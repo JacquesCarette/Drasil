@@ -11,8 +11,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special,
-  USymb(US), HasTermTable, LinkType(Internal, Cite2, External))
+  Decoration(Prime, Hat, Vector), Document, special, USymb(US), HasTermTable) 
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -24,7 +23,8 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn, Point), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label)
+  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
+  LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
@@ -265,9 +265,9 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref L.Internal r sn)  = snref r $ spec sn
-spec (Ref L.Cite2 r _)      = cite $ pure $ text r
-spec (Ref L.External r sn)  = snref r $ spec sn
+spec (Ref Internal r sn)  = snref r $ spec sn
+spec (Ref Cite2 r _)      = cite $ pure $ text r
+spec (Ref External r sn)  = snref r $ spec sn
 spec EmptyS                 = empty
 spec (Quote q)              = quote $ spec q
 

@@ -19,15 +19,27 @@ We will go through each of the files, in topological-sort order. Everything here
 under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Data/Date**: representation of dates. Mostly Month for now, but will extend, or
-  replace with something more standard.
+  replace with something more standard. (Data.Dates from dates-0.2.2.2.2 ?)
+  (Data.Time from time-1.9.2?)
 
-- **People**: Defines Person, which holds a person's name as data. People as lists of Person(s).
+- **Misc**: Some, well, miscellaneous routines. To make a table, to check that
+  a String has not spaces (hard error otherwise) and a routine to sort by 
+  (Implementation!) symbol. [The latter function could be moved to docLang, but
+  it is still odd]
+
+- **People**: Defines Person, which holds a person's name as data. People as
+  lists of Person(s).
   A name can have many parts, and can follow Western or Eastern convention, or by a Mononym.
   Defines HasName class to extract a String version of a name, as well as some more
   specialized renderers.
+  Should probably also contain a |Maybe ORCID|
 
 - **Space**: Supposed to be a notion of 'space' where quantities live. Right now there is
   still confusion between space and type.
+
+- **Stages**: (perhaps misnamed?). An indication of which 'stage' of the processing an
+  entity belongs to. Mostly used to configure the display of 'variables', i.e. which
+  symbol to choose.
 
 - **UID**: Defines abstract type of 'unique identifiers', which are used to tag everything
   uniquely, so that we can insert things into various internal databases. Basically a global
@@ -36,13 +48,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **ShortName**: Abstract type for a 'short name', i.e. the string to be displayed
   for a link, visible to users.
 
-- **RefTypes**: (Should eventually disappear?). Currently defines different kinds of
-  definitions (knowledge which belongs to documents), requirements and kinds of
-  references. The 'kinds of reference' belongs here, but it shouldn't have a Show instance.
-  And lots of the kinds of references are either layout-specific or document-specific, so
-  should not be defined globally in either case. Also defines Reference, which pulls these
-  together.
-
 - **Label.Type**: Label type. Is a reference address, link or URI.
 
 - **Label.Core**: Label structure. Has a type, shortname and a reference type (hack?).
@@ -50,10 +55,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Symbol**: Abstract definition of symbol layout primitives. Enough information for
   renderers to display them.
-
-- **Stages**: (perhaps misnamed?). An indication of which 'stage' of the processing an
-  entity belongs to. Mostly used to configure the display of 'variables', i.e. which
-  symbol to choose.
 
 - **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
   HasRefAddress, HasSymbol.
@@ -143,11 +144,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   perhaps a unit (definition). It is meant to represent a value.
 
 - **Chunk/Unitary**: A Unitary is a Quantity that must have a unit.
-
-- **Misc**: Some, well, miscellaneous routines. To make a table, to check that
-  a String has not spaces (hard error otherwise) and a routine to sort by 
-  (Implementation!) symbol. [The latter function could be moved to docLang, but
-  it is still odd]
 
 - **Chunk/Eq**: Short for 'Equation' which means a Quantity which has a definition,
   both in words and through an equation. Called QDefinition.

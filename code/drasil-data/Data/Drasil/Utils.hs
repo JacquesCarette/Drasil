@@ -162,7 +162,7 @@ unwrap Nothing  = EmptyS
 
 -- | noRefs converts lists of simple ItemTypes into a lists which may be used
 -- in Contents but not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe RefAdd)]
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 noRefs a = zip a $ repeat Nothing
 
 -- | noRefsLT converts lists of tuples containing a title and ItemType into

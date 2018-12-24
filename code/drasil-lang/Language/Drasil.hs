@@ -168,9 +168,6 @@ module Language.Drasil (
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
   , citationRefTable
-  -- RefTypes
-  , RefAdd
-  , LinkType(Internal, Cite2, External)
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
@@ -306,7 +303,6 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(Reference(Reference))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 

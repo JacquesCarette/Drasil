@@ -283,11 +283,11 @@ spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference _ (RP rp ra) sn)) = 
-  P.Ref Internal ra $ spec sm $ renderShortName sm rp sn
+  P.Ref P.Internal ra $ spec sm $ renderShortName sm rp sn
 spec sm (Ref (Reference _ (Citation ra) sn)) = 
-  P.Ref Cite2    ra $ spec sm $ renderCitation sm sn
+  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
 spec sm (Ref (Reference _ (URI ra) sn)) = 
-  P.Ref External    ra $ spec sm $ renderURI sm sn
+  P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -416,20 +416,17 @@ layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 -- | Translates lists
 makeL :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, labref y)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, labref y)) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, fmap P.S y)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, fmap P.S y)) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 
 -- | Helper for translating list items
 item :: (HasSymbolTable ctx, HasTermTable ctx,HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
-
-labref :: Maybe RefAdd -> Maybe P.Spec
-labref = fmap P.S
 
 -- | Helper for getting a short name
 getShortName :: HasShortName c => c -> Sentence

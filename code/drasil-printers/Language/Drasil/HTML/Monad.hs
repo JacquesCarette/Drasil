@@ -11,5 +11,4 @@ newtype PrintHTML = PH {unPH :: String}
 instance RenderSpecial PrintHTML where
   special Circle       = PH "&deg;"
   special Partial      = PH "&part;"
-  special UScore       = PH "_"
   special Percent      = PH "%"

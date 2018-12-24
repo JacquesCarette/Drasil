@@ -218,11 +218,11 @@ gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integ
 
 is_safePb      = vc "is_safePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
   " probability is less than tolerable probability")
-  (Concat [Atomic "is", Special UScore, Atomic "safePb"]) Boolean
+  (Atomic "is-safePb") Boolean
 
 is_safeLR      = vc "is_safeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
-  (Concat [Atomic "is", Special UScore, Atomic "safeLR"]) Boolean
+  (Atomic "is-safeLR") Boolean
 
 lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 

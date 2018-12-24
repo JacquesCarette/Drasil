@@ -83,9 +83,9 @@ $GTF$ & Glass type factor & --
 \\
 $h$ & Minimum thickness & m
 \\
-$is\_safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
+$is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
 \\
-$is\_safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
+$is-safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -380,16 +380,16 @@ This section focuses on the general equations and laws that GlassBR is based on.
 Label & Safety Req-Pb
 \\ \midrule \\
 Equation & \begin{dmath}
-           is\_safePb={P_{b}}<{P_{btol}}
+           is-safePb={P_{b}}<{P_{btol}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+              \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
               \item{${P_{b}}$ is the probability of breakage (Unitless)}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[TM:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safeLR$ (from \hyperref[TM:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -406,16 +406,16 @@ RefBy & \hyperref[TM:isSafeLR]{TM: isSafeLR} \hyperref[checkGlassSafety]{FR: Che
 Label & Safety Req-LR
 \\ \midrule \\
 Equation & \begin{dmath}
-           is\_safeLR=LR>q
+           is-safeLR=LR>q
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Unitless)}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[TM:isSafePb]{TM: isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[TM:isSafePb]{TM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -1010,7 +1010,7 @@ This section provides the functional requirements, the business tasks that the s
                                                                                                 \end{itemize}
 \item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.
-\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[TM:isSafePb]{TM: isSafePb} and \hyperref[TM:isSafeLR]{TM: isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is-safePb$ ∧ $is-safeLR$ (from \hyperref[TM:isSafePb]{TM: isSafePb} and \hyperref[TM:isSafeLR]{TM: isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \item[Output-Quantities:\phantomsection\label{outputQuants}]Output the following quantities:
                                                             \begin{itemize}
                                                             \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{DD: aspect\_ratio})}

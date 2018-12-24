@@ -128,7 +128,7 @@ module Language.Drasil (
   -- Space
   , Space(..)
   -- Symbol
-  , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy
+  , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, compsy
   -- SymbolAlphabet
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
@@ -295,7 +295,7 @@ import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

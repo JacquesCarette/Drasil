@@ -14,5 +14,3 @@ instance RenderSpecial PrintHTML where
   special UScore       = PH "_"
   special Percent      = PH "%"
   special Hash         = PH "#"
-  special CurlyBrOpen  = PH "{"
-  special CurlyBrClose = PH "}"

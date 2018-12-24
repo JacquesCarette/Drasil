@@ -7,8 +7,6 @@ data Special = Partial
              | Circle
              | Percent
              | Hash
-             | CurlyBrOpen
-             | CurlyBrClose
              | UScore
   deriving (Eq, Ord)
 

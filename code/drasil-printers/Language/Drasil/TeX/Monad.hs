@@ -114,5 +114,3 @@ instance RenderSpecial Latex where
   special UScore       = L "\\_"
   special Percent      = L "\\%"
   special Hash         = L "\\#"
-  special CurlyBrOpen  = L "\\{"
-  special CurlyBrClose = L "\\}"

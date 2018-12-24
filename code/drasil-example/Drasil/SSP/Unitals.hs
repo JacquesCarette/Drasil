@@ -164,10 +164,12 @@ yi = uc' "y_i" (cn $ "y ordinate") smsi lY metre
   
 xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
+-- FIXME: the 'symbol' for this should not have { and } embedded in it.
+-- They have been removed now, but we need a reasonable notation.
 critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"),
-  sub (Atomic ",y") (Atomic "cs")])) metre
+  (Concat [sub (Atomic "x") (Atomic "cs"), Atomic ",",
+  sub (Atomic "y") (Atomic "cs")]) metre
 
 mobShrI = uc' "mobShear" (cn $ "mobilized shear force")
   fsi

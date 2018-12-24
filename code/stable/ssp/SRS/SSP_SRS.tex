@@ -59,8 +59,6 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
-$\{{x_{cs}}{,y_{cs}}\}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
-\\
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
 $b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
@@ -128,6 +126,8 @@ $W$ & Weight: downward force caused by gravity on slice i & N
 $X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
 \\
 $x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
+\\
+${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
 ${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
@@ -1527,16 +1527,16 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{dmath}
-           {{F_{S}}_{min}}=Υ\left(\{{x_{cs}}{,y_{cs}}\}\right)
+           {{F_{S}}_{min}}=Υ\left({x_{cs}},{y_{cs}}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${{F_{S}}_{min}}$ is the minimum factor of safety (Unitless)}
               \item{$Υ$ is the function (Unitless)}
-              \item{$\{{x_{cs}}{,y_{cs}}\}$ is the the set of x and y coordinates (m)}
+              \item{${x_{cs}},{y_{cs}}$ is the the set of x and y coordinates (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties}
+Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties}
 \\ \midrule \\
 Source & \cite{li2010}
 \\ \midrule \\

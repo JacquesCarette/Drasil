@@ -5,6 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
   fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
   repeated, singleLine, singleton)

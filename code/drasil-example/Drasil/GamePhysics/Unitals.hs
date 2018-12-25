@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
+
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
@@ -15,8 +17,6 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
   torqueU, velU)
 
 import Control.Lens((^.))
-
-
 
 gamephySymbols :: [DefinedQuantityDict]
 gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) ++

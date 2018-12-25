@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 
 import Drasil.SSP.Defs (fs_concept)
 

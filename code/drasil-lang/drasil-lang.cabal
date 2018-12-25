@@ -11,6 +11,7 @@ library
     , Language.Drasil.Development
     , Language.Drasil.Utils
     , Data.Drasil.IdeaDicts
+    , Language.Drasil.ShortHands
   other-modules:
       Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Citation
@@ -59,7 +60,6 @@ library
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SymbolAlphabet
     , Language.Drasil.SystemInformation
     , Language.Drasil.UID
     , Language.Drasil.Unicode

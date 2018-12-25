@@ -1,6 +1,7 @@
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
     acceleration, displacement, distance, energy, force, gravitationalAccel, 
     gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 

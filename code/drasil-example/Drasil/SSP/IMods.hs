@@ -3,6 +3,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
+import Language.Drasil.ShortHands (lU, lV) -- local (bound) variables
 
 import Data.Drasil.Utils (eqUnR', weave)
 

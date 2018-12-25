@@ -60,7 +60,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
   HasRefAddress, HasSymbol.
 
-- **SymbolAlphabet**: The long names of many symbols, and even some short ones (because of the
+- **ShortHands**: The long names of many symbols, and even some short ones (because of the
   tag) is inconvenient; provides some short-hand way of referring to them.
 
 - **Expr**: mathematical expressions. And also domain descriptions and real intervals.

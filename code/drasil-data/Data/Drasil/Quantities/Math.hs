@@ -1,6 +1,8 @@
 module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
+
 import Data.Drasil.Concepts.Math as CM (diameter, euclidN, gradient, normalV,
     orient, perpV, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)

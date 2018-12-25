@@ -129,13 +129,6 @@ module Language.Drasil (
   , Space(..)
   -- Symbol
   , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, compsy
-  -- SymbolAlphabet
-  , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
-  , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
-  , lAlpha, cAlpha, lBeta, cBeta, lGamma, cGamma, lDelta, cDelta, lEpsilon, vEpsilon, cEpsilon, lZeta, cZeta
-  , lEta, cEta, lTheta, cTheta, lIota, cIota, lKappa, cKappa, lLambda, cLambda, lMu, cMu, lNu, cNu, lXi, cXi 
-  , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
-  , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
   , mkTable
   -- People
@@ -297,7 +290,6 @@ import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat,
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 

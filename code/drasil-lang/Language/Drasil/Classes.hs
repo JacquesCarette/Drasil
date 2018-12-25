@@ -31,7 +31,7 @@ module Language.Drasil.Classes (
 -- also helps with cycles...
 import Language.Drasil.Classes.Core
 
-import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Data.Citation (CiteField)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)

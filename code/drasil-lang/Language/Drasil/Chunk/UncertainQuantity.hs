@@ -5,12 +5,12 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
-import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
 import Language.Drasil.Chunk.Concept(cw) 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), UncertainQuantity(uncert))
+import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase(NP)

@@ -1,5 +1,5 @@
 {-# Language GADTs #-}
-module Language.Drasil.Chunk.Constrained.Core (
+module Language.Drasil.Constraint (
     Constraint(..), ConstraintReason(..)
   , physc, sfwrc, enumc, isPhysC, isSfwrC
   ) where

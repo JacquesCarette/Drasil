@@ -71,7 +71,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Expr/Extract**:function to extract names, and thence dependencies, from Expr.
 
-- **Chunk/Constrained/Core**: Definition of a constraint on variables, and the reason 
+- **Constraint**: Definition of a constraint on variables, and the reason 
   why this constraint exists. These constraints are either an interval enclosure or an
   enumeration.
 

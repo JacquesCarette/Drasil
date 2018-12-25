@@ -49,7 +49,7 @@ module Language.Drasil (
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  -- Chunk.Constrained.Core
+  -- Constraint
   , physc, sfwrc, enumc , isPhysC, isSfwrC
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
@@ -241,7 +241,7 @@ import Language.Drasil.Chunk.Citation (
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
+import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)

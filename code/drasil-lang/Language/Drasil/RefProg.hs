@@ -1,5 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.RefProg (Reference(Reference)) where
+
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Label.Type (LblType, getAdd)

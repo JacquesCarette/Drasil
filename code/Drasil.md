@@ -75,15 +75,16 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   why this constraint exists. These constraints are either an interval enclosure or an
   enumeration.
 
-- **Development/UnitLang**: First, the 'Development' sub-hierarchy indicates that this 
-  should not be exported from Drasil.hs at all, just from Drasil.Development.
+- **RefProg**: Defines |Reference|.
+
+- **UnitLang**:
   This defines the 'language of units', in two layers. First, as a 'laurent monomial'
   over basic symbols; and then as an extended type which takes into account synonyms
   scaling and shifting. This is the internal representation, which of course is only
   useful for printing. The combinators, one level up, for creating them, is more
   semantic.
 
-- **Spec**: Should really be called 'Sentence'. A 'language of sentences', mostly to
+- **Sentence**: Should really be called 'Sentence'. A 'language of sentences', mostly to
   accomodate symbols, concatenation, units, etc. And some helper functions as well.
 
 - **Sentence/Extract**: Utility to extract the (unique) dependencies of Sentences on

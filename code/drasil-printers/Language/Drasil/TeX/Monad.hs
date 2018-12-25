@@ -111,4 +111,3 @@ data Latex = L { unPL :: String }
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"
   special Partial      = L "\\partial{}"
-  special Percent      = L "\\%"

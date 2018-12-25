@@ -26,7 +26,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn, Point), 
+  Real, Rational, Natural, Integer, IsIn, Point, Perc), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
@@ -207,6 +207,7 @@ p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
 p_ops Point    = "."
+p_ops Perc     = "%"
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("

@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
-  (Sentence(Ch, Sy, S, Sp, E, Quote, (:+:), EmptyS, P, Ref),
+  (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
    sParen, (+:+), sC, (+:+.), (+:),
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
@@ -10,7 +10,6 @@ import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Unicode (Special)
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -29,11 +28,12 @@ data Sentence where
   Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-  Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence       -- should not be used in examples?
   E     :: Expr -> Sentence
   Ref   :: Reference -> Sentence
+
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
+  Percent :: Sentence               -- % symbol
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   

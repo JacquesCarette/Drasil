@@ -50,7 +50,6 @@ decorate s Prime = s ++ "'"
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"
 specialToCodeName Partial       = "partial"
-specialToCodeName Percent       = "%"
 
 toCodeName :: String -> String
 toCodeName s =

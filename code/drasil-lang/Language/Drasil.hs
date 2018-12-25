@@ -98,7 +98,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), sParen, (+:+), (+:+.), sC, (+:)
+  , Sentence(..), sParen, (+:+), (+:+.), sC, (+:), ch
   , SentenceStyle(..)
   -- RefProg
   , Reference(..)
@@ -160,8 +160,6 @@ module Language.Drasil (
   , citationRefTable
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
-  -- Chunk.Sentence.EmbedSymbol
-  , ch
   -- Label.Type
   , getAdd
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -200,7 +198,6 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Document (section, fig, figWithWidth
   , section'', Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
@@ -272,7 +269,8 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
-import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
+import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
+  , SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
  , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)

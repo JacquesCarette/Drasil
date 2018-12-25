@@ -2,14 +2,17 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
-   sParen, (+:+), sC, (+:+.), (+:),
+   sParen, (+:+), sC, (+:+.), (+:), ch,
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
+
+import Control.Lens ((^.))
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -38,6 +41,9 @@ data Sentence where
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
+
+ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch x = Ch SymbolStyle (x ^. uid)
 
 instance Monoid Sentence where
   mempty = EmptyS

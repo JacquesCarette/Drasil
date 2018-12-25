@@ -10,7 +10,7 @@ import Language.Drasil.Classes (CommonIdea, Concept, Constrained, HasUID,
 import Language.Drasil.People (HasName)
 import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap, 
   citationRefTable)
-import Language.Drasil.Development (MayHaveUnit)
+import Language.Drasil.Development.Unit (MayHaveUnit)
 
 import Control.Lens ((^.))
 

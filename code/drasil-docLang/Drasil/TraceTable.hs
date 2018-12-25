@@ -8,9 +8,12 @@
 module Drasil.TraceTable where
 
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage
-import Language.Drasil
 import qualified Data.Map as Map
+
+import Language.Drasil
+import Language.Drasil.Development (lnames')
+
+import Drasil.DocumentLanguage
 
 
 traceMap :: (HasUID l) => (l -> [Sentence]) -> [l] -> TraceMap

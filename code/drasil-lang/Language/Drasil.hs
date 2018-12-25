@@ -15,10 +15,6 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
-  -- Expr.Extract
-  , dep, names', lnames, lnames'
-  -- Expr.Precendence
-  , precA, precB, eprec
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
    -- UID
@@ -166,10 +162,6 @@ module Language.Drasil (
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
   , ch
-  -- Sentence.Extract
-  , sdep
-  -- Expr.Extract
-  , names
   -- Label.Type
   , getAdd
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -208,10 +200,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Expr.Extract (dep, names', names)
-import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
-import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
   , section'', Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection

@@ -4,7 +4,7 @@ module Language.Drasil (
     SystemInformation(..), Block(..), citeDB, getRefDB
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
-  , Relation, RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
+  , Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean
@@ -127,6 +127,7 @@ module Language.Drasil (
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
   , Space(..)
+  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   -- Symbol
   , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, compsy
   -- Misc
@@ -198,8 +199,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), DerivType(..),
-          BoolOper(..), Relation, RealInterval(..), Inclusive(..), RTopology(..), 
-          DomainDesc(AllDD, BoundedDD),
+          BoolOper(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,
@@ -281,7 +281,8 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
-import Language.Drasil.Space (Space(..))
+import Language.Drasil.Space (Space(..)
+  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
  , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB

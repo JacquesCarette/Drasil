@@ -4,7 +4,8 @@ module Language.Drasil.Chunk.Constrained.Core (
   , physc, sfwrc, enumc, isPhysC, isSfwrC
   ) where
 
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
+import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Space (RealInterval(..))
 
 data ConstraintReason = Physical | Software
 data Constraint where

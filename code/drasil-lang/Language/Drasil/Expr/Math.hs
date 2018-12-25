@@ -3,11 +3,10 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), RealInterval, Relation,
-  DerivType(..), ($^), BinOp(..), RTopology(..), DomainDesc(..),
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..), 
   ArithOper(..), UFunc(..))
-import Language.Drasil.Space (Space)
-import Language.Drasil.Classes (HasUID(uid), HasSymbol)
+import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr

@@ -2,7 +2,8 @@
 module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, short, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Sentence (Sentence, sentenceShort)

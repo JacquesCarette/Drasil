@@ -2,13 +2,14 @@
 module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(ComConDict)
   , ConceptInstance(ConInst)) where
 
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict)
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
 import Language.Drasil.Chunk.CommonIdea (CI)
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv), HasShortName(shortname))
+import Language.Drasil.Chunk.NamedIdea (IdeaDict)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses, (^.), view)
 

@@ -57,12 +57,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Symbol**: Abstract definition of symbol layout primitives. Enough information for
   renderers to display them.
 
-- **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
-  HasRefAddress, HasSymbol.
-
-- **ShortHands**: The long names of many symbols, and even some short ones (because of the
-  tag) is inconvenient; provides some short-hand way of referring to them.
-
 - **Expr**: mathematical expressions. And also domain descriptions and real intervals.
   (the latter two should probably be split off on their own)
 
@@ -75,7 +69,18 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   why this constraint exists. These constraints are either an interval enclosure or an
   enumeration.
 
+- **ShortHands**: The long names of many symbols, and even some short ones (because of the
+  tag) is inconvenient; provides some short-hand way of referring to them.
+
+- **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
+  HasRefAddress, HasSymbol.
+
+- **Symbol/Helpers**: helper routines to check if symbol exists, and to extract the 
+  Implementation or Equational stage symbol.
+
 - **RefProg**: Defines |Reference|.
+
+- **Expr/Math**: constructors of Expr. 
 
 - **UnitLang**:
   This defines the 'language of units', in two layers. First, as a 'laurent monomial'
@@ -83,6 +88,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   scaling and shifting. This is the internal representation, which of course is only
   useful for printing. The combinators, one level up, for creating them, is more
   semantic.
+  [It should really be done as an 8-tuple... but that can be done later]
 
 - **Sentence**: Should really be called 'Sentence'. A 'language of sentences', mostly to
   accomodate symbols, concatenation, units, etc. And some helper functions as well.
@@ -94,6 +100,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   Used to deal with terms and other things which are defined as 'noun phrases'
   that are used in contexts where they then need a plural or capitalization. Easier
   to go via rules than to define all variants upon creation.
+  [Uses |Sentence|, which is really not right. But later routines use the lazy
+   properties of Sentence, so refactoring this is complicated.]
 
 - **NounPhrase**: Constructors for noun phrases, and actual computations of plurals
   and capitalization. And a Class for NounPhrase, which gives the main methods on
@@ -103,22 +111,15 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   this really ought to be a real data-structure, that alternates between narrative and
   equations. Could even be equational reasoning, etc.
 
+- **Data/Citation**: internal representation of the data in citations, and their
+  smart constructors.
+
 - **Classes**: Defined a bunch of 'classy lenses'.  These can be understood as 
   our meta-model. NamedIdea, Idea, Definition, ConceptDomain, Concept, HasSymbol, etc.
   Really deserves a full write up.
   Sits 'on top' of all the important data-structures, and 'below' most of the
   actual chunks.
   (TODO: actually define the meaning of each of them)
-
-- **Sentence/EmbedSymbol**: defines 'ch' to embed a chunk with a symbol into a
-  sentence.  Defined here because HasSymbol is in Classes rather than Classes/Core.
-
-- **Label**: routines for making labels.
-
-- **Expr/Math**: constructors of Expr. 
-
-- **Symbol/Helpers**: helper routines to check if symbol exists, and to extract the 
-  Implementation or Equational stage symbol.
 
 - **Chunk/NamedIdea**: defines data-structures that hold NamedIdea and Idea, their
   constructors and instances.
@@ -179,8 +180,5 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
-
-- **Data/Citation**: internal representation of the data in citations, and their
-  smart constructors.
 
 - **Chunk/Citation**: citations as a chunk (record, with accessors, etc)

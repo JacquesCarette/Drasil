@@ -1,14 +1,11 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid), UID
-  , NamedIdea(term)
+    NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
-  , HasShortName(shortname)
-  , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit(udefn, getUnits)
@@ -21,7 +18,6 @@ module Language.Drasil.Classes (
   , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
-  , HasRefAddress(getRefAdd)
   , Quantity
   , UncertainQuantity(uncert)
   , HasFields(getFields)

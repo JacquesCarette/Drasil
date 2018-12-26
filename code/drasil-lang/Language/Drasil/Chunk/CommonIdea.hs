@@ -3,7 +3,8 @@ module Language.Drasil.Chunk.CommonIdea
   (CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv) where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.NounPhrase (NP)

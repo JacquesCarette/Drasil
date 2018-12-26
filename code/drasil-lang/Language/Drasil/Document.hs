@@ -3,7 +3,7 @@
 module Language.Drasil.Document where
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
 import Language.Drasil.Misc (repUnd)

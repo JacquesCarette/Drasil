@@ -4,7 +4,8 @@ module Language.Drasil.Development.Sentence where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
 import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
   sentencePlural)

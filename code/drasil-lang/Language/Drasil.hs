@@ -19,8 +19,12 @@ module Language.Drasil (
   , Special(..), RenderSpecial(..)
    -- UID
   , UID
-  -- Classes
+  -- Classes.Core
   , HasUID(uid)
+  , HasShortName(shortname)
+  , HasRefAddress(getRefAdd)
+  , HasSymbol(symbol)
+  -- Classes
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -37,8 +41,6 @@ module Language.Drasil (
   , ExprRelat(relat)
   , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
-  , HasRefAddress(getRefAdd)
-  , HasShortName(shortname)
   , UncertainQuantity(uncert)
   , Quantity
   , HasFields(getFields)
@@ -136,7 +138,7 @@ module Language.Drasil (
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
-  , HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
+  , eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable
@@ -208,15 +210,14 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
+  HasRefAddress(getRefAdd), HasShortName(shortname))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences),
-  HasRefAddress(getRefAdd), HasSpace(typ),
-  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
-  HasFields(getFields))
--- import Language.Drasil.Label.Core (Label)
+  HasReference(getReferences), HasSpace(typ),
+  DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert), HasFields(getFields))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk

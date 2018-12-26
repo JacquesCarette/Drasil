@@ -4,9 +4,9 @@ module Language.Drasil.Chunk.Quantity
 
 import Control.Lens ((^.),makeLenses,view)
 
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), Quantity)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), HasSpace(typ), Quantity)
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)

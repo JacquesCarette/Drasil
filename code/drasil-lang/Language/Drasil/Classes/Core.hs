@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
 -- | Defining the core classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes.Core (
-    HasUID(uid), UID
+    HasUID(uid)
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)

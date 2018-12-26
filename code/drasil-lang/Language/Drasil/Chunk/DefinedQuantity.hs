@@ -4,9 +4,9 @@ module Language.Drasil.Chunk.DefinedQuantity
   , dqdQd) where
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  HasSpace(typ), IsUnit, Quantity)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,

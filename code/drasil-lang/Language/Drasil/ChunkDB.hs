@@ -17,8 +17,8 @@ module Language.Drasil.ChunkDB
 import Control.Lens ((^.), Lens', makeLenses)
 import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit,
-  Quantity)
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Document.Core (LabelledContent)

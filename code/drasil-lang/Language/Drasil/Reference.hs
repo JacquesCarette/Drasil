@@ -17,8 +17,9 @@ import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), abrv,
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
+  HasShortName(shortname))
+import Language.Drasil.Classes (ConceptDomain(cdom), abrv, HasFields(getFields))
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))

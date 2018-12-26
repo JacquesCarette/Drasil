@@ -12,14 +12,16 @@ module Language.Drasil.Development.Unit (
 
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
+
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
+import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   comp_usymb, from_udefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
-import Language.Drasil.NounPhrase (cn,cn',NP)
 
 -- | for defining units
 -- It is a concept chunk (defined what kind of unit it is),

@@ -393,12 +393,12 @@ layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField
 layField  _ (Address      s) = P.Address      $ P.S s
 layField  _ (Author       p) = P.Author       p
-layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
+layField  _ (BookTitle    b) = P.BookTitle    $ P.S b
 layField  _ (Chapter      c) = P.Chapter      c
 layField  _ (Edition      e) = P.Edition      e
 layField  _ (Editor       e) = P.Editor       e
-layField sm (Institution  i) = P.Institution  $ spec sm i
-layField sm (Journal      j) = P.Journal      $ spec sm j
+layField  _ (Institution  i) = P.Institution  $ P.S i
+layField  _ (Journal      j) = P.Journal      $ P.S j
 layField  _ (Month        m) = P.Month        m
 layField sm (Note         n) = P.Note         $ spec sm n
 layField  _ (Number       n) = P.Number       n

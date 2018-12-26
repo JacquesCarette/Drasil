@@ -23,13 +23,13 @@ import Language.Drasil.Data.Date (Month(..))
 -- | Fields used in citations.
 data CiteField = Address      String
                | Author       People
-               | BookTitle    Sentence -- Used for 'InCollection' references only.
+               | BookTitle    String -- Used for 'InCollection' references only.
                | Chapter      Int
                | Edition      Int
                | Editor       People
                | HowPublished HP
-               | Institution  Sentence
-               | Journal      Sentence
+               | Institution  String
+               | Journal      String
                | Month        Month
                | Note         Sentence
                | Number       Int
@@ -68,10 +68,9 @@ author = Author
 editor = Editor
 
 -- | Smart field constructor
-address :: String -> CiteField
+address, bookTitle, institution, journal :: String -> CiteField
 
-bookTitle, howPublished, howPublishedU, institution, journal, note,
-  organization, publisher, school, series, title,
+howPublished, howPublishedU, note, organization, publisher, school, series, title,
   typeField :: Sentence -> CiteField
 
 address       = Address

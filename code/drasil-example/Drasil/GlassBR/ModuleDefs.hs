@@ -99,12 +99,12 @@ filename= var "filename"  (Atomic "filename")         String
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Num a, Fractional a) => (a, a) -> (a, a) -> a
+slope :: (Fractional a) => (a, a) -> (a, a) -> a
 slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
 onLine p1@(x1,y1) p2 x_ = 
   let m = slope p1 p2 in
   m * (x_ - x1) + y1

@@ -20,7 +20,7 @@ rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
 astm2009 = cMisc [author [mononym "ASTM"],
   title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
   publisher (S "ASTM International"),
-  bookTitle (S "Standard E1300-09a"),
+  bookTitle "Standard E1300-09a",
   year (2009), howPublishedU (S "www.astm.org")]
   "astm2009"
 
@@ -44,7 +44,7 @@ astm2012 = cMisc
 beasonEtAl1998 = cMisc
   [ author [wlBeason, tlKohutek, jmBracci],
   title (S "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts"),
-  bookTitle (S "ASCE Library"),
+  bookTitle "ASCE Library",
   month Feb, year 1998,
   howPublishedU (S "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)")]
   "beasonEtAl1998"

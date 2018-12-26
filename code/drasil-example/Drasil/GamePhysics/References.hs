@@ -17,15 +17,14 @@ cpCitations = [parnas1978, sciComp2013, parnas1972, parnasClements1984,
 
 parnas1978 = cInProceedings [dParnas]
     (S "Designing Software for Ease of Extension and Contraction.")
-    (S "ICSE '78: Proceedings of the 3rd international conference on" +:+ 
-      S "Software engineering") 1978
-    [pages [264,277]] "parnas1978"
+    "ICSE '78: Proceedings of the 3rd international conference on Software engineering" 
+    1978 [pages [264,277]] "parnas1978"
 
 sciComp2013 = cArticle
   [gWilson, daAruliah, cTitus, nChueHong, mDavis, rGuy, shdHaddock,
   kdHuff, imMitchell, mdPlumblet, bWaugh, epWhite, pWilson]
   (S "Best Practices for Scientific Computing, 2013")
-  (S "PLoS Biol") 2013
+  "PLoS Biol" 2013
   [volume 12, number 1] "sciComp2013"
 
 jfBeucheIntro = cMisc

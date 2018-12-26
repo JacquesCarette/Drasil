@@ -2,7 +2,7 @@ module Drasil.SSP.References where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (crtSlpSrf, fs_concept, ssa, soil)
+import Drasil.SSP.Defs (crtSlpSrf, fs_concept, ssa)
 
 import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986, smithLai2005)
 import Data.Drasil.Concepts.Documentation (analysis)
@@ -32,4 +32,7 @@ li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   "li2010"
 
 karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
-  (S "Influence of inherent anisotropy of" +:+ phrase soil +:+ S "strength on limit equilibrium" +:+ phrase ssa) (S "Proceedings of the 65th annual Canadian GeoTechnical Conference") 2012 [address "Winnipeg, MB, Canada", organization (S "Canadian Geotechnical Society")] "karchewski2012"
+  (S "Influence of inherent anisotropy of soil strength on limit equilibrium" +:+ 
+   S "slope stability analysis") 
+  "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012 
+  [address "Winnipeg, MB, Canada", organization (S "Canadian Geotechnical Society")] "karchewski2012"

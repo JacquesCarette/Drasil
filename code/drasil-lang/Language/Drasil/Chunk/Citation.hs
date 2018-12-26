@@ -51,7 +51,7 @@ cite x y z = let s = noSpaces z in Cite x y s (shortname' s)
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cArticle :: People -> Sentence -> Sentence -> Int -> [CiteField] -> String -> Citation
+cArticle :: People -> Sentence -> String -> Int -> [CiteField] -> String -> Citation
 cArticle aut t journ yr opt lbe = cite Article 
   ((author aut) : (title t) : (journal journ) : (year yr) : opt) lbe
 
@@ -111,7 +111,7 @@ cInBookEP ed t pgs pub yr opt lbe = cite InBook
 -- Optional fields can be editor, volume or number, series, type, chapter,
 -- pages, address, edition, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cInCollection :: People -> Sentence -> Sentence -> Sentence -> Int ->
+cInCollection :: People -> Sentence -> String -> Sentence -> Int ->
   [CiteField] -> String -> Citation
 cInCollection auth t bt pub yr opt lbe = cite InCollection 
   (author auth : bookTitle bt : stdFields t pub yr opt) lbe
@@ -120,7 +120,7 @@ cInCollection auth t bt pub yr opt lbe = cite InCollection
 -- Optional fields can be editor, volume or number, series, pages,
 -- address, month, organization, publisher, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cInProceedings :: People -> Sentence -> Sentence -> Int ->
+cInProceedings :: People -> Sentence -> String -> Int ->
   [CiteField] -> String -> Citation
 cInProceedings auth t bt yr opt lbe = cite InProceedings 
   (author auth : title t : bookTitle bt : year yr : opt) lbe
@@ -159,7 +159,7 @@ cProceedings t yr opt lbe = cite Proceedings (title t : year yr : opt) lbe
 -- | Technical Report citation requires author, title, institution, and year.
 -- Optional fields can be type, number, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cTechReport :: People -> Sentence -> Sentence -> Int -> [CiteField] -> String -> Citation
+cTechReport :: People -> Sentence -> String -> Int -> [CiteField] -> String -> Citation
 cTechReport auth t inst yr opt lbe = cite TechReport 
   (author auth : title t : institution inst : year yr : opt) lbe
 

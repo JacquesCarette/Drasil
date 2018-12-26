@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
+  Definition(defn), ConceptDomain(cdom), IsUnit,
   ExprRelat(relat), HasDerivation(derivations),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Data.Drasil.IdeaDicts (gendef)
@@ -32,7 +32,6 @@ makeLenses ''GenDefn
 instance HasUID             GenDefn where uid = relC . uid
 instance NamedIdea          GenDefn where term = relC . term
 instance Idea               GenDefn where getA = getA . view relC
-instance Concept            GenDefn where
 instance Definition         GenDefn where defn = relC . defn
 instance ConceptDomain      GenDefn where cdom = cdom . view relC
 instance ExprRelat          GenDefn where relat = relC . relat

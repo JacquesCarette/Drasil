@@ -16,7 +16,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  ConceptDomain(cdom), CommonIdea(abrv), Concept, Definition(defn))
+  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
@@ -52,7 +52,6 @@ makeLenses ''InstanceModel
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA = getA . view rc
-instance Concept            InstanceModel where
 instance Definition         InstanceModel where defn = rc . defn
 instance ConceptDomain      InstanceModel where cdom = cdom . view rc
 instance ExprRelat          InstanceModel where relat = rc . relat

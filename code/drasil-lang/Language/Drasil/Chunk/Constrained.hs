@@ -71,7 +71,6 @@ instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 instance Quantity      ConstrConcept where 
 instance Definition    ConstrConcept where defn = defq . defn
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq
-instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)

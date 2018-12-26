@@ -6,8 +6,8 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
+  Definition(defn), ConceptDomain(cdom), HasReference(getReferences),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
@@ -62,7 +62,6 @@ instance Definition         TheoryModel where defn = con . defn
 instance HasReference       TheoryModel where getReferences = ref
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
 instance HasAdditionalNotes TheoryModel where getNotes = notes
-instance Concept            TheoryModel where
 instance Theory             TheoryModel where
   valid_context = vctx
   spaces        = spc

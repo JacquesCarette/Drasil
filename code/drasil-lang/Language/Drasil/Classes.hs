@@ -1,4 +1,4 @@
-{-# Language TypeFamilies #-}
+{-# Language TypeFamilies, ConstraintKinds #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
     NamedIdea(term)
@@ -68,7 +68,8 @@ class ConceptDomain c where
   -- Drasil framework, but should not be exported beyond that.
 
 -- | Concepts are 'Idea's with definitions and domains
-class (Idea c, Definition c, ConceptDomain c) => Concept c where
+-- class (Idea c, Definition c, ConceptDomain c) => Concept c where
+type Concept c = (Idea c, Definition c, ConceptDomain c)
 
 -- | HasSpace is anything which has a Space...
 class HasSpace c where

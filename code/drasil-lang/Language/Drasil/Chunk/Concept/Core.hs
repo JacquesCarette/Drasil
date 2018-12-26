@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(C
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
+  Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Sentence (Sentence)
@@ -29,7 +29,6 @@ instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = defn'
 instance ConceptDomain ConceptChunk where cdom = cdom'
-instance Concept       ConceptChunk where
 
 
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, dom :: [UID]}
@@ -42,7 +41,6 @@ instance Idea          CommonConcept where getA = getA . view comm
 instance Definition    CommonConcept where defn = def
 instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = dom
-instance Concept       CommonConcept where
 
 data ConceptInstance = ConInst { _cc :: ConceptChunk , shnm :: ShortName}
 makeLenses ''ConceptInstance
@@ -53,5 +51,4 @@ instance NamedIdea     ConceptInstance where term = cc . idea . term
 instance Idea          ConceptInstance where getA = getA . view (cc . idea)
 instance Definition    ConceptInstance where defn = cc . defn'
 instance ConceptDomain ConceptInstance where cdom = cdom' . view cc
-instance Concept       ConceptInstance where
 instance HasShortName  ConceptInstance where shortname = shnm

@@ -6,7 +6,7 @@ import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term),Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat))
+  Definition(defn), ConceptDomain(cdom), ExprRelat(relat))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
@@ -21,7 +21,6 @@ instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA = getA . view conc
 instance Definition    RelationConcept where defn = conc . defn
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
-instance Concept       RelationConcept where
 instance ExprRelat     RelationConcept where relat = rel
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 

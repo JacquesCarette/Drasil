@@ -24,6 +24,8 @@ module Language.Drasil (
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
+  -- Classes.Document
+  , HasFields(getFields)
   -- Classes
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
@@ -32,7 +34,6 @@ module Language.Drasil (
   , HasReference(getReferences)
   , HasReasVal(reasVal)
   , HasDerivation(derivations)
-  , HasFields(getFields)
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
@@ -217,7 +218,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
-  DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert), HasFields(getFields))
+  DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert))
+import Language.Drasil.Classes.Document (HasFields(getFields))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk

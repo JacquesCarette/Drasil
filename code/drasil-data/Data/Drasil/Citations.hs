@@ -19,7 +19,7 @@ campidelli = cBooklet
 koothoor2013 = 
   cMThesis [nKoothoor] 
   (S "A document drive approach to certifying" +:+ phrase sciCompS)
-  (S "McMaster University") 2013 [address (S "Hamilton, ON, Canada")]
+  (S "McMaster University") 2013 [address "Hamilton, ON, Canada"]
   "koothoor2013"
 
 parnas1972 = cArticle [dParnas]
@@ -36,7 +36,7 @@ parnasClements1984 = cInProceedings
 parnasClements1986 = cArticle [dParnas, pcClements] 
   (S "A rational design process: How and why to fake it")
   (S "IEEE Transactions on Software Engineering") 1986
-  [month Feb, volume 12, number 2, pages [251,257], address (S "Washington, USA")]
+  [month Feb, volume 12, number 2, pages [251,257], address "Washington, USA"]
   "parnasClements1986"
 
 smithLai2005 = cInProceedings [spencerSmith, lLai]
@@ -45,7 +45,7 @@ smithLai2005 = cInProceedings [spencerSmith, lLai]
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+
   S "Engineering Processes, SREP'05") 2005
-  [ editor [pjAgerfalk, nKraiem, jRalyte], address (S "Paris, France")
+  [ editor [pjAgerfalk, nKraiem, jRalyte], address "Paris, France"
   , pages [107,121], 
   note (S "In conjunction with 13th IEEE International Requirements" +:+
   S "Engineering Conference,")] 

@@ -9,23 +9,20 @@ module Language.Drasil.Classes (
   , HasReasVal(reasVal)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
-  , HasFields(getFields)
-
-  -- the named collection of classes which express certain ideas
-  , Concept
-
-  -- the unsorted rest
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
-  , IsUnit(udefn, getUnits)
-  , UnitEq(uniteq)
-  , CommonIdea(abrv)
   , Constrained(constraints)
   , ExprRelat(relat)
+  , CommonIdea(abrv)
   , DefiningExpr(defnExpr)
   , Quantity
   , UncertainQuantity(uncert)
+  , Concept
+
+  -- the unsorted rest
+  , IsUnit(udefn, getUnits)
+  , UnitEq(uniteq)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere
@@ -33,7 +30,6 @@ module Language.Drasil.Classes (
 import Language.Drasil.Classes.Core
 
 import Language.Drasil.Constraint (Constraint)
-import Language.Drasil.Data.Citation (CiteField)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
@@ -102,17 +98,13 @@ class HasReasVal c where
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes
--- all sorts of import cycles (or lost of orphans)
+-- all sorts of import cycles (or lots of orphans)
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 
 -- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class Quantity c => UncertainQuantity c where
   uncert :: Lens' c (Maybe Double)
-
--- | Citations have Fields
-class HasFields c where
-  getFields :: Lens' c [CiteField]
 
 -----------------------------------------------------
 -- Below are for units only
@@ -130,6 +122,7 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
+-----------------------------------------------------
 -- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
 class ExprRelat c where
   relat :: Lens' c Expr

@@ -21,7 +21,7 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Data.Date (Month(..))
 
 -- | Fields used in citations.
-data CiteField = Address      Sentence
+data CiteField = Address      String
                | Author       People
                | BookTitle    Sentence -- Used for 'InCollection' references only.
                | Chapter      Int
@@ -68,7 +68,9 @@ author = Author
 editor = Editor
 
 -- | Smart field constructor
-address, bookTitle, howPublished, howPublishedU, institution, journal, note,
+address :: String -> CiteField
+
+bookTitle, howPublished, howPublishedU, institution, journal, note,
   organization, publisher, school, series, title,
   typeField :: Sentence -> CiteField
 

@@ -32,4 +32,4 @@ li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   "li2010"
 
 karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
-  (S "Influence of inherent anisotropy of" +:+ phrase soil +:+ S "strength on limit equilibrium" +:+ phrase ssa) (S "Proceedings of the 65th annual Canadian GeoTechnical Conference") 2012 [address (S "Winnipeg, MB, Canada"), organization (S "Canadian Geotechnical Society")] "karchewski2012"
+  (S "Influence of inherent anisotropy of" +:+ phrase soil +:+ S "strength on limit equilibrium" +:+ phrase ssa) (S "Proceedings of the 65th annual Canadian GeoTechnical Conference") 2012 [address "Winnipeg, MB, Canada", organization (S "Canadian Geotechnical Society")] "karchewski2012"

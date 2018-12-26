@@ -20,13 +20,13 @@ bueche1986, incroperaEtAl2007, lightstone2012 :: Citation
 bueche1986 = cBookA [jBueche]
   (S "Introduction to Physics for Scientists")
   (S "McGraw Hill") 1986
-  [edition 4, address (S "New York City, New York")]
+  [edition 4, address "New York City, New York"]
   "bueche1986"
 
 incroperaEtAl2007 = cBookA [fIncropera, dDewitt, tBergman, aLavine]
   (S "Fundamentals of Heat and Mass Transfer")
   (S "John Wiley and Sons") 2007
-  [edition 6, address (S "Hoboken, New Jersey")]
+  [edition 6, address "Hoboken, New Jersey"]
   "incroperaEtAl2007"
 
 lightstone2012 = cMisc [

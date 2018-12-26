@@ -36,6 +36,7 @@ library
     , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
+    , Language.Drasil.Classes.Document
     , Language.Drasil.Constraint
     , Language.Drasil.Data.Citation
     , Language.Drasil.Data.Date

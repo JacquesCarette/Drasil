@@ -391,7 +391,7 @@ layCite sm c = P.Cite (c ^. citeID) (c ^. citeKind) (map (layField sm) (c ^. get
 
 layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField
-layField sm (Address      s) = P.Address      $ spec sm s
+layField  _ (Address      s) = P.Address      $ P.S s
 layField  _ (Author       p) = P.Author       p
 layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
 layField  _ (Chapter      c) = P.Chapter      c

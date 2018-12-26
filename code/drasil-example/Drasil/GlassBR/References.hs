@@ -28,7 +28,7 @@ astm2016 = cMisc
   [ author [mononym "ASTM"],
   title (S "Standard specification for Flat Glass"),
   publisher (S "ASTM International"),  
-  address (S "West Conshohocken, PA"),
+  address "West Conshohocken, PA",
   year 2016, howPublishedU (S "https://doi.org/10.1520/C1036-16")]
   "astm2016"
 
@@ -37,7 +37,7 @@ astm2012 = cMisc
   title (S "Standard Specification for Heat-Strengthened and Fully Tempered" +:+
     S "Flat Glass"),
   publisher (S "ASTM International"),
-  address (S "West Conshohocken, PA"),
+  address "West Conshohocken, PA",
   year 2012, howPublishedU (S "https://doi.org/10.1520/C1048-12E01")]
   "astm2012"
 

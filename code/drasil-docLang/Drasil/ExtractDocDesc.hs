@@ -206,7 +206,7 @@ getBib :: (HasFields c) => [c] -> [Sentence]
 getBib a = concatMap getField $ concatMap (^. getFields) a
 
 getField :: CiteField -> [Sentence]
-getField (Address s) = [s]
+getField (Address s) = [S s]
 getField (BookTitle s) = [s]
 getField (Institution s) = [s]
 getField (Journal s) = [s]

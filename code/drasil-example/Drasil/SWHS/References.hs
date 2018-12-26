@@ -18,20 +18,20 @@ swhsCitations = [bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, pa
 bueche1986, incroperaEtAl2007, lightstone2012 :: Citation
 
 bueche1986 = cBookA [jBueche]
-  (S "Introduction to Physics for Scientists")
-  (S "McGraw Hill") 1986
+  "Introduction to Physics for Scientists"
+  "McGraw Hill" 1986
   [edition 4, address "New York City, New York"]
   "bueche1986"
 
 incroperaEtAl2007 = cBookA [fIncropera, dDewitt, tBergman, aLavine]
-  (S "Fundamentals of Heat and Mass Transfer")
-  (S "John Wiley and Sons") 2007
+  "Fundamentals of Heat and Mass Transfer"
+  "John Wiley and Sons" 2007
   [edition 6, address "Hoboken, New Jersey"]
   "incroperaEtAl2007"
 
 lightstone2012 = cMisc [
   author [mLightstone],
-  title (S "Derivation of tank/pcm model"),
+  title "Derivation of tank/pcm model",
   year 2012,
-  note (S "From Marilyn Lightstone's Personal Notes")]
+  note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"

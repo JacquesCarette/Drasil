@@ -363,7 +363,7 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
-layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
+layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
@@ -382,37 +382,35 @@ layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec s
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
+layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing bibliography
-layCite ::(HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (c ^. citeID) (c ^. citeKind) (map (layField sm) (c ^. getFields))
+layCite :: Citation -> P.Citation
+layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
 
-layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField
-layField  _ (Address      s) = P.Address      $ P.S s
-layField  _ (Author       p) = P.Author       p
-layField  _ (BookTitle    b) = P.BookTitle    $ P.S b
-layField  _ (Chapter      c) = P.Chapter      c
-layField  _ (Edition      e) = P.Edition      e
-layField  _ (Editor       e) = P.Editor       e
-layField  _ (Institution  i) = P.Institution  $ P.S i
-layField  _ (Journal      j) = P.Journal      $ P.S j
-layField  _ (Month        m) = P.Month        m
-layField sm (Note         n) = P.Note         $ spec sm n
-layField  _ (Number       n) = P.Number       n
-layField sm (Organization o) = P.Organization $ spec sm o
-layField  _ (Pages        p) = P.Pages        p
-layField sm (Publisher    p) = P.Publisher    $ spec sm p
-layField sm (School       s) = P.School       $ spec sm s
-layField sm (Series       s) = P.Series       $ spec sm s
-layField sm (Title        t) = P.Title        $ spec sm t
-layField sm (Type         t) = P.Type         $ spec sm t
-layField  _ (Volume       v) = P.Volume       v
-layField  _ (Year         y) = P.Year         y
-layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
-layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
+layField :: CiteField -> P.CiteField
+layField (Address      s) = P.Address      $ P.S s
+layField (Author       p) = P.Author       p
+layField (BookTitle    b) = P.BookTitle    $ P.S b
+layField (Chapter      c) = P.Chapter      c
+layField (Edition      e) = P.Edition      e
+layField (Editor       e) = P.Editor       e
+layField (Institution  i) = P.Institution  $ P.S i
+layField (Journal      j) = P.Journal      $ P.S j
+layField (Month        m) = P.Month        m
+layField (Note         n) = P.Note         $ P.S n
+layField (Number       n) = P.Number       n
+layField (Organization o) = P.Organization $ P.S o
+layField (Pages        p) = P.Pages        p
+layField (Publisher    p) = P.Publisher    $ P.S p
+layField (School       s) = P.School       $ P.S s
+layField (Series       s) = P.Series       $ P.S s
+layField (Title        t) = P.Title        $ P.S t
+layField (Type         t) = P.Type         $ P.S t
+layField (Volume       v) = P.Volume       v
+layField (Year         y) = P.Year         y
+layField (HowPublished (URL  u)) = P.HowPublished (P.URL  $ P.S u)
+layField (HowPublished (Verb v)) = P.HowPublished (P.Verb $ P.S v)
 
 -- | Translates lists
 makeL :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>

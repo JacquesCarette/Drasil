@@ -28,7 +28,7 @@ import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
   prepend, name, raw, (+::+), defer)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (Reference(Reference))
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.Sentence (Sentence(Ref))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -189,14 +189,10 @@ getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. ge
         isYear _        = False
 
 getTitle :: (HasFields c) => c -> String
-getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
+getTitle c = maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
   where isTitle :: CiteField -> Bool
         isTitle (Title _) = True
         isTitle _         = False
-        getStr :: Sentence -> String
-        getStr (S s) = s
-        getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-        getStr _ = error "Term is not a string"
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy compareAuthYearTitle citations

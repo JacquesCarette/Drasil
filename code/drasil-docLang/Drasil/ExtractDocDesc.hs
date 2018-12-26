@@ -210,13 +210,13 @@ getField (Address s) = S s
 getField (BookTitle s) = S s
 getField (Institution s) = S s
 getField (Journal s) = S s
-getField (Note s) = s
-getField (Organization s) = s
-getField (Publisher s) = s
-getField (School s) = s
-getField (Series s) = s
-getField (Title s) = s
-getField (Type s) = s
+getField (Note s) = S s
+getField (Organization s) = S s
+getField (Publisher s) = S s
+getField (School s) = S s
+getField (Series s) = S s
+getField (Title s) = S s
+getField (Type s) = S s
 getField _ = EmptyS
 
 getLT :: ListType -> [Sentence]

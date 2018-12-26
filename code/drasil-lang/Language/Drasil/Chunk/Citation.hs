@@ -14,7 +14,6 @@ module Language.Drasil.Chunk.Citation
   ) where
 
 import Language.Drasil.People (People)
-import Language.Drasil.Sentence (Sentence)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes.Document (HasFields(getFields))
@@ -51,14 +50,14 @@ cite x y z = let s = noSpaces z in Cite x y s (shortname' s)
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cArticle :: People -> Sentence -> String -> Int -> [CiteField] -> String -> Citation
+cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
 cArticle aut t journ yr opt lbe = cite Article 
   ((author aut) : (title t) : (journal journ) : (year yr) : opt) lbe
 
 -- | Book citation requires author or editor, title, publisher, year.
 -- Optional fields can be volume or number, series, address, edition, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cBookA, cBookE :: People -> Sentence -> Sentence -> Int ->
+cBookA, cBookE :: People -> String -> String -> Int ->
   [CiteField] -> String -> Citation
 -- | Book citation by author
 cBookA aut t pub yr opt lbe = cite Book (author aut : stdFields t pub yr opt) lbe
@@ -68,7 +67,7 @@ cBookE ed t pub yr opt lbe = cite Book (editor ed : stdFields t pub yr opt) lbe
 -- | Booklet citation requires title.
 -- Optional fields can be author, how published, address, month, year, note.
 -- Implicitly uses the EntryID as the chunk i.
-cBooklet :: Sentence -> [CiteField] -> String -> Citation
+cBooklet :: String -> [CiteField] -> String -> Citation
 cBooklet t opt lbe = cite Booklet (title t : opt) lbe
 
 -- | InBook citation requires author or editor, title, chapter and/or pages,
@@ -76,8 +75,8 @@ cBooklet t opt lbe = cite Booklet (title t : opt) lbe
 -- address, edition, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
 -- This smart constructor includes both chapter and page numbers.
-cInBookACP, cInBookECP :: People -> Sentence -> Int -> [Int] ->
-  Sentence -> Int -> [CiteField] -> String -> Citation
+cInBookACP, cInBookECP :: People -> String -> Int -> [Int] ->
+  String -> Int -> [CiteField] -> String -> Citation
 -- | InBook citation by author.
 cInBookACP auth t chap pgs pub yr opt lbe = cite InBook 
   (author auth : chapter chap : pages pgs : stdFields t pub yr opt) lbe
@@ -86,8 +85,8 @@ cInBookECP ed t chap pgs pub yr opt lbe = cite InBook
   (editor ed : chapter chap : pages pgs : stdFields t pub yr opt) lbe
 
 -- | InBook citation excluding page numbers.
-cInBookAC, cInBookEC :: People -> Sentence -> Int ->
-  Sentence -> Int -> [CiteField] -> String -> Citation
+cInBookAC, cInBookEC :: People -> String -> Int ->
+  String -> Int -> [CiteField] -> String -> Citation
 
 -- | Otherwise ientical to 'cInBookACP'
 cInBookAC auth t chap pub yr opt lbe = cite InBook 
@@ -97,8 +96,8 @@ cInBookEC ed t chap pub yr opt lbe = cite InBook
   (editor ed : chapter chap : stdFields t pub yr opt) lbe
 
 -- | InBook citation excluding chapter.
-cInBookAP, cInBookEP :: People -> Sentence -> [Int] ->
-  Sentence -> Int -> [CiteField] -> String -> Citation
+cInBookAP, cInBookEP :: People -> String -> [Int] ->
+  String -> Int -> [CiteField] -> String -> Citation
 
 -- | Otherwise ientical to 'cInBookACP'
 cInBookAP auth t pgs pub yr opt lbe = cite InBook 
@@ -111,7 +110,7 @@ cInBookEP ed t pgs pub yr opt lbe = cite InBook
 -- Optional fields can be editor, volume or number, series, type, chapter,
 -- pages, address, edition, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cInCollection :: People -> Sentence -> String -> Sentence -> Int ->
+cInCollection :: People -> String -> String -> String -> Int ->
   [CiteField] -> String -> Citation
 cInCollection auth t bt pub yr opt lbe = cite InCollection 
   (author auth : bookTitle bt : stdFields t pub yr opt) lbe
@@ -120,7 +119,7 @@ cInCollection auth t bt pub yr opt lbe = cite InCollection
 -- Optional fields can be editor, volume or number, series, pages,
 -- address, month, organization, publisher, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cInProceedings :: People -> Sentence -> String -> Int ->
+cInProceedings :: People -> String -> String -> Int ->
   [CiteField] -> String -> Citation
 cInProceedings auth t bt yr opt lbe = cite InProceedings 
   (author auth : title t : bookTitle bt : year yr : opt) lbe
@@ -128,13 +127,13 @@ cInProceedings auth t bt yr opt lbe = cite InProceedings
 -- | Manual (technical documentation) citation requires title.
 -- Optional fields can be author, organization, address, edition, month, year, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cManual :: Sentence -> [CiteField] -> String -> Citation
+cManual :: String -> [CiteField] -> String -> Citation
 cManual t opt lbe = cite Manual (title t : opt) lbe
 
 -- | Master's Thesis citation requires author, title, school, and year.
 -- Optional fields can be type, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cMThesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> String -> Citation
+cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
 cMThesis auth t sch yr opt lbe = cite MThesis (thesis auth t sch yr opt) lbe
 
 -- | Misc citation requires nothing.
@@ -146,36 +145,36 @@ cMisc opt lbe = cite Misc opt lbe
 -- | PhD Thesis citation requires author, title, school, and year.
 -- Optional fields can be type, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cPhDThesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> String -> Citation
+cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
 cPhDThesis auth t sch yr opt lbe = cite PhDThesis (thesis auth t sch yr opt) lbe
 
 -- | Proceedings citation requires title and year.
 -- Optional fields can be editor, volume or number, series, address,
 -- publisher, note, month, and organization.
 -- Implicitly uses the EntryID as the chunk i.
-cProceedings :: Sentence -> Int -> [CiteField] -> String -> Citation
+cProceedings :: String -> Int -> [CiteField] -> String -> Citation
 cProceedings t yr opt lbe = cite Proceedings (title t : year yr : opt) lbe
 
 -- | Technical Report citation requires author, title, institution, and year.
 -- Optional fields can be type, number, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
-cTechReport :: People -> Sentence -> String -> Int -> [CiteField] -> String -> Citation
+cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
 cTechReport auth t inst yr opt lbe = cite TechReport 
   (author auth : title t : institution inst : year yr : opt) lbe
 
 -- | Unpublished citation requires author, title, and note.
 -- Optional fields can be month and year.
 -- Implicitly uses the EntryID as the chunk i.
-cUnpublished :: People -> Sentence -> Sentence -> [CiteField] -> String -> Citation
+cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
 cUnpublished auth t n opt lbe = cite Unpublished 
   (author auth : title t : note n : opt) lbe
 
 -- Helper function (do not export) for creating book reference.
-stdFields :: Sentence -> Sentence -> Int -> [CiteField] -> [CiteField]
+stdFields :: String -> String -> Int -> [CiteField] -> [CiteField]
 stdFields t pub yr opt = title t : publisher pub : year yr : opt
 
 -- Helper function (do not export) for creating thesis reference.
-thesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> [CiteField]
+thesis :: People -> String -> String -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
 
 ------------

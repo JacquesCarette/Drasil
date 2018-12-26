@@ -27,23 +27,23 @@ module Language.Drasil (
   -- Classes
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
+  , HasSpace(typ)
+  , HasUnitSymbol(usymb)
+  , HasReference(getReferences)
+  , HasReasVal(reasVal)
+  , HasDerivation(derivations)
+  , HasFields(getFields)
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
-  , HasSpace(typ)
-  , HasUnitSymbol(usymb)
   , IsUnit
-  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
-  , HasReasVal(reasVal)
   , ExprRelat(relat)
   , DefiningExpr(defnExpr)
-  , HasDerivation(derivations)
   , UncertainQuantity(uncert)
   , Quantity
-  , HasFields(getFields)
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea

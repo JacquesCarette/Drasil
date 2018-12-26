@@ -74,7 +74,7 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a, MayHaveUnit a) => Sentence -> a -> Sentence
+fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets a reasonable or typical value from a Constrained chunk

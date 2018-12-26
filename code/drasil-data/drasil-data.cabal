@@ -45,9 +45,9 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0),
-    drasil-lang >= 0.1.51
+    drasil-lang >= 0.1.53
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall  -Wredundant-constraints
 
 source-repository head
   type:     git

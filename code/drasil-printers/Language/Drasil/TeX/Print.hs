@@ -38,7 +38,7 @@ import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', des
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote,
   snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))

@@ -45,6 +45,9 @@ data Sentence where
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 ch x = Ch SymbolStyle (x ^. uid)
 
+instance Semigroup Sentence where
+  (<>) = (:+:)
+
 instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)

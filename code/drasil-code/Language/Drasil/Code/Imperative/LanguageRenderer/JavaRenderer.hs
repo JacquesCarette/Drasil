@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
-import Prelude hiding (break,print)
+import Prelude hiding (break,print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 

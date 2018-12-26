@@ -1,26 +1,31 @@
 {-# Language TypeFamilies, ConstraintKinds #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
+  -- the classes
     NamedIdea(term)
+  , HasSpace(typ)
+  , HasUnitSymbol(usymb)
+  , HasReference(getReferences)
+  , HasReasVal(reasVal)
+  , HasDerivation(derivations)
+  , HasAdditionalNotes(getNotes)
+  , HasFields(getFields)
+
+  -- the named collection of classes which express certain ideas
+  , Concept
+
+  -- the unsorted rest
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
-  , Concept
-  , HasSpace(typ)
-  , HasUnitSymbol(usymb)
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
-  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
-  , HasReasVal(reasVal)
   , ExprRelat(relat)
   , DefiningExpr(defnExpr)
-  , HasDerivation(derivations)
-  , HasAdditionalNotes(getNotes)
   , Quantity
   , UncertainQuantity(uncert)
-  , HasFields(getFields)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere
@@ -68,7 +73,6 @@ class ConceptDomain c where
   -- Drasil framework, but should not be exported beyond that.
 
 -- | Concepts are 'Idea's with definitions and domains
--- class (Idea c, Definition c, ConceptDomain c) => Concept c where
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 
 -- | HasSpace is anything which has a Space...

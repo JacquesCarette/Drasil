@@ -72,6 +72,9 @@ toText = switch (const Text)
 get_ctx :: PrintLaTeX MathContext
 get_ctx = PL id
 
+instance Semigroup (PrintLaTeX TP.Doc) where
+  (PL s1) <> (PL s2) = PL $ \ctx -> (s1 ctx) TP.<> (s2 ctx)
+
 -- very convenient lifting of $$
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
@@ -82,9 +85,8 @@ instance Monoid (PrintLaTeX TP.Doc) where
 (%%) :: D -> D -> D
 (%%) = mappend
 
-($+$),(<>) :: D -> D -> D
+($+$) :: D -> D -> D
 ($+$) = liftA2 (TP.$+$)
-(<>) = liftA2 (TP.<>)
 
 vcat :: [D] -> D
 vcat l = PL $ \ctx -> TP.vcat $ map (\x -> runPrint x ctx) l

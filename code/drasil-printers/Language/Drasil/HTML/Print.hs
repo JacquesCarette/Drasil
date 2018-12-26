@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)

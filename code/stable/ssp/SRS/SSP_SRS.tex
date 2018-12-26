@@ -358,921 +358,916 @@ This section simplifies the original problem and helps in developing the theoret
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SSA is based on.
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:factOfSafety}
 \phantomsection 
 \label{TM:factOfSafety}
 \\ \midrule \\
 Label & Factor of safety
-\\ \midrule \\
-Equation & \begin{dmath}
-           {F_{S}}=\frac{P}{S}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \item{$P$ is the resistive shear force (N)}
-              \item{$S$ is the mobilized shear force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The stability metric of the slope, known as the factor of safety (${F_{S}}$), is determined by the ratio of the shear force at the base of the slope ($S$), and the resistive shear ($P$).
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   {F_{S}}=\frac{P}{S}
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                 \item{$P$ is the resistive shear force (N)}
+                                 \item{$S$ is the mobilized shear force (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & The stability metric of the slope, known as the factor of safety (${F_{S}}$), is determined by the ratio of the shear force at the base of the slope ($S$), and the resistive shear ($P$).
+                                         \\ \midrule \\
+                                         Source & \cite{fredlund1977}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:equilibrium}
 \phantomsection 
 \label{TM:equilibrium}
 \\ \midrule \\
 Label & Equilibrium
-\\ \midrule \\
-Equation & \begin{dmath}
-           \displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${F_{x}}$ is the x-component of the net force (N)}
-              \item{${F_{y}}$ is the y-component of the net force (N)}
-              \item{$M$ is the moment (Nm)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[A:Effective-Norm-Stress-Large]{A: Effective-Norm-Stress-Large}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   \displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{${F_{x}}$ is the x-component of the net force (N)}
+                                 \item{${F_{y}}$ is the y-component of the net force (N)}
+                                 \item{$M$ is the moment (Nm)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[A:Effective-Norm-Stress-Large]{A: Effective-Norm-Stress-Large}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+                                         \\ \midrule \\
+                                         Source & \cite{fredlund1977}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:mcShrStrgth}
 \phantomsection 
 \label{TM:mcShrStrgth}
 \\ \midrule \\
 Label & Mohr-Coulumb shear strength
-\\ \midrule \\
-Equation & \begin{dmath}
-           τ=σ \tan\left(φ'\right)+c'
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$τ$ is the resistive shear stress (Pa)}
-              \item{$σ$ is the normal stress (Pa)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{$c'$ is the effective cohesion (Pa)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the cohesion $c'$ represents the $τ$ intercept of the fitted line.
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   τ=σ \tan\left(φ'\right)+c'
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$τ$ is the resistive shear stress (Pa)}
+                                 \item{$σ$ is the normal stress (Pa)}
+                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                 \item{$c'$ is the effective cohesion (Pa)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the cohesion $c'$ represents the $τ$ intercept of the fitted line.
+                                         \\ \midrule \\
+                                         Source & \cite{fredlund1977}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[GD:resShr]{GD: resShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:effStress}
 \phantomsection 
 \label{TM:effStress}
 \\ \midrule \\
 Label & Effective stress
-\\ \midrule \\
-Equation & \begin{dmath}
-           σ=σ-μ
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$σ$ is the normal stress (Pa)}
-              \item{$μ$ is the pore pressure (Pa)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $σ$ is the total stress a soil mass needs to maintain itself as a rigid collection of particles. The source of the stress can be provided by the soil skeleton $σ$, or by the pore pressure from water within the soil $μ$. The stress from the soil skeleton is known as the effective stress $σ$ and is the difference between the total stress $σ$ and the pore stress $μ$.
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   σ=σ-μ
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$σ$ is the normal stress (Pa)}
+                                 \item{$μ$ is the pore pressure (Pa)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & $σ$ is the total stress a soil mass needs to maintain itself as a rigid collection of particles. The source of the stress can be provided by the soil skeleton $σ$, or by the pore pressure from water within the soil $μ$. The stress from the soil skeleton is known as the effective stress $σ$ and is the difference between the total stress $σ$ and the pore stress $μ$.
+                                         \\ \midrule \\
+                                         Source & \cite{fredlund1977}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[GD:resShr]{GD: resShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normForcEq}
 \phantomsection 
 \label{GD:normForcEq}
 \\ \midrule \\
 Label & Normal force equilibrium
-\\ \midrule \\
-Equation & \begin{dmath}
-           N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$N$ is the normal force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$W$ is the weight (N)}
-              \item{$X$ is the interslice shear force (N)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$H$ is the interslice water force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$N$ is the normal force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$W$ is the weight (N)}
+                                 \item{$X$ is the interslice shear force (N)}
+                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                 \item{$β$ is the angle (${}^{\circ}$)}
+                                 \item{$Q$ is the imposed surface load (N)}
+                                 \item{$ω$ is the angle (${}^{\circ}$)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                 \item{$G$ is the interslice normal force (N)}
+                                 \item{$H$ is the interslice water force (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:bsShrFEq}
 \phantomsection 
 \label{GD:bsShrFEq}
 \\ \midrule \\
 Label & Base shear force equilibrium
-\\ \midrule \\
-Equation & \begin{dmath}
-           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$S$ is the mobilized shear force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$W$ is the weight (N)}
-              \item{$X$ is the interslice shear force (N)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$H$ is the interslice water force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$S$ is the mobilized shear force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$W$ is the weight (N)}
+                                 \item{$X$ is the interslice shear force (N)}
+                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                 \item{$β$ is the angle (${}^{\circ}$)}
+                                 \item{$Q$ is the imposed surface load (N)}
+                                 \item{$ω$ is the angle (${}^{\circ}$)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                 \item{$G$ is the interslice normal force (N)}
+                                 \item{$H$ is the interslice water force (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShr}
 \phantomsection 
 \label{GD:resShr}
 \\ \midrule \\
 Label & Resistive shear force
-\\ \midrule \\
-Equation & \begin{dmath}
-           P_{i}={N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$P$ is the resistive shear force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$N'$ is the effective normal force (N)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{$c'$ is the effective cohesion (Pa)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)\cdot{}1=N'$ \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   P_{i}={N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$P$ is the resistive shear force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$N'$ is the effective normal force (N)}
+                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                 \item{$c'$ is the effective cohesion (Pa)}
+                                 \item{$b$ is the base width of a slice (m)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)\cdot{}1=N'$ \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShr}
 \phantomsection 
 \label{GD:mobShr}
 \\ \midrule \\
 Label & Mobile shear force
-\\ \midrule \\
-Equation & \begin{dmath}
-           S_{i}=\frac{P_{i}}{{F_{S}}}=\frac{{N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{{F_{S}}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$S$ is the mobilized shear force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$P$ is the resistive shear force (N)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \item{$N'$ is the effective normal force (N)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{$c'$ is the effective cohesion (Pa)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & From the definition of the factor of safety in \hyperref[TM:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety ${F_{S}}$. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   S_{i}=\frac{P_{i}}{{F_{S}}}=\frac{{N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{{F_{S}}}
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$S$ is the mobilized shear force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$P$ is the resistive shear force (N)}
+                                 \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                 \item{$N'$ is the effective normal force (N)}
+                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                 \item{$c'$ is the effective cohesion (Pa)}
+                                 \item{$b$ is the base width of a slice (m)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & From the definition of the factor of safety in \hyperref[TM:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety ${F_{S}}$. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShearWO}
 \phantomsection 
 \label{GD:resShearWO}
 \\ \midrule \\
 Label & Resistive shear force
-\\ \midrule \\
-Equation & \begin{dmath}
-           R=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$R$ is the resistive shear force (N)}
-              \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$ΔH$ is the difference between interslice forces (N)}
-              \item{${U_{b}}$ is the base hydrostatic force (N)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{$c'$ is the effective cohesion (Pa)}
-              \item{$b$ is the base width of a slice (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   R=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$R$ is the resistive shear force (N)}
+                                 \item{$W$ is the weight (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                 \item{$β$ is the angle (${}^{\circ}$)}
+                                 \item{$Q$ is the imposed surface load (N)}
+                                 \item{$ω$ is the angle (${}^{\circ}$)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                 \item{$ΔH$ is the difference between interslice forces (N)}
+                                 \item{${U_{b}}$ is the base hydrostatic force (N)}
+                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                 \item{$c'$ is the effective cohesion (Pa)}
+                                 \item{$b$ is the base width of a slice (m)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Source & \cite{chen2005}
+                                          \\ \midrule \\
+                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShearWO}
 \phantomsection 
 \label{GD:mobShearWO}
 \\ \midrule \\
 Label & Mobilized shear force
-\\ \midrule \\
-Equation & \begin{dmath}
-           T=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$T$ is the mobilized shear force (N)}
-              \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$ΔH$ is the difference between interslice forces (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   T=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$T$ is the mobilized shear force (N)}
+                                 \item{$W$ is the weight (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                 \item{$β$ is the angle (${}^{\circ}$)}
+                                 \item{$Q$ is the imposed surface load (N)}
+                                 \item{$ω$ is the angle (${}^{\circ}$)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                 \item{$ΔH$ is the difference between interslice forces (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Source & \cite{chen2005}
+                                          \\ \midrule \\
+                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normShrR}
 \phantomsection 
 \label{GD:normShrR}
 \\ \midrule \\
 Label & Interslice normal/shear relationship
-\\ \midrule \\
-Equation & \begin{dmath}
-           X=λ f G
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$X$ is the interslice shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$G$ is the interslice normal force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The assumption for the Morgenstern Price method (\hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   X=λ f G
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$X$ is the interslice shear force (N)}
+                                 \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                 \item{$f$ is the scaling function (Unitless)}
+                                 \item{$G$ is the interslice normal force (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & The assumption for the Morgenstern Price method (\hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:momentEql}
 \phantomsection 
 \label{GD:momentEql}
 \\ \midrule \\
 Label & Moment equilibrium
-\\ \midrule \\
-Equation & \begin{dmath}
-           0=-G_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$z$ is the center of slice height (m)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{$H$ is the interslice water force (N)}
-              \item{$X$ is the interslice shear force (N)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$W$ is the weight (N)}
-              \item{$h$ is the midpoint height (m)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[TM:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   0=-G_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$G$ is the interslice normal force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$z$ is the center of slice height (m)}
+                                 \item{$b$ is the base width of a slice (m)}
+                                 \item{$α$ is the angle (${}^{\circ}$)}
+                                 \item{$H$ is the interslice water force (N)}
+                                 \item{$X$ is the interslice shear force (N)}
+                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                 \item{$W$ is the weight (N)}
+                                 \item{$h$ is the midpoint height (m)}
+                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                 \item{$β$ is the angle (${}^{\circ}$)}
+                                 \item{$Q$ is the imposed surface load (N)}
+                                 \item{$ω$ is the angle (${}^{\circ}$)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[TM:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sliceWght}
 \phantomsection 
 \label{DD:sliceWght}
 \\ \midrule \\
 Label & Weight
-\\ \midrule \\
-Symbol & $W$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           W=b_{i} \begin{cases}
+        \\ \midrule \\
+        Symbol & $W$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    W=b_{i} \begin{cases}
 \left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
 \left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 \left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$W$ is the weight (N)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${y_{slope}}$ is the slope y-ordinate (m)}
-              \item{${y_{slip}}$ is the y ordinate (m)}
-              \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${y_{wt}}$ is the y ordinate (m)}
-              \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$W$ is the weight (N)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:baseWtrF}
 \phantomsection 
 \label{DD:baseWtrF}
 \\ \midrule \\
 Label & Base hydrostatic force
-\\ \midrule \\
-Symbol & ${U_{b}}$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           {U_{b}}={ℓ_{b,i}} \begin{cases}
+        \\ \midrule \\
+        Symbol & ${U_{b}}$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    {U_{b}}={ℓ_{b,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${U_{b}}$ is the base hydrostatic force (N)}
-              \item{${ℓ_{b}}$ is the total base length of a slice (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${y_{wt}}$ is the y ordinate (m)}
-              \item{${y_{slip}}$ is the y ordinate (m)}
-              \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${U_{b}}$ is the base hydrostatic force (N)}
+                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:surfWtrF}
 \phantomsection 
 \label{DD:surfWtrF}
 \\ \midrule \\
 Label & Surface hydrostatic force
-\\ \midrule \\
-Symbol & ${U_{t}}$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           {U_{t}}={ℓ_{s,i}} \begin{cases}
+        \\ \midrule \\
+        Symbol & ${U_{t}}$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    {U_{t}}={ℓ_{s,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{slope,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slope,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slope,i}}
 \end{cases}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${y_{wt}}$ is the y ordinate (m)}
-              \item{${y_{slope}}$ is the slope y-ordinate (m)}
-              \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                                  \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:intersliceWtrF}
 \phantomsection 
 \label{DD:intersliceWtrF}
 \\ \midrule \\
 Label & Interslice water force
-\\ \midrule \\
-Symbol & $H$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           H=\begin{cases}
+        \\ \midrule \\
+        Symbol & $H$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    H=\begin{cases}
 \frac{\left({y_{slope,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}+\left({y_{wt,i}}-{y_{slope,i}}\right)^{2} {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
 \frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$H$ is the interslice water force (N)}
-              \item{${y_{slope}}$ is the slope y-ordinate (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${y_{slip}}$ is the y ordinate (m)}
-              \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${y_{wt}}$ is the y ordinate (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$H$ is the interslice water force (N)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleA}
 \phantomsection 
 \label{DD:angleA}
 \\ \midrule \\
 Label & Angle
-\\ \midrule \\
-Symbol & $α$
-\\ \midrule \\
-Units & ${}^{\circ}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           α=\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${y_{slip}}$ is the y ordinate (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${x_{slip}}$ is the x ordinate (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $α$
+                 \\ \midrule \\
+                 Units & ${}^{\circ}$
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    α=\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleB}
 \phantomsection 
 \label{DD:angleB}
 \\ \midrule \\
 Label & Angle
-\\ \midrule \\
-Symbol & $β$
-\\ \midrule \\
-Units & ${}^{\circ}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           β=\frac{{y_{slope,i}}-{y_{slope,i-1}}}{{x_{slope,i}}-{x_{slope,i-1}}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{${y_{slope}}$ is the slope y-ordinate (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{${x_{slope}}$ is the slope x-ordinate (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $β$
+                 \\ \midrule \\
+                 Units & ${}^{\circ}$
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    β=\frac{{y_{slope,i}}-{y_{slope,i-1}}}{{x_{slope,i}}-{x_{slope,i-1}}}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$β$ is the angle (${}^{\circ}$)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${x_{slope}}$ is the slope x-ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthB}
 \phantomsection 
 \label{DD:lengthB}
 \\ \midrule \\
 Label & Base width of a slice
-\\ \midrule \\
-Symbol & $b$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{dmath}
-           b={x_{slip,i}}-{x_{slip,i-1}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$b$ is the base width of a slice (m)}
-              \item{${x_{slip}}$ is the x ordinate (m)}
-              \item{$i$ is the index (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $b$
+                 \\ \midrule \\
+                 Units & m
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    b={x_{slip,i}}-{x_{slip,i-1}}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLb}
 \phantomsection 
 \label{DD:lengthLb}
 \\ \midrule \\
 Label & Total base length of a slice
-\\ \midrule \\
-Symbol & ${ℓ_{b}}$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{dmath}
-           {ℓ_{b}}=b_{i} \sec\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${ℓ_{b}}$ is the total base length of a slice (m)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & ${ℓ_{b}}$
+                 \\ \midrule \\
+                 Units & m
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    {ℓ_{b}}=b_{i} \sec\left(α_{i}\right)
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLs}
 \phantomsection 
 \label{DD:lengthLs}
 \\ \midrule \\
 Label & Length of an interslice surface
-\\ \midrule \\
-Symbol & ${ℓ_{s}}$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{dmath}
-           {ℓ_{s}}=b_{i} \sec\left(β_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+        \\ \midrule \\
+        Symbol & ${ℓ_{s}}$
+                 \\ \midrule \\
+                 Units & m
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    {ℓ_{s}}=b_{i} \sec\left(β_{i}\right)
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$β$ is the angle (${}^{\circ}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:seismicLoadF}
 \phantomsection 
 \label{DD:seismicLoadF}
 \\ \midrule \\
 Label & Earthquake load factor
-\\ \midrule \\
-Symbol & ${K_{c}}$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{dmath}
-           {K_{c}}={K_{c}} W_{i}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & ${K_{c}}$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    {K_{c}}={K_{c}} W_{i}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                                  \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                                  \item{$W$ is the weight (N)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:surfLoads}
 \phantomsection 
 \label{DD:surfLoads}
 \\ \midrule \\
 Label & Imposed surface load
-\\ \midrule \\
-Symbol & $Q$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           Q=Q_{i} ω_{i}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $Q$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    Q=Q_{i} ω_{i}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$Q$ is the imposed surface load (N)}
+                                                  \item{$Q$ is the imposed surface load (N)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$ω$ is the angle (${}^{\circ}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{chen2005}
+                                                           \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:intrsliceF}
 \phantomsection 
 \label{DD:intrsliceF}
 \\ \midrule \\
 Label & Interslice shear force
-\\ \midrule \\
-Symbol & $X$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           X=λ f_{i} G_{i}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$X$ is the interslice shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$i$ is the index (Unitless)}
-              \item{$G$ is the interslice normal force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $X$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    X=λ f_{i} G_{i}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$X$ is the interslice shear force (N)}
+                                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                  \item{$f$ is the scaling function (Unitless)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$G$ is the interslice normal force (N)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{chen2005}
+                                                           \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc1}
 \phantomsection 
 \label{DD:convertFunc1}
 \\ \midrule \\
 Label & First function for incorporating interslice forces into shear force
-\\ \midrule \\
-Symbol & $Φ$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           Φ=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$i$ is the index (Unitless)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005} and \cite{karchewski2012}
-\\ \midrule \\
-RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Symbol & $Φ$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    Φ=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
+                                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                  \item{$f$ is the scaling function (Unitless)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                                  \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{chen2005} and \cite{karchewski2012}
+                                                           \\ \midrule \\
+                                                           RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc2}
 \phantomsection 
 \label{DD:convertFunc2}
 \\ \midrule \\
 Label & Second function for incorporating interslice forces into shear force
-\\ \midrule \\
-Symbol & $Ψ$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           Ψ=\frac{\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}}{Φ_{i-1}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$i$ is the index (Unitless)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{chen2005} and \cite{karchewski2012}
-\\ \midrule \\
-RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Symbol & $Ψ$
+                 \\ \midrule \\
+                 Units & N
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    Ψ=\frac{\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}}{Φ_{i-1}}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                  \item{$f$ is the scaling function (Unitless)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                                  \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{chen2005} and \cite{karchewski2012}
+                                                           \\ \midrule \\
+                                                           RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme1}
 \phantomsection 
 \label{DD:fixme1}
 \\ \midrule \\
 Label & Fixme
-\\ \midrule \\
-Symbol & $SpencerFixme1Please$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{dmath}
-           SpencerFixme1Please=G_{i}+G_{i-1}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$SpencerFixme1Please$ is the fixme (Unitless)}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $SpencerFixme1Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    SpencerFixme1Please=G_{i}+G_{i-1}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme1Please$ is the fixme (Unitless)}
+                                                  \item{$G$ is the interslice normal force (N)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme2}
 \phantomsection 
 \label{DD:fixme2}
 \\ \midrule \\
 Label & Fixme
-\\ \midrule \\
-Symbol & $SpencerFixme2Please$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{dmath}
-           SpencerFixme2Please=H_{i}+H_{i-1}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$SpencerFixme2Please$ is the fixme (Unitless)}
-              \item{$H$ is the interslice water force (N)}
-              \item{$i$ is the index (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Symbol & $SpencerFixme2Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    SpencerFixme2Please=H_{i}+H_{i-1}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme2Please$ is the fixme (Unitless)}
+                                                  \item{$H$ is the interslice water force (N)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:fctSfty}
 \phantomsection 
 \label{IM:fctSfty}
 \\ \midrule \\
 Label & Factor of safety
-\\ \midrule \\
-Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, $c'$, $φ'$, $γ$, ${γ_{Sat}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
-\\ \midrule \\
-Output & ${F_{S}}$
-\\ \midrule \\
-Input Constraints & 
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{dmath}
-           {F_{S}}=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \item{$R$ is the resistive shear force (N)}
-              \item{$v$ is the local index (Unitless)}
-              \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
-              \item{$u$ is the local index (Unitless)}
-              \item{$n$ is the number of slices (Unitless)}
-              \item{$T$ is the mobilized shear force (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & 
-\\ \midrule \\
-Source & \cite{chen2005} and \cite{karchewski2012}
-\\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        \\ \midrule \\
+        Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, $c'$, $φ'$, $γ$, ${γ_{Sat}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
+                \\ \midrule \\
+                Output & ${F_{S}}$
+                         \\ \midrule \\
+                         Input Constraints & \\ \midrule \\
+                                             Output Constraints & \\ \midrule \\
+                                                                  Equation & \begin{dmath}
+                                                                             {F_{S}}=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
+                                                                             \end{dmath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                                                                           \item{$R$ is the resistive shear force (N)}
+                                                                                           \item{$v$ is the local index (Unitless)}
+                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$u$ is the local index (Unitless)}
+                                                                                           \item{$n$ is the number of slices (Unitless)}
+                                                                                           \item{$T$ is the mobilized shear force (N)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & \\ \midrule \\
+                                                                                                   Source & \cite{chen2005} and \cite{karchewski2012}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
@@ -1369,28 +1364,28 @@ Isolating the factor of safety on the left-hand side and using compact notation 
 \end{dmath}
 ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:nrmShrFor}
 \phantomsection 
 \label{IM:nrmShrFor}
 \\ \midrule \\
 Label & Normal/shear force ratio
-\\ \midrule \\
-Input & $b$, $f$, $H$, $α$, $h$, ${K_{c}}$, $W$, ${U_{t}}$
-\\ \midrule \\
-Output & ${C2_{i}}$
-\\ \midrule \\
-Input Constraints & \begin{dmath}
-                    SpencerFixme1Please<SpencerFixme1Please
-                    \end{dmath}
-\\ \midrule \\
-Output Constraints & \begin{dmath}
-                     0<SpencerFixme1Please<SpencerFixme1Please
-                     \end{dmath}
-\\ \midrule \\
-Equation & \begin{dmath}
-           {C1_{i}}=\begin{cases}
+        \\ \midrule \\
+        Input & $b$, $f$, $H$, $α$, $h$, ${K_{c}}$, $W$, ${U_{t}}$
+                \\ \midrule \\
+                Output & ${C2_{i}}$
+                         \\ \midrule \\
+                         Input Constraints & \begin{dmath}
+                                             SpencerFixme1Please<SpencerFixme1Please
+                                             \end{dmath}
+                                             \\ \midrule \\
+                                             Output Constraints & \begin{dmath}
+                                                                  0<SpencerFixme1Please<SpencerFixme1Please
+                                                                  \end{dmath}
+                                                                  \\ \midrule \\
+                                                                  Equation & \begin{dmath}
+                                                                             {C1_{i}}=\begin{cases}
 b_{1} \left(G_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
 b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(G_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
@@ -1399,35 +1394,35 @@ b_{1} f_{1} G_{1}, & i=1\\
 b_{i} \left(f_{i} G_{i}+f_{i-1} G_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 b_{n} G_{n-1} H_{n-1}, & i=1
 \end{cases}=λ=\frac{\displaystyle\sum_{i=1}^{n}{{C1_{i}}}}{\displaystyle\sum_{i=1}^{n}{{C2_{i}}}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${C1_{i}}$ is the interslice normal force function (Nm)}
-              \item{$b$ is the base width of a slice (m)}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$H$ is the interslice water force (N)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{$i$ is the index (Unitless)}
-              \item{$SpencerFixme1Please$ is the fixme (Unitless)}
-              \item{$SpencerFixme2Please$ is the fixme (Unitless)}
-              \item{$h$ is the midpoint height (m)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$W$ is the weight (N)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$n$ is the number of slices (Unitless)}
-              \item{${C2_{i}}$ is the interslice shear force function (Nm)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                             \end{dmath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{${C1_{i}}$ is the interslice normal force function (Nm)}
+                                                                                           \item{$b$ is the base width of a slice (m)}
+                                                                                           \item{$G$ is the interslice normal force (N)}
+                                                                                           \item{$H$ is the interslice water force (N)}
+                                                                                           \item{$α$ is the angle (${}^{\circ}$)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{$SpencerFixme1Please$ is the fixme (Unitless)}
+                                                                                           \item{$SpencerFixme2Please$ is the fixme (Unitless)}
+                                                                                           \item{$h$ is the midpoint height (m)}
+                                                                                           \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+                                                                                           \item{$W$ is the weight (N)}
+                                                                                           \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                                                                           \item{$β$ is the angle (${}^{\circ}$)}
+                                                                                           \item{$Q$ is the imposed surface load (N)}
+                                                                                           \item{$ω$ is the angle (${}^{\circ}$)}
+                                                                                           \item{$n$ is the number of slices (Unitless)}
+                                                                                           \item{${C2_{i}}$ is the interslice shear force function (Nm)}
+                                                                                           \item{$f$ is the scaling function (Unitless)}
+                                                                                           \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
+                                                                                                   \\ \midrule \\
+                                                                                                   Source & \cite{chen2005}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
@@ -1444,46 +1439,44 @@ Taking a summation of each slice, and applying the boundary condition that $G_{0
 \end{dmath}
 equation (11) for $λ$, is a function of the unknown interslice normal force $G$ \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:intsliceFs}
 \phantomsection 
 \label{IM:intsliceFs}
 \\ \midrule \\
 Label & Interslice forces
-\\ \midrule \\
-Input & $i$, ${F_{S}}$, $R$, $T$, $Ψ$, $Φ$
-\\ \midrule \\
-Output & $G$
-\\ \midrule \\
-Input Constraints & 
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{dmath}
-           G_{i}=\begin{cases}
+        \\ \midrule \\
+        Input & $i$, ${F_{S}}$, $R$, $T$, $Ψ$, $Φ$
+                \\ \midrule \\
+                Output & $G$
+                         \\ \midrule \\
+                         Input Constraints & \\ \midrule \\
+                                             Output Constraints & \\ \midrule \\
+                                                                  Equation & \begin{dmath}
+                                                                             G_{i}=\begin{cases}
 \frac{{F_{S}} T_{1}-R_{1}}{Φ_{1}}, & i=1\\
 \frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}, & 2\leq{}i\leq{}n-1\\
 0, & i=0\lor{}i=n
 \end{cases}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
-              \item{$T$ is the mobilized shear force (N)}
-              \item{$R$ is the resistive shear force (N)}
-              \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
-              \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
-              \item{$n$ is the number of slices (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Seismic-Force]{A: Seismic-Force} \hyperref[A:Surface-Load]{A: Surface-Load}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                             \end{dmath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{$G$ is the interslice normal force (N)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                                                                           \item{$T$ is the mobilized shear force (N)}
+                                                                                           \item{$R$ is the resistive shear force (N)}
+                                                                                           \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$n$ is the number of slices (Unitless)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Seismic-Force]{A: Seismic-Force} \hyperref[A:Surface-Load]{A: Surface-Load}
+                                                                                                   \\ \midrule \\
+                                                                                                   Source & \cite{chen2005}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normForcEq} and the assumption \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} represented by \hyperref[GD:momentEql]{GD: momentEql} into the effective normal force definition from \hyperref[GD:normShrR]{GD: normShrR} yields equation equation (12):
@@ -1510,37 +1503,34 @@ G_{i}=\frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}
 \end{dmath}
 The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and the factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 ~\newline
-\noindent \begin{minipage}{\textwidth}
+ \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:crtSlpId}
 \phantomsection 
 \label{IM:crtSlpId}
 \\ \midrule \\
 Label & Critical slip identification
-\\ \midrule \\
-Input & 
-\\ \midrule \\
-Output & ${{F_{S}}_{min}}$
-\\ \midrule \\
-Input Constraints & 
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{dmath}
-           {{F_{S}}_{min}}=Υ\left({x_{cs}},{y_{cs}}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${{F_{S}}_{min}}$ is the minimum factor of safety (Unitless)}
-              \item{$Υ$ is the function (Unitless)}
-              \item{${x_{cs}},{y_{cs}}$ is the the set of x and y coordinates (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties}
-\\ \midrule \\
-Source & \cite{li2010}
-\\ \midrule \\
-RefBy & 
+        \\ \midrule \\
+        Input & \\ \midrule \\
+                Output & ${{F_{S}}_{min}}$
+                         \\ \midrule \\
+                         Input Constraints & \\ \midrule \\
+                                             Output Constraints & \\ \midrule \\
+                                                                  Equation & \begin{dmath}
+                                                                             {{F_{S}}_{min}}=Υ\left({x_{cs}},{y_{cs}}\right)
+                                                                             \end{dmath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{${{F_{S}}_{min}}$ is the minimum factor of safety (Unitless)}
+                                                                                           \item{$Υ$ is the function (Unitless)}
+                                                                                           \item{${x_{cs}},{y_{cs}}$ is the the set of x and y coordinates (m)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties}
+                                                                                                   \\ \midrule \\
+                                                                                                   Source & \cite{li2010}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

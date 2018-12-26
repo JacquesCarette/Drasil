@@ -96,7 +96,7 @@ conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (IsUnit u, ConceptDomain u) => [u] -> UnitMap
+unitMap :: (IsUnit u) => [u] -> UnitMap
 unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x)) 
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
@@ -158,7 +158,7 @@ class HasLabelledContent s where
   labelledcontent :: Lens' s LabelledContentMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => HasUID c => s -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
@@ -272,7 +272,7 @@ traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m
   where getT = maybe [] id
  
-invert :: (Ord k, Ord v) => Map.Map k [v] -> Map.Map v [k]
+invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  

@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Math where
 
 import Prelude hiding (sqrt)
@@ -133,6 +134,7 @@ apply2 f a b = FCall (sy f) [sy a, sy b]
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 
+-- This also wants a symbol constraint.
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)

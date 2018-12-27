@@ -1,10 +1,11 @@
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, short, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses)
 
 import Language.Drasil.Sentence (Sentence, sentenceShort)
 import Language.Drasil.NounPhrase (NP)
@@ -30,13 +31,13 @@ nc = NC
 
 -- | |IdeaDict| is the canonical dictionary associated to |Idea|
 -- don't export the record accessors
-data IdeaDict = IdeaDict { _nc' :: NamedChunk, _mabbr :: Maybe String }
+data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
 instance HasUID    IdeaDict where uid = nc' . uid
 instance NamedIdea IdeaDict where term = nc' . term
-instance Idea      IdeaDict where getA = view mabbr
+instance Idea      IdeaDict where getA = mabbr
   
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' ms = IdeaDict (nc s np') ms

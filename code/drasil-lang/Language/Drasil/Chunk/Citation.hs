@@ -9,21 +9,19 @@ module Language.Drasil.Chunk.Citation
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
-  -- FIXME move out of here later
-  , HasCitation(getCitations)
   ) where
 
 import Language.Drasil.People (People)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes.Document (HasFields(getFields))
+import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses, Lens')
+import Control.Lens (makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -177,7 +175,3 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 thesis :: People -> String -> String -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
 
-------------
--- This does not belong here, should be moved later
-class HasCitation c where
-  getCitations :: Lens' c [Citation]

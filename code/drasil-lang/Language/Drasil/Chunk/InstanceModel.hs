@@ -7,12 +7,13 @@ module Language.Drasil.Chunk.InstanceModel
   ) where
 
 import Data.Drasil.IdeaDicts (instanceMod)
-import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
+import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
+import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),

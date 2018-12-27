@@ -72,7 +72,9 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **ShortHands**: The long names of many symbols, and even some short ones (because of the
   tag) is inconvenient; provides some short-hand way of referring to them.
 
-- **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
+- **Classes/Document**: classes about documents (mostly citation right now)
+
+- **Classes/Core**: The 'core' classes which abstract over HasUID, HasShortName,
   HasRefAddress, HasSymbol.
 
 - **Symbol/Helpers**: helper routines to check if symbol exists, and to extract the 
@@ -113,6 +115,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Data/Citation**: internal representation of the data in citations, and their
   smart constructors.
+
+- **Chunk/Citation**: citations as a chunk (record, with accessors, etc)
 
 - **Classes**: Defined a bunch of 'classy lenses'.  These can be understood as 
   our meta-model. NamedIdea, Idea, Definition, ConceptDomain, Concept, HasSymbol, etc.
@@ -181,4 +185,3 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
 
-- **Chunk/Citation**: citations as a chunk (record, with accessors, etc)

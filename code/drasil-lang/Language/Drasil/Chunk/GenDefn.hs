@@ -7,8 +7,9 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), IsUnit,
   ExprRelat(relat), HasDerivation(derivations),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
+import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Data.Drasil.IdeaDicts (gendef)
-import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
+import Language.Drasil.Chunk.Citation (Citation) 
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)

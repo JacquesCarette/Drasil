@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
-import Language.Drasil.Classes.Document (HasFields(getFields))
+import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes (ConceptDomain(cdom), abrv)
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))

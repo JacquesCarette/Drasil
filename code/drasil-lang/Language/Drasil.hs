@@ -219,7 +219,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert))
-import Language.Drasil.Classes.Document (HasFields(getFields))
+import Language.Drasil.Classes.Citations (HasFields(getFields))
+import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk
@@ -235,9 +236,7 @@ import Language.Drasil.Chunk.Citation (
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished
-  -- move?
-  , HasCitation(getCitations) )
+  , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained

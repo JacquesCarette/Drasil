@@ -105,6 +105,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   [Uses |Sentence|, which is really not right. But later routines use the lazy
    properties of Sentence, so refactoring this is complicated.]
 
+- **Document.Core**: the various types that make a Document. Rather syntactic in nature.
+
 - **NounPhrase**: Constructors for noun phrases, and actual computations of plurals
   and capitalization. And a Class for NounPhrase, which gives the main methods on
   them. Right now, there is a single instance though.
@@ -185,3 +187,4 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
 
+- **Develement/Sentence**: (bad name) short-cuts for building Sentences.

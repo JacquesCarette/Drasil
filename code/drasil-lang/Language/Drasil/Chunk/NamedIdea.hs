@@ -1,6 +1,5 @@
-{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, short, nw, mkIdea) where
+module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
@@ -9,10 +8,6 @@ import Control.Lens ((^.), makeLenses)
 
 import Language.Drasil.Sentence (Sentence, sentenceShort)
 import Language.Drasil.NounPhrase (NP)
-
--- | Get short form (if it exists), else get term.
-short :: (Idea c, HasUID c) => c -> Sentence
-short c = sentenceShort (c ^. uid)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation
@@ -23,7 +18,7 @@ makeLenses ''NamedChunk
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasUID    NamedChunk where uid = uu
 instance NamedIdea NamedChunk where term = np
-instance Idea      NamedChunk where getA = \_ -> Nothing
+instance Idea      NamedChunk where getA _ = Nothing
   
 -- | 'NamedChunk' constructor, takes an uid and a term.
 nc :: String -> NP -> NamedChunk

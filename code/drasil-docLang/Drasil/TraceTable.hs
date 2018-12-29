@@ -16,8 +16,8 @@ import Language.Drasil.Development (lnames')
 import Drasil.DocumentLanguage
 
 
-traceMap :: (HasUID l) => (l -> [Sentence]) -> [l] -> TraceMap
-traceMap f = Map.fromList . map (\x -> ((x ^. uid), lnames' (f x)))
+traceMap' :: HasUID l => (l -> [Sentence]) -> [l] -> TraceMap
+traceMap' f = traceMap $ lnames' . f
 
 getTraceMapFromDocSec :: [DocSection] -> SSDSec
 getTraceMapFromDocSec ((SSDSec ssd):_)  = ssd
@@ -66,18 +66,19 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
  $ getTraceMapFromDocSec a
 
 generateTraceMap :: [DocSection] -> TraceMap
-generateTraceMap a = Map.unionsWith (++) [
-  (traceMap extractSFromNotes tt), (traceMap extractSFromNotes gd),
-  (traceMap extractSFromNotes dd), (traceMap extractSFromNotes im),
+generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
+  (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
+  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes im),
   -- Theory models do not have derivations.
-  (traceMap extractSFromDeriv gd),
-  (traceMap extractSFromDeriv dd), (traceMap extractSFromDeriv im)]
+  (traceMap' extractSFromDeriv gd),
+  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv im)]
   where
     tt = getTraceMapFromTM $ getSCSSub a
     gd = getTraceMapFromGD $ getSCSSub a
     im = getTraceMapFromIM $ getSCSSub a
     dd = getTraceMapFromDD $ getSCSSub a
+    ordering a b = if a == b then a else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.
 generateTraceMap' :: [ConceptInstance] -> TraceMap
-generateTraceMap' = Map.fromList . map (\x -> ((x ^. uid), lnames' [x ^. defn]))
+generateTraceMap' = traceMap' (\x -> [x ^. defn])

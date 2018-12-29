@@ -150,26 +150,26 @@ ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequireme
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
 
-ssp_datadefn :: DatadefnMap
-ssp_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+ssp_datadefn :: [DataDefinition]
+ssp_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-ssp_insmodel :: InsModelMap
-ssp_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+ssp_insmodel :: [InstanceModel]
+ssp_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
-ssp_gendef :: GendefMap
-ssp_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+ssp_gendef :: [GenDefn]
+ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
-ssp_theory :: TheoryModelMap
-ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+ssp_theory :: [TheoryModel]
+ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_assump :: AssumptionMap
-ssp_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+ssp_assump :: [AssumpChunk]
+ssp_assump = newAssumptions
 
-ssp_concins :: ConceptInstanceMap
-ssp_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (sspRequirements ++ likelyChgs ++ unlikelyChgs)
+ssp_concins :: [ConceptInstance]
+ssp_concins = sspRequirements ++ likelyChgs ++ unlikelyChgs
 
-ssp_section :: SectionMap
-ssp_section = Map.fromList $ map (\x -> (x ^. uid, x)) ssp_sec
+ssp_section :: [Section]
+ssp_section = ssp_sec
 
 ssp_sec :: [Section]
 ssp_sec = extractSection ssp_srs
@@ -195,13 +195,13 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
   ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
-  ssp_section (head ([] :: [LabelledContentMap]))
+  ssp_section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
- ssp_section (head ([] :: [LabelledContentMap]))
+ ssp_section []
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

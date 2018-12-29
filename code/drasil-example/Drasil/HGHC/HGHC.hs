@@ -1,5 +1,6 @@
 module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols, printSetting) where
 
+import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Development (UnitDefn)
@@ -49,14 +50,12 @@ allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  si_units (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
-  (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
-  (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
+  si_units Map.empty Map.empty [] [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si) ([] :: [ConceptChunk]) check_si (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
-           (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
-           (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si)
+           ([] :: [ConceptChunk]) check_si Map.empty Map.empty [] [] [] [] []
+           [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

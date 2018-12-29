@@ -144,7 +144,7 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable, defLookup, labelledconLookup
+  , HasDefinitionTable, conceptMap, traceMap, defTable, defLookup, labelledconLookup
   , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap
   , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
   , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap, HasLabelledContent(..)

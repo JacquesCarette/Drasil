@@ -36,7 +36,7 @@ import qualified Data.Map as Map
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
 -- what the map is for. One is for symbols + their units, and the others are for
 -- what they state.
-type UMap a = Map.Map UID a
+type UMap a = Map.Map UID (a, Int)
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
@@ -84,8 +84,8 @@ type SectionMap = UMap Section
 -- LabelledContent map
 type LabelledContentMap = UMap LabelledContent
 
-cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID b
-cdbMap fn = Map.fromList . map (\x -> (x ^. uid, fn x))
+cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
+cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . (flip zip) [1..]
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
@@ -103,7 +103,7 @@ conceptMap = cdbMap cw
 unitMap :: (IsUnit u) => [u] -> UnitMap
 unitMap = cdbMap unitWrapper
 
-idMap :: HasUID a => [a] -> Map.Map UID a
+idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
 idMap = cdbMap id
 
 traceMap :: HasUID l => (l -> [UID]) -> [l] -> TraceMap
@@ -112,7 +112,7 @@ traceMap f = cdbMap f
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
-  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") id
+  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
 
 --- SYMBOL TABLE ---
 class HasSymbolTable s where
@@ -174,7 +174,7 @@ getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 -- | Looks up a UID in a UMap table. If nothing is found an error is thrown
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ Map.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) id
+  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) fst
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: UID -> TermMap -> IdeaDict
@@ -216,7 +216,7 @@ conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
 sectionLookup :: UID -> SectionMap -> Section
 sectionLookup = uMapLookup "Section" "SectionMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the labelled content table. If nothing is found, an error is thrown.
 labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
 labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
@@ -270,14 +270,14 @@ collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] id
+  where getT = maybe [] fst
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap tm = invert tm
+generateRefbyMap tm = invert $ Map.map (\(x,_) -> x) tm
 
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c m = getT $ Map.lookup c m

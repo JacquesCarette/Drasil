@@ -34,8 +34,7 @@ instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.
 --FIXME: Space hack
-fromEqn :: (IsUnit u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc def symb un eqn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn
 

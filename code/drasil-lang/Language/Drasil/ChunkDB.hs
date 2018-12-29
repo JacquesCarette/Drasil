@@ -171,64 +171,54 @@ class HasLabelledContent s where
 getUnitLup :: HasSymbolTable s => HasUID c => s -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
--- | Looks up an uid in the term table. If nothing is found, an error is thrown
-termLookup :: UID -> TermMap -> IdeaDict
-termLookup c m = getT $ Map.lookup c m
-  where getT = maybe (error $ "Term: " ++ c ++ " not found in TermMap") id
+-- | Looks up a UID in a UMap table. If nothing is found an error is thrown
+uMapLookup :: String -> String -> UID -> UMap a -> a
+uMapLookup tys ms u t = getFM $ Map.lookup u t
+  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) id
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
+termLookup :: UID -> TermMap -> IdeaDict
+termLookup = uMapLookup "Term" "TermMap"
+
+-- | Looks up an uid in the unit table. If nothing is found, an error is thrown
 unitLookup :: UID -> UnitMap -> UnitDefn
-unitLookup c m = getT $ Map.lookup c m
-  where getT = maybe (error $ "Unit: " ++ c ++ " not found in UnitMap") id
+unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk
-defLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Concept: " ++ u ++ " not found in ConceptMap") id
-
+defLookup = uMapLookup "Concept" "ConceptMap"
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-datadefnLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "DataDefinition: " ++ u ++ " not found in datadefnMap") id
+datadefnLookup = uMapLookup "DataDefinition" "DatadefnMap"
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the instance model table. If nothing is found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
-insmodelLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "InstanceModel: " ++ u ++ " not found in insModelMap") id
+insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "GeneralDefinition: " ++ u ++ " not found in GendefMap") id
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-theoryModelLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "TheoryModel: " ++ u ++ " not found in TheoryModelMap") id
+theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the assumption table. If nothing is found, an error is thrown.
 assumptionLookup :: UID -> AssumptionMap -> AssumpChunk
-assumptionLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Assumption: " ++ u ++ " not found in AssumptionMap") id
+assumptionLookup = uMapLookup "Assumption" "AssumptionMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the concept instance table. If nothing is found, an error is thrown.
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-conceptinsLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "ConceptInstance: " ++ u ++ " not found in conceptInstanceMap") id
+conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the section table. If nothing is found, an error is thrown.
 sectionLookup :: UID -> SectionMap -> Section
-sectionLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Section: " ++ u ++ " not found in sectionMap") id
+sectionLookup = uMapLookup "Section" "SectionMap"
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
-labelledconLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "LabelledContent: " ++ u ++ " not found in LabelledContentMap") id
+labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap

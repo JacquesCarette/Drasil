@@ -12,7 +12,7 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 
 data RelationConcept = RC { _conc :: ConceptChunk
-                          , _rel :: Relation
+                          ,  rel :: Relation
                           }
 makeLenses ''RelationConcept
 

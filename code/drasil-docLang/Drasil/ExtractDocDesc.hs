@@ -141,10 +141,10 @@ egetTM x = concatMap egetTM (x ^. valid_context) ++
   ++ (x ^. invariants)
 
 egetIM :: InstanceModel ->[Expr]
-egetIM x = [x ^. relat]
+egetIM x = [relat x]
 
 egetGD :: GenDefn ->[Expr]
-egetGD gd = [gd ^. relat]
+egetGD gd = [relat gd]
 
 egetDD :: DataDefinition -> [Expr]
 egetDD dd = [dd ^. defnExpr, sy dd]

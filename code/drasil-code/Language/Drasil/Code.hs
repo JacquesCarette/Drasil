@@ -29,7 +29,7 @@ module Language.Drasil.Code (
   generator, generateCode,
   ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
-  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
+  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod,
   Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton
 ) where
 
@@ -73,6 +73,6 @@ import Language.Drasil.Code.DataDesc (Ind(..), junk, junkLine, listEntry, multiL
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), 
   Func, FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), 
-  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
+  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod
   )
 

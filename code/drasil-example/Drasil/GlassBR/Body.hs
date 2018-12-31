@@ -3,7 +3,7 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
-import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
+import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
@@ -209,7 +209,7 @@ glassSystInfo = SI {
   _units       = check_si,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
+  _definitions = getEqMod gbrIMods ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
                  (concatMap (^. defined_fun) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears

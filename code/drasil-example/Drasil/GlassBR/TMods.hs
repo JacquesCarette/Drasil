@@ -2,7 +2,6 @@ module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import qualified Data.Map as Map
 import Language.Drasil
-import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Language.Drasil.Development (UnitDefn) -- FIXME
 
 import Control.Lens ((^.))
@@ -31,15 +30,15 @@ glass_concept = []
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
+   [lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
    where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
                         ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                         glass_concept [] []
 
-lrIsSafe_RC :: RelationConcept
-lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand))
+lrIsSafe_RC :: QDefinition
+lrIsSafe_RC = fromEqn' "safetyReqLR" (nounPhraseSP "Safety Req-LR")
+  lrIsSafeDesc (eqSymb is_safeLR) ((sy lRe) $> (sy demand))
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLR) s ending

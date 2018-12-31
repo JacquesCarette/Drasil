@@ -32,7 +32,7 @@ import Language.Drasil.Classes.Core
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
@@ -123,9 +123,10 @@ class UnitEq u where
    uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
--- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
+-- It is ok to be able to view a (defining?) 'Relation', but not necessarily
+-- to 'set' it,  as it might just not be settable. So Getter it is.
 class ExprRelat c where
-  relat :: Lens' c Expr
+  relat :: c -> Relation
 
 -- This is the 'correct' version of ExprRelat.
 class DefiningExpr c where

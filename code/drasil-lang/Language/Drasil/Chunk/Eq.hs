@@ -5,18 +5,26 @@ import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), ExprRelat(relat),
+  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
+  ConceptDomain(cdom))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr (Expr, ($=))
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.UID (UID)
 
 -- | A QDefinition is a 'Quantity' with a defining expression, and a definition
-data QDefinition = EC { _qua :: QuantityDict , _defn' :: Sentence, _equat :: Expr }
+data QDefinition = EC 
+  { _qua :: QuantityDict
+  , _defn' :: Sentence
+  , _equat :: Expr
+  ,  cd :: [UID] -- FIXME, there is no way to set this right now!!
+  }
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
@@ -30,20 +38,22 @@ instance Quantity      QDefinition where
 instance DefiningExpr  QDefinition where defnExpr = equat
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
+instance ExprRelat     QDefinition where relat z = sy z $= z^.equat
+instance ConceptDomain QDefinition where cdom = cd
 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.
 --FIXME: Space hack
 fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc def symb un eqn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn []
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) def eqn
+fromEqn' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) def eqn []
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
-ec c eqn = EC (qw c) EmptyS eqn
+ec c eqn = EC (qw c) EmptyS eqn []

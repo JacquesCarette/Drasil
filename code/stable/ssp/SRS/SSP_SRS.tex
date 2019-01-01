@@ -65,6 +65,8 @@ $b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i 
 \\
 ${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
 \\
+${C2_{i}}$ & Interslice Normal Force Function: $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice. & Nm
+\\
 ${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice interface for slice i & Nm
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
@@ -73,13 +75,19 @@ $f$ & Scaling Function: magnitude of interslice forces as a function of the x co
 \\
 ${F_{S}}$ & Factor of Safety: The global stability of a surface in a slope & --
 \\
+${F_{S}}$ & Factor of Safety: & --
+\\
 ${F_{x}}$ & X-Component of the Net Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
 ${{F_{S}}_{min}}$ & Minimum Factor of Safety: The minimum factor of safety & --
 \\
+${{F_{S}}_{min}}$ & Critical Slip Identification: Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties} & --
+\\
 $G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
+\\
+$G$ & Interslice Forces: The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Seismic-Force]{A: Seismic-Force} \hyperref[A:Surface-Load]{A: Surface-Load} & N
 \\
 $H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
@@ -1360,7 +1368,7 @@ The multiplication of the $Ψ$ terms can be further distributed over the subtrac
 \end{dmath}
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
 \begin{dmath}
-{F_{S}}=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
+\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
 \end{dmath}
 ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 ~\newline
@@ -1370,7 +1378,7 @@ ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) 
 \phantomsection 
 \label{IM:nrmShrFor}
 \\ \midrule \\
-Label & Normal/shear force ratio
+Label & Interslice normal force function
         \\ \midrule \\
         Input & $b$, $f$, $H$, $α$, $h$, ${K_{c}}$, $W$, ${U_{t}}$
                 \\ \midrule \\
@@ -1385,7 +1393,7 @@ Label & Normal/shear force ratio
                                                                   \end{dmath}
                                                                   \\ \midrule \\
                                                                   Equation & \begin{dmath}
-                                                                             {C1_{i}}=\begin{cases}
+                                                                             {C2_{i}}=\begin{cases}
 b_{1} \left(G_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
 b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(G_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
@@ -1397,7 +1405,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                              \end{dmath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{${C1_{i}}$ is the interslice normal force function (Nm)}
+                                                                                           \item{${C2_{i}}$ is the interslice normal force function (Nm)}
                                                                                            \item{$b$ is the base width of a slice (m)}
                                                                                            \item{$G$ is the interslice normal force (N)}
                                                                                            \item{$H$ is the interslice water force (N)}
@@ -1416,6 +1424,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{${C2_{i}}$ is the interslice shear force function (Nm)}
                                                                                            \item{$f$ is the scaling function (Unitless)}
                                                                                            \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                                                           \item{${C1_{i}}$ is the interslice normal force function (Nm)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
@@ -1454,7 +1463,7 @@ Label & Interslice forces
                          Input Constraints & \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
                                                                   Equation & \begin{dmath}
-                                                                             G_{i}=\begin{cases}
+                                                                             G=\begin{cases}
 \frac{{F_{S}} T_{1}-R_{1}}{Φ_{1}}, & i=1\\
 \frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}, & 2\leq{}i\leq{}n-1\\
 0, & i=0\lor{}i=n
@@ -1462,13 +1471,14 @@ Label & Interslice forces
                                                                              \end{dmath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{$G$ is the interslice normal force (N)}
-                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{$G$ is the interslice forces (N)}
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                                                            \item{$T$ is the mobilized shear force (N)}
                                                                                            \item{$R$ is the resistive shear force (N)}
                                                                                            \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
                                                                                            \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{$G$ is the interslice normal force (N)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
@@ -1521,7 +1531,7 @@ Label & Critical slip identification
                                                                              \end{dmath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{${{F_{S}}_{min}}$ is the minimum factor of safety (Unitless)}
+                                                                                           \item{${{F_{S}}_{min}}$ is the critical slip identification (Unitless)}
                                                                                            \item{$Υ$ is the function (Unitless)}
                                                                                            \item{${x_{cs}},{y_{cs}}$ is the the set of x and y coordinates (m)}
                                                                                            \end{symbDescription}
@@ -1677,7 +1687,7 @@ pages={"272-278"}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05},
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},

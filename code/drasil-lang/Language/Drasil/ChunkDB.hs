@@ -241,10 +241,10 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
-        ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-        [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
-        [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
+    [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
+    [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
+    [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
 cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
  tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm) (idMap a) (idMap ci) (idMap sec) (idMap lc)
 
@@ -264,7 +264,7 @@ instance HasConceptInstance  ChunkDB where conceptinsTable   = cconceptins
 instance HasSectionTable     ChunkDB where sectionTable      = csec
 instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
-collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
+collectUnits :: (HasSymbolTable s, HasUnitTable s, Quantity c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
  $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
 

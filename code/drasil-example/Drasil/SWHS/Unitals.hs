@@ -407,7 +407,7 @@ w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
-pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
+pcm_E = cuc' "heatEInPCM" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
   (sub (eqSymb sens_heat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)
@@ -549,3 +549,4 @@ pcm_HTC_max = mkQuantDef (unitary "pcm_HTC_max"
 time_final_max = mkQuantDef (unitary "time_final_max"
   (nounPhraseSP "maximum final time")
   (sup (eqSymb time_final) (Atomic "max")) second Rational) 86400
+

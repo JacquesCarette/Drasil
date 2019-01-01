@@ -140,6 +140,17 @@ N&sdot;m
 <em>C2<sub>i</sub></em>
 </td>
 <td>
+Interslice Normal Force Function: <em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice.
+</td>
+<td>
+N&sdot;m
+</td>
+</tr>
+<tr>
+<td>
+<em>C2<sub>i</sub></em>
+</td>
+<td>
 Interslice Shear Force Function: the shear force at the interslice interface for slice i
 </td>
 <td>
@@ -181,6 +192,17 @@ Factor of Safety: The global stability of a surface in a slope
 </tr>
 <tr>
 <td>
+<em>F<sub>S</sub></em>
+</td>
+<td>
+Factor of Safety:
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>F<sub>x</sub></em>
 </td>
 <td>
@@ -214,10 +236,32 @@ Minimum Factor of Safety: The minimum factor of safety
 </tr>
 <tr>
 <td>
+<em>F<sub>S</sub><sub>min</sub></em>
+</td>
+<td>
+Critical Slip Identification: Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>x<sub>cs</sub>,y<sub>cs</sub></em> and the minimum factor of safety <em>F<sub>S</sub><sub>min</sub></em> that results. <a href=#A:Soil-Properties>A: Soil-Properties</a>
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>G</em>
 </td>
 <td>
 Interslice Normal Force: exerted between adjacent slices for interslice index i
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+<em>G</em>
+</td>
+<td>
+Interslice Forces: The value of the interslice normal force <em>G</em> at interface <em>i</em> The net force. is the weight of the slices adjacent to interface <em>i</em> exert horizontally on each other. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Seismic-Force>A: Seismic-Force</a> <a href=#A:Surface-Load>A: Surface-Load</a>
 </td>
 <td>
 N
@@ -4205,7 +4249,7 @@ The multiplication of the <em>Ψ</em> terms can be further distributed over the 
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
 </p>
 <div class="equation">
-<em>F<sub>S</sub> = <div class="fraction">
+<em><div class="fraction">
 <span class="fup">
 &sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
 </span>
@@ -4225,7 +4269,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Normal/shear force ratio
+Interslice normal force function
 </p>
 </td>
 </tr>
@@ -4275,7 +4319,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>C1<sub>i</sub> = <span class="casebr">
+<em>C2<sub>i</sub> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -4331,7 +4375,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>C1<sub>i</sub></em> is the interslice normal force function (N&sdot;m)
+<em>C2<sub>i</sub></em> is the interslice normal force function (N&sdot;m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
@@ -4386,6 +4430,9 @@ Description
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
+</li>
+<li>
+<em>C1<sub>i</sub></em> is the interslice normal force function (N&sdot;m)
 </li>
 </ul>
 </td>
@@ -4593,7 +4640,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>G<sub>i</sub> = <span class="casebr">
+<em>G = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -4637,10 +4684,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>G</em> is the interslice normal force (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
+<em>G</em> is the interslice forces (N)
 </li>
 <li>
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
@@ -4656,6 +4700,12 @@ Description
 </li>
 <li>
 <em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>G</em> is the interslice normal force (N)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -4805,7 +4855,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F<sub>S</sub><sub>min</sub></em> is the minimum factor of safety (Unitless)
+<em>F<sub>S</sub><sub>min</sub></em> is the critical slip identification (Unitless)
 </li>
 <li>
 <em>Υ</em> is the function (Unitless)
@@ -5233,7 +5283,7 @@ References
 </li>
 <li>
 <div id="smithLai2005">
-[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>

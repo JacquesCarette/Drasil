@@ -289,7 +289,7 @@ sliceHght = uc' "z_i" (cn "center of slice height")
   "of the slice to the height of the centers of slice")
   (lZ) metre
 
-normFunc = uc' "C1_i" (cn "interslice normal force function")
+normFunc = uc' "normShrFor" (cn "interslice normal force function")
   "the normal force at the interslice interface for slice i"
   (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
   

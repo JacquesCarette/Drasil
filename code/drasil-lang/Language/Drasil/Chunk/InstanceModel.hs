@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables #-}
 module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
-  , im', im'', getEqMod
+  , eqModel, deModel, othModel, getEqMod
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
@@ -16,7 +16,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Quantity, HasSpace(typ),
+  Quantity, HasSpace(typ), ConceptDomain(cdom),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
   CommonIdea(abrv), Definition(defn))
 import Language.Drasil.Derivation (Derivation)
@@ -78,7 +78,7 @@ instance HasUID             InstanceModel where uid = lens_mk uid uid
 instance NamedIdea          InstanceModel where term = lens_mk term term
 instance Idea               InstanceModel where getA = elim_mk (to getA) (to getA) . view mk
 instance Definition         InstanceModel where defn = lens_mk defn defn
--- instance ConceptDomain      InstanceModel where cdom = elim_mk (to cdom) (to cdom) . view mk
+instance ConceptDomain      InstanceModel where cdom = elim_mk (to cdom) (to cdom) . view mk
 instance ExprRelat          InstanceModel where relat = elim_mk (to relat) (to relat) . view mk
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasCitation        InstanceModel where getCitations = cit
@@ -91,16 +91,23 @@ instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
 
--- | Smart constructor for instance models; no derivations
-im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Citation] -> String -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes =
-  IM (OthModel rcon) i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe) addNotes
-
--- | im but with everything defined
-im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+-- | Smart constructor for equational models
+eqModel :: QDefinition -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc src der sn addNotes = 
+eqModel q i ic o oc src der lbe addNotes =
+  IM (EquationalModel q) i ic o oc src der (shortname' lbe)
+     (prependAbrv instanceMod lbe) addNotes
+
+-- | DE, everything defined
+deModel :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+  OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
+deModel rcon i ic o oc src der sn addNotes = 
+  IM (DEModel rcon) i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn) addNotes
+
+-- | Other, everything defined
+othModel :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+  OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
+othModel rcon i ic o oc src der sn addNotes = 
   IM (OthModel rcon) i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn) addNotes
 
 -- | Get equational models from a list of instance models

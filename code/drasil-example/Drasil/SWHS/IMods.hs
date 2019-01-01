@@ -19,8 +19,10 @@ import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentE_P, melt_frac, pcm_E, pcm_HTC, pcm_initMltE, 
   pcm_mass, pcm_SA, pcm_vol, t_init_melt, tau_L_P, tau_S_P, tau_W, temp_C, temp_init, 
-  temp_melt_P, temp_PCM, temp_W, time_final, vol_ht_gen, w_E, w_mass, w_vol) 
+  temp_melt_P, temp_PCM, temp_W, time_final, vol_ht_gen, w_E, w_mass, w_vol)
 import Drasil.SWHS.GenDefs (rocTempSimp)
+
+import Control.Lens ((^.))
 
 swhsIMods :: [InstanceModel]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -29,7 +31,7 @@ swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
+eBalanceOnWtr = deModel eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
  qw pcm_HTC, qw coil_SA, qw temp_PCM, qw time_final, qw temp_C, qw temp_init]
   [sy temp_init $< sy temp_C] (qw temp_W)
    [0 $< sy time $< sy time_final] [koothoor2013] eBalanceOnWtrDeriv
@@ -194,7 +196,7 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im'' eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
+eBalanceOnPCM = deModel eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [sy temp_init $< sy temp_melt_P] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [koothoor2013] eBalanceOnPCMDeriv 
@@ -354,8 +356,9 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 -- IM3 --
 ---------
+-- FIXME: this is an 'other' model because we don't have Functional models yet
 heatEInWtr :: InstanceModel
-heatEInWtr = im'' heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass] 
+heatEInWtr = othModel heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass] 
   [] (qw w_E) [0 $< sy time $< sy time_final] [koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
@@ -387,18 +390,17 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = im' heatEInPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
+heatEInPCM = eqModel heatEInPCM_defn [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [sy temp_init $< sy temp_melt_P] (qw pcm_E)
-  [0 $< sy time $< sy time_final] [koothoor2013]
+  [0 $< sy time $< sy time_final] [koothoor2013] []
   "heatEInPCM" [htPCMDesc]
 
-heatEInPCM_rc :: RelationConcept
-heatEInPCM_rc = makeRC "heatEInPCM_rc" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel
+heatEInPCM_defn :: QDefinition
+heatEInPCM_defn = fromEqn' "heatEInPCM" (pcm_E ^. term) htPCMDesc (eqSymb pcm_E) htPCM
 
-htPCM_Rel :: Relation
-htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
+htPCM :: Expr
+htPCM = case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcm_mass * ((apply1 temp_PCM time) -
           sy temp_init), real_interval temp_PCM (UpTo (Exc, sy temp_melt_P)))
 

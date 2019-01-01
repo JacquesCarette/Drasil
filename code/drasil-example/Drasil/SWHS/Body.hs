@@ -117,13 +117,15 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
+swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+  (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
-  (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
+  (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (this_si ++ [m_2, m_3]) swhs_label swhs_refby
   swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
   swhs_section swhs_labcon
 

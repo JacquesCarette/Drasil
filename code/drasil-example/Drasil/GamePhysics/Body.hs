@@ -195,11 +195,13 @@ chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw prodtcon
+everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll)
+  (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw prodtcon ++ map nw iModels_new
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
+  (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new)
+  chipUnits game_label game_refby
   game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
   game_section []
 

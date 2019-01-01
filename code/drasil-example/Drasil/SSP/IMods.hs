@@ -1,9 +1,10 @@
 module Drasil.SSP.IMods where
 
 import Prelude hiding (tan, product, sin, cos)
+import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.ShortHands (lU, lV) -- local (bound) variables
+import Language.Drasil.ShortHands (lI, lU, lV) -- index and local (bound) variables
 
 import Data.Drasil.Utils (eqUnR', weave)
 
@@ -44,14 +45,14 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
 
 --
 fctSfty :: InstanceModel
-fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw cohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+fctSfty = eqModel fctSfty_defn [qw slopeDist, qw slopeHght, qw waterHght, qw cohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] [chen2005, karchewski2012] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
-fctSfty_rc :: RelationConcept
-fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel -- fctSftyL
+fctSfty_defn :: QDefinition
+fctSfty_defn = fromEqn' "fctSftyc" factorOfSafety fcSfty_desc (eqSymb fs) fcSfty
 
-fcSfty_rel :: Relation
-fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
+fcSfty :: Expr
+fcSfty = sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod lU (sy index) (sy numbSlices - 1)
           (idx (sy mobShrC) (sy varblU))
         sumOp sym = (defsum lV 1 (sy numbSlices - 1)
@@ -62,18 +63,18 @@ fcSfty_desc = foldlSent_ []
 
 --
 nrmShrFor :: InstanceModel
-nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
+nrmShrFor = eqModel nrmShrFor_defn [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
   [sy fixme1 $< sy fixme1] (qw shearFunc)
    [0 $< sy fixme1 $< sy fixme1] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
-nrmShrFor_rc :: RelationConcept
-nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel -- nrmShrForL
+nrmShrFor_defn :: QDefinition
+nrmShrFor_defn = fromEqn' "nrmShrFor" (normFunc ^. term)
+  nrmShrF_desc (eqSymb normFunc) nrmShrF
 
-nrmShrF_rel :: Relation
-nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
+nrmShrF :: Expr
+nrmShrF = case_ [case1,case2,case3] $=
   sy shearFunc $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
@@ -110,16 +111,17 @@ nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
 --
 
 intsliceFs :: InstanceModel
-intsliceFs = im'' intsliceFs_rc [qw index, qw fs, qw shearRNoIntsl, qw shearFNoIntsl,
+intsliceFs = eqModel intsliceFs_defn [qw index, qw fs, qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC]
   [] (qw intNormForce) [] [chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
 
-intsliceFs_rc :: RelationConcept
-intsliceFs_rc = makeRC "intsliceFs_rc" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel -- inslideFxL
+-- Symbol hack
+intsliceFs_defn :: QDefinition
+intsliceFs_defn = fromEqn' "intsliceFs" (nounPhraseSP "interslice forces")
+  sliceFs_desc (sub (eqSymb intNormForce) lI) sliceFs_eq -- inslideFxL
 
-sliceFs_rel :: Relation
-sliceFs_rel = inxi intNormForce $= case_ [
+sliceFs_eq :: Expr
+sliceFs_eq = case_ [
   (((sy fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     sy index $= 1),
   ((inxiM1 mobShrC * inxiM1 intNormForce +
@@ -138,15 +140,15 @@ sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
 
 --
 crtSlpId :: InstanceModel
-crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [li2010] "crtSlpId" [crtSlpId_desc]
+crtSlpId = eqModel crtSlpId_defn [] [] (qw fs_min) [] [li2010] [] "crtSlpId" [crtSlpId_desc]
 
-crtSlpId_rc :: RelationConcept
-crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel -- crtSlpIdL
+crtSlpId_defn :: QDefinition
+crtSlpId_defn = fromEqn' "crtSlpId" (nounPhraseSP "critical slip identification")
+  crtSlpId_desc (eqSymb fs_min) crtSlpId_eq -- crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
-crtSlpId_rel :: Relation
-crtSlpId_rel = (sy fs_min) $= (apply1 minFunction critCoords) -- sy inputHack])
+crtSlpId_eq :: Expr
+crtSlpId_eq = apply1 minFunction critCoords -- sy inputHack])
   --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
@@ -224,7 +226,7 @@ fctSftyDerivEqns1 = [fctSftyDerivEqn1, fctSftyDerivEqn2, fctSftyDerivEqn3,
 fctSftyDerivEqns2 :: [Expr]
 fctSftyDerivEqns2 = [fctSftyDerivEqn11, fctSftyDerivEqn12, fctSftyDerivEqn13,
   fctSftyDerivEqn14, fctSftyDerivEqn15, fctSftyDerivEqn16, fctSftyDerivEqn17,
-  fctSftyDerivEqn18, fcSfty_rel]
+  fctSftyDerivEqn18, fcSfty]
 
 fctSftyDerivSentence1 :: [Sentence]
 fctSftyDerivSentence1 = [S "The" +:+ phrase mobShrI +:+ S "defined in",
@@ -642,9 +644,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef2S intsliceFs 
   S "rearranging, and", boundaryCon `sC` S "an", phrase equation, 
   S "for the", phrase fs, S "is found as", eqN 12 `sC` 
   S "also seen in", makeRef2S fctSfty],
-  
-  eqUnR' fcSfty_rel,
-  
+  eqUnR' fcSfty,
   fUnknownsCon]
 
 nrmShrDerivation = [

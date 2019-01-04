@@ -3,7 +3,7 @@ module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   HasConceptRefs(conceptRefTable),
-  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
+  assumpDB, assumpLookup, HasAssumpRefs) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)

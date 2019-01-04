@@ -18,7 +18,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Constraint (Constraint(..))
-import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
@@ -44,7 +44,7 @@ instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2
 instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 
 -- | Creates a constrained unitary
-cuc :: (IsUnit u, ConceptDomain u) => String -> NP -> Symbol -> u
+cuc :: (IsUnit u) => String -> NP -> Symbol -> u
   -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
@@ -84,7 +84,7 @@ constrainedNRV' :: (MayHaveUnit c, Concept c, Quantity c) =>
   c -> [Constraint] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs Nothing
 
-cuc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
+cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)

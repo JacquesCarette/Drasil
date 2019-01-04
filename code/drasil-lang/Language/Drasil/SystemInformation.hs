@@ -4,13 +4,13 @@ module Language.Drasil.SystemInformation where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.Classes.Core (HasUID)
 import Language.Drasil.Classes (CommonIdea, Concept, Constrained, Idea, IsUnit, Quantity)
 import Language.Drasil.People (HasName)
 import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap, 
   citationRefTable)
-import Language.Drasil.Development.Unit (MayHaveUnit)
 
 import Control.Lens ((^.))
 

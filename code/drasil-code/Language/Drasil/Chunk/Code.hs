@@ -9,8 +9,7 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil-- hiding (CodeType(..))
-import Language.Drasil.Development (MayHaveUnit(getUnit))
+import Language.Drasil
 
 import qualified Language.Drasil.Code.Code as G
 
@@ -134,12 +133,12 @@ type ConstraintMap = Map.Map UID [Constraint]
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
-physLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
 sfwrLookup m q = constraintLookup' q m (filter isPhysC)
 
-constraintLookup' :: (Quantity q, MayHaveUnit q) => q -> ConstraintMap
+constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

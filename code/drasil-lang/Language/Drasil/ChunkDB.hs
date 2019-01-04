@@ -18,7 +18,7 @@ import Control.Lens ((^.), Lens', makeLenses)
 import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
+import Language.Drasil.Classes (Concept, Idea, IsUnit, Quantity)
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Document.Core (LabelledContent)
@@ -29,7 +29,8 @@ import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Document (Section)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper, IsUnit(getUnits))
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit), unitWrapper
+  , IsUnit(getUnits))
 import qualified Data.Map as Map
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
@@ -241,8 +242,8 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
-        ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => 
+        [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
         [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
         [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
 cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)

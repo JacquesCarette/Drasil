@@ -13,7 +13,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Quantity, HasSpace(typ), HasDerivation(derivations),
   HasAdditionalNotes(getNotes), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.ShortName (ShortName, shortname')

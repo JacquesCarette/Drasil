@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
 

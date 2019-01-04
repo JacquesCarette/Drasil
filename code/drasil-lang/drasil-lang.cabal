@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.54
+Version:	0.1.56
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -32,6 +32,7 @@ library
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.UnitaryConcept
+    , Language.Drasil.Chunk.UnitDefn
     , Language.Drasil.ChunkDB
     , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
@@ -66,7 +67,6 @@ library
     , Language.Drasil.Unicode
     , Language.Drasil.UnitLang
     , Language.Drasil.Derivation
-    , Language.Drasil.Development.Unit
     , Language.Drasil.Development.Sentence
 
   Build-Depends:

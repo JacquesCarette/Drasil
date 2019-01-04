@@ -1,9 +1,7 @@
 -- Standard code to make a table of symbols.
-module Drasil.Sections.TableOfSymbols 
-  (table) where
+module Drasil.Sections.TableOfSymbols (table) where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
 
 import qualified Data.Drasil.Concepts.Math as CM
 import Drasil.DocumentLanguage.Units (toSentence)

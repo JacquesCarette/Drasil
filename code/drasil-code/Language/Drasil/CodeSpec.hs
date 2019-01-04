@@ -2,7 +2,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit, dep, names')
+import Language.Drasil.Development (dep, names')
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
   codevar, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,

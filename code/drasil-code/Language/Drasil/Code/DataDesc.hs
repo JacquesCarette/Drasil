@@ -1,7 +1,6 @@
 module Language.Drasil.Code.DataDesc where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 
 import Data.List (nub)

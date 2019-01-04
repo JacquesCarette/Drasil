@@ -12,7 +12,6 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
-import Language.Drasil.Development (comp_unitdefn, MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 
 import Control.Lens ((^.))

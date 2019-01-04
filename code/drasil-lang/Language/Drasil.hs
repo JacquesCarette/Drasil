@@ -2,6 +2,7 @@
 module Language.Drasil (
   -- SystemInformation
     SystemInformation(..), Block(..), citeDB
+  , ReferenceDB, assumptionsFromDB , rdb, assumpDB , RefMap, simpleMap
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation
@@ -156,9 +157,6 @@ module Language.Drasil (
   , AssumpChunk(AC), assuming, assump
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
-  , ReferenceDB, assumptionsFromDB
-  , rdb, assumpDB
-  , RefMap, simpleMap
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Label.Type
@@ -279,9 +277,8 @@ import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
-import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
- , assumpDB, assumptionsFromDB
- , rdb, Referable(..), RefMap, simpleMap, makeRef2S)
+import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S
+ , Referable(..))
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)

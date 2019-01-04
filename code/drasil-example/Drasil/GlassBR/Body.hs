@@ -223,7 +223,7 @@ glassSystInfo = SI {
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
   _usedinfodb = usedDB,
-  _refdb       = gbRefDB
+   refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
 

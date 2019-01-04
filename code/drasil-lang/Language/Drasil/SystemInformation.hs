@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Language.Drasil.SystemInformation where
+module Language.Drasil.SystemInformation(SystemInformation(..), Block(..), citeDB) where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -9,8 +9,7 @@ import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.Classes.Core (HasUID)
 import Language.Drasil.Classes (CommonIdea, Concept, Constrained, Idea, IsUnit, Quantity)
 import Language.Drasil.People (HasName)
-import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap, 
-  citationRefTable)
+import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap, citationDB)
 
 import Control.Lens ((^.))
 
@@ -42,18 +41,12 @@ data SystemInformation where
   , _constants :: [QDefinition]
   , _sysinfodb :: ChunkDB
   , _usedinfodb :: ChunkDB
-  , _refdb :: ReferenceDB
+  , refdb :: ReferenceDB
   } -> SystemInformation
   
 -- | for listing QDefs in SystemInformation
-data Block a = Coupled a a [a]
-           | Parallel a [a]
+data Block a = Coupled a a [a] | Parallel a [a]
 
 -- | Helper for extracting bibliography
 citeDB :: SystemInformation -> BibRef
-citeDB (SI {_refdb = db}) = citationsFromBibMap (db ^. citationRefTable)
-
-
--- | Helper for ectracting RefDB
-getRefDB :: SystemInformation -> ReferenceDB
-getRefDB (SI {_refdb = db}) = db
+citeDB si = citationsFromBibMap ((refdb si) ^. citationDB)

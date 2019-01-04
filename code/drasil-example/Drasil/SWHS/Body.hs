@@ -109,7 +109,7 @@ swhs_si = SI {
   _constants = [],
   _sysinfodb = swhsSymMap,
   _usedinfodb = usedDB,
-  _refdb = swhsRefDB
+   refdb = swhsRefDB
 }
 
 resourcePath :: String

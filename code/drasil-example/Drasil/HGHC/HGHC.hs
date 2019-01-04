@@ -39,7 +39,7 @@ thisSI = SI {
   _constants = [],
   _sysinfodb = allSymbols,
   _usedinfodb = usedDB,
-  _refdb = rdb [] [] [] -- FIXME?
+   refdb = rdb [] [] [] -- FIXME?
 }
 
 check_si :: [UnitDefn] -- FIXME? Probably shouldn't be done here

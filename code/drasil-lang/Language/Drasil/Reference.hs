@@ -1,9 +1,8 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
-  makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
-  assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
-  HasConceptRefs(conceptRefTable),
-  assumpDB, assumpLookup, HasAssumpRefs) where
+  makeCiteS, ReferenceDB, citationsFromBibMap, citationDB,
+  assumptionsFromDB, rdb, Referable(..), RefMap, simpleMap,
+  conceptDB, assumpDB, assumpLookup) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
@@ -55,9 +54,6 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
 
 makeLenses ''ReferenceDB
 
-data RefBy = ByName
-           | ByNum -- If applicable
-
 rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
 rdb assumps citations con = RDB (simpleMap assumps) (bibMap citations) (conceptMap con)
 
@@ -88,18 +84,6 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
-
--- Classes and instances --
-class HasAssumpRefs s where
-  assumpRefTable :: Simple Lens s AssumpMap
-class HasCitationRefs s where
-  citationRefTable :: Simple Lens s BibMap
-class HasConceptRefs s where
-  conceptRefTable :: Simple Lens s ConceptMap
-
-instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
-instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
-instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 class HasUID s => Referable s where
   refAdd    :: s -> String  -- The referencing address (what we're linking to).

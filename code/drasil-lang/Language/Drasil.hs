@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- SystemInformation
-    SystemInformation(..), Block(..), citeDB, getRefDB
+    SystemInformation(..), Block(..), citeDB
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation
@@ -157,10 +157,8 @@ module Language.Drasil (
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
   , ReferenceDB, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable, HasAssumpRefs
-  , RefBy(..)
-  , assumpDB, RefMap, simpleMap
-  , citationRefTable
+  , rdb, assumpDB
+  , RefMap, simpleMap
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Label.Type
@@ -282,8 +280,8 @@ import Language.Drasil.Space (Space(..)
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
- , assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
- , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
+ , assumpLookup, assumpDB, assumptionsFromDB
+ , rdb, Referable(..), RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)

@@ -5,7 +5,9 @@ import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict, prependAbrv)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (ConceptDomain(cdom), CommonIdea(abrv), NamedIdea(term))
+import Language.Drasil.Classes (ConceptDomain(cdom), CommonIdea(abrv), NamedIdea(term),
+  Referable(refAdd, renderRef))
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -31,6 +33,9 @@ instance HasShortName  AssumpChunk where shortname = lbl
 instance ConceptDomain AssumpChunk where cdom _ = cdom assumption
 instance NamedIdea     AssumpChunk where term = ci . term
 instance CommonIdea    AssumpChunk where abrv = abrv . view ci
+instance Referable AssumpChunk where
+  refAdd    x = getRefAdd x
+  renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 assumption :: CI
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]

@@ -156,7 +156,7 @@ module Language.Drasil (
   , AssumpChunk(AC), assuming, assump
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
-  , ReferenceDB, assumpLookup, assumptionsFromDB
+  , ReferenceDB, assumptionsFromDB
   , rdb, assumpDB
   , RefMap, simpleMap
   -- Document.getChunk
@@ -280,7 +280,7 @@ import Language.Drasil.Space (Space(..)
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
- , assumpLookup, assumpDB, assumptionsFromDB
+ , assumpDB, assumptionsFromDB
  , rdb, Referable(..), RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)

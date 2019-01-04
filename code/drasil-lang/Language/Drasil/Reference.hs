@@ -2,9 +2,9 @@
 module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationDB,
   assumptionsFromDB, rdb, Referable(..), RefMap, simpleMap,
-  conceptDB, assumpDB, assumpLookup) where
+  conceptDB, assumpDB) where
 
-import Control.Lens ((^.), Simple, Lens, makeLenses)
+import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
@@ -78,12 +78,6 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
   (\x -> zip x [1..]) grp
   where grp :: [[ConceptInstance]]
         grp = groupBy conGrp $ sortBy uidSort cs
-
-assumpLookup :: HasUID c => c -> AssumpMap -> (AssumpChunk, Int)
-assumpLookup a m = getS $ Map.lookup (a ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
-          " referencing information not found in Assumption Map"
 
 class HasUID s => Referable s where
   refAdd    :: s -> String  -- The referencing address (what we're linking to).

@@ -102,7 +102,7 @@ ssp_si = SI {
   _constants = [],
   _sysinfodb = sspSymMap,
   _usedinfodb = usedDB,
-  _refdb = sspRefDB
+   refdb = sspRefDB
 }
 
 resourcePath :: String

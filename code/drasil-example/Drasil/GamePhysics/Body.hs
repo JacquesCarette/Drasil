@@ -178,7 +178,7 @@ chipmunkSysInfo = SI {
   _constants = [],
   _sysinfodb = everything,
   _usedinfodb = usedDB,
-  _refdb = cpRefDB
+   refdb = cpRefDB
 }
 
 symbTT :: [DefinedQuantityDict]

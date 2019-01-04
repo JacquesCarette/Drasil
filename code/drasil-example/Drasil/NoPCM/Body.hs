@@ -228,7 +228,7 @@ nopcm_si = SI {
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
   _usedinfodb = usedDB,
-  _refdb = nopcmRefDB
+   refdb = nopcmRefDB
 }
 
 nopcmRefDB :: ReferenceDB

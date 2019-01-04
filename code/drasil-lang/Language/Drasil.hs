@@ -156,7 +156,7 @@ module Language.Drasil (
   , AssumpChunk(AC), assuming, assump
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
-  , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
+  , ReferenceDB, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
@@ -282,7 +282,7 @@ import Language.Drasil.Space (Space(..)
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
- , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
+ , assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)

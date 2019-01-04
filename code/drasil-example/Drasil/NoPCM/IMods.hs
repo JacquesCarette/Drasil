@@ -1,7 +1,6 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 
 import Language.Drasil
-import Language.Drasil.Development (getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)

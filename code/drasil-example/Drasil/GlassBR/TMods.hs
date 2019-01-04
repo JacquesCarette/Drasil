@@ -1,8 +1,6 @@
 module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
-import qualified Data.Map as Map
 import Language.Drasil
-import Language.Drasil.Development (UnitDefn) -- FIXME
 
 import Control.Lens ((^.))
 
@@ -10,7 +8,6 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
-import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 
@@ -23,8 +20,8 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- needs to be updated properly.
 -- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
-glass_concept :: [ConceptInstance]
-glass_concept = []
+-- glass_concept :: [ConceptInstance]
+-- glass_concept = []
 
 
 lrIsSafe :: TheoryModel
@@ -32,9 +29,9 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
    [lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
-   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
-                        ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-                        glass_concept [] []
+   -- where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
+   --                      ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+   --                      glass_concept [] []
 
 lrIsSafe_RC :: QDefinition
 lrIsSafe_RC = fromEqn' "safetyReqLR" (nounPhraseSP "Safety Req-LR")

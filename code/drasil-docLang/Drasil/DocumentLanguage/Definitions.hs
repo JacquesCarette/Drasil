@@ -12,16 +12,17 @@ module Drasil.DocumentLanguage.Definitions
   , helperRefs
   , helpToRefField
   )where
+
 import Data.Map (keys)
 import Data.List (elem)
+import Control.Lens ((^.))
+
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit(getUnit))
+
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (getSource', foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
-
-import Control.Lens ((^.))
 
 -- | Synonym for a list of 'Field'
 type Fields = [Field]

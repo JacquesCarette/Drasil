@@ -9,7 +9,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
   Definition(defn), ConceptDomain(cdom), HasReference(getReferences),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
-import Language.Drasil.Development.Unit (MayHaveUnit)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)

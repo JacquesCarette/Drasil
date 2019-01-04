@@ -28,7 +28,6 @@ module Data.Drasil.Utils
   ) where
 
 import Language.Drasil
-import Language.Drasil.Development (UnitDefn, MayHaveUnit(getUnit))
 
 import Control.Lens ((^.))
 import Data.List (transpose, elem)

@@ -187,6 +187,14 @@ module Language.Drasil (
   , pages
       -- Month -> CiteField
   , month
+  -- Chunk.UnitDefn
+  , UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , unitWrapper, getCu, MayHaveUnit(getUnit)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -290,3 +298,10 @@ import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(
 import Language.Drasil.UnitLang (USymb(US))
 
 import Language.Drasil.Development.Sentence -- are these really development?
+import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))

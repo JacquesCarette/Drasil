@@ -77,7 +77,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
+scopeOfRequirements :: (Idea a) => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
   where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",

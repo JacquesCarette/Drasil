@@ -7,7 +7,7 @@ module Language.Drasil.SystemInformation(SystemInformation(..), Block(..), citeD
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation (BibRef, Citation)
-import Language.Drasil.Chunk.Concept (ConceptInstance)
+import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.ChunkDB (ChunkDB)
@@ -17,7 +17,6 @@ import Language.Drasil.Classes (CommonIdea, Concept, ConceptDomain(cdom), Constr
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.People (HasName, People, comparePeople)
-import Language.Drasil.Reference (sDom)
 import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.), makeLenses)

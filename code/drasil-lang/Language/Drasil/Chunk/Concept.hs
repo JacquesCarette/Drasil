@@ -2,6 +2,7 @@
 module Language.Drasil.Chunk.Concept 
   ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cic, cw
   , CommonConcept, ConceptInstance
+  , sDom
   ) where
 
 import Language.Drasil.Classes.Core (HasUID(uid))
@@ -13,6 +14,7 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
+import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.))
 
@@ -55,3 +57,9 @@ cw c = ConDict (nw c) (c ^. defn) (cdom c)
 
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn
+
+sDom :: [UID] -> UID
+sDom [d] = d
+sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
+  show (length d) ++ " instead."
+

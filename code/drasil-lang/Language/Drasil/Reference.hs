@@ -1,12 +1,12 @@
 module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
-  makeCiteS, Referable(..), sDom
+  makeCiteS, Referable(..)
   ) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation as Ci (citeID, Citation)
-import Language.Drasil.Chunk.Concept (ConceptInstance)
+import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
@@ -20,7 +20,6 @@ import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
   prepend, name, raw, (+::+), defer)
 import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(Ref))
-import Language.Drasil.UID (UID)
 
 class HasUID s => Referable s where
   refAdd    :: s -> String  -- The referencing address (what we're linking to).
@@ -75,11 +74,6 @@ refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
 refLabelledCon (Bib _)               = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-
-sDom :: [UID] -> UID
-sDom [d] = d
-sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
-  show (length d) ++ " instead."
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
 makeRef2 l = Reference (l ^. uid) (renderRef l) (shortname l)

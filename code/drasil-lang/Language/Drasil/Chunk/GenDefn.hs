@@ -5,13 +5,14 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), IsUnit,
-  ExprRelat(relat), HasDerivation(derivations),
+  ExprRelat(relat), HasDerivation(derivations), Referable(refAdd, renderRef),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Data.Drasil.IdeaDicts (gendef)
 import Language.Drasil.Chunk.Citation (Citation) 
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Sentence (Sentence)
@@ -43,6 +44,9 @@ instance HasRefAddress      GenDefn where getRefAdd = view ra
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv _ = abrv gendef
+instance Referable          GenDefn where
+  refAdd    g = getRefAdd g
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 gd' :: (IsUnit u) => RelationConcept -> Maybe u ->
   Derivation -> [Citation] -> String -> [Sentence] -> GenDefn

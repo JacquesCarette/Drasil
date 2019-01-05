@@ -18,9 +18,10 @@ import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ), ConceptDomain(cdom),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  CommonIdea(abrv), Definition(defn))
-import Language.Drasil.Derivation (Derivation)
+  CommonIdea(abrv), Definition(defn), Referable(refAdd, renderRef))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
+import Language.Drasil.Derivation (Derivation)
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -90,6 +91,9 @@ instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
+instance Referable          InstanceModel where
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for equational models
 eqModel :: QDefinition -> Inputs -> InputConstraints -> Output -> 

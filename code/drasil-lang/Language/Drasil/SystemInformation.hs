@@ -7,7 +7,8 @@ module Language.Drasil.SystemInformation(SystemInformation(..), Block(..), citeD
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation (BibRef, Citation)
-import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
+import Language.Drasil.Chunk.Concept (ConceptInstance)
+import Language.Drasil.Chunk.Concept.Core (sDom)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.ChunkDB (ChunkDB)

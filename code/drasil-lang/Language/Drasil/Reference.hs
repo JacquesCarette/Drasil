@@ -5,34 +5,13 @@ module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
 import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Citation (Citation)
-import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
-import Language.Drasil.Classes (ConceptDomain(cdom), abrv, Referable(refAdd, renderRef))
+import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
-import Language.Drasil.Label.Type (LblType(RP), IRefProg,
-  prepend, name, raw, (+::+), defer)
+import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(Ref))
-
-instance Referable GenDefn where
-  refAdd    g = getRefAdd g
-  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
-
-instance Referable DataDefinition where
-  refAdd    d = getRefAdd d
-  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
-
-instance Referable InstanceModel where
-  refAdd    i = getRefAdd i
-  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
-
-instance Referable ConceptInstance where
-  refAdd l    = l ^. uid
-  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getRefAdd lb

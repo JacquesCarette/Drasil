@@ -11,10 +11,12 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Quantity, HasSpace(typ), HasDerivation(derivations),
-  HasAdditionalNotes(getNotes), ConceptDomain(cdom), CommonIdea(abrv))
+  HasAdditionalNotes(getNotes), ConceptDomain(cdom), CommonIdea(abrv),
+  Referable(refAdd, renderRef))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.Symbol.Helpers (eqSymb)
@@ -54,6 +56,9 @@ instance HasShortName       DataDefinition where shortname = lbl
 instance HasRefAddress      DataDefinition where getRefAdd = ra
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
+instance Referable DataDefinition where
+  refAdd    d = getRefAdd d
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition

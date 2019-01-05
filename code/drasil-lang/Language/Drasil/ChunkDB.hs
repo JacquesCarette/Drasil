@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.ChunkDB 
   ( ChunkDB, cdb
-  , HasSymbolTable(..), symbolMap, symbLookup
+  , symbolTable, symbLookup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, traceMap, defLookup
   , unitLookup , HasUnitTable(..), unitMap, collectUnits, TraceMap
@@ -115,10 +115,6 @@ symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
   where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
 
---- SYMBOL TABLE ---
-class HasSymbolTable s where
-  symbolTable :: Lens' s SymbolMap
-
 --- TERM TABLE ---
 class HasTermTable s where
   termTable :: Lens' s TermMap
@@ -169,8 +165,8 @@ class HasLabelledContent s where
   labelledcontent :: Lens' s LabelledContentMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => HasUID c => s -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
 
 -- | Looks up a UID in a UMap table. If nothing is found an error is thrown
 uMapLookup :: String -> String -> UID -> UMap a -> a
@@ -222,7 +218,7 @@ labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
 labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
-data ChunkDB = CDB { _csymbs :: SymbolMap
+data ChunkDB = CDB { symbolTable :: SymbolMap
                    , _cterms :: TermMap 
                    , _cdefs  :: ConceptMap
                    , _cunitDB :: UnitMap
@@ -242,15 +238,15 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => 
-        [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-        [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
-        [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
-cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
- tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm) (idMap a) (idMap ci) (idMap sec) (idMap lc)
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
+    [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
+    [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
+    [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
+cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t)
+  (conceptMap c) (unitMap u) tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm)
+  (idMap a) (idMap ci) (idMap sec) (idMap lc)
 
 ----------------------
-instance HasSymbolTable      ChunkDB where symbolTable       = csymbs
 instance HasTermTable        ChunkDB where termTable         = cterms
 instance HasDefinitionTable  ChunkDB where defTable          = cdefs
 instance HasUnitTable        ChunkDB where unitTable         = cunitDB
@@ -265,7 +261,7 @@ instance HasConceptInstance  ChunkDB where conceptinsTable   = cconceptins
 instance HasSectionTable     ChunkDB where sectionTable      = csec
 instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
-collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
+collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
  $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
 

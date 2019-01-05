@@ -143,7 +143,7 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
-  , HasSymbolTable, symbolMap, symbLookup, symbolTable
+  , symbLookup, symbolTable
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, traceMap, defTable, defLookup, labelledconLookup
   , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap

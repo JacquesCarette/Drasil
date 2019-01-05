@@ -23,7 +23,6 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
-import Control.Lens ((^.))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
@@ -450,12 +449,12 @@ convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
+  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ codeSpec g))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
-  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
+  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
 convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
@@ -473,8 +472,8 @@ convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
 
-lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
-lookupC sm c = symbLookup c $ sm^.symbolTable
+lookupC :: ChunkDB -> UID -> QuantityDict
+lookupC sm c = symbLookup c $ symbolTable sm
 
 renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l

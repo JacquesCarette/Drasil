@@ -5,7 +5,9 @@ import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
+import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -90,3 +92,20 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+
+instance Referable LabelledContent where
+  refAdd     (LblC lb _) = getRefAdd lb
+  renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
+
+refLabelledCon :: RawContent -> IRefProg
+refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
+refLabelledCon (Assumption _ _)      = raw "Assump:" +::+ name
+refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
+refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
+refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
+refLabelledCon (Bib _)               = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."

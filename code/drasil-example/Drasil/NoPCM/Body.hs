@@ -213,7 +213,6 @@ nopcm_si = SI {
   _sys = srs_swhs,
   _kind = srs,
   _authors = [thulasi],
-  _units = check_si,
   _quants = symbTT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs

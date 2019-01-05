@@ -54,35 +54,15 @@ type UnitMap = UMap UnitDefn
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
 type TermMap = UMap IdeaDict
-
--- Reference map
 type TraceMap = UMap [UID]
-
--- Refby map
 type RefbyMap = Map.Map UID [UID]
-
--- DataDefinition map
 type DatadefnMap = UMap DataDefinition
-
--- InstanceModel map
 type InsModelMap = UMap InstanceModel
-
--- GenDef map
 type GendefMap = UMap GenDefn
-
--- TheoryModel map
 type TheoryModelMap = UMap TheoryModel
-
--- Assumption map
 type AssumptionMap = UMap AssumpChunk
-
--- ConceptInstance map
 type ConceptInstanceMap = UMap ConceptInstance
-
--- Section map
 type SectionMap = UMap Section
-
--- LabelledContent map
 type LabelledContentMap = UMap LabelledContent
 
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
@@ -202,16 +182,14 @@ collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable
  $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
 
 traceLookup :: UID -> TraceMap -> [UID]
-traceLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] fst
+traceLookup c m = maybe [] fst $ Map.lookup c m
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap tm = invert $ Map.map (\(x,_) -> x) tm
+generateRefbyMap = invert . Map.map fst
 
 refbyLookup :: UID -> RefbyMap -> [UID]
-refbyLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] id
+refbyLookup c m = maybe [] id $ Map.lookup c m

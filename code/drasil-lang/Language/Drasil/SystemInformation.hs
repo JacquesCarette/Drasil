@@ -34,14 +34,13 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (CommonIdea a, Idea a, Idea b, HasName c, IsUnit d,
+ SI :: (CommonIdea a, Idea a, Idea b, HasName c,
   Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
   Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b
   , _authors :: [c]
-  , _units :: [d]
   , _quants :: [e]
   , _concepts :: [f]
   , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below

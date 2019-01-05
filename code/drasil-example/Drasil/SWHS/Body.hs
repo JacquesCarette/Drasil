@@ -97,7 +97,6 @@ swhs_si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
-  _units = check_si,
   _quants = swhsSymbols,
   _concepts = symbTT,
   _definitions = swhsQDefs,

@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
@@ -42,6 +43,7 @@ data Sentence where
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
 
+-- The HasSymbol is redundant, but on purpose
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 ch x = Ch SymbolStyle (x ^. uid)
 

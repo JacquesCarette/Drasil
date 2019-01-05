@@ -27,7 +27,6 @@ thisSI = SI {
   _sys = hghc,
   _kind = srs,
   _authors = [spencerSmith],
-  _units = check_si,  
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = ([] :: [QDefinition]),

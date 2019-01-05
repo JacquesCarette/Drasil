@@ -84,7 +84,6 @@ ssp_si = SI {
   _sys = ssa, 
   _kind = srs, 
   _authors = [henryFrankis],
-  _units = check_si,
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),

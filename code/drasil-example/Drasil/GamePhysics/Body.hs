@@ -166,7 +166,6 @@ chipmunkSysInfo = SI {
   _sys = chipmunk,
   _kind = srs,
   _authors = authors,
-  _units = chipUnits,
   _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,

@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6,
   newA7)
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
+  col2DLegTerms, mass_A, mass_j, normalVect, time_c, torque_i, vel_A, vel_i)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
@@ -21,9 +21,9 @@ iModels_new = [im1_new, im2_new, im3_new]
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
 im1_new = eqModel transMot
-  [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
+  [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_j] 
   [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] [] "transMot" [transMotDesc]
+            sy force_i $> 0, sy mass_j $> 0 ] (qw acc_i) [] [] [] "transMot" [transMotDesc]
 
 transMot :: QDefinition
 transMot = fromEqn' "transMot" transMotNP (transMotDesc +:+ transMotLeg) 
@@ -35,7 +35,7 @@ transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rig
 -- FIXME: the 'equation' used to be a sequence of equations
 transMotEqn :: Expr
 transMotEqn = (deriv (apply1 vel_i QP.time) QP.time)
-  -- $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_i))
+  -- $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_j))
 
 
 -- FIXME: need referencing

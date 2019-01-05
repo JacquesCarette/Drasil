@@ -26,7 +26,7 @@ gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
-  pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
+  pos_CM, mass_j, pos_j, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
@@ -55,7 +55,7 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 cpUnits :: [UnitalChunk]
 cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
+  QP.time, QP.angularDisplacement, pos_CM, pos_j, mass_j, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
@@ -92,8 +92,7 @@ contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
 
-perpParam, rigidParam, velParam, 
-  angParam :: String -> Symbol -> UnitalChunk
+perpParam, rigidParam, velParam, angParam :: String -> Symbol -> UnitalChunk
 
 velParam n w = ucs'
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
@@ -121,7 +120,7 @@ rigidParam n w = ucs'
 
 iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
-  pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
+  pos_CM, mass_j, pos_j, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
@@ -156,11 +155,11 @@ pos_CM = ucs "p_CM" (nounPhraseSP $
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.position) (Atomic "CM")) Real metre
 
-mass_i = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
+mass_j = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
 
-pos_i = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
+pos_j = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 

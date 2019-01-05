@@ -5,9 +5,9 @@ module Drasil.GamePhysics.DataDefs (cpQDefs, dataDefns,
 import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
-import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
+import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_j,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB,)
+  perpLen_A, perpLen_B, pos_CM, pos_j, vel_B, vel_O, r_OB)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -37,7 +37,7 @@ ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (sum_all (Atomic "i") ((sy mass_i) * (sy pos_i))) / (sy mTot)
+ctrOfMassEqn = (sum_all (Atomic "i") ((sy mass_j) * (sy pos_j))) / (sy mTot)
 
 -- DD2 : Linear displacement --
 

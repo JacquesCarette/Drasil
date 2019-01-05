@@ -8,9 +8,10 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
   Definition(defn), ConceptDomain(cdom), HasReference(getReferences),
-  HasAdditionalNotes(getNotes), CommonIdea(abrv))
+  HasAdditionalNotes(getNotes), CommonIdea(abrv), Referable(refAdd, renderRef))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -73,6 +74,9 @@ instance Theory             TheoryModel where
 instance HasShortName       TheoryModel where shortname = lb
 instance HasRefAddress      TheoryModel where getRefAdd = ra
 instance CommonIdea         TheoryModel where abrv _ = abrv theoryMod
+instance Referable TheoryModel where
+  refAdd    t = getRefAdd t
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments

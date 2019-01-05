@@ -204,13 +204,6 @@ glassSystInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqMod gbrIMods ++ 
-                 (concatMap (^. defined_quant) gbrTMods) ++
-                 (concatMap (^. defined_fun) gbrTMods) ++
-                  [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
-                                             -- in the description of the Calculation of Demand instance model;
-                                             -- should this be included as a Data Definition?
-                                             -- (same for sdWithEqn)
   _datadefs    = dataDefns,
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
@@ -218,7 +211,7 @@ glassSystInfo = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
-  _usedinfodb = usedDB,
+  _usedinfodb  = usedDB,
    refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.

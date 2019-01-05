@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (CommonIdea, Concept, ConceptDomain(cdom), Constrained, 
-  Idea, IsUnit, Quantity)
+  Idea, Quantity)
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.People (HasName, People, comparePeople)
@@ -43,7 +43,6 @@ data SystemInformation where
   , _authors :: [c]
   , _quants :: [e]
   , _concepts :: [f]
-  , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
   , _datadefs :: [DataDefinition]
   , _inputs :: [h]
   , _outputs :: [i]

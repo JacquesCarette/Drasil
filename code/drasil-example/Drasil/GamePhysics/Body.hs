@@ -62,7 +62,7 @@ import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
+import Drasil.GamePhysics.DataDefs (cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
@@ -168,7 +168,6 @@ chipmunkSysInfo = SI {
   _authors = authors,
   _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
-  _definitions = cpDDefs,
   _datadefs = dataDefns,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 

@@ -72,7 +72,6 @@ getStr _ = error "Term is not a string"
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec (SI {_sys = sys
               , _quants = q
-              , _definitions = defs'
               , _datadefs = ddefs
               , _inputs = ins
               , _outputs = outs
@@ -81,8 +80,8 @@ codeSpec (SI {_sys = sys
               , _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
-      derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
-      rels = (map qtoc ({-defs'++-}(map qdFromDD ddefs))) \\ derived
+      derived = map qtov $ getDerivedInputs ddefs inputs' const' db
+      rels = (map qtoc (map qdFromDD ddefs)) \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
@@ -292,12 +291,11 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
         pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
-getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
+getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
-getDerivedInputs ddefs defs' ins consts sm  =
+getDerivedInputs ddefs ins consts sm  =
   let refSet = ins ++ map codevar consts
-  in  if (ddefs == []) then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
-      else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
+  in  filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
 type Known = CodeChunk
 type Need  = CodeChunk

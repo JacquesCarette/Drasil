@@ -275,6 +275,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 $ filter (`hasStageSymbol` Equational) 
                 (nub v))
                 at_start] []
+    -- mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db

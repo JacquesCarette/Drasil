@@ -215,7 +215,6 @@ nopcm_si = SI {
   _authors = [thulasi],
   _quants = symbTT,
   _concepts = nopcm_Symbols,
-  _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
   _inputs = (map qw nopcm_Constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs

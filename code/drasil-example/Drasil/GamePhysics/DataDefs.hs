@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
+module Drasil.GamePhysics.DataDefs (cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
   angVelDD, angAccelDD, impulseDD) where
 
@@ -24,12 +24,8 @@ dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
   angVelDD, angAccelDD, impulseDD, chaslesDD]
 
-cpDDefs :: [QDefinition]
-cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles]
-
 cpQDefs :: [Block QDefinition]
-cpQDefs = map (\x -> Parallel x []) cpDDefs
+cpQDefs = map (\x -> Parallel x []) $ map qdFromDD dataDefns
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition

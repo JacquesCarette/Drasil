@@ -29,7 +29,6 @@ thisSI = SI {
   _authors = [spencerSmith],
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
-  _definitions = ([] :: [QDefinition]),
   _datadefs = hghcVarsDD,
   _inputs = htInputs,
   _outputs = htOutputs,

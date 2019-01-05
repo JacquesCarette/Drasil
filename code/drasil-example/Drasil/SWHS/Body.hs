@@ -61,7 +61,7 @@ import Drasil.SWHS.Assumptions (newA13, newAssumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
@@ -99,7 +99,6 @@ swhs_si = SI {
   _authors = swhsPeople,
   _quants = swhsSymbols,
   _concepts = symbTT,
-  _definitions = swhsQDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,

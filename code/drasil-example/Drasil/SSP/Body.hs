@@ -86,7 +86,6 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _quants = sspSymbols,
   _concepts = symbTT,
-  _definitions = ([] :: [QDefinition]),
   _datadefs = dataDefns,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,

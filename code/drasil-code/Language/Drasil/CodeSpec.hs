@@ -221,7 +221,7 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: HasSymbolTable ctx => ctx -> ModExportMap -> [Mod] -> ModDepMap
+modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> ModDepMap
 modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
                                    ++ [("Control", [ "InputParameters",  
                                                      "DerivedValues",
@@ -239,7 +239,7 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
-fstdep :: HasSymbolTable ctx => ctx -> FuncStmt ->[CodeChunk]
+fstdep :: ChunkDB -> FuncStmt ->[CodeChunk]
 fstdep _  (FDec cch _) = [cch]
 fstdep sm (FAsg cch e) = cch:codevars e sm
 fstdep sm (FFor cch e fs) = delete cch $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
@@ -252,10 +252,10 @@ fstdep _  (FContinue) = []
 fstdep sm (FProcCall _ l)  = concatMap (\x -> codevars  x sm) l
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
-fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
+fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
   where
-    fstvars :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+    fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
     fstvars _  (FDec cch _) = [cch]
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = delete cch $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
@@ -268,7 +268,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     fstvars sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
-    declared :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+    declared :: ChunkDB -> FuncStmt -> [CodeChunk]
     declared _  (FDec cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
@@ -292,7 +292,8 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
         pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
-getDerivedInputs :: HasSymbolTable ctx => [DataDefinition] -> [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
+getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
+  ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins consts sm  =
   let refSet = ins ++ map codevar consts
   in  if (ddefs == []) then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
@@ -301,7 +302,7 @@ getDerivedInputs ddefs defs' ins consts sm  =
 type Known = CodeChunk
 type Need  = CodeChunk
 
-getExecOrder :: HasSymbolTable ctx => [Def] -> [Known] -> [Need] -> ctx -> [Def]
+getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
@@ -319,11 +320,11 @@ subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs
 
 -- | Get a list of CodeChunks from an equation
-codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars :: Expr -> ChunkDB -> [CodeChunk]
 codevars e m = map resolve $ dep e
-  where resolve x = codevar (symbLookup x $ m ^. symbolTable)
+  where resolve x = codevar (symbLookup x $ symbolTable m)
 
 -- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars' :: Expr -> ChunkDB -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = codevar (symbLookup x (m ^. symbolTable))
+  where  resolve x = codevar (symbLookup x (symbolTable m))

@@ -50,31 +50,23 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
-tmodel :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx  -> TheoryModel -> LabelledContent
+tmodel :: Fields -> ChunkDB  -> TheoryModel -> LabelledContent
 tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (makeRef2 t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> DataDefinition -> LabelledContent
+ddefn :: Fields -> ChunkDB -> DataDefinition -> LabelledContent
 ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
-gdefn :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> GenDefn -> LabelledContent
+gdefn :: Fields -> ChunkDB -> GenDefn -> LabelledContent
 gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (makeRef2 g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
-instanceModel :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> InstanceModel -> LabelledContent
+instanceModel :: Fields -> ChunkDB -> InstanceModel -> LabelledContent
 instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (makeRef2 i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
@@ -97,9 +89,7 @@ nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
-mkTMField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => TheoryModel -> ctx  -> Field -> ModRow -> ModRow
+mkTMField :: TheoryModel -> ChunkDB  -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
   (show l, (map eqUnR' (t ^. invariants))) : fs 
@@ -112,14 +102,10 @@ mkTMField t _ l@(Notes) fs =
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
-helperRefs :: (HasUID t, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => t -> ctx -> Sentence
+helperRefs :: (HasUID t) => t -> ChunkDB -> Sentence
 helperRefs t s = foldlSent $ map (\x -> helpToRefField x s) $ refbyLookup (t ^. uid) (s ^. refbyTable)
 
-helpToRefField :: (HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => UID -> ctx -> Sentence
+helpToRefField :: UID -> ChunkDB -> Sentence
 helpToRefField t s = if elem t (keys $ s ^. dataDefnTable) 
   then makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
   else if  elem t (keys $ s ^. insmodelTable)
@@ -139,9 +125,7 @@ helpToRefField t s = if elem t (keys $ s ^. dataDefnTable)
                 else error $ t ++ "Caught."
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkDDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
+mkDDField :: DataDefinition -> ChunkDB -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
@@ -156,7 +140,7 @@ mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] ->
+buildDescription :: Verbosity -> InclUnits -> Expr -> ChunkDB -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC $ ulcc $
@@ -164,16 +148,14 @@ buildDescription Verbose u e m cs = (UlC $ ulcc $
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
-buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefinition -> ctx ->
+buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> ChunkDB ->
   [Contents]
 buildDDescription' Succinct u d _ = map (UlC . ulcc) [Enumeration (Definitions $ (firstPair' u d):[])]
 buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
   (firstPair' u d : descPairs u (vars (d^.defnExpr) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
-mkGDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => GenDefn -> ctx -> Field -> ModRow -> ModRow
+mkGDField :: GenDefn -> ChunkDB -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs = 
   maybe fs (\udef -> (show l, (mkParagraph $ Sy (usymb udef)):[]) : fs) (getUnit g)
@@ -186,9 +168,7 @@ mkGDField g _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : 
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
-mkIMField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
-  , HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
-  HasSectionTable ctx, HasLabelledContent ctx) => InstanceModel -> ctx -> Field -> ModRow -> ModRow
+mkIMField :: InstanceModel -> ChunkDB -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, (eqUnR' (relat i)):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,

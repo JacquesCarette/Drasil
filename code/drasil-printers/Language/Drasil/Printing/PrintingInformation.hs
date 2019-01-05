@@ -4,8 +4,7 @@ module Language.Drasil.Printing.PrintingInformation where
 
 import Control.Lens (makeLenses, Lens')
 
-import Language.Drasil (ChunkDB, HasSymbolTable(..)
-  , HasTermTable(..), HasDefinitionTable(..)
+import Language.Drasil (ChunkDB , HasTermTable(..), HasDefinitionTable(..)
   , HasUnitTable(..)
   )
 
@@ -27,7 +26,6 @@ data PrintingInformation = PI
                          }
 makeLenses ''PrintingInformation
 
-instance HasSymbolTable      PrintingInformation where symbolTable  = ckdb . symbolTable
 instance HasTermTable        PrintingInformation where termTable    = ckdb . termTable
 instance HasDefinitionTable  PrintingInformation where defTable     = ckdb . defTable
 instance HasUnitTable        PrintingInformation where unitTable    = ckdb . unitTable

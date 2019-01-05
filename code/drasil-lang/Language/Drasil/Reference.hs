@@ -9,7 +9,6 @@ import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Classes (ConceptDomain(cdom), abrv, Referable(refAdd, renderRef))
@@ -18,10 +17,6 @@ import Language.Drasil.Label.Type (LblType(RP), IRefProg,
   prepend, name, raw, (+::+), defer)
 import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(Ref))
-
-instance Referable TheoryModel where
-  refAdd    t = getRefAdd t
-  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable GenDefn where
   refAdd    g = getRefAdd g

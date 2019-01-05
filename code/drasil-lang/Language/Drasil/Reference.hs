@@ -4,7 +4,7 @@ module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Chunk.Citation as Ci (citeID, Citation)
+import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Chunk.Concept (ConceptInstance, sDom)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -13,20 +13,11 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Classes (ConceptDomain(cdom), abrv, Referable(refAdd, renderRef))
-import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
-import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
+import Language.Drasil.Label.Type (LblType(RP), IRefProg,
   prepend, name, raw, (+::+), defer)
 import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(Ref))
-
-instance Referable Section where
-  refAdd    (Section _ _ lb ) = getRefAdd lb
-  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
-
-instance Referable Citation where
-  refAdd    c = c ^. citeID -- citeID should be unique.
-  renderRef c = Citation $ refAdd c
 
 instance Referable TheoryModel where
   refAdd    t = getRefAdd t

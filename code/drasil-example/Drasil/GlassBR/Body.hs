@@ -133,9 +133,6 @@ gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
 
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
-
 check_si :: [UnitDefn]
 check_si = collectUnits gbSymbMap this_symbols 
 
@@ -203,7 +200,6 @@ glassSystInfo = SI {
   _sys         = gLassBR,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = check_si,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 

@@ -2,19 +2,19 @@
 module Language.Drasil.ChunkDB 
   ( ChunkDB, cdb
   , symbolTable, symbLookup
-  , HasTermTable(..), termLookup
-  , HasDefinitionTable(..), conceptMap, traceMap, defLookup
-  , unitLookup , HasUnitTable(..), unitMap, collectUnits, TraceMap
-  , traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap
-  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap
-  , GendefMap, TheoryModelMap, AssumptionMap, ConceptInstanceMap, datadefnLookup
+  , termLookup, termTable
+  , conceptMap, traceMap, defLookup, defTable
+  , unitLookup , unitTable, collectUnits
+  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
+  , refbyLookup, refbyTable
+  , datadefnLookup
   , insmodelLookup, gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup
   , sectionLookup, labelledconLookup
-  , HasDataDefnTable(..), HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..)
-  , HasAssumpTable(..), HasConceptInstance(..), HasSectionTable(..), HasLabelledContent(..)
+  , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
+  , assumpTable, conceptinsTable, sectionTable, labelledcontentTable
   ) where
 
-import Control.Lens ((^.), Lens', makeLenses)
+import Control.Lens ((^.), makeLenses)
 import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
@@ -115,55 +115,6 @@ symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
   where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
 
---- TERM TABLE ---
-class HasTermTable s where
-  termTable :: Lens' s TermMap
-  
---- DEFINITION TABLE ---
-class HasDefinitionTable s where
-  defTable :: Lens' s ConceptMap
-
---- UNIT TABLE ---
-class HasUnitTable s where
-  unitTable :: Lens' s UnitMap
-
--- TRACE TABLE --
-class HasTraceTable s where
-  traceTable :: Lens' s TraceMap
-
--- Refby TABLE --
-class HasRefbyTable s where
-  refbyTable :: Lens' s RefbyMap
-
---- DataDefn TABLE ---
-class HasDataDefnTable s where
-  dataDefnTable :: Lens' s DatadefnMap
-
--- Instance Model TABLE --
-class HasInsModelTable s where
-  insmodelTable :: Lens' s InsModelMap
-
--- General Definition TABLE --
-class HasGendefTable s where
-  gendefTable :: Lens' s GendefMap
-
--- Theory Model TABLE --
-class HasTheoryModelTable s where
-  theoryModelTable :: Lens' s TheoryModelMap
-
--- Assumption TABLE --
-class HasAssumpTable s where
-  assumpTable :: Lens' s AssumptionMap
-
-class HasConceptInstance s where
-  conceptinsTable :: Lens' s ConceptInstanceMap
-
-class HasSectionTable s where
-  sectionTable :: Lens' s SectionMap
-
-class HasLabelledContent s where
-  labelledcontent :: Lens' s LabelledContentMap
-
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
@@ -219,19 +170,19 @@ labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbolTable :: SymbolMap
-                   , _cterms :: TermMap 
-                   , _cdefs  :: ConceptMap
-                   , _cunitDB :: UnitMap
-                   , _ctrace :: TraceMap
-                   , _crefby :: RefbyMap
-                   , _cdata  :: DatadefnMap
-                   , _cins   :: InsModelMap
-                   , _cgen   :: GendefMap
-                   , _ctheory :: TheoryModelMap
-                   , _cassump :: AssumptionMap
-                   , _cconceptins :: ConceptInstanceMap
-                   , _csec :: SectionMap
-                   , _clabelled :: LabelledContentMap
+                   , termTable :: TermMap 
+                   , defTable  :: ConceptMap
+                   , _unitTable :: UnitMap
+                   , _traceTable :: TraceMap
+                   , _refbyTable :: RefbyMap
+                   , _dataDefnTable  :: DatadefnMap
+                   , _insmodelTable   :: InsModelMap
+                   , _gendefTable   :: GendefMap
+                   , _theoryModelTable :: TheoryModelMap
+                   , _assumpTable :: AssumptionMap
+                   , _conceptinsTable :: ConceptInstanceMap
+                   , _sectionTable :: SectionMap
+                   , _labelledcontentTable :: LabelledContentMap
                    } --TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
@@ -245,21 +196,6 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
 cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t)
   (conceptMap c) (unitMap u) tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm)
   (idMap a) (idMap ci) (idMap sec) (idMap lc)
-
-----------------------
-instance HasTermTable        ChunkDB where termTable         = cterms
-instance HasDefinitionTable  ChunkDB where defTable          = cdefs
-instance HasUnitTable        ChunkDB where unitTable         = cunitDB
-instance HasTraceTable       ChunkDB where traceTable        = ctrace
-instance HasRefbyTable       ChunkDB where refbyTable        = crefby
-instance HasDataDefnTable    ChunkDB where dataDefnTable     = cdata
-instance HasInsModelTable    ChunkDB where insmodelTable     = cins
-instance HasGendefTable      ChunkDB where gendefTable       = cgen
-instance HasTheoryModelTable ChunkDB where theoryModelTable  = ctheory
-instance HasAssumpTable      ChunkDB where assumpTable       = cassump
-instance HasConceptInstance  ChunkDB where conceptinsTable   = cconceptins
-instance HasSectionTable     ChunkDB where sectionTable      = csec
-instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)

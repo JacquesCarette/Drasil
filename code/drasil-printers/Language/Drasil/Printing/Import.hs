@@ -153,14 +153,14 @@ expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 lookupC :: ChunkDB -> UID -> Symbol
 lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
 
-lookupT :: HasTermTable s => s -> UID -> Sentence
-lookupT sm c = phraseNP $ (termLookup c (sm^.termTable)) ^. term
+lookupT :: ChunkDB -> UID -> Sentence
+lookupT sm c = phraseNP $ (termLookup c (termTable sm)) ^. term
 
-lookupS :: HasTermTable s => s -> UID -> Sentence
-lookupS sm c = maybe (phraseNP $ (termLookup c (sm^.termTable)) ^. term) id (fmap S $ getA $ termLookup c (sm^.termTable))
+lookupS :: ChunkDB -> UID -> Sentence
+lookupS sm c = maybe (phraseNP $ (termLookup c (termTable sm)) ^. term) id (fmap S $ getA $ termLookup c (termTable sm))
 
-lookupP :: HasTermTable s => s -> UID -> Sentence
-lookupP sm c =  pluralNP $ (termLookup c (sm^.termTable)) ^. term
+lookupP :: ChunkDB -> UID -> Sentence
+lookupP sm c =  pluralNP $ (termLookup c (termTable sm)) ^. term
 -- --plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
@@ -279,11 +279,11 @@ spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
-spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
-spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
-spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
+spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
+spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
+spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
 spec sm (Ref (Reference _ (RP rp ra) sn)) = 
-  P.Ref P.Internal ra $ spec sm $ renderShortName sm rp sn
+  P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
 spec sm (Ref (Reference _ (Citation ra) sn)) = 
   P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
 spec sm (Ref (Reference _ (URI ra) sn)) = 
@@ -292,8 +292,8 @@ spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
+renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ defTable ctx
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

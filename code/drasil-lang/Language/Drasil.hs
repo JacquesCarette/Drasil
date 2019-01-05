@@ -144,15 +144,15 @@ module Language.Drasil (
   -- ChunkDB
   , ChunkDB, cdb
   , symbLookup, symbolTable
-  , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, traceMap, defTable, defLookup, labelledconLookup
-  , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap
-  , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
-  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap, HasLabelledContent(..)
-  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
-  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
-  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
-  , HasAssumpTable(..), HasConceptInstance(..), SectionMap
+  , termLookup, termTable
+  , conceptMap, traceMap, defTable, defLookup, labelledconLookup
+  , unitTable, collectUnits
+  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
+  , refbyLookup, refbyTable, labelledcontentTable
+  , datadefnLookup, insmodelLookup, sectionLookup
+  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, dataDefnTable
+  , insmodelTable, gendefTable, theoryModelTable, sectionTable
+  , assumpTable, conceptinsTable
   -- AssumpChunk
   , AssumpChunk(AC), assuming, assump
   -- Reference

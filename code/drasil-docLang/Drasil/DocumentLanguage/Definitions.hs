@@ -120,8 +120,8 @@ helpToRefField t s = if elem t (keys $ s ^. dataDefnTable)
             then makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
             else if elem t (keys $ s ^. sectionTable)
               then makeRef2S $ sectionLookup t (s ^. sectionTable)
-              else if elem t (keys $ s ^. labelledcontent)
-                then makeRef2S $ labelledconLookup t (s ^. labelledcontent) 
+              else if elem t (keys $ s ^. labelledcontentTable)
+                then makeRef2S $ labelledconLookup t (s ^. labelledcontentTable) 
                 else error $ t ++ "Caught."
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)

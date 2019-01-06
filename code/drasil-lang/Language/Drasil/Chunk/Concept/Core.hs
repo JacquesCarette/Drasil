@@ -4,7 +4,8 @@ module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(C
   , sDom)
   where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), CommonIdea(abrv), Referable(refAdd, renderRef))
 import Language.Drasil.Chunk.CommonIdea (CI)
@@ -46,7 +47,7 @@ instance Definition    CommonConcept where defn = def
 instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = dom
 
-data ConceptInstance = ConInst { _cc :: ConceptChunk , shnm :: ShortName}
+data ConceptInstance = ConInst { _cc :: ConceptChunk , ra :: String, shnm :: ShortName}
 makeLenses ''ConceptInstance
 
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -56,7 +57,8 @@ instance Idea          ConceptInstance where getA = getA . view (cc . idea)
 instance Definition    ConceptInstance where defn = cc . defn'
 instance ConceptDomain ConceptInstance where cdom = cdom' . view cc
 instance HasShortName  ConceptInstance where shortname = shnm
+instance HasRefAddress ConceptInstance where getRefAdd = ra
 instance Referable     ConceptInstance where
-  refAdd l    = l ^. uid
-  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (l ^. uid)
+  refAdd      = ra
+  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (ra l)
 

@@ -63,7 +63,7 @@ Symbol & Description & Units
 \midrule
 $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${\mathbf{a}_{i}}$ & Force on the translational motion of a set of 2d rigid bodies & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -75,11 +75,7 @@ ${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
 \\
 ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & N
 \\
-${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & N
-\\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
-\\
-$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
 \\
@@ -151,11 +147,11 @@ ${||\mathbf{r}||^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
 $α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
+$α$ & Force on the rotational motion of a set of 2D rigid body & $\frac{\text{rad}}{\text{s}^{2}}$
+\\
 $θ$ & Angular Displacement & rad
 \\
 $τ$ & Torque & Nm
-\\
-${τ_{i}}$ & Torque applied to the i-th body & Nm
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -320,9 +316,9 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \\ \midrule \\
 Label & Newton's second law of motion
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    \mathbf{F}=m \mathbf{a}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$\mathbf{F}$ is the force (N)}
@@ -345,9 +341,9 @@ Label & Newton's second law of motion
 \\ \midrule \\
 Label & Newton's third law of motion
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{${\mathbf{F}_{1}}$ is the force exerted by the first body (on another body) (N)}
@@ -369,9 +365,9 @@ Label & Newton's third law of motion
 \\ \midrule \\
 Label & Newton's law of universal gravitation
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$\mathbf{F}$ is the force (N)}
@@ -398,9 +394,9 @@ Label & Newton's law of universal gravitation
 \\ \midrule \\
 Label & Chasles' theorem
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
@@ -424,9 +420,9 @@ Label & Chasles' theorem
 \\ \midrule \\
 Label & Newton's second law for rotational motion
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    τ=\mathbf{I} α
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$τ$ is the torque (Nm)}
@@ -459,9 +455,9 @@ Label & Mass-weighted average position of a rigid body's particles
                  \\ \midrule \\
                  Units & m
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\mathbf{p}_{CM}}$ is the mass-weighted average position of a rigid body's particles (m)}
@@ -490,9 +486,9 @@ Label & Linear Displacement
                  \\ \midrule \\
                  Units & m
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$\mathbf{r}(t)$ is the linear displacement (m)}
@@ -521,9 +517,9 @@ Label & Linear Velocity
                  \\ \midrule \\
                  Units & $\frac{\text{m}}{\text{s}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
@@ -552,9 +548,9 @@ Label & Linear Acceleration
                  \\ \midrule \\
                  Units & $\frac{\text{m}}{\text{s}^{2}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
@@ -583,9 +579,9 @@ Label & Angular Displacement
                  \\ \midrule \\
                  Units & rad
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     θ=\frac{d\,ϕ\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$θ$ is the angular displacement (rad)}
@@ -614,9 +610,9 @@ Label & Angular Velocity
                  \\ \midrule \\
                  Units & $\frac{\text{rad}}{\text{s}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     ω=\frac{d\,θ\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
@@ -645,9 +641,9 @@ Label & Angular Acceleration
                  \\ \midrule \\
                  Units & $\frac{\text{rad}}{\text{s}^{2}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     α=\frac{d\,ω\left(t\right)}{d\,t}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
@@ -676,9 +672,9 @@ Label & Impulse (scalar)
                  \\ \midrule \\
                  Units & Ns
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$j$ is the impulse (scalar) (Ns)}
@@ -716,9 +712,9 @@ Label & Velocity At Point B
                  \\ \midrule \\
                  Units & $\frac{\text{m}}{\text{s}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
@@ -749,34 +745,31 @@ Label & Force on the translational motion of a set of 2d rigid bodies
                 \\ \midrule \\
                 Output & ${\mathbf{a}_{i}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              {\mathbf{v}_{i}}>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              t>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              g>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              {\mathbf{F}_{i}}>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              {m_{j}}>0
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
-                                                                  Equation & \begin{dmath}
-                                                                             {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
-                                                                             \end{dmath}
+                                                                  Equation & \begin{displaymath}
+                                                                             {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+                                                                                           \item{${\mathbf{a}_{i}}$ is the Force on the translational motion of a set of 2d rigid bodies ($\frac{\text{m}}{\text{s}^{2}}$)}
                                                                                            \item{$t$ is the time (s)}
                                                                                            \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
-                                                                                           \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-                                                                                           \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
-                                                                                           \item{${m_{j}}$ is the mass of the j-th particle (kg)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & The above equation expresses the total acceleration of the rigid body \hyperref[A:objectTy]{A: objectTy} \hyperref[A:objectDimension]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[A:dampingInvolvement]{A: dampingInvolvement} or constraints \hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
@@ -798,33 +791,31 @@ Label & Force on the rotational motion of a set of 2D rigid body
                 \\ \midrule \\
                 Output & $α$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              ω>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              t>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              {τ_{i}}>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              \mathbf{I}>0
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   α>0
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
-                                                                             α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
-                                                                             \end{dmath}
+                                                                  Equation & \begin{displaymath}
+                                                                             α=\frac{d\,ω\left(t\right)}{d\,t}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+                                                                                           \item{$α$ is the Force on the rotational motion of a set of 2D rigid body ($\frac{\text{rad}}{\text{s}^{2}}$)}
                                                                                            \item{$t$ is the time (s)}
                                                                                            \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                                                                           \item{${τ_{i}}$ is the torque applied to the i-th body (Nm)}
-                                                                                           \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & The above equation for the total angular acceleration of the rigid body \hyperref[A:objectTy]{A: objectTy} \hyperref[A:objectDimension]{A: objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angAccel]{DD: angAccel}. It is currently assumed that there is no damping \hyperref[A:dampingInvolvement]{A: dampingInvolvement} or constraints \hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} involved. \hyperref[A:axesDefined]{A: axesDefined}
@@ -846,29 +837,29 @@ Label & Collisions on 2D rigid bodies
                 \\ \midrule \\
                 Output & ${t_{c}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              t>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              j>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              {m_{A}}>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              \mathbf{n}>0
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   {\mathbf{v}_{A}}>0
-                                                                  \end{dmath}
-                                                                  \begin{dmath}
+                                                                  \end{displaymath}
+                                                                  \begin{displaymath}
                                                                   {t_{c}}>0
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${\mathbf{v}_{A}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
@@ -1232,7 +1223,7 @@ pages={"408-417"}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05},
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},

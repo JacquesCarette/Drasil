@@ -405,9 +405,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of thermal energy
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$∇$ is the gradient (Unitless)}
@@ -435,13 +435,13 @@ Label & Conservation of thermal energy
 \\ \midrule \\
 Label & Sensible heat energy
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    E=\begin{cases}
 {C^{S}} m ΔT, & T<{T_{melt}}\\
 {C^{L}} m ΔT, & {T_{melt}}<T<{T_{boil}}\\
 {C^{V}} m ΔT, & {T_{boil}}<T
 \end{cases}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$E$ is the sensible heat (J)}
@@ -471,9 +471,9 @@ Label & Sensible heat energy
 \\ \midrule \\
 Label & Latent heat energy
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$Q$ is the latent heat (J)}
@@ -502,9 +502,9 @@ Label & Newton's law of cooling
         \\ \midrule \\
         Units & $\frac{\text{W}}{\text{m}^{2}}$
                 \\ \midrule \\
-                Equation & \begin{dmath}
+                Equation & \begin{displaymath}
                            q\left(t\right)=h ΔT\left(t\right)
-                           \end{dmath}
+                           \end{displaymath}
                            \\ \midrule \\
                            Description & \begin{symbDescription}
                                          \item{$q$ is the heat flux ($\frac{\text{W}}{\text{m}^{2}}$)}
@@ -529,9 +529,9 @@ Label & Newton's law of cooling
 \\ \midrule \\
 Label & Simplified rate of change of temperature
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$m$ is the mass (kg)}
@@ -554,25 +554,25 @@ Label & Simplified rate of change of temperature
 \end{minipage}\\
 Detailed derivation of simplified rate of change of temperature :
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
-\begin{dmath}
+\begin{displaymath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
-\begin{dmath}
+\begin{displaymath}
 -\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
-\begin{dmath}
+\begin{displaymath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}, \hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[A:Specific-Heat-Energy-Constant-over-Volume]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
-\begin{dmath}
+\begin{displaymath}
 ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{dmath}
+\end{displaymath}
 Using the fact that $ρ$=$m$/$V$, (2) can be written as:
-\begin{dmath}
+\begin{displaymath}
 m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{dmath}
+\end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -589,9 +589,9 @@ Label & Heat flux into the water from the coil
                  \\ \midrule \\
                  Units & $\frac{\text{W}}{\text{m}^{2}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {q_{C}}={h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
@@ -623,9 +623,9 @@ Label & Heat flux into the PCM from water
                  \\ \midrule \\
                  Units & $\frac{\text{W}}{\text{m}^{2}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {q_{P}}={h_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${q_{P}}$ is the heat flux into the PCM from water ($\frac{\text{W}}{\text{m}^{2}}$)}
@@ -657,9 +657,9 @@ Label & Specific latent heat of fusion
                  \\ \midrule \\
                  Units & $\frac{\text{J}}{\text{kg}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {H_{f}}=\frac{Q}{m}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)}
@@ -685,9 +685,9 @@ Label & Melt fraction
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     ϕ=\frac{{Q_{P}}}{{H_{f}} {m_{P}}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$ϕ$ is the melt fraction (Unitless)}
@@ -719,17 +719,17 @@ Label & Energy balance on water to find the temperature of the water
                 \\ \midrule \\
                 Output & ${T_{W}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              {T_{init}}<{T_{C}}
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+η \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$t$ is the time (s)}
@@ -749,33 +749,33 @@ Label & Energy balance on water to find the temperature of the water
 \end{minipage}\\
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat transfer into the water from the heating coil and ${q_{P}}$ represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}). Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
-\end{dmath}
+\end{displaymath}
 Using \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} and \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
-\end{dmath}
+\end{displaymath}
 Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{m_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
-\end{dmath}
+\end{displaymath}
 Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by ${h_{C}}$ ${A_{C}}$ / ${h_{C}}$ ${A_{C}}$ yields:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 Which simplifies to:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:melt.frac]{DD: melt\_frac}), Equation (5) can be written as:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}):
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
-\end{dmath}
+\end{displaymath}
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -789,22 +789,22 @@ Label & Energy Balance on PCM to Find T\_p
                 \\ \midrule \\
                 Output & ${T_{P}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              {T_{init}}<{{T_{melt}}^{P}}
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              \frac{d\,{T_{P}}}{d\,t}=\begin{cases}
 \frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 \frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
 0, & 0<ϕ<1
 \end{cases}
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$t$ is the time (s)}
@@ -825,21 +825,21 @@ Label & Energy Balance on PCM to Find T\_p
 \end{minipage}\\
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$ , the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={q_{P}} {A_{P}}
-\end{dmath}
+\end{displaymath}
 Using \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P} for ${q_{P}}$, this equation can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
-\end{dmath}
+\end{displaymath}
 Dividing by ${m_{P}}$ ${{C_{P}}^{S}}$ we obtain:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{P}}}{d\,t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
-\end{dmath}
+\end{displaymath}
 Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$ , this can be written as:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
-\end{dmath}
+\end{displaymath}
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[A:Volume-Change-Melting-PCM-Negligible]{A: Volume-Change-Melting-PCM-Negligible}).
 In the case where ${T_{P}}={{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d ${T_{P}}$ / d $t$ = 0.
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}).
@@ -857,13 +857,13 @@ Label & Heat energy in the water
                 Output & ${E_{W}}$
                          \\ \midrule \\
                          Input Constraints & \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${E_{W}}$ is the change in heat energy in the water (J)}
@@ -894,22 +894,22 @@ Label & Change in heat energy in the PCM
                 \\ \midrule \\
                 Output & ${E_{P}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              {T_{init}}<{{T_{melt}}^{P}}
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              {E_{P}}=\begin{cases}
 {{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<ϕ<1
 \end{cases}
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${E_{P}}$ is the change in heat energy in the PCM (J)}
@@ -999,13 +999,13 @@ ${E_{P}}$ & ${E_{P}}\geq{}0$
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} and \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
-\begin{dmath}
+\begin{displaymath}
 {E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
-\end{dmath}
+\end{displaymath}
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
-\begin{dmath}
+\begin{displaymath}
 {E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
-\end{dmath}
+\end{displaymath}
 Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% \hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}.
 \section{Requirements}
 \label{Sec:Requirements}

@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module LanguageRenderer.NewPythonRenderer (
-    -- * Python Code Configuration -- defines syntax of all Java code
+    -- * Python Code Configuration -- defines syntax of all Python code
     PythonCode(..)
 ) where
 

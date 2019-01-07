@@ -8,12 +8,12 @@ module NewLanguageRenderer (
     
     -- * Default Functions available for use in renderers
     fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', blockDocD, bodyDocD, outDocD, 
-    printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
-    stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
-    constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
-    stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
-    whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD, plusEqualsDocD', 
-    plusPlusDocD, plusPlusDocD', varDecDocD, 
+    printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
+    voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
+    methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
+    forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD,
+    plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
     varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
     commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
     sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
@@ -24,9 +24,10 @@ module NewLanguageRenderer (
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
     litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
-    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
-    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
-    constDecDefDocD, notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, listSetDocD, 
+    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+    inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+    objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD,
+    castDocD, sizeDocD, listAccessDocD, listSetDocD, 
     objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
     getterName, setterName
@@ -154,6 +155,9 @@ outDocD printFn v = printFn <> parens (v)
 
 printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
 printListDocD open b lastElem close = vcat [open, b, lastElem, close]
+
+printFileDocD :: Label -> Doc -> Doc
+printFileDocD fn f = f <> dot <> text fn
 
 -- Type Printers --
 
@@ -523,6 +527,10 @@ listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 
 notNullDocD :: Doc -> Doc -> Doc -> Doc
 notNullDocD v op nullvar = binOpDocD v op nullvar
+
+listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
+listIndexExistsDocD lst greater index = parens (lst <> text ".Length" <+>      
+    greater <+> index) 
 
 -- Functions --
 

@@ -2,15 +2,16 @@ module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
+    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
 ) where
 
+import Prelude hiding ((<>))
 import Control.Monad (filterM)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)
 import Data.List (nub,intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), ($+$), comma, punctuate, nest)
+    (<>), ($+$), comma, punctuate, nest)
 
 blank :: Doc
 blank = text ""
@@ -74,6 +75,9 @@ hmap f l = hcat $ map f l
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
 himap c f l = hcat $ intersperse c (map f l)
 
+hicat :: Doc -> [Doc] -> Doc
+hicat c l = hcat $ intersperse c l
+
 vicat :: Doc -> [Doc] -> Doc
 vicat c l = vcat $ intersperse c l
 
@@ -99,3 +103,4 @@ myLiteralNameReplace l old = replace old ("\\" ++ old) l
 myVarNameReplace :: String -> String -> String
 myVarNameReplace l old = replace old "_" l
 ----------
+    

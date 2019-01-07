@@ -368,19 +368,16 @@ clsDecListDocD :: Config -> [Class] -> Doc
 clsDecListDocD c = vmap $ clsDecDoc c
     
 classDocD :: Config -> FileType -> Label -> Class -> Doc
-classDocD c _ _ (Enum n s es) = vcat [ -- these pattern matches would be
+classDocD c _ _ (Enum n s es) = vcat [
     scopeDoc c s <+> text "enum" <+> text n <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace]
 classDocD c ft _ (Class n p s vs fs) = vcat [
-    scopeDoc c s <+> clsDec c <+> text n <+> baseClass <+> lbrace, 
-    -- runReader (unJC s) c <+> clsDec c <+> text n <+> baseClass <+> lbrace
+    scopeDoc c s <+> clsDec c <+> text n <+> baseClass <+> lbrace,
     oneTabbed [
         stateListDoc c vs,
-        -- runReader (unJC vs) c
         blank,
         methodListDoc c ft n fs],
-        -- runReader (unJC fs) c
     rbrace]
     where baseClass = case p of Nothing -> empty
                                 Just pn -> inherit c <+> text pn

@@ -146,6 +146,7 @@ instance StateTypeSym CSharpCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
+-- Translation outstanding for this instance
 instance ControlBlockSym CSharpCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switch v cs c = lift3Pair switchDocD (state break) v c cs
@@ -402,29 +403,31 @@ instance StatementSym CSharpCode where
     printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
     printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
 
-    getIntInput v = liftA3 jInput (return $ text "nextInt()") v inputFunc
-    getFloatInput v = liftA3 jInput (return $ text "nextDouble()") v inputFunc
-    getBoolInput v = liftA3 jInput (return $ text "nextBoolean()") v inputFunc
-    getStringInput v = liftA3 jInput (return $ text "nextLine()") v inputFunc
-    getCharInput _ = return empty
-    discardInput = liftA jDiscardInput inputFunc
-    getIntFileInput f v = liftA3 jInput (return $ text "nextInt()") v f
-    getFloatFileInput f v = liftA3 jInput (return $ text "nextDouble()") v f
-    getBoolFileInput f v = liftA3 jInput (return $ text "nextBoolean()") v f
-    getStringFileInput f v = liftA3 jInput (return $ text "nextLine()") v f
-    getCharFileInput _ _ = return empty
+    getIntInput v = liftA2 (csInput "Int32.Parse") v inputFunc
+    getFloatInput v = liftA2 (csInput "Double.Parse") v inputFunc
+    getBoolInput _ = error "Boolean input not yet implemented for C#"
+    getStringInput v = liftA2 (csInput "") v inputFunc
+    getCharInput _ = error "Char input not yet implemented for C#"
+    discardInput = liftA csDiscardInput inputFunc
+
+    getIntFileInput f v = liftA2 (csInput "Int32.Parse") v (liftA csFileInput f)
+    getFloatFileInput f v = liftA2 (csInput "Double.Parse") v (liftA   csFileInput f)
+    getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
+    getStringFileInput f v = liftA2 (csInput "") v (liftA csFileInput f)
+    getCharFileInput _ _ = error "Char input not yet implemented for C#"
     discardFileInput f = liftA jDiscardInput f
 
-    openFileR f n = liftA2 jOpenFileR f n
-    openFileW f n = liftA2 jOpenFileW f n
-    closeFile f = valState $ objMethodCall f "close" []
+    openFileR f n = liftA3 csOpenFile f n infile
+    openFileW f n = liftA3 csOpenFile f n outfile
+    closeFile f = valState $ objMethodCall f "Close" []
 
+    -- Translation outstanding for all below
     getFileInputLine f v = v &= (f $. (func "nextLine" []))
     discardFileLine f = valState $ f $. (func "nextLine" [])
     stringSplit d vnew s = liftA3 jStringSplit vnew (listType dynamic string) 
         (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])])
 
-    break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+    break = return breakDocD
     continue = return continueDocD
 
     returnState v = liftA returnDocD v
@@ -529,17 +532,17 @@ jTryCatch tb cb= vcat [
     oneTab $ cb,
     rbrace]
 
-jDiscardInput :: Doc -> Doc
-jDiscardInput inFn = inFn <> dot <> text "next()"
+csDiscardInput :: Doc -> Doc
+csDiscardInput inFn = inFn
 
-jInput :: Doc -> Doc -> Doc -> Doc
-jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
+csInput :: Label -> Doc -> Doc -> Doc
+csInput it v inFn = v <+> equals <+> text it <> parens (inFn)
 
-jOpenFileR :: Doc -> Doc -> Doc
-jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
+csFileInput :: Doc -> Doc
+csFileInput f = f <> dot <> text "ReadLine()"
 
-jOpenFileW :: Doc -> Doc -> Doc
-jOpenFileW f n = f <+> equals <+> new <+> text "PrintWriter" <> parens n
+csOpenFile :: Doc -> Doc -> Doc -> Doc
+csOpenFile f n rw = f <+> equals <+> new <+> rw <> parens n
 
 csListExtend :: Doc -> Doc
 csListExtend v = dot <> text "Add" <> parens v

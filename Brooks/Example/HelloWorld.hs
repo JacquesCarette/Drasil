@@ -7,7 +7,6 @@ import New (
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
-import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)

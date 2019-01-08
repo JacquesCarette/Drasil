@@ -5,7 +5,6 @@ import New (
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ValueSym(..), ValueExpression(..), 
   MethodSym(..), ClassSym(..), ModuleSym(..))
-import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 patternTest :: (RenderSym repr) => repr (RenderFile repr)

@@ -4,7 +4,6 @@ import New (RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (RenderSym repr) => repr (RenderFile repr)

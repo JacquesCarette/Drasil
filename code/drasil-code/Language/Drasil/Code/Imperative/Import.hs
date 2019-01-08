@@ -36,7 +36,7 @@ import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
 -- Private State, used to push these options around the generator
-data State = State {
+data State repr = State {
   codeSpec :: CodeSpec,
   inStruct :: Structure,
   logName :: String,
@@ -44,8 +44,8 @@ data State = State {
   commented :: Comments,
   currentModule :: String,
 
-  sfwrCBody :: Expr -> Body,
-  physCBody :: Expr -> Body
+  sfwrCBody :: (I.RenderSym repr) => Expr -> (repr (I.Body repr)),
+  physCBody :: (I.RenderSym repr) => Expr -> (repr (I.Body repr))
 }
 
 -- function to choose how to deal with
@@ -99,15 +99,17 @@ generateCode chs g =
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
           when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode -- files names exts
-            (getLabel x)
-            (Options Nothing Nothing Nothing (Just "Code"))
-            (toAbsCode prog modules)
+          createCodeFiles $ makeCode (map (getUnRepr x) files) names (getExt x) -- need to find a way to get names, likely will need to change GOOL
           setCurrentDirectory workingDir) (lang $ chs)
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
-        modules = runReader genModules g
+        files = runReader genFiles g
 
-genModules :: Reader State [Module]
+genFiles :: Reader State [(repr (I.RenderFile repr))]
+genFiles = do
+  g <- ask
+  return $ map fileDoc $ genModules g
+
+genModules :: Reader State [(repr (I.Module repr))]
 genModules = do
   g <- ask
   let s = codeSpec g
@@ -127,6 +129,14 @@ getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
+
+getExt :: Lang -> [Label]
+getExt Java = [".java"]
+getExt Python = [".py"]
+
+getUnRepr :: (I.RenderSym repr) => Lang -> (repr (I.RenderFile repr) -> Doc)
+getUnRepr Java = unJC
+getUnRepr Python = unPC
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (\x -> [x])
@@ -305,10 +315,10 @@ loggedMethod n p b =
 
 ---- MAIN ---
 
-genModule :: Name
-               -> Maybe (Reader State [FunctionDecl])
-               -> Maybe (Reader State [Class])
-               -> Reader State Module
+genModule :: (I.RenderSym repr) => Name
+               -> Maybe (Reader State [(repr (I.Method repr))])
+               -> Maybe (Reader State [(repr (I.Class repr))])
+               -> Reader State (repr (I.Module repr))
 genModule n maybeMs maybeCs = do
   g <- ask
   let ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
@@ -318,10 +328,10 @@ genModule n maybeMs maybeCs = do
   return $ buildModule n ls [] ms cs
 
 
-genMain :: Reader State Module
+genMain :: (I.RenderSym repr) => Reader State (repr (I.Module repr))
 genMain = genModule "Control" (Just $ liftS $ genMainFunc) Nothing
 
-genMainFunc :: Reader State FunctionDecl
+genMainFunc :: (I.RenderSym repr) => Reader State (repr (I.Method repr))
 genMainFunc =
   let l_filename = "inputfile"
       v_filename = var l_filename

@@ -3,12 +3,20 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 import Language.Drasil hiding (int, getLabel, Label)
 import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
   String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
-  Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
-import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+-- import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
+--   Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
+-- import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+import qualified Language.Drasil.Code.Imperative.New as I (
+  RenderSym(..), PermanenceSym(..),
+  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
+  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+-- import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (createCodeFiles, makeCode) -- potentially move to CodeGeneration.hs
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
   codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
@@ -91,7 +99,7 @@ generateCode chs g =
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
           when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode
+          createCodeFiles $ makeCode -- files names exts
             (getLabel x)
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)

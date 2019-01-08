@@ -9,7 +9,7 @@ import Drasil.GlassBR.Body (glassBR_code, glassBR_srs, printSetting)
 
 glassChoices :: Choices
 glassChoices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
+  lang = [Python, Java], --Cpp, CSharp, taken out for now
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,

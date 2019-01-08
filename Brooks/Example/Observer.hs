@@ -3,7 +3,7 @@ module Example.Observer (observer) where
 import New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
-  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))gi
+  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)

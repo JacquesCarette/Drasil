@@ -1,6 +1,6 @@
 module Example.Main (main) where
 
-import New (Label)
+import New (Label, RenderSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import LanguageRenderer.NewPythonRenderer (PythonCode(..))
@@ -17,12 +17,18 @@ main = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
-  genCode (map unJC [helloWorld, patternTest, fileTests, observer]) ["HelloWorld", "PatternTest", "FileTests", "Observer"] [".java"]
+  genCode (classes unJC) filenames [".java"]
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
-  genCode (map unPC [helloWorld, patternTest, fileTests, observer]) ["HelloWorld", "PatternTest", "FileTests", "Observer"] [".py"]
+  genCode (classes unPC) filenames [".py"]
   setCurrentDirectory workingDir
     
 genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
+
+classes :: (RenderSym repr) => (repr (RenderFile repr) -> Doc) -> [Doc]
+classes unRepr = map unRepr [helloWorld, patternTest, fileTests, observer]
+
+filenames :: [Label]
+filenames = ["HelloWorld", "PatternTest", "FileTests", "Observer"]

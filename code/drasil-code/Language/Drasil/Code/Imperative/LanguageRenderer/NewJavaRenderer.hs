@@ -386,7 +386,9 @@ instance StatementSym JavaCode where
     listDecDef l t vs = liftA2 (jListDecDef l) t (liftList callFuncParamList vs)
     objDecDef l t v = liftA2 (objDecDefDocD l) t v
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
+    extObjDecNew l _ t vs = objDecNew l t vs
     objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
+    extObjDecNewVoid l _ t = objDecNewVoid l t
     constDecDef l t v = liftA2 (jConstDecDef l) t v
 
     print _ v = liftA2 outDocD printFunc v

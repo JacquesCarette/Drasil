@@ -35,8 +35,8 @@ import Helpers (angles,oneTab)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, render, colon, isEmpty)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
+    semi, vcat, lbrace, rbrace, render, colon, isEmpty)
 
 newtype JavaCode a = JC {unJC :: a}
 
@@ -383,7 +383,9 @@ instance StatementSym JavaCode where
     listDecDef l t vs = liftA2 (jListDecDef l) t (liftList callFuncParamList vs)
     objDecDef l t v = liftA2 (objDecDefDocD l) t v
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
+    extObjDecNew l _ t vs = objDecNew l t vs
     objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
+    extObjDecNewVoid l _ t = objDecNewVoid l t
     constDecDef l t v = liftA2 (jConstDecDef l) t v
 
     print _ v = liftA2 outDocD printFunc v

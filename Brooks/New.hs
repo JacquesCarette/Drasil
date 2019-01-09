@@ -343,7 +343,9 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
     listDecDef    :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
     objDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
     objDecNew     :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
-    objDecNewVoid :: Label -> repr (StateType repr) -> repr (Statement repr)
+    extObjDecNew     :: Label -> Library -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    objDecNewVoid    :: Label -> repr (StateType repr) -> repr (Statement repr)
+    extObjDecNewVoid :: Label -> Library -> repr (StateType repr) -> repr (Statement repr)
     constDecDef   :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
 
     print      :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)

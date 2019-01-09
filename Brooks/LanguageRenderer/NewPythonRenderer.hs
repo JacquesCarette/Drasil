@@ -358,7 +358,9 @@ instance StatementSym PythonCode where
     listDecDef l _ vs = liftA (pyListDecDef l) (liftList callFuncParamList vs)
     objDecDef l t v = varDecDef l t v
     objDecNew l t vs = varDecDef l t (stateObj t vs)
+    extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
     objDecNewVoid l t = varDecDef l t (stateObj t [])
+    extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
     constDecDef l t v = varDecDef l t v 
 
     print _ v = liftA4 pyOut printFunc v (return $ text ", end=''") (return empty)

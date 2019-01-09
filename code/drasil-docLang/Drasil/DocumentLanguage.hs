@@ -14,8 +14,8 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                -- Vector - Name conflict (defined in file)
 import Language.Drasil.Utils (sortBySymbol)
 
-import Control.Lens ((^.))
-import qualified Data.Map as Map (elems)
+import Control.Lens ((^.), over)
+import qualified Data.Map as Map (elems, toList)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
@@ -37,11 +37,11 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
 import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub, sortBy, sortOn)
 
 type System = Sentence
 type DocKind = Sentence
@@ -461,10 +461,13 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS si' (Assumptions) =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\y -> 
-        let lb = makeRef2 y in
-        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((refdb si') ^. assumpDB))
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD . map (flip helperCI (_sysinfodb si')) . filter (\x -> sDom (cdom x) == assumpDom ^. uid) . map fst . sortOn snd . map snd . Map.toList $ (_sysinfodb si') ^. conceptinsTable
+      where
+        -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        sDom :: [UID] -> UID
+        sDom [u] = u
+        sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
+          show (length u) ++ " instead."
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -473,8 +476,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
-helperAssump :: AssumpChunk -> ChunkDB -> Sentence
-helperAssump a c = foldlSent_ $ ([assuming a, helperRefs a c])
+helperCI :: ConceptInstance -> ChunkDB -> ConceptInstance
+helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing

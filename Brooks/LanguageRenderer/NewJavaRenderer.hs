@@ -147,6 +147,7 @@ instance StateTypeSym JavaCode where
 
 instance ControlBlockSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
+    ifNoElse bs = ifCond bs []
     switch v cs c = lift3Pair switchDocD (state break) v c cs
     switchAsIf v cs c = ifCond cases c
         where cases = map (\(l, b) -> (v ?== l, b)) cs

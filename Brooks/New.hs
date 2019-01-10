@@ -86,6 +86,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
 
 class (BodySym repr) => ControlBlockSym repr where
     ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) 
+    ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Block repr)
     switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
     switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
 

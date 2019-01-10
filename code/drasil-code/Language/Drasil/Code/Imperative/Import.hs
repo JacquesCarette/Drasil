@@ -349,13 +349,13 @@ genMainFunc =
       cnargs <- fApp (codeName x) args
       return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs) (execOrder $ codeSpec g)
     wo <- fApp "write_output" args2
-    return $ mainMethod $ body $ [
+    return $ mainMethod $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
-      objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valStmt gi,
-      valStmt dv,
-      valStmt ic
-      ] ++ varDef ++ [ valStmt wo ]
+      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
+      valState gi,
+      valState dv,
+      valState ic
+      ] ++ varDef ++ [ valState wo ]
 
 -----
 
@@ -391,15 +391,15 @@ variable s' = do
              | otherwise                        = return $ var s
   doit s'
   
-fApp :: String -> [Value] -> Reader State Value
+fApp :: (I.RenderSym repr) => String -> [(repr (I.Value repr))] -> Reader State (repr (I.Value repr))
 fApp s' vl' = do
   g <- ask
   let doit :: String -> [Value] -> Value
       doit s vl | member s (eMap $ codeSpec g) =
         maybe (error "impossible")
-          (\x -> if x /= currentModule g then funcApp x s vl else funcApp' s vl)
+          (\x -> if x /= currentModule g then extFuncApp x s vl else funcApp s vl)
           (Map.lookup s (eMap $ codeSpec g))
-                | otherwise = funcApp' s vl
+                | otherwise = funcApp s vl
   return $ doit s' vl'
 
 getParams :: [CodeChunk] -> Reader State [Parameter]
@@ -413,7 +413,7 @@ getParams cs = do
            then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
            else ps
 
-getArgs :: [CodeChunk] -> Reader State [Value]
+getArgs :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Value repr))]
 getArgs cs = do
   g <- ask
   let ins = inputs $ codeSpec g
@@ -447,13 +447,13 @@ valName (ObjVar o v) = valName o ++ "." ++ valName v
 valName (ObjAccess o (ListAccess v)) = valName o ++ "[" ++ valName v ++ "]"
 valName _ = error "Value has no name"
 
-convType :: C.CodeType -> I.StateType
+convType :: (I.RenderSym repr) => C.CodeType -> (repr (I.StateType repr))
 convType C.Boolean = bool
 convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = listT $ convType t
+convType (C.List t) = listType dynamic $ convType t -- new GOOL has different functions for intListType, floatListType, etc... Probably need to add these to CodeType
 convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 

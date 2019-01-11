@@ -56,7 +56,7 @@ chooseConstr :: ConstraintBehaviour -> Expr -> Body
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
-chooseInStructure :: Structure -> Reader State [Module]
+chooseInStructure :: (I.RenderSym repr) => Structure -> Reader State [(repr (I.Module repr))]
 chooseInStructure Loose   = genInputModNoClass
 chooseInStructure AsClass = genInputModClass
 
@@ -143,14 +143,14 @@ liftS = fmap (\x -> [x])
 
 ------- INPUT ----------
 
-genInputModClass :: Reader State [Module]
+genInputModClass :: (I.RenderSym repr) => Reader State [(repr (I.Module repr))]
 genInputModClass =
   sequence $ [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
                genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
                genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
              ]
 
-genInputModNoClass :: Reader State [Module]
+genInputModNoClass :: (I.RenderSym repr) => Reader State [(repr (I.Module repr))]
 genInputModNoClass = do
   g <- ask
   let ins = inputs $ codeSpec g
@@ -162,7 +162,7 @@ genInputModNoClass = do
              []
            ]
 
-genInputClass :: Reader State Class
+genInputClass :: (I.RenderSym repr) => Reader State (repr (I.Class repr))
 genInputClass = do
   g <- ask
   let ins          = inputs $ codeSpec g
@@ -174,7 +174,7 @@ genInputClass = do
   return $ pubClass "InputParameters" Nothing inputVars
     [ constructor "InputParameters" [] [block asgs] ]
 
-genInputConstraints :: Reader State Method
+genInputConstraints :: (I.RenderSym repr) => Reader State (repr (I.Method repr))
 genInputConstraints = do
   g <- ask
   let varsList = inputs $ codeSpec g
@@ -187,7 +187,7 @@ genInputConstraints = do
   publicMethod methodTypeVoid "input_constraints" parms
       (return $ [ block $ sf ++ hw ])
 
-genInputDerived :: Reader State Method
+genInputDerived :: (I.RenderSym repr) => Reader State (repr (I.Method repr))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
@@ -233,7 +233,7 @@ genCalcFunc cdef = do
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
+genCalcBlock :: (I.RenderSym repr) => CalcType -> String -> Expr -> Reader State (repr (I.Body repr))
 genCalcBlock t' v' e' = do
   doit t' v' e'
     where
@@ -243,10 +243,10 @@ genCalcBlock t' v' e' = do
       | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
       | otherwise        = fmap (oneLiner . I.return) $ convExpr e
 
-genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
+genCaseBlock :: (I.RenderSym repr) => CalcType -> String -> [(Expr,Relation)] -> Reader State (repr (I.Body repr))
 genCaseBlock t v cs = do
   ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
-  return $ oneLiner $ ifCond ifs noElse
+  return $ body $ [ifNoElse ifs]
 
 ----- OUTPUT -------
 
@@ -379,12 +379,12 @@ loggedAssign a b =
 nopfx :: String -> String
 nopfx s = maybe s id (stripPrefix funcPrefix s)
 
-variable :: String -> Reader State Value
+variable :: (I.RenderSym repr) => String -> Reader State (repr (I.Value repr))
 variable s' = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
-      doit :: String -> Reader State Value
+      doit :: (I.RenderSym repr) => String -> Reader State (repr (I.Value repr))
       doit s | member s mm =
         maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
              | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
@@ -402,7 +402,7 @@ fApp s' vl' = do
                 | otherwise = funcApp s vl
   return $ doit s' vl'
 
-getParams :: [CodeChunk] -> Reader State [Parameter]
+getParams :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Parameter))]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
@@ -457,7 +457,7 @@ convType (C.List t) = listType dynamic $ convType t -- new GOOL has different fu
 convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
-convExpr :: Expr -> Reader State Value
+convExpr :: Expr -> Reader State (repr (I.Value repr))
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
@@ -483,7 +483,7 @@ convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
-    doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
+    doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) (convExpr (Case xs))
 convExpr (Matrix _)    = error "convExpr: Matrix"
 convExpr (Operator _ _ _) = error "convExpr: Operator"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
@@ -512,7 +512,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: UFunc -> (Value -> Value)
+unop :: UFunc -> ((repr (I.Value repr)) -> (repr (I.Value repr)))
 unop Sqrt = (#/^)
 unop Log  = I.log
 unop Ln   = I.ln
@@ -529,7 +529,7 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: BinOp -> (Value -> Value -> Value)
+bfunc :: BinOp -> ((repr (I.Value repr)) -> (repr (I.Value repr)) -> (repr (I.Value repr)))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt   = (?>)

@@ -60,7 +60,7 @@ chooseInStructure :: (I.RenderSym repr) => Structure -> Reader State [(repr (I.M
 chooseInStructure Loose   = genInputModNoClass
 chooseInStructure AsClass = genInputModClass
 
-chooseLogging :: Logging -> (Value -> Value -> Reader State Statement)
+chooseLogging :: (I.RenderSym repr) => Logging -> ((repr (I.Value repr)) -> (repr (I.Value repr)) -> Reader State (repr (I.Statement repr)))
 chooseLogging LogVar = loggedAssign
 chooseLogging LogAll = loggedAssign
 chooseLogging _      = (\x y -> return $ I.assign x y)
@@ -81,15 +81,15 @@ generator chs spec = State {
   physCBody = chooseConstr $ onPhysConstraint chs
 }
 
-assign :: Value -> Value -> Reader State Statement
+assign :: (I.RenderSym repr) => (repr (I.Value repr)) -> (repr (I.Value repr)) -> Reader State (repr (I.Statement repr))
 assign x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method
-publicMethod mt l pl u = do
+publicMethod :: (I.RenderSym repr) => (repr (I.MethodType repr)) -> Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Method repr))
+publicMethod mt l pl st v u = do
   g <- ask
-  genMethodCall Public Static (commented g) (logKind g) mt l pl u
+  genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
 generateCode :: Choices -> State -> IO ()
 generateCode chs g =
@@ -192,8 +192,10 @@ genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
   parms <- getParams $ map codevar dvals
+  types <- getParamTypes $ map codevar dvals
+  names <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
-  publicMethod methodTypeVoid "derived_values" parms
+  publicMethod void "derived_values" parms types names
       (return $ concat inps)
 
 -- need Expr -> String to print constraint
@@ -237,11 +239,11 @@ genCalcBlock :: (I.RenderSym repr) => CalcType -> String -> Expr -> Reader State
 genCalcBlock t' v' e' = do
   doit t' v' e'
     where
-    doit :: CalcType -> String -> Expr -> Reader State Body
+    doit :: (I.RenderSym repr) => CalcType -> String -> Expr -> Reader State (repr (I.Body repr))
     doit t v (Case e)    = genCaseBlock t v e
     doit t v e
       | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
-      | otherwise        = fmap (oneLiner . I.return) $ convExpr e
+      | otherwise        = fmap (oneLiner . I.returnState) $ convExpr e
 
 genCaseBlock :: (I.RenderSym repr) => CalcType -> String -> [(Expr,Relation)] -> Reader State (repr (I.Body repr))
 genCaseBlock t v cs = do
@@ -271,30 +273,30 @@ genOutputFormat outs =
 
 -----
 
-genMethodCall :: Scope -> Permanence -> Comments -> Logging -> MethodType -> Label -> [Parameter]
-                  -> Reader State Body -> Reader State Method
-genMethodCall s pr doComments doLog t n p b = do
-  let loggedBody LogFunc = loggedMethod n p b
-      loggedBody LogAll  = loggedMethod n p b
+genMethodCall :: (I.RenderSym repr) => (repr (I.Scope repr)) -> (repr (I.Permanence repr)) -> Comments -> Logging -> (repr (I.MethodType repr)) -> Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label]
+                  -> Reader State (repr (I.Body repr)) -> Reader State (repr I.Method repr))
+genMethodCall s pr doComments doLog t n p st l b = do
+  let loggedBody LogFunc = loggedMethod n st l b
+      loggedBody LogAll  = loggedMethod n st l b
       loggedBody _       = b
-      commBody CommentFunc = commMethod n p
+      commBody CommentFunc = commMethod n l
       commBody _           = id
   bod <- commBody doComments (loggedBody doLog)
   return $ Method n s pr t p bod
 
-commMethod :: Label -> [Parameter] -> Reader State Body -> Reader State Body
-commMethod n p b = do
+commMethod :: (I.RenderSym repr) => Label -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body repr))
+commMethod n l b = do
   g <- ask
   rest <- b
   return $ (
-    block [
+    block [ -- Shouldn't this be body, not block?
       comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
       multi $ map
-        (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p
+        (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
     ]) : rest 
 
-loggedMethod :: Label -> [Parameter] -> Reader State Body -> Reader State Body
-loggedMethod n p b =
+loggedMethod :: (I.RenderSym repr) => Label -> [repr (I.StateType repr)] -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr I.Body repr))
+loggedMethod n st l b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
@@ -304,14 +306,14 @@ loggedMethod n p b =
       varDec l_outfile outfile,
       openFileW v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
-      printParams p v_outfile,
+      printParams st v v_outfile,
       printFileStrLn v_outfile ") called",
       closeFile v_outfile ] )
       : rest
   where
-    printParams ps v_outfile = multi $
+    printParams st v v_outfile = multi $
       intersperse (printFileStr v_outfile ", ") $
-      map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
+      map (\x y -> printFile v_outfile x (var y)) st l
 
 ---- MAIN ---
 
@@ -359,7 +361,7 @@ genMainFunc =
 
 -----
 
-loggedAssign :: Value -> Value -> Reader State Statement
+loggedAssign :: (I.RenderSym repr) => (repr (I.Value repr)) -> (repr (I.Value repr)) -> Reader State (repr (I.Statement repr))
 loggedAssign a b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
@@ -402,7 +404,7 @@ fApp s' vl' = do
                 | otherwise = funcApp s vl
   return $ doit s' vl'
 
-getParams :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Parameter))]
+getParams :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Parameter repr))]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
@@ -412,6 +414,28 @@ getParams cs = do
   return $ if length csSubIns < length cs
            then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
            else ps
+
+getParamTypes :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.StateType repr))]
+getParamTypes cs = do
+  g <- ask
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      pts = map (\y -> convType $ codeType y)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+  return $ if length csSubIns < length cs
+          then (obj "InputParameters"):pts  -- todo:  make general
+          else pts
+
+getParamNames :: [CodeChunk] -> Reader State [Label]
+getParamNames cs = do
+  g <- ask
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      pvs = map (\y -> codeName y)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+  return $ if length csSubIns < length cs
+          then ("inParams"):pvs  -- todo:  make general
+          else pvs
 
 getArgs :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Value repr))]
 getArgs cs = do
@@ -423,14 +447,6 @@ getArgs cs = do
   return $ if length csSubIns < length cs
            then (var "inParams"):args  -- todo:  make general
            else args
-
-paramType :: Parameter -> StateType
-paramType (StateParam _ s) = s
-paramType (FuncParam _ _ _) = error "Function param not implemented"
-
-paramVal :: Parameter -> Value
-paramVal (StateParam l _) = var l
-paramVal (FuncParam _ _ _) = error "Function param not implemented"
 
 paramName :: Parameter -> String
 paramName (StateParam l _) = l
@@ -529,7 +545,7 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: BinOp -> ((repr (I.Value repr)) -> (repr (I.Value repr)) -> (repr (I.Value repr)))
+bfunc :: (I.RenderSym repr) => BinOp -> ((repr (I.Value repr)) -> (repr (I.Value repr)) -> (repr (I.Value repr)))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt   = (?>)

@@ -45,7 +45,7 @@ import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
-import Drasil.SSP.Assumptions (newAssumptions)
+import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
@@ -142,7 +142,7 @@ mkSRS = RefSec (RefProg intro
   ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
 ssp_label :: TraceMap
-ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)
+ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
  
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
@@ -160,10 +160,10 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_assump :: [AssumpChunk]
-ssp_assump = newAssumptions
+ssp_assump = []
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -202,8 +202,7 @@ usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++ map nw che
  ssp_section []
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
-  likelyChgs ++ unlikelyChgs)
+sspRefDB = rdb ssp_assump sspCitations ssp_concins
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration

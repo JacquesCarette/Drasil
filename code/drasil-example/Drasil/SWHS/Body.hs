@@ -57,7 +57,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
   heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
-import Drasil.SWHS.Assumptions (newA13, newAssumptions)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
@@ -132,8 +132,7 @@ usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map n
  swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
-  likelyChgs ++ unlikelyChgs)
+swhsRefDB = rdb swhs_assump swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration
@@ -213,7 +212,7 @@ swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS for swhs_si
 
 swhs_label :: TraceMap
-swhs_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
  
 swhs_refby :: RefbyMap
 swhs_refby = generateRefbyMap swhs_label 
@@ -231,10 +230,10 @@ swhs_theory :: [TheoryModel]
 swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 swhs_assump :: [AssumpChunk]
-swhs_assump = newAssumptions
+swhs_assump = []
 
 swhs_concins :: [ConceptInstance]
-swhs_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
+swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 swhs_section :: [Section]
 swhs_section = swhs_sec
@@ -579,7 +578,7 @@ traceDataRef = [makeRef2S dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef2S newAssumptions 
+traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map makeRef2S swhsTMods
@@ -1239,7 +1238,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef2S newA13)],
+  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
 
   [sParen (S "++"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.

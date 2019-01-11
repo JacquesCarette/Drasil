@@ -26,41 +26,16 @@ import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
 -- 4.2.1 : Assumptions --
 -------------------------
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
-  newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20]
-
-newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
-  newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
+assumptions :: [ConceptInstance]
+assumptions = [assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
+  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpCTNOD, assumpSITWP,
+  assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP,
+  assumpAPT, assumpVCN]
 
 assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpCTNOD, assumpSITWP,
   assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP,
   assumpAPT, assumpVCN :: ConceptInstance
-
--- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
--- Assumptions has been migrated to using assumpDom
-
-newA1  = assump "assumpTEO"              assumpS1 "Thermal-Energy-Only"
-newA2  = assump "assumpHTCC"             assumpS2 "Heat-Transfer-Coeffs-Constant"
-newA3  = assump "assumpCWTAT"            assumpS3 "Constant-Water-Temp-Across-Tank"
-newA4  = assump "assumpTPCAV"            assumpS4 "Temp-PCM-Constant-Across-Volume"
-newA5  = assump "assumpDWPCoV"           assumpS5 "Density-Water-PCM-Constant-over-Volume"
-newA6  = assump "assumpSHECov"           assumpS6 "Specific-Heat-Energy-Constant-over-Volume"
-newA7  = assump "assumpLCCCW"            assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"
-newA8  = assump "assumpTHCCoT"           assumpS8 "Temp-Heating-Coil-Constant-over-Time"
-newA9  = assump "assumpTHCCoL"           assumpS9 "Temp-Heating-Coil-Constant-over-Length"
-newA10 = assump "assumpLCCWP"            assumpS10 "Law-Convective-Cooling-Water-PCM"
-newA11 = assump "assumpCTNOD"            assumpS11 "Charging-Tank-No-Temp-Discharge"
-newA12 = assump "assumpSITWP"            assumpS12 "Same-Initial-Temp-Water-PCM"
-newA13 = assump "assumpPIS"              assumpS13 "PCM-Initially-Solid"
-newA14 = assump "assumpWAL"              assumpS14 "Water-Always-Liquid"
-newA15 = assump "assumpPIT"              assumpS15 "Perfect-Insulation-Tank"
-newA16 = assump "assumpNIHGBWP"          assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"
-newA17 = assump "assumpVCMPN"            assumpS17 "Volume-Change-Melting-PCM-Negligible"
-newA18 = assump "assumpNGSP"             assumpS18 "No-Gaseous-State-PCM"
-newA19 = assump "assumpAPT"              assumpS19 "Atmospheric-Pressure-Tank"
-newA20 = assump "assumpVCN"              assumpS20 "Volume-Coil-Negligible"
 
 assumpTEO = cic "assumpTEO"                  assumpS1 "Thermal-Energy-Only"                        assumpDom
 assumpHTCC = cic "assumpHTCC"                assumpS2 "Heat-Transfer-Coeffs-Constant"              assumpDom
@@ -130,7 +105,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, Ref $ makeRef2 newA12, S "is less than (or equal)",
+  phrase temp_init, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)",
   S "to the", phrase temp_C]
 assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",

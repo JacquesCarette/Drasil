@@ -19,7 +19,8 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6)
+import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
+  assumpINSFL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
@@ -37,10 +38,11 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, 
+generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD,
   mobShearWOGD, normShrRGD, momentEqlGD]
 
-normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, mobShearWOGD,
+  normShrRGD, momentEqlGD :: GenDefn
 normForcEqGD = gd'' normForcEq  [chen2005]   "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd'' bsShrFEq    [chen2005]   "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd'' resShr      [chen2005]   "resShr"      [resShr_desc]
@@ -106,7 +108,7 @@ resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   makeRef2S effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat,
-  makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
+  makeRef2S assumpSLH, makeRef2S assumpSP, makeRef2S assumpSLI]
 
 --
 mobShr :: RelationConcept
@@ -123,7 +125,8 @@ mobShr_desc = foldlSent_ [
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
   sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
-  makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
+  makeRef2S assumpFOSL, makeRef2S assumpSLH, makeRef2S assumpSP,
+  makeRef2S assumpSLI]
 
 --
 normShrR :: RelationConcept
@@ -135,7 +138,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -162,7 +165,7 @@ resShearWO_rel = sy shearRNoIntsl $= (((inxi slcWght) + (inxi surfHydroForce) *
 
 resShearWO_desc :: Sentence
 resShearWO_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -188,7 +191,7 @@ mobShearWO_rel = sy shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
 
 mobShearWO_desc :: Sentence
 mobShearWO_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -220,4 +223,4 @@ momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
   plural intrslce, S "following convention in" +:+.
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), at_start variable, plural definition,
   S "can be found in", makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
-  makeRef2S newA6]
+  makeRef2S assumpINSFL]

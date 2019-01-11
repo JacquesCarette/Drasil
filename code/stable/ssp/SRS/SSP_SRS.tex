@@ -20,8 +20,6 @@
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
-\newcounter{assumpnum}
-\newcommand{\atheassumpnum}{A\theassumpnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
 \author{Henry Frankis}
@@ -335,42 +333,20 @@ The instance models that govern SSA are presented in \hyperref[Sec:IMs]{Section:
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Factor-of-Safety}:]The factor of safety is assumed to be constant across a whole slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Properties}:]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layers-Isotropic}:]Soil layers are treated as if they have isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Edge-Slices}:]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Seismic-Force}:]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Load}:]There is no imposed surface, load and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
-\end{description}
+\begin{itemize}
+\item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
+\item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across a whole slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The different layers of the soil are homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
+\item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
+\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]Soil layers are treated as if they have isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
+\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
+\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
+\item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice between interslice nodes are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
+\item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+\item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface, load and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+\end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SSA is based on.
@@ -421,7 +397,7 @@ Label & Equilibrium
                                  \item{$M$ is the moment (Nm)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[A:Effective-Norm-Stress-Large]{A: Effective-Norm-Stress-Large}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+                                 Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
@@ -449,7 +425,7 @@ Label & Mohr-Coulumb shear strength
                                  \item{$c'$ is the effective cohesion (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the cohesion $c'$ represents the $τ$ intercept of the fitted line.
+                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the cohesion $c'$ represents the $τ$ intercept of the fitted line.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
@@ -581,7 +557,7 @@ Label & Resistive shear force
                                  \item{$α$ is the angle (${}^{\circ}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)\cdot{}1=N'$ \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)\cdot{}1=N'$ \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -614,7 +590,7 @@ Label & Mobile shear force
                                  \item{$α$ is the angle (${}^{\circ}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & From the definition of the factor of safety in \hyperref[TM:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety ${F_{S}}$. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+                                 Notes & From the definition of the factor of safety in \hyperref[TM:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety ${F_{S}}$. \hyperref[assumpFOS]{A: Factor-of-Safety} \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -642,7 +618,7 @@ Label & Effective normal force
                                  \item{${U_{b}}$ is the base hydrostatic force (N)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (\hyperref[A:Plane-Strain-Conditions]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the z-direction.
+                                 Notes & Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the z-direction.
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -738,7 +714,7 @@ Label & Interslice normal/shear relationship
                                  \item{$G$ is the interslice normal force (N)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & The assumption for the Morgenstern Price method (\hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant
+                                 Notes & The assumption for the Morgenstern Price method (\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -776,7 +752,7 @@ Label & Moment equilibrium
                                  \item{$ω$ is the angle (${}^{\circ}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[TM:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}
+                                 Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[TM:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -854,7 +830,7 @@ Label & Base hydrostatic force
                                                   \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -891,7 +867,7 @@ Label & Surface hydrostatic force
                                                   \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -959,7 +935,7 @@ Label & Angle
                                                   \item{${x_{slip}}$ is the x ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -991,7 +967,7 @@ Label & Angle
                                                   \item{${x_{slope}}$ is the slope x-ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1052,7 +1028,7 @@ Label & Total base length of a slice
                                                   \item{$α$ is the angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1084,7 +1060,7 @@ Label & Length of an interslice surface
                                                   \item{$β$ is the angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1115,7 +1091,7 @@ Label & Y-direction height of a slice
                                                   \item{$SpencerFixme4Please$ is the fixme (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
+                                                  Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1422,7 +1398,7 @@ Since the interslice shear force $X$ and interslice normal force $G$ are unknown
 \begin{displaymath}
 \left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
-Applying assumptions \hyperref[A:Seismic-Force]{A: Seismic-Force} and \hyperref[A:Surface-Load]{A: Surface-Load}, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
+Applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
 \begin{displaymath}
 \left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \sin\left(α_{i}\right)-\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \cos\left(α_{i}\right)+\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
@@ -1430,7 +1406,7 @@ The definitions of \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mob
 \begin{displaymath}
 T_{i}+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)=\frac{R_{i}+\left(\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)\right) \tan\left(φ'\right)}{{F_{S}}}
 \end{displaymath}
-The interslice shear force $X$ can be expressed in terms of the interslice normal force $G$ using \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
+The interslice shear force $X$ can be expressed in terms of the interslice normal force $G$ using \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
 \begin{displaymath}
 T_{i}+\left(-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}\right) \sin\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)=\frac{R_{i}+\left(\left(-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}\right) \cos\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)\right) \tan\left(φ'\right)}{{F_{S}}}
 \end{displaymath}
@@ -1462,7 +1438,7 @@ G_{n-1} Φ_{n-1}=Ψ_{n-2} G_{n-2} Φ_{n-2}+{F_{S}} T_{n-1}-R_{n-1}
 \begin{displaymath}
 G_{n} Φ_{n}=Ψ_{n-1} G_{n-1} Φ_{n-1}+{F_{S}} T_{n}-R_{n}
 \end{displaymath}
-Applying \hyperref[A:Edge-Slices]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, results in the following special cases: equation (8) for the first slice:
+Applying \hyperref[assumpES]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, results in the following special cases: equation (8) for the first slice:
 \begin{displaymath}
 G_{1} Φ_{1}={F_{S}} T_{1}-R_{1}
 \end{displaymath}
@@ -1562,7 +1538,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
+From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
 \begin{displaymath}
 0=-G_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-λ \frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
 \end{displaymath}
@@ -1570,7 +1546,7 @@ Rearranging the equation in terms of $λ$ leads to equation (10):
 \begin{displaymath}
 λ=\frac{-G_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
 \end{displaymath}
-Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, and removing the seismic and external forces due to \hyperref[A:Seismic-Force]{A: Seismic-Force} and \hyperref[A:Surface-Load]{A: Surface-Load}, a general equation for the constant $λ$ is developed in equation (11), also found in \hyperref[IM:nrmShrFor]{IM: nrmShrFor}:
+Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, and removing the seismic and external forces due to \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, a general equation for the constant $λ$ is developed in equation (11), also found in \hyperref[IM:nrmShrFor]{IM: nrmShrFor}:
 \begin{displaymath}
 λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \sin\left(ω_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
 \end{displaymath}
@@ -1610,14 +1586,14 @@ Label & Interslice forces
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Seismic-Force]{A: Seismic-Force} \hyperref[A:Surface-Load]{A: Surface-Load}
+                                                                                           Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other. \hyperref[assumpFOS]{A: Factor-of-Safety} \hyperref[assumpSF]{A: Seismic-Force} \hyperref[assumpSL]{A: Surface-Load}
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normForcEq} and the assumption \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} represented by \hyperref[GD:momentEql]{GD: momentEql} into the effective normal force definition from \hyperref[GD:normShrR]{GD: normShrR} yields equation equation (12):
+Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normForcEq} and the assumption \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} represented by \hyperref[GD:momentEql]{GD: momentEql} into the effective normal force definition from \hyperref[GD:normShrR]{GD: normShrR} yields equation equation (12):
 \begin{displaymath}
 {N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{displaymath}
@@ -1665,7 +1641,7 @@ Label & Critical slip identification
                                                                                            \item{${x_{cs}},{y_{cs}}$ is the the set of x and y coordinates (m)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[A:Soil-Properties]{A: Soil-Properties}
+                                                                                           Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs}},{y_{cs}}$ and the minimum factor of safety ${{F_{S}}_{min}}$ that results. \hyperref[assumpSP]{A: Soil-Properties}
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{li2010}
                                                                                                             \\ \midrule \\
@@ -1755,14 +1731,14 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]\hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 If changes were to be made with regard to the following, a different algorithm would be needed.
 \begin{itemize}
-\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic} and \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
-\item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[A:Effective-Norm-Stress-Large]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[assumpSLI]{A: Soil-Layers-Isotropic} and \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+\item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

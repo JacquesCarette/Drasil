@@ -58,7 +58,7 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
-import Drasil.GamePhysics.Assumptions(newAssumptions)
+import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -125,8 +125,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 game_label :: TraceMap
-game_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChangesList' ++ unlikelyChangesList' ++
-  functional_requirements_list')
+game_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' game_concins
 
 game_refby :: RefbyMap
 game_refby = generateRefbyMap game_label
@@ -144,10 +143,10 @@ game_theory :: [TheoryModel]
 game_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 game_assump :: [AssumpChunk]
-game_assump = newAssumptions
+game_assump = []
 
 game_concins :: [ConceptInstance]
-game_concins = likelyChangesList' ++ unlikelyChangesList' ++
+game_concins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   functional_requirements_list'
 
 game_section :: [Section]
@@ -184,8 +183,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb newAssumptions cpCitations
-  (functional_requirements_list' ++ likelyChangesList' ++ unlikelyChangesList') -- FIXME: Convert the rest to new chunk types
+cpRefDB = rdb game_assump cpCitations game_concins
 
 --FIXME: All named ideas, not just acronyms.
 
@@ -755,7 +753,7 @@ traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 traceMatDataDefRef = map makeRef2S dataDefns
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-traceMatAssumpRef = map makeRef2S newAssumptions
+traceMatAssumpRef = map makeRef2S assumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 traceMatFuncReqRef = map makeRef2S functional_requirements_list'

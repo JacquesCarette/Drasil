@@ -1024,55 +1024,43 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
-<ul class="hide-list-style">
-<li>
-<div id="A:objectTy">
+<div class="list">
+<p>
+<div id="assumpOT">
 objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:objectDimension">
+</p>
+<p>
+<div id="assumpOD">
 objectDimension: All objects are 2D. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:coordinateSystemTy">
+</p>
+<p>
+<div id="assumpCST">
 coordinateSystemTy: The library uses a Cartesian coordinate system.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:axesDefined">
+</p>
+<p>
+<div id="assumpAD">
 axesDefined: The axes are defined using right-handed coordinate system. <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:collisionType">
+</p>
+<p>
+<div id="assumpCT">
 collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a href=#lcEC>LC: Expanded-Collisions</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:dampingInvolvement">
+</p>
+<p>
+<div id="assumpDI">
 dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:constraintsAndJointsInvolvement">
+</p>
+<p>
+<div id="assumpCAJI">
 constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#lcIJC>LC: Include-Joints-Constraints</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:TMs">
@@ -1369,7 +1357,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
@@ -1438,7 +1426,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional <a href=#A:objectDimension>A: objectDimension</a>.
+The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional <a href=#assumpOD>A: objectDimension</a>.
 </p>
 </td>
 </tr>
@@ -1557,10 +1545,10 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 </td>
 </tr>
@@ -1659,13 +1647,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -1764,13 +1752,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -1869,13 +1857,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -1974,13 +1962,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -2079,13 +2067,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -2184,13 +2172,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -2341,16 +2329,16 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </p>
 <p class="paragraph">
-<a href=#A:axesDefined>A: axesDefined</a>
+<a href=#assumpAD>A: axesDefined</a>
 </p>
 <p class="paragraph">
-<a href=#A:collisionType>A: collisionType</a>
+<a href=#assumpCT>A: collisionType</a>
 </p>
 </td>
 </tr>
@@ -2445,7 +2433,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
@@ -2691,7 +2679,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation expresses the total acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linAcc>DD: linAcc</a>.  It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
+The above equation expresses the total acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linAcc>DD: linAcc</a>.  It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
 </p>
 </td>
 </tr>
@@ -2832,7 +2820,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angAccel>DD: angAccel</a>. It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved. <a href=#A:axesDefined>A: axesDefined</a>
+The above equation for the total angular acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angAccel>DD: angAccel</a>. It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#assumpAD>A: axesDefined</a>
 </p>
 </td>
 </tr>
@@ -2972,7 +2960,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> collisions <a href=#A:collisionType>A: collisionType</a> Again, this does not take damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> into account. <a href=#A:axesDefined>A: axesDefined</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:impulse>DD: impulse</a>
+This instance model is based on our assumptions regarding rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> collisions <a href=#assumpCT>A: collisionType</a> Again, this does not take damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> into account. <a href=#assumpAD>A: axesDefined</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:impulse>DD: impulse</a>
 </p>
 </td>
 </tr>
@@ -3313,17 +3301,17 @@ Variable-ODE-Solver: The internal ODE-solving algorithm used by the library may 
 </p>
 <p>
 <div id="lcEC">
-Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. <a href=#A:collisionType>A: collisionType</a>
+Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. <a href=#assumpCT>A: collisionType</a>
 </div>
 </p>
 <p>
 <div id="lcID">
-Include-Dampening: The library may be expanded to include motion with damping. <a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+Include-Dampening: The library may be expanded to include motion with damping. <a href=#assumpDI>A: dampingInvolvement</a>
 </div>
 </p>
 <p>
 <div id="lcIJC">
-Include-Joints-Constraints: The library may be expanded to include joints and constraints. <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
+Include-Joints-Constraints: The library may be expanded to include joints and constraints. <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>
 </div>
 </p>
 </div>
@@ -3700,7 +3688,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:axesDefined>A: axesDefined</a>
+<a href=#assumpAD>A: axesDefined</a>
 </td>
 <td>
 
@@ -3759,7 +3747,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
+<a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>
 </td>
 <td>
 
@@ -3818,7 +3806,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:collisionType>A: collisionType</a>
+<a href=#assumpCT>A: collisionType</a>
 </td>
 <td>
 
@@ -3877,7 +3865,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+<a href=#assumpDI>A: dampingInvolvement</a>
 </td>
 <td>
 
@@ -3936,7 +3924,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:objectDimension>A: objectDimension</a>
+<a href=#assumpOD>A: objectDimension</a>
 </td>
 <td>
 
@@ -3995,7 +3983,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:objectTy>A: objectTy</a>
+<a href=#assumpOT>A: objectTy</a>
 </td>
 <td>
 
@@ -4704,25 +4692,25 @@ Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:R
 
 </th>
 <th>
-A1 (<a href=#A:objectTy>A: objectTy</a>)
+A1 (<a href=#assumpOT>A: objectTy</a>)
 </th>
 <th>
-A2 (<a href=#A:objectDimension>A: objectDimension</a>)
+A2 (<a href=#assumpOD>A: objectDimension</a>)
 </th>
 <th>
-A3 (<a href=#A:coordinateSystemTy>A: coordinateSystemTy</a>)
+A3 (<a href=#assumpCST>A: coordinateSystemTy</a>)
 </th>
 <th>
-A4 (<a href=#A:axesDefined>A: axesDefined</a>)
+A4 (<a href=#assumpAD>A: axesDefined</a>)
 </th>
 <th>
-A5 (<a href=#A:collisionType>A: collisionType</a>)
+A5 (<a href=#assumpCT>A: collisionType</a>)
 </th>
 <th>
-A6 (<a href=#A:dampingInvolvement>A: dampingInvolvement</a>)
+A6 (<a href=#assumpDI>A: dampingInvolvement</a>)
 </th>
 <th>
-A7 (<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>)
+A7 (<a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>)
 </th>
 </tr>
 <tr>

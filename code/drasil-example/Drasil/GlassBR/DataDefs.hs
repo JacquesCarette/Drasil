@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 
-import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
+import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
@@ -79,8 +79,8 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDF_eq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S standardValues,
-  makeRef2S ldfConstant]
+loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S assumpSV,
+  makeRef2S assumpLDFC]
 
 --DD4--
 
@@ -107,7 +107,7 @@ nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
 nonFL :: DataDefinition
 nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
-  (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S standardValues])
+  (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S assumpSV])
 
 --DD6--
 
@@ -135,7 +135,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
-  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S standardValues])
+  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S assumpSV])
 
 --DD8--
 
@@ -163,7 +163,7 @@ tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFac :: DataDefinition
 tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
-  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S standardValues])
+  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S assumpSV])
 
 --DD10--
 
@@ -234,7 +234,7 @@ capacityS :: [Sentence]
 capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
   makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
-  makeRef2S glaTyFac] ++ [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
+  makeRef2S glaTyFac] ++ [makeRef2S assumpGL, makeRef2S glaTyFac, makeRef2S nonFL]
 
 
 glassBreak :: Sentence
@@ -305,4 +305,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S glassLite)
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL)

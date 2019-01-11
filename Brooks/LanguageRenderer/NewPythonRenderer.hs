@@ -13,7 +13,7 @@ import New (Label,
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', enumElementsDocD',
-  blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, typeDocD,
+  multiStateDocD, blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, typeDocD,
   voidDocD, constructDocD,
   paramListDocD, methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
   statementDocD, returnDocD,
@@ -137,7 +137,7 @@ instance StateTypeSym PythonCode where
 
 instance ControlBlockSym PythonCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    ifNoElse bs = ifCond bs []
+    ifNoElse bs = ifCond bs $ body []
     switch v cs c = switchAsIf v cs c
     switchAsIf v cs c = ifCond cases c
         where cases = map (\(l, b) -> (v ?== l, b)) cs
@@ -425,6 +425,7 @@ instance StatementSym PythonCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
+    multi s = lift1List multiStateDocD endStatement s
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc

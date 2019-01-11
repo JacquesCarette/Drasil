@@ -12,8 +12,8 @@ import New (Label,
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD,
-  blockDocD, bodyDocD, outDocD, 
+import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
+  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD, 
   printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
   voidDocD, constructDocD, stateParamDocD,
   paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
@@ -147,7 +147,7 @@ instance StateTypeSym JavaCode where
 
 instance ControlBlockSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    ifNoElse bs = ifCond bs []
+    ifNoElse bs = ifCond bs $ body []
     switch v cs c = lift3Pair switchDocD (state break) v c cs
     switchAsIf v cs c = ifCond cases c
         where cases = map (\(l, b) -> (v ?== l, b)) cs
@@ -450,6 +450,7 @@ instance StatementSym JavaCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
+    multi s = lift1List multiStateDocD endStatement s
 
 instance ScopeSym JavaCode where
     type Scope JavaCode = Doc

@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.New (Label,
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc', 
-    enumElementsDocD', blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, 
+    enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, 
     typeDocD, voidDocD, constructDocD, paramListDocD, methodListDocD, 
     ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
     statementDocD, returnDocD, commentDocD, notOpDocD', negateOpDocD,
@@ -139,7 +139,7 @@ instance StateTypeSym PythonCode where
 
 instance ControlBlockSym PythonCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    ifNoElse bs = ifCond bs []
+    ifNoElse bs = ifCond bs $ body []
     switch v cs c = switchAsIf v cs c
     switchAsIf v cs c = ifCond cases c
         where cases = map (\(l, b) -> (v ?== l, b)) cs
@@ -427,6 +427,7 @@ instance StatementSym PythonCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
+    multi s = liftA2 multiStateDocD s endStatement
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc

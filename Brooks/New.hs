@@ -405,8 +405,9 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
     initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
     addObserver      :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
 
-    state :: repr (Statement repr) -> repr (Statement repr)
+    state     :: repr (Statement repr) -> repr (Statement repr)
     loopState :: repr (Statement repr) -> repr (Statement repr)
+    multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
 class ScopeSym repr where
     type Scope repr

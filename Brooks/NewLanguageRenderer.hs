@@ -7,7 +7,7 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', blockDocD, bodyDocD, outDocD, 
+    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
     printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
@@ -137,6 +137,14 @@ enumElementsDocD' es = vcat $
         where nums = [0..length es - 1]
 
 -- Groupings --
+
+multiStateDocD :: Doc -> [Doc] -> Doc
+multiStateDocD end sts = vcat (applyEnd statements)
+  where applyEnd [] = []
+        applyEnd [s] = [s]
+        applyEnd (s:ss) = (s <> end):(applyEnd ss)
+        statements = filter notNullStatement sts
+        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
 
 blockDocD :: Doc -> [Doc] -> Doc
 blockDocD end sts = vcat statements

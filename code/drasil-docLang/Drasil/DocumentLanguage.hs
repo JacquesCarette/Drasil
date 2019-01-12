@@ -15,7 +15,7 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
 import Language.Drasil.Utils (sortBySymbol)
 
 import Control.Lens ((^.), over)
-import qualified Data.Map as Map (elems, toList)
+import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
@@ -41,7 +41,7 @@ import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
 import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
-import Data.List (nub, sortBy, sortOn)
+import Data.List (nub, sortBy)
 
 type System = Sentence
 type DocKind = Sentence
@@ -460,7 +460,9 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS si' (Assumptions) =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD . map (flip helperCI (_sysinfodb si')) . filter (\x -> sDom (cdom x) == assumpDom ^. uid) . map fst . sortOn snd . map snd . Map.toList $ (_sysinfodb si') ^. conceptinsTable
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
+      map (flip helperCI (_sysinfodb si')) . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      asOrderedList $ (_sysinfodb si') ^. conceptinsTable
       where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
         sDom :: [UID] -> UID

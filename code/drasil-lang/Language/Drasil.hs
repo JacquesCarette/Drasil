@@ -152,7 +152,7 @@ module Language.Drasil (
   , datadefnLookup, insmodelLookup, sectionLookup
   , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, dataDefnTable
   , insmodelTable, gendefTable, theoryModelTable, sectionTable
-  , assumpTable, conceptinsTable
+  , assumpTable, conceptinsTable, asOrderedList
   -- AssumpChunk
   , AssumpChunk(AC), assuming, assump
   -- Reference

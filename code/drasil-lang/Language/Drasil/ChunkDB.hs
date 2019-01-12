@@ -11,7 +11,7 @@ module Language.Drasil.ChunkDB
   , insmodelLookup, gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup
   , sectionLookup, labelledconLookup
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , assumpTable, conceptinsTable, sectionTable, labelledcontentTable
+  , assumpTable, conceptinsTable, sectionTable, labelledcontentTable, asOrderedList
   ) where
 
 import Control.Lens ((^.), makeLenses)
@@ -32,6 +32,7 @@ import Language.Drasil.Document (Section)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(getUnit), unitWrapper
   , IsUnit(getUnits))
 import qualified Data.Map as Map
+import Data.List (sortOn)
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -147,6 +148,9 @@ sectionLookup = uMapLookup "Section" "SectionMap"
 -- | Looks up a uid in the labelled content table. If nothing is found, an error is thrown.
 labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
 labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
+
+asOrderedList :: UMap a -> [a]
+asOrderedList = map fst . sortOn snd . map snd . Map.toList
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbolTable :: SymbolMap

@@ -178,10 +178,10 @@ demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
 -----------------------------inserted by Vajiheh-----------------------------------------
 lRe      = unitary "lRe"      (nounPhraseSP "Load resistance")
-  cL pascal Rational --correct Space used?
+  (Atomic "LR") pascal Rational --correct Space used?
 
 nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "Non-factored load")
-  cN pascal Rational --correct Space used?
+  (Atomic "NFL") pascal Rational --correct Space used?
 
   -------------------------inserted by Vajiheh------------------------------------------
 

@@ -15,11 +15,6 @@ import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 
--- Labels
-l1, l2 :: Reference
-l1 = makeTMRef "isSafeLR"
-l2 = makeTMRef "isSafePb"
-
 {--}
 
 gbrTMods :: [TheoryModel]
@@ -29,23 +24,22 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- needs to be updated properly.
 -- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
-glass_concept :: ConceptInstanceMap
-glass_concept = Map.fromList $ map (\x -> (x ^. uid, x)) ([] :: [ConceptInstance])
+glass_concept :: [ConceptInstance]
+glass_concept = []
 
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
-   l1 [lrIsSafeDesc]
-  where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
-                       (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap]))
-                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap])) glass_concept (head ([] :: [SectionMap]))
-                        (head ([] :: [LabelledContentMap]))
+   "isSafeLR" [lrIsSafeDesc]
+   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
+                        ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+                        glass_concept [] []
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) -- l1
+  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand))
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLR) s ending
@@ -61,11 +55,11 @@ pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
   [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeCite astm2009]
-  l2 [pbIsSafeDesc]
+  "isSafePb" [pbIsSafeDesc]
 
 pbIsSafe_RC :: RelationConcept
 pbIsSafe_RC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) -- l2
+  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol))
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safePb) s ending

@@ -3,18 +3,18 @@ module Language.Drasil.Chunk.Unital
   ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs' , ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
+
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  IsUnit, Quantity, HasSpace(typ))
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
-
-import Language.Drasil.NounPhrase (NP)
 
 -- | UnitalChunks are Unitary DefinedQuantityDict
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
@@ -26,8 +26,7 @@ instance HasUID        UnitalChunk where uid = defq' . uid
 instance NamedIdea     UnitalChunk where term = defq' . term
 instance Idea          UnitalChunk where getA (UC qc _) = getA qc
 instance Definition    UnitalChunk where defn = defq' . defn
-instance ConceptDomain UnitalChunk where cdom = defq' . cdom
-instance Concept       UnitalChunk where
+instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
 instance Quantity      UnitalChunk where 

@@ -1,6 +1,8 @@
 module Data.Drasil.SI_Units where
+
 import Language.Drasil
 import Language.Drasil.Development
+import Language.Drasil.ShortHands (cOmega)
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]

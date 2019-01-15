@@ -74,7 +74,7 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a, MayHaveUnit a) => Sentence -> a -> Sentence
+fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets a reasonable or typical value from a Constrained chunk
@@ -85,7 +85,7 @@ getRVal c = uns (c ^. reasVal)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
-addPercent num = (S (show num) :+: (Sp Percent))
+addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
@@ -162,7 +162,7 @@ unwrap Nothing  = EmptyS
 
 -- | noRefs converts lists of simple ItemTypes into a lists which may be used
 -- in Contents but not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe RefAdd)]
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 noRefs a = zip a $ repeat Nothing
 
 -- | noRefsLT converts lists of tuples containing a title and ItemType into

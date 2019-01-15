@@ -107,7 +107,7 @@ for' t1 t2 = (titleize t1) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+for'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
 
 the' :: (NamedIdea t) => t -> NP

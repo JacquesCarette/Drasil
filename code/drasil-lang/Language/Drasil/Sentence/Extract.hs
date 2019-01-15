@@ -15,15 +15,16 @@ getUIDs (Ch TermStyle _)     = []
 getUIDs (Ch PluralTerm _)    = []
 getUIDs (Sy _)               = []
 getUIDs (S _)                = []
-getUIDs (Sp _)               = []
 getUIDs (P _)                = []
 getUIDs (Ref _)              = []
+getUIDs Percent              = []
 getUIDs ((:+:) a b)          = (getUIDs a) ++ (getUIDs b)
 getUIDs (Quote a)            = getUIDs a
 getUIDs (E a)                = names a
 getUIDs (EmptyS)             = []
 
 -- | Generic traverse of all positions that could lead to UIDs from sentences
+-- but don't go into expressions.
 getUIDshort   :: Sentence -> [UID]
 getUIDshort (Ch ShortStyle a)    = [a]
 getUIDshort (Ch SymbolStyle _)   = []
@@ -31,7 +32,7 @@ getUIDshort (Ch TermStyle _)     = []
 getUIDshort (Ch PluralTerm _)    = []
 getUIDshort (Sy _)               = []
 getUIDshort (S _)                = []
-getUIDshort (Sp _)               = []
+getUIDshort Percent              = []
 getUIDshort (P _)                = []
 getUIDshort (Ref _)              = []
 getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
@@ -54,7 +55,7 @@ lnames   :: Sentence -> [UID]
 lnames  (Ch _ _)       = []
 lnames  (Sy _)         = []
 lnames  (S _)          = []
-lnames  (Sp _)         = []
+lnames  Percent        = []
 lnames  (P _)          = []
 lnames  (Ref (Reference u _ _)) = [u] -- This should be fixed.
 lnames  ((:+:) a b)    = (lnames  a) ++ (lnames  b)
@@ -63,5 +64,4 @@ lnames  (E _)          = []
 lnames  (EmptyS)       = []
 
 lnames'  :: [Sentence] -> [UID]
-lnames'  (hd:tl) = lnames  hd ++ lnames'  tl
-lnames'  []      = []
+lnames' = concatMap lnames 

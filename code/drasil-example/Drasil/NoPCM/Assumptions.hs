@@ -43,7 +43,7 @@ assumpS4 =
   `sC` S "it is constant over their entire", phrase vol])
 
 newA5NoPCM :: AssumpChunk
-newA5NoPCM = assump (makeAssumpRef "Density-Water-Constant-over-Volume") assumpS4
+newA5NoPCM = assump "assumpDVCoW" assumpS4 ("Density-Water-Constant-over-Volume")
 
 assumpDWCoW = cic "assumpDWCoW" assumpS4
   "Density-Water-Constant-over-Volume" assumpDom
@@ -53,7 +53,7 @@ assumpS5 =
   S "is, it is constant over its entire", phrase vol])
 
 newA6NoPCM :: AssumpChunk
-newA6NoPCM = assump (makeAssumpRef "Specific-Heat-Energy-Constant-over-Volume") assumpS5
+newA6NoPCM = assump "assumpSHECoW" assumpS5 ("Specific-Heat-Energy-Constant-over-Volume")
 
 assumpSHECoW = cic "assumpSHECoW" assumpS5
   "Specific-Heat-Energy-Constant-over-Volume" assumpDom
@@ -65,7 +65,7 @@ assumpS9_npcm =
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C])
 
 newA9NoPCM :: AssumpChunk
-newA9NoPCM = assump (makeAssumpRef "Charging-Tank-No-Temp-Discharge") assumpS9_npcm
+newA9NoPCM = assump "assumpCTNTD" assumpS9_npcm ("Charging-Tank-No-Temp-Discharge")
 
 assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
   "Charging-Tank-No-Temp-Discharge" assumpDom
@@ -75,7 +75,7 @@ assumpS12 =
   +:+ phrase vol_ht_gen +:+. S "is zero")
 
 newA16 :: AssumpChunk
-newA16 = assump (makeAssumpRef "No-Internal-Heat-Generation-By-Water") assumpS12
+newA16 = assump "assumpNIHGBW" assumpS12 ("No-Internal-Heat-Generation-By-Water")
 
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
@@ -87,7 +87,7 @@ assumpS13 =
   Sy (unit_symb QT.temp) `sC` S "respectively")
 
 newA19 :: AssumpChunk
-newA19 = assump (makeAssumpRef "Atmospheric-Pressure-Tank") assumpS13
+newA19 = assump "assumpAPT" assumpS13 ("Atmospheric-Pressure-Tank")
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom

@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   classDocD, exceptionDocD, exprDocD'', declarationDocD, conditionalDocD)
 import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), semi, parens, equals, vcat, doubleQuotes,
   render, rbrace, lbrace, empty, colon)
 

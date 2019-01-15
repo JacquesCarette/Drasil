@@ -1,10 +1,11 @@
 {-# Language GADTs #-}
-module Language.Drasil.Chunk.Constrained.Core (
+module Language.Drasil.Constraint (
     Constraint(..), ConstraintReason(..)
   , physc, sfwrc, enumc, isPhysC, isSfwrC
   ) where
 
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
+import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Space (RealInterval(..))
 
 data ConstraintReason = Physical | Software
 data Constraint where

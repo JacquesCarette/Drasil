@@ -1,6 +1,7 @@
-module Drasil.SWHS.Unitals where --all of this file is exorted
+module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Control.Lens ((^.))
 
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,

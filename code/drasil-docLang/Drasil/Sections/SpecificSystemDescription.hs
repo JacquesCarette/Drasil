@@ -103,7 +103,7 @@ assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent
           foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
           refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef2S ref) 
+          where refs (chunk, ref) = (titleize' chunk) +:+ (Ref $ makeRef2 ref) 
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
                                 (inModel, r4)]
 

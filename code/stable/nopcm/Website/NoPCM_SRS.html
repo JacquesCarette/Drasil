@@ -877,12 +877,12 @@ The instance models that govern SWHS are presented in <a href=#Sec:IMs>Section: 
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Section: Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>Section: General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Section: Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Section: Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Section: Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Section: Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
 <div id="A:Thermal-Energy-Only">
-Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. <a href=#T:consThermE>TM: consThermE</a>.
+Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. <a href=#TM:consThermE>TM: consThermE</a>.
 </div>
 </li>
 </ul>
@@ -938,7 +938,7 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. <a href=#likeChgDT>LC: Discharging-Tank</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. <a href=#likeChgDT>LC: Discharging-Tank</a>.
 </div>
 </li>
 </ul>
@@ -987,7 +987,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<div id="T:consThermE">
+<div id="TM:consThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1277,7 +1277,7 @@ RefBy
 Detailed derivation of simplified rate of change of temperature.
 </p>
 <p class="paragraph">
-Integrating <a href=#T:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
+Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
 <div class="equation">
 <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
@@ -1762,7 +1762,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -1831,7 +1831,7 @@ Uncert.
 <em>120.0&sdot;10<sup>-3</sup></em> m<sup>2</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1848,7 +1848,7 @@ Uncert.
 <em>4.186&sdot;10<sup>3</sup></em> J/(kg&sdot;&deg;C)
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1865,7 +1865,7 @@ Uncert.
 <em>412.0&sdot;10<sup>-3</sup></em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1882,7 +1882,7 @@ Uncert.
 <em>1.0&sdot;10<sup>3</sup></em> W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1899,7 +1899,7 @@ Uncert.
 <em>1.5</em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1916,7 +1916,7 @@ Uncert.
 <em>50.0</em> &deg;C
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1933,7 +1933,7 @@ Uncert.
 <em>50.0&sdot;10<sup>3</sup></em> s
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1950,7 +1950,7 @@ Uncert.
 <em>40.0</em> &deg;C
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -1967,7 +1967,7 @@ Uncert.
 <em>1.0&sdot;10<sup>3</sup></em> kg/m<sup>3</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 </table>
@@ -2258,6 +2258,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
+<a href=#reqCISPC>FR: Check-Inputs-Satisfy-Physical-Constraints</a>
+</th>
+<th>
+<a href=#reqIIV>FR: Input-Inital-Values</a>
+</th>
+<th>
 <a href=#IM:heatEInWtr>IM: heatEInWtr</a>
 </th>
 <th>
@@ -2273,12 +2279,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#GD:nwtnCooling>GD: nwtnCooling</a>
 </th>
 <th>
-<a href=#reqCISPC>FR: Check-Inputs-Satisfy-Physical-Constraints</a>
-</th>
-<th>
-<a href=#reqIIV>FR: Input-Inital-Values</a>
-</th>
-<th>
 <a href=#DD:ht.flux.C>DD: ht_flux_C</a>
 </th>
 <th>
@@ -2288,13 +2288,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#likeChgTLH>LC: Tank-Lose-Heat</a>
 </th>
 <th>
+<a href=#TM:consThermE>TM: consThermE</a>
+</th>
+<th>
 <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a>
 </th>
 <th>
 <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>
-</th>
-<th>
-<a href=#T:consThermE>TM: consThermE</a>
 </th>
 <th>
 <a href=#unlikeChgWFS>UC: Water-Fixed-States</a>
@@ -2311,19 +2311,131 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td>
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
 
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -2373,7 +2485,10 @@ X
 
 </td>
 <td>
-X
+
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -2383,6 +2498,59 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -2435,13 +2603,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2491,13 +2659,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2550,59 +2718,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -2610,121 +2725,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:Law-Convective-Cooling-Water-PCM>A: Law-Convective-Cooling-Water-PCM</a>
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2815,7 +2815,13 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:No-Internal-Heat-Generation-By-Water>A: No-Internal-Heat-Generation-By-Water</a>
+<a href=#A:Law-Convective-Cooling-Water-PCM>A: Law-Convective-Cooling-Water-PCM</a>
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -2828,6 +2834,56 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:No-Internal-Heat-Generation-By-Water>A: No-Internal-Heat-Generation-By-Water</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -2877,24 +2933,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -2919,157 +2957,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:Temp-Heating-Coil-Constant-over-Length>A: Temp-Heating-Coil-Constant-over-Length</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:Temp-Heating-Coil-Constant-over-Time>A: Temp-Heating-Coil-Constant-over-Time</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3128,6 +3016,47 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:Temp-Heating-Coil-Constant-over-Length>A: Temp-Heating-Coil-Constant-over-Length</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 
 </td>
 <td>
@@ -3135,6 +3064,133 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:Temp-Heating-Coil-Constant-over-Time>A: Temp-Heating-Coil-Constant-over-Time</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3154,16 +3210,16 @@ X
 <a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
 
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -3207,7 +3263,13 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:consThermE>TM: consThermE</a>
+<a href=#TM:consThermE>TM: consThermE</a>
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3220,12 +3282,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3437,13 +3493,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3605,6 +3661,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -3612,12 +3674,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3655,16 +3711,16 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:sensHtE>TM: sensHtE</a>
+<a href=#TM:sensHtE>TM: sensHtE</a>
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3721,7 +3777,7 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#T:consThermE>TM: consThermE</a>)
+T1 (<a href=#TM:consThermE>TM: consThermE</a>)
 </th>
 <th>
 GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
@@ -3741,7 +3797,7 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:consThermE>TM: consThermE</a>)
+T1 (<a href=#TM:consThermE>TM: consThermE</a>)
 </td>
 <td>
 
@@ -4228,7 +4284,7 @@ A14 (<a href=#A:Volume-Coil-Negligible>A: Volume-Coil-Negligible</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:consThermE>TM: consThermE</a>)
+T1 (<a href=#TM:consThermE>TM: consThermE</a>)
 </td>
 <td>
 X

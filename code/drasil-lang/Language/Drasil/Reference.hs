@@ -17,16 +17,18 @@ import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), abrv,
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
+  HasShortName(shortname))
+import Language.Drasil.Classes.Citations (HasFields(getFields))
+import Language.Drasil.Classes (ConceptDomain(cdom), abrv)
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
 import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
-  prepend, name, raw, (+::+), defer, getAdd)
+  prepend, name, raw, (+::+), defer)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (Reference(Reference))
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.Sentence (Sentence(Ref))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -73,7 +75,7 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
 conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
-  cdl x = sDom $ x ^. cdom
+  cdl = sDom . cdom
 
 conceptMap :: [ConceptInstance] -> ConceptMap
 conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
@@ -105,40 +107,40 @@ class HasUID s => Referable s where
   renderRef :: s -> LblType -- alternate
 
 instance Referable AssumpChunk where
-  refAdd    x = getAdd $ getRefAdd x
+  refAdd    x = getRefAdd x
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getAdd $ getRefAdd lb
-  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getAdd $ getRefAdd lb)
+  refAdd    (Section _ _ lb ) = getRefAdd lb
+  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
 
 instance Referable Citation where
-  refAdd    c = citeID c -- citeID should be unique.
+  refAdd    c = c ^. citeID -- citeID should be unique.
   renderRef c = Citation $ refAdd c
 
 instance Referable TheoryModel where
-  refAdd    t = getAdd $ getRefAdd t
-  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
+  refAdd    t = getRefAdd t
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable GenDefn where
-  refAdd    g = getAdd $ getRefAdd g
-  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
+  refAdd    g = getRefAdd g
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable DataDefinition where
-  refAdd    d = getAdd $ getRefAdd d
-  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
+  refAdd    d = getRefAdd d
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable InstanceModel where
-  refAdd    i = getAdd $ getRefAdd i
-  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable ConceptInstance where
   refAdd l    = l ^. uid
-  renderRef l = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
+  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = getAdd $ getRefAdd lb
-  renderRef  (LblC lb c) = RP (refLabelledCon c) (getAdd $ getRefAdd lb)
+  refAdd     (LblC lb _) = getRefAdd lb
+  renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
 refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
@@ -187,14 +189,10 @@ getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. ge
         isYear _        = False
 
 getTitle :: (HasFields c) => c -> String
-getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
+getTitle c = maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
   where isTitle :: CiteField -> Bool
         isTitle (Title _) = True
         isTitle _         = False
-        getStr :: Sentence -> String
-        getStr (S s) = s
-        getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-        getStr _ = error "Term is not a string"
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy compareAuthYearTitle citations

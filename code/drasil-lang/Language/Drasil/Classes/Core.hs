@@ -1,13 +1,12 @@
 {-# Language TypeFamilies #-}
 -- | Defining the core classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes.Core (
-    HasUID(uid), UID
+    HasUID(uid)
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
   ) where
 
-import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
@@ -33,5 +32,4 @@ class HasSymbol c where
  
 -- | For a "Reference Address", we just need a getter.
 class HasRefAddress b where
-  getRefAdd :: b -> LblType 
-
+  getRefAdd :: b -> String

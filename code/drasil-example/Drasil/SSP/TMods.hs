@@ -22,13 +22,6 @@ import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
--- Pre-defined some labels. They will be re-used for tings which are 'the same'
-l1, l2, l3, l4 :: Reference
-l1 = makeTMRef "factOfSafety"
-l2 = makeTMRef "equilibrium"
-l3 = makeTMRef "mcShrStrgth"
-l4 = makeTMRef "effStress"
-
 --------------------------
 --  Theoretical Models  --
 --------------------------
@@ -37,11 +30,11 @@ l4 = makeTMRef "effStress"
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
   [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeCite fredlund1977] l1 [factOfSafety_desc]
+  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel -- l1
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel
 
 factOfSafety_rel :: Relation
 factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -59,11 +52,11 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibrium_rc)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeCite fredlund1977] l2 [eq_desc]
+  [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel -- l2
+equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -84,12 +77,12 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
   [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeCite fredlund1977] l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
 mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel -- l3
+  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
 mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
@@ -119,7 +112,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeCite fredlund1977] l4 [effS_desc]
+  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept

@@ -6,23 +6,23 @@ module Language.Drasil.Chunk.InstanceModel
   , Constraints
   ) where
 
-import Data.Drasil.IdeaDicts (softEng)
-import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
+import Data.Drasil.IdeaDicts (instanceMod)
+import Language.Drasil.Chunk.Citation (Citation)
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
+import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  ConceptDomain(cdom), CommonIdea(abrv), Concept, Definition(defn))
+  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.RefProg (Reference, makeInstRef)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.NounPhrase (cn')
+import Language.Drasil.ShortName (ShortName, shortname')
 
 import Control.Lens (makeLenses, view)
 
@@ -44,40 +44,37 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _cit :: [Citation]
                         , _deri :: Derivation
-                        , _lb :: Reference
+                        ,  lb :: ShortName
+                        ,  ra :: String
                         , _notes :: [Sentence]
-                        , _ci :: CI
                         }
 makeLenses ''InstanceModel
 
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA = getA . view rc
-instance Concept            InstanceModel where
 instance Definition         InstanceModel where defn = rc . defn
-instance ConceptDomain      InstanceModel where cdom = rc . cdom
+instance ConceptDomain      InstanceModel where cdom = cdom . view rc
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasCitation        InstanceModel where getCitations = cit
-instance HasShortName       InstanceModel where shortname = shortname . view lb
-instance HasRefAddress      InstanceModel where getRefAdd = getRefAdd . view lb
+instance HasShortName       InstanceModel where shortname = lb
+instance HasRefAddress      InstanceModel where getRefAdd = ra
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 instance HasSymbol          InstanceModel where symbol = symbol . view imOutput -- ???
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
-instance CommonIdea         InstanceModel where abrv = abrv . view ci
-
-instanceMod :: CI
-instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]
+instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Citation] -> Reference -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
+  OutputConstraints -> [Citation] -> String -> [Sentence] -> InstanceModel
+im' rcon i ic o oc src lbe addNotes =
+  IM rcon i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe) addNotes
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (makeInstRef sn)
- addNotes instanceMod
+im'' rcon i ic o oc src der sn addNotes = 
+  IM rcon i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn) addNotes

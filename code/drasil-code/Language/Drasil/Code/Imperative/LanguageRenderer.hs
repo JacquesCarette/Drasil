@@ -32,7 +32,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,on
 
 import qualified Data.Map as Map (fromList,lookup)
 import Data.List (find)
-import Prelude hiding (break,print,return,last,mod)
+import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
   isEmpty, rbrace, lbrace, vcat, space, char, double, quotes, integer, semi, equals, braces,
   int, comma, colon)

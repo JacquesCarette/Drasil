@@ -1,4 +1,5 @@
-module Language.Drasil.Misc(mkTable, noSpaces) where
+-- | A collection of |String|-handling routines as well as one for making 'tables'
+module Language.Drasil.Misc(mkTable, noSpaces, repUnd) where
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -19,57 +20,16 @@ mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
--- Returns the string if it doesn't contain spaces and throws an error if it does
+-- \ Returns the string if it doesn't contain spaces and throws an error if it does
 noSpaces :: String -> String
 noSpaces s
   | not (' ' `elem` s) = s
   | otherwise          = error "String has at least one space in it."
 
-{-
---------------------- WIP ---------------------
-Function used to derive the unit of an equation. Takes a Relation, sorts the
-respective values into lists of units found in the numerator and denominator,
-eliminates units found in both list and combines the remainder to create the
-units of the equation. WORK IN PROGRESS
-
-inferUnit :: HasSymbolTable ctx => Relation -> ctx -> Maybe UnitDefn
-inferUnit rel () = combine $ eliminate ([], []) $ convert symbtab $ findUnit rel ([], [])
-  where combine (num, den) = 
-          | 
-          | otherwise = combine 
-
-findUnit :: Relation -> ([SF], [SF]) -> ([SF], [SF])
-findUnit (_ :+ a) ([], []) = analyze a True ([], [])
-findUnit (_ :- a) ([], []) = analyze a True ([], [])
-findUnit (a :* b) frac = findUnit a (analyze b True frac)
-findUnit (a :/ b) frac = findUnit a (analyze b False frac)
-findUnit (a :^ b) frac = error "Exponential not yet implemented"
-findUnit (_ :+ _) frac = frac
-findUnit (_ :- _) frac = frac
-findUnit (_ := _) frac = frac
-
-analyze :: Expr -> Bool -> ([SF], [SF]) -> ([SF], [SF])
-analyze (Deriv _ (C a) (C b)) True (num, den) = (((SF a) ^. id):num, ((SF b) ^. id):den)
-analyze (Deriv _ (C a) (C b)) False (num, den) = (((SF b) ^. id):num, ((SF a) ^. id):den)
-analyze (FCall (C a) _) True (num, den) = (((SF a) ^. id):num, den)
-analyze (FCall (C a) _) False (num, den) = (num, ((SF a) ^. id):den)
-analyze (C a) True (num, den) = (((SF a) ^. id):num, den)
-analyze (C b) False (num, den) = (num, ((SF b) ^. id):den)
-analyze a True (num, den) = findUnit a (num, den)
-analyze a False (num, den) = findUnit a (den, num)
-
-convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
-convert (num, den) = combine ((reorder (map (getUnitLup symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
-where reorder [] lst = lst
-      reorder (frst:rst) lst = reorder rst (divide frst lst)
-      divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"
-      divide (UDiv a b) lst = 
-      divide (UProd a b) x@(val1, val2) =
-      combine ((num1, den1), (num2, den2)) = (num1 ++ den2, den1 ++ num2)
-
-eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
-eliminate lst ([], den) = (lst, den)
-eliminate lst (frst:rst, den)
-  | delete frst den == den = eliminate (frst:lst) (rst, den)
-  | delete frst den /= den = eliminate lst (rst, delete frst den)
--}
+-- | repUnd - Replace Underscore (with '.').
+repUnd :: String -> String
+repUnd = map rep
+  where
+    rep :: Char -> Char
+    rep '_' = '.'
+    rep c = c

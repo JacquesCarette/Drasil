@@ -189,7 +189,7 @@ followA :: Sentence -> AssumpChunk -> Sentence
 preceding `followA` assumpt = preceding +:+ S "following" +:+ (makeRef2S assumpt)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
 
 -- | get term, definition, and symbol

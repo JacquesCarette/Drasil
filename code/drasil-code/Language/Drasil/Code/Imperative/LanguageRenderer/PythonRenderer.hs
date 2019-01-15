@@ -28,7 +28,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, semi, colon, parens, (<>), (<+>), empty, equals,
   brackets, vcat, doubleQuotes, render, char, int, ($+$))
 

@@ -9,14 +9,15 @@ module Language.Drasil.Chunk.Constrained (
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Concept (cw)
-import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), Quantity, HasSpace(typ),
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
+import Language.Drasil.Constraint (Constraint(..))
 import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
@@ -69,8 +70,7 @@ instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 instance Quantity      ConstrConcept where 
 instance Definition    ConstrConcept where defn = defq . defn
-instance ConceptDomain ConstrConcept where cdom = defq . cdom
-instance Concept       ConstrConcept where
+instance ConceptDomain ConstrConcept where cdom = cdom . view defq
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)

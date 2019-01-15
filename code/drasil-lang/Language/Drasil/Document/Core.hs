@@ -3,18 +3,17 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
-data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
-              | Numeric [(ItemType,Maybe RefAdd)] -- ^ Enumerated List
+data ListType = Bullet [(ItemType,Maybe String)] -- ^ Bulleted list
+              | Numeric [(ItemType,Maybe String)] -- ^ Enumerated List
               | Simple [ListTuple] -- ^ Simple list with items denoted by @-@
               | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple')
               | Definitions [ListTuple] -- ^ Renders a list of "@Title@ is the @Item@"
@@ -34,7 +33,7 @@ type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListTuple = (Title,ItemType,Maybe RefAdd) -- ^ Title: Item
+type ListTuple = (Title,ItemType,Maybe String) -- ^ Title: Item
 type Filepath = String
 type Lbl      = Sentence
 

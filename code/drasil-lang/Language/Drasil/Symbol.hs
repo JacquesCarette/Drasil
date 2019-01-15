@@ -34,6 +34,9 @@ data Symbol =
   | Empty
   deriving Eq
 
+instance Semigroup Symbol where
+ a <> b = Concat [a , b]
+
 instance Monoid Symbol where
   mempty = Empty
   mappend a b = Concat [a , b]

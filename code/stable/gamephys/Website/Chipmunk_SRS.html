@@ -1028,19 +1028,19 @@ The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Sec
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Section: Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>Section: General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Section: Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Section: Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Section: Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Section: Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
 <div id="A:objectTy">
-objectTy: All objects are rigid bodies. <a href=#DD:impulse>DD: impulse</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:impulse>DD: impulse</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:objectDimension">
-objectDimension: All objects are 2D. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#T:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectDimension: All objects are 2D. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
@@ -1089,7 +1089,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 </p>
-<div id="T:NewtonSecLawMot">
+<div id="TM:NewtonSecLawMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1158,7 +1158,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="T:NewtonThirdLawMot">
+<div id="TM:NewtonThirdLawMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1224,7 +1224,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="T:UniversalGravLaw">
+<div id="TM:UniversalGravLaw">
 <table class="tdefn">
 <tr>
 <th>
@@ -1326,7 +1326,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="T:ChaslesTheorem">
+<div id="TM:ChaslesThm">
 <table class="tdefn">
 <tr>
 <th>
@@ -1398,7 +1398,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="T:NewtonSecLawRotMot">
+<div id="TM:NewtonSecLawRotMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -2949,7 +2949,7 @@ Uncert.
 <em>800.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2963,7 +2963,7 @@ Uncert.
 <em>98.1</em> N
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2977,7 +2977,7 @@ Uncert.
 <em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2991,7 +2991,7 @@ Uncert.
 <em>74.5</em> kg&sdot;m<sup>2</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3005,7 +3005,7 @@ Uncert.
 <em>44.2</em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3019,7 +3019,7 @@ Uncert.
 <em>56.2</em> kg
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3033,7 +3033,7 @@ Uncert.
 <em>412.0&sdot;10<sup>-3</sup></em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3047,7 +3047,7 @@ Uncert.
 <em>2.51</em> m/s
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3061,7 +3061,7 @@ Uncert.
 <em>200.0</em> N&sdot;m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3075,7 +3075,7 @@ Uncert.
 <em>2.1</em> rad/s
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3096,7 +3096,7 @@ Uncert.
 </div></em> rad
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 </table>
@@ -3334,13 +3334,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:col2D>IM: col2D</a>
 </th>
 <th>
-<a href=#lcEC>LC: Expanded-Collisions</a>
-</th>
-<th>
 <a href=#IM:transMot>IM: transMot</a>
 </th>
 <th>
 <a href=#lcIJC>LC: Include-Joints-Constraints</a>
+</th>
+<th>
+<a href=#lcEC>LC: Expanded-Collisions</a>
 </th>
 <th>
 <a href=#DD:linVel>DD: linVel</a>
@@ -3367,13 +3367,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:ctrOfMass>DD: ctrOfMass</a>
 </th>
 <th>
-<a href=#T:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>
+<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>
 </th>
 <th>
 <a href=#DD:impulse>DD: impulse</a>
 </th>
 <th>
-<a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a>
+<a href=#TM:ChaslesThm>TM: ChaslesThm</a>
 </th>
 </tr>
 <tr>
@@ -3673,10 +3673,13 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:collisionType>A: collisionType</a>
+<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
 </td>
 <td>
 
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -3689,9 +3692,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3732,7 +3732,10 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
+<a href=#A:collisionType>A: collisionType</a>
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3741,16 +3744,13 @@ X
 X
 </td>
 <td>
-
-</td>
-<td>
 X
 </td>
 <td>
 
 </td>
 <td>
-X
+
 </td>
 <td>
 X
@@ -3806,33 +3806,6 @@ X
 X
 </td>
 <td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 X
 </td>
 <td>
@@ -3842,10 +3815,155 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
 
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:objectDimension>A: objectDimension</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:objectTy>A: objectTy</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 </tr>
 <tr>
@@ -3924,10 +4042,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -3983,10 +4101,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -4042,9 +4160,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -4083,123 +4198,8 @@ X
 <td>
 
 </td>
-</tr>
-<tr>
-<td>
-<a href=#A:objectDimension>A: objectDimension</a>
-</td>
 <td>
 
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:objectTy>A: objectTy</a>
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
 </td>
 </tr>
 <tr>
@@ -4219,10 +4219,10 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -4641,7 +4641,7 @@ A7 (<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvemen
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </td>
 <td>
 
@@ -4667,7 +4667,7 @@ T1 (<a href=#T:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </td>
 <td>
 
@@ -4693,7 +4693,7 @@ T2 (<a href=#T:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:UniversalGravLaw>TM: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </td>
 <td>
 
@@ -4719,7 +4719,7 @@ T3 (<a href=#T:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </td>
 <td>
 X
@@ -4745,7 +4745,7 @@ X
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </td>
 <td>
 
@@ -5353,19 +5353,19 @@ Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:Pr
 
 </th>
 <th>
-T1 (<a href=#T:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </th>
 <th>
-T2 (<a href=#T:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </th>
 <th>
-T3 (<a href=#T:UniversalGravLaw>TM: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </th>
 <th>
-T4 (<a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </th>
 <th>
-T5 (<a href=#T:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </th>
 <th>
 GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
@@ -5424,7 +5424,7 @@ IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </td>
 <td>
 
@@ -5498,7 +5498,7 @@ T1 (<a href=#T:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </td>
 <td>
 
@@ -5572,7 +5572,7 @@ T2 (<a href=#T:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:UniversalGravLaw>TM: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </td>
 <td>
 
@@ -5646,7 +5646,7 @@ T3 (<a href=#T:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </td>
 <td>
 
@@ -5720,7 +5720,7 @@ T4 (<a href=#T:ChaslesTheorem>TM: ChaslesTheorem</a>)
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </td>
 <td>
 

@@ -3,7 +3,7 @@ module Language.Drasil.ChunkDB
   ( ChunkDB, cdb
   , HasSymbolTable(..), symbolMap, symbLookup
   , HasTermTable(..), termLookup
-  , HasDefinitionTable(..), conceptMap, defLookup
+  , HasDefinitionTable(..), conceptMap, traceMap, defLookup
   , unitLookup , HasUnitTable(..), unitMap, collectUnits, TraceMap
   , traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap
   , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap
@@ -17,8 +17,8 @@ module Language.Drasil.ChunkDB
 import Control.Lens ((^.), Lens', makeLenses)
 import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit,
-  Quantity)
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Document.Core (LabelledContent)
@@ -36,73 +36,83 @@ import qualified Data.Map as Map
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
 -- what the map is for. One is for symbols + their units, and the others are for
 -- what they state.
+type UMap a = Map.Map UID (a, Int)
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
-type SymbolMap  = Map.Map UID QuantityDict
+type SymbolMap  = UMap QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
-type ConceptMap = Map.Map UID ConceptChunk
+type ConceptMap = UMap ConceptChunk
 
 -- | A map of all the units used. Should be restricted to base units/synonyms.
-type UnitMap = Map.Map UID UnitDefn
+type UnitMap = UMap UnitDefn
 
 -- | Again a bit of a misnomer as it's really a map of all NamedIdeas.
 -- Until these are built through automated means, there will
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
-type TermMap = Map.Map UID IdeaDict
+type TermMap = UMap IdeaDict
 
 -- Reference map
-type TraceMap = Map.Map UID [UID]
+type TraceMap = UMap [UID]
 
 -- Refby map
 type RefbyMap = Map.Map UID [UID]
 
 -- DataDefinition map
-type DatadefnMap = Map.Map UID DataDefinition
+type DatadefnMap = UMap DataDefinition
 
 -- InstanceModel map
-type InsModelMap = Map.Map UID InstanceModel
+type InsModelMap = UMap InstanceModel
 
 -- GenDef map
-type GendefMap = Map.Map UID GenDefn
+type GendefMap = UMap GenDefn
 
 -- TheoryModel map
-type TheoryModelMap = Map.Map UID TheoryModel
+type TheoryModelMap = UMap TheoryModel
 
 -- Assumption map
-type AssumptionMap = Map.Map UID AssumpChunk
+type AssumptionMap = UMap AssumpChunk
 
 -- ConceptInstance map
-type ConceptInstanceMap = Map.Map UID ConceptInstance
+type ConceptInstanceMap = UMap ConceptInstance
 
 -- Section map
-type SectionMap = Map.Map UID Section
+type SectionMap = UMap Section
 
 -- LabelledContent map
-type LabelledContentMap = Map.Map UID LabelledContent
+type LabelledContentMap = UMap LabelledContent
+
+cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
+cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . (flip zip) [1..]
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
+symbolMap = cdbMap qw
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap
-termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
+termMap = cdbMap nw
 
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
+conceptMap = cdbMap cw
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (IsUnit u, ConceptDomain u) => [u] -> UnitMap
-unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x)) 
+unitMap :: (IsUnit u) => [u] -> UnitMap
+unitMap = cdbMap unitWrapper
+
+idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
+idMap = cdbMap id
+
+traceMap :: HasUID l => (l -> [UID]) -> [l] -> TraceMap
+traceMap f = cdbMap f
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
-  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") id
+  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
 
 --- SYMBOL TABLE ---
 class HasSymbolTable s where
@@ -158,67 +168,57 @@ class HasLabelledContent s where
   labelledcontent :: Lens' s LabelledContentMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => HasUID c => s -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
+
+-- | Looks up a UID in a UMap table. If nothing is found an error is thrown
+uMapLookup :: String -> String -> UID -> UMap a -> a
+uMapLookup tys ms u t = getFM $ Map.lookup u t
+  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) fst
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: UID -> TermMap -> IdeaDict
-termLookup c m = getT $ Map.lookup c m
-  where getT = maybe (error $ "Term: " ++ c ++ " not found in TermMap") id
+termLookup = uMapLookup "Term" "TermMap"
 
--- | Looks up an uid in the term table. If nothing is found, an error is thrown
+-- | Looks up an uid in the unit table. If nothing is found, an error is thrown
 unitLookup :: UID -> UnitMap -> UnitDefn
-unitLookup c m = getT $ Map.lookup c m
-  where getT = maybe (error $ "Unit: " ++ c ++ " not found in UnitMap") id
+unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk
-defLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Concept: " ++ u ++ " not found in ConceptMap") id
-
+defLookup = uMapLookup "Concept" "ConceptMap"
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-datadefnLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "DataDefinition: " ++ u ++ " not found in datadefnMap") id
+datadefnLookup = uMapLookup "DataDefinition" "DatadefnMap"
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the instance model table. If nothing is found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
-insmodelLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "InstanceModel: " ++ u ++ " not found in insModelMap") id
+insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "GeneralDefinition: " ++ u ++ " not found in GendefMap") id
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
 
-
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-theoryModelLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "TheoryModel: " ++ u ++ " not found in TheoryModelMap") id
+theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the assumption table. If nothing is found, an error is thrown.
 assumptionLookup :: UID -> AssumptionMap -> AssumpChunk
-assumptionLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Assumption: " ++ u ++ " not found in AssumptionMap") id
+assumptionLookup = uMapLookup "Assumption" "AssumptionMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the concept instance table. If nothing is found, an error is thrown.
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-conceptinsLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "ConceptInstance: " ++ u ++ " not found in conceptInstanceMap") id
+conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the section table. If nothing is found, an error is thrown.
 sectionLookup :: UID -> SectionMap -> Section
-sectionLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "Section: " ++ u ++ " not found in sectionMap") id
+sectionLookup = uMapLookup "Section" "SectionMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+-- | Looks up a uid in the labelled content table. If nothing is found, an error is thrown.
 labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
-labelledconLookup u m = getC $ Map.lookup u m
-  where getC = maybe (error $ "LabelledContent: " ++ u ++ " not found in LabelledContentMap") id
+labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap
@@ -243,10 +243,10 @@ makeLenses ''ChunkDB
 -- and Units (for UnitTable)
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
         ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-        DatadefnMap -> InsModelMap -> GendefMap ->  TheoryModelMap -> AssumptionMap ->
-        ConceptInstanceMap -> SectionMap -> LabelledContentMap -> ChunkDB
+        [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
+        [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
 cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
- tc rfm dd ins gd tm a ci sec lc
+ tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm) (idMap a) (idMap ci) (idMap sec) (idMap lc)
 
 ----------------------
 instance HasSymbolTable      ChunkDB where symbolTable       = csymbs
@@ -270,14 +270,14 @@ collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] id
+  where getT = maybe [] fst
  
-invert :: (Ord k, Ord v) => Map.Map k [v] -> Map.Map v [k]
+invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap tm = invert tm
+generateRefbyMap tm = invert $ Map.map (\(x,_) -> x) tm
 
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c m = getT $ Map.lookup c m

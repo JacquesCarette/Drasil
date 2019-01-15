@@ -1,16 +1,18 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
-  (Sentence(Ch, Sy, S, Sp, E, Quote, (:+:), EmptyS, P, Ref),
-   sParen, sSqBr, (+:+), sC, (+:+.), (+:),
+  (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
+   sParen, (+:+), sC, (+:+.), (+:), ch,
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+
+import Control.Lens ((^.))
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -29,15 +31,22 @@ data Sentence where
   Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-  Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence       -- should not be used in examples?
   E     :: Expr -> Sentence
   Ref   :: Reference -> Sentence
+
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
+  Percent :: Sentence               -- % symbol
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
+
+ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch x = Ch SymbolStyle (x ^. uid)
+
+instance Semigroup Sentence where
+  (<>) = (:+:)
 
 instance Monoid Sentence where
   mempty = EmptyS
@@ -57,10 +66,6 @@ sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
-
--- | Helper function for wrapping sentences in square brackets.
-sSqBr :: Sentence -> Sentence
-sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

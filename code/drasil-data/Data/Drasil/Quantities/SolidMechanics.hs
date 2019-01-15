@@ -1,6 +1,8 @@
 module Data.Drasil.Quantities.SolidMechanics where
 
 import Language.Drasil
+import Language.Drasil.ShortHands (cE, cS, cP, cK, lSigma, lNu)
+
 import Data.Drasil.Concepts.SolidMechanics as CSM (elastMod, mobShear, nrmStrss,
     poissnsR, shearRes, stffness)
 import Data.Drasil.SI_Units (newton, pascal)

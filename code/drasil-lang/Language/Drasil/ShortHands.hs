@@ -1,5 +1,5 @@
 -- | Alphabet of capital/lowercase English letters as symbols
-module Language.Drasil.SymbolAlphabet where
+module Language.Drasil.ShortHands where
 
 import Language.Drasil.Symbol (Symbol(Atomic))
 

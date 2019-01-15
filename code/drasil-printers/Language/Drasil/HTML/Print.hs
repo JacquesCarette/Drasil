@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)
@@ -11,8 +11,7 @@ import qualified Language.Drasil as L (People, Person,
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US),
-  LinkType(Internal, Cite2, External))
+  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -27,10 +26,11 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn, Point), 
+  Real, Rational, Natural, Integer, IsIn, Point, Perc), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
+  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
+  LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
@@ -101,9 +101,9 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref L.Internal r a )  = reflink  r $ p_spec a
-p_spec (Ref L.Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
-p_spec (Ref L.External r a ) = reflinkURI  r $ p_spec a
+p_spec (Ref Internal r a )  = reflink  r $ p_spec a
+p_spec (Ref Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
+p_spec (Ref External r a ) = reflinkURI  r $ p_spec a
 p_spec EmptyS             = text "" -- Expected in the output
 p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
@@ -207,6 +207,7 @@ p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
 p_ops Point    = "."
+p_ops Perc     = "%"
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("

@@ -12,39 +12,38 @@ gbCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, ast
   astm2012, beasonEtAl1998, parnasClements1986]
 
 rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
-  (S "Volere requirements specification template edition 16"),
-  howPublishedU (S "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e5" :+: 
-    S "87e09880561dbe22.pdf"), year 2012]
+  "Volere requirements specification template edition 16",
+  howPublishedU "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf"
+  , year 2012]
   "rbrtsn2012"
 
 astm2009 = cMisc [author [mononym "ASTM"],
-  title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
-  publisher (S "ASTM International"),
-  bookTitle (S "Standard E1300-09a"),
-  year (2009), howPublishedU (S "www.astm.org")]
+  title "Standard Practice for Determining Load Resistance of Glass in Buildings",
+  publisher "ASTM International",
+  bookTitle "Standard E1300-09a",
+  year (2009), howPublishedU "www.astm.org"]
   "astm2009"
 
 astm2016 = cMisc
   [ author [mononym "ASTM"],
-  title (S "Standard specification for Flat Glass"),
-  publisher (S "ASTM International"),  
-  address (S "West Conshohocken, PA"),
-  year 2016, howPublishedU (S "https://doi.org/10.1520/C1036-16")]
+  title "Standard specification for Flat Glass",
+  publisher "ASTM International",
+  address "West Conshohocken, PA",
+  year 2016, howPublishedU "https://doi.org/10.1520/C1036-16"]
   "astm2016"
 
 astm2012 = cMisc
   [ author [mononym "ASTM"],
-  title (S "Standard Specification for Heat-Strengthened and Fully Tempered" +:+
-    S "Flat Glass"),
-  publisher (S "ASTM International"),
-  address (S "West Conshohocken, PA"),
-  year 2012, howPublishedU (S "https://doi.org/10.1520/C1048-12E01")]
+  title "Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass",
+  publisher "ASTM International",
+  address "West Conshohocken, PA",
+  year 2012, howPublishedU "https://doi.org/10.1520/C1048-12E01"]
   "astm2012"
 
 beasonEtAl1998 = cMisc
   [ author [wlBeason, tlKohutek, jmBracci],
-  title (S "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts"),
-  bookTitle (S "ASCE Library"),
+  title "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts",
+  bookTitle "ASCE Library",
   month Feb, year 1998,
-  howPublishedU (S "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)")]
+  howPublishedU "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"

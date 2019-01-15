@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.49
+Version:	0.1.54
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -11,6 +11,7 @@ library
     , Language.Drasil.Development
     , Language.Drasil.Utils
     , Data.Drasil.IdeaDicts
+    , Language.Drasil.ShortHands
   other-modules:
       Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Citation
@@ -18,7 +19,6 @@ library
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.Constrained
-    , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
@@ -36,6 +36,9 @@ library
     , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
+    , Language.Drasil.Classes.Citations
+    , Language.Drasil.Classes.Document
+    , Language.Drasil.Constraint
     , Language.Drasil.Data.Citation
     , Language.Drasil.Data.Date
     , Language.Drasil.Document
@@ -51,16 +54,13 @@ library
     , Language.Drasil.People
     , Language.Drasil.Reference
     , Language.Drasil.RefProg
-    , Language.Drasil.RefTypes
     , Language.Drasil.Sentence.Extract
-    , Language.Drasil.Sentence.EmbedSymbol
     , Language.Drasil.ShortName
     , Language.Drasil.Space
     , Language.Drasil.Sentence
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SymbolAlphabet
     , Language.Drasil.SystemInformation
     , Language.Drasil.UID
     , Language.Drasil.Unicode
@@ -81,7 +81,7 @@ library
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0)
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
 
 source-repository head
   type:     git

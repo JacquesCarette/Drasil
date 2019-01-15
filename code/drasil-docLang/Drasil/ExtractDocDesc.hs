@@ -203,21 +203,21 @@ isVar ([], _) = []
 isVar (_, []) = []
 
 getBib :: (HasFields c) => [c] -> [Sentence]
-getBib a = concatMap getField $ concatMap (^. getFields) a
+getBib a = map getField $ concatMap (^. getFields) a
 
-getField :: CiteField -> [Sentence]
-getField (Address s) = [s]
-getField (BookTitle s) = [s]
-getField (Institution s) = [s]
-getField (Journal s) = [s]
-getField (Note s) = [s]
-getField (Organization s) = [s]
-getField (Publisher s) = [s]
-getField (School s) = [s]
-getField (Series s) = [s]
-getField (Title s) = [s]
-getField (Type s) = [s]
-getField _ = []
+getField :: CiteField -> Sentence
+getField (Address s) = S s
+getField (BookTitle s) = S s
+getField (Institution s) = S s
+getField (Journal s) = S s
+getField (Note s) = S s
+getField (Organization s) = S s
+getField (Publisher s) = S s
+getField (School s) = S s
+getField (Series s) = S s
+getField (Title s) = S s
+getField (Type s) = S s
+getField _ = EmptyS
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it

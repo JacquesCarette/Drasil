@@ -182,10 +182,12 @@ genInputConstraints = do
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
   parms <- getParams varsList
-  sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
-  hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
-  publicMethod methodTypeVoid "input_constraints" parms
-      (return $ [ block $ sf ++ hw ])
+  types <- getParamTypes $ map codevar dvals
+  names <- getParamNames $ map codevar dvals
+  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
+  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
+  publicMethod void "input_constraints" parms types names
+      (return $ body [ sf ++ hw ])
 
 genInputDerived :: (I.RenderSym repr) => Reader State (repr (I.Method repr))
 genInputDerived = do
@@ -289,11 +291,11 @@ commMethod n l b = do
   g <- ask
   rest <- b
   return $ (
-    block [ -- Shouldn't this be body, not block?
+    body $ [ block [
       comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
       multi $ map
         (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
-    ]) : rest 
+    ]]) : rest 
 
 loggedMethod :: (I.RenderSym repr) => Label -> [repr (I.StateType repr)] -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr I.Body repr))
 loggedMethod n st l b =

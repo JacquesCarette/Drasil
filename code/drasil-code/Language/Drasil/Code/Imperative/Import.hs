@@ -157,7 +157,7 @@ genInputModNoClass = do
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
   return $ [ buildModule "InputParameters" []
-             (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
+             (map (\x -> varDecDef (codeName x) (convType $ codeType x) (getDefaultValue $ codeType x)) ins)
              [inpDer , inpConstr]
              []
            ]
@@ -464,6 +464,14 @@ valName (Var _ n) = n
 valName (ObjVar o v) = valName o ++ "." ++ valName v
 valName (ObjAccess o (ListAccess v)) = valName o ++ "[" ++ valName v ++ "]"
 valName _ = error "Value has no name"
+
+getDefaultValue :: (I.RenderSym repr) => C.CodeType -> (repr (I.Value repr))
+getDefaultValue C.Boolean = defaultBool
+getDefaultValue C.Integer = defaultInt
+getDefaultValue C.Float = defaultFloat
+getDefaultValue C.Char = defaultChar
+getDefaultValue C.String = defaultString
+getDefaultValue _ = error "No default value for the given type"
 
 convType :: (I.RenderSym repr) => C.CodeType -> (repr (I.StateType repr))
 convType C.Boolean = bool

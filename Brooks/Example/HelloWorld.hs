@@ -10,7 +10,7 @@ import New (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc (buildModule "" [] [] [] [helloWorldClass])
+helloWorld = fileDoc (buildModule "HelloWorld" [] [] [] [helloWorldClass])
 
 helloWorldClass :: (RenderSym repr) => repr (Class repr)
 helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [doubleAndAdd,

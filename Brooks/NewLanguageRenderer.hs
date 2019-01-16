@@ -45,10 +45,10 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), bracket
   int, comma, colon, hcat)
 
 
--- | Takes code, filenames, and extensions
-makeCode :: [Doc] -> [Label] -> [Label] -> [(FilePath, Doc)]
-makeCode files names exts =
-    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) names) (zip files (cycle exts))]
+-- | Takes code and extensions
+makeCode :: [(Doc, Label)] -> [Label] -> [(FilePath, Doc)]
+makeCode files exts =
+    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) (map snd files)) (zip (map fst files) (cycle exts))]
 
 repeatListElems :: Int -> [a] -> [a]
 repeatListElems _ [] = []

@@ -7,7 +7,7 @@ import New (RenderSym(..), PermanenceSym(..),
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (RenderSym repr) => repr (RenderFile repr)
-fileTests = fileDoc (buildModule "" [] [] [] [fileTestClass])
+fileTests = fileDoc (buildModule "FileTests" [] [] [] [fileTestClass])
 
 fileTestClass :: (RenderSym repr) => repr (Class repr)
 fileTestClass = pubClass "FileTests" Nothing [privMVar 1 "dummy" int] 

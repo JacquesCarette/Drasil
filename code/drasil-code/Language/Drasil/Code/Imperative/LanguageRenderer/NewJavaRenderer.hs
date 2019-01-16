@@ -81,9 +81,12 @@ lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map
 lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
 lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 
+liftPairFst :: (JavaCode Doc, a) -> JavaCode (Doc, a)
+liftPairFst (c, n) = JC $ (unJC c, n)
+
 instance RenderSym JavaCode where
-    type RenderFile JavaCode = Doc
-    fileDoc code = liftA3 fileDoc' top code bottom
+    type RenderFile JavaCode = (Doc, Label)
+    fileDoc code = liftPairFst (liftA3 fileDoc' top (return $ fst $ unJC code) bottom, snd $ unJC code)
     top = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
@@ -502,8 +505,8 @@ instance ClassSym JavaCode where
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym JavaCode where
-    type Module JavaCode = Doc
-    buildModule _ _ _ _ cs = liftList moduleDocD cs
+    type Module JavaCode = (Doc, Label)
+    buildModule n _ _ _ cs = liftPairFst (liftList moduleDocD cs, n)
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

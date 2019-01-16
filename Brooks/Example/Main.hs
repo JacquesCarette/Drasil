@@ -17,18 +17,15 @@ main = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
-  genCode (classes unJC) filenames [".java"]
+  genCode (classes unJC) [".java"]
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
-  genCode (classes unPC) filenames [".py"]
+  genCode (classes unPC) [".py"]
   setCurrentDirectory workingDir
     
-genCode :: [Doc] -> [Label] -> [Label] -> IO()
-genCode files names exts = createCodeFiles $ makeCode files names exts
+genCode :: [(Doc, Label)] -> [Label] -> IO()
+genCode files exts = createCodeFiles $ makeCode files exts
 
-classes :: (RenderSym repr) => (repr (RenderFile repr) -> Doc) -> [Doc]
+classes :: (RenderSym repr) => (repr (RenderFile repr) -> (Doc, Label)) -> [(Doc, Label)]
 classes unRepr = map unRepr [helloWorld, patternTest, fileTests, observer]
-
-filenames :: [Label]
-filenames = ["HelloWorld", "PatternTest", "FileTests", "Observer"]

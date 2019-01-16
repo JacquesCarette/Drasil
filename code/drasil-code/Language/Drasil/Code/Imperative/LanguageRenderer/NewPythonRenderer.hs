@@ -70,9 +70,12 @@ unPCPair (a1, a2) = (unPC a1, unPC a2)
 lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> [(PythonCode Doc, PythonCode Doc)] -> PythonCode Doc
 lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map unPCPair as)
 
+liftPairFst :: (PythonCode Doc, a) -> PythonCode (Doc, a)
+liftPairFst (c, n) = PC $ (unPC c, n)
+
 instance RenderSym PythonCode where
-    type RenderFile PythonCode = Doc
-    fileDoc code = liftA3 fileDoc' top code bottom
+    type RenderFile PythonCode = (Doc, Label)
+    fileDoc code = liftPairFst (liftA3 fileDoc' top (return $ fst $ unPC code) bottom, snd $ unPC code)
     top = return pytop
     bottom = return empty
 
@@ -478,8 +481,8 @@ instance ClassSym PythonCode where
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym PythonCode where
-    type Module PythonCode = Doc
-    buildModule _ ls vs fs cs = liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList vs) (liftList methodListDocD fs) (liftList pyModuleClassList cs)
+    type Module PythonCode = (Doc, Label)
+    buildModule n ls vs fs cs = liftPairFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList vs) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n)
 
 -- convenience
 imp, incl, initName :: Label

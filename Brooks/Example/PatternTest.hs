@@ -8,7 +8,7 @@ import New (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc (buildModule "" ["Observer"] [] [] [patternTestClass])
+patternTest = fileDoc (buildModule "PatternTest" ["Observer"] [] [] [patternTestClass])
 
 patternTestClass :: (RenderSym repr) => repr (Class repr)
 patternTestClass = mainClass "PatternTest" [] [patternTestMainMethod]

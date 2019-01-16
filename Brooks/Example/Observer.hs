@@ -7,7 +7,7 @@ import New (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "" [] [] [] [helperClass])
+observer = fileDoc (buildModule "Observer" [] [] [] [helperClass])
 
 helperClass :: (RenderSym repr) => repr (Class repr)
 helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public static int] [observerConstructor, printNumMethod]

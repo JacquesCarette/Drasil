@@ -99,7 +99,7 @@ generateCode chs g =
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
           when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode (map (getUnRepr x) files) names (getExt x) -- need to find a way to get names, likely will need to change GOOL
+          createCodeFiles $ makeCode (map (getUnRepr x) files) (getExt x)
           setCurrentDirectory workingDir) (lang $ chs)
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         files = runReader genFiles g

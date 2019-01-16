@@ -80,9 +80,12 @@ lift4Pair f a1 a2 a3 a4 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4)
 lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> [(CSharpCode Doc, CSharpCode Doc)] -> CSharpCode Doc
 lift3Pair f a1 a2 a3 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (map unCSCPair as)
 
+liftPairFst :: (CSharpCode Doc, a) -> CSharpCode (Doc, a)
+liftPairFst (c, n) = CSC $ (unCSC c, n)
+
 instance RenderSym CSharpCode where
-    type RenderFile CSharpCode = Doc
-    fileDoc code = liftA3 fileDoc' top code bottom
+    type RenderFile CSharpCode = (Doc, Label)
+    fileDoc code = liftPairFst (liftA3 fileDoc' top (return $ fst $ unCSC code) bottom, snd $ unCSC code)
     top = liftA2 cstop endStatement (include "")
     bottom = return empty
 
@@ -504,8 +507,8 @@ instance ClassSym CSharpCode where
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym CSharpCode where
-    type Module CSharpCode = Doc
-    buildModule _ _ _ _ cs = liftList moduleDocD cs
+    type Module CSharpCode = (Doc, Label)
+    buildModule n _ _ _ cs = liftPairFst (liftList moduleDocD cs, n)
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

@@ -503,7 +503,11 @@ instance ClassSym JavaCode where
 
 instance ModuleSym JavaCode where
     type Module JavaCode = (Doc, Label)
-    buildModule n _ _ _ cs = liftPairFst (liftList moduleDocD cs, n)
+    buildModule n _ vs ms cs = 
+        case vs ++ ms of [] -> liftPairFst (liftList moduleDocD cs, n) 
+                         _  -> liftPairFst (liftList moduleDocD ((pubClass n 
+                                   Nothing (map (liftA4 jStatementsToStateVars
+                                   public static endStatement) vs) ms):cs), n)
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -583,3 +587,6 @@ jMethod n s p t ps b = vcat [
 
 jListIndexExists :: Doc -> Doc -> Doc -> Doc
 jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <+> index)
+
+jStatementsToStateVars :: Doc -> Doc -> Doc -> Doc -> Doc
+jStatementsToStateVars s p end v = s <+> p <+> v <> end

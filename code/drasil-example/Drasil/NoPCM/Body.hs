@@ -601,7 +601,7 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable nopcm_SymbMap
+traceTableAll = generateTraceTable nopcm_si
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]

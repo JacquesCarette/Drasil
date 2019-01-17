@@ -2,7 +2,7 @@
 module Language.Drasil (
   -- SystemInformation
     SystemInformation(..), Block(..), citeDB
-  , ReferenceDB, assumptionsFromDB , rdb, assumpDB , RefMap, simpleMap
+  , ReferenceDB, rdb, RefMap, simpleMap
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation

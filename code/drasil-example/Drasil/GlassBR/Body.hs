@@ -127,7 +127,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ m
   glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb glassBR_assump gbCitations glassBR_concins
+gbRefDB = rdb gbCitations glassBR_concins
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration

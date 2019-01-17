@@ -209,7 +209,7 @@ usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms
  ssp_section []
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb ssp_assump sspCitations ssp_concins
+sspRefDB = rdb sspCitations ssp_concins
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration

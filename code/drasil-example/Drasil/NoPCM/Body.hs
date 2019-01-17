@@ -231,7 +231,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb nopcm_assump referencesRefList nopcm_concins
+nopcmRefDB = rdb referencesRefList nopcm_concins
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]

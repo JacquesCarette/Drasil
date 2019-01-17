@@ -159,9 +159,6 @@ ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_assump :: [AssumpChunk]
-ssp_assump = []
-
 ssp_concins :: [ConceptInstance]
 ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
@@ -192,13 +189,13 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols)
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
   ssp_section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
  ssp_section []
 
 sspRefDB :: ReferenceDB

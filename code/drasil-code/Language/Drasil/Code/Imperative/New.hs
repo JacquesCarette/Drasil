@@ -452,7 +452,7 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     enum :: Label -> [Label] -> repr (Scope repr) -> repr (Class repr)
     mainClass :: Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
     privClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-    pubClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
 
 class (ClassSym repr) => ModuleSym repr where
     type Module repr

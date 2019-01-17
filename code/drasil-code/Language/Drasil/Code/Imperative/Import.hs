@@ -167,12 +167,12 @@ genInputClass = do
   g <- ask
   let ins          = inputs $ codeSpec g
       inputVars    =
-          map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
-      varsList     = map svToVar inputVars
-      vals         = map (defaultValue' . convType . codeType) ins
+          map (\x -> pubMVar 0 (codeName x) (convType $ codeType x)) ins
+      varsList     = map (\x -> self $-> var (codeName x)) ins
+      vals         = map (getDefaultValue . codeType) ins
   asgs <- zipWithM assign varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
-    [ constructor "InputParameters" [] [block asgs] ]
+    [ constructor "InputParameters" [] (body [block asgs]) ]
 
 genInputConstraints :: (I.RenderSym repr) => Reader State (repr (I.Method repr))
 genInputConstraints = do

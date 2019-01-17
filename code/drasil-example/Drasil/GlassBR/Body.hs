@@ -88,7 +88,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   glassBR_section glassBR_labelledcon
 
 glassBR_label :: TraceMap
-glassBR_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs -- glassBR_concins FIXME: Citations in tracemap
+glassBR_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBR_concins
  
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 

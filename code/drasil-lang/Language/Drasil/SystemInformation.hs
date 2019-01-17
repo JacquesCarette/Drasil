@@ -121,8 +121,8 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
 
 makeLenses ''ReferenceDB
 
-rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
-rdb assumps citations con = RDB (simpleMap assumps) (bibMap citations) (conceptMap con)
+rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
+rdb citations con = RDB (simpleMap []) (bibMap citations) (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])

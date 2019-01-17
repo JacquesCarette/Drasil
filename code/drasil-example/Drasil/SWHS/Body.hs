@@ -132,7 +132,7 @@ usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map n
  swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb swhs_assump swhsCitations swhs_concins
+swhsRefDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration

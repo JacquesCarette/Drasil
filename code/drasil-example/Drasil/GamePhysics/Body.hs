@@ -182,7 +182,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb game_assump cpCitations game_concins
+cpRefDB = rdb cpCitations game_concins
 
 --FIXME: All named ideas, not just acronyms.
 

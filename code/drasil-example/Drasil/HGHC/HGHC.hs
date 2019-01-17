@@ -48,11 +48,11 @@ allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  si_units Map.empty Map.empty [] [] [] [] [] [] [] []
+  si_units Map.empty Map.empty [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si)
-           ([] :: [ConceptChunk]) check_si Map.empty Map.empty [] [] [] [] []
+           ([] :: [ConceptChunk]) check_si Map.empty Map.empty [] [] [] []
            [] [] []
 
 printSetting :: PrintingInformation

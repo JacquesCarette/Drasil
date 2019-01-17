@@ -26,12 +26,11 @@ import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model, nonfunctionalRequirement,
-  object, organization, physical, physicalConstraint, physicalProperty,
-  physicalSim, physics, priority, problem, problemDescription, product_,
-  project, property, quantity, realtime, reference, requirement, section_,
-  simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
-  sysCont, task, template, termAndDef, thModel, traceyMatrix, user,
-  userCharacteristic, doccon, doccon')
+  object, organization, physical, physicalConstraint, physicalSim, physics,
+  priority, problem, problemDescription, product_, project, property, quantity,
+  realtime, reference, requirement, section_, simulation, software, softwareSys,
+  srs, srsDomains, system, systemConstraint, sysCont, task, template,
+  termAndDef, thModel, traceyMatrix, user, userCharacteristic, doccon, doccon')
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
@@ -51,13 +50,13 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, physicCon, physicCon')
+  cartesian, friction, rightHand, collision, space, physicCon)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
 import Data.Drasil.Software.Products (prodtcon)
-import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
-  linearVelocity, position, time, velocity)
+  position, time, velocity)
 import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
@@ -142,9 +141,6 @@ game_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 game_theory :: [TheoryModel]
 game_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-game_assump :: [AssumpChunk]
-game_assump = []
-
 game_concins :: [ConceptInstance]
 game_concins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   functional_requirements_list'
@@ -191,19 +187,20 @@ chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb (cpSymbolsAll ++ map qw [QM.pi_]) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw prodtcon
-  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' 
-  ++ map nw CP.physicCon ++ map nw CP.physicCon'
-  ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
-  ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
-  game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
-  game_section []
+everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
+  ++ map nw cpAcronyms ++ map nw prodtcon ++ map nw iModels_new
+  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
+  ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
+  ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
+  (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new) chipUnits
+  game_label game_refby game_datadefn game_insmodel game_gendef game_theory
+  game_concins game_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
- game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
- game_section []
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
+ ++ map nw check_si) ([] :: [ConceptChunk]) check_si game_label game_refby
+ game_datadefn game_insmodel game_gendef game_theory game_concins game_section
+ []
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

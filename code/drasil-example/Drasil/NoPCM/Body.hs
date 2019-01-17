@@ -191,9 +191,6 @@ nopcm_gendef = swhs_gendef ++ (getTraceMapFromGD $ getSCSSub mkSRS)
 nopcm_theory :: [TheoryModel]
 nopcm_theory = swhs_theory ++ (getTraceMapFromTM $ getSCSSub mkSRS)
 
-nopcm_assump :: [AssumpChunk]
-nopcm_assump = []
-
 nopcm_concins :: [ConceptInstance]
 nopcm_concins =
  reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
@@ -248,13 +245,13 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans] ++ map nw check_si)
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
+  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si nopcm_label nopcm_refby
- nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump nopcm_concins
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation

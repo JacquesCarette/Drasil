@@ -84,7 +84,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
   glassBR_section glassBR_labelledcon
 
 glassBR_label :: TraceMap
@@ -105,9 +105,6 @@ glassBR_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 glassBR_theory :: [TheoryModel]
 glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBR_assump :: [AssumpChunk]
-glassBR_assump = []
-
 glassBR_concins :: [ConceptInstance]
 glassBR_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
@@ -123,7 +120,7 @@ glassBR_sec = extractSection glassBR_srs
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
   glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB

@@ -35,7 +35,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    "isSafeLR" [lrIsSafeDesc]
    where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-                          [] [] []
+                           [] []
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

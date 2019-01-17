@@ -10,7 +10,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
 
-import Data.Drasil.Quantities.Math (area)
+import Data.Drasil.Quantities.Math (area, pi_)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
@@ -313,7 +313,7 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, varblU, varblV, fs_min,
+  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min,
   ufixme1, ufixme2, ufixme3, ufixme4]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,

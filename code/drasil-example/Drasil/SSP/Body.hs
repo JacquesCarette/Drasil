@@ -25,22 +25,20 @@ import qualified Drasil.DocLang.SRS as SRS (goalStmt, thModel, inModel,
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, input_, interest, interface, issue,
-  loss, method_, model, organization, physics, problem, product_, property,
-  purpose, requirement, software, softwareSys, srs, srsDomains, sysCont, system,
-  systemConstraint, table_, template, thModel, user, value, variable, physSyst,
-  doccon, doccon')
+  goal, goalStmt, information, inModel, interest, interface, issue, loss, model,
+  organization, physics, problem, product_, property, purpose, requirement,
+  software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
+  table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
-  physicCon, physicCon')
+  physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
-import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -58,7 +56,7 @@ import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
   itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
-  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
+  soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -167,9 +165,6 @@ ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_assump :: [AssumpChunk]
-ssp_assump = []
-
 ssp_concins :: [ConceptInstance]
 ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
@@ -192,21 +187,20 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
-  map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
-  ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' 
+sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw sspIMods
+  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
-  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
+  (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si ssp_label
+  ssp_refby ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
   ssp_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
- ssp_section []
+usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
+ map nw check_si) ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section []
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb sspCitations ssp_concins

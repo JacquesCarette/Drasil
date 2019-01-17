@@ -36,7 +36,7 @@ import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
   understandability, reusability, maintainability)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
@@ -115,21 +115,22 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
+swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+  (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
-  (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
+  (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (this_si ++ [m_2, m_3]) swhs_label swhs_refby
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
- swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
+ swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb swhsCitations swhs_concins
@@ -228,9 +229,6 @@ swhs_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
 swhs_theory :: [TheoryModel]
 swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
-
-swhs_assump :: [AssumpChunk]
-swhs_assump = []
 
 swhs_concins :: [ConceptInstance]
 swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs

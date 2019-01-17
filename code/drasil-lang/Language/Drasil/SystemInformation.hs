@@ -1,11 +1,9 @@
 {-# LANGUAGE GADTs, TemplateHaskell #-}
-module Language.Drasil.SystemInformation(SystemInformation(..), Block(..), citeDB,
-  ReferenceDB, citationsFromBibMap, citationDB,
-  assumptionsFromDB, rdb, RefMap, simpleMap,
-  conceptDB, assumpDB
+module Language.Drasil.SystemInformation(SystemInformation(..), Block(..),
+  citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
+  conceptDB
   ) where
 
-import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation (BibRef, Citation)
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Concept.Core (sDom)
@@ -104,8 +102,6 @@ getTitle c = maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^
 -- if no shortname exists)
 type RefMap a = Map.Map UID (a, Int)
 
--- | Assumption Database
-type AssumpMap = RefMap AssumpChunk
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
 -- | ConceptInstance Database
@@ -114,15 +110,14 @@ type ConceptMap = RefMap ConceptInstance
 
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
-  { _assumpDB :: AssumpMap
-  , _citationDB :: BibMap
+  { _citationDB :: BibMap
   , _conceptDB :: ConceptMap
   }
 
 makeLenses ''ReferenceDB
 
 rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-rdb citations con = RDB (simpleMap []) (bibMap citations) (conceptMap con)
+rdb citations con = RDB (bibMap citations) (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -148,9 +143,3 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
-
-assumptionsFromDB :: AssumpMap -> [AssumpChunk]
-assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
-  where assumptions = Map.elems am
-        dropNums = map fst
-

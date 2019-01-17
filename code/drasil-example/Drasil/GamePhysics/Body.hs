@@ -712,7 +712,7 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solution_label [
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable everything
+traceTable1 = generateTraceTable chipmunkSysInfo
 
 traceability_matrices_and_graph :: Section
 traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,

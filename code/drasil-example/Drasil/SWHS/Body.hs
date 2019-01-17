@@ -555,7 +555,7 @@ traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
 
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable swhsSymMap
+traceTableAll = generateTraceTable swhs_si
 
 traceTrailing :: [Sentence]
 traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]

@@ -494,7 +494,7 @@ outputDataConstraints = outDataConstTbl [prob_br]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable gbSymbMap
+traceTable1 = generateTraceTable glassSystInfo
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

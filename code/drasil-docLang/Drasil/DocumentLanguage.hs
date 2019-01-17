@@ -445,23 +445,23 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
+      SSD.thModF (siSys si') (map LlC (map (tmodel fields si') ts))
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds)
+      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds)
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields si') dds))
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs')
+      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
+      SSD.genDefnF (map LlC (map (gdefn fields si') gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
-      (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
+      (concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields si') ims))
     mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
-      map (flip helperCI (_sysinfodb si')) . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      map (flip helperCI si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ (_sysinfodb si') ^. conceptinsTable
       where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
@@ -477,7 +477,7 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
-helperCI :: ConceptInstance -> ChunkDB -> ConceptInstance
+helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
 {--}
 

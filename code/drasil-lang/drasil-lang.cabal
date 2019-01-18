@@ -13,8 +13,7 @@ library
     , Data.Drasil.IdeaDicts
     , Language.Drasil.ShortHands
   other-modules:
-      Language.Drasil.Chunk.AssumpChunk
-    , Language.Drasil.Chunk.Citation
+      Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core

@@ -115,17 +115,15 @@ helpToRefField t s r = if elem t (keys $ s ^. dataDefnTable)
       then makeRef2S $ gendefLookup t (s ^. gendefTable)
       else if elem t (keys $ s ^. theoryModelTable)
         then makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-        else if elem t (keys $ s ^. assumpTable)
-          then makeRef2S $ assumptionLookup t (s ^. assumpTable)
-          else if elem t (keys $ s ^. conceptinsTable)
-            then makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-            else if elem t (keys $ s ^. sectionTable)
-              then makeRef2S $ sectionLookup t (s ^. sectionTable)
-              else if elem t (keys $ s ^. labelledcontentTable)
-                then makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
-                else if elem t $ map (^. uid) r
-                  then EmptyS
-                  else error $ t ++ "Caught."
+        else if elem t (keys $ s ^. conceptinsTable)
+          then makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
+          else if elem t (keys $ s ^. sectionTable)
+            then makeRef2S $ sectionLookup t (s ^. sectionTable)
+            else if elem t (keys $ s ^. labelledcontentTable)
+              then makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+              else if elem t $ map (^. uid) r
+                then EmptyS
+                else error $ t ++ "Caught."
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow

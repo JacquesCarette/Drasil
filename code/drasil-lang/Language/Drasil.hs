@@ -150,9 +150,9 @@ module Language.Drasil (
   , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
   , refbyLookup, refbyTable, labelledcontentTable
   , datadefnLookup, insmodelLookup, sectionLookup
-  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, dataDefnTable
+  , gendefLookup, theoryModelLookup, conceptinsLookup, dataDefnTable
   , insmodelTable, gendefTable, theoryModelTable, sectionTable
-  , assumpTable, conceptinsTable, asOrderedList
+  , conceptinsTable, asOrderedList
   -- AssumpChunk
   , AssumpChunk(AC), assuming, assump
   -- Reference

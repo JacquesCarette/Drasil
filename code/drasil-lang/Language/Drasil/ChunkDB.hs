@@ -8,10 +8,10 @@ module Language.Drasil.ChunkDB
   , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
   , refbyLookup, refbyTable
   , datadefnLookup
-  , insmodelLookup, gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup
+  , insmodelLookup, gendefLookup, theoryModelLookup, conceptinsLookup
   , sectionLookup, labelledconLookup
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , assumpTable, conceptinsTable, sectionTable, labelledcontentTable, asOrderedList
+  , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList
   ) where
 
 import Control.Lens ((^.), makeLenses)
@@ -19,7 +19,6 @@ import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Concept, Idea, IsUnit, Quantity)
-import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Document.Core (LabelledContent)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
@@ -61,7 +60,6 @@ type DatadefnMap = UMap DataDefinition
 type InsModelMap = UMap InstanceModel
 type GendefMap = UMap GenDefn
 type TheoryModelMap = UMap TheoryModel
-type AssumptionMap = UMap AssumpChunk
 type ConceptInstanceMap = UMap ConceptInstance
 type SectionMap = UMap Section
 type LabelledContentMap = UMap LabelledContent
@@ -133,10 +131,6 @@ gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
 theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
 
--- | Looks up a uid in the assumption table. If nothing is found, an error is thrown.
-assumptionLookup :: UID -> AssumptionMap -> AssumpChunk
-assumptionLookup = uMapLookup "Assumption" "AssumptionMap"
-
 -- | Looks up a uid in the concept instance table. If nothing is found, an error is thrown.
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
 conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
@@ -163,7 +157,6 @@ data ChunkDB = CDB { symbolTable :: SymbolMap
                    , _insmodelTable   :: InsModelMap
                    , _gendefTable   :: GendefMap
                    , _theoryModelTable :: TheoryModelMap
-                   , _assumpTable :: AssumptionMap
                    , _conceptinsTable :: ConceptInstanceMap
                    , _sectionTable :: SectionMap
                    , _labelledcontentTable :: LabelledContentMap
@@ -179,7 +172,7 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
 cdb s t c u tc rfm dd ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
   (conceptMap c) (unitMap u) tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm)
-  (idMap []) (idMap ci) (idMap sec) (idMap lc)
+  (idMap ci) (idMap sec) (idMap lc)
 
 collectUnits :: (Quantity c) => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)

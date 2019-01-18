@@ -153,8 +153,6 @@ module Language.Drasil (
   , gendefLookup, theoryModelLookup, conceptinsLookup, dataDefnTable
   , insmodelTable, gendefTable, theoryModelTable, sectionTable
   , conceptinsTable, asOrderedList
-  -- AssumpChunk
-  , AssumpChunk(AC), assuming, assump
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
   -- Document.getChunk
@@ -227,7 +225,6 @@ import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
-import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types

@@ -88,7 +88,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   glassBR_section glassBR_labelledcon
 
 glassBR_label :: TraceMap
-glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+glassBR_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBR_concins
  
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 
@@ -106,10 +106,10 @@ glassBR_theory :: [TheoryModel]
 glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 glassBR_assump :: [AssumpChunk]
-glassBR_assump = assumptions
+glassBR_assump = []
 
 glassBR_concins :: [ConceptInstance]
-glassBR_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
+glassBR_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 glassBR_section :: [Section]
 glassBR_section = glassBR_sec
@@ -127,8 +127,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ m
   glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
-  unlikelyChgs
+gbRefDB = rdb glassBR_assump gbCitations glassBR_concins
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
@@ -536,7 +535,7 @@ outputDataConstraints = outDataConstTbl [prob_br]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable gbSymbMap
+traceTable1 = generateTraceTable glassSystInfo
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

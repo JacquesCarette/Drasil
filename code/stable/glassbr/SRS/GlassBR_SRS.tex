@@ -20,8 +20,6 @@
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
-\newcounter{assumpnum}
-\newcommand{\atheassumpnum}{A\theassumpnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -343,30 +341,16 @@ The instance models that govern GlassBR are presented in \hyperref[Sec:IMs]{Sect
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassType}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassCondition}:]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explainScenario}:]This system only considers the external explosion scenario for its calculations. \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} \hyperref[DD:sdf.tol]{DD: sdf\_tol} \hyperref[DD:nFL]{DD: nFL} \hyperref[DD:loadDurFactor]{DD: loadDurFactor} \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[DD:calofCapacity]{DD: calofCapacity} \hyperref[DD:dimlessLoad]{DD: dimlessLoad} \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to \hyperref[A:standardValues]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
-\end{description}
+\begin{itemize}
+\item[glassType:\phantomsection\label{assumpGT}]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
+\item[glassCondition:\phantomsection\label{assumpGC}]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.
+\item[explainScenario:\phantomsection\label{assumpES}]This system only considers the external explosion scenario for its calculations. \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.
+\item[standardValues:\phantomsection\label{assumpSV}]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} \hyperref[DD:sdf.tol]{DD: sdf\_tol} \hyperref[DD:nFL]{DD: nFL} \hyperref[DD:loadDurFactor]{DD: loadDurFactor} \hyperref[DD:dimlessLoad]{DD: dimlessLoad} \hyperref[assumpLDFC]{A: ldfConstant}.
+\item[glassLite:\phantomsection\label{assumpGL}]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[DD:calofCapacity]{DD: calofCapacity} \hyperref[DD:dimlessLoad]{DD: dimlessLoad} \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.
+\item[boundaryConditions:\phantomsection\label{assumpBC}]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.
+\item[responseType:\phantomsection\label{assumpRT}]The response type considered in GlassBR is flexural. \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.
+\item[ldfConstant:\phantomsection\label{assumpLDFC}]With reference to \hyperref[assumpSV]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+\end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that GlassBR is based on.
@@ -532,8 +516,8 @@ Label & Load duration factor
                                                   \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[A:standardValues]{A: standardValues}
-                                                          \hyperref[A:ldfConstant]{A: ldfConstant}
+                                                  Notes & \hyperref[assumpSV]{A: standardValues}
+                                                          \hyperref[assumpLDFC]{A: ldfConstant}
                                                           \\ \midrule \\
                                                           Source & \cite{astm2009}
                                                                    \\ \midrule \\
@@ -602,7 +586,7 @@ Label & Non-factored load
                                                   Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
                                                           $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
                                                           ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
-                                                          \hyperref[A:standardValues]{A: standardValues}
+                                                          \hyperref[assumpSV]{A: standardValues}
                                                           \\ \midrule \\
                                                           Source & \cite{astm2009}
                                                                    \\ \midrule \\
@@ -675,8 +659,8 @@ Label & Dimensionless load
                                                           $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
                                                           $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
                                                           $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
-                                                          $\hat{q}$ is calculated with reference to \hyperref[A:glassLite]{A: glassLite}.
-                                                          \hyperref[A:standardValues]{A: standardValues}
+                                                          $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
+                                                          \hyperref[assumpSV]{A: standardValues}
                                                           \\ \midrule \\
                                                           Source & \cite{astm2009} and \cite{campidelli}
                                                                    \\ \midrule \\
@@ -749,7 +733,7 @@ Label & Stress distribution factor (Function) based on Pbtol
                                                           $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
                                                           $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
                                                           ${P_{btol}}$ is the tolerable probability entered by the user.
-                                                          \hyperref[A:standardValues]{A: standardValues}
+                                                          \hyperref[assumpSV]{A: standardValues}
                                                           \\ \midrule \\
                                                           Source & \cite{astm2009}
                                                                    \\ \midrule \\
@@ -869,7 +853,7 @@ Label & Load resistance
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & $LR$ is the load resistance, which is also called capacity $NFL$. is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
-                                                          \hyperref[A:glassLite]{A: glassLite}
+                                                          \hyperref[assumpGL]{A: glassLite}
                                                           \hyperref[DD:gTF]{DD: gTF}
                                                           \hyperref[DD:nFL]{DD: nFL}
                                                           \\ \midrule \\
@@ -1000,9 +984,9 @@ This section provides the functional requirements, the business tasks that the s
 \item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from \hyperref[Table:InputGlassPropsReqInputs]{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as follows:
                                                                                                 \begin{itemize}
-                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following \hyperref[A:standardValues]{A: standardValues}}
+                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following \hyperref[assumpSV]{A: standardValues}}
                                                                                                 \item{$LDF$ from \hyperref[DD:loadDurFactor]{DD: loadDurFactor}}
-                                                                                                \item{LSF following \hyperref[A:glassLite]{A: glassLite}}
+                                                                                                \item{LSF following \hyperref[assumpGL]{A: glassLite}}
                                                                                                 \item{$h$ from \hyperref[DD:min.thick]{DD: min\_thick}}
                                                                                                 \item{$GTF$ from \hyperref[DD:gTF]{DD: gTF}}
                                                                                                 \item{$SD$ from \hyperref[DD:standOffDist]{DD: standOffDist}}
@@ -1060,79 +1044,83 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[A:explainScenario]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
-\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[A:standardValues]{A: standardValues}, \hyperref[A:ldfConstant]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
-\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]\hyperref[A:glassLite]{A: glassLite} - The software may be changed to accommodate more than a single lite.
-\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]\hyperref[A:boundaryConditions]{A: boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
-\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]\hyperref[A:responseType]{A: responseType} - The software may be changed to consider more than just flexure of the glass.
+\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[assumpES]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[assumpSV]{A: standardValues}, \hyperref[assumpLDFC]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]\hyperref[assumpGL]{A: glassLite} - The software may be changed to accommodate more than a single lite.
+\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]\hyperref[assumpBC]{A: boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]\hyperref[assumpRT]{A: responseType} - The software may be changed to consider more than just flexure of the glass.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
-\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[A:glassCondition]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[assumpGC]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, instance models, and data definitions with each other. \hyperref[Table:TraceyItemSecs]{Table:TraceyItemSecs} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Table:TraceyReqsItems]{Table:TraceyReqsItems} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
+ & \hyperref[assumpSV]{A: standardValues} & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[assumpLDFC]{A: ldfConstant} & \hyperref[assumpGC]{A: glassCondition} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
 \\
 \midrule
-\hyperref[Sec:DataConstraints]{Section: Data Constraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:InputGlassPropsReqInputs]{Table:InputGlassPropsReqInputs} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:DataConstraints]{Section: Data Constraints} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:aspect.ratio]{DD: aspect\_ratio} &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:InputGlassPropsReqInputs]{Table:InputGlassPropsReqInputs} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:boundaryConditions]{A: boundaryConditions} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:aspect.ratio]{DD: aspect\_ratio} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:explainScenario]{A: explainScenario} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpBC]{A: boundaryConditions} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:glassCondition]{A: glassCondition} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpES]{A: explainScenario} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:glassLite]{A: glassLite} &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpGC]{A: glassCondition} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:ldfConstant]{A: ldfConstant} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpGL]{A: glassLite} &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:responseType]{A: responseType} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpLDFC]{A: ldfConstant} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:standardValues]{A: standardValues} &  &  &  &  &  &  &  &  & X &  & X & X &  & X & X &  &  &  &  &  &  &  & 
+\hyperref[assumpRT]{A: responseType} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[assumpSV]{A: standardValues} &  &  &  &  &  &  &  &  &  & X &  & X & X &  & X & X & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  & 
+\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[DD:min.thick]{DD: min\_thick} &  &  &  &  &  &  &  &  & X &  &  &  &  & X & X &  &  & X &  &  &  &  & 
+\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[DD:nFL]{DD: nFL} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[DD:min.thick]{DD: min\_thick} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & X &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[DD:risk.fun]{DD: risk\_fun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[DD:nFL]{DD: nFL} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  & 
+\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-\hyperref[TM:isSafePb]{TM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  & 
+\hyperref[DD:risk.fun]{DD: risk\_fun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[DD:sdf.tol]{DD: sdf\_tol} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  & 
 \\
-\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
+\hyperref[TM:isSafePb]{TM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  & 
 \\
-\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[DD:sdf.tol]{DD: sdf\_tol} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
 \\
-\hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\\
+\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1196,7 +1184,7 @@ R6 (in \hyperref[outputQuants]{FR: Output-Quantities}) &  &  & X & X & X &  & X 
 \end{longtable}
 \begin{longtable}{l l l l l l l l l}
 \toprule
- & A1 (\hyperref[A:glassType]{A: glassType}) & A2 (\hyperref[A:glassCondition]{A: glassCondition}) & A3 (\hyperref[A:explainScenario]{A: explainScenario}) & A4 (\hyperref[A:standardValues]{A: standardValues}) & A5 (\hyperref[A:glassLite]{A: glassLite}) & A6 (\hyperref[A:boundaryConditions]{A: boundaryConditions}) & A7 (\hyperref[A:responseType]{A: responseType}) & A8 (\hyperref[A:ldfConstant]{A: ldfConstant})
+ & A1 (\hyperref[assumpGT]{A: glassType}) & A2 (\hyperref[assumpGC]{A: glassCondition}) & A3 (\hyperref[assumpES]{A: explainScenario}) & A4 (\hyperref[assumpSV]{A: standardValues}) & A5 (\hyperref[assumpGL]{A: glassLite}) & A6 (\hyperref[assumpBC]{A: boundaryConditions}) & A7 (\hyperref[assumpRT]{A: responseType}) & A8 (\hyperref[assumpLDFC]{A: ldfConstant})
 \\
 \midrule
 T1 (\hyperref[TM:isSafePb]{TM: isSafePb}) &  &  &  &  &  &  &  & 

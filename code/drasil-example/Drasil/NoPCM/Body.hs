@@ -54,7 +54,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA11, newA12, newAssumptions)
+import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
   swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
@@ -171,8 +171,7 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [specParamVal] ++ (Bibliography : [])
 
 nopcm_label :: TraceMap
-nopcm_label = Map.union (generateTraceMap mkSRS)
- (generateTraceMap' $ reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
+nopcm_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
  
 nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
@@ -190,11 +189,12 @@ nopcm_theory :: [TheoryModel]
 nopcm_theory = swhs_theory ++ (getTraceMapFromTM $ getSCSSub mkSRS)
 
 nopcm_assump :: [AssumpChunk]
-nopcm_assump = assumps_Nopcm_list_new ++ newAssumptions
+nopcm_assump = []
 
 nopcm_concins :: [ConceptInstance]
 nopcm_concins =
- reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
+ reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ [likeChgTLH] ++ unlikelyChgs
 
 nopcm_section :: [Section]
 nopcm_section = nopcm_sec
@@ -227,8 +227,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb assumps_Nopcm_list_new referencesRefList (reqs ++
-  likelyChgs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb nopcm_assump referencesRefList nopcm_concins
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -462,8 +461,8 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef2S newA11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef2S newA12) `sC`
+  phrase purin +:+. sParen (makeRef2S assumpCTNOD), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef2S assumpSITWP) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   makeRef2S rocTempSimp, S "can be written as"]
 
@@ -602,7 +601,7 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable nopcm_SymbMap
+traceTableAll = generateTraceTable nopcm_si
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
@@ -623,7 +622,7 @@ traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-traceAssumpRef = map makeRef2S assumps_Nopcm_list_new
+traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1"]
 traceTheoriesRef = map makeRef2S [consThermE]

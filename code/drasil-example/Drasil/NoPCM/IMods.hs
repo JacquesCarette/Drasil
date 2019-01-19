@@ -14,13 +14,13 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe,
   sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions (newA10, newA11, newA14, newA15)
+import Drasil.SWHS.Assumptions (assumpLCCWP, assumpWAL, assumpPIT)
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
-import Drasil.NoPCM.Assumptions
+import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpAPT)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
 ---------
 -- IM1 --
@@ -55,8 +55,8 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively"
-  +:+. sParen (makeRef2S newA10), sParen (makeRef2S newA14),
-  sParen (makeRef2S newA15), sParen (makeRef2S newA19)]
+  +:+. {-sParen (makeRef2S assumpLCCWP), FIXME (https://github.com/JacquesCarette/Drasil/issues/1082#issuecomment-453653043)-} sParen (makeRef2S assumpWAL),
+  sParen (makeRef2S assumpPIT), sParen (makeRef2S assumpAPT)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -69,14 +69,14 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA16 vol_ht_gen, 
+    htCap_W heat_trans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]
 
 eBalanceOnWtrDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
   UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
-  UnitalChunk -> UncertQ -> ConceptChunk -> AssumpChunk -> AssumpChunk -> UnitalChunk -> [Sentence]
+  UnitalChunk -> UncertQ -> ConceptChunk -> ConceptInstance -> ConceptInstance -> UnitalChunk -> [Sentence]
 eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass16 vhg =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 

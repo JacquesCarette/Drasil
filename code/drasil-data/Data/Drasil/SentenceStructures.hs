@@ -8,7 +8,7 @@ module Data.Drasil.SentenceStructures
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
-  , followA
+  , follows
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
@@ -185,8 +185,8 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ (makeRef2S assumpt)
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence

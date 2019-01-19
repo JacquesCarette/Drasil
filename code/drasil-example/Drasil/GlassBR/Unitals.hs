@@ -178,14 +178,13 @@ min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, loa
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
------------------------------inserted by Vajiheh-----------------------------------------
-lRe      = unitary "lRe"      (nounPhraseSP "Load resistance")
+
+  lRe      = unitary "lRe"      (nounPhraseSP "Load resistance")
   (Atomic "LR") pascal Rational --correct Space used?
 
 nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "Non-factored load")
   (Atomic "NFL") pascal Rational --correct Space used?
 
-  -------------------------inserted by Vajiheh------------------------------------------
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
@@ -237,11 +236,6 @@ is_safeLR      = vc "is_safeLR"        (nounPhraseSP $ "variable that is assigne
 lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 
 loadSF        = vc'' (lShareFac) (Atomic "LSF") Natural
-----------------------Should be moved to UnitryChunckSection-----------------------------------
---lRe           = vc'' (lResistance) (Atomic "LR") Real
-
---nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL") Real
------------------------Should be moved to UnitryChunckSection---------------------------------
 
 risk_fun      = vc "risk_fun"    (nounPhraseSP "risk of failure") cB Real
 

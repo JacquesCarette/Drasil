@@ -2,7 +2,7 @@
 module Language.Drasil (
   -- SystemInformation
     SystemInformation(..), Block(..), citeDB
-  , ReferenceDB, assumptionsFromDB , rdb, assumpDB , RefMap, simpleMap
+  , ReferenceDB, rdb, RefMap, simpleMap
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation
@@ -150,11 +150,9 @@ module Language.Drasil (
   , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
   , refbyLookup, refbyTable, labelledcontentTable
   , datadefnLookup, insmodelLookup, sectionLookup
-  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, dataDefnTable
+  , gendefLookup, theoryModelLookup, conceptinsLookup, dataDefnTable
   , insmodelTable, gendefTable, theoryModelTable, sectionTable
-  , assumpTable, conceptinsTable, asOrderedList
-  -- AssumpChunk
-  , AssumpChunk(AC), assuming, assump
+  , conceptinsTable, asOrderedList
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
   -- Document.getChunk
@@ -227,7 +225,6 @@ import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
-import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types

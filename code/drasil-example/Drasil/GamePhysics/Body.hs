@@ -142,9 +142,6 @@ game_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 game_theory :: [TheoryModel]
 game_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-game_assump :: [AssumpChunk]
-game_assump = []
-
 game_concins :: [ConceptInstance]
 game_concins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   functional_requirements_list'
@@ -182,7 +179,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb game_assump cpCitations game_concins
+cpRefDB = rdb cpCitations game_concins
 
 --FIXME: All named ideas, not just acronyms.
 
@@ -197,12 +194,12 @@ everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll)
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new)
   chipUnits game_label game_refby
-  game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
+  game_datadefn game_insmodel game_gendef game_theory game_concins
   game_section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
- game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
+ game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_concins
  game_section []
 
 printSetting :: PrintingInformation

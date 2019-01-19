@@ -123,16 +123,16 @@ swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) swhs_label swhs_refby
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
- swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
+ swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb swhs_assump swhsCitations swhs_concins
+swhsRefDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration
@@ -228,9 +228,6 @@ swhs_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
 swhs_theory :: [TheoryModel]
 swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
-
-swhs_assump :: [AssumpChunk]
-swhs_assump = []
 
 swhs_concins :: [ConceptInstance]
 swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs

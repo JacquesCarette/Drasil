@@ -1,6 +1,7 @@
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, nest, (<>))
 import Data.Char (toUpper, toLower)
 

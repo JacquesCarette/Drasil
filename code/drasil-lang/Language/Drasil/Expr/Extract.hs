@@ -1,7 +1,10 @@
 module Language.Drasil.Expr.Extract(dep, names, names') where
 
 import Data.List (nub)
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
+
+import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Space (RealInterval(..))
+
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
 names (AssocA _ l)   = concatMap names l

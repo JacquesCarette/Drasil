@@ -17,7 +17,7 @@ module Drasil.Sections.SolutionCharacterSpec
   siUQO
   ) where
 
-import Language.Drasil hiding (Sect)
+import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
@@ -252,7 +252,7 @@ render _ symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (mkLabelRASec (niname ^. uid) (niname ^. uid)) --fixme
+  (pullContents xs) (pullSections xs) (makeSecRef (niname ^. uid) (niname ^. uid)) --FIXME
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --

@@ -24,6 +24,9 @@ likelyChanges :: Section
 likelyChangesIntro :: Contents
 likelyChangesList :: [Contents]
 
+likelyChangesListwithIntro :: [Contents]
+likelyChangesListwithIntro = [likelyChangesIntro] ++ likelyChangesList
+
 likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
@@ -40,13 +43,13 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+
-  plural CP.collision) +:+ makeRefS newA5
+  plural CP.collision) +:+ makeRef2S newA5
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRefS newA6
+  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRef2S newA6
 
 likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
-  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ (makeRefS newA7)
+  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ (makeRef2S newA7)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 
@@ -66,6 +69,9 @@ likelyChangesList = mkEnumSimpleD likelyChangesList'
 
 unlikelyChanges :: Section
 unlikelyChangesIntro :: Contents
+
+unlikelyChangeswithIntro :: [Contents]
+unlikelyChangeswithIntro = [unlikelyChangesIntro] ++ unlikelyChangesList
 
 unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
 

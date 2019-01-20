@@ -1,8 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Data.List (nub)
-
+import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -11,16 +10,19 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
+  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
+  generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
-  referenceLabel, valsOfAuxConsLabel, assumptLabel)
+import qualified Drasil.DocLang.SRS as SRS (datCon, indPRCase, 
+  reference, valsOfAuxCons, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -38,7 +40,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, material
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance, softwarecon, program)
+  performance, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
@@ -55,15 +57,15 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
   makeTMatrix, noRefs, prodUCTbl)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
-import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
+import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -81,12 +83,49 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]
+  (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_section glassBR_labelledcon
+
+glassBR_label :: TraceMap
+glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+ 
+glassBR_refby :: RefbyMap
+glassBR_refby = generateRefbyMap glassBR_label 
+
+glassBR_datadefn :: [DataDefinition]
+glassBR_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+
+glassBR_insmodel :: [InstanceModel]
+glassBR_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+
+glassBR_gendef :: [GenDefn]
+glassBR_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+
+glassBR_theory :: [TheoryModel]
+glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
+
+glassBR_assump :: [AssumpChunk]
+glassBR_assump = assumptions
+
+glassBR_concins :: [ConceptInstance]
+glassBR_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
+
+glassBR_section :: [Section]
+glassBR_section = glassBR_sec
+
+glassBR_labelledcon :: [LabelledContent]
+glassBR_labelledcon = [inputGlassPropsTable]
+
+glassBR_sec :: [Section]
+glassBR_sec = extractSection glassBR_srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
@@ -115,7 +154,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpOfDocIntro document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec orgOfDocIntro dataDefn SRS.dataDefnLabel orgOfDocIntroEnd]) :
+     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -134,10 +173,11 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) gbrTMods
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRefS SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRefS inputDataConstraints)])
+                        (foldlSent [makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]),
+                        S "gives", (plural value `ofThe` S "specification"), 
+                        plural parameter, S "used in", (makeRef2S inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -149,7 +189,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg likelyChgsList) :
+  LCsSec' (LCsProg' likelyChgs) :
   UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
@@ -200,7 +240,7 @@ inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMats
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration $ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
   noRefs $ map tAndDOnly termsWithDefsOnly
   ++
@@ -224,13 +264,14 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
   (map tAndDOnly $ drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
+
 goalStmtsList :: Contents
-goalStmtsList = enumSimple 1 (short goalStmt) goalStmtsListGS1
+goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsListGS1
 
 --Used in "Traceability Matrices and Graphs" Section--
 
 traceyMatrices :: [LabelledContent]
-traceyMatrices = [traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
+traceyMatrices = [traceTable1, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
 
 traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
@@ -269,8 +310,8 @@ undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", (foldlList Comma List
-  $ map makeRefS [astm2009, astm2012, astm2016]) `sIn`
-  (makeRefS SRS.referenceLabel)]
+  $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
+  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -300,10 +341,10 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ makeRefS koothoor2013
-  `sAnd` makeRefS smithLai2005 `sC` S "with some", 
+  S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
+  `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeRefS rbrtsn2012]
+  S "16", makeCiteS rbrtsn2012]
 
 orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -320,7 +361,7 @@ orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
@@ -328,7 +369,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ 
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ 
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
 
 sysCtxDesc :: Contents
@@ -343,7 +384,8 @@ sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
     S "type ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+    (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+ phrase software]
 
 sysCtxSysResp :: [Sentence]
@@ -363,7 +405,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 {--User Characteristics--}
 
 user_characteristics_intro :: Contents
-user_characteristics_intro = enumBullet $ map foldlSent
+user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
@@ -382,7 +424,7 @@ prodUseCaseTableUC1, prodUseCaseTableUC2 :: [Sentence]
 
 prodUseCaseTableUC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRefS SRS.indPRCaseLabel]
+  +:+ (makeRef2S $ SRS.indPRCase ([]::[Contents]) ([]::[Section]))]
 
 prodUseCaseTableUC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -437,18 +479,18 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 {--Terminology and Definitions--}
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeRefS astm2009 `sIn`
-  (makeRefS SRS.referenceLabel))) [termsAndDescBullets]
+  S "are extracted from" +:+ makeCiteS astm2009 `sIn`
+  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
 physSystDescription = physSystDesc (short gLassBR) fig_glassbr 
   [physSystDescriptionList, LlC fig_glassbr]
 
-fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
+fig_glassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
-physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
+physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
 
 --"Dead" knowledge?
 physSystDescriptionListPhysys :: [Sentence]
@@ -505,6 +547,8 @@ outputDataConstraints = outDataConstTbl [prob_br]
 {--UNLIKELY CHANGES--}
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
+traceTable1 :: LabelledContent
+traceTable1 = generateTraceTable gbSymbMap
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
@@ -526,25 +570,25 @@ traceMatsAndGraphsTRef, traceMatsAndGraphsIMRef, traceMatsAndGraphsDDRef, traceM
   traceMatsAndGraphsARef, traceMatsAndGraphsLCRef :: [Sentence]
 
 traceMatsAndGraphsT = ["T1", "T2"]
-traceMatsAndGraphsTRef = map makeRefS gbrTMods
+traceMatsAndGraphsTRef = map makeRef2S gbrTMods
 
 traceMatsAndGraphsIM = ["IM1", "IM2", "IM3"]
-traceMatsAndGraphsIMRef = map makeRefS gbrIMods
+traceMatsAndGraphsIMRef = map makeRef2S gbrIMods
 
 traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceMatsAndGraphsDDRef = map makeRefS dataDefns
+traceMatsAndGraphsDDRef = map makeRef2S dataDefns
 
 traceMatsAndGraphsDataCons  = ["Data Constraints"]
-traceMatsAndGraphsDataConsRef = [makeRefS SRS.datConLabel]
+traceMatsAndGraphsDataConsRef = [makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRefS funcReqs
+traceMatsAndGraphsFuncReqRef = map makeRef2S funcReqs
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceMatsAndGraphsARef = map makeRefS assumptions
+traceMatsAndGraphsARef = map makeRef2S assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceMatsAndGraphsLCRef = map makeRefS likelyChgs
+traceMatsAndGraphsLCRef = map makeRef2S likelyChgs
 
 traceMatsAndGraphsRowT1 :: [String]
 traceMatsAndGraphsRowT1 = traceMatsAndGraphsT ++ traceMatsAndGraphsIM ++ traceMatsAndGraphsDD
@@ -578,7 +622,7 @@ traceMatsAndGraphsColsT1_DD6 = ["IM3", "DD2", "DD5"]
 traceMatsAndGraphsColsT1_DD7 = ["DD8"]
 traceMatsAndGraphsColsT1_DD8 = ["DD2"]
 
-traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table
+traceMatsAndGraphsTable1 = llcc (makeTabRef "TraceyItemSecs") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT1)
   (makeTMatrix traceMatsAndGraphsRowHdrT1 traceMatsAndGraphsColsT1 traceMatsAndGraphsRowT1)
   (showingCxnBw traceyMatrix
@@ -611,7 +655,7 @@ traceMatsAndGraphsColsT2_R4 = ["R1", "R2"]
 traceMatsAndGraphsColsT2_R5 = ["T1", "T2"]
 traceMatsAndGraphsColsT2_R6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table
+traceMatsAndGraphsTable2 = llcc (makeTabRef "TraceyReqsItems") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT2)
   (makeTMatrix traceMatsAndGraphsColHdrT2 traceMatsAndGraphsColsT2 traceMatsAndGraphsRowT2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
@@ -665,7 +709,7 @@ traceMatsAndGraphsColsT3_R4  = []
 traceMatsAndGraphsColsT3_R5  = []
 traceMatsAndGraphsColsT3_R6  = []
 
-traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table
+traceMatsAndGraphsTable3 = llcc (makeTabRef "TraceyAssumpsOthers") $ Table
   (EmptyS:traceMatsAndGraphsRowHdr3)
   (makeTMatrix traceMatsAndGraphsColHdr3 traceMatsAndGraphsColsT3 traceMatsAndGraphsRowT3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
@@ -700,15 +744,15 @@ fig_4 = figureLabel 4 traceyMatrix
 
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((makeRefS fig_5) `sAnd` (makeRefS fig_6)),
+  sParen ((makeRef2S fig_5) `sAnd` (makeRef2S fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = llcc (mkLabelRAFig "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
+fig_5 = llcc (makeFigRef "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (ch char_weight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
-fig_6 = llcc (mkLabelRAFig "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
+fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))

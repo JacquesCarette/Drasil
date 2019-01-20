@@ -12,9 +12,6 @@ import Data.Monoid (Monoid(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 
---import Language.Drasil.Unicode (RenderSpecial, Special(SqBrClose, SqBrOpen, 
-  --CurlyBrClose, CurlyBrOpen, Hash, Percent, UScore, Partial, Circle), special)
-
 -----------------------------------------------------------------------------
 -- Printing monad
 --
@@ -75,6 +72,9 @@ toText = switch (const Text)
 get_ctx :: PrintLaTeX MathContext
 get_ctx = PL id
 
+instance Semigroup (PrintLaTeX TP.Doc) where
+  (PL s1) <> (PL s2) = PL $ \ctx -> (s1 ctx) TP.<> (s2 ctx)
+
 -- very convenient lifting of $$
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
@@ -85,9 +85,8 @@ instance Monoid (PrintLaTeX TP.Doc) where
 (%%) :: D -> D -> D
 (%%) = mappend
 
-($+$),(<>) :: D -> D -> D
+($+$) :: D -> D -> D
 ($+$) = liftA2 (TP.$+$)
-(<>) = liftA2 (TP.<>)
 
 vcat :: [D] -> D
 vcat l = PL $ \ctx -> TP.vcat $ map (\x -> runPrint x ctx) l
@@ -111,18 +110,6 @@ lub _    _    = Text -- Text is top-most
 -- Hacked up version, will get deleted
 data Latex = L { unPL :: String }
 
---instance RenderGreek Latex where
-
- 
-  
-
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"
   special Partial      = L "\\partial{}"
-  special UScore       = L "\\_"
-  special Percent      = L "\\%"
-  special Hash         = L "\\#"
-  special CurlyBrOpen  = L "\\{"
-  special CurlyBrClose = L "\\}"
-  special SqBrOpen     = L "{[}"
-  special SqBrClose    = L "{]}"

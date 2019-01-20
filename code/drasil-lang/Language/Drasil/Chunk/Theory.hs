@@ -4,17 +4,18 @@ module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
+  Definition(defn), ConceptDomain(cdom), HasReference(getReferences),
+  HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
-import Language.Drasil.NounPhrase (cn')
+import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
+import Data.Drasil.IdeaDicts (theoryMod)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -48,9 +49,9 @@ data TheoryModel = TM
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
   , _ref  :: [Reference]
-  , _lb :: Label
+  ,  lb   :: ShortName
+  ,  ra   :: String
   , _notes :: [Sentence]
-  , ci :: CI
   }
 makeLenses ''TheoryModel
 
@@ -59,9 +60,8 @@ instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
 instance HasReference       TheoryModel where getReferences = ref
-instance ConceptDomain      TheoryModel where cdom = con . cdom
+instance ConceptDomain      TheoryModel where cdom = cdom . view con
 instance HasAdditionalNotes TheoryModel where getNotes = notes
-instance Concept            TheoryModel where
 instance Theory             TheoryModel where
   valid_context = vctx
   spaces        = spc
@@ -70,14 +70,9 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasLabel           TheoryModel where getLabel = lb
-instance HasShortName       TheoryModel where shortname = lb . shortname
-
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
-
-theoryMod :: CI
-theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")                    "TM"        [softEng]
+instance HasShortName       TheoryModel where shortname = lb
+instance HasRefAddress      TheoryModel where getRefAdd = ra
+instance CommonIdea         TheoryModel where abrv _ = abrv theoryMod
 
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
@@ -85,5 +80,7 @@ theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")           
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
-    Label -> [Sentence] -> TheoryModel
-tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 
+    String -> [Sentence] -> TheoryModel
+tm c0 q c1 dq inv dfn r lbe nts = 
+  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
+      (prependAbrv theoryMod lbe) nts

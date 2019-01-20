@@ -4,9 +4,9 @@ module Language.Drasil.Chunk.DefinedQuantity
   , dqdQd) where
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  HasSpace(typ), IsUnit, Quantity)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept,
+  Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
@@ -29,8 +29,7 @@ instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. ui
 instance NamedIdea     DefinedQuantityDict where term = con . term
 instance Idea          DefinedQuantityDict where getA = getA . view con
 instance Definition    DefinedQuantityDict where defn = con . defn
-instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
-instance Concept       DefinedQuantityDict where
+instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 instance HasSpace      DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Quantity      DefinedQuantityDict where 

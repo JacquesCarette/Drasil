@@ -11,20 +11,20 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..),
-  USymb(US), HasTermTable)
+  Decoration(Prime, Hat, Vector), Document, special, USymb(US), HasTermTable) 
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, Ref2, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
   Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
-  Rational, Integer, IsIn, Point), Spacing(Thin), Fonts(Emph, Bold), 
+  Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label)
+  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
+  LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
@@ -36,9 +36,9 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, sref,
-  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
+  newline, superscript, parens, fraction, quote,
+  snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
@@ -169,6 +169,7 @@ p_ops Summ     = "\\displaystyle\\sum"
 p_ops Prod     = "\\displaystyle\\prod"
 p_ops Inte     = "\\int"
 p_ops Point    = "."
+p_ops Perc     = "\\%"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -244,15 +245,14 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)          = Text
-needs (E _)          = Math
-needs (Sy _)         = Text
-needs (Sp _)         = Math
-needs HARDNL         = Text
-needs (Ref _ _ _ _)  = Text
-needs (Ref2 _ _ _ _) = Text
-needs (EmptyS)       = Text
-needs (Quote _)      = Text
+needs (S _)            = Text
+needs (E _)            = Math
+needs (Sy _)           = Text
+needs (Sp _)           = Math
+needs HARDNL           = Text
+needs (Ref _ _ _)      = Text
+needs (EmptyS)         = Text
+needs (Quote _)        = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -266,19 +266,11 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
-spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
-spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
-spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
-spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
-spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
-spec (Ref L.Blank r sn _)    = snref r $ spec sn
-spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
-spec (Ref t r _ _)            = ref (show t) (pure $ text r)
-spec (Ref2 _ _ _ _)           = error "Ref2 Not implemented in TeX printer."
-spec EmptyS                   = empty
-spec (Quote q)                = quote $ spec q
+spec (Ref Internal r sn)  = snref r $ spec sn
+spec (Ref Cite2 r _)      = cite $ pure $ text r
+spec (Ref External r sn)  = snref r $ spec sn
+spec EmptyS                 = empty
+spec (Quote q)              = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

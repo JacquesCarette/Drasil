@@ -1,6 +1,8 @@
 module Data.Drasil.Quantities.Thermodynamics where
 
 import Language.Drasil
+import Language.Drasil.ShortHands (cT, cC, lQ, cQ, cE)
+
 import Data.Drasil.Concepts.Thermodynamics as CT (boil_pt, heat_cap_spec,
     ht_flux, latent_heat, melt_pt, sens_heat, temp)
 import Data.Drasil.SI_Units (centigrade, joule)

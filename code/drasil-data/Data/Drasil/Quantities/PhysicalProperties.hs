@@ -1,6 +1,8 @@
 module Data.Drasil.Quantities.PhysicalProperties where
 
 import Language.Drasil
+import Language.Drasil.ShortHands (lM, cL, cV, lRho)
+
 import Data.Drasil.Concepts.PhysicalProperties as CPP (density, len, mass, vol)
 import Data.Drasil.SI_Units (kilogram, metre, m_3)
 import Data.Drasil.Units.PhysicalProperties (densityU)

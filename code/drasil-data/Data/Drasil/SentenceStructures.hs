@@ -15,7 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
-  , getSource
+  , getSource'
   ) where
 
 import Language.Drasil
@@ -127,13 +127,13 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (Ref $ mkRefFrmLbl ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
 figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char] -> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (mkLabelRAFig rn) $
+figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
   Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
 
@@ -186,10 +186,10 @@ tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ (Ref $ makeRef assumpt)
+preceding `followA` assumpt = preceding +:+ S "following" +:+ (makeRef2S assumpt)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
 
 -- | get term, definition, and symbol
@@ -239,9 +239,6 @@ replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s@_ = s
 
--- Should this get only the first one or all potential sources?
--- Should we change the source ref to have a list (to keep things clean in case
---    of multiple sources)?
--- | Get the source reference from the references (if it exists)
-getSource :: HasReference c => c -> Sentence
-getSource c = foldlList Comma List $ map Ref $ c ^. getReferences
+-- | Get the source citations (if any)
+getSource' :: HasCitation c => c -> Sentence
+getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations

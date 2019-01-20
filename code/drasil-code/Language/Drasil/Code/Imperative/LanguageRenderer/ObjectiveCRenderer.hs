@@ -29,7 +29,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                                             doubleQuotedText,himap,vmap,vibmap)
 
-import Prelude hiding (break,print,return,init)
+import Prelude hiding (break,print,return,init,(<>))
 import Text.PrettyPrint.HughesPJ hiding (Str,integer)
 
 validListTypes :: [Label]

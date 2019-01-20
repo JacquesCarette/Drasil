@@ -1,5 +1,9 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference where
+module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
+  makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+  assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
+  HasConceptRefs(conceptRefTable),
+  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
@@ -8,23 +12,23 @@ import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation as Ci (BibRef, citeID, Citation)
-import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
+  HasShortName(shortname))
+import Language.Drasil.Classes.Citations (HasFields(getFields))
+import Language.Drasil.Classes (ConceptDomain(cdom), abrv)
+import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))
-import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.Label.Core (Label(..))
-import Language.Drasil.Label.Type (getAdd)
-import Language.Drasil.Label (getDefName, getReqName)
+import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
+import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
+  prepend, name, raw, (+::+), defer)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
-import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.RefProg (Reference(Reference))
+import Language.Drasil.Sentence (Sentence(Ref))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -55,10 +59,7 @@ data RefBy = ByName
            | ByNum -- If applicable
 
 rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
-rdb assumps citations con = RDB
-  (simpleMap assumps)
-  (bibMap citations)
-  (conceptMap con)
+rdb assumps citations con = RDB (simpleMap assumps) (bibMap citations) (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -74,7 +75,7 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
 conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
-  cdl x = sDom $ x ^. cdom
+  cdl = sDom . cdom
 
 conceptMap :: [ConceptInstance] -> ConceptMap
 conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
@@ -88,11 +89,6 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
 
-conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptInstance, Int)
-conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
-          " referencing information not found in Concept Map") id .
-          Map.lookup (c ^. uid)
-
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
@@ -105,66 +101,57 @@ instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
-
---FIXME: "class (HasLabel s) => Referable s where" instead?
-class Referable s where
-  refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
-                          -- Should be string with no spaces/special chars.
-                          -- Only visible in the source (tex/html).
-  rType   :: s -> RefType -- The reference type (referencing namespace?)
+class HasUID s => Referable s where
+  refAdd    :: s -> String  -- The referencing address (what we're linking to).
+                            -- Only visible in the source (tex/html).
+  renderRef :: s -> LblType -- alternate
 
 instance Referable AssumpChunk where
-  refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
-  rType   _ = Assump
+  refAdd    x = getRefAdd x
+  renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 instance Referable Section where
-  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
-  rType   _                = Sect
+  refAdd    (Section _ _ lb ) = getRefAdd lb
+  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
 
 instance Referable Citation where
-  refAdd c = citeID c -- citeID should be unique.
-  rType _  = Cite
+  refAdd    c = c ^. citeID -- citeID should be unique.
+  renderRef c = Citation $ refAdd c
 
 instance Referable TheoryModel where
-  refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
-  rType   _ = Def TM
+  refAdd    t = getRefAdd t
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable GenDefn where
-  refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType   _ = Def General
+  refAdd    g = getRefAdd g
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable DataDefinition where
-  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
-  rType   _ = Def DD
+  refAdd    d = getRefAdd d
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable InstanceModel where
-  refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
-  rType   _ = Def Instance
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 instance Referable ConceptInstance where
-  refAdd i = i ^. uid
-  rType i  = DeferredCC $ sDom $ i ^. cdom
-
---Should refer to an object WITH a variable.
---Can be removed once sections have labels.
-instance Referable Label where
-  refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
-  rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  refAdd l    = l ^. uid
+  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
-  refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType  (LblC _ c)  = temp c
+  refAdd     (LblC lb _) = getRefAdd lb
+  renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
 
-temp :: RawContent -> RefType
-temp (Table _ _ _ _)       = Tab
-temp (Figure _ _ _)        = Fig
-temp (Graph _ _ _ _)       = Fig
-temp (Defini x _)          = Def x
-temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
-temp (EqnBlock _)          = EqnB
-temp (Enumeration _)       = Lst 
-temp (Paragraph _)         = error "Shouldn't reference paragraphs"
-temp (Bib _)               = error $
+refLabelledCon :: RawContent -> IRefProg
+refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
+refLabelledCon (Assumption _ _)      = raw "Assump:" +::+ name
+refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
+refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
+refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
+refLabelledCon (Bib _)               = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
@@ -202,14 +189,10 @@ getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. ge
         isYear _        = False
 
 getTitle :: (HasFields c) => c -> String
-getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
+getTitle c = maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
   where isTitle :: CiteField -> Bool
         isTitle (Title _) = True
         isTitle _         = False
-        getStr :: Sentence -> String
-        getStr (S s) = s
-        getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-        getStr _ = error "Term is not a string"
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy compareAuthYearTitle citations
@@ -221,39 +204,16 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
--- | Create References to a given 'LayoutObj'
--- This should not be exported to the end-user, but should be usable
--- within the recipe (we want to force reference creation to check if the given
--- item exists in our database of referable objects.
---FIXME: completely shift to being `HasLabel` since customref checks for 
---  `HasShortName` and `Referable`?
-makeRef :: (HasShortName l, Referable l) => l -> Reference
-makeRef r = customRef r (r ^. shortname)
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+makeRef2 l = Reference (l ^. uid) (renderRef l) (shortname l)
 
-makeRefS :: (HasShortName l, Referable l) => l -> Sentence
-makeRefS = Ref . makeRef
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
+makeRef2S = Ref . makeRef2
 
---FIXME: needs design (HasShortName, Referable only possible when HasLabel)
-mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Reference
-mkRefFrmLbl = makeRef
+-- Here we don't use the Lenses as constraints, we really do want a Citation.
+makeCite :: Citation -> Reference
+makeCite l = Reference (l ^. uid) (renderRef l) (shortname l)
 
---FIXME: should be removed from Examples once sections have labels
--- | Create a reference with a customized 'ShortName'
-customRef :: (HasShortName l, Referable l) => l -> ShortName -> Reference
-customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
-  where 
-    getAcc' :: RefType -> ShortName -> ShortName
-    getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
-    getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
-    getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
-    getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
-    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = concatSN (defer u) s
-    getAcc' _         sn = sn
-    fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
-    fixupRType a = a
+makeCiteS :: Citation -> Sentence
+makeCiteS = Ref . makeCite
 
--- This works for passing the correct id to the reference generator for Assumptions,
--- Requirements and Likely Changes but I question whether we should use it.
--- Pass it the item to be referenced and the enumerated list of the respective
--- contents for that file. Change rType values to implement.

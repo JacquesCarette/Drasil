@@ -1,9 +1,12 @@
+-- | Custom type for dates, in this case Month.
+-- This should, in time, be switched out in favour of a proper package
+-- designed to handle all the complexities of dates.
 module Language.Drasil.Data.Date
   ( -- Types
     Month(..)
   ) where
 
--- | Month must be of this format.
+-- | Month abbreviations
 data Month = Jan
            | Feb
            | Mar

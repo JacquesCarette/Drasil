@@ -1,7 +1,5 @@
 module Drasil.GamePhysics.Assumptions where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
@@ -11,7 +9,6 @@ import Drasil.GamePhysics.Concepts (twoD)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
   cartesian, rightHand, collision, joint, damping)
 import qualified Data.Drasil.Concepts.Math as CM (constraint)
-
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
@@ -23,24 +20,21 @@ assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
 assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI :: ConceptInstance
-newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRAAssump' "objectTy")
-assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRAAssump' "objectDimension")
-assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRAAssump' "coordinateSystemTy")
-assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRAAssump' "axesDefined")
-assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRAAssump' "collisionType")
-assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRAAssump' "dampingInvolvement")
-assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRAAssump' "constraintsAndJointsInvolvement")
-assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
+newA1 = assump "assumpOT" (foldlSent assumptions_assum1) "objectTy"
+newA2 = assump "assumpOD" (foldlSent assumptions_assum2) "objectDimension"
+newA3 = assump "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy"
+newA4 = assump "assumpAD" (foldlSent assumptions_assum4) "axesDefined"
+newA5 = assump "assumpCT" (foldlSent assumptions_assum5) "collisionType"
+newA6 = assump "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement"
+newA7 = assump "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement"
 
-assumptions_list :: [Contents]
-assumptions_list = map (LlC . 
-  (\x -> mkRawLC (Assumption (x^.uid) (assuming x) (x^.getLabel)) (x ^. getLabel))) newAssumptions
+assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
+assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
+assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
+assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
+assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
+assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
+assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]

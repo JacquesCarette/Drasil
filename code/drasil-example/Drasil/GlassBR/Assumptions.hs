@@ -3,7 +3,7 @@ module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, s
   assumptions) where
 
 import Language.Drasil hiding (organization)
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
   practice, reference, scenario, system, value)
@@ -14,7 +14,6 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
-import Drasil.GlassBR.Labels (glassTypeL, glassConditionL, glassLiteL)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, load_dur)
@@ -33,21 +32,21 @@ glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryC
 -- FIXME: Remove the AssumpChunks once ConceptInstance and SCSProg's
 -- Assumptions has been migrated to using assumpDom
 
-glassType          = assump "glassTypeA"          glassTypeDesc                    glassTypeL
--- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-glassCondition     = assump "glassConditionA"     glassConditionDesc               glassConditionL
--- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   )
+glassType          = assump "assumpGT" glassTypeDesc "glassType"
+-- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom
+glassCondition     = assump "assumpGC" glassConditionDesc "glassCondition"
+-- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom
+explainScenario    = assump "assumpES" explainScenarioDesc "explainScenario"
 -- assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
+standardValues     = assump "assumpSV" (standardValuesDesc load_dur) "standardValues"
 -- assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
-glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL
--- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-boundaryConditions = assump "boundaryConditionsA" boundaryConditionsDesc           (mkLabelRAAssump' "boundaryConditions")
+glassLite          = assump "assumpGL" glassLiteDesc "glassLite"
+-- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
+boundaryConditions = assump "assumpBC" boundaryConditionsDesc "boundaryConditions"
 -- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
-responseType       = assump "responseTypeA"       responseTypeDesc                 (mkLabelRAAssump' "responseType"      )
+responseType       = assump "assumpRT" responseTypeDesc "responseType"
 -- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-ldfConstant        = assump "ldfConstantA"       (ldfConstantDesc constant_LoadDF) (mkLabelRAAssump' "ldfConstant"       )
+ldfConstant        = assump "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"
 -- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
@@ -63,7 +62,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]])]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeRefS astm2009, sParen (S "pg. 1") `sC` 
+glassConditionDesc = foldlSent [S "Following", makeCiteS astm2009, sParen (S "pg. 1") `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]
@@ -74,7 +73,7 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRefS SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
+  makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 
@@ -94,6 +93,6 @@ responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRefS standardValues `sC` S "the", phrase value `sOf`
+  makeRef2S standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in", short gLassBR]

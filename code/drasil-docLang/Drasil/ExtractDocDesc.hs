@@ -18,6 +18,7 @@ egetDocSec (ScpOfProjSec s)     = egetScp s
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec (ReqrmntSec r)       = egetReq r
 egetDocSec (LCsSec l)           = egetLcs l
+egetDocSec (LCsSec' _)          = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
@@ -26,7 +27,7 @@ egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc _ _) = concatMap egetSecCon sc
+egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -161,6 +162,7 @@ getDocSec (ScpOfProjSec s)     = getScp s
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
+getDocSec (LCsSec' l)          = getLcs' l
 getDocSec (UCsSec u)           = getUcs u
 getDocSec (TraceabilitySec t)  = getTrace t
 getDocSec (AuxConstntSec a)    = getAux a
@@ -169,7 +171,7 @@ getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc _ _) = t : concatMap getSecCon sc
+getSec (Section t sc _ ) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -184,7 +186,7 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
-getCon (Assumption _ b _) = [b]
+getCon (Assumption _ b)  = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Defini _ []) = []
@@ -201,21 +203,21 @@ isVar ([], _) = []
 isVar (_, []) = []
 
 getBib :: (HasFields c) => [c] -> [Sentence]
-getBib a = concatMap getField $ concatMap (^. getFields) a
+getBib a = map getField $ concatMap (^. getFields) a
 
-getField :: CiteField -> [Sentence]
-getField (Address s) = [s]
-getField (BookTitle s) = [s]
-getField (Institution s) = [s]
-getField (Journal s) = [s]
-getField (Note s) = [s]
-getField (Organization s) = [s]
-getField (Publisher s) = [s]
-getField (School s) = [s]
-getField (Series s) = [s]
-getField (Title s) = [s]
-getField (Type s) = [s]
-getField _ = []
+getField :: CiteField -> Sentence
+getField (Address s) = S s
+getField (BookTitle s) = S s
+getField (Institution s) = S s
+getField (Journal s) = S s
+getField (Note s) = S s
+getField (Organization s) = S s
+getField (Publisher s) = S s
+getField (School s) = S s
+getField (Series s) = S s
+getField (Title s) = S s
+getField (Type s) = S s
+getField _ = EmptyS
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it
@@ -338,6 +340,9 @@ getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc
 getLcs :: LCsSec -> [Sentence]
 getLcs (LCsProg c) = concatMap getCon' c
 
+getLcs' :: LCsSec' -> [Sentence]
+getLcs' (LCsProg' c) = map (^. defn) c
+
 getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = concatMap getCon' c
 
@@ -359,21 +364,22 @@ ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec (Verbatim        sec)     = []
-ciGetDocSec (RefSec          refsec)  = []
-ciGetDocSec (IntroSec        intro)   = ciGetIntro intro
-ciGetDocSec (StkhldrSec      stk)     = ciGetStk stk
-ciGetDocSec (GSDSec          gsd)     = []
-ciGetDocSec (ScpOfProjSec    scpPro)  = []
-ciGetDocSec (SSDSec          ssd)     = ciGetSSD ssd
-ciGetDocSec (ReqrmntSec      req)     = []
-ciGetDocSec (LCsSec          lc)      = []
-ciGetDocSec (UCsSec          uc)      = []
-ciGetDocSec (TraceabilitySec trace)   = []
-ciGetDocSec (AuxConstntSec   aux)     = ciGetAux aux
-ciGetDocSec (Bibliography)            = []
-ciGetDocSec (AppndxSec       app)     = []
-ciGetDocSec (ExistingSolnSec exist)   = []
+ciGetDocSec (Verbatim        _)     = []
+ciGetDocSec (RefSec          _)     = []
+ciGetDocSec (IntroSec        intro) = ciGetIntro intro
+ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
+ciGetDocSec (GSDSec          _)     = []
+ciGetDocSec (ScpOfProjSec    _)     = []
+ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
+ciGetDocSec (ReqrmntSec      _)     = []
+ciGetDocSec (LCsSec          _)     = []
+ciGetDocSec (LCsSec'         _)     = []
+ciGetDocSec (UCsSec          _)     = []
+ciGetDocSec (TraceabilitySec _)     = []
+ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
+ciGetDocSec (Bibliography)          = []
+ciGetDocSec (AppndxSec       _)     = []
+ciGetDocSec (ExistingSolnSec _)     = []
 
 ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
@@ -396,9 +402,9 @@ ciGetSSD :: SSDSec -> [CI]
 ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
 
 ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub (SSDSubVerb _)         = []
-ciGetSSDSub (SSDProblem pd)        = ciGetProbDesc pd
-ciGetSSDSub (SSDSolChSpec solspec) = []
+ciGetSSDSub (SSDSubVerb _)   = []
+ciGetSSDSub (SSDProblem pd)  = ciGetProbDesc pd
+ciGetSSDSub (SSDSolChSpec _) = []
 
 ciGetProbDesc :: ProblemDescription -> [CI]
 ciGetProbDesc (PDProg _ ci _ _) = [ci]

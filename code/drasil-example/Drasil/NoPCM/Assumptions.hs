@@ -17,8 +17,6 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, temp_init, temp_W, htCap_W, w_density)
-import Drasil.NoPCM.GenDefs (rocTempSimp)
-import Drasil.SWHS.Changes (likeChgTCVOD, likeChgDT)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -38,15 +36,14 @@ assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT :: ConceptInstan
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (makeRefS rocTempSimp)])
+  S "same throughout the entire", phrase tank])
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr $ makeRefS likeChgTCVOD])
+  `sC` S "it is constant over their entire", phrase vol])
 
 newA5NoPCM :: AssumpChunk
-newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
-  (mkLabelRAAssump' "Density-Water-Constant-over-Volume")
+newA5NoPCM = assump "assumpDVCoW" assumpS4 ("Density-Water-Constant-over-Volume")
 
 assumpDWCoW = cic "assumpDWCoW" assumpS4
   "Density-Water-Constant-over-Volume" assumpDom
@@ -56,8 +53,7 @@ assumpS5 =
   S "is, it is constant over its entire", phrase vol])
 
 newA6NoPCM :: AssumpChunk
-newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
-  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume") 
+newA6NoPCM = assump "assumpSHECoW" assumpS5 ("Specific-Heat-Energy-Constant-over-Volume")
 
 assumpSHECoW = cic "assumpSHECoW" assumpS5
   "Specific-Heat-Energy-Constant-over-Volume" assumpDom
@@ -66,12 +62,10 @@ assumpS9_npcm =
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
-  phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr $ makeRefS likeChgDT])
+  phrase temp_init, S "is less than (or equal to) the", phrase temp_C])
 
 newA9NoPCM :: AssumpChunk
-newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
-  (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge")
+newA9NoPCM = assump "assumpCTNTD" assumpS9_npcm ("Charging-Tank-No-Temp-Discharge")
 
 assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
   "Charging-Tank-No-Temp-Discharge" assumpDom
@@ -81,8 +75,7 @@ assumpS12 =
   +:+ phrase vol_ht_gen +:+. S "is zero")
 
 newA16 :: AssumpChunk
-newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 
-  (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water")
+newA16 = assump "assumpNIHGBW" assumpS12 ("No-Internal-Heat-Generation-By-Water")
 
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
@@ -94,8 +87,7 @@ assumpS13 =
   Sy (unit_symb QT.temp) `sC` S "respectively")
 
 newA19 :: AssumpChunk
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
-  (mkLabelRAAssump' "Atmospheric-Pressure-Tank")
+newA19 = assump "assumpAPT" assumpS13 ("Atmospheric-Pressure-Tank")
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom

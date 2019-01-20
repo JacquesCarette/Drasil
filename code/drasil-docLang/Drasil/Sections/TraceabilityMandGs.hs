@@ -1,6 +1,7 @@
 module Drasil.Sections.TraceabilityMandGs
   ( traceMGF,
-    traceGIntro
+    traceGIntro,
+    generateTraceTable
    ) where
 
 import Language.Drasil
@@ -8,7 +9,14 @@ import Data.Drasil.SentenceStructures (ofThe', foldlSent, tableShows)
 import Data.Drasil.Concepts.Documentation (purpose, component, column,
   reference, traceyGraph, traceyMatrix, item, dependency)
 import Data.Drasil.Concepts.Math ( graph)
+import Data.Drasil.Concepts.Documentation(section_)
+import Data.Drasil.Utils (makeTMatrix)
 import qualified Drasil.DocLang.SRS as SRS
+import Data.List (nub)
+import qualified Data.Map as Map
+import Data.Drasil.SentenceStructures (showingCxnBw)
+import Control.Lens ((^.))
+import Drasil.DocumentLanguage.Definitions (helpToRefField)
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
@@ -37,3 +45,25 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
         phrase component, S "is changed, the", plural component, S "that it points to should also",
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)]
+ 
+traceMRow :: ChunkDB -> [UID]
+traceMRow c = nub $ Map.keys (c ^. refbyTable)
+
+traceMCol :: ChunkDB -> [UID]
+traceMCol c = nub $ concat $ Map.elems (c ^. refbyTable)
+ 
+traceMRowHeader :: ChunkDB -> [Sentence]
+traceMRowHeader c = map (\x -> helpToRefField x c) (traceMRow c)
+
+traceMColHeader :: ChunkDB -> [Sentence]
+traceMColHeader c = map (\x -> helpToRefField x c) (traceMCol c)
+
+traceMColumns :: ChunkDB -> [[UID]]
+traceMColumns c = map (\x -> refbyLookup x (c ^. refbyTable)) (traceMRow c)
+ 
+generateTraceTable :: ChunkDB -> LabelledContent
+generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
+  (EmptyS:(traceMColHeader c))
+  (makeTMatrix (traceMRowHeader c) (traceMColumns c) (traceMCol c))
+  (showingCxnBw traceyMatrix
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True 

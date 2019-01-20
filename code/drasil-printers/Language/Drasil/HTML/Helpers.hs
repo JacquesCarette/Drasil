@@ -1,8 +1,8 @@
 module Language.Drasil.HTML.Helpers where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
 import Data.List (intersperse, foldl1)
-import Data.String (unwords)
 
 import Language.Drasil hiding (Expr)
 

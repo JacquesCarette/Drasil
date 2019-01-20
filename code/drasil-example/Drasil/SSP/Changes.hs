@@ -22,7 +22,7 @@ likelyChgCISL :: ConceptInstance
 likelyChgCISL = cic "LC_inhomogeneous" lcCISLDesc "Calculate-Inhomogeneous-Soil-Layers" likeChgDom
 
 lcCISLDesc :: Sentence
-lcCISLDesc = foldlSent [(makeRefS newA3) +:+ S "- The",
+lcCISLDesc = foldlSent [(makeRef2S newA3) +:+ S "- The",
   phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
   S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]
@@ -40,12 +40,12 @@ unlikelyChg2AO =   cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 
 ucNASLODesc, uc2AODesc :: Sentence
 
-ucNASLODesc = foldlSent [S "Changes related to", (makeRefS newA5) `sAnd`
-  (makeRefS newA6), S "are not possible due to the dependency",
+ucNASLODesc = foldlSent [S "Changes related to", (makeRef2S newA5) `sAnd`
+  (makeRef2S newA6), S "are not possible due to the dependency",
   S "of the", plural calculation, S "on the linear relationship between",
   S "interslice normal and shear forces"]
 
-uc2AODesc = foldlSent [makeRefS newA8, S "allows for 2D analysis" +:+.
+uc2AODesc = foldlSent [makeRef2S newA8, S "allows for 2D analysis" +:+.
   S "with these models only because stress along z-direction is zero", 
   S "These models do not take into account stress in the z-direction, and",
   S "therefore cannot be without manipulation to attempt 3d analysis"]

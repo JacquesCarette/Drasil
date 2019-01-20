@@ -3,6 +3,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) wher
 import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol)
+import Language.Drasil.Development (precA, precB, eprec)
 
 import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P
@@ -276,23 +277,33 @@ spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
-spec _ (Sp s)          = P.Sp s
+spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC sm s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
-spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
-  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 t r sn)) = P.Ref2 t r (spec sm (S . getStringSN $ resolveSN sn $
-  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
+spec sm (Ref (Reference _ (RP rp ra) sn)) = 
+  P.Ref P.Internal ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref (Reference _ (Citation ra) sn)) = 
+  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
+spec sm (Ref (Reference _ (URI ra) sn)) = 
+  P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
-lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
-  getA $ defLookup u $ ctx ^. defTable
+renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
+renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
+renderShortName _ (RS s) _ = S s
+renderShortName _ Name sn = S $ getStringSN sn
+
+renderURI :: ctx -> ShortName -> Sentence
+renderURI _ sn = S $ getStringSN sn
+
+renderCitation :: ctx -> ShortName -> Sentence
+renderCitation _ sn = S $ getStringSN sn
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx,
@@ -314,7 +325,7 @@ createLayout sm = map (sec sm 0)
 -- | Helper function for creating sections at the appropriate depth
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
   HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
@@ -331,34 +342,28 @@ layLabelled :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
   (spec sm c) f wp
-{-
-layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
-  (spec sm $ requires r) 
-  (P.S $ getAdd (x ^. getRefAdd)) 
-  (spec sm $ getShortName r)
--}
-layLabelled sm x@(LblC _ (Assumption _ b c))        = T.ALUR T.Assumption
+layLabelled sm x@(LblC c (Assumption _ b))        = T.ALUR T.Assumption
   (spec sm b)
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
   (spec sm $ getShortName c)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
-  (P.S $ getAdd (x ^. getRefAdd))
+  (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
-layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
+layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
@@ -370,55 +375,51 @@ layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
--- layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
---   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
-layUnlabelled sm (Assumption _ b c)       = T.ALUR T.Assumption
-  (spec sm b) (P.S "nolabel4") (spec sm $ getShortName c)
+layUnlabelled sm (Assumption _ b)       = T.ALUR T.Assumption
+  (spec sm b) (P.S "nolabel4") (P.S "nolabel4b")
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
+layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing bibliography
-layCite ::(HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (citeID c) (c ^. citeKind) (map (layField sm) (c ^. getFields))
+layCite :: Citation -> P.Citation
+layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
 
-layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField
-layField sm (Address      s) = P.Address      $ spec sm s
-layField  _ (Author       p) = P.Author       p
-layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
-layField  _ (Chapter      c) = P.Chapter      c
-layField  _ (Edition      e) = P.Edition      e
-layField  _ (Editor       e) = P.Editor       e
-layField sm (Institution  i) = P.Institution  $ spec sm i
-layField sm (Journal      j) = P.Journal      $ spec sm j
-layField  _ (Month        m) = P.Month        m
-layField sm (Note         n) = P.Note         $ spec sm n
-layField  _ (Number       n) = P.Number       n
-layField sm (Organization o) = P.Organization $ spec sm o
-layField  _ (Pages        p) = P.Pages        p
-layField sm (Publisher    p) = P.Publisher    $ spec sm p
-layField sm (School       s) = P.School       $ spec sm s
-layField sm (Series       s) = P.Series       $ spec sm s
-layField sm (Title        t) = P.Title        $ spec sm t
-layField sm (Type         t) = P.Type         $ spec sm t
-layField  _ (Volume       v) = P.Volume       v
-layField  _ (Year         y) = P.Year         y
-layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
-layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
+layField :: CiteField -> P.CiteField
+layField (Address      s) = P.Address      $ P.S s
+layField (Author       p) = P.Author       p
+layField (BookTitle    b) = P.BookTitle    $ P.S b
+layField (Chapter      c) = P.Chapter      c
+layField (Edition      e) = P.Edition      e
+layField (Editor       e) = P.Editor       e
+layField (Institution  i) = P.Institution  $ P.S i
+layField (Journal      j) = P.Journal      $ P.S j
+layField (Month        m) = P.Month        m
+layField (Note         n) = P.Note         $ P.S n
+layField (Number       n) = P.Number       n
+layField (Organization o) = P.Organization $ P.S o
+layField (Pages        p) = P.Pages        p
+layField (Publisher    p) = P.Publisher    $ P.S p
+layField (School       s) = P.School       $ P.S s
+layField (Series       s) = P.Series       $ P.S s
+layField (Title        t) = P.Title        $ P.S t
+layField (Type         t) = P.Type         $ P.S t
+layField (Volume       v) = P.Volume       v
+layField (Year         y) = P.Year         y
+layField (HowPublished (URL  u)) = P.HowPublished (P.URL  $ P.S u)
+layField (HowPublished (Verb v)) = P.HowPublished (P.Verb $ P.S v)
 
 -- | Translates lists
 makeL :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, labref y)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, labref y)) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, fmap P.S y)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, fmap P.S y)) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 
 -- | Helper for translating list items
 item :: (HasSymbolTable ctx, HasTermTable ctx,HasDefinitionTable ctx,
@@ -426,9 +427,6 @@ item :: (HasSymbolTable ctx, HasTermTable ctx,HasDefinitionTable ctx,
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
-labref :: Maybe RefAdd -> Maybe P.Spec
-labref l = maybe Nothing (\z -> Just $ P.S z) l
-
 -- | Helper for getting a short name
 getShortName :: HasShortName c => c -> Sentence
-getShortName c = S . getStringSN $ c ^. shortname
+getShortName = S . getStringSN . shortname

@@ -1,0 +1,131 @@
+Title: 
+"Automate your problems away with Drasil - Developing software without CTRL-C/CTRL-V"
+variant - "Automate your problems away with Drasil - Developing software without copy/paste"
+
+Main idea Notes (outline after):
+  - Software dev has problems including
+    - duplication + inconsistency + unnecessary re-development
+      - duplication
+        - We really only care about manual duplication, automated duplication
+            is not common enough(?) and (when done properly) not an issue.
+        - Manual duplication begets problems with:
+          - inconsistency - common enough, we want to fix that
+          - traceability - inter- and intra-artifact issues are common
+      - inconsistency
+        - really big problem in certified software (inconsistency costs money and time)
+          - Why shouldn't we hold all software projects to the same standard?
+            - Obviously, costs.
+        - common enough in many software projects
+        - makes maintenance/expansion efforts much more difficult
+      - re-development
+        - We want to see more software re-use, but the reality is its often
+          faster (or cheaper) to re-develop a particular tool, algorithm, etc.
+          rather than find an existing project to adapt 
+            (re-word previous, it's not quite what I want to say)
+        - Significant efforts can be made to develop a software variant that is very 
+          similar to an existing project
+          - These variants are members of the same software family, typically with
+            minor changes
+            - Can happen when it seems easier to create a new variant as a stand-alone
+              rather than attempt to update old code and docs
+            - Also influenced by lack of documentation around existing software,
+              confusing APIs, lack of subject-matter-experts, etc.
+
+  - A look at why duplication is a 'forced reality'
+    - Software artifacts are views of the same information
+    - Views that don't replicate (or reference) the core knowledge to some extent
+      imply inconsistency between artifacts
+    - Traceability only matters when there is lots of duplication
+      - Low duplication = loose threads of knowledge
+        - We expect a tightly woven pattern with neat ends
+    - Manually maintaining consistency across knowledge duplication is complex
+      and tedious
+  
+  - Drasil is a framework we've developed to tackle these problems through a 
+    knowledge-capture (KC) focused approach to software development
+    - What is it? A framework for generating *ALL* software artifacts (in their
+    desired format) from a single source using transformations and projections.
+      - Core knowledge (not system-specific) is reusable inter- and intra-project
+      - No manual duplication
+      - Consistent by construction
+      - Fully traceable for certification, maintenance, or upgrades
+    - Leveraged our understanding of generative software & software development
+    principles and practices in dev
+    - Development of Drasil has been practical and example-driven
+    - Guiding principle: If software artifacts are views of the same information,
+    we should be able to abstract out the core knowledge, then generate the views 
+    as necessary
+      - Remove the need for manual duplication
+      - Use transformations to format knowledge appropriately
+        - Ex. Code-views vs. document-views of calculations
+        look very different, even across similar languages, but say the same thing
+          - Figure: A calculation in C# code, python code, LaTeX, and HTML
+      - Ensure consistency & traceability
+    - "Recipes" used to create our views, can be thought of as "little programs"
+    that assemble our artifacts.
+      - Based off of document templates, and similar to code templating, but 
+      much broader configuration scope(or something?)
+    - Includes KC mechanisms for creating a 'living database' of common information 
+      - Currently hand-curated
+      - Expands as needed, all projects share it
+      - Very low-level, system-specific information stored elsewhere to avoid pollution
+        - Easy to move around if determined to be 'general-enough' for the common
+        knowledge base (KB)
+    - Captured knowledge acts as a uniform source for artifact generation
+    - Structure of a project in Drasil can be broken down (generally) as:
+      [Core knowledge], [Specific knowledge], & [Recipes]
+  
+  - What Drasil isn't
+    - Not the be-all, end-all of software development
+    - Only useful (and useable) in well-understood domains
+      - We need to know how to capture and structure knowledge effectively
+      - Ex. Science/math
+    - One tool with a specific set of possible outputs and limited scope
+    - Will not replace human developers, only help remove some of the tedium of
+      following good software development practices
+    - Complete - Dev is still in progress
+  
+  - Our examples - SWHS, GlassBR, Gamephys, Tiny, and NoPCM
+    - All re-developed to follow the SmithEtAl artifact templates using modern SE approaches
+      - Gives us consistent views
+        - Knowledge is easier to extract
+        - We know what we want the generator to create from our Recipes
+        - Gives a base structure to our recipes
+    - SWHS and NoPCM are software family members
+      - Model solar water heating system with and without phase change material (PCM)
+    - GlassBR
+      - Models whether glass panes will break due to force of explosions
+    - Gamephys
+      - Reduced-scope section of the Chipmunk2D game physics engine
+      - Simulates rigid-body physics
+    - Tiny
+      - Toy example taken from a model of a fuel-pin in a nuclear reactor
+      - Used for proof of concept mainly, and as a test case to ensure 
+      updates to Drasil don't create any unwanted behaviours
+    - Examples share common baseline math/science knowledge
+      - Gives us a starting point for the common KB
+
+  - Analyzing artifacts and extracting commonalities
+    - Part of our practical approach
+    - Introduce exercise we did way back on finding out what each section of 
+    each artifact is really saying
+      - Each section has its own purpose and we need to identify it
+      - What is boilerplate text (common to all artifacts of a given type), 
+      what is contextual text, and what is knowledge we really care about?
+      - Can we extract the knowledge and abstract the rest?
+    - Using the SmithEtAl SRS as our example for each of the case studies
+    mentioned above, what do we find?
+      - SRS is separated into distinct sections with related subsections within
+      - Each section and subsection has a specific purpose
+        - Table: SRS Sections & subsections and their purposes
+      - The exact text differs, but the core idea being conveyed is the same
+        - System-specific knowledge will obviously differ.
+        - Other text may look different, but is either saying the same thing or 
+        adding something that is not relevant to the other examples
+          - Example: Pick one section from two of the SRS (SWHS and GlassBR?) and explain
+
+---------------------
+OUTLINE
+---------------------
+
+-- The 'Main Idea Notes' above could really be a huge part of the introduction

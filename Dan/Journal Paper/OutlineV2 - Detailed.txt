@@ -79,13 +79,14 @@ Main idea Notes (outline after):
     - Not the be-all, end-all of software development
     - Only useful (and useable) in well-understood domains
       - We need to know how to capture and structure knowledge effectively
-      - Ex. Science/math
+        - Ex. Science/math
     - One tool with a specific set of possible outputs and limited scope
     - Will not replace human developers, only help remove some of the tedium of
       following good software development practices
-    - Complete - Dev is still in progress
+    - Not complete - Dev is still in progress
   
   - Our examples - SWHS, GlassBR, Gamephys, Tiny, and NoPCM
+    - Drove our practical approach
     - All re-developed to follow the SmithEtAl artifact templates using modern SE approaches
       - Gives us consistent views
         - Knowledge is easier to extract
@@ -95,6 +96,8 @@ Main idea Notes (outline after):
       - Model solar water heating system with and without phase change material (PCM)
     - GlassBR
       - Models whether glass panes will break due to force of explosions
+    - SSP
+      - Models slope stability
     - Gamephys
       - Reduced-scope section of the Chipmunk2D game physics engine
       - Simulates rigid-body physics
@@ -124,8 +127,49 @@ Main idea Notes (outline after):
         adding something that is not relevant to the other examples
           - Example: Pick one section from two of the SRS (SWHS and GlassBR?) and explain
 
+
+          
 ---------------------
 OUTLINE
 ---------------------
 
 -- The 'Main Idea Notes' above could really be a huge part of the introduction
+
+Introduction
+  - Problem
+  - Drasil
+    - What is?
+    - What isn't?
+      - Scope goes here
+  - Artifacts and analysis
+  - Roadmap of doc
+
+Background
+  - Software artifact reuse and generation
+    - Literate programming
+    - Reproducible research
+    - Literate software
+  - Generative Software Development
+  - Knowledge-based software engineering
+  - SC Software dev
+  - Other influences
+    - Model-driven design
+    - Grounded theory
+
+Case studies - in-depth background
+  - GlassBR (as key example for this paper)
+    - Overview
+    - Specific equations - used for examples later on
+  - SWHS/NoPCM
+    - Overview
+    - Specific equations
+  - SSP
+    - Overview
+    - Specific equations
+  - Gamephys
+    - Overview
+    - Specific equations
+  - Tiny
+    - Overview
+    - Specific equations
+  

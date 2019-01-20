@@ -1,5 +1,5 @@
 Name:		drasil-printers
-Version:	0.1.5
+Version:	0.1.7
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -12,6 +12,7 @@ library
       Language.Drasil.Config
     , Language.Drasil.Format
     , Language.Drasil.Output.Formats
+    , Language.Drasil.HTML.CSS
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad
@@ -41,9 +42,10 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0),
-    drasil-lang >= 0.1.23
+    drasil-lang >= 0.1.53
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
+
 
 source-repository head
   type:     git

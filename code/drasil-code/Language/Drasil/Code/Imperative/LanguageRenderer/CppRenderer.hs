@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   classDec, namespaceD, includeD, fileNameD, cpplist)
 import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, oneTabbed, vmap, vibmap)
 
-import Prelude hiding (break, print, return)
+import Prelude hiding (break, print, return,(<>))
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
 validListTypes :: [Label]

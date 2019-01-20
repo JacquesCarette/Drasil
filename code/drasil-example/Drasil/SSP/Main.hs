@@ -1,12 +1,13 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+-- import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
+--   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.SSP.Body (ssp_srs, printSetting)
 
+{- for when we can generate code again, comment this out
 sspChoices :: Choices
 sspChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
@@ -17,7 +18,7 @@ sspChoices = Choices {
   onSfwrConstraint = Warning,  -- Warning, Exception
   onPhysConstraint = Warning,  -- Warning, Exception
   inputStructure = Loose    -- Loose, AsClass
-}  
+} -} 
        
 main :: IO ()            
 main = do

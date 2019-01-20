@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.13
+Version:	0.1.19
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -9,11 +9,15 @@ library
   exposed-modules:
       Drasil.DocLang
     , Drasil.DocLang.SRS
+    , Drasil.DocumentLanguage.Units
   other-modules:
       Drasil.DocumentLanguage
+    , Drasil.ExtractDocDesc
+    , Drasil.TraceTable
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.DocumentLanguage.Labels
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.Introduction
@@ -39,10 +43,11 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0),
-    drasil-lang >= 0.1.23,
-    drasil-data >= 0.1.6
+    drasil-lang >= 0.1.54,
+    drasil-data >= 0.1.9
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
+
 
 source-repository head
   type:     git

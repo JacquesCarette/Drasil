@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)
@@ -8,16 +8,17 @@ import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(Corners, Concat, Special, Atomic, Empty, Atop), USymb(US),
-  DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
+  Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
+  DType(DD, TM, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
+  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag)
+  author, article_title, title, head_tag)
 import qualified Language.Drasil.Output.Formats as F
+import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
@@ -25,10 +26,11 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn, Point), 
+  Real, Rational, Natural, Integer, IsIn, Point, Perc), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
+  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
+  LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
@@ -42,8 +44,8 @@ import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, L.HasTermTable ctx, L.HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -60,6 +62,7 @@ build fn (Document t a c) =
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
+printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
                                  div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ p_spec contents
@@ -98,10 +101,11 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref L.Link r a _)  = reflinkURI r $ p_spec a
-p_spec (Ref _      r a _)  = reflink    r $ p_spec a
-p_spec EmptyS            = text "" -- Expected in the output
-p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
+p_spec (Ref Internal r a )  = reflink  r $ p_spec a
+p_spec (Ref Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
+p_spec (Ref External r a ) = reflinkURI  r $ p_spec a
+p_spec EmptyS             = text "" -- Expected in the output
+p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 
@@ -203,6 +207,7 @@ p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
 p_ops Point    = "."
+p_ops Perc     = "%"
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("
@@ -297,7 +302,7 @@ p_item (Nested s l) = vcat [p_spec s, makeList l]
 -----------------------------------------------------------------
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
+makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc

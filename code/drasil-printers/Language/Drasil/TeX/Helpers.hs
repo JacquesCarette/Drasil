@@ -8,7 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (<>), (%%))
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (%%))
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -105,8 +105,7 @@ href a0 a1 = command2 "href" a0 a1
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x
 
-mref, rref, aref, lcref, ucref, cite :: D -> D
-mref  x = custRef "M\\ref"  x
+rref, aref, lcref, ucref, cite :: D -> D
 rref  x = custRef "R\\ref"  x
 aref  x = custRef "A\\ref"  x
 lcref x = custRef "LC\\ref" x

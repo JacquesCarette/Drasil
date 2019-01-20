@@ -5,6 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
   fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
   repeated, singleLine, singleton)
@@ -16,7 +17,7 @@ allMods :: [Mod]
 allMods = [readTableMod, inputMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
-implVars :: [VarChunk]
+implVars :: [QuantityDict]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
@@ -63,10 +64,10 @@ one = Atomic "1"
 two = Atomic "2"
 
 -- No need to be too verbose
-var :: String -> Symbol -> Space -> VarChunk
+var :: String -> Symbol -> Space -> QuantityDict
 var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
 
-y_2, y_1, x_2, x_1, x :: VarChunk
+y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1"          (sub lY one) Real
 y_2  = var "y2"          (sub lY two) Real
 x_1  = var "x1"          (sub lX one) Real
@@ -74,7 +75,7 @@ x_2  = var "x2"          (sub lX two) Real
 x    = var "x"            lX          Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename :: VarChunk
+  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename :: QuantityDict
 v       = var "v"         lV                          Real
 i       = var "i"         lI                          Natural
 j       = var "j"         lJ                          Natural
@@ -98,12 +99,12 @@ filename= var "filename"  (Atomic "filename")         String
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Num a, Fractional a) => (a, a) -> (a, a) -> a
+slope :: (Fractional a) => (a, a) -> (a, a) -> a
 slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
 onLine p1@(x1,y1) p2 x_ = 
   let m = slope p1 p2 in
   m * (x_ - x1) + y1
@@ -121,7 +122,7 @@ aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
 getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
 
-call :: Func -> [VarChunk] -> FuncStmt
+call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FProcCall f $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr

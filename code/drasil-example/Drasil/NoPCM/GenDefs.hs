@@ -1,6 +1,7 @@
 module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
 
 import Language.Drasil
+import Language.Drasil.Development (UnitDefn) -- FIXME?
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -18,7 +19,6 @@ import Data.Drasil.Utils (weave)
 import Drasil.SWHS.Assumptions (newA3, newA4, newA5)
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimp_desc)
-import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
@@ -27,7 +27,8 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
-rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [S "FIXME: no sources"] "rocTempSimp" [rocTempSimp_desc]
+rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
+  [{-S "FIXME: no sources"-}] "rocTempSimp" [rocTempSimp_desc]
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
@@ -41,15 +42,15 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
   genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRef newA3, makeRef newA4, makeRef newA5],
+    QT.temp vol [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5],
   genDefDesc5 density mass vol]
 
 genDefDesc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
-  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> [Sentence]
+genDefDesc2 :: (Quantity b, Quantity e) => ConceptChunk -> b -> UnitalChunk ->
+  UnitalChunk -> e -> ConceptChunk -> [Sentence]
 genDefDesc2 gad su vo tfv unv un =
   [S "Applying", titleize gad, S "to the first term over",
   (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
@@ -66,7 +67,7 @@ genDefDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   (foldlList Comma List assumps) `sC` S "we have"]
 

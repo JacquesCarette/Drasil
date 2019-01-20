@@ -59,7 +59,11 @@ th, td {border: 1px solid black; padding: 0.5em;}
   white-space: -o-pre-wrap;
   background: #faf8f0;}
 .list {text-align: left;}
-.figure {max-width: 100%;}
+figure {
+max-width: 100%;
+text-align: center;
+font-style: bold;
+}
 .matrix {
   position: relative;
   display: inline-table;

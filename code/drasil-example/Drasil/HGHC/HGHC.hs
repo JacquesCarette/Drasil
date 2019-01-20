@@ -1,7 +1,9 @@
 module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols, printSetting) where
 
+import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Development (UnitDefn)
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -12,9 +14,9 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
-import Data.Drasil.SI_Units (si_units)
+import Data.Drasil.SI_Units (si_units, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
 import Data.Drasil.Phrase (for)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
@@ -37,15 +39,23 @@ thisSI = SI {
   _constraints = ([] :: [ConstrainedChunk]),
   _constants = [],
   _sysinfodb = allSymbols,
-  _refdb = rdb [] [] [] [] [] [] [] -- FIXME?
+  _usedinfodb = usedDB,
+  _refdb = rdb [] [] [] -- FIXME?
 }
 
-check_si :: [UnitDefn]
+check_si :: [UnitDefn] -- FIXME? Probably shouldn't be done here
 check_si = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
-allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
-  si_units
+allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
+  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
+ ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+  si_units Map.empty Map.empty [] [] [] [] [] [] [] []
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si)
+           ([] :: [ConceptChunk]) check_si Map.empty Map.empty [] [] [] [] []
+           [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

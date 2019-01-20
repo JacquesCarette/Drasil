@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
     systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
-import Data.Drasil.Phrase (for'')
+import Data.Drasil.Phrase (for'', the')
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -53,8 +53,8 @@ charOfIR    cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
 orgOfDoc    cs ss = section' (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
 stakeholder cs ss = section' (titleize' Doc.stakeholder) cs ss "Stakeholder"
-theCustomer cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
-theClient   cs ss = section' (titleize $ the Doc.client) cs ss "Client"
+theCustomer cs ss = section' (titleizeNP $ the' Doc.customer) cs ss "Customer"
+theClient   cs ss = section' (titleizeNP $ the' Doc.client) cs ss "Client"
 
 genSysDes   cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"
@@ -99,7 +99,7 @@ tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (mkLabelRASec d (toString a))
+section' a b c d = section a b c (makeSecRef d (toString a))
   where
     toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
     toString (S x) = x
@@ -110,19 +110,19 @@ section' a b c d = section a b c (mkLabelRASec d (toString a))
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Label
-physSystLabel      = mkLabelRASec "PhysSyst" "Physical System Description"
-datConLabel        = mkLabelRASec "DataConstraints" "Data Constraints"
-genDefnLabel       = mkLabelRASec "GDs" "General Definitions"
-thModelLabel       = mkLabelRASec "TMs" "Theoretical Models"
-dataDefnLabel      = mkLabelRASec "DDs" "Data Definitions"
-inModelLabel       = mkLabelRASec "IMs" "Instance Models"
-likeChgLabel       = mkLabelRASec "LCs" "Likely Changes"
-unlikeChgLabel     = mkLabelRASec "UCs" "Unlikely Changes"
-tOfSymbLabel       = mkLabelRASec "ToS" "Table of Symbols"
-valsOfAuxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
-referenceLabel     = mkLabelRASec "References" "References" 
-indPRCaseLabel     = mkLabelRASec "IndividualProdUC" "Individual Product Use Cases"
-assumptLabel       = mkLabelRASec "Assumps" "Assumptions"
-funcReqLabel       = mkLabelRASec "FRs" "Functional Requirements"
-solCharSpecLabel   = mkLabelRASec "SolCharSpec" "Solution Characteristics Specification"
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Reference
+physSystLabel      = makeSecRef "PhysSyst" "Physical System Description"
+datConLabel        = makeSecRef "DataConstraints" "Data Constraints"
+genDefnLabel       = makeSecRef "GDs" "General Definitions"
+thModelLabel       = makeSecRef "TMs" "Theoretical Models"
+dataDefnLabel      = makeSecRef "DDs" "Data Definitions"
+inModelLabel       = makeSecRef "IMs" "Instance Models"
+likeChgLabel       = makeSecRef "LCs" "Likely Changes"
+unlikeChgLabel     = makeSecRef "UCs" "Unlikely Changes"
+tOfSymbLabel       = makeSecRef "ToS" "Table of Symbols"
+valsOfAuxConsLabel = makeSecRef "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+referenceLabel     = makeSecRef "References" "References" 
+indPRCaseLabel     = makeSecRef "IndividualProdUC" "Individual Product Use Cases"
+assumptLabel       = makeSecRef "Assumps" "Assumptions"
+funcReqLabel       = makeSecRef "FRs" "Functional Requirements"
+solCharSpecLabel   = makeSecRef "SolCharSpec" "Solution Characteristics Specification"

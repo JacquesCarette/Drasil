@@ -1,5 +1,6 @@
 module Language.Drasil.Make.Print where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, (<>), (<+>), ($+$), hsep, vcat) 
 
 import Language.Drasil.Output.Formats (DocSpec(..))

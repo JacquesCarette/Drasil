@@ -3,7 +3,7 @@ module Data.Drasil.Utils
   ( foldle
   , foldle1
   , mkEnumAbbrevList
-  , zipFTable
+  , zipFTable'
   , zipSentList
   , makeTMatrix
   , itemRefToSent
@@ -14,6 +14,8 @@ module Data.Drasil.Utils
   , bulletNested
   , enumSimple
   , enumBullet
+  , enumSimpleU
+  , enumBulletU
   , mkInputDatTb
   , getRVal
   , addPercent
@@ -26,14 +28,16 @@ module Data.Drasil.Utils
   ) where
 
 import Language.Drasil
-import Control.Lens ((^.))
+import Language.Drasil.Development (UnitDefn, MayHaveUnit(getUnit))
 
-import Data.List (transpose)
+import Control.Lens ((^.))
+import Data.List (transpose, elem)
+
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
-eqUnR :: Expr -> Label -> LabelledContent
+eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
 
 eqUnR' :: Expr -> Contents
@@ -70,7 +74,7 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a) => Sentence -> a -> Sentence
+fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets a reasonable or typical value from a Constrained chunk
@@ -81,7 +85,7 @@ getRVal c = uns (c ^. reasVal)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
-addPercent num = (S (show num) :+: (Sp Percent))
+addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
@@ -90,22 +94,18 @@ zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
--- acc - accumulator
--- k   - list of type that is comparable
--- l   - list of type that is comparable
-zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
-zipFTable acc _ []              = acc
-zipFTable acc [] l              = acc ++ (take (length l) (repeat EmptyS))
-zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
-                                | otherwise = zipFTable (acc++[EmptyS]) k ys
+
+zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
+zipFTable' content l = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS]) l
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
+makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
+
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
-mkInputDatTb :: (Quantity a) => [a] -> LabelledContent
-mkInputDatTb inputVar = llcc (mkLabelSame "inDataTable" Tab) $ 
+mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
+mkInputDatTb inputVar = llcc (makeTabRef "inDataTable") $ 
   Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
@@ -122,7 +122,7 @@ itemRefToSent a b = S a +:+ sParen b
 -- l - list whos length is to be matched
 -- r - reference to be repeated
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l r = take (length l) $ repeat $ makeRef r
+makeListRef l r = take (length l) $ repeat $ Ref $ makeRef2 r
 
 -- | bulletFlat applies Bullet and Flat to a list.
 bulletFlat :: [Sentence] -> ListType
@@ -135,15 +135,21 @@ bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
-enumBullet :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumBullet s = UlC $ ulcc $ Enumeration $ bulletFlat s
+enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
+enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
+
+enumBulletU ::[Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
-enumSimple :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumSimple s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
+enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
@@ -151,12 +157,12 @@ weave = concat . transpose
 
 -- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
-unwrap (Just a) = Sy (a ^. usymb)
+unwrap (Just a) = Sy $ usymb a
 unwrap Nothing  = EmptyS
 
 -- | noRefs converts lists of simple ItemTypes into a lists which may be used
 -- in Contents but not directly referable.
-noRefs :: [ItemType] -> [(ItemType, Maybe RefAdd)]
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 noRefs a = zip a $ repeat Nothing
 
 -- | noRefsLT converts lists of tuples containing a title and ItemType into
@@ -165,6 +171,6 @@ noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 prodUCTbl :: [[Sentence]] -> LabelledContent
-prodUCTbl cases = llcc (mkLabelSame "useCaseTable" Tab) $ --FIXME: do we want labels across examples to be unique?
+prodUCTbl cases = llcc (makeTabRef "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
   Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases (titleize useCaseTable) True

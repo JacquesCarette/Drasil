@@ -1,15 +1,13 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary
-  ( UnitaryChunk
-  , unitary, mkUnitary
-  , Unitary(..)) where
+  ( UnitaryChunk, unitary, mkUnitary, Unitary(..), unit_symb) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain, HasSymbol(symbol), IsUnit)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, mkQuant, qw, 
-  HasSpace(typ))
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
-  MayHaveUnit(getUnit))
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  ConceptDomain, IsUnit, usymb, Quantity, HasSpace(typ))
+import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
+import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
@@ -42,5 +40,11 @@ unitary :: (IsUnit u, ConceptDomain u) =>
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
-mkUnitary :: (Unitary u) => u -> UnitaryChunk
+mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)
+
+-- | Helper for getting the unit's symbol from a chunk, 
+-- as opposed to the symbols of the chunk itself.
+unit_symb :: (Unitary c) => c -> USymb
+unit_symb c = usymb $ unit c
+

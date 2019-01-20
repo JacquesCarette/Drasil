@@ -8,11 +8,13 @@ import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, maybeChanged,
   maybeExpanded, sAnd)
-import Data.Drasil.Concepts.Documentation (section_, likelyChg, unlikelyChg,
+import Data.Drasil.Concepts.Documentation as Doc (section_, likelyChg, unlikelyChg,
   physics, game, library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
+
+import Drasil.GamePhysics.Assumptions (newA5, newA6, newA7)
 
 ---------------------
 --  LIKELY CHANGES --
@@ -22,11 +24,14 @@ likelyChanges :: Section
 likelyChangesIntro :: Contents
 likelyChangesList :: [Contents]
 
+likelyChangesListwithIntro :: [Contents]
+likelyChangesListwithIntro = [likelyChangesIntro] ++ likelyChangesList
+
 likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
   S "lists the", plural likelyChg, S "to be made to the",
-  phrase game, phrase physics, phrase library]
+  phrase game, phrase Doc.physics, phrase library]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -38,13 +43,13 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+
-  plural CP.collision)
+  plural CP.collision) +:+ makeRef2S newA5
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping))
+  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRef2S newA6
 
 likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
-  (plural CP.joint) `sAnd` (plural CM.constraint))
+  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ (makeRef2S newA7)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 
@@ -65,10 +70,13 @@ likelyChangesList = mkEnumSimpleD likelyChangesList'
 unlikelyChanges :: Section
 unlikelyChangesIntro :: Contents
 
+unlikelyChangeswithIntro :: [Contents]
+unlikelyChangeswithIntro = [unlikelyChangesIntro] ++ unlikelyChangesList
+
 unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
 
 unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
-  plural unlikelyChg, S "to be made to the", phrase game, phrase physics,
+  plural unlikelyChg, S "to be made to the", phrase game, phrase Doc.physics,
   phrase library]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2,

@@ -2,7 +2,9 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
   roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
+
 import Language.Drasil
+import Language.Drasil.Development (UnitDefn, getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
@@ -20,7 +22,6 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (nwtnCoolingL, rocTempSimpL)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
@@ -37,15 +38,18 @@ import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
 swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCooling, rocTempSimp] 
 
+-- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) [makeRef incroperaEtAl2007 +:+ sParen (S "pg. 8")] "nwtnCooling" [nwtnCooling_desc]
-rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [S "FIXME: no sources"]                   "rocTempSimp" [rocTempSimp_desc]
+nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) 
+  [incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
+                 "rocTempSimp" [rocTempSimp_desc]
 
 --
 
 nwtnCoolingRC :: RelationConcept
 nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel nwtnCoolingL
+  nwtnCooling_desc nwtnCooling_rel -- nwtnCoolingL
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
@@ -60,7 +64,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (makeRef newA2) +:+.
+  S "assumed independant of", ch QT.temp, sParen (makeRef2S newA2) +:+.
   sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
   apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
   S "time-dependant thermal gradient between the environment and the object",
@@ -69,7 +73,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimpRC :: RelationConcept
 rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel rocTempSimpL
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
@@ -109,15 +113,15 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRef newA3, makeRef newA4, 
-                 makeRef newA5, makeRef newA6],
+    QT.temp vol [makeRef2S newA3, makeRef2S newA4, 
+                 makeRef2S newA5, makeRef2S newA6],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 cchn su vo tfv unv un =
   [S "Applying", titleize cchn, S "to the first term over",
@@ -135,7 +139,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   (foldlList Comma List assumps) `sC` S "we have"]
 

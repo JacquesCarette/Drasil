@@ -4,6 +4,8 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Phrase (compoundNC, compoundNCPlPh, compoundNCPlPl)
+import Data.Drasil.IdeaDicts
 
 algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")
@@ -11,6 +13,10 @@ algorithm    = dcc "algorithm" (cn' "algorithm")
 
 mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
+
+compcon :: [NamedChunk]
+compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
+  inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
 
 application, computer, structure :: NamedChunk
 os :: CI
@@ -20,7 +26,7 @@ os :: CI
 application  = nc  "application"    (cn' "application")      
 computer     = nc  "computer"       (cn' "computer")         
 structure    = nc  "structure"      (cn' "structure")         
-os           = commonIdea "os"      (cn' "operating system")    "OS"
+os           = commonIdeaWithDict "os"      (cn' "operating system")    "OS"   [compScience]
 
 
 dataStruct, dataStruct', dataType, dataType', 

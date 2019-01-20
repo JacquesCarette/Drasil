@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 module Language.Drasil.NounPhrase 
   ( NounPhrase(..)
   , NP
@@ -6,7 +5,7 @@ module Language.Drasil.NounPhrase
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , at_start, at_start', titleize, titleize'
+  , at_startNP, at_startNP', titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -14,15 +13,14 @@ module Language.Drasil.NounPhrase
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
 
 import Language.Drasil.NounPhrase.Core -- uses whole module
-import Language.Drasil.Spec (Sentence((:+:), S), (+:+))
-
+import Language.Drasil.Sentence (Sentence((:+:), S), (+:+))
 
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
 
 class NounPhrase n where
-  phrase :: n -> Sentence -- ex. "the quick brown fox"
-  plural :: n -> PluralForm -- ex. "the quick brown foxes" 
+  phraseNP :: n -> Sentence -- ex. "the quick brown fox"
+  pluralNP :: n -> PluralForm -- ex. "the quick brown foxes" 
     --Could replace plural string with a function.
   sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
@@ -35,16 +33,16 @@ type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralString   = String
 
 instance NounPhrase NP where
-  phrase (ProperNoun n _)             = S n
-  phrase (CommonNoun n _ _)           = S n
-  phrase (Phrase n _ _ _)             = n
-  plural n@(ProperNoun _ p)           = sPlur (phrase n) p
-  plural n@(CommonNoun _ p _)         = sPlur (phrase n) p
-  plural (Phrase _ p _ _)             = p
-  sentenceCase n@ProperNoun {}   _ = phrase n
+  phraseNP (ProperNoun n _)             = S n
+  phraseNP (CommonNoun n _ _)           = S n
+  phraseNP (Phrase n _ _ _)             = n
+  pluralNP n@(ProperNoun _ p)           = sPlur (phraseNP n) p
+  pluralNP n@(CommonNoun _ p _)         = sPlur (phraseNP n) p
+  pluralNP (Phrase _ p _ _)             = p
+  sentenceCase n@ProperNoun {}   _ = phraseNP n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
-  titleCase n@ProperNoun {}      _ = phrase n
+  titleCase n@ProperNoun {}      _ = phraseNP n
   titleCase n@CommonNoun {}    f = cap (f n) CapWords
   titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
   
@@ -140,13 +138,13 @@ nounPhraseSent s = Phrase s s CapFirst CapWords
 -- "system constraint" and plural "system constraints"
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 
-  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst CapWords
+  (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapFirst CapWords
   
 -- | Similar to 'compoundPhrase', but where the sentence case is the same
 -- as the title case (CapWords).
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
-  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
+  (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapWords CapWords
 
 -- | Similar to 'compoundPhrase\'', but which accepts functions to be used for
 -- constructing the plural form. For example 
@@ -154,7 +152,7 @@ compoundPhrase' t1 t2 = Phrase
 -- form "systems constraint". 
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
-  (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
+  (phraseNP t1 +:+ phraseNP t2) (f1 t1 +:+ f2 t2) CapWords CapWords
 
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
@@ -162,27 +160,27 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 --Used when you need a special function apllied to the first term (eg. short or plural)
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
-  (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
+  (f1 t1 +:+ phraseNP t2) (f1 t1 +:+ pluralNP t2) CapFirst CapWords
 
 --For Data.Drasil.Documentation
 --Pluralizes the first word in two phrases
 compoundPhraseP1 :: NP -> NP -> NP
-compoundPhraseP1 = compoundPhrase''' plural
+compoundPhraseP1 = compoundPhrase''' pluralNP
 
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.
-at_start, at_start' :: NounPhrase n => n -> Capitalization
+at_startNP, at_startNP' :: NounPhrase n => n -> Capitalization
 -- | Singular sentence case.
-at_start  n = sentenceCase n phrase
+at_startNP  n = sentenceCase n phraseNP
 -- | Plural sentence case.
-at_start' n = sentenceCase n plural
+at_startNP' n = sentenceCase n pluralNP
 
 -- | Helper function for getting the title case of a noun phrase.
-titleize, titleize' :: NounPhrase n => n -> Capitalization
+titleizeNP, titleizeNP' :: NounPhrase n => n -> Capitalization
 -- | Singular title case.
-titleize  n = titleCase n phrase
+titleizeNP  n = titleCase n phraseNP
 -- | Plural title case.
-titleize' n = titleCase n plural
+titleizeNP' n = titleCase n pluralNP
 
 -- DO NOT EXPORT --                
 -- | Pluralization helper function.
@@ -194,7 +192,7 @@ sPlur s@(S _) SelfPlur = s
 sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
-
+--  titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
 -- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s

@@ -2,6 +2,11 @@ module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (material_, property)
+import Data.Drasil.Phrase (compoundNC)
+
+physicalcon :: [ConceptChunk]
+physicalcon = [gaseous, liquid, solid, ctrOfMass, density, mass, len, dimension,
+  vol, flexure]
 
 gaseous, liquid, solid, ctrOfMass, density, mass, len, dimension,
   vol, flexure :: ConceptChunk

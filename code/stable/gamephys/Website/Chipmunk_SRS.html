@@ -464,10 +464,10 @@ s
 </tr>
 <tr>
 <td>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+<em><b>v</b><sub>A</sub></em>
 </td>
 <td>
-Relative Velocity Between Rigid Bodies of a and B
+Velocity At Point a
 </td>
 <td>
 m/s
@@ -479,6 +479,17 @@ m/s
 </td>
 <td>
 Velocity At Point B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+<em><b>v</b><sub>i</sub></em>
+</td>
+<td>
+Velocity Of the I-Th Body's Velocity
 </td>
 <td>
 m/s
@@ -508,21 +519,10 @@ m/s
 </tr>
 <tr>
 <td>
-<em><b>v</b><sub>A</sub></em>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em>
 </td>
 <td>
-Velocity At Point a
-</td>
-<td>
-m/s
-</td>
-</tr>
-<tr>
-<td>
-<em><b>v</b><sub>i</sub></em>
-</td>
-<td>
-Velocity Of the I-Th Body's Velocity
+Relative Velocity Between Rigid Bodies of a and B
 </td>
 <td>
 m/s
@@ -845,7 +845,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -855,7 +855,7 @@ Reviewers of this documentation should have a strong knowledge in rigid body dyn
 Organization of Document
 </h2>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>parnas1972</a> and <a href=#dParnasPcClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>dParnas1972</a> and <a href=#parnasClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
@@ -878,13 +878,15 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:sysCtxDiag>sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
-<img class="figure" src="../../../datafiles/GamePhysics/sysctx.png" alt="System Context"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GamePhysics/sysctx.png" alt="System Context" >
+<figcaption>
 System Context
-</p>
+</figcaption>
+</figure>
 </div>
 <p class="paragraph">
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -957,7 +959,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Section: Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
@@ -1018,7 +1020,7 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1026,19 +1028,19 @@ The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Ins
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
 <div id="A:objectTy">
-objectTy: All objects are rigid bodies.
+objectTy: All objects are rigid bodies. <a href=#DD:impulse>DD: impulse</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:objectDimension">
-objectDimension: All objects are 2D.
+objectDimension: All objects are 2D. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
@@ -1052,28 +1054,28 @@ coordinateSystemTy: The library uses a Cartesian coordinate system.
 <ul class="hide-list-style">
 <li>
 <div id="A:axesDefined">
-axesDefined: The axes are defined using right-handed coordinate system.
+axesDefined: The axes are defined using right-handed coordinate system. <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:collisionType">
-collisionType: All rigid bodies collisions are vertex-to-edge collisions.
+collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a href=#lcEC>LC: Expanded-Collisions</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:dampingInvolvement">
-dampingInvolvement: There is no damping involved throughout the simulation.
+dampingInvolvement: There is no damping involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:constraintsAndJointsInvolvement">
-constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation.
+constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#lcIJC>LC: Include-Joints-Constraints</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
 </li>
 </ul>
@@ -1087,7 +1089,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 </p>
-<div id="T:newtonSL">
+<div id="TM:NewtonSecLawMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1104,10 +1106,8 @@ Newton's second law of motion
 Equation
 </th>
 <td>
-<div id="Eqn:T:newtonSL">
 <div class="equation">
 <em><b>F</b> = m&#8239;<b>a</b></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1152,13 +1152,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:newtonTL">
+<div id="TM:NewtonThirdLawMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1175,10 +1175,8 @@ Newton's third law of motion
 Equation
 </th>
 <td>
-<div id="Eqn:T:newtonTL">
 <div class="equation">
 <em><b>F</b><sub>1</sub> = &minus;<b>F</b><sub>2</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1220,13 +1218,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:newtonLUG">
+<div id="TM:UniversalGravLaw">
 <table class="tdefn">
 <tr>
 <th>
@@ -1243,7 +1241,6 @@ Newton's law of universal gravitation
 Equation
 </th>
 <td>
-<div id="Eqn:T:newtonLUG">
 <div class="equation">
 <em><b>F</b> = G&#8239;<div class="fraction">
 <span class="fup">
@@ -1267,7 +1264,6 @@ m<sub>1</sub>&#8239;m<sub>2</sub>
 ||<b>r</b>||
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1324,13 +1320,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:chaslesThm">
+<div id="TM:ChaslesThm">
 <table class="tdefn">
 <tr>
 <th>
@@ -1347,10 +1343,8 @@ Chasles' theorem
 Equation
 </th>
 <td>
-<div id="Eqn:T:chaslesThm">
 <div class="equation">
 <em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1381,7 +1375,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
@@ -1398,13 +1392,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:newtonSLR">
+<div id="TM:NewtonSecLawRotMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1421,10 +1415,8 @@ Newton's second law for rotational motion
 Equation
 </th>
 <td>
-<div id="Eqn:T:newtonSLR">
 <div class="equation">
 <em>τ = <b>I</b>&#8239;α</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1452,7 +1444,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional <a href=#A:objectDimension>A: objectDimension</a>.
 </p>
 </td>
 </tr>
@@ -1469,7 +1461,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1485,479 +1477,6 @@ General Definitions
 <p class="paragraph">
 There are no general definitions.
 </p>
-</div>
-</div>
-<div id="Sec:IMs">
-<div class="subsubsection">
-<h3>
-Instance Models
-</h3>
-<p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
-</p>
-<div id="IM:transMot">
-<table class="idefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Force on the translational motion of a set of 2d rigid bodies
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em><b>a</b><sub>i</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em><b>v</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>t&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>g&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em><b>F</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>m<sub>j</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:IM:transMot">
-<div class="equation">
-<em><b>a</b><sub>i</sub> = <div class="fraction">
-<span class="fup">
-d&#8239;<b>v</b><sub>i</sub>(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div> = g&plus;<div class="fraction">
-<span class="fup">
-<b>F</b><sub>i</sub>(t)
-</span>
-<span class="fdn">
-m<sub>j</sub>
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
-</li>
-<li>
-<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
-</li>
-<li>
-<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
-</li>
-<li>
-<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="IM:rotMot">
-<table class="idefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Force on the rotational motion of a set of 2D rigid body
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>ω</em>, <em>t</em>, <em>τ<sub>i</sub></em>, <em><b>I</b></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>α</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em>ω&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>t&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>τ<sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em><b>I</b>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em>α&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:IM:rotMot">
-<div class="equation">
-<em>α = <div class="fraction">
-<span class="fup">
-d&#8239;ω(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div> = <div class="fraction">
-<span class="fup">
-τ<sub>i</sub>(t)
-</span>
-<span class="fdn">
-<b>I</b>
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>ω</em> is the angular velocity (rad/s)
-</li>
-<li>
-<em>τ<sub>i</sub></em> is the torque applied to the i-th body (N&sdot;m)
-</li>
-<li>
-<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="IM:col2D">
-<table class="idefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Collisions on 2D rigid bodies
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>t</em>, <em>j</em>, <em>m<sub>A</sub></em>, <em><b>n</b></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>t<sub>c</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em>t&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>j&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>m<sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em><b>n</b>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em><b>v</b><sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>t<sub>c</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:IM:col2D">
-<div class="equation">
-<em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
-<span class="fup">
-j
-</span>
-<span class="fdn">
-m<sub>A</sub>
-</span>
-</div>&#8239;<b>n</b></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s)
-</li>
-<li>
-<em>t<sub>c</sub></em> is the denotes the time at collision (s)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>j</em> is the impulse (scalar) (N&sdot;s)
-</li>
-<li>
-<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
-</li>
-<li>
-<em><b>n</b></em> is the collision normal vector (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div id="Sec:DDs">
@@ -2005,7 +1524,6 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:ctrOfMass">
 <div class="equation">
 <em><b>p</b><sub>CM</sub> = <div class="fraction">
 <span class="fup">
@@ -2015,7 +1533,6 @@ Equation
 M
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2042,6 +1559,19 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2056,7 +1586,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:transMot>IM: transMot</a> <a href=#IM:col2D>IM: col2D</a>.
 </p>
 </td>
 </tr>
@@ -2099,7 +1629,6 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linDisp">
 <div class="equation">
 <em><b>r</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2109,7 +1638,6 @@ d&#8239;<b>p</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2133,6 +1661,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2147,7 +1691,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:transMot>IM: transMot</a>.
 </p>
 </td>
 </tr>
@@ -2190,7 +1734,6 @@ m/s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linVel">
 <div class="equation">
 <em><b>v</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2200,7 +1743,6 @@ d&#8239;<b>r</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2224,6 +1766,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2238,7 +1796,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:transMot>IM: transMot</a>.
 </p>
 </td>
 </tr>
@@ -2281,7 +1839,6 @@ m/s<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linAcc">
 <div class="equation">
 <em><b>a</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2291,7 +1848,6 @@ d&#8239;<b>v</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2315,6 +1871,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2329,7 +1901,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:transMot>IM: transMot</a>.
 </p>
 </td>
 </tr>
@@ -2372,7 +1944,6 @@ rad
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angDisp">
 <div class="equation">
 <em>θ = <div class="fraction">
 <span class="fup">
@@ -2382,7 +1953,6 @@ d&#8239;ϕ(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2406,6 +1976,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2420,7 +2006,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:rotMot>IM: rotMot</a>.
 </p>
 </td>
 </tr>
@@ -2463,7 +2049,6 @@ rad/s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angVel">
 <div class="equation">
 <em>ω = <div class="fraction">
 <span class="fup">
@@ -2473,7 +2058,6 @@ d&#8239;θ(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2497,6 +2081,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2511,7 +2111,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:rotMot>IM: rotMot</a>.
 </p>
 </td>
 </tr>
@@ -2554,7 +2154,6 @@ rad/s<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angAccel">
 <div class="equation">
 <em>α = <div class="fraction">
 <span class="fup">
@@ -2564,7 +2163,6 @@ d&#8239;ω(t)
 d&#8239;t
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2588,6 +2186,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2602,7 +2216,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:rotMot>IM: rotMot</a>.
 </p>
 </td>
 </tr>
@@ -2645,7 +2259,6 @@ N&sdot;s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:impulse">
 <div class="equation">
 <em>j = <div class="fraction">
 <span class="fup">
@@ -2683,7 +2296,6 @@ m<sub>B</sub>
 </div>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2731,6 +2343,25 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:axesDefined>A: axesDefined</a>
+</p>
+<p class="paragraph">
+<a href=#A:collisionType>A: collisionType</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2745,7 +2376,537 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:col2D>IM: col2D</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:impulse">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Velocity At Point B
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>B</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b><sub>B</sub></em> is the velocity at point B (m/s)
+</li>
+<li>
+<em><b>v</b><sub>O</sub></em> is the velocity at point origin (m/s)
+</li>
+<li>
+<em>ω</em> is the angular velocity (rad/s)
+</li>
+<li>
+<em><b>r</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div id="Sec:IMs">
+<div class="subsubsection">
+<h3>
+Instance Models
+</h3>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+</p>
+<div id="IM:transMot">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Force on the translational motion of a set of 2d rigid bodies
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em><b>a</b><sub>i</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>g&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em><b>F</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>m<sub>j</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>a</b><sub>i</sub> = <div class="fraction">
+<span class="fup">
+d&#8239;<b>v</b><sub>i</sub>(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div> = g&plus;<div class="fraction">
+<span class="fup">
+<b>F</b><sub>i</sub>(t)
+</span>
+<span class="fdn">
+m<sub>j</sub>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
+</li>
+<li>
+<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+</li>
+<li>
+<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
+</li>
+<li>
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation expresses the total acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linAcc>DD: linAcc</a>.  It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IM:rotMot">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Force on the rotational motion of a set of 2D rigid body
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>ω</em>, <em>t</em>, <em>τ<sub>i</sub></em>, <em><b>I</b></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>α</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em>ω&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>τ<sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em><b>I</b>&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<div class="equation">
+<em>α&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>α = <div class="fraction">
+<span class="fup">
+d&#8239;ω(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div> = <div class="fraction">
+<span class="fup">
+τ<sub>i</sub>(t)
+</span>
+<span class="fdn">
+<b>I</b>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>ω</em> is the angular velocity (rad/s)
+</li>
+<li>
+<em>τ<sub>i</sub></em> is the torque applied to the i-th body (N&sdot;m)
+</li>
+<li>
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation for the total angular acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angAccel>DD: angAccel</a>. It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved. <a href=#A:axesDefined>A: axesDefined</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IM:col2D">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Collisions on 2D rigid bodies
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>t</em>, <em>j</em>, <em>m<sub>A</sub></em>, <em><b>n</b></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>t<sub>c</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>j&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>m<sub>A</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em><b>n</b>&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>A</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>t<sub>c</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
+<span class="fup">
+j
+</span>
+<span class="fdn">
+m<sub>A</sub>
+</span>
+</div>&#8239;<b>n</b></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s)
+</li>
+<li>
+<em>t<sub>c</sub></em> is the denotes the time at collision (s)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>j</em> is the impulse (scalar) (N&sdot;s)
+</li>
+<li>
+<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
+</li>
+<li>
+<em><b>n</b></em> is the collision normal vector (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This instance model is based on our assumptions regarding rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> collisions <a href=#A:collisionType>A: collisionType</a> Again, this does not take damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> into account. <a href=#A:axesDefined>A: axesDefined</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:impulse>DD: impulse</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
 </p>
 </td>
 </tr>
@@ -2759,7 +2920,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -2788,7 +2949,7 @@ Uncert.
 <em>800.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2802,7 +2963,7 @@ Uncert.
 <em>98.1</em> N
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2816,7 +2977,7 @@ Uncert.
 <em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2830,7 +2991,7 @@ Uncert.
 <em>74.5</em> kg&sdot;m<sup>2</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2844,7 +3005,7 @@ Uncert.
 <em>44.2</em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2858,7 +3019,7 @@ Uncert.
 <em>56.2</em> kg
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2872,7 +3033,7 @@ Uncert.
 <em>412.0&sdot;10<sup>-3</sup></em> m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2886,7 +3047,7 @@ Uncert.
 <em>2.51</em> m/s
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2900,7 +3061,7 @@ Uncert.
 <em>200.0</em> N&sdot;m
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2914,7 +3075,7 @@ Uncert.
 <em>2.1</em> rad/s
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -2935,7 +3096,7 @@ Uncert.
 </div></em> rad
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 </table>
@@ -3012,7 +3173,7 @@ Input-Surface-Properties: Input the surface properties of the bodies such as fri
 </p>
 <p>
 <div id="reqVPC">
-Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>.
+Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>.
 </div>
 </p>
 <p>
@@ -3044,7 +3205,7 @@ Determine-Collision-Response-Over-Time: Determine the positions and velocities o
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
+Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
 </p>
 </div>
 </div>
@@ -3066,17 +3227,17 @@ Variable-ODE-Solver: The internal ODE-solving algorithm used by the library may 
 </p>
 <p>
 <div id="lcEC">
-Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
+Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. <a href=#A:collisionType>A: collisionType</a>
 </div>
 </p>
 <p>
 <div id="lcID">
-Include-Dampening: The library may be expanded to include motion with damping.
+Include-Dampening: The library may be expanded to include motion with damping. <a href=#A:dampingInvolvement>A: dampingInvolvement</a>
 </div>
 </p>
 <p>
 <div id="lcIJC">
-Include-Joints-Constraints: The library may be expanded to include joints and constraints.
+Include-Joints-Constraints: The library may be expanded to include joints and constraints. <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
 </div>
 </p>
 </div>
@@ -3120,7 +3281,7 @@ Objects-Rigid-Bodies: All objects are rigid bodies.
 Off-The-Shelf Solutions
 </h1>
 <p class="paragraph">
-As mentioned in <a href=#Sec:ProbDesc>Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+As mentioned in <a href=#Sec:ProbDesc>Section: Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 </p>
 <ul class="list">
 <li>
@@ -3152,8 +3313,959 @@ Newton Game Dynamics: http://newtondynamics.com/
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
+<div id="Table:Tracey">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+<a href=#reqVPC>FR: Verify-Physical_Constraints</a>
+</th>
+<th>
+<a href=#IM:rotMot>IM: rotMot</a>
+</th>
+<th>
+<a href=#DD:impulse>DD: impulse</a>
+</th>
+<th>
+<a href=#IM:col2D>IM: col2D</a>
+</th>
+<th>
+<a href=#IM:transMot>IM: transMot</a>
+</th>
+<th>
+<a href=#lcIJC>LC: Include-Joints-Constraints</a>
+</th>
+<th>
+<a href=#lcEC>LC: Expanded-Collisions</a>
+</th>
+<th>
+<a href=#DD:linVel>DD: linVel</a>
+</th>
+<th>
+<a href=#DD:linDisp>DD: linDisp</a>
+</th>
+<th>
+<a href=#DD:linAcc>DD: linAcc</a>
+</th>
+<th>
+<a href=#lcID>LC: Include-Dampening</a>
+</th>
+<th>
+<a href=#DD:angVel>DD: angVel</a>
+</th>
+<th>
+<a href=#DD:angDisp>DD: angDisp</a>
+</th>
+<th>
+<a href=#DD:angAccel>DD: angAccel</a>
+</th>
+<th>
+<a href=#DD:ctrOfMass>DD: ctrOfMass</a>
+</th>
+<th>
+<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>
+</th>
+<th>
+<a href=#DD:impulse>DD: impulse</a>
+</th>
+<th>
+<a href=#TM:ChaslesThm>TM: ChaslesThm</a>
+</th>
+</tr>
+<tr>
+<td>
+<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:angAccel>DD: angAccel</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:angDisp>DD: angDisp</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:angVel>DD: angVel</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:axesDefined>A: axesDefined</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:collisionType>A: collisionType</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:objectDimension>A: objectDimension</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#A:objectTy>A: objectTy</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:impulse>DD: impulse</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:linAcc>DD: linAcc</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:linDisp>DD: linDisp</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:linVel>DD: linVel</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:ctrOfMass>DD: ctrOfMass</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Items of Different Sections
+</p>
+</div>
 <div id="Table:TraceyReqGoalsOther">
 <table class="table">
 <tr>
@@ -3179,12 +4291,12 @@ R4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
 R7 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+Data Constraints (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 </tr>
 <tr>
 <td>
-GS1 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS1 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 X
@@ -3210,7 +4322,7 @@ X
 </tr>
 <tr>
 <td>
-GS2 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS2 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3236,7 +4348,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS3 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3262,7 +4374,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS4 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3496,7 +4608,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
+Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Section: Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Section: Problem Description</a>) and Other Items
 </p>
 </div>
 <div id="Table:TraceyAssumpsOther">
@@ -3529,7 +4641,7 @@ A7 (<a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvemen
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:newtonSL>T: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </td>
 <td>
 
@@ -3555,7 +4667,7 @@ T1 (<a href=#T:newtonSL>T: NewtonSecLawMot</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:newtonTL>T: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </td>
 <td>
 
@@ -3581,7 +4693,7 @@ T2 (<a href=#T:newtonTL>T: NewtonThirdLawMot</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:newtonLUG>T: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </td>
 <td>
 
@@ -3607,7 +4719,7 @@ T3 (<a href=#T:newtonLUG>T: UniversalGravLaw</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:chaslesThm>T: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </td>
 <td>
 X
@@ -3633,7 +4745,7 @@ X
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:newtonSLR>T: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </td>
 <td>
 
@@ -3659,7 +4771,7 @@ T5 (<a href=#T:newtonSLR>T: NewtonSecLawRotMot</a>)
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3685,7 +4797,7 @@ GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3711,7 +4823,7 @@ GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3737,7 +4849,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3763,7 +4875,7 @@ GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3789,7 +4901,7 @@ GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3815,7 +4927,7 @@ GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -4049,7 +5161,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 X
@@ -4075,7 +5187,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 X
@@ -4101,7 +5213,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 X
@@ -4127,7 +5239,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC1 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -4153,7 +5265,7 @@ LC1 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#lcEC>LC: Expanded-Collisions</a>)
+LC2 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </td>
 <td>
 
@@ -4179,7 +5291,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#lcID>LC: Include-Dampening</a>)
+LC3 (<a href=#lcEC>LC: Expanded-Collisions</a>)
 </td>
 <td>
 
@@ -4205,7 +5317,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcIJC>LC: Include-Joints-Constraints</a>)
+LC4 (<a href=#lcID>LC: Include-Dampening</a>)
 </td>
 <td>
 
@@ -4231,7 +5343,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
+Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Section: Problem Description</a>) and Other Items
 </p>
 </div>
 <div id="Table:TraceyItemsSecs">
@@ -4241,40 +5353,40 @@ Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:Pr
 
 </th>
 <th>
-T1 (<a href=#T:newtonSL>T: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </th>
 <th>
-T2 (<a href=#T:newtonTL>T: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </th>
 <th>
-T3 (<a href=#T:newtonLUG>T: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </th>
 <th>
-T4 (<a href=#T:chaslesThm>T: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </th>
 <th>
-T5 (<a href=#T:newtonSLR>T: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </th>
 <th>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
 DD1 (<a href=#DD:ctrOfMass>DD: ctrOfMass</a>)
@@ -4301,18 +5413,18 @@ DD7 (<a href=#DD:angAccel>DD: angAccel</a>)
 DD8 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </th>
 <th>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:newtonSL>T: NewtonSecLawMot</a>)
+T1 (<a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>)
 </td>
 <td>
 
@@ -4386,7 +5498,7 @@ T1 (<a href=#T:newtonSL>T: NewtonSecLawMot</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:newtonTL>T: NewtonThirdLawMot</a>)
+T2 (<a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a>)
 </td>
 <td>
 
@@ -4460,7 +5572,7 @@ T2 (<a href=#T:newtonTL>T: NewtonThirdLawMot</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:newtonLUG>T: UniversalGravLaw</a>)
+T3 (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>)
 </td>
 <td>
 
@@ -4534,7 +5646,7 @@ T3 (<a href=#T:newtonLUG>T: UniversalGravLaw</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:chaslesThm>T: ChaslesTheorem</a>)
+T4 (<a href=#TM:ChaslesThm>TM: ChaslesThm</a>)
 </td>
 <td>
 
@@ -4608,7 +5720,7 @@ T4 (<a href=#T:chaslesThm>T: ChaslesTheorem</a>)
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:newtonSLR>T: NewtonSecLawRotMot</a>)
+T5 (<a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>)
 </td>
 <td>
 
@@ -4682,7 +5794,7 @@ X
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 X
@@ -4756,7 +5868,7 @@ X
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -4830,7 +5942,7 @@ X
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 X
@@ -4904,7 +6016,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -4978,7 +6090,7 @@ GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5052,7 +6164,7 @@ X
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5126,7 +6238,7 @@ GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5792,7 +6904,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 X
@@ -5866,7 +6978,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -5940,7 +7052,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -6061,7 +7173,7 @@ References
 </div>
 </li>
 <li>
-<div id="dParnasPcClements1984">
+<div id="parnasClements1984">
 [6]: Parnas, David L., Clements, P. C., and Wiess, . "The Modular Structure of Complex Systems." <em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>. 1984. pp. 408&ndash;417.
 </div>
 </li>

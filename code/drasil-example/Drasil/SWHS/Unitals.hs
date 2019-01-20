@@ -1,6 +1,7 @@
-module Drasil.SWHS.Unitals where --all of this file is exorted
+module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Control.Lens ((^.))
 
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
@@ -13,15 +14,14 @@ import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
+import Drasil.SWHS.Concepts (water)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
-  (map dqdWr swhsConstrained)
+swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
@@ -39,6 +39,15 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
+
+swhsUC :: [UnitalChunk]
+swhsUC = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+  pcm_initMltE, vol_ht_gen, htTransCoeff,
+  pcm_mass, w_mass,
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  temp_env, t_init_melt,
+  t_final_melt, tank_vol, w_vol, deltaT,
+  tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
@@ -189,8 +198,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 -- Unitless symbols --
 ----------------------
 
+-- FIXME: this list should not be hand-constructed
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, frac_min]
+swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 
@@ -213,8 +223,8 @@ frac_min = dqd' (dcc "frac_min"
 -- Constraints --
 -----------------
 
-swhsConstrained ::[UncertQ]
-swhsConstrained = swhsInputs ++ swhsOutputs
+swhsConstrained ::[ConstrConcept]
+swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
 
 -- Input Constraints
 swhsInputs :: [UncertQ]
@@ -224,8 +234,9 @@ swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, temp_PCM, 
-  temp_W, w_E, pcm_E :: UncertQ
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: UncertQ
+
+temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
 tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
@@ -250,8 +261,10 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
+-- Capitalization Issue here too.
 pcm_SA = uqc "pcm_SA"
-  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl)
+  (compoundPhrase (nounPhrase'' (S "phase change material")
+  (S "phase change material")
   CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea)
   CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material"
@@ -303,8 +316,10 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   sfwrc $ Bounded (Exc, sy htFusion_min) (Exc, sy htFusion_max)] (dbl 211600) 0.1
 
 -- Constraint 10
+-- The "S "heating coil" " should be replaced by "phrase coil",
+-- Since the capitalization issue, they are replaced by S so far.
 coil_SA = uqc "coil_SA"
-  (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
+  (compoundPhrase (nounPhrase'' (S "heating coil") (S "heating coil") CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
   [gtZeroConstr,
@@ -366,19 +381,19 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   
   
 -- Output Constraints
-swhsOutputs :: [UncertQ]
+swhsOutputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
 swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
-temp_W = uqcNU "temp_W"
+temp_W = cuc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational
   [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
 
 -- Constraint 19
-temp_PCM = uqcNU "temp_PCM"
+temp_PCM = cuc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   ("The average kinetic energy of the " ++
     "particles within the phase change material")
@@ -386,13 +401,13 @@ temp_PCM = uqcNU "temp_PCM"
   [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
   
 -- Constraint 20
-w_E = uqcNU "w_E" (nounPhraseSP "change in heat energy in the water")
+w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" 
   (sub (eqSymb sens_heat) cW) joule Rational
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
-pcm_E = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
+pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
   (sub (eqSymb sens_heat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)

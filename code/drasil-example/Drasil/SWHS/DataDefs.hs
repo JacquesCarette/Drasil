@@ -4,10 +4,10 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
 
+import Drasil.SWHS.Assumptions
 import Drasil.SWHS.References (bueche1986, koothoor2013)
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
-import Drasil.SWHS.Labels(dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -33,7 +33,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL Nothing
+dd1HtFluxC = mkDD dd1HtFluxCQD [koothoor2013] [] "ht_flux_C" [makeRef2S newA7, makeRef2S newA8, makeRef2S newA9]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -45,7 +45,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL Nothing
+dd2HtFluxP = mkDD dd2HtFluxPQD [koothoor2013] [] "ht_flux_P" [makeRef2S newA3, makeRef2S newA4, makeRef2S newA10]
 
 ----
 
@@ -55,8 +55,10 @@ dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
 htFusionEqn :: Expr
 htFusionEqn = (sy latent_heat) / (sy mass)
 
+-- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDDL dd3HtFusionQD [makeRef bueche1986 +:+ sParen (S "pg. 282")] [] dd3HtFusionL Nothing
+dd3HtFusion = mkDD dd3HtFusionQD [bueche1986 {- +:+ sParen (S "pg. 282") -} ] 
+  [] "htFusion" []
 
 ----
 
@@ -73,7 +75,8 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDDL dd4MeltFracQD [makeRef koothoor2013] [] dd4MeltFracL Nothing
+dd4MeltFrac = mkDD dd4MeltFracQD [koothoor2013] [] "melt_frac"
+ [makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions
 

@@ -24,7 +24,7 @@ import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
 import Data.Char (toLower)
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, vcat, hcat, punctuate,
   brackets, int, char, quotes, double, integer, equals, empty)
 

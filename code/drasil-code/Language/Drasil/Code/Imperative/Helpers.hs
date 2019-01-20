@@ -5,6 +5,7 @@ module Language.Drasil.Code.Imperative.Helpers (
     hmap,himap,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
 ) where
 
+import Prelude hiding ((<>))
 import Control.Monad (filterM)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)

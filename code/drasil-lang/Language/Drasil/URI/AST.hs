@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 -- | Abstract Syntax Tree for Uniform Resource Identifiers
-module ASTURI where
+module Language.Drasil.URI.AST where
 
 data URI = URL Scheme Authority Path Query Fragment
          | ISBN String

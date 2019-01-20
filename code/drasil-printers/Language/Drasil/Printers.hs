@@ -24,7 +24,7 @@ module Language.Drasil.Printers (
 import Language.Drasil.Format (Format(TeX, HTML))
 import Language.Drasil.Output.Formats (DocSpec(DocSpec), DocType(SRS, MG, MIS, Website),
   Filename)
-import Language.Drasil.HTML.Helpers (makeCSS)
+import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.TeX.Print (genTeX)

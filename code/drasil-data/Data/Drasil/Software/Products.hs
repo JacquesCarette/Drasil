@@ -1,11 +1,17 @@
 module Data.Drasil.Software.Products where
-import Language.Drasil (CI, NamedChunk, cn', commonIdea, compoundNC, nc, pn')
+import Language.Drasil (CI, NamedChunk, cn', commonIdeaWithDict, nc, pn')
+import Data.Drasil.Phrase (compoundNC)
 import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.IdeaDicts
+
+
+prodtcon :: [NamedChunk]
+prodtcon = [sciCompS, videoGame, openSource, compPro]
 
 matlab :: CI
-matlab     = commonIdea "matlab" (pn' "MATLAB programming language")       "MATLAB" 
+matlab     = commonIdeaWithDict "matlab" (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 
 sciCompS :: NamedChunk
 sciCompS   = nc "sciCompS"       (cn' "scientific computing software")

@@ -1,4 +1,4 @@
-If you are looking for **build instructions**, find them in the README file [here](https://github.com/JacquesCarette/literate-scientific-software).
+If you are looking for **build instructions**, find them in the [top level README](https://github.com/JacquesCarette/Drasil).
 
 --------------------------------------------------
 ### Drasil Coding Style Guide

@@ -7,10 +7,13 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel,
+  helperRefs)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
+import Language.Drasil.Development (comp_unitdefn, MayHaveUnit)
+import Language.Drasil.Utils (sortBySymbol)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map (elems)
@@ -20,7 +23,7 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, genDefnLabel, propCorSol, offShelfSol)
+  stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -36,6 +39,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -58,6 +62,7 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | LCsSec' LCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -116,8 +121,8 @@ data TUIntro = System -- ^ System of units (defaults to SI)
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
-  TermExcept :: Concept c => [c] -> LFunc
-  DefnExcept :: Concept c => [c] -> LFunc
+  TermExcept :: [DefinedQuantityDict] -> LFunc
+  DefnExcept :: [DefinedQuantityDict] -> LFunc
   TAD :: LFunc --Term and Definition
 
 {--}
@@ -132,7 +137,7 @@ data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Label -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
 
@@ -141,8 +146,8 @@ data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub]
 
 -- | Stakeholders subsections
 data StkhldrSub where
-  Client :: (Idea a) => a -> Sentence -> StkhldrSub
-  Cstmr  :: (Idea a) => a -> StkhldrSub
+  Client :: CI -> Sentence -> StkhldrSub
+  Cstmr  :: CI -> StkhldrSub
 
 {--}
 
@@ -171,7 +176,7 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> CI -> Sentence -> [Section] -> ProblemDescription
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -195,11 +200,12 @@ data ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 
 data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+data LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
@@ -246,6 +252,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
+    doit (LCsSec' lc)        = mkLCsSec' lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -255,13 +262,13 @@ mkSections si l = map doit l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
-  (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+  (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef SI {_sysinfodb = db}  TUnits =
-        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
-    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
-        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
+    mkSubRef SI {_usedinfodb = db}  TUnits =
+        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+    mkSubRef SI {_usedinfodb = db} (TUnits' con) =
+        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,
@@ -270,11 +277,11 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 (nub v))
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
-    mkSubRef SI {_sysinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
+    mkSubRef SI {_usedinfodb = db} TAandA =
+      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems (db ^. termTable)
 
 -- | Helper for creating the table of symbols
-mkTSymb :: (Quantity e, Concept e, Eq e) =>
+mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational
@@ -362,7 +369,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (getShortName x, f x, Just $ refAdd x)
+mkListTuple f x = ((S . getStringSN $ shortname x), f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -449,13 +456,15 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel 
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
       (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
-    mkSubSCS SI {_refdb = db} Assumptions =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
+    mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption x) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\y -> 
+        let lb = makeRef2 y in
+        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -464,6 +473,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
+helperAssump :: AssumpChunk -> ChunkDB -> Sentence
+helperAssump a c = foldlSent_ $ ([assuming a, helperRefs a c])
 {--}
 
 -- | Section stubs for implicit referencing
@@ -489,6 +500,9 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+mkLCsSec' :: LCsSec' -> Section
+mkLCsSec' (LCsProg' c) = SRS.likeChg (mkEnumSimpleD c) []
 
 {--}
 
@@ -533,18 +547,3 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 -- Helper
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys
-
---BELOW IS IN THIS FILE TEMPORARILY--
---Creates Contents using an uid and description (passed in as a Sentence).
-
-mkRequirementL :: String -> Sentence -> Label -> LabelledContent
-mkRequirementL i desc label = mkRawLC (Requirement (frc i desc label)) label
-
-mkRequirement :: String -> Sentence -> String -> LabelledContent
-mkRequirement i desc shrtn = mkRawLC (Requirement (frc i desc (mkLabelSame shrtn (Req FR)))) (mkLabelSame shrtn (Req FR)) --FIXME: label made twice?
-
-mkLklyChnk :: String -> Sentence -> String -> LabelledContent
-mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (mkLabelSame shrtn LCh) --FIXME: label made twice?
-
-mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent 
-mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn UnCh))) (mkLabelSame shrtn UnCh) --FIXME: label made twice?

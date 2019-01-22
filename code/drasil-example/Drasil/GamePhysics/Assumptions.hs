@@ -7,7 +7,7 @@ import Data.Drasil.SentenceStructures (FoldType(..), SepType(..),
   foldlList, foldlSent)
 import Drasil.GamePhysics.Concepts (twoD)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
-  cartesian, rightHand, collision, joint, damping)
+  cartesian, rightHand, collision, joint, damping, force, friction)
 import qualified Data.Drasil.Concepts.Math as CM (constraint)
 
 newAssumptions :: [AssumpChunk]
@@ -48,6 +48,9 @@ thereNo [x]      = [S "There is no", x, S "involved throughout the",
 thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
   (phrase simulation)]
 
+implies :: Sentence -> [Sentence]
+implies f = [S "and this implies that there are no", f] 
+
 assumptions_assum1 = allObject (plural CP.rigidBody)
 assumptions_assum2 = allObject (getAcc twoD)
 assumptions_assum3 = [S "The library uses a", (phrase CP.cartesian)]
@@ -57,7 +60,7 @@ assumptions_assum5 = [S "All", (plural CP.rigidBody),
   (plural CP.collision), S "are vertex-to-edge", 
   (plural CP.collision)]
 
-assumptions_assum6 = thereNo [(phrase CP.damping)]
+assumptions_assum6 = (thereNo [(phrase CP.damping)]) ++ (implies (phrase CP.friction +:+ plural CP.force))
 assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
 
 {-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 

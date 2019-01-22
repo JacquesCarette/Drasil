@@ -1,6 +1,10 @@
+JC: I will put my comments inline below, but with all lines prefixed with JC.
+
 Title: 
 "Automate your problems away with Drasil - Developing software without CTRL-C/CTRL-V"
 variant - "Automate your problems away with Drasil - Developing software without copy/paste"
+JC: I'm not so keen on either of those titles. But that's fine, we can adjust that later.
+JC: Though it does communicate your spin on the story, and I'm less comfortable with that.
 
 Main idea Notes (outline after):
   - Software dev has problems including
@@ -11,35 +15,54 @@ Main idea Notes (outline after):
         - Manual duplication begets problems with:
           - inconsistency - common enough, we want to fix that
           - traceability - inter- and intra-artifact issues are common
+JC: So that was DEFINITELY our story for ~4 years. But your 'forced reality' comments below are
+JC: very apt, and do reflect our newer story. In other words, I think the deeper reality is about
+JC: *development of all artifacts by hand*. Duplication is indeed 'forced', because different
+JC: artifacts are different views on the same thing.
+JC: Hand-development is error prone, and does indeed lead to inconsistency and traceability problems.
       - inconsistency
         - really big problem in certified software (inconsistency costs money and time)
           - Why shouldn't we hold all software projects to the same standard?
             - Obviously, costs.
         - common enough in many software projects
         - makes maintenance/expansion efforts much more difficult
+JC: I continue to be wary of talking about 'certified software' too earlier / too prominently.
+JC: Otherwise agree.
       - re-development
         - We want to see more software re-use, but the reality is its often
           faster (or cheaper) to re-develop a particular tool, algorithm, etc.
           rather than find an existing project to adapt 
             (re-word previous, it's not quite what I want to say)
+JC: Good point. Leads to justification for 'knowledge capture' via current artifacts of SE
+JC: perhaps not being the 'right' ones. Some libraries (and frameworks) have had huge success
+JC: regarding re-use, while others have flopped completely. No obvious trend.
         - Significant efforts can be made to develop a software variant that is very 
           similar to an existing project
           - These variants are members of the same software family, typically with
             minor changes
+JC: need to be more concrete. The linux kernel here is an interesting example - it is a huge
+JC: software family. No one really knows which of the variants actually work!
             - Can happen when it seems easier to create a new variant as a stand-alone
               rather than attempt to update old code and docs
             - Also influenced by lack of documentation around existing software,
               confusing APIs, lack of subject-matter-experts, etc.
+JC: Do you have citations to back that up? Proper science needs its citations.
 
   - A look at why duplication is a 'forced reality'
     - Software artifacts are views of the same information
+JC: Right. The telling of the story, in my mind, needs to show this concretely.
     - Views that don't replicate (or reference) the core knowledge to some extent
       imply inconsistency between artifacts
+JC: That's a Drasil-centric view of things (naturally). But this represents looking at things
+JC: 'backwards' [this is a new realization, that came with the forced reality]. The very existence
+JC: of the shared information is the source of the 'core knowledge' that we want to dig out.
     - Traceability only matters when there is lots of duplication
+JC: strongly agreed.
       - Low duplication = loose threads of knowledge
         - We expect a tightly woven pattern with neat ends
     - Manually maintaining consistency across knowledge duplication is complex
       and tedious
+JC: right!
   
   - Drasil is a framework we've developed to tackle these problems through a 
     knowledge-capture (KC) focused approach to software development
@@ -49,6 +72,9 @@ Main idea Notes (outline after):
       - No manual duplication
       - Consistent by construction
       - Fully traceable for certification, maintenance, or upgrades
+JC: I would remove that last point, or at least tone it down.
+JC: I agree that that is one very plausible description of "What is it?". Is it the one we want?
+
     - Leveraged our understanding of generative software & software development
     principles and practices in dev
     - Development of Drasil has been practical and example-driven
@@ -61,11 +87,14 @@ Main idea Notes (outline after):
         look very different, even across similar languages, but say the same thing
           - Figure: A calculation in C# code, python code, LaTeX, and HTML
       - Ensure consistency & traceability
+JC: agreed on all points above (leveraged ... here).
+
     - "Recipes" used to create our views, can be thought of as "little programs"
     that assemble our artifacts.
       - Based off of document templates, and similar to code templating, but 
       much broader configuration scope(or something?)
     - Includes KC mechanisms for creating a 'living database' of common information 
+JC: not sure about mentioning KC *here*. Agree that it is part of our ideas.
       - Currently hand-curated
       - Expands as needed, all projects share it
       - Very low-level, system-specific information stored elsewhere to avoid pollution
@@ -74,6 +103,8 @@ Main idea Notes (outline after):
     - Captured knowledge acts as a uniform source for artifact generation
     - Structure of a project in Drasil can be broken down (generally) as:
       [Core knowledge], [Specific knowledge], & [Recipes]
+JC: on Recipes and 'living database': this is all true, and important. But I am not quite
+JC: "feeling it" as far as how/when to say this.
   
   - What Drasil isn't
     - Not the be-all, end-all of software development
@@ -84,6 +115,7 @@ Main idea Notes (outline after):
     - Will not replace human developers, only help remove some of the tedium of
       following good software development practices
     - Not complete - Dev is still in progress
+JC: Right. We don't want to over-emphasize, but do want to say.
   
   - Our examples - SWHS, GlassBR, Gamephys, Tiny, and NoPCM
     - Drove our practical approach
@@ -92,6 +124,7 @@ Main idea Notes (outline after):
         - Knowledge is easier to extract
         - We know what we want the generator to create from our Recipes
         - Gives a base structure to our recipes
+JC: Right.
     - SWHS and NoPCM are software family members
       - Model solar water heating system with and without phase change material (PCM)
     - GlassBR
@@ -107,6 +140,7 @@ Main idea Notes (outline after):
       updates to Drasil don't create any unwanted behaviours
     - Examples share common baseline math/science knowledge
       - Gives us a starting point for the common KB
+JC: Right.
 
   - Analyzing artifacts and extracting commonalities
     - Part of our practical approach
@@ -116,6 +150,11 @@ Main idea Notes (outline after):
       - What is boilerplate text (common to all artifacts of a given type), 
       what is contextual text, and what is knowledge we really care about?
       - Can we extract the knowledge and abstract the rest?
+JC: Yes, but this kind of feels like it should be part of the n^th round of exercise to pull
+JC: out knowledge from the artifacts. Various things already mentioned above were parts of
+JC: previous rounds.  Since this 'knowledge extraction' is so important to us, we need to work
+JC: hard at organizing how we extracted it. We should be honest and describe it as a rational
+JC: reconstruction of the actual process.
     - Using the SmithEtAl SRS as our example for each of the case studies
     mentioned above, what do we find?
       - SRS is separated into distinct sections with related subsections within
@@ -126,7 +165,7 @@ Main idea Notes (outline after):
         - Other text may look different, but is either saying the same thing or 
         adding something that is not relevant to the other examples
           - Example: Pick one section from two of the SRS (SWHS and GlassBR?) and explain
-
+JC: Good.
 
           
 ---------------------
@@ -134,6 +173,16 @@ OUTLINE
 ---------------------
 
 -- The 'Main Idea Notes' above could really be a huge part of the introduction
+
+JC: And I'm really not hapy with the outline. I think a lot of the notes above are great, and
+JC: capture lots of good things about Drasil.  The outline below doesn't strike me as telling
+JC: any kind of story!
+
+JC: I think you should focus on first figuring out
+JC: 1. what are the take home points?
+JC: 2. what is the problem we are solving?
+JC: 3. why does our solution make sense?
+JC: 4. how to lead the reader from what they know, to the problem, to our solution.
 
 Introduction
   - Problem

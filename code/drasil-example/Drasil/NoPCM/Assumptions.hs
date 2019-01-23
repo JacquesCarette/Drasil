@@ -13,7 +13,7 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, isThe)
 
 import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
-  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpWAL, assumpPIT, assumpVCN)
+  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT, assumpVCN)
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, temp_init, temp_W, htCap_W, w_density)
@@ -28,7 +28,8 @@ assumptions = [assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW,
   assumpNIHGBW, assumpAPT, assumpVCN]
   
 assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
-assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT :: ConceptInstance
+assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT,
+  assumpWAL :: ConceptInstance
 
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
@@ -64,6 +65,9 @@ assumpS12 =
 
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
+
+assumpWAL = cic "assumpWAL" (assumpS14 $ S "material" +:+ (sParen $
+  (phrase water) +:+ S "in this case")) "Water-Always-Liquid" assumpDom
 
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+

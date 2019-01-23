@@ -14,13 +14,14 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe,
   sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions (assumpLCCWP, assumpWAL, assumpPIT)
+import Drasil.SWHS.Assumptions (assumpLCCWP, assumpPIT)
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
-import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpAPT)
+import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpAPT,
+  assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
 ---------
 -- IM1 --

@@ -29,9 +29,8 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, ALUR, Figure, Definition,
-  List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document), 
-  ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
+import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definition,
+  List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
@@ -63,10 +62,6 @@ lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _  = toText $ makeList l
 lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (ALUR Requirement n l _)    _  = toText $ makeReq (spec n) (spec l)
-lo (ALUR Assumption n l _)     _  = toText $ makeAssump (spec n) (spec l)
-lo (ALUR LikelyChange n l _)   _  = toText $ makeLC (spec n) (spec l)
-lo (ALUR UnlikelyChange n l _) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
@@ -428,22 +423,6 @@ makeFigure r c f wp =
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------
 -----------------------------------------------------------------
-
-makeReq :: D -> D -> D
-makeReq n l = description $ item' ((pure $ text ("\\refstepcounter{reqnum}"
-  ++ "\\rthereqnum")) <> label l <> (pure $ text ":")) n
-
-makeAssump :: D -> D -> D
-makeAssump n l = description $ item' ((pure $ text ("\\refstepcounter{assumpnum}"
-  ++ "\\atheassumpnum")) <> label l <> (pure $ text ":")) n
-
-makeLC :: D -> D -> D
-makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
-  ++ "\\lcthelcnum")) <> label l <> (pure $ text ":")) n
-
-makeUC :: D -> D -> D
-makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
-  ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n
 
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =

@@ -10,7 +10,6 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
@@ -63,7 +62,6 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Defini DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Assumption UID Sentence -- FIXME: hack, remove
                | Bib BibRef
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
@@ -102,7 +100,6 @@ refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name
 refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
 refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
 refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
-refLabelledCon (Assumption _ _)      = raw "Assump:" +::+ name
 refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
 refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
 refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"

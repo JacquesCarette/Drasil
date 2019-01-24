@@ -37,7 +37,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
-  HDiv, ALUR))
+  HDiv))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
@@ -71,8 +71,6 @@ printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
-printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
-  makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
 

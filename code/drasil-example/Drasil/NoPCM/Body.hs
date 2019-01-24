@@ -57,7 +57,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
-  swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
+  swhspriorityNFReqs)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
@@ -177,16 +177,16 @@ nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
 
 nopcm_datadefn :: [DataDefinition]
-nopcm_datadefn = swhs_datadefn ++ (getTraceMapFromDD $ getSCSSub mkSRS)
+nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
 nopcm_insmodel :: [InstanceModel]
-nopcm_insmodel = swhs_insmodel ++ (getTraceMapFromIM $ getSCSSub mkSRS)
+nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
 nopcm_gendef :: [GenDefn]
-nopcm_gendef = swhs_gendef ++ (getTraceMapFromGD $ getSCSSub mkSRS)
+nopcm_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
 nopcm_theory :: [TheoryModel]
-nopcm_theory = swhs_theory ++ (getTraceMapFromTM $ getSCSSub mkSRS)
+nopcm_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 nopcm_concins :: [ConceptInstance]
 nopcm_concins =

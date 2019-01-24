@@ -14,19 +14,19 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon')
+  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
-  thermocon)
+  thermocon, phase_change)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux)
+  heat_cap_spec, ht_flux, sens_heat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -66,7 +66,7 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.TMods (consThermE, sensHtE_rc, sensHtEEqn, sensHtESrc, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
@@ -110,7 +110,7 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W]
+  vol, w_mass, w_vol, tau_W, QT.sens_heat]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
@@ -147,7 +147,7 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields) theoretical_models
           , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -391,15 +391,25 @@ goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
 
+
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
-  
-  {--end = foldlSent [S "The", phrase uncertCol,
-    S "provides an estimate of the confidence with which the physical",
-    plural quantity, S "can be measured. This", phrase information,
-    S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]-}
+
+theoretical_models :: [TheoryModel]
+theoretical_models = [consThermE, sensHtE]
+
+sensHtE :: TheoryModel
+sensHtE = tm (sensHtE_rc eqn desc)
+  [qw QT.sens_heat, qw mass,
+    qw deltaT, qw htCap_L] ([] :: [ConceptChunk])
+  [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
+    desc = sensHtEdesc
+    eqn = sensHtEEqn Liquid
+
+sensHtEdesc :: Sentence
+sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -621,8 +631,8 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
 traceAssumpRef = map makeRef2S assumptions
 
-traceTheories = ["T1"]
-traceTheoriesRef = map makeRef2S [consThermE]
+traceTheories = ["T1", "T2"]
+traceTheoriesRef = map makeRef2S theoretical_models
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S swhsGDs

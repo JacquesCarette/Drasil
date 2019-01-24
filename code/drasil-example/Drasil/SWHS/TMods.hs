@@ -1,4 +1,5 @@
-module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, latentHtE) where
+module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_rc,
+  sensHtEEqn, sensHtESrc, latentHtE, PhaseChange(Liquid)) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -68,25 +69,34 @@ consThermEdesc = foldlSent [
 -- Theoretical Model 2 --
 -------------------------
 sensHtE :: TheoryModel
-sensHtE = tm sensHtE_rc
+sensHtE = tm (sensHtE_rc eqn desc)
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [sensHtESrc] "sensHtE" [sensHtEdesc]
+  [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
+    desc = sensHtEdesc
+    eqn = sensHtEEqn AllPhases
 
-sensHtE_rc :: RelationConcept
-sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
+
+sensHtE_rc :: Relation -> Sentence -> RelationConcept
+sensHtE_rc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") desc eqn
 
 sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
   shortname' "Definition of Sensible Heat"
 
-sensHtEEqn :: Relation
-sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
-  ((sy temp) $< (sy melt_pt))), ((sy htCap_L) *
-  (sy mass) * (sy deltaT), ((sy melt_pt) $< (sy temp) $<
-  (sy boil_pt))), ((sy htCap_V) * (sy mass) *
-  (sy deltaT), ((sy boil_pt) $< (sy temp)))]
+data PhaseChange = AllPhases
+                 | Liquid
+
+sensHtEEqn :: PhaseChange -> Relation
+sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
+  Liquid -> liquidFormula
+  AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
+      ((sy temp) $< (sy melt_pt))), (liquidFormula, ((sy melt_pt) $< (sy temp) $<
+      (sy boil_pt))), ((sy htCap_V) * (sy mass) *
+      (sy deltaT), ((sy boil_pt) $< (sy temp)))]
+  where
+    liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 

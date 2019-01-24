@@ -150,9 +150,9 @@ r_OB    = uc' "r_OB"
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
 
-pos_CM = ucs "p_CM" (nounPhraseSP $ 
-  "mass-weighted average position of a rigid " ++
-  "body's particles") 
+pos_CM = ucs "p_CM" (nounPhraseSP $ "Center of Mass")
+ --"mass-weighted average position of a rigid " ++
+ -- "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.position) (Atomic "CM")) Real metre
 

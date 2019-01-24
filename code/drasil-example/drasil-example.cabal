@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.18
+Version:	0.1.19
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -23,8 +23,8 @@ executable tiny
     drasil-data >= 0.1.9,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints
 
@@ -57,8 +57,8 @@ executable glassbr
     drasil-data >= 0.1.10,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -101,8 +101,8 @@ executable nopcm
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -136,8 +136,8 @@ executable swhs
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -173,8 +173,8 @@ executable ssp
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -203,8 +203,8 @@ executable chipmunkdocs
     drasil-data >= 0.1.6,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.21
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 

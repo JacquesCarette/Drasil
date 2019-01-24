@@ -343,10 +343,6 @@ layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
   (P.S $ getRefAdd x)
   (spec sm c) f wp
-layLabelled sm x@(LblC c (Assumption _ b))        = T.ALUR T.Assumption
-  (spec sm b)
-  (P.S $ getRefAdd x)
-  (spec sm $ getShortName c)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getRefAdd x)
@@ -367,8 +363,6 @@ layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Assumption _ b)       = T.ALUR T.Assumption
-  (spec sm b) (P.S "nolabel4") (P.S "nolabel4b")
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
@@ -416,7 +410,3 @@ makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm
 item :: PrintingInformation -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
-
--- | Helper for getting a short name
-getShortName :: HasShortName c => c -> Sentence
-getShortName = S . getStringSN . shortname

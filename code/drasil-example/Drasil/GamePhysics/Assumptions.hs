@@ -50,6 +50,9 @@ thereNo l        = [S "There are no", foldlList Comma List l, S "involved throug
 
 implies :: Sentence -> [Sentence]
 implies f = [S "and this implies that there are no", f] 
+--not sure if defining a new function is the best way to do this,
+-- as was done in the original file,but it displays correctly
+--(line 52 was added for assumption6)
 
 assumptions_assum1 = allObject (plural CP.rigidBody)
 assumptions_assum2 = allObject (getAcc twoD)

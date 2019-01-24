@@ -1,5 +1,4 @@
-module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_rc,
-  sensHtEEqn, sensHtESrc, latentHtE, PhaseChange(Liquid)) where
+module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -68,25 +67,30 @@ consThermEdesc = foldlSent [
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
+
 sensHtE :: TheoryModel
-sensHtE = tm (sensHtE_rc eqn desc)
+sensHtE = sensHtE_template AllPhases sensHtEdesc
+
+data PhaseChange = AllPhases
+                 | Liquid
+
+sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
+sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
-    desc = sensHtEdesc
-    eqn = sensHtEEqn AllPhases
+    eqn = sensHtEEqn pc
 
 
-sensHtE_rc :: Relation -> Sentence -> RelationConcept
-sensHtE_rc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") desc eqn
+sensHtE_rc :: PhaseChange -> Relation -> Sentence -> RelationConcept
+sensHtE_rc pc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP ("Sensible heat energy" ++ case pc of
+  Liquid -> " (no state change)"
+  AllPhases -> "")) desc eqn
 
 sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
   shortname' "Definition of Sensible Heat"
-
-data PhaseChange = AllPhases
-                 | Liquid
 
 sensHtEEqn :: PhaseChange -> Relation
 sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of

@@ -2,7 +2,7 @@ module Drasil.NoPCM.Assumptions where --all of this file is exported
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (model, assumpDom)
+import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt)
@@ -66,7 +66,7 @@ assumpS12 =
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
 
-assumpWAL = cic "assumpWAL" (assumpS14 $ S "material" +:+ (sParen $
+assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+ (sParen $
   (phrase water) +:+ S "in this case")) "Water-Always-Liquid" assumpDom
 
 assumpS13 = 

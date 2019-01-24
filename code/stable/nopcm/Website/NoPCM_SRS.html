@@ -919,12 +919,12 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 </p>
 <p>
 <div id="assumpDWCoW">
-Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume.
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume. <a href=#GD:rocTempSimp>GD: rocTempSimp</a>.
 </div>
 </p>
 <p>
 <div id="assumpSHECoW">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume.
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. <a href=#GD:rocTempSimp>GD: rocTempSimp</a>.
 </div>
 </p>
 <p>
@@ -1382,7 +1382,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>&#8239;dV</em>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
 </p>
 <div class="equation">
 <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
@@ -2675,6 +2675,65 @@ X
 </tr>
 <tr>
 <td>
+<a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 <a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a>
 </td>
 <td>
@@ -2883,6 +2942,65 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 

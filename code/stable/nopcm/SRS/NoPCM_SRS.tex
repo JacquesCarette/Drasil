@@ -273,8 +273,8 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. \hyperref[TM:consThermE]{TM: consThermE}.
 \item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]All heat transfer coefficients are constant over time. \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.
 \item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
-\item[Density-Water-Constant-over-Volume:\phantomsection\label{assumpDWCoW}]The density of water has no spatial variation; that is, it is constant over their entire volume.
-\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume.
+\item[Density-Water-Constant-over-Volume:\phantomsection\label{assumpDWCoW}]The density of water has no spatial variation; that is, it is constant over their entire volume. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
+\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
 \item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]Newton's law of convective cooling applies between the heating coil and the water. \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
 \item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]The temperature of the heating coil is constant over time. \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
 \item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
@@ -421,7 +421,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{displaymath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{displaymath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{displaymath}
 ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
@@ -681,6 +681,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
@@ -688,6 +690,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water} &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpPIT]{A: Perfect-Insulation-Tank} &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpTEO]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\

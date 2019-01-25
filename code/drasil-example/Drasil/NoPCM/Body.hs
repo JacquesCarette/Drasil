@@ -14,19 +14,19 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon')
+  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
-  thermocon)
+  thermocon, phase_change)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux)
+  heat_cap_spec, ht_flux, sens_heat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -57,16 +57,16 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing,
-  swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
+  swhspriorityNFReqs)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
-import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
+import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
@@ -113,7 +113,7 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W]
+  vol, w_mass, w_vol, tau_W, QT.sens_heat]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
@@ -150,7 +150,7 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields) theoretical_models
           , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -180,16 +180,16 @@ nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
 
 nopcm_datadefn :: [DataDefinition]
-nopcm_datadefn = swhs_datadefn ++ (getTraceMapFromDD $ getSCSSub mkSRS)
+nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
 nopcm_insmodel :: [InstanceModel]
-nopcm_insmodel = swhs_insmodel ++ (getTraceMapFromIM $ getSCSSub mkSRS)
+nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
 nopcm_gendef :: [GenDefn]
-nopcm_gendef = swhs_gendef ++ (getTraceMapFromGD $ getSCSSub mkSRS)
+nopcm_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
 nopcm_theory :: [TheoryModel]
-nopcm_theory = swhs_theory ++ (getTraceMapFromTM $ getSCSSub mkSRS)
+nopcm_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 nopcm_concins :: [ConceptInstance]
 nopcm_concins =
@@ -395,15 +395,20 @@ goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
 
+
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
-  
-  {--end = foldlSent [S "The", phrase uncertCol,
-    S "provides an estimate of the confidence with which the physical",
-    plural quantity, S "can be measured. This", phrase information,
-    S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]-}
+
+theoretical_models :: [TheoryModel]
+theoretical_models = [consThermE, sensHtE]
+
+sensHtE :: TheoryModel
+sensHtE = sensHtE_template Liquid sensHtEdesc
+
+sensHtEdesc :: Sentence
+sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -544,8 +549,8 @@ reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
 reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr +:+
-    S "to" +:+ makeRef2S eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
+    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr `sC`
+    S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
@@ -625,8 +630,8 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
 traceAssumpRef = map makeRef2S assumptions
 
-traceTheories = ["T1"]
-traceTheoriesRef = map makeRef2S [consThermE]
+traceTheories = ["T1", "T2"]
+traceTheoriesRef = map makeRef2S theoretical_models
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S swhsGDs

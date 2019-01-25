@@ -37,35 +37,32 @@ assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
   assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP,
   assumpAPT, assumpVCN :: ConceptInstance
 
-assumpTEO = cic "assumpTEO"                  assumpS1 "Thermal-Energy-Only"                        assumpDom
-assumpHTCC = cic "assumpHTCC"                assumpS2 "Heat-Transfer-Coeffs-Constant"              assumpDom
-assumpCWTAT = cic "assumpCWTAT"              assumpS3 "Constant-Water-Temp-Across-Tank"            assumpDom
-assumpTPCAV = cic "assumpTPCAV"              assumpS4 "Temp-PCM-Constant-Across-Volume"            assumpDom
-assumpDWPCoV = cic "assumpDWPCoV"            assumpS5 "Density-Water-PCM-Constant-over-Volume"     assumpDom
-assumpSHECoV = cic "assumpSHECov"            assumpS6 "Specific-Heat-Energy-Constant-over-Volume"  assumpDom
-assumpLCCCW = cic "assumpLCCCW"              assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"   assumpDom
-assumpTHCCoT = cic "assumpTHCCoT"            assumpS8 "Temp-Heating-Coil-Constant-over-Time"       assumpDom
-assumpTHCCoL = cic "assumpTHCCoL"            assumpS9 "Temp-Heating-Coil-Constant-over-Length"     assumpDom
-assumpLCCWP = cic "assumpLCCWP"              assumpS10 "Law-Convective-Cooling-Water-PCM"          assumpDom
-assumpCTNOD = cic "assumpCTNOD"              assumpS11 "Charging-Tank-No-Temp-Discharge"           assumpDom
-assumpSITWP = cic "assumpSITWP"              assumpS12 "Same-Initial-Temp-Water-PCM"               assumpDom
-assumpPIS = cic "assumpPIS"                  assumpS13 "PCM-Initially-Solid"                       assumpDom
-assumpWAL = cic "assumpWAL"                  assumpS14 "Water-Always-Liquid"                       assumpDom
-assumpPIT = cic "assumpPIT"                  assumpS15 "Perfect-Insulation-Tank"                   assumpDom
-assumpNIHGBWP = cic "assumpNIHGBWP"          assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"  assumpDom
-assumpVCMPN = cic "assumpVCMPN"              assumpS17 "Volume-Change-Melting-PCM-Negligible"      assumpDom
-assumpNGSP = cic "assumpNGSP"                assumpS18 "No-Gaseous-State-PCM"                      assumpDom
-assumpAPT = cic "assumpAPT"                  assumpS19 "Atmospheric-Pressure-Tank"                 assumpDom
-assumpVCN = cic "assumpVCN"                  assumpS20 "Volume-Coil-Negligible"                    assumpDom
-
-swhsAssumptionsS:: [Sentence]
-swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
-  assumpS6, assumpS7, assumpS8, assumpS9, assumpS10, assumpS11, assumpS12, assumpS13, assumpS14,
-  assumpS15, assumpS16, assumpS17, assumpS18, assumpS19, assumpS20]
+assumpTEO = cic "assumpTEO"                  assumpS1                   "Thermal-Energy-Only"                       assumpDom
+assumpHTCC = cic "assumpHTCC"                assumpS2                   "Heat-Transfer-Coeffs-Constant"             assumpDom
+assumpCWTAT = cic "assumpCWTAT"              assumpS3                   "Constant-Water-Temp-Across-Tank"           assumpDom
+assumpTPCAV = cic "assumpTPCAV"              assumpS4                   "Temp-PCM-Constant-Across-Volume"           assumpDom
+assumpDWPCoV = cic "assumpDWPCoV"            assumpS5                   "Density-Water-PCM-Constant-over-Volume"    assumpDom
+assumpSHECoV = cic "assumpSHECov"            assumpS6                   "Specific-Heat-Energy-Constant-over-Volume" assumpDom
+assumpLCCCW = cic "assumpLCCCW"              assumpS7                   "Newton-Law-Convective-Cooling-Coil-Water"  assumpDom
+assumpTHCCoT = cic "assumpTHCCoT"            assumpS8                   "Temp-Heating-Coil-Constant-over-Time"      assumpDom
+assumpTHCCoL = cic "assumpTHCCoL"            assumpS9                   "Temp-Heating-Coil-Constant-over-Length"    assumpDom
+assumpLCCWP = cic "assumpLCCWP"              assumpS10                  "Law-Convective-Cooling-Water-PCM"          assumpDom
+assumpCTNOD = cic "assumpCTNOD"              assumpS11                  "Charging-Tank-No-Temp-Discharge"           assumpDom
+assumpSITWP = cic "assumpSITWP"              assumpS12                  "Same-Initial-Temp-Water-PCM"               assumpDom
+assumpPIS = cic "assumpPIS"                  assumpS13                  "PCM-Initially-Solid"                       assumpDom
+assumpWAL = cic "assumpWAL"                  (assumpS14 $ phrase water) "Water-Always-Liquid"                       assumpDom
+assumpPIT = cic "assumpPIT"                  assumpS15                  "Perfect-Insulation-Tank"                   assumpDom
+assumpNIHGBWP = cic "assumpNIHGBWP"          assumpS16                  "No-Internal-Heat-Generation-By-Water-PCM"  assumpDom
+assumpVCMPN = cic "assumpVCMPN"              assumpS17                  "Volume-Change-Melting-PCM-Negligible"      assumpDom
+assumpNGSP = cic "assumpNGSP"                assumpS18                  "No-Gaseous-State-PCM"                      assumpDom
+assumpAPT = cic "assumpAPT"                  assumpS19                  "Atmospheric-Pressure-Tank"                 assumpDom
+assumpVCN = cic "assumpVCN"                  assumpS20                  "Volume-Coil-Negligible"                    assumpDom
 
 assumpS1, assumpS2, assumpS3, assumpS4, assumpS5, assumpS6, assumpS7,
-  assumpS8, assumpS9, assumpS10, assumpS11, assumpS12, assumpS13, assumpS14,
+  assumpS8, assumpS9, assumpS10, assumpS11, assumpS12, assumpS13,
   assumpS15, assumpS16, assumpS17, assumpS18, assumpS19, assumpS20 :: Sentence
+
+assumpS14 :: Sentence -> Sentence
 
 assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
@@ -113,9 +110,9 @@ assumpS12 = foldlSent [
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn]
-assumpS14 = foldlSent [
+assumpS14 mat = foldlSent [
   (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
-  S "is such that the", phrase water,
+  S "is such that the", mat,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",

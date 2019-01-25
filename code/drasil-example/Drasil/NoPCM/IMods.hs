@@ -14,13 +14,12 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe,
   sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions (assumpLCCWP, assumpWAL, assumpPIT)
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
-import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpAPT)
+import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
 ---------
 -- IM1 --
@@ -55,8 +54,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively"
-  +:+. {-sParen (makeRef2S assumpLCCWP), FIXME (https://github.com/JacquesCarette/Drasil/issues/1082#issuecomment-453653043)-} sParen (makeRef2S assumpWAL),
-  sParen (makeRef2S assumpPIT), sParen (makeRef2S assumpAPT)]
+  +:+ sParen (makeRef2S assumpWAL)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

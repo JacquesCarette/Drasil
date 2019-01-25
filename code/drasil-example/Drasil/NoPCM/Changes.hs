@@ -6,9 +6,8 @@ import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)
 import Data.Drasil.SentenceStructures (foldlSent)
 
-import Drasil.NoPCM.Assumptions(assumpCTNTD, assumpNIHGBW)
+import Drasil.NoPCM.Assumptions(assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
-import Drasil.SWHS.Assumptions (assumpWAL)
 import Drasil.SWHS.Concepts (water)
 --------------------------------
 -- Section 6 : LIKELY CHANGES --

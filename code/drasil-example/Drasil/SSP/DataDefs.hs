@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs (dataDefns, intrsliceF, 
+module Drasil.SSP.DataDefs (dataDefns, 
   lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
   fixme1, fixme2) where 
 
@@ -23,7 +23,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, intrsliceF, 
+  lengthB, lengthLb, lengthLs, 
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -167,18 +167,6 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
-
---DD9
-
-intrsliceF :: DataDefinition
-intrsliceF = mkDD intrsliceFQD [chen2005] [{-Derivation-}] "intrsliceF" []--Notes
---FIXME: fill empty lists in
-
-intrsliceFQD :: QDefinition
-intrsliceFQD = mkQuantDef intShrForce intrsliceFEqn
-
-intrsliceFEqn :: Expr
-intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 
 --DD13
 

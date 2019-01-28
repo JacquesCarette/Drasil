@@ -12,11 +12,12 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.SentenceStructures (sAnd)
 import Drasil.SSP.Assumptions (newA9)
-import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
+import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
+  huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, midpntHght, mobShrC, normToShear,
-  satWeight, scalFunc, shrResC, slcWght, 
+  dryWeight, earthqkLoadFctr, fricAngle, fs, genericF, genericA, 
+  impLoadAngle, intNormForce, intShrForce, inx, inxi, inxiM1, midpntHght, 
+  mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
 ------------------------
@@ -25,7 +26,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, slcHeight,
+  lengthB, lengthLb, lengthLs, slcHeight, stressDD,
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -188,6 +189,17 @@ slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
   S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
   S "are straight lines" +:+. sParen (makeRef2S newA9)]
+
+--DD11 
+
+stressDD :: DataDefinition
+stressDD = mkDD stressQD [huston2008] [{-Derivation-}] "stress" []
+
+stressQD :: QDefinition
+stressQD = mkQuantDef normStress stressEqn
+
+stressEqn :: Expr
+stressEqn = (sy genericF) / (sy genericA)
 
 --DD13
 

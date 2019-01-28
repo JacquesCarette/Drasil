@@ -10,6 +10,8 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
 
+import Data.Drasil.Quantities.Math (area)
+import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
@@ -25,6 +27,8 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
+genericF = force
+genericA = area
 
 -------------
 -- HELPERS --
@@ -115,7 +119,7 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, normFunc, shearFunc,
+sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
@@ -123,7 +127,7 @@ sspUnits = map ucw [normStress, normFunc, shearFunc,
   momntOfBdy, porePressure, sliceHght,
   fx, fy, mobShrC, shrResC, intNormForce, shrStress]
 
-normStress, normFunc, shearFunc, slopeDist, slipDist,
+normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,

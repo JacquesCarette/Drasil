@@ -95,13 +95,13 @@ $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LDF$ & Load duration factor & --
 \\
-$LR$ & Load resistance & --
+$LR$ & Load resistance & Pa
 \\
 $LSF$ & Load share factor & --
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & --
+$NFL$ & Non-factored load & Pa
 \\
 ${P_{b}}$ & Probability of breakage & --
 \\
@@ -173,7 +173,11 @@ LC & Likely Change
 \\
 LG & Laminated Glass
 \\
+LR & Load Resistance
+\\
 N/A & Not Applicable
+\\
+NFL & Non-Factored Load
 \\
 PS & Physical System Description
 \\
@@ -411,7 +415,7 @@ Label & Safety Req-LR
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
-                                 \item{$LR$ is the load resistance (Unitless)}
+                                 \item{$LR$ is the Load resistance (Pa)}
                                  \item{$q$ is the applied load (demand) (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
@@ -584,14 +588,14 @@ Label & Non-factored load
         \\ \midrule \\
         Symbol & $NFL$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & Pa
                          \\ \midrule \\
                          Equation & \begin{dmath}
                                     NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
                                     \end{dmath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$NFL$ is the non-factored load (Unitless)}
+                                                  \item{$NFL$ is the Non-factored load (Pa)}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
                                                   \item{$E$ is the modulus of elasticity of glass (Pa)}
                                                   \item{$h$ is the minimum thickness (m)}
@@ -855,20 +859,20 @@ Label & Load resistance
         \\ \midrule \\
         Symbol & $LR$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & Pa
                          \\ \midrule \\
                          Equation & \begin{dmath}
                                     LR=NFL GTF LSF
                                     \end{dmath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$LR$ is the load resistance (Unitless)}
-                                                  \item{$NFL$ is the non-factored load (Unitless)}
+                                                  \item{$LR$ is the Load resistance (Pa)}
+                                                  \item{$NFL$ is the Non-factored load (Pa)}
                                                   \item{$GTF$ is the glass type factor (Unitless)}
                                                   \item{$LSF$ is the load share factor (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & $LR$ is the load resistance, which is also called capacity $NFL$. is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
+                                                  Notes & $LR$ is the Load resistance, which is also called capacity $NFL$. is the Non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
                                                           \hyperref[A:glassLite]{A: glassLite}
                                                           \hyperref[DD:gTF]{DD: gTF}
                                                           \hyperref[DD:nFL]{DD: nFL}
@@ -1374,7 +1378,7 @@ year={2012}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05},
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},

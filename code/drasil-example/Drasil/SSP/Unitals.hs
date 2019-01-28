@@ -268,9 +268,9 @@ surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   "line from an interslice vertex " ++ fisi)
   (sub lEll (Atomic "s")) metre
 
-midpntHght = uc' "h_i" (cn $ "midpoint height")
-  ("distance from the slip base to the slope surface in a vertical " ++
-  "line from the midpoint of the slice " ++ fsi)
+midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
+  ("height in the y-direction from the base of a slice to the slope " ++
+  "surface, at the x-direction midpoint of the slice")
   (lH) metre
 
 momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++

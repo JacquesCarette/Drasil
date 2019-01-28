@@ -1,5 +1,5 @@
 module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
-  seismicLoadF, lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
+  lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
   fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
@@ -24,7 +24,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, 
+  lengthB, lengthLb, lengthLs, surfLoads, intrsliceF, 
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -168,19 +168,6 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
-
---DD7
-
-seismicLoadF :: DataDefinition
-seismicLoadF = mkDD seismicLoadFQD [fredlund1977] [{-Derivation-}] "seismicLoadF" []--Notes
---FIXME: fill empty lists in
-
-seismicLoadFQD :: QDefinition
-seismicLoadFQD = mkQuantDef earthqkLoadFctr ssmcLFEqn
-  --FIXME: K_E missing for unitals?
-
-ssmcLFEqn :: Expr
-ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
 
 --DD8
 

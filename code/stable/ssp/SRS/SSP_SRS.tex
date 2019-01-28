@@ -61,6 +61,8 @@ Symbol & Description & Units
 \midrule
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
+$A$ & Area: A part of an object or surface & $\text{m}^{2}$
+\\
 $b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
 \\
 ${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
@@ -78,6 +80,8 @@ ${F_{x}}$ & X-Component of the Net Force:  & N
 ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
 ${{F_{S}}_{min}}$ & Minimum Factor of Safety: The minimum factor of safety & --
+\\
+$\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
 \\
@@ -1059,6 +1063,34 @@ Label & Y-direction height of a slice
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:stress}
+\phantomsection 
+\label{DD:stress}
+\\ \midrule \\
+Label & Normal stress
+        \\ \midrule \\
+        Symbol & $σ$
+                 \\ \midrule \\
+                 Units & Pa
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    σ=\frac{\mathbf{F}}{A}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$σ$ is the normal stress (Pa)}
+                                                  \item{$\mathbf{F}$ is the force (N)}
+                                                  \item{$A$ is the area ($\text{m}^{2}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{huston2008}
+                                                           \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+ \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc1}
 \phantomsection 
 \label{DD:convertFunc1}
@@ -1580,6 +1612,13 @@ month={apr},
 pages={"429-439"},
 volume={14},
 number={3}}
+
+@book{huston2008,
+author={Huston, Ronald and Josephs, Harold},
+title={Practical stress analysis in engineering design},
+publisher={CRC Press},
+year={2008},
+edition={3}}
 
 @inproceedings{karchewski2012,
 author={Karchewski, Brandon and Guo, Peijun and Stolle, Dieter},

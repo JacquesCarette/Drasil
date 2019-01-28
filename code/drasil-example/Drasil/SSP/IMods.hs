@@ -20,8 +20,7 @@ import Drasil.SSP.Assumptions (newA2, newA4, newA6, newA10, newA11, newA12)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2, convertFunc1, convertFunc2,
-  lengthLs, sliceWght, 
-  surfLoads)
+  lengthLs, sliceWght)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)

@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
+module Drasil.SSP.DataDefs (dataDefns, intrsliceF, 
   lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
   fixme1, fixme2) where 
 
@@ -15,8 +15,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
   intShrForce, inx, inxi, inxiM1, mobShrC, normToShear,
   satWeight, scalFunc, shrResC, slcWght, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
-  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
+  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -24,7 +23,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, surfLoads, intrsliceF, 
+  lengthB, lengthLb, lengthLs, intrsliceF, 
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -168,20 +167,6 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
-
---DD8
-
-surfLoads :: DataDefinition
-surfLoads = mkDD surfLoadsQD [chen2005] [{-Derivation-}] "surfLoads" []--Notes
---FIXME: fill empty lists in
-
-surfLoadsQD :: QDefinition
-surfLoadsQD = mkQuantDef surfLoad surfLEqn
-  --FIXEME: is this data definition necessary?
-
-surfLEqn :: Expr
-surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
-  --FIXME: should be split into two DataDefs
 
 --DD9
 

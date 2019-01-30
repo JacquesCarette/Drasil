@@ -182,8 +182,8 @@ genInputConstraints = do
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
   parms <- getParams varsList
-  types <- getParamTypes $ map codevar dvals
-  names <- getParamNames $ map codevar dvals
+  types <- getParamTypes varsList
+  names <- getParamNames varsList
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms types names
@@ -284,7 +284,7 @@ genMethodCall s pr doComments doLog t n p st l b = do
       commBody CommentFunc = commMethod n l
       commBody _           = id
   bod <- commBody doComments (loggedBody doLog)
-  return $ Method n s pr t p bod
+  return $ method n s pr t p bod
 
 commMethod :: (I.RenderSym repr) => Label -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body repr))
 commMethod n l b = do

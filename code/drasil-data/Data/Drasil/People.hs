@@ -9,7 +9,8 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
-  mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski :: Person
+  mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
+  hJosephs :: Person
   
 pjAgerfalk   = person    "PJ"                        "Agerfalk"
 daAruliah    = personWM  "D"         ["A"]           "Aruliah"
@@ -30,10 +31,12 @@ rGuy         = personWM  "Richard"   ["T"]           "Guy"
 pGuo         = person    "Peijun"                    "Guo"
 shdHaddock   = personWM  "Steven"    ["H", "D"]      "Haddock"
 alex         = person    "Alex"                      "Halliwushka"
+rHuston      = person    "Ronald"                    "Huston"
 nChueHong    = personWM  "Neil"      ["P"]           "Chue Hong"
 kdHuff       = personWM  "Kathryn"   ["D"]           "Huff"
 fIncropera   = personWM  "F"         ["P"]           "Incropera"
 thulasi      = person    "Thulasi"                   "Jegatheesan"
+hJosephs     = person    "Harold"                    "Josephs"
 bKarchewski  = person    "Brandon"                   "Karchewski"
 tlKohutek    = personWM  "Terry"     ["L"]           "Kohutek"
 nKoothoor    = person    "Nirmitha"                  "Koothoor"

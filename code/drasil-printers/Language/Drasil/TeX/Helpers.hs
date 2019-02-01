@@ -105,11 +105,7 @@ href a0 a1 = command2 "href" a0 a1
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x
 
-rref, aref, lcref, ucref, cite :: D -> D
-rref  x = custRef "R\\ref"  x
-aref  x = custRef "A\\ref"  x
-lcref x = custRef "LC\\ref" x
-ucref x = custRef "UC\\ref" x
+cite :: D -> D
 cite  x = custRef "\\cite"  x
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
@@ -173,17 +169,12 @@ superscript a b = a <> (pure $ H.hat) <> br b
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum, reqcounter, reqnum, assumpcounter, assumpnum
- , lccounter, lcnum, uccounter, ucnum :: D
+ , modcounter, modnum :: D
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
 counter       = count "datadefnum"
 modcounter    = count "modnum"
-reqcounter    = count "reqnum"
-assumpcounter = count "assumpnum"
-lccounter     = count "lcnum"
-uccounter     = count "ucnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
@@ -192,10 +183,6 @@ colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
 
 modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
-reqnum    = comm "rthereqnum"        "R\\thereqnum"        Nothing
-assumpnum = comm "atheassumpnum"     "A\\theassumpnum"     Nothing
-lcnum     = comm "lcthelcnum"        "LC\\thelcnum"        Nothing
-ucnum     = comm "uctheucnum"        "UC\\theucnum"        Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 

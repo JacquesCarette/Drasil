@@ -38,6 +38,7 @@ import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability,
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
@@ -187,7 +188,7 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
+sspSymMap = cdb (map qw sspSymbols ++ [QM.pi_]) (map nw sspSymbols ++ map nw acronyms ++ map nw [QM.pi_] ++
   map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
   ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
@@ -198,7 +199,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ssp_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
+usedDB = cdb (map qw symbTT ++ [QM.pi_]) (map nw sspSymbols ++ map nw acronyms ++ map nw [QM.pi_] ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
  ssp_section []

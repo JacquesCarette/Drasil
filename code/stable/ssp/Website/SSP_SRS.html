@@ -239,7 +239,7 @@ N
 <em>h</em>
 </td>
 <td>
-Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i
+Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice
 </td>
 <td>
 m
@@ -1182,7 +1182,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 <ul class="hide-list-style">
 <li>
 <div id="A:Surface-Base-Slice-between-Interslice-Straight-Lines">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </li>
 </ul>
@@ -2259,7 +2259,7 @@ Description
 <em>W</em> is the weight (N)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N)
@@ -3264,7 +3264,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:seismicLoadF">
+<div id="DD:slcHeight">
 <table class="ddefn">
 <tr>
 <th>
@@ -3272,7 +3272,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Earthquake load factor
+Y-direction height of a slice
 </p>
 </td>
 </tr>
@@ -3282,7 +3282,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>c</sub></em>
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -3292,7 +3292,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+m
 </p>
 </td>
 </tr>
@@ -3302,7 +3302,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
+<em>h = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>&plus;y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3313,18 +3320,28 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>W</em> is the weight (N)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the surface and base of a slice are straight lines (<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -3334,179 +3351,6 @@ Source
 <td>
 <p class="paragraph">
 <a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:surfLoads">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Imposed surface load
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>Q</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em>Q = Q<sub>i</sub>&#8239;ω<sub>i</sub></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#chen2005>chen2005</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:intrsliceF">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Interslice shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>X</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em>X = λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>X</em> is the interslice shear force (N)
-</li>
-<li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
-</li>
-<li>
-<em>f</em> is the scaling function (Unitless)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#chen2005>chen2005</a>
 </p>
 </td>
 </tr>
@@ -4355,7 +4199,7 @@ Description
 <em>SpencerFixme2Please</em> is the fixme (Unitless)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
@@ -5233,7 +5077,7 @@ References
 </li>
 <li>
 <div id="smithLai2005">
-[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>

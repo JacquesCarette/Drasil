@@ -1,4 +1,5 @@
 JC: I will put my comments inline below, but with all lines prefixed with JC.
+DS: Responses to comments/questions will be prefixed with DS.
 
 Title: 
 "Automate your problems away with Drasil - Developing software without CTRL-C/CTRL-V"
@@ -28,6 +29,8 @@ JC: Hand-development is error prone, and does indeed lead to inconsistency and t
         - makes maintenance/expansion efforts much more difficult
 JC: I continue to be wary of talking about 'certified software' too earlier / too prominently.
 JC: Otherwise agree.
+DS: Completely agree - I want to include cert. software as an example, but am trying
+DS: not to focus on it too heavily.
       - re-development
         - We want to see more software re-use, but the reality is its often
           faster (or cheaper) to re-develop a particular tool, algorithm, etc.
@@ -42,11 +45,13 @@ JC: regarding re-use, while others have flopped completely. No obvious trend.
             minor changes
 JC: need to be more concrete. The linux kernel here is an interesting example - it is a huge
 JC: software family. No one really knows which of the variants actually work!
+DS: That's a great example.
             - Can happen when it seems easier to create a new variant as a stand-alone
               rather than attempt to update old code and docs
             - Also influenced by lack of documentation around existing software,
               confusing APIs, lack of subject-matter-experts, etc.
 JC: Do you have citations to back that up? Proper science needs its citations.
+DS: Yes, just need to re-find them.
 
   - A look at why duplication is a 'forced reality'
     - Software artifacts are views of the same information
@@ -73,7 +78,9 @@ JC: right!
       - Consistent by construction
       - Fully traceable for certification, maintenance, or upgrades
 JC: I would remove that last point, or at least tone it down.
+DS: Will tone it down
 JC: I agree that that is one very plausible description of "What is it?". Is it the one we want?
+DS: I think it's the one that best suits my narrative for the time being.
 
     - Leveraged our understanding of generative software & software development
     principles and practices in dev
@@ -95,6 +102,7 @@ JC: agreed on all points above (leveraged ... here).
       much broader configuration scope(or something?)
     - Includes KC mechanisms for creating a 'living database' of common information 
 JC: not sure about mentioning KC *here*. Agree that it is part of our ideas.
+DS: KC was just being used as a descriptor, doesn't need to be here.
       - Currently hand-curated
       - Expands as needed, all projects share it
       - Very low-level, system-specific information stored elsewhere to avoid pollution
@@ -105,6 +113,9 @@ JC: not sure about mentioning KC *here*. Agree that it is part of our ideas.
       [Core knowledge], [Specific knowledge], & [Recipes]
 JC: on Recipes and 'living database': this is all true, and important. But I am not quite
 JC: "feeling it" as far as how/when to say this.
+DS: This is where I'm explaining the key parts of our design/impl.
+DS: It's as good a place as any to introduce the concepts. We can get into more
+DS: detail later on.
   
   - What Drasil isn't
     - Not the be-all, end-all of software development
@@ -117,7 +128,7 @@ JC: "feeling it" as far as how/when to say this.
     - Not complete - Dev is still in progress
 JC: Right. We don't want to over-emphasize, but do want to say.
   
-  - Our examples - SWHS, GlassBR, Gamephys, Tiny, and NoPCM
+  - Our examples - SWHS, GlassBR, SSP, Gamephys, Tiny, and NoPCM
     - Drove our practical approach
     - All re-developed to follow the SmithEtAl artifact templates using modern SE approaches
       - Gives us consistent views
@@ -177,48 +188,82 @@ OUTLINE
 JC: And I'm really not hapy with the outline. I think a lot of the notes above are great, and
 JC: capture lots of good things about Drasil.  The outline below doesn't strike me as telling
 JC: any kind of story!
+DS: Understandable, it was by no means ready for review.
 
 JC: I think you should focus on first figuring out
 JC: 1. what are the take home points?
+DS:   - All artifacts important, even though they say a lot of the same things.
+        - Core knowledge is most important to capture
+        - Everything else is derived from there as a view for a specific audience
+      - Change dev practice 
+        - stop reinventing the wheel (manual duplication/re-dev)
+        - start using/modifying wheel manufacturing lines (generate all the things)
+
 JC: 2. what is the problem we are solving?
+DS:   - Inconsistency in software artifacts
+      - Unnecessary re-development 
+      - Difficulty in creating new software family members
+
 JC: 3. why does our solution make sense?
+DS:   - Keeps artifacts consistent
+      - Promotes re-use of whole projects and/or core components where applicable
+      - Simplifies software family member generation
+
 JC: 4. how to lead the reader from what they know, to the problem, to our solution.
-
-Introduction
-  - Problem
-  - Drasil
-    - What is?
-    - What isn't?
-      - Scope goes here
-  - Artifacts and analysis
-  - Roadmap of doc
-
-Background
-  - Software artifact reuse and generation
-    - Literate programming
-    - Reproducible research
-    - Literate software
-  - Generative Software Development
-  - Knowledge-based software engineering
-  - SC Software dev
-  - Other influences
-    - Model-driven design
-    - Grounded theory
-
-Case studies - in-depth background
-  - GlassBR (as key example for this paper)
-    - Overview
-    - Specific equations - used for examples later on
-  - SWHS/NoPCM
-    - Overview
-    - Specific equations
-  - SSP
-    - Overview
-    - Specific equations
-  - Gamephys
-    - Overview
-    - Specific equations
-  - Tiny
-    - Overview
-    - Specific equations
+DS: This is the general "flow" of ideas from reader -> problem -> intro of our solution, essentially 
+  - What has the reader experienced?
+  - Why did they experience that?
+  - Where can improvements be made?
+  - How do we make those improvements?
+DS: After we've introduced the key ideas, then the rest of the paper will just be
+DS: explaining in more depth, in likely the same order as originally introduced.
   
+DS: Attempt at explaining how to structure it is below, but this needs tuning as well.
+-- Begin --
+- Common experiences in Sfwr dev. (What we've observed and/or know to be common)
+  - Not always easy to find a good solution to the problem you're tackling
+  - Can be easier (and faster) to roll-your-own even if one exists
+    - Could be software exists, but is un- or badly-documented
+      - [Discuss inconsistency and lack of traceability particularly w/ respect to code and APIs]
+    - OR Locked-down software lacking a req'd feature
+      - Wasn't in scope for the devs at the time
+    - OR Simple problem that's quick to solve
+      - Not worth investing time in finding an existing solution
+- Why is the above common?
+  - Short answer - costs.
+  - Longer answer:
+    - Documentation
+      - Not often incentivized, except in specific areas (ie. cert sfwr)
+      - Tedious or complex to maintain, lots of requisite hand-duplication between artifacts
+      - Sometimes all you get is comments in source code (open-source) or the API,
+        or a user guide (not necessarily targeted to devs)
+    - Software families are not developed from the get-go
+      - Costly and out of scope
+      - Develop the required software at the time, add features when deemed worthwhile
+        - Over time other family members will be developed as needs change
+        - Not always the same devs/teams working on it.
+        - Want to upgrade existing software when possible
+          - Easiest to occur with open-source projects, but can lead to many branched projects w/ different feature sets
+            - Linux as an example
+        - When impossible to upgrade, need to roll new software family member with similar features
+- What can we do about it?
+  - Make maintaining documentation easier
+  - Emphasize re-use in development
+  - Make creating software family members easier
+- How?
+  - Let's be practical
+  - Need to understand more about artifacts first.
+    - Look at case studies (See "Our examples - SWHS, GlassBR, SSP, Gamephys, Tiny, and NoPCM" above)
+    - Analyze & generalize (see "Analyzing artifacts and extracting commonalities" above)
+  - Don't sweat the small stuff
+    - Generating boilerplate
+  - Figure out what's relevant
+    - Capture the core knowledge
+    - Generate the context-sensitive stuff
+      - Core transformations/projections for views
+      - Context-sensitive recipe pieces
+  - Put it all together
+    - Drasil
+-- END --  
+
+Section-by-Section (roadmap + breakdown) to follow.  

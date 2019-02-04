@@ -71,7 +71,9 @@ ${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice 
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
 \\
-$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & --
+$const_f$ & Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false & --
+\\
+$f$ & Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & --
 \\
 ${F_{S}}$ & Factor of Safety: The global stability of a surface in a slope & --
 \\
@@ -158,6 +160,8 @@ ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\f
 $λ$ & Interslice Normal/shear Force Ratio: applied to all interslices & --
 \\
 $μ$ & Pore Pressure: from water within the soil & Pa
+\\
+$π$ & Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter & --
 \\
 $σ$ & Normal Stress: The stress exerted perpendicular to the plane of the object & Pa
 \\
@@ -682,7 +686,7 @@ Label & Interslice normal/shear relationship
                    Description & \begin{symbDescription}
                                  \item{$X$ is the interslice shear force (N)}
                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-                                 \item{$f$ is the scaling function (Unitless)}
+                                 \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                  \item{$G$ is the interslice normal force (N)}
                                  \end{symbDescription}
                                  \\ \midrule \\
@@ -1091,6 +1095,40 @@ Label & Normal stress
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:ratioVariation}
+\phantomsection 
+\label{DD:ratioVariation}
+\\ \midrule \\
+Label & Interslice normal to shear force ratio variation function
+        \\ \midrule \\
+        Symbol & $f$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    f=\begin{cases}
+1, & const_f\\
+\sin\left(π \frac{{x_{slip,i}}-{x_{slip,0}}}{{x_{slip,n}}-{x_{slip,0}}}\right), & \neg{}const_f
+\end{cases}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
+                                                  \item{$π$ is the circumference to diameter ratio (Unitless)}
+                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{$n$ is the number of slices (Unitless)}
+                                                  \item{$const_f$ is the decision on f (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+ \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc1}
 \phantomsection 
 \label{DD:convertFunc1}
@@ -1108,7 +1146,7 @@ Label & First function for incorporating interslice forces into shear force
                                     Description & \begin{symbDescription}
                                                   \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
                                                   \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-                                                  \item{$f$ is the scaling function (Unitless)}
+                                                  \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the angle (${}^{\circ}$)}
                                                   \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
@@ -1140,7 +1178,7 @@ Label & Second function for incorporating interslice forces into shear force
                                     Description & \begin{symbDescription}
                                                   \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
                                                   \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-                                                  \item{$f$ is the scaling function (Unitless)}
+                                                  \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the angle (${}^{\circ}$)}
                                                   \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
@@ -1389,7 +1427,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{$ω$ is the angle (${}^{\circ}$)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \item{${C2_{i}}$ is the interslice shear force function (Nm)}
-                                                                                           \item{$f$ is the scaling function (Unitless)}
+                                                                                           \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                                                            \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
@@ -1659,7 +1697,7 @@ pages={"272-278"}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-booktitle={Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},

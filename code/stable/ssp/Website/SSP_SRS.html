@@ -170,10 +170,21 @@ Pa
 </tr>
 <tr>
 <td>
+<em>const_f</em>
+</td>
+<td>
+Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>f</em>
 </td>
 <td>
-Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
+Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
 </td>
 <td>
 --
@@ -650,6 +661,17 @@ Pore Pressure: from water within the soil
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>π</em>
+</td>
+<td>
+Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter
+</td>
+<td>
+--
 </td>
 </tr>
 <tr>
@@ -2143,7 +2165,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>G</em> is the interslice normal force (N)
@@ -3477,6 +3499,118 @@ RefBy
 </tr>
 </table>
 </div>
+<div id="DD:ratioVariation">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Interslice normal to shear force ratio variation function
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>f</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Unitless
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>f = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+1 , <span class="case">
+const_f
+</span>
+</span>
+<span>
+sin(π&#8239;<div class="fraction">
+<span class="fup">
+x<sub>slip,i</sub>&minus;x<sub>slip,0</sub>
+</span>
+<span class="fdn">
+x<sub>slip,n</sub>&minus;x<sub>slip,0</sub>
+</span>
+</div>) , <span class="case">
+&not;const_f
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+</li>
+<li>
+<em>π</em> is the circumference to diameter ratio (Unitless)
+</li>
+<li>
+<em>x<sub>slip</sub></em> is the x ordinate (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>n</em> is the number of slices (Unitless)
+</li>
+<li>
+<em>const_f</em> is the decision on f (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
 <div id="DD:convertFunc1">
 <table class="ddefn">
 <tr>
@@ -3532,7 +3666,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3633,7 +3767,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4337,7 +4471,7 @@ Description
 <em>C2<sub>i</sub></em> is the interslice shear force function (N&sdot;m)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -5193,7 +5327,7 @@ References
 </li>
 <li>
 <div id="smithLai2005">
-[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>

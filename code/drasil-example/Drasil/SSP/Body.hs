@@ -188,18 +188,18 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb (map qw sspSymbols ++ [QM.pi_]) (map nw sspSymbols ++ map nw acronyms ++ map nw [QM.pi_] ++
+sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
   map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
   ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
+  (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
   ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
   ssp_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT ++ [QM.pi_]) (map nw sspSymbols ++ map nw acronyms ++ map nw [QM.pi_] ++ map nw check_si)
+usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
  ssp_section []

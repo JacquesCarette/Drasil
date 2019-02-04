@@ -37,8 +37,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
 
 cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
--- FIXME: pi hack
-cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [QM.pi_]
+cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
 
 cpSymbols = (map qw cpUnits) ++ 
   (map qw cpUnitless) ++ 

@@ -55,7 +55,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity,
   cartesian, friction, rightHand, collision, space, physicCon)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
 import Data.Drasil.Software.Products (prodtcon)
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
@@ -195,7 +195,7 @@ chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw prodtcon
+everything = cdb (cpSymbolsAll ++ map qw [QM.pi_]) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw prodtcon
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
@@ -204,7 +204,7 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   game_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
+usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
  game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
  game_section []
 

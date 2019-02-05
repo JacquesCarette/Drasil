@@ -225,15 +225,18 @@ genConstClassD = pubClass "Constants" Nothing genVars []
 genCalcMod :: String -> [CodeDefinition] -> Reader State Module
 genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . codeEquat) defs)) []
 -}
-genCalcFunc :: CodeDefinition -> Reader State Method
+genCalcFunc :: (I.RenderSym repr) => CodeDefinition -> Reader State (repr (I.Method repr))
 genCalcFunc cdef = do
   g <- ask
-  parms <- getParams (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)
+  parms <- getParams codecs
+  types <- getParamTypes codecs
+  names <- getParamNames codecs
   publicMethod
-    (methodType $ convType (codeType cdef))
+    (mState $ convType (codeType cdef))
     (codeName cdef)
-    parms
+    parms types names
     (genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef))
+  where codecs = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
@@ -586,11 +589,11 @@ genFunc (FDef (FuncDef n i o s)) = do
   names <- getParamNames i
   blocks <- mapM convBlock s
   publicMethod (mState $ convType o) n parms types names
-    (return body $ (block
+    (return body $ [block
         (map (\x -> varDec (codeName x) (convType $ codeType x))
-          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)))
+          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i))]
         ++ blocks
-    ])
+    )
 genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 

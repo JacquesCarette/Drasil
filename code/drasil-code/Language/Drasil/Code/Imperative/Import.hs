@@ -584,48 +584,59 @@ genFunc (FDef (FuncDef n i o s)) = do
   parms <- getParams i
   types <- getParamTypes i
   names <- getParamNames i
-  stmts <- mapM convStmt s
+  blocks <- mapM convBlock s
   publicMethod (mState $ convType o) n parms types names
-    (return bodyStatements $
+    (return body $ (block
         (map (\x -> varDec (codeName x) (convType $ codeType x))
-          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
-        ++ stmts
+          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)))
+        ++ blocks
     ])
 genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
-convStmt :: FuncStmt -> Reader State Statement
-convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
-convStmt (FFor v e st) = do
-  stmts <- mapM convStmt st
+convBlock :: (I.RenderSym repr) => FuncStmt -> Reader State (repr (I.Block 
+  repr))
+convBlock (FAsg v e) = do
+  e' <- convExpr e
+  return $ block $ [assign (var $ codeName v) e']
+convBlock (FFor v e st) = do
+  blcks <- mapM convBlock st
   e' <- convExpr e
   return $ for (varDecDef (codeName v) int (litInt 0)) e' ((&++) (var (codeName v)))
-               [ block stmts ]
-convStmt (FWhile e st) = do
-  stmts <- mapM convStmt st
+               (body blcks)
+convBlock (FWhile e st) = do
+  blcks <- mapM convBlock st
   e' <- convExpr e
-  return $ while e' [ block stmts ]
-convStmt (FCond e tSt []) = do
-  stmts <- mapM convStmt tSt
+  return $ while e' (body blcks)
+convBlock (FCond e tSt []) = do
+  blcks <- mapM convBlock tSt
   e' <- convExpr e
-  return $ ifCond [(e', [ block stmts ])] noElse
-convStmt (FCond e tSt eSt) = do
-  stmt1 <- mapM convStmt tSt
-  stmt2 <- mapM convStmt eSt
+  return $ ifNoElse [(e', (body blcks))]
+convBlock (FCond e tSt eSt) = do
+  blck1 <- mapM convBlock tSt
+  blck2 <- mapM convBlock eSt
   e' <- convExpr e
-  return $ ifCond [(e', [ block stmt1 ])] [ block stmt2 ]
-convStmt (FRet e) = fmap I.return (convExpr e)
-convStmt (FThrow s) = return $ throw s
-convStmt (FTry t c) = do
-  stmt1 <- mapM convStmt t
-  stmt2 <- mapM convStmt c
-  return $ tryCatch [ block stmt1 ] [ block stmt2 ]
-convStmt (FContinue) = return continue
-convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
-convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
-convStmt (FAppend a b) = fmap valStmt $
-  liftM2 (\x y -> x I.$.(listAppend y)) (convExpr a) (convExpr b)
+  return $ ifCond [(e', (body blck1)] (body blck2)
+convBlock (FRet e) = do
+  e' <- convExpr e
+  return $ block $ [I.returnState e']
+convBlock (FThrow s) = return $ block [throw s]
+convBlock (FTry t c) = do
+  blck1 <- mapM convBlock t
+  blck2 <- mapM convBlock c
+  return $ tryCatch (body blck1) (body blck2)
+convBlock (FContinue) = return $ block [continue]
+convBlock (FDec v (C.List t)) = return $ listDec' (codeName v) 0 (listType
+  dynamic $ convType t)
+-- Again, above won't work for intListType, etc. Better solution needed.
+convBlock (FDec v t) = return $ varDec (codeName v) (convType t)
+convBlock (FProcCall n l) = do
+  e' <- convExpr (FCall (asExpr n) l)
+  return $ block [valState e']
+convBlock (FAppend a b) = do
+  a' <- convExpr a
+  b' <- convExpr b
+  return $ block [valState $ liftM2 (\x y -> x I.$.(listAppend y)) a' b']
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method

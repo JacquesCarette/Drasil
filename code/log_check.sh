@@ -7,6 +7,11 @@ GAME_PREF="Chipmunk"
 NoPCM_PREF="NoPCM"
 log="_log.log"
 #
+if [ $# -gt 0 ]; then
+  printout="$1"
+else
+  printout="no"
+fi
 errors="no"
 exitval=0
 #
@@ -21,6 +26,12 @@ for e in $EXAMPLES; do
     echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
     echo "-------------------------------------------"
     errors="yes"
+    if [ "$printout" = "yes" ]; then
+      echo "- $logfile"
+      echo "-------------------------------------------"
+      cat "$logfile"
+      echo "-------------------------------------------"
+    fi
   fi
 done
 

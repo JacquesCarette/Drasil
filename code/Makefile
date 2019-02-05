@@ -36,13 +36,15 @@ PROGS = tiny_prog glassbr_prog nopcm_prog swhs_prog ssp_prog gamephys_prog
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
+NOISY=no
+
 all: build build_code build_data test
 
 test: $(PROGS) $(TESTS)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	sh log_check.sh
+	sh log_check.sh $(NOISY)
 
 prog: $(PROGS)
 

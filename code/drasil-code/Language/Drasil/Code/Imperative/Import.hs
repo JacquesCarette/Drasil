@@ -575,16 +575,18 @@ bfunc Frac = (#/)
 bfunc Index      = (\x y -> x I.$.(listAccess y))
 
 -- medium hacks --
-genModDef :: CS.Mod -> Reader State Module
+genModDef :: (I.RenderSym repr) => CS.Mod -> Reader State (repr (I.Module repr))
 genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
 
-genFunc :: Func -> Reader State Method
+genFunc :: (I.RenderSym repr) => Func -> Reader State (repr (I.Method repr))
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
+  types <- getParamTypes i
+  names <- getParamNames i
   stmts <- mapM convStmt s
-  publicMethod (methodType $ convType o) n parms
-    (return [ block $
+  publicMethod (mState $ convType o) n parms types names
+    (return bodyStatements $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
         ++ stmts

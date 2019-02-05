@@ -254,24 +254,27 @@ genCaseBlock t v cs = do
 
 ----- OUTPUT -------
 
-genOutputMod :: [CodeChunk] -> Reader State [Module]
+genOutputMod :: (I.RenderSym repr) => [CodeChunk] -> Reader State [(repr (I.Module repr))]
 genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ genOutputFormat outs) Nothing
 
-genOutputFormat :: [CodeChunk] -> Reader State Method
+genOutputFormat :: (I.RenderSym repr) => [CodeChunk] -> Reader State (repr (I.Method repr))
 genOutputFormat outs =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
     parms <- getParams outs
+    types <- getParamTypes outs
+    names <- getParamNames outs
     outp <- mapM (\x -> do
         v <- variable $ codeName x
         return [ printFileStr v_outfile ((codeName x) ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod methodTypeVoid "write_output" parms (return [ block $ [
+    publicMethod void "write_output" parms types names (return bodyStatements $
+      [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ] ])
+      concat outp ++ [ closeFile v_outfile ])
 
 -----
 

@@ -463,17 +463,6 @@ getArgs cs = do
            then (var "inParams"):args  -- todo:  make general
            else args
 
-valName :: Value -> String
-valName (Lit (LitBool b)) = show b
-valName (Lit (LitInt i)) = show i
-valName (Lit (LitFloat f)) = show f
-valName (Lit (LitChar c)) = [c]
-valName (Lit (LitStr s)) = s
-valName (Var _ n) = n
-valName (ObjVar o v) = valName o ++ "." ++ valName v
-valName (ObjAccess o (ListAccess v)) = valName o ++ "[" ++ valName v ++ "]"
-valName _ = error "Value has no name"
-
 getDefaultValue :: (I.RenderSym repr) => C.CodeType -> (repr (I.Value repr))
 getDefaultValue C.Boolean = defaultBool
 getDefaultValue C.Integer = defaultInt

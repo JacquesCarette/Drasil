@@ -6,7 +6,7 @@ import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object,
 -- import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
 --   Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
 -- import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
-import qualified Language.Drasil.Code.Imperative.New as I (
+import qualified Language.Drasil.Code.Imperative.New as I (Label,
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -34,6 +34,7 @@ import Data.Maybe (maybe)
 import Control.Lens ((^.))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -87,7 +88,7 @@ assign x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: (I.RenderSym repr) => (repr (I.MethodType repr)) -> Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Method repr))
+publicMethod :: (I.RenderSym repr) => (repr (I.MethodType repr)) -> I.Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [I.Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Method repr))
 publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
@@ -131,7 +132,7 @@ getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
 
-getExt :: Lang -> [Label]
+getExt :: Lang -> [I.Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
 
@@ -284,7 +285,7 @@ genOutputFormat outs =
 
 genMethodCall :: (I.RenderSym repr) => (repr (I.Scope repr)) -> (repr
   (I.Permanence repr)) -> Comments -> Logging -> (repr (I.MethodType repr)) ->
-  Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label]
+  I.Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [I.Label]
   -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Method repr))
 genMethodCall s pr doComments doLog t n p st l b = do
   let loggedBody LogFunc = loggedMethod n st l b
@@ -295,7 +296,7 @@ genMethodCall s pr doComments doLog t n p st l b = do
   bod <- commBody doComments (loggedBody doLog)
   return $ method n s pr t p bod
 
-commMethod :: (I.RenderSym repr) => Label -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body repr))
+commMethod :: (I.RenderSym repr) => I.Label -> [I.Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body repr))
 commMethod n l b = do
   g <- ask
   rest <- b
@@ -306,8 +307,8 @@ commMethod n l b = do
         (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
     ]]) : rest 
 
-loggedMethod :: (I.RenderSym repr) => Label -> [repr (I.StateType repr)] ->
-  [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body
+loggedMethod :: (I.RenderSym repr) => I.Label -> [repr (I.StateType repr)] ->
+  [I.Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body
   repr))
 loggedMethod n st l b =
   let l_outfile = "outfile"
@@ -409,7 +410,8 @@ variable s' = do
 fApp :: (I.RenderSym repr) => String -> [(repr (I.Value repr))] -> Reader State (repr (I.Value repr))
 fApp s' vl' = do
   g <- ask
-  let doit :: String -> [Value] -> Value
+  let doit :: (I.RenderSym repr) => String -> [(repr (I.Value repr))] -> (repr
+        (I.Value repr))
       doit s vl | member s (eMap $ codeSpec g) =
         maybe (error "impossible")
           (\x -> if x /= currentModule g then extFuncApp x s vl else funcApp s vl)
@@ -439,7 +441,7 @@ getParamTypes cs = do
           then (obj "InputParameters"):pts  -- todo:  make general
           else pts
 
-getParamNames :: [CodeChunk] -> Reader State [Label]
+getParamNames :: [CodeChunk] -> Reader State [I.Label]
 getParamNames cs = do
   g <- ask
   let ins = inputs $ codeSpec g

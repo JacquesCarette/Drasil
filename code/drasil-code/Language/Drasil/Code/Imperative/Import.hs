@@ -52,7 +52,8 @@ data State repr = State {
 -- 1. constraints
 -- 2. how to structure the input "module"
 -- 3. logging assignments
-chooseConstr :: ConstraintBehaviour -> Expr -> Body
+chooseConstr :: (I.RenderSym repr) => ConstraintBehaviour -> Expr -> (repr
+  (I.Body repr))
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
@@ -201,10 +202,10 @@ genInputDerived = do
       (return $ concat inps)
 
 -- need Expr -> String to print constraint
-constrWarn :: Expr -> Body
+constrWarn :: (I.RenderSym repr) => Expr -> (repr (I.Body repr))
 constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
 
-constrExc :: Expr -> Body
+constrExc :: (I.RenderSym repr) => Expr -> (repr (I.Body repr))
 constrExc _ = oneLiner $ throw "InputError"
 
 ---- CONST ----

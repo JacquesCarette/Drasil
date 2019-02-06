@@ -179,10 +179,10 @@ min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, loa
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
   
-lRe      = unitary "lRe"      (nounPhraseSP "Load resistance")
+lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
   (Atomic "LR") pascal Rational --correct Space used?
 
-nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "Non-factored load")
+nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
   (Atomic "NFL") pascal Rational --correct Space used?
 
 

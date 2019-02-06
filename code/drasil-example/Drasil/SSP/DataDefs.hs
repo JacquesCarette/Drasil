@@ -10,13 +10,14 @@ import Language.Drasil
  -- ofThe', sAnd)
 
 import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.SentenceStructures (sAnd)
 import Drasil.SSP.Assumptions (newA9)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, earthqkLoadFctr, fricAngle, fs, genericF, genericA, 
-  impLoadAngle, intNormForce, intShrForce, inx, inxi, inxiM1, midpntHght, 
+  constF, dryWeight, fricAngle, fs, genericF, genericA, 
+  intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
@@ -26,7 +27,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, slcHeight, stressDD,
+  lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -200,6 +201,22 @@ stressQD = mkQuantDef normStress stressEqn
 
 stressEqn :: Expr
 stressEqn = (sy genericF) / (sy genericA)
+
+--DD12
+
+ratioVariation :: DataDefinition
+ratioVariation = mkDD ratioVarQD [fredlund1977] [{-Derivation-}] 
+  "ratioVariation" []
+
+ratioVarQD :: QDefinition
+ratioVarQD = mkQuantDef scalFunc ratioVarEqn
+
+ratioVarEqn :: Expr
+ratioVarEqn = case_ [case1, case2]
+  where case1 = (1, (sy constF))
+
+        case2 = (sin ((sy QM.pi_) * (((inxi slipDist) - (idx (sy slipDist) 0)) /
+                ((indxn slipDist) - (idx (sy slipDist) 0)))), UnaryOp Not (sy constF))
 
 --DD13
 

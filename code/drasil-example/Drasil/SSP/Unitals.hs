@@ -320,7 +320,8 @@ constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
-  ("boolean that determines the form of f: constant if true, or a half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
+  ("boolean decision on which form of f the user desires: constant if true," ++
+  " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
@@ -331,7 +332,8 @@ normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
   ("applied to all interslices")) (const lLambda) Real Nothing
 
-scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
+  "force ratio variation function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
   (const lF) Real Nothing 

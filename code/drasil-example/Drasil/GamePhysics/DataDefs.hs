@@ -253,7 +253,7 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = (cross (sy r_OB) (sy  QP.force))
+torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
 --will need a new parameter to define r is a position vector
 -- of the point where the force is applied, measured from the axis of rotation.
 

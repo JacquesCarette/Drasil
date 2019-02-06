@@ -1,7 +1,7 @@
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
-import Language.Drasil hiding (int, getLabel, Label, Block, ($.), log, ln, exp,
+import Language.Drasil hiding (int, Label, Block, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot)
 import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
   String, Boolean, Integer))
@@ -126,11 +126,7 @@ genModules = do
   return $ (mn : inp ++ out ++ moddef)
 
 -- private utilities used in generateCode
-getLabel, getDir :: Lang -> String
-getLabel Cpp = cppLabel
-getLabel CSharp = cSharpLabel
-getLabel Java = javaLabel
-getLabel Python = pythonLabel
+getDir :: Lang -> String
 getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"

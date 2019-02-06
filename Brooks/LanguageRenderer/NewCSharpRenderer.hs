@@ -38,7 +38,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, render, colon, isEmpty)
+  semi, vcat, lbrace, rbrace, render, colon, isEmpty, render)
 
 newtype CSharpCode a = CSC {unCSC :: a}
 
@@ -263,6 +263,8 @@ instance ValueSym CSharpCode where
     n `listOf` t = listVar n t
     
     inputFunc = return $ text "Console.ReadLine()"
+
+    valName v = unCSC $ liftA render v
 
 instance NumericExpression CSharpCode where
     (#~) v = liftA2 unOpDocD negateOp v

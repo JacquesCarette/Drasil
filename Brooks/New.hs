@@ -176,6 +176,8 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     
     inputFunc :: repr (Value repr)
 
+    valName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
+
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => NumericExpression repr where
     (#~)  :: repr (Value repr) -> repr (Value repr)
     infixl 8 #~

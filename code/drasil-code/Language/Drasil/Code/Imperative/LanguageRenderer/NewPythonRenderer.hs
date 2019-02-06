@@ -37,7 +37,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-    vcat, colon, brackets, isEmpty)
+    vcat, colon, brackets, isEmpty, render)
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -237,6 +237,8 @@ instance ValueSym PythonCode where
     n `listOf` t = listVar n t
 
     inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
+    
+    valName v = unPC $ liftA render v
 
 instance NumericExpression PythonCode where
     (#~) v = liftA2 unOpDocD negateOp v

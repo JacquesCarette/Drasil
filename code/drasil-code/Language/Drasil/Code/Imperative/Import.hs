@@ -463,10 +463,6 @@ getArgs cs = do
            then (var "inParams"):args  -- todo:  make general
            else args
 
-paramName :: Parameter -> String
-paramName (StateParam l _) = l
-paramName (FuncParam _ _ _) = error "Function param not implemented"
-
 valName :: Value -> String
 valName (Lit (LitBool b)) = show b
 valName (Lit (LitInt i)) = show i

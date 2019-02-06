@@ -69,7 +69,7 @@ chooseLogging LogVar = loggedAssign
 chooseLogging LogAll = loggedAssign
 chooseLogging _      = (\x y -> return $ assign x y)
 
-generator :: Choices -> CodeSpec -> (State repr)
+generator :: (RenderSym repr) => Choices -> CodeSpec -> (State repr)
 generator chs spec = State {
   -- constants
   codeSpec = spec,
@@ -95,7 +95,7 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: Choices -> (State repr) -> IO ()
+generateCode :: (RenderSym repr) => Choices -> (State repr) -> IO ()
 generateCode chs g =
   do workingDir <- getCurrentDirectory
      mapM_ (\x -> do
@@ -108,12 +108,12 @@ generateCode chs g =
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         files = runReader genFiles g
 
-genFiles :: Reader (State repr) [(repr (RenderFile repr))]
+genFiles :: (RenderSym repr) => Reader (State repr) [(repr (RenderFile repr))]
 genFiles = do
   g <- ask
-  return $ map fileDoc $ genModules g
+  return $ map fileDoc $ runReader genModules g
 
-genModules :: Reader (State repr) [(repr (Module repr))]
+genModules :: (RenderSym repr) => Reader (State repr) [(repr (Module repr))]
 genModules = do
   g <- ask
   let s = codeSpec g
@@ -138,7 +138,7 @@ getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
 
-getUnRepr :: (RenderSym repr) => Lang -> (repr (RenderFile repr) -> Doc)
+getUnRepr :: (RenderSym repr) => Lang -> (repr (RenderFile repr) -> (Doc, Label))
 getUnRepr Java = unJC
 getUnRepr Python = unPC
 

@@ -281,8 +281,10 @@ genOutputFormat outs =
 
 -----
 
-genMethodCall :: (I.RenderSym repr) => (repr (I.Scope repr)) -> (repr (I.Permanence repr)) -> Comments -> Logging -> (repr (I.MethodType repr)) -> Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label]
-                  -> Reader State (repr (I.Body repr)) -> Reader State (repr I.Method repr))
+genMethodCall :: (I.RenderSym repr) => (repr (I.Scope repr)) -> (repr
+  (I.Permanence repr)) -> Comments -> Logging -> (repr (I.MethodType repr)) ->
+  Label -> [repr (I.Parameter repr)] -> [repr (I.StateType repr)] -> [Label]
+  -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Method repr))
 genMethodCall s pr doComments doLog t n p st l b = do
   let loggedBody LogFunc = loggedMethod n st l b
       loggedBody LogAll  = loggedMethod n st l b
@@ -303,7 +305,9 @@ commMethod n l b = do
         (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
     ]]) : rest 
 
-loggedMethod :: (I.RenderSym repr) => Label -> [repr (I.StateType repr)] -> [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr I.Body repr))
+loggedMethod :: (I.RenderSym repr) => Label -> [repr (I.StateType repr)] ->
+  [Label] -> Reader State (repr (I.Body repr)) -> Reader State (repr (I.Body
+  repr))
 loggedMethod n st l b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
@@ -621,7 +625,7 @@ convBlock (FCond e tSt eSt) = do
   blck1 <- mapM convBlock tSt
   blck2 <- mapM convBlock eSt
   e' <- convExpr e
-  return $ ifCond [(e', (body blck1)] (body blck2)
+  return $ ifCond [(e', (body blck1))] (body blck2)
 convBlock (FRet e) = do
   e' <- convExpr e
   return $ block $ [I.returnState e']
@@ -659,7 +663,7 @@ genDataFunc nameTitle dd = do
       (concat inD) ++ (block [
       closeFile v_infile ])]
   where inData :: (I.RenderSym repr) => Data -> Reader State [repr (I.Block
-    repr)]
+          repr)]
         inData (Singleton v) = do
           vv <- variable $ codeName v
           return $ [block [(getFileInput (codeType v)) v_infile vv]]
@@ -675,7 +679,7 @@ genDataFunc nameTitle dd = do
               ((&++) v_i)
               ( body $ [(block [ stringSplit d v_linetokens (v_lines I.$.
                 (listAccess v_i)) ])] ++ lnV)
-          ]
+            ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
           return $ [ for (varDecDef l_i int (litInt 0)) 
@@ -686,7 +690,7 @@ genDataFunc nameTitle dd = do
                 ])
               ] ++ lnV
             )
-          ]
+            ]
         ---------------
         lineData :: (I.RenderSym repr) => LinePattern -> (repr (I.Value repr))
           -> Reader State [(repr (I.Block repr))]
@@ -699,7 +703,7 @@ genDataFunc nameTitle dd = do
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
           return $ [for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat))
-          ((&++) v_j) ( body pat )]
+            ((&++) v_j) ( body pat )]
         ---------------
         patternData :: (I.RenderSym repr) => [Entry] -> (repr (I.Value repr))
           -> (repr (I.Value repr)) -> Reader State [(repr (I.Block repr))]
@@ -755,7 +759,7 @@ genDataFunc nameTitle dd = do
           ++ checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
         getListType :: (I.RenderSym repr) => C.CodeType -> Integer -> (repr 
-          I.StateType repr))
+          (I.StateType repr))
         getListType _ 0 = error "No index given"
         getListType (C.List t) 1 = convType t
         getListType (C.List t) n = getListType t (n-1)
@@ -766,7 +770,7 @@ genDataFunc nameTitle dd = do
         listBase t = t
         ---------------
         getListType' :: (I.RenderSym repr) => C.CodeType -> Integer -> (repr
-          I.StateType repr))
+          (I.StateType repr))
         getListType' _ 0 = error "No index given"
         getListType' t 1 = convType t
         getListType' t n = listType $ getListType' t (n-1)

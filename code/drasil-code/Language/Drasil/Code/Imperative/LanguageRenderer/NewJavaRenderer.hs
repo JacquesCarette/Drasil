@@ -592,4 +592,4 @@ jListIndexExists :: Doc -> Doc -> Doc -> Doc
 jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <+> index)
 
 jStatementsToStateVars :: Doc -> Doc -> Doc -> Doc -> Doc
-jStatementsToStateVars s p end v = s <+> p <+> vs <> end
+jStatementsToStateVars s p end v = s <+> p <+> v <> end

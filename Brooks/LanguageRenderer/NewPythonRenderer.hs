@@ -34,8 +34,8 @@ import Helpers (blank,oneTab,vibcat)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty, equals, 
-  vcat, colon, brackets, isEmpty, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
+  equals, vcat, colon, brackets, isEmpty, render)
 
 newtype PythonCode a = PC {unPC :: a}
 

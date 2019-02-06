@@ -36,8 +36,8 @@ import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,vibcat)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-    vcat, colon, brackets, isEmpty, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
+    equals, vcat, colon, brackets, isEmpty, render)
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -432,7 +432,7 @@ instance StatementSym PythonCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
-    multi s = liftA2 multiStateDocD s endStatement
+    multi s = lift1List multiStateDocD endStatement s
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc

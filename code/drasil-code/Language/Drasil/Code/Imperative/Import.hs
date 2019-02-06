@@ -515,7 +515,8 @@ convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
-    doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) (convExpr (Case xs))
+    doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
+      (convExpr (Case xs))
 convExpr (Matrix _)    = error "convExpr: Matrix"
 convExpr (Operator _ _ _) = error "convExpr: Operator"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
@@ -561,7 +562,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (I.RenderSym repr) => BinOp -> ((repr (I.Value repr)) -> (repr (I.Value repr)) -> (repr (I.Value repr)))
+bfunc :: (I.RenderSym repr) => BinOp -> ((repr (I.Value repr)) -> (repr
+  (I.Value repr)) -> (repr (I.Value repr)))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt   = (?>)
@@ -605,8 +607,8 @@ convBlock (FAsg v e) = do
 convBlock (FFor v e st) = do
   blcks <- mapM convBlock st
   e' <- convExpr e
-  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((&++) (var (codeName v)))
-               (body blcks)
+  return $ for (varDecDef (codeName v) int (litInt 0)) e' 
+    ((&++) (var (codeName v))) (body blcks)
 convBlock (FWhile e st) = do
   blcks <- mapM convBlock st
   e' <- convExpr e
@@ -629,7 +631,7 @@ convBlock (FTry t c) = do
   blck2 <- mapM convBlock c
   return $ tryCatch (body blck1) (body blck2)
 convBlock (FContinue) = return $ block [continue]
-convBlock (FDec v (C.List t)) = return $ listDec' (codeName v) 0 (listType
+convBlock (FDec v (C.List t)) = return $ listDec (codeName v) 0 (listType
   dynamic $ convType t)
 -- Again, above won't work for intListType, etc. Better solution needed.
 convBlock (FDec v t) = return $ varDec (codeName v) (convType t)
@@ -642,109 +644,133 @@ convBlock (FAppend a b) = do
   return $ block [valState $ liftM2 (\x y -> x I.$.(listAppend y)) a' b']
 
 -- this is really ugly!!
-genDataFunc :: Name -> DataDesc -> Reader State Method
+genDataFunc :: (I.RenderSym repr) => Name -> DataDesc -> Reader State (repr 
+  (I.Method repr))
 genDataFunc nameTitle dd = do
     parms <- getParams $ getInputs dd
     inD <- mapM inData dd
-    publicMethod methodTypeVoid nameTitle (p_filename : parms) $
-      return $ body $ [
+    publicMethod void nameTitle (p_filename : parms) $
+      return $ body $ [ (block [
       varDec l_infile infile,
       varDec l_line string,
-      listDec' l_lines string 0,
-      listDec' l_linetokens string 0,
-      openFileR v_infile v_filename ] ++
-      (concat inD) ++ [
-      closeFile v_infile ]
-  where inData :: Data -> Reader State [Statement]
+      listDec l_lines 0 string,
+      listDec l_linetokens 0 string,
+      openFileR v_infile v_filename ]) ++
+      (concat inD) ++ (block [
+      closeFile v_infile ])]
+  where inData :: (I.RenderSym repr) => Data -> Reader State [repr (I.Block
+    repr)]
         inData (Singleton v) = do
           vv <- variable $ codeName v
-          return [getFileInput v_infile (convType $ codeType v) vv]
-        inData JunkData = return [discardFileLine v_infile]
+          return $ [block [(getFileInput (codeType v)) v_infile vv]]
+        inData JunkData = return $ [block [discardFileLine v_infile]]
         inData (Line lp d) = do
           lnI <- lineData lp (litInt 0)
-          return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ lnI
+          return $ [block [ getFileInputLine v_infile v_line, 
+            stringSplit d v_linetokens v_line ]] ++ lnI
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) ((&++) v_i)
-                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ lnV))
-            ]
+            for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) 
+              ((&++) v_i)
+              ( body $ [(block [ stringSplit d v_linetokens (v_lines I.$.
+                (listAccess v_i)) ])] ++ lnV)
+          ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
-              ( body
-                ( [ getFileInputLine v_infile v_line,
-                    stringSplit v_linetokens v_line d
-                  ] ++ lnV
-                )
-              )
-            ]
+          return $ [ for (varDecDef l_i int (litInt 0)) 
+            (v_i ?< (litInt numLines)) ((&++) v_i)
+            ( body $
+              [ (block [ getFileInputLine v_infile v_line,
+                  stringSplit d v_linetokens v_line
+                ])
+              ] ++ lnV
+            )
+          ]
         ---------------
-        lineData :: LinePattern -> Value -> Reader State [Statement]
+        lineData :: (I.RenderSym repr) => LinePattern -> (repr (I.Value repr))
+          -> Reader State [(repr (I.Block repr))]
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) ((&++) v_j)
-              ( body pat )
-            ]
+          return $ [for (varDecDef l_j int (litInt 0)) 
+            (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ 
+            length p)) I.$.(cast int float)) ((&++) v_j) ( body pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
-              ( body pat )
-            ]
+          return $ [for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat))
+          ((&++) v_j) ( body pat )]
         ---------------
-        patternData :: [Entry] -> Value -> Value -> Reader State [Statement]
+        patternData :: (I.RenderSym repr) => [Entry] -> (repr (I.Value repr))
+          -> (repr (I.Value repr)) -> Reader State [(repr (I.Block repr))]
         patternData d lineNo patNo = do
           let l = toInteger $ length d
-          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ 
+            zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
           return $ concat ent
         ---------------
-        entryData :: Value -> Value -> Value -> Entry -> Reader State [Statement]
+        entryData :: (I.RenderSym repr) => (repr (I.Value repr)) -> (repr 
+          (I.Value repr)) -> (repr (I.Value repr)) -> Entry -> Reader State
+          [(repr (I.Block repr))]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
-          a <- assign vv $ (v_linetokens I.$.(listAccess tokIndex))I.$. (cast (convType $ codeType v) string)
-          return [a]
+          a <- assign vv $ (v_linetokens I.$.(listAccess tokIndex))I.$. 
+            (cast (convType $ codeType v) string)
+          return [block [a]]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
           a <- assign (indexData indx lineNo patNo vv) $
-                (v_linetokens I.$.(listAccess tokIndex))I.$.(cast (listType (codeType v) (toInteger $ length indx)) string)
-          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [ a ]
+            (v_linetokens I.$.(listAccess tokIndex))I.$.(cast 
+            (getListType (codeType v) (toInteger $ length indx)) string)
+          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [a]]
         entryData _ _ _ JunkEntry = return []
         ---------------
-        indexData :: [Ind] -> Value -> Value -> Value -> Value
+        indexData :: (I.RenderSym repr) => [Ind] -> (repr (I.Value repr)) ->
+          (repr (I.Value)) -> (repr (I.Value repr)) -> (repr (I.Value repr))
         indexData [] _ _ v = v
-        indexData ((Explicit i):is) l p v = indexData is l p (ObjAccess v (listAccess $ litInt i))
-        indexData (WithLine:is) l p v = indexData is l p (ObjAccess v (listAccess l))
-        indexData (WithPattern:is) l p v = indexData is l p (ObjAccess v (listAccess p))
+        indexData ((Explicit i):is) l p v = indexData is l p (objAccess v 
+          (listAccess $ litInt i))
+        indexData (WithLine:is) l p v = indexData is l p (objAccess v 
+          (listAccess l))
+        indexData (WithPattern:is) l p v = indexData is l p (objAccess v
+          (listAccess p))
         ---------------
-        checkIndex :: [Ind] -> Value -> Value -> Value -> C.CodeType -> [Statement]
+        checkIndex :: (I.RenderSym repr) => [Ind] -> (repr (I.Value repr)) ->
+          (repr (I.Value repr)) -> (repr (I.Value repr)) -> C.CodeType ->
+          [repr (I.Block repr)]
         checkIndex indx l p v s = checkIndex' indx len l p v (listBase s)
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          [ while (v I.$.listSize ?<= (litInt i)) ( body [ valStmt $ v I.$.(listExtend $ listType' s n) ] ) ]
+          [ while (v I.$.listSize ?<= (litInt i)) ( bodyStatements [ valState $
+          v I.$.(listExtend $ getListType' s n) ] ) ]
           ++ checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
-          [ while (v I.$.listSize ?<= l) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
+          [ while (v I.$.listSize ?<= l) ( bodyStatements [ valState $
+          v I.$.(listExtend $ getListType' s n ) ] ) ]
           ++ checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v I.$.listSize ?<= p) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
+          [ while (v I.$.listSize ?<= p) ( bodyStatements [ valState $ 
+          v I.$.(listExtend $ listType' s n ) ] ) ]
           ++ checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
-        listType :: C.CodeType -> Integer -> I.StateType
-        listType _ 0 = error "No index given"
-        listType (C.List t) 1 = convType t
-        listType (C.List t) n = listType t (n-1)
-        listType _ _ = error "Not a list type"
+        getListType :: (I.RenderSym repr) => C.CodeType -> Integer -> (repr 
+          I.StateType repr))
+        getListType _ 0 = error "No index given"
+        getListType (C.List t) 1 = convType t
+        getListType (C.List t) n = getListType t (n-1)
+        getListType _ _ = error "Not a list type"
         ---------------
         listBase :: C.CodeType -> C.CodeType
         listBase (C.List t) = listBase t
         listBase t = t
         ---------------
-        listType' :: C.CodeType -> Integer -> I.StateType
-        listType' _ 0 = error "No index given"
-        listType' t 1 = convType t
-        listType' t n = listT $ listType' t (n-1)
+        getListType' :: (I.RenderSym repr) => C.CodeType -> Integer -> (repr
+          I.StateType repr))
+        getListType' _ 0 = error "No index given"
+        getListType' t 1 = convType t
+        getListType' t n = listType $ getListType' t (n-1)
+        -- Another fragile use of listType
         ---------------
         l_line = "line"
         v_line = var l_line
@@ -755,9 +781,18 @@ genDataFunc nameTitle dd = do
         l_infile = "infile"
         v_infile = var l_infile
         l_filename = "filename"
-        p_filename = param l_filename string
+        p_filename = stateParam l_filename string
         v_filename = var l_filename
         l_i = "i"
         v_i = var l_i
         l_j = "j"
         v_j = var l_j
+
+getFileInput :: (I.RenderSym repr) => C.CodeType -> ((repr (I.Value repr)) ->
+  (repr (I.Statement repr)))
+getFileInput C.Boolean = getBoolFileInput
+getFileInput C.Integer = getIntFileInput
+getFileInput C.Float = getFloatFileInput
+getFileInput C.Char = getCharFileInput
+getFileInput C.String = getStringFileInput
+getFileInput _ = error "No getFileInput function for the given type"

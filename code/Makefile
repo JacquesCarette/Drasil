@@ -63,35 +63,13 @@ $(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
 	mkdir -p build/$(EDIR)
 	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
-tiny_diff: tiny_build
-	- $(DIFF) ./stable/tiny/SRS/$(TINY_PREF)SRS.tex ./build/$(TINY_DIR)/SRS/$(TINY_PREF)SRS.tex > $(TINY_PREF)log.log 2>&1
-	- $(DIFF) ./stable/tiny/Website/$(TINY_PREF)SRS.css ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.css >> $(TINY_PREF)log.log 2>&1
-	- $(DIFF) ./stable/tiny/Website/$(TINY_PREF)SRS.html ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.html >> $(TINY_PREF)log.log 2>&1
-
-glassbr_diff: glassbr_build
-	- $(DIFF) ./stable/glassbr/SRS/$(GLASSBR_PREF)SRS.tex ./build/$(GLASSBR_DIR)/SRS/$(GLASSBR_PREF)SRS.tex > $(GLASSBR_PREF)log.log 2>&1
-	- $(DIFF) ./stable/glassbr/Website/$(GLASSBR_PREF)SRS.css ./build/$(GLASSBR_DIR)/Website/$(GLASSBR_PREF)SRS.css >> $(GLASSBR_PREF)log.log 2>&1
-	- $(DIFF) ./stable/glassbr/Website/$(GLASSBR_PREF)SRS.html ./build/$(GLASSBR_DIR)/Website/$(GLASSBR_PREF)SRS.html >> $(GLASSBR_PREF)log.log 2>&1
-
-nopcm_diff: nopcm_build
-	- $(DIFF) ./stable/nopcm/SRS/$(NOPCM_PREF)SRS.tex ./build/$(NOPCM_DIR)/SRS/$(NOPCM_PREF)SRS.tex > $(NOPCM_PREF)log.log 2>&1
-	- $(DIFF) ./stable/nopcm/Website/$(NOPCM_PREF)SRS.css ./build/$(NOPCM_DIR)/Website/$(NOPCM_PREF)SRS.css >> $(NOPCM_PREF)log.log 2>&1
-	- $(DIFF) ./stable/nopcm/Website/$(NOPCM_PREF)SRS.html ./build/$(NOPCM_DIR)/Website/$(NOPCM_PREF)SRS.html >> $(NOPCM_PREF)log.log 2>&1
-
-swhs_diff: swhs_build
-	- $(DIFF) ./stable/swhs/SRS/$(SWHS_PREF)SRS.tex ./build/$(SWHS_DIR)/SRS/$(SWHS_PREF)SRS.tex > $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/Website/$(SWHS_PREF)SRS.css ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.css >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/Website/$(SWHS_PREF)SRS.html ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.html >> $(SWHS_PREF)log.log 2>&1
-
-ssp_diff: ssp_build
-	- $(DIFF) ./stable/ssp/SRS/$(SSP_PREF)SRS.tex ./build/$(SSP_DIR)/SRS/$(SSP_PREF)SRS.tex > $(SSP_PREF)log.log 2>&1
-	- $(DIFF) ./stable/ssp/Website/$(SSP_PREF)SRS.css ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.css >> $(SSP_PREF)log.log 2>&1
-	- $(DIFF) ./stable/ssp/Website/$(SSP_PREF)SRS.html ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.html >> $(SSP_PREF)log.log 2>&1
-
-gamephys_diff: gamephys_build
-	- $(DIFF) ./stable/gamephys/SRS/$(GAMEPHYS_PREF)SRS.tex ./build/$(GAMEPHYS_DIR)/SRS/$(GAMEPHYS_PREF)SRS.tex > $(GAMEPHYS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/Website/$(GAMEPHYS_PREF)SRS.css ./build/$(GAMEPHYS_DIR)/Website/$(GAMEPHYS_PREF)SRS.css >> $(GAMEPHYS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/Website/$(GAMEPHYS_PREF)SRS.html ./build/$(GAMEPHYS_DIR)/Website/$(GAMEPHYS_PREF)SRS.html >> $(GAMEPHYS_PREF)log.log 2>&1
+%_diff: EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%_diff: EDIR=$($(EXAMPLE)_DIR)
+%_diff: EPREF=$($(EXAMPLE)_PREF)
+$(filter %_diff, $(TESTS)): %_diff: %_build
+	- $(DIFF) ./stable/$*/SRS/$(EPREF)SRS.tex ./build/$(EDIR)/SRS/$(EPREF)SRS.tex > $(EPREF)log.log 2>&1
+	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.css ./build/$(EDIR)/Website/$(EPREF)SRS.css >> $(EPREF)log.log 2>&1
+	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.html ./build/$(EDIR)/Website/$(EPREF)SRS.html >> $(EPREF)log.log 2>&1
 
 tiny_prog: tiny_build
 

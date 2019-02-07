@@ -13,6 +13,8 @@ SSP_DIR   = SSP
 GAME_DIR  = Chipmunk
 
 PACKAGES = lang code printers gen data docLang example
+DPACKAGES = $(addprefix drasil-, $(PACKAGES))
+BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
 
 TINY_EXE  = tiny
 GLASS_EXE = glassbr
@@ -21,7 +23,7 @@ SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAME_EXE  = chipmunkdocs
 
-DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(addprefix drasil-,$(PACKAGES))
+DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DPACKAGES)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = tiny_diff glassbr_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
@@ -48,8 +50,8 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-build_example: FORCE
-	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-example --dump-logs --interleaved-output
+$(filter build_%, $(BUILD_PACKAGES)): build_%: FORCE
+	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
 tiny_build: build_example
 	mkdir -p build/$(TINY_DIR)

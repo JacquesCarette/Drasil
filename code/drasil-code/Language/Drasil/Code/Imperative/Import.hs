@@ -436,10 +436,10 @@ getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      ps = map (\y -> param (codeName y) (convType $ codeType y))
+      ps = map (\y -> stateParam (codeName y) (convType $ codeType y))
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
   return $ if length csSubIns < length cs
-           then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
+           then (stateParam "inParams" (obj "InputParameters")):ps  -- todo:  make general
            else ps
 
 getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr (StateType repr))]

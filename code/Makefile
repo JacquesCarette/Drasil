@@ -12,13 +12,7 @@ SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAME_DIR  = Chipmunk
 
-LANG_DIR  = drasil-lang
-CODE_DIR  = drasil-code
-PRINT_DIR = drasil-printers
-GEN_DIR   = drasil-gen
-DATA_DIR  = drasil-data
-DOCL_DIR  = drasil-docLang
-EXAM_DIR  = drasil-example
+PACKAGES = lang code printers gen data docLang example
 
 TINY_EXE  = tiny
 GLASS_EXE = glassbr
@@ -27,7 +21,7 @@ SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAME_EXE  = chipmunkdocs
 
-DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR) $(PRINT_DIR)
+DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(addprefix drasil-,$(PACKAGES))
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = tiny_diff glassbr_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
@@ -38,7 +32,7 @@ PROFEXEC = +RTS -xc -P
 
 NOISY=no
 
-all: build build_code build_data test
+all: test
 
 test: $(PROGS) $(TESTS)
 	@echo ----------------------------
@@ -54,28 +48,10 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-build: FORCE
-	stack install -j2 $(stackArgs) drasil-lang
+build_example: FORCE
+	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-example --dump-logs --interleaved-output
 
-build_code: build
-	stack install -j2 $(stackArgs) drasil-code
-
-build_print: build_code
-	stack install -j2 $(stackArgs) drasil-printers
-
-build_gen: build_print
-	stack install -j2 $(stackArgs) drasil-gen
-
-build_data: build_gen
-	stack install -j2 $(stackArgs) drasil-data
-
-build_docl: build_data
-	stack install -j2 $(stackArgs) drasil-docLang
-
-build_exam: build_docl
-	stack install -j2 $(stackArgs) drasil-example
-
-tiny_build: build_exam
+tiny_build: build_example
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec -- $(TINY_EXE) $(EXECARGS)
 

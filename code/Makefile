@@ -12,13 +12,15 @@ SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAME_DIR  = Chipmunk
 
-LANG_DIR  = drasil-lang
-CODE_DIR  = drasil-code
-PRINT_DIR = drasil-printers
-GEN_DIR   = drasil-gen
-DATA_DIR  = drasil-data
-DOCL_DIR  = drasil-docLang
-EXAM_DIR  = drasil-example
+PACKAGES = lang code printers gen data docLang example
+
+LANG_DEPS =
+CODE_DEPS = lang
+PRINTERS_DEPS = lang
+GEN_DEPS = lang code printers
+DATA_DEPS = lang
+DOCLANG_DEPS = lang data
+EXAMPLE_DEPS = lang data docLang gen printers code
 
 TINY_EXE  = tiny
 GLASS_EXE = glassbr
@@ -27,7 +29,7 @@ SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAME_EXE  = chipmunkdocs
 
-DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR) $(PRINT_DIR)
+DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(addprefix drasil-,$(PACKAGES))
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = tiny_diff glassbr_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
@@ -38,7 +40,7 @@ PROFEXEC = +RTS -xc -P
 
 NOISY=no
 
-all: build build_code build_data test
+all: test
 
 test: $(PROGS) $(TESTS)
 	@echo ----------------------------
@@ -54,28 +56,18 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-build: FORCE
-	stack install -j2 $(stackArgs) drasil-lang
+build_lang_deps: $(addprefix build_, $(LANG_DEPS))
+build_data_deps: $(addprefix build_, $(DATA_DEPS))
+build_code_deps: $(addprefix build_, $(CODE_DEPS))
+build_printers_deps: $(addprefix build_, $(PRINTERS_DEPS))
+build_gen_deps: $(addprefix build_, $(GEN_DEPS))
+build_docLang_deps: $(addprefix build_, $(DOCLANG_DEPS))
+build_example_deps: $(addprefix build_, $(EXAMPLE_DEPS))
 
-build_code: build
-	stack install -j2 $(stackArgs) drasil-code
+build_%: FORCE build_%_deps
+	stack install --ghc-options -j2 $(stackArgs) drasil-$*
 
-build_print: build_code
-	stack install -j2 $(stackArgs) drasil-printers
-
-build_gen: build_print
-	stack install -j2 $(stackArgs) drasil-gen
-
-build_data: build_gen
-	stack install -j2 $(stackArgs) drasil-data
-
-build_docl: build_data
-	stack install -j2 $(stackArgs) drasil-docLang
-
-build_exam: build_docl
-	stack install -j2 $(stackArgs) drasil-example
-
-tiny_build: build_exam
+tiny_build: build_example
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec -- $(TINY_EXE) $(EXECARGS)
 

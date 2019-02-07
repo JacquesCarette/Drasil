@@ -493,7 +493,7 @@ convType (C.List t) = listType dynamic $ convType t -- new GOOL has different fu
 convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
-convExpr :: Expr -> Reader (State repr) (repr (Value repr))
+convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
@@ -549,7 +549,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: UFunc -> ((repr (Value repr)) -> (repr (Value repr)))
+unop :: (RenderSym repr) => UFunc -> ((repr (Value repr)) -> (repr (Value repr)))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln

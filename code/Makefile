@@ -72,21 +72,14 @@ $(filter %_diff, $(TESTS)): %_diff: %_build
 	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.css ./build/$(EDIR)/Website/$(EPREF)SRS.css >> $(EPREF)log.log 2>&1
 	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.html ./build/$(EDIR)/Website/$(EPREF)SRS.html >> $(EPREF)log.log 2>&1
 
-tiny_prog: tiny_build
+%_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
+$(filter %_prog, $(PROGS)): %_prog: %_build
 
 glassbr_prog: glassbr_build
 	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
 	test -d ./build/$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/java/
 	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
 	test -d ./build/$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/cpp/
-
-nopcm_prog: nopcm_build
-
-swhs_prog: swhs_build
-
-ssp_prog: ssp_build
-
-gamephys_prog: gamephys_build
 
 docs: $(DOCS_PACKAGES)
 

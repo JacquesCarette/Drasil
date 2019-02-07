@@ -150,6 +150,10 @@ r_OB    = uc' "r_OB"
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
 
+{-r_F    = uc' "r_F" 
+  (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
+  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
+  
 pos_CM = ucs "p_CM" (nounPhraseSP $ "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 

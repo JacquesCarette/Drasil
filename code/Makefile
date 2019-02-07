@@ -15,6 +15,7 @@ GAMEPHYS_DIR  = Chipmunk
 PACKAGES = lang code printers gen data docLang example
 DPACKAGES = $(addprefix drasil-, $(PACKAGES))
 BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
+DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
 
 TINY_EXE  = tiny
 GLASSBR_EXE = glassbr
@@ -87,28 +88,10 @@ ssp_prog: ssp_build
 
 gamephys_prog: gamephys_build
 
-docs: lang-docs code-docs data-docs example-docs gen-docs printers-docs 
+docs: $(DOCS_PACKAGES)
 
-lang-docs:
-	stack haddock drasil-lang $(haddockArgs)
-
-code-docs:
-	stack haddock drasil-code $(haddockArgs)
-
-data-docs:
-	stack haddock drasil-data $(haddockArgs)
-
-example-docs:
-	stack haddock drasil-example $(haddockArgs)
-
-gen-docs:
-	stack haddock drasil-gen $(haddockArgs)
-
-printers-docs:
-	stack haddock drasil-printers $(haddockArgs)
-
-docLang-docs:
-	stack haddock drasil-docLang $(haddockArgs)
+$(filter %-docs, $(DOCS_PACKAGES)): %-docs: FORCE
+	stack haddock drasil-$* $(haddockArgs)
 
 clean: clean_build
 	- stack clean

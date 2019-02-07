@@ -112,8 +112,8 @@ generateCode chs g =
 
 genFiles :: (RenderSym repr) => Reader (State repr) [(repr (RenderFile repr))]
 genFiles = do
-  g <- ask
-  return $ map fileDoc $ runReader genModules g
+  ms <- genModules
+  return $ map fileDoc ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [(repr (Module repr))]
 genModules = do

@@ -92,7 +92,9 @@ assign' x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: (RenderSym repr) => (repr (MethodType repr)) -> Label -> [repr (Parameter repr)] -> [repr (StateType repr)] -> [Label] -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr (Method repr))
+publicMethod :: (RenderSym repr) => (repr (MethodType repr)) -> Label -> [repr
+  (Parameter repr)] -> [repr (StateType repr)] -> [Label] -> Reader (State repr)
+  [(repr (Block repr))] -> Reader (State repr) (repr (Method repr))
 publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
@@ -189,7 +191,7 @@ genInputConstraints = do
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms types names
-      (return $ body (sf ++ hw))
+      (return $ sf ++ hw)
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genInputDerived = do
@@ -200,7 +202,7 @@ genInputDerived = do
   names <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
   publicMethod void "derived_values" parms types names
-      (return $ body $ inps)
+      (return $ inps)
 
 -- need Expr -> String to print constraint
 constrWarn :: (RenderSym repr) => Expr -> (repr (Body repr))
@@ -239,7 +241,7 @@ genCalcFunc cdef = do
     (mState $ convType (codeType cdef))
     (codeName cdef)
     parms types names
-    (return $ body $ [blck])
+    (return $ [blck])
   where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
@@ -285,18 +287,18 @@ genOutputFormat outs =
         return [ printFileStr v_outfile ((codeName x) ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod void "write_output" parms types names (return bodyStatements $
+    publicMethod void "write_output" parms types names (return $ [block $
       [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ])
+      concat outp ++ [ closeFile v_outfile ]])
 
 -----
 
 genMethodCall :: (RenderSym repr) => (repr (Scope repr)) -> (repr
   (Permanence repr)) -> Comments -> Logging -> (repr (MethodType repr)) ->
   Label -> [repr (Parameter repr)] -> [repr (StateType repr)] -> [Label]
-  -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr
+  -> Reader (State repr) [(repr (Block repr))] -> Reader (State repr) (repr
   (Method repr))
 genMethodCall s pr doComments doLog t n p st l b = do
   let loggedBody LogFunc = loggedMethod n st l b
@@ -305,29 +307,28 @@ genMethodCall s pr doComments doLog t n p st l b = do
       commBody CommentFunc = commMethod n l
       commBody _           = id
   bod <- commBody doComments (loggedBody doLog)
-  return $ method n s pr t p bod
+  return $ method n s pr t p (body bod)
 
-commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr (Body repr))
+commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) [(repr (Block repr))] -> Reader (State repr) [(repr (Block repr))]
 commMethod n l b = do
   g <- ask
   rest <- b
-  return $ (
-    body $ [ block [
+  return $ (block [
       comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
       multi $ map
         (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
-    ]]) : rest 
+    ]) : rest 
 
 loggedMethod :: (RenderSym repr) => Label -> [repr (StateType repr)] ->
-  [Label] -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr (Body
-  repr))
+  [Label] -> Reader (State repr) [(repr (Block repr))] -> Reader (State repr)
+  [(repr (Block repr))]
 loggedMethod n st l b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
     g <- ask
     rest <- b
-    return $ ( block [
+    return $ (block [
       varDec l_outfile outfile,
       openFileW v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
@@ -594,7 +595,7 @@ genFunc (FDef (FuncDef n i o s)) = do
   names <- getParamNames i
   blocks <- mapM convBlock s
   publicMethod (mState $ convType o) n parms types names
-    (return body $ [block
+    (return $ [block
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i))]
         ++ blocks
@@ -653,13 +654,13 @@ genDataFunc nameTitle dd = do
     parms <- getParams $ getInputs dd
     inD <- mapM inData dd
     publicMethod void nameTitle (p_filename : parms) $
-      return $ body $ [ (block [
+      return $ [ (block [
       varDec l_infile infile,
       varDec l_line string,
       listDec l_lines 0 string,
       listDec l_linetokens 0 string,
-      openFileR v_infile v_filename ]) ++
-      (concat inD) ++ (block [
+      openFileR v_infile v_filename ])] ++
+      (concat inD) ++ [(block [
       closeFile v_infile ])]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Block
           repr)]

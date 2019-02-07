@@ -14,14 +14,6 @@ GAME_DIR  = Chipmunk
 
 PACKAGES = lang code printers gen data docLang example
 
-LANG_DEPS =
-CODE_DEPS = lang
-PRINTERS_DEPS = lang
-GEN_DEPS = lang code printers
-DATA_DEPS = lang
-DOCLANG_DEPS = lang data
-EXAMPLE_DEPS = lang data docLang gen printers code
-
 TINY_EXE  = tiny
 GLASS_EXE = glassbr
 NoPCM_EXE = nopcm
@@ -56,16 +48,8 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-build_lang_deps: $(addprefix build_, $(LANG_DEPS))
-build_data_deps: $(addprefix build_, $(DATA_DEPS))
-build_code_deps: $(addprefix build_, $(CODE_DEPS))
-build_printers_deps: $(addprefix build_, $(PRINTERS_DEPS))
-build_gen_deps: $(addprefix build_, $(GEN_DEPS))
-build_docLang_deps: $(addprefix build_, $(DOCLANG_DEPS))
-build_example_deps: $(addprefix build_, $(EXAMPLE_DEPS))
-
-build_%: FORCE build_%_deps
-	stack install --ghc-options -j2 $(stackArgs) drasil-$*
+build_example: FORCE
+	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-example --dump-logs --interleaved-output
 
 tiny_build: build_example
 	mkdir -p build/$(TINY_DIR)

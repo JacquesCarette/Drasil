@@ -607,7 +607,7 @@ convBlock :: (RenderSym repr) => FuncStmt -> Reader (State repr) (repr (Block
   repr))
 convBlock (FAsg v e) = do
   e' <- convExpr e
-  return $ block $ [assign' (var $ codeName v) e']
+  fmap block $ liftS $ assign' (var $ codeName v) e'
 convBlock (FFor v e st) = do
   blcks <- mapM convBlock st
   e' <- convExpr e
@@ -635,17 +635,17 @@ convBlock (FTry t c) = do
   blck2 <- mapM convBlock c
   return $ tryCatch (body blck1) (body blck2)
 convBlock (FContinue) = return $ block [continue]
-convBlock (FDec v (C.List t)) = return $ listDec (codeName v) 0 (listType
-  dynamic $ convType t)
+convBlock (FDec v (C.List t)) = return $ block [listDec (codeName v) 0 (listType
+  dynamic $ convType t)]
 -- Again, above won't work for intListType, etc. Better solution needed.
-convBlock (FDec v t) = return $ varDec (codeName v) (convType t)
+convBlock (FDec v t) = return $ block [varDec (codeName v) (convType t)]
 convBlock (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
   return $ block [valState e']
 convBlock (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ block [valState $ liftM2 (\x y -> x $.(listAppend y)) a' b']
+  return $ block [valState $ a' $.(listAppend b')]
 
 -- this is really ugly!!
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr) (repr 

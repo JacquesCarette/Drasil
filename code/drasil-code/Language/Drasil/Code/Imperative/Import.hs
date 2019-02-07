@@ -332,14 +332,14 @@ loggedMethod n st l b =
       varDec l_outfile outfile,
       openFileW v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
-      printParams st v v_outfile,
+      printParams st l v_outfile,
       printFileStrLn v_outfile ") called",
       closeFile v_outfile ] )
       : rest
   where
-    printParams st v v_outfile = multi $
+    printParams st l v_outfile = multi $
       intersperse (printFileStr v_outfile ", ") $
-      map (\x y -> printFile v_outfile x (var y)) st l
+      map (\(x,y) -> printFile v_outfile x (var y)) (zip st l)
 
 ---- MAIN ---
 

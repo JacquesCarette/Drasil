@@ -189,7 +189,7 @@ genInputConstraints = do
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms types names
-      (return $ body [ sf ++ hw ])
+      (return $ body (sf ++ hw))
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genInputDerived = do
@@ -200,7 +200,7 @@ genInputDerived = do
   names <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
   publicMethod void "derived_values" parms types names
-      (return $ concat inps)
+      (return $ body $ inps)
 
 -- need Expr -> String to print constraint
 constrWarn :: (RenderSym repr) => Expr -> (repr (Body repr))
@@ -227,42 +227,52 @@ genConstClassD = pubClass "Constants" Nothing genVars []
 genCalcMod :: String -> [CodeDefinition] -> Reader State Module
 genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . codeEquat) defs)) []
 -}
-genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr (Method repr))
+genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr
+  (Method repr))
 genCalcFunc cdef = do
   g <- ask
-  parms <- getParams codecs
-  types <- getParamTypes codecs
-  names <- getParamNames codecs
+  parms <- getParams $ codecs g
+  types <- getParamTypes $ codecs g
+  names <- getParamNames $ codecs g
+  blck <- genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef)
   publicMethod
     (mState $ convType (codeType cdef))
     (codeName cdef)
     parms types names
-    (genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef))
-  where codecs = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
+    (return $ body $ [blck])
+  where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State repr) (repr (Body repr))
+genCalcBlock :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
+  repr) (repr (Block repr))
 genCalcBlock t' v' e' = do
   doit t' v' e'
     where
-    doit :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State repr) (repr (Body repr))
+    doit :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
+      repr) (repr (Block repr))
     doit t v (Case e)    = genCaseBlock t v e
     doit t v e
-      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign' vv ee}
-      | otherwise        = fmap (oneLiner . returnState) $ convExpr e
+      | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
+        convExpr e; assign' vv ee}
+      | otherwise        = fmap block $ liftS $ fmap returnState $ convExpr e
 
-genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] -> Reader (State repr) (repr (Body repr))
+genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
+  Reader (State repr) (repr (Block repr))
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
-  return $ body $ [ifNoElse ifs]
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (fmap body $ liftS $
+    genCalcBlock t v r)) cs
+  return $ ifNoElse ifs
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr (Module repr))]
-genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ genOutputFormat outs) Nothing
+genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr
+  (Module repr))]
+genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ 
+  genOutputFormat outs) Nothing
 
-genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr (Method repr))
+genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
+  (Method repr))
 genOutputFormat outs =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
@@ -286,7 +296,8 @@ genOutputFormat outs =
 genMethodCall :: (RenderSym repr) => (repr (Scope repr)) -> (repr
   (Permanence repr)) -> Comments -> Logging -> (repr (MethodType repr)) ->
   Label -> [repr (Parameter repr)] -> [repr (StateType repr)] -> [Label]
-  -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr (Method repr))
+  -> Reader (State repr) (repr (Body repr)) -> Reader (State repr) (repr
+  (Method repr))
 genMethodCall s pr doComments doLog t n p st l b = do
   let loggedBody LogFunc = loggedMethod n st l b
       loggedBody LogAll  = loggedMethod n st l b

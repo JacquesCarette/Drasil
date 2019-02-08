@@ -648,12 +648,15 @@ convBlock (FAppend a b) = do
   return $ block [valState $ a' $.(listAppend b')]
 
 -- this is really ugly!!
-genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr) (repr 
-  (Method repr))
+genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
+  (repr (Method repr))
 genDataFunc nameTitle dd = do
     parms <- getParams $ getInputs dd
+    types <- getParamTypes $ getInputs dd
+    names <- getParamNames $ getInputs dd
     inD <- mapM inData dd
-    publicMethod void nameTitle (p_filename : parms) $
+    publicMethod void nameTitle (p_filename : parms) (string : types)
+      (l_filename : names) $
       return $ [ (block [
       varDec l_infile infile,
       varDec l_line string,
@@ -665,8 +668,8 @@ genDataFunc nameTitle dd = do
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Block
           repr)]
         inData (Singleton v) = do
-          vv <- variable $ codeName v
-          return $ [block [(getFileInput (codeType v)) v_infile vv]]
+            vv <- variable $ codeName v
+            return $ [block [(getFileInput (codeType v)) v_infile vv]]
         inData JunkData = return $ [block [discardFileLine v_infile]]
         inData (Line lp d) = do
           lnI <- lineData lp (litInt 0)
@@ -730,7 +733,7 @@ genDataFunc nameTitle dd = do
         entryData _ _ _ JunkEntry = return []
         ---------------
         indexData :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
-          (repr (Value)) -> (repr (Value repr)) -> (repr (Value repr))
+          (repr (Value repr)) -> (repr (Value repr)) -> (repr (Value repr))
         indexData [] _ _ v = v
         indexData ((Explicit i):is) l p v = indexData is l p (objAccess v 
           (listAccess $ litInt i))
@@ -747,35 +750,21 @@ genDataFunc nameTitle dd = do
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
           [ while (v $.listSize ?<= (litInt i)) ( bodyStatements [ valState $
-          v $.(listExtend $ getListType' s n) ] ) ]
+          v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
           [ while (v $.listSize ?<= l) ( bodyStatements [ valState $
-          v $.(listExtend $ getListType' s n ) ] ) ]
+          v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
           [ while (v $.listSize ?<= p) ( bodyStatements [ valState $ 
-          v $.(listExtend $ getListType' s n ) ] ) ]
+          v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess p)) s
-        ---------------
-        getListType :: (RenderSym repr) => C.CodeType -> Integer -> (repr 
-          (StateType repr))
-        getListType _ 0 = error "No index given"
-        getListType (C.List t) 1 = convType t
-        getListType (C.List t) n = getListType t (n-1)
-        getListType _ _ = error "Not a list type"
-        ---------------
-        listBase :: C.CodeType -> C.CodeType
-        listBase (C.List t) = listBase t
-        listBase t = t
-        ---------------
-        getListType' :: (RenderSym repr) => C.CodeType -> Integer -> (repr
-          (StateType repr))
-        getListType' _ 0 = error "No index given"
-        getListType' t 1 = convType t
-        getListType' t n = listType $ getListType' t (n-1)
-        -- Another fragile use of listType
-        ---------------
+        ---------------------------
+        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
+        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
+          (RenderSym repr) => (repr (Value repr))
+        p_filename :: (RenderSym repr) => (repr (Parameter repr))
         l_line = "line"
         v_line = var l_line
         l_lines = "lines"
@@ -792,11 +781,33 @@ genDataFunc nameTitle dd = do
         l_j = "j"
         v_j = var l_j
 
-getFileInput :: (RenderSym repr) => C.CodeType -> ((repr (Value repr)) ->
-  (repr (Statement repr)))
+getFileInput :: (RenderSym repr) => C.CodeType -> ((repr (Value repr)) -> (repr
+  (Value repr)) -> (repr (Statement repr)))
 getFileInput C.Boolean = getBoolFileInput
 getFileInput C.Integer = getIntFileInput
 getFileInput C.Float = getFloatFileInput
 getFileInput C.Char = getCharFileInput
 getFileInput C.String = getStringFileInput
 getFileInput _ = error "No getFileInput function for the given type"
+
+getListExtend :: (RenderSym repr) => C.CodeType -> (repr (Function repr))
+getListExtend C.Boolean = listExtendBool
+getListExtend C.Integer = listExtendInt
+getListExtend C.Float = listExtendFloat
+getListExtend C.Char = listExtendChar
+getListExtend C.String = listExtendString
+getListExtend t@(C.List _) = listExtendList (convType t)
+getListExtend _ = error "No getFileInput function for the given type"
+
+getListType :: (RenderSym repr) => C.CodeType -> Integer -> (repr 
+  (StateType repr))
+getListType _ 0 = error "No index given"
+getListType (C.List t) 1 = convType t
+getListType (C.List t) n = getListType t (n-1)
+getListType _ _ = error "Not a list type"
+
+listBase :: C.CodeType -> C.CodeType
+listBase (C.List t) = listBase t
+listBase t = t
+
+

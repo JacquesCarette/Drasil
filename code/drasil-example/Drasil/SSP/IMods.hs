@@ -20,8 +20,7 @@ import Drasil.SSP.Assumptions (newA2, newA4, newA6, newA10, newA11, newA12)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2, convertFunc1, convertFunc2,
-  lengthLs, seismicLoadF, sliceWght, 
-  surfLoads)
+  lengthLs, sliceWght)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
@@ -177,7 +176,7 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
   plural physicalProperty, S "of", makeRef2S sliceWght, S "to",
-  makeRef2S lengthLs `sC` S "as done in", makeRef2S seismicLoadF `sC` makeRef2S surfLoads]
+  makeRef2S lengthLs `sC` S "as done in", makeRef2S resShearWOGD `sC` makeRef2S mobShearWOGD]
 
 instModIntro2 = foldlSP [
   plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
@@ -186,7 +185,7 @@ instModIntro2 = foldlSP [
   at_start' equation, S "for the unknowns are written in terms of only the",
   plural value, S "in", makeRef2S sliceWght, S "to", makeRef2S lengthLs `sC` S "the", plural value,
   S "of", ch shearRNoIntsl `sC` S "and", ch shearFNoIntsl, S "in",
-  makeRef2S seismicLoadF, S "and", makeRef2S surfLoads `sC` S "and each",
+  makeRef2S resShearWOGD, S "and", makeRef2S mobShearWOGD `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -735,8 +734,7 @@ intrSlcDerivation = [
   
   foldlSP [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
-  S wiif, ch intNormForce `sAnd` ch intShrForce `sC`
-  S "as defined in", makeRef2S seismicLoadF `sAnd` makeRef2S surfLoads,
+  S wiif, ch intNormForce `sAnd` ch intShrForce,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs],

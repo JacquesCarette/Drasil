@@ -379,7 +379,7 @@ m
 <em><b>p</b><sub>CM</sub></em>
 </td>
 <td>
-Mass-weighted average position of a rigid body's particles
+Center of Mass
 </td>
 <td>
 m
@@ -998,16 +998,10 @@ Given the inputs, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
+GS1: Determine their new positions and velocities over a period of time.
 </p>
 <p>
-GS2: Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
-</p>
-<p>
-GS3: Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
-</p>
-<p>
-GS4: Given the physical properties, initial positions, orientations, linear velocities, and angular velocities of a set of rigid bodies, determine the new positions, orientations, linear velocities, and angular velocities over a period of time of the rigid bodies that have undergone a collision.
+GS2: Determine their new orientations and angular velocities over a period of time.
 </p>
 </div>
 </div>
@@ -1068,7 +1062,7 @@ collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a hre
 <ul class="hide-list-style">
 <li>
 <div id="A:dampingInvolvement">
-dampingInvolvement: There is no damping involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
@@ -1495,7 +1489,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mass-weighted average position of a rigid body's particles
+Center of Mass
 </p>
 </td>
 </tr>
@@ -1543,7 +1537,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>p</b><sub>CM</sub></em> is the mass-weighted average position of a rigid body's particles (m)
+<em><b>p</b><sub>CM</sub></em> is the Center of Mass (m)
 </li>
 <li>
 <em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
@@ -2452,6 +2446,98 @@ Notes
 <td>
 <p class="paragraph">
 The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:torque">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Torque
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>τ</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N&sdot;m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>τ = <b>r</b>&#10799;<b>F</b></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>τ</em> is the torque (N&sdot;m)
+</li>
+<li>
+<em><b>r</b></em> is the displacement (m)
+</li>
+<li>
+<em><b>F</b></em> is the force (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
 </p>
 </td>
 </tr>
@@ -4348,7 +4434,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
+GS3 (<a href=#reqSS>FR: Simulation-Space</a>)
 </td>
 <td>
 
@@ -4374,7 +4460,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
+GS4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
 </td>
 <td>
 
@@ -4400,7 +4486,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#reqSS>FR: Simulation-Space</a>)
+R1 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
 </td>
 <td>
 
@@ -4426,7 +4512,7 @@ R1 (<a href=#reqSS>FR: Simulation-Space</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
+R2 (<a href=#reqVPC>FR: Verify-Physical_Constraints</a>)
 </td>
 <td>
 X
@@ -4452,7 +4538,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
+R3 (<a href=#reqCTOT>FR: Calculate-Translation-Over-Time</a>)
 </td>
 <td>
 
@@ -4478,7 +4564,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#reqVPC>FR: Verify-Physical_Constraints</a>)
+R4 (<a href=#reqCROT>FR: Calculate-Rotation-Over-Time</a>)
 </td>
 <td>
 
@@ -4504,7 +4590,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#reqCTOT>FR: Calculate-Translation-Over-Time</a>)
+R5 (<a href=#reqDC>FR: Determine-Collisions</a>)
 </td>
 <td>
 X
@@ -4530,7 +4616,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#reqCROT>FR: Calculate-Rotation-Over-Time</a>)
+R6 (<a href=#reqDCROT>FR: Determine-Collision-Response-Over-Time</a>)
 </td>
 <td>
 
@@ -4556,7 +4642,7 @@ X
 </tr>
 <tr>
 <td>
-R7 (<a href=#reqDC>FR: Determine-Collisions</a>)
+
 </td>
 <td>
 
@@ -4582,7 +4668,7 @@ X
 </tr>
 <tr>
 <td>
-R8 (<a href=#reqDCROT>FR: Determine-Collision-Response-Over-Time</a>)
+
 </td>
 <td>
 
@@ -5187,7 +5273,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </td>
 <td>
 X
@@ -5213,7 +5299,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 X
@@ -5239,7 +5325,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#IM:col2D>IM: col2D</a>)
+LC1 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5265,7 +5351,7 @@ LC1 (<a href=#IM:col2D>IM: col2D</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC2 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -5291,7 +5377,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#lcEC>LC: Expanded-Collisions</a>)
+LC3 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </td>
 <td>
 
@@ -5317,7 +5403,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcID>LC: Include-Dampening</a>)
+LC4 (<a href=#lcEC>LC: Expanded-Collisions</a>)
 </td>
 <td>
 
@@ -5416,10 +5502,10 @@ DD8 (<a href=#DD:impulse>DD: impulse</a>)
 IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </th>
 </tr>
 <tr>
@@ -6978,7 +7064,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </td>
 <td>
 
@@ -7052,7 +7138,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -7179,7 +7265,7 @@ References
 </li>
 <li>
 <div id="smithLai2005">
-[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>

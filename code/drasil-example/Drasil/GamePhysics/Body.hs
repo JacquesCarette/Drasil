@@ -441,7 +441,19 @@ goal_statements_list :: Contents
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [goal_statements_list])]
 
-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
+goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> [Sentence]
+goalStatementStruct outputs condition1 condition2 = 
+  [ S "Determine", condition1, listOfOutputs, S "over a period of",
+  (phrase QP.time), condition2]
+  where listOfOutputs       = (foldlList Comma List $ map plural outputs)
+
+goal_statements_G_linear = goalStatementStruct (take 2 outputSymbols)
+  (S "their new") EmptyS
+
+goal_statements_G_angular = goalStatementStruct (drop 3 $ take 5 inputSymbols)
+  (S "their new") EmptyS
+
+{-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
   Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
 goalStatementStruct state inputs wrt adjective outputs objct condition1 condition2 = 
   [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
@@ -452,7 +464,9 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
         listOfInputs EmptyS = (foldlList Comma List $ map plural inputs)
         listOfInputs i      = (foldlList Comma List $ map plural inputs) `sC` S "and" +:+ i
         listOfOutputs       = (foldlList Comma List $ map plural outputs)
-
+--GS1: Given the physical properties, initial positions and velocities, 
+--and forces applied on a set of rigid bodies, determine their new positions 
+--and velocities over a period of time. 
 goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
   (take 2 outputSymbols) CP.rigidBody
@@ -461,9 +475,9 @@ goal_statements_G_linear = goalStatementStruct (plural physicalProperty)
 goal_statements_G_angular = goalStatementStruct (plural physicalProperty) 
   (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
   (drop 3 $ take 5 inputSymbols) CP.rigidBody
-  (S "their new") EmptyS
+  (S "their new") EmptyS-}
 
-goal_statements_G_detectCollision = goalStatementStruct EmptyS
+{-goal_statements_G_detectCollision = goalStatementStruct EmptyS
   (take 2 inputSymbols) EmptyS (S "of")
   (take 0 inputSymbols) CP.rigidBody
   (S "if any of them will collide with one another") EmptyS
@@ -477,15 +491,26 @@ goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
   EmptyS (S "of")
   (goalStatement4Inputs) --fixme input symbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
-  S "that have undergone a" +:+ (phrase CP.collision))
+  S "that have undergone a" +:+ (phrase CP.collision))-}
 
-goal_statements_G_linear, goal_statements_G_angular, 
+{-goal_statements_G_linear, goal_statements_G_angular, 
   goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
 
 goal_statements_list' :: [Sentence]
 goal_statements_list' = map (foldlSent) [goal_statements_G_linear, 
   goal_statements_G_angular, goal_statements_G_detectCollision, 
-  goal_statements_G_collision]
+  goal_statements_G_collision]-}
+
+goal_statements_G_linear, goal_statements_G_angular :: [Sentence]
+
+  {-, 
+  goal_statements_G_detectCollision, goal_statements_G_collision-} 
+
+goal_statements_list' :: [Sentence]
+goal_statements_list' = map (foldlSent) [goal_statements_G_linear, goal_statements_G_angular]
+
+  {-, goal_statements_G_detectCollision, 
+  goal_statements_G_collision-}
 
 goal_statements_list = LlC $ enumSimple goalStmt_label 1 (getAcc goalStmt) goal_statements_list'
 

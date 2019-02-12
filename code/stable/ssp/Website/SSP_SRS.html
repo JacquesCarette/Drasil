@@ -1212,7 +1212,7 @@ Interslice-Norm-Shear-Forces-Linear: Interslice normal and shear forces have a l
 <ul class="hide-list-style">
 <li>
 <div id="A:Plane-Strain-Conditions">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:effNormF>GD: effNormF</a>.
 </div>
 </li>
 </ul>
@@ -1550,7 +1550,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -1947,6 +1947,81 @@ RefBy
 <td>
 <p class="paragraph">
 <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GD:effNormF">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Effective normal force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>N&prime;<sub>i</sub> = N<sub>i</sub>&minus;U<sub>b,i</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>N&prime;</em> is the effective normal force (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>N</em> is the normal force (N)
+</li>
+<li>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+Derived by substituting <a href=#DD:stress>DD: stress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (<a href=#A:Plane-Strain-Conditions>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the z-direction.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
 </p>
 </td>
 </tr>
@@ -3493,7 +3568,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>

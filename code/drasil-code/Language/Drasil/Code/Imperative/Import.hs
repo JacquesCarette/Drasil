@@ -129,6 +129,7 @@ getDir Python = "python"
 getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
+getExt _ = error "Language not yet implemented"
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (\x -> [x])
@@ -174,11 +175,11 @@ genInputConstraints = do
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
   parms <- getParams varsList
-  types <- getParamTypes varsList
-  names <- getParamNames varsList
+  ptypes <- getParamTypes varsList
+  pnames <- getParamNames varsList
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
-  publicMethod void "input_constraints" parms types names
+  publicMethod void "input_constraints" parms ptypes pnames
       (return $ sf ++ hw)
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
@@ -186,10 +187,10 @@ genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
   parms <- getParams $ map codevar dvals
-  types <- getParamTypes $ map codevar dvals
-  names <- getParamNames $ map codevar dvals
+  ptypes <- getParamTypes $ map codevar dvals
+  pnames <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
-  publicMethod void "derived_values" parms types names
+  publicMethod void "derived_values" parms ptypes pnames
       (return $ inps)
 
 -- need Expr -> String to print constraint
@@ -222,13 +223,13 @@ genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr
 genCalcFunc cdef = do
   g <- ask
   parms <- getParams $ codecs g
-  types <- getParamTypes $ codecs g
-  names <- getParamNames $ codecs g
+  ptypes <- getParamTypes $ codecs g
+  pnames <- getParamNames $ codecs g
   blck <- genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef)
   publicMethod
     (mState $ convType (codeType cdef))
     (codeName cdef)
-    parms types names
+    parms ptypes pnames
     (return $ [blck])
   where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
@@ -268,14 +269,14 @@ genOutputFormat outs =
       v_outfile = var l_outfile
   in do
     parms <- getParams outs
-    types <- getParamTypes outs
-    names <- getParamNames outs
+    ptypes <- getParamTypes outs
+    pnames <- getParamNames outs
     outp <- mapM (\x -> do
         v <- variable $ codeName x
         return [ printFileStr v_outfile ((codeName x) ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod void "write_output" parms types names (return $ [block $
+    publicMethod void "write_output" parms ptypes pnames (return $ [block $
       [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
@@ -325,9 +326,9 @@ loggedMethod n st l b =
       closeFile v_outfile ] )
       : rest
   where
-    printParams st l v_outfile = multi $
+    printParams sts ls v_outfile = multi $
       intersperse (printFileStr v_outfile ", ") $
-      map (\(x,y) -> printFile v_outfile x (var y)) (zip st l)
+      map (\(x,y) -> printFile v_outfile x (var y)) (zip sts ls)
 
 ---- MAIN ---
 
@@ -579,10 +580,10 @@ genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
-  types <- getParamTypes i
-  names <- getParamNames i
+  ptypes <- getParamTypes i
+  pnames <- getParamNames i
   blocks <- mapM convBlock s
-  publicMethod (mState $ convType o) n parms types names
+  publicMethod (mState $ convType o) n parms ptypes pnames
     (return $ [block
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i))]
@@ -640,11 +641,11 @@ genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
 genDataFunc nameTitle dd = do
     parms <- getParams $ getInputs dd
-    types <- getParamTypes $ getInputs dd
-    names <- getParamNames $ getInputs dd
+    ptypes <- getParamTypes $ getInputs dd
+    pnames <- getParamNames $ getInputs dd
     inD <- mapM inData dd
-    publicMethod void nameTitle (p_filename : parms) (string : types)
-      (l_filename : names) $
+    publicMethod void nameTitle (p_filename : parms) (string : ptypes)
+      (l_filename : pnames) $
       return $ [ (block [
       varDec l_infile infile,
       varDec l_line string,

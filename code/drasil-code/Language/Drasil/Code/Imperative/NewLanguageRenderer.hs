@@ -33,13 +33,12 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     getterName, setterName
 ) where
 
-import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.New (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,
     oneTab,capitalize,oneTabbed,hicat,vibcat,vmap)
 
 import Data.List (intersperse)
-import Prelude hiding (break,print,return,last,mod,(<>))
+import Prelude hiding (break,print,return,last,mod)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
     brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 

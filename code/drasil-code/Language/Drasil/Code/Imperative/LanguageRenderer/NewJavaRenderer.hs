@@ -6,7 +6,6 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.New (Label,
     RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -35,7 +34,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     addCommentsDocD, callFuncParamList, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (angles,oneTab)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Prelude hiding (break,print,sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,

@@ -99,15 +99,15 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (RenderSym repr) => Choices -> (State repr) -> IO ()
-generateCode chs g =
+generateCode :: (RenderSym repr) => Choices -> (State repr) -> ((repr (RenderFile repr)) -> (Doc, Label)) -> IO ()
+generateCode chs g unRepr =
   do workingDir <- getCurrentDirectory
      mapM_ (\x -> do
           createDirectoryIfMissing False (getDir x)
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
           when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode (map (getUnRepr x) files) (getExt x)
+          createCodeFiles $ makeCode (map unRepr files) (getExt x)
           setCurrentDirectory workingDir) (lang $ chs)
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         files = runReader genFiles g
@@ -137,10 +137,6 @@ getDir Python = "python"
 getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
-
-getUnRepr :: (RenderSym repr) => Lang -> (repr (RenderFile repr) -> (Doc, Label))
-getUnRepr Java = unJC
-getUnRepr Python = unPC
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (\x -> [x])

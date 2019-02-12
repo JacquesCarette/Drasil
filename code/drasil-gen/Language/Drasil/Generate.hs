@@ -11,6 +11,7 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
   genTeX, HasPrintingOptions)
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
+import Language.Drasil.Code (unJC, unPC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: (HasSymbolTable s, HasTermTable s, HasDefinitionTable s, HasPrintingOptions s) =>
@@ -69,5 +70,5 @@ genCode chs spec = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode chs $ generator chs spec
+  generateCode chs unJC $ generator chs spec
   setCurrentDirectory workingDir

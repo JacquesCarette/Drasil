@@ -91,8 +91,8 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (RenderSym repr) => Choices -> (State repr) -> ((repr (RenderFile repr)) -> (Doc, Label)) -> IO ()
-generateCode chs g unRepr =
+generateCode :: (RenderSym repr) => Choices -> ((repr (RenderFile repr)) -> (Doc, Label)) -> (State repr) -> IO ()
+generateCode chs unRepr g =
   do workingDir <- getCurrentDirectory
      mapM_ (\x -> do
           createDirectoryIfMissing False (getDir x)

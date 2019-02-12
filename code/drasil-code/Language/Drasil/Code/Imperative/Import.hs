@@ -549,6 +549,10 @@ convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
 
+getUpperBound :: Expr -> Expr
+getUpperBound (BinaryOp Lt _ b) = b
+getUpperBound _ = error "Attempt to get upper bound of invalid expression"
+
 lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
 lookupC sm c = symbLookup c $ sm^.symbolTable
 
@@ -633,9 +637,8 @@ convBlock (FAsg v e) = do
   fmap block $ liftS $ assign' (var $ codeName v) e'
 convBlock (FFor v e st) = do
   blcks <- mapM convBlock st
-  e' <- convExpr e
-  return $ for (varDecDef (codeName v) int (litInt 0)) e' 
-    ((&++) (var (codeName v))) (body blcks)
+  e' <- convExpr $ getUpperBound e
+  return $ forRange (codeName v) (litInt 0) e' (litInt 1) (body blcks)
 convBlock (FWhile e st) = do
   blcks <- mapM convBlock st
   e' <- convExpr e
@@ -701,15 +704,13 @@ genDataFunc nameTitle dd = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-            for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines $.listSize) 
-              ((&++) v_i)
+            forRange l_i (litInt 0) (v_lines $.listSize) (litInt 1)
               ( body $ [(block [ stringSplit d v_linetokens (v_lines $.
                 (listAccess v_i)) ])] ++ lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return $ [ for (varDecDef l_i int (litInt 0)) 
-            (v_i ?< (litInt numLines)) ((&++) v_i)
+          return $ [ forRange l_i (litInt 0) (litInt numLines) (litInt 1)
             ( body $
               [ (block [ getFileInputLine v_infile v_line,
                   stringSplit d v_linetokens v_line
@@ -723,13 +724,13 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return $ [for (varDecDef l_j int (litInt 0)) 
-            (v_j ?< (v_linetokens $.listSize #/ (litInt $ toInteger $ 
-            length p)) $.(cast int float)) ((&++) v_j) ( body pat )]
+          return $ [forRange l_j (litInt 0) ((v_linetokens $.listSize #/ 
+            (litInt $ toInteger $ length p)) $.(cast int float)) (litInt 1)
+            ( body pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
-          return $ [for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat))
-            ((&++) v_j) ( body pat )]
+          return $ [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
+            ( body pat )]
         ---------------
         patternData :: (RenderSym repr) => [Entry] -> (repr (Value repr))
           -> (repr (Value repr)) -> Reader (State repr) [(repr (Block repr))]

@@ -158,7 +158,7 @@ instance ControlBlockSym JavaCode where
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
-    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
+    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv) b
     forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
     while v b = liftA4 whileDocD blockStart blockEnd v b
 

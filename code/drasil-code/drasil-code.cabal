@@ -13,22 +13,12 @@ library
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.New
-    , Language.Drasil.Code.Imperative.AST
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.LanguageRenderer
     , Language.Drasil.Code.Imperative.NewLanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer
     , Language.Drasil.Code.CodeGeneration
-    , Language.Drasil.Code.Imperative.Parsers.ConfigParser
     , Language.Drasil.CodeSpec
 
   Build-Depends:

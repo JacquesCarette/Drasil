@@ -10,8 +10,9 @@ import Language.Drasil
 import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
   genTeX, HasPrintingOptions)
-import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
-import Language.Drasil.Code (unJC, unPC)
+import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec)
+import Language.Drasil.Code (Lang(..), unJC, unPC)
+import Control.Monad (when)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: (HasSymbolTable s, HasTermTable s, HasDefinitionTable s, HasPrintingOptions s) =>
@@ -70,5 +71,7 @@ genCode chs spec = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode chs unJC $ generator chs spec
+  mapM_ (\x -> do 
+    when (x == Java) $ generateCode x unJC $ generator chs spec
+    when (x == Python) $ generateCode x unPC $ generator chs spec) (lang $ chs)
   setCurrentDirectory workingDir

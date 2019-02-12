@@ -91,16 +91,15 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (RenderSym repr) => Choices -> ((repr (RenderFile repr)) -> (Doc, Label)) -> (State repr) -> IO ()
-generateCode chs unRepr g =
+generateCode :: (RenderSym repr) => Lang -> ((repr (RenderFile repr)) -> (Doc, Label)) -> (State repr) -> IO ()
+generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
-     mapM_ (\x -> do
-          createDirectoryIfMissing False (getDir x)
-          setCurrentDirectory (getDir x)
-          when (x == Java) $ createDirectoryIfMissing False prog
-          when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode (map unRepr files) (getExt x)
-          setCurrentDirectory workingDir) (lang $ chs)
+     createDirectoryIfMissing False (getDir l)
+     setCurrentDirectory (getDir l)
+     when (l == Java) $ createDirectoryIfMissing False prog
+     when (l == Java) $ setCurrentDirectory prog
+     createCodeFiles $ makeCode (map unRepr files) (getExt l)
+     setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         files = runReader genFiles g
 

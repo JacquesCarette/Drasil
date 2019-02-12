@@ -1,5 +1,5 @@
-module Drasil.SSP.DataDefs (dataDefns, 
-  lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
+module Drasil.SSP.DataDefs (dataDefns, sliceWght,
+  lengthLs, lengthLb, stressDD, convertFunc1, convertFunc2,
   fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)

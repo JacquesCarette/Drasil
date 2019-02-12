@@ -3,8 +3,8 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int, Label, Block, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot)
-import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
-  String, Boolean, Integer))
+import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, 
+  Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
@@ -13,8 +13,9 @@ import Language.Drasil.Code.Imperative.New (Label,
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
-  codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
+  codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
+  programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit), 
@@ -23,7 +24,8 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
+  getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
@@ -54,11 +56,13 @@ chooseConstr :: (RenderSym repr) => ConstraintBehaviour -> Expr -> (repr
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
-chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) [(repr (Module repr))]
+chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
+  [(repr (Module repr))]
 chooseInStructure Loose   = genInputModNoClass
 chooseInStructure AsClass = genInputModClass
 
-chooseLogging :: (RenderSym repr) => Logging -> ((repr (Value repr)) -> (repr (Value repr)) -> Reader (State repr) (repr (Statement repr)))
+chooseLogging :: (RenderSym repr) => Logging -> ((repr (Value repr)) -> 
+  (repr (Value repr)) -> Reader (State repr) (repr (Statement repr)))
 chooseLogging LogVar = loggedAssign
 chooseLogging LogAll = loggedAssign
 chooseLogging _      = (\x y -> return $ assign x y)
@@ -79,7 +83,8 @@ generator chs spec = State {
   physCBody = chooseConstr $ onPhysConstraint chs
 }
 
-assign' :: (RenderSym repr) => (repr (Value repr)) -> (repr (Value repr)) -> Reader (State repr) (repr (Statement repr))
+assign' :: (RenderSym repr) => (repr (Value repr)) -> (repr (Value repr)) ->
+  Reader (State repr) (repr (Statement repr))
 assign' x y = do
   g <- ask
   chooseLogging (logKind g) x y
@@ -91,7 +96,8 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (RenderSym repr) => Lang -> ((repr (RenderFile repr)) -> (Doc, Label)) -> (State repr) -> IO ()
+generateCode :: (RenderSym repr) => Lang -> ((repr (RenderFile repr)) -> 
+  (Doc, Label)) -> (State repr) -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
@@ -135,21 +141,25 @@ liftS = fmap (\x -> [x])
 
 ------- INPUT ----------
 
-genInputModClass :: (RenderSym repr) => Reader (State repr) [(repr (Module repr))]
+genInputModClass :: (RenderSym repr) => Reader (State repr) 
+  [(repr (Module repr))]
 genInputModClass =
   sequence $ [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
                genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
-               genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
+               genModule "InputConstraints" (Just $ liftS genInputConstraints)
+                 Nothing
              ]
 
-genInputModNoClass :: (RenderSym repr) => Reader (State repr) [(repr (Module repr))]
+genInputModNoClass :: (RenderSym repr) => Reader (State repr)
+  [(repr (Module repr))]
 genInputModNoClass = do
   g <- ask
   let ins = inputs $ codeSpec g
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
   return $ [ buildModule "InputParameters" []
-             (map (\x -> varDecDef (codeName x) (convType $ codeType x) (getDefaultValue $ codeType x)) ins)
+             (map (\x -> varDecDef (codeName x) (convType $ codeType x)
+               (getDefaultValue $ codeType x)) ins)
              [inpDer , inpConstr]
              []
            ]
@@ -166,7 +176,8 @@ genInputClass = do
   return $ pubClass "InputParameters" Nothing inputVars
     [ constructor "InputParameters" [] (body [block asgs]) ]
 
-genInputConstraints :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
+genInputConstraints :: (RenderSym repr) => Reader (State repr) 
+  (repr (Method repr))
 genInputConstraints = do
   g <- ask
   let varsList = inputs $ codeSpec g
@@ -176,8 +187,10 @@ genInputConstraints = do
   parms <- getParams varsList
   ptypes <- getParamTypes varsList
   pnames <- getParamNames varsList
-  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, sfwrCBody g x)]}) sfwrCs
-  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, physCBody g x)]}) physCs
+  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+    sfwrCBody g x)]}) sfwrCs
+  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+    physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms ptypes pnames
       (return $ sf ++ hw)
 
@@ -297,14 +310,16 @@ genMethodCall s pr doComments doLog t n p st l b = do
   bod <- commBody doComments (loggedBody doLog)
   return $ method n s pr t p (body bod)
 
-commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) [(repr (Block repr))] -> Reader (State repr) [(repr (Block repr))]
+commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) 
+  [(repr (Block repr))] -> Reader (State repr) [(repr (Block repr))]
 commMethod n l b = do
   g <- ask
   rest <- b
   return $ (block [
       comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
       multi $ map
-        (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ codeSpec g))) l
+        (\x -> comment $ "parameter '" ++ x ++ "': " ++ (varTerm x (vMap $ 
+          codeSpec g))) l
     ]) : rest 
 
 loggedMethod :: (RenderSym repr) => Label -> [repr (StateType repr)] ->
@@ -363,7 +378,8 @@ genMainFunc =
     varDef <- mapM (\x -> do
       args <- args1 x
       cnargs <- fApp (codeName x) args
-      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs) (execOrder $ codeSpec g)
+      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs)
+        (execOrder $ codeSpec g)
     wo <- fApp "write_output" args2
     return $ mainMethod $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
@@ -375,7 +391,8 @@ genMainFunc =
 
 -----
 
-loggedAssign :: (RenderSym repr) => (repr (Value repr)) -> (repr (Value repr)) -> Reader (State repr) (repr (Statement repr))
+loggedAssign :: (RenderSym repr) => (repr (Value repr)) -> 
+  (repr (Value repr)) -> Reader (State repr) (repr (Statement repr))
 loggedAssign a b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
@@ -386,7 +403,8 @@ loggedAssign a b =
       varDec l_outfile outfile,
       openFileW v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
+      printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g))
+        b,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 
@@ -395,48 +413,57 @@ loggedAssign a b =
 nopfx :: String -> String
 nopfx s = maybe s id (stripPrefix funcPrefix s)
 
-variable :: (RenderSym repr) => String -> Reader (State repr) (repr (Value repr))
+variable :: (RenderSym repr) => String -> Reader (State repr) 
+  (repr (Value repr))
 variable s' = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
-      doit :: (RenderSym repr) => String -> Reader (State repr) (repr (Value repr))
+      doit :: (RenderSym repr) => String -> Reader (State repr) 
+        (repr (Value repr))
       doit s | member s mm =
         maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-             | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
+             | s `elem` (map codeName $ inputs cs) = return $
+               (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
   
-fApp :: (RenderSym repr) => String -> [(repr (Value repr))] -> Reader (State repr) (repr (Value repr))
+fApp :: (RenderSym repr) => String -> [(repr (Value repr))] -> Reader 
+  (State repr) (repr (Value repr))
 fApp s' vl' = do
   g <- ask
   let doit :: (RenderSym repr) => String -> [(repr (Value repr))] -> (repr
         (Value repr))
       doit s vl | member s (eMap $ codeSpec g) =
         maybe (error "impossible")
-          (\x -> if x /= currentModule g then extFuncApp x s vl else funcApp s vl)
+          (\x -> if x /= currentModule g then extFuncApp x s vl else 
+            funcApp s vl)
           (Map.lookup s (eMap $ codeSpec g))
                 | otherwise = funcApp s vl
   return $ doit s' vl'
 
-getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr (Parameter repr))]
+getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [(repr (Parameter repr))]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       ps = map (\y -> stateParam (codeName y) (convType $ codeType y))
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
   return $ if length csSubIns < length cs
            then (stateParam "inParams" (obj "InputParameters")):ps  -- todo:  make general
            else ps
 
-getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr (StateType repr))]
+getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [(repr (StateType repr))]
 getParamTypes cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       pts = map (\y -> convType $ codeType y)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
   return $ if length csSubIns < length cs
           then (obj "InputParameters"):pts  -- todo:  make general
           else pts
@@ -447,18 +474,21 @@ getParamNames cs = do
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       pvs = map (\y -> codeName y)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
   return $ if length csSubIns < length cs
           then ("inParams"):pvs  -- todo:  make general
           else pvs
 
-getArgs :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [(repr (Value repr))]
+getArgs :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [(repr (Value repr))]
 getArgs cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       args = map (var . codeName)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
   return $ if length csSubIns < length cs
            then (var "inParams"):args  -- todo:  make general
            else args
@@ -489,16 +519,19 @@ convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
-convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
+convExpr (Deriv _ _ _) = return $ 
+  litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
+  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^.
+    symbolTable))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
-convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (FCall _ _)   = return $ 
+  litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
@@ -537,7 +570,8 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (RenderSym repr) => UFunc -> ((repr (Value repr)) -> (repr (Value repr)))
+unop :: (RenderSym repr) => UFunc -> ((repr (Value repr)) -> 
+  (repr (Value repr)))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -572,7 +606,8 @@ bfunc Frac = (#/)
 bfunc Index      = (\x y -> x $.(listAccess y))
 
 -- medium hacks --
-genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) (repr (Module repr))
+genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
+  (repr (Module repr))
 genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
@@ -797,5 +832,3 @@ getListType _ _ = error "Not a list type"
 listBase :: C.CodeType -> C.CodeType
 listBase (C.List t) = listBase t
 listBase t = t
-
-

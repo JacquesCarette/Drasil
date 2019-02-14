@@ -72,5 +72,7 @@ genCode chs spec = do
   setCurrentDirectory "src"
   mapM_ (\x -> do genLangCode x) (lang $ chs)
   setCurrentDirectory workingDir
-  where genLangCode Java = generateCode Java unJC $ generator chs spec
-        genLangCode Python = generateCode Python unPC $ generator chs spec
+  where genLangCode Java = genCall Java unJC
+        genLangCode Python = genCall Python unPC
+        genLangCode _ = error "Language not yet implemented"
+        genCall lng unRepr = generateCode lng unRepr $ generator chs spec

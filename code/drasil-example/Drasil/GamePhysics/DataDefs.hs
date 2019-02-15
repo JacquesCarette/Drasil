@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, impulseVDD) where
 
 import Language.Drasil
 
@@ -14,9 +14,8 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
-  linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
+  linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity, chgMomentum,
   impulseV, force, torque)
-
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Utils (eqUnR')
 
@@ -26,11 +25,11 @@ import Data.Drasil.Utils (eqUnR')
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, impulseVDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque]
+  angVel, angAccel, impulse, chasles, torque, impulseV]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -242,6 +241,33 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (phrase r_OB) `sC` (ch r_OB), 
   (sParen $ Sy $ unit_symb r_OB)]
 
+-----------------DD10 Impulse--------------------------------------
+impulseVDD :: DataDefinition
+impulseVDD = mkDD impulseV [{-- References --}] [{-- Derivation --}] "impulse"
+ [makeRef2S newA1]
+
+impulseV :: QDefinition
+impulseV = mkQuantDef QP.impulseV impulseVEqn
+
+impulseVEqn :: Expr
+impulseVEqn =  int_all (codeSymb QP.time) (sy QP.force) = (sy QP.chgMomentum)
+
+impulseVThmDesc :: Sentence
+impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV) ]
+--An impulse J occurs when a force F acts over an interval of time
+
+--(sy changeInMomentum)(sy changeInVelocity)
+  --(sy impulseV) $= (defint (sy force_1)(sy QP.time) (sy momtInert_B))
+  --((sy QP.time) * ( sy mass_A) * ((apply1 r_OB) - 
+  --(apply1 sy QP.time))))
+
+--defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
+--propCorSolDeriv4 :: Contents
+--propCorSolDeriv4 = eqUnR' $ 
+  --((sy impulseV) $= (defint (eqSymb time) 0 (sy time)
+  --((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
+  --(apply1 temp_PCM time))))) 
+ 
  
 -----------------DD13 Torque---------------------------------------
 

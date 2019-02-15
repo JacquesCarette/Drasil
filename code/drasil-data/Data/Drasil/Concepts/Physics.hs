@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon, chgMomentum
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -18,7 +18,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure]
+  joint, damping, pressure, chgMomentum]
 
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
@@ -26,7 +26,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure :: ConceptChunk
+  joint, damping, pressure, chgMomentum :: ConceptChunk
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -80,6 +80,9 @@ compression  = dccWDS "compression" (cn' "compression")
 
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+
+chgMomentum = dccWDS "chgMomentum" (cn' "Change in momentum")
+  (S "The rate of change of a body's" +:+ (phrase impulseV))
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

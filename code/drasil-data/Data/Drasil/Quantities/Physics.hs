@@ -5,7 +5,7 @@ import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
     acceleration, displacement, distance, energy, force, gravitationalAccel, 
     gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
-    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity)
+    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, chgMomentum)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -17,12 +17,12 @@ physicscon :: [UnitalChunk]
 physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity]
+  position, pressure, time, torque, velocity, chgMomentum]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity :: UnitalChunk
+  position, pressure, time, torque, velocity, chgMomentum :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
@@ -40,6 +40,7 @@ linearAccel          = uc CP.linAccel (Concat [(vec lA), Atomic "(", lT, Atomic 
 linearDisplacement   = uc CP.linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"]) metre
 linearVelocity       = uc CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"]) velU
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
+chgMomentum          = uc CP.chgMomentum (Concat [(cDelta), (lP)]) impulseU
 position             = uc CP.position (vec lP) metre
 pressure             = uc CP.pressure lP pascal
 time                 = uc CP.time lT second

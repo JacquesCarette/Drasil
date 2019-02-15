@@ -383,9 +383,9 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \\ \midrule \\
 Label & Safety Req-Pb
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    is-safePb={P_{b}}<{P_{btol}}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
@@ -409,9 +409,9 @@ Label & Safety Req-Pb
 \\ \midrule \\
 Label & Safety Req-LR
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    is-safeLR=LR>q
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
@@ -445,9 +445,9 @@ Label & Risk of failure
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$B$ is the risk of failure (Unitless)}
@@ -484,7 +484,7 @@ Label & Minimum thickness
                  \\ \midrule \\
                  Units & m
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     h=\frac{1}{1000} \begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
@@ -499,7 +499,7 @@ Label & Minimum thickness
 18.26, & t=19.0\\
 21.44, & t=22.0
 \end{cases}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$h$ is the minimum thickness (m)}
@@ -526,9 +526,9 @@ Label & Load duration factor
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$LDF$ is the load duration factor (Unitless)}
@@ -557,9 +557,9 @@ Label & Stress distribution factor (Function)
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     J=J\left(\hat{q},AR\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$J$ is the stress distribution factor (Function) (Unitless)}
@@ -590,9 +590,9 @@ Label & Non-factored load
                  \\ \midrule \\
                  Units & Pa
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$NFL$ is the non-factored load (Pa)}
@@ -626,13 +626,13 @@ Label & Glass type factor
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     GTF=\begin{cases}
 1, & g=AN\\
 4, & g=FT\\
 2, & g=HS
 \end{cases}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$GTF$ is the glass type factor (Unitless)}
@@ -661,9 +661,9 @@ Label & Dimensionless load
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$\hat{q}$ is the dimensionless load (Unitless)}
@@ -700,9 +700,9 @@ Label & Tolerable load
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
@@ -732,9 +732,9 @@ Label & Stress distribution factor (Function) based on Pbtol
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
@@ -773,9 +773,9 @@ Label & Stand off distance
                  \\ \midrule \\
                  Units & m
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$SD$ is the stand off distance (m)}
@@ -802,9 +802,9 @@ Label & Aspect ratio
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     AR=\frac{a}{b}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
@@ -832,9 +832,9 @@ Label & Probability of breakage
                  \\ \midrule \\
                  Units & Unitless
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {P_{b}}=1-e^{-B}
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${P_{b}}$ is the probability of breakage (Unitless)}
@@ -861,9 +861,9 @@ Label & Load resistance
                  \\ \midrule \\
                  Units & Pa
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     LR=NFL GTF LSF
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$LR$ is the load resistance (Pa)}
@@ -895,9 +895,9 @@ Label & Applied load (demand)
                  \\ \midrule \\
                  Units & Pa
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     q=q\left({w_{TNT}},SD\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$q$ is the applied load (demand) (Pa)}
@@ -929,20 +929,20 @@ Label & Calculation of Demand
                 \\ \midrule \\
                 Output & $q$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              q>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              {w_{TNT}}>0
-                                             \end{dmath}
-                                             \begin{dmath}
+                                             \end{displaymath}
+                                             \begin{displaymath}
                                              SD>0
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              q=q\left({w_{TNT}},SD\right)
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$q$ is the applied load (demand) (Pa)}

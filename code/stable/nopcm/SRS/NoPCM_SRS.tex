@@ -321,9 +321,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of thermal energy
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$∇$ is the gradient (Unitless)}
@@ -356,9 +356,9 @@ Label & Newton's law of cooling
         \\ \midrule \\
         Units & $\frac{\text{W}}{\text{m}^{2}}$
                 \\ \midrule \\
-                Equation & \begin{dmath}
+                Equation & \begin{displaymath}
                            q\left(t\right)=h ΔT\left(t\right)
-                           \end{dmath}
+                           \end{displaymath}
                            \\ \midrule \\
                            Description & \begin{symbDescription}
                                          \item{$q$ is the heat flux ($\frac{\text{W}}{\text{m}^{2}}$)}
@@ -383,9 +383,9 @@ Label & Newton's law of cooling
 \\ \midrule \\
 Label & Simplified rate of change of temperature
         \\ \midrule \\
-        Equation & \begin{dmath}
+        Equation & \begin{displaymath}
                    m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-                   \end{dmath}
+                   \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$m$ is the mass (kg)}
@@ -408,25 +408,25 @@ Label & Simplified rate of change of temperature
 \end{minipage}\\
 Detailed derivation of simplified rate of change of temperature.
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
-\begin{dmath}
+\begin{displaymath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
-\begin{dmath}
+\begin{displaymath}
 -\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
-\begin{dmath}
+\begin{displaymath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{dmath}
+\end{displaymath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}, \hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}, and \hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume}, we have:
-\begin{dmath}
+\begin{displaymath}
 ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{dmath}
+\end{displaymath}
 Using the fact that $ρ$=$m$/$V$, (2) can be written as:
-\begin{dmath}
+\begin{displaymath}
 m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{dmath}
+\end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -443,9 +443,9 @@ Label & Heat flux into the water from the coil
                  \\ \midrule \\
                  Units & $\frac{\text{W}}{\text{m}^{2}}$
                          \\ \midrule \\
-                         Equation & \begin{dmath}
+                         Equation & \begin{displaymath}
                                     {q_{C}}={h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
-                                    \end{dmath}
+                                    \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
@@ -480,17 +480,17 @@ Label & Energy balance on water to find the temperature of the water
                 \\ \midrule \\
                 Output & ${T_{W}}$
                          \\ \midrule \\
-                         Input Constraints & \begin{dmath}
+                         Input Constraints & \begin{displaymath}
                                              {T_{init}}\leq{}{T_{C}}
-                                             \end{dmath}
+                                             \end{displaymath}
                                              \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$t$ is the time (s)}
@@ -508,21 +508,21 @@ Label & Energy balance on water to find the temperature of the water
 \end{minipage}\\
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$ . Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}) . Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water]{A: No-Internal-Heat-Generation-By-Water}), $g=0$ . Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
-\end{dmath}
+\end{displaymath}
 Using \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} , this can be written as:
-\begin{dmath}
+\begin{displaymath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 Dividing (3) by ${m_{W}} {C_{W}}$, we obtain:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) can be written in its final form as:
-\begin{dmath}
+\begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
-\end{dmath}
+\end{displaymath}
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -537,13 +537,13 @@ Label & Heat energy in the water
                 Output & ${E_{W}}$
                          \\ \midrule \\
                          Input Constraints & \\ \midrule \\
-                                             Output Constraints & \begin{dmath}
+                                             Output Constraints & \begin{displaymath}
                                                                   0<t<{t_{final}}
-                                                                  \end{dmath}
+                                                                  \end{displaymath}
                                                                   \\ \midrule \\
-                                                                  Equation & \begin{dmath}
+                                                                  Equation & \begin{displaymath}
                                                                              {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
-                                                                             \end{dmath}
+                                                                             \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${E_{W}}$ is the change in heat energy in the water (J)}

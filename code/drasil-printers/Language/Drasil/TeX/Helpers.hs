@@ -152,7 +152,7 @@ description = mkEnv "description"
 figure      = mkEnv "figure"
 center      = mkEnv "center"
 document    = mkEnv "document"
-equation    = mkEnv "dmath" --displays math and wraps long lines
+equation    = mkEnv "displaymath" --displays math
 symbDescription = mkEnv "symbDescription"
 
 docclass, exdoc :: Maybe String -> String -> D

@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.16
+Version:	0.1.17
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -22,7 +22,7 @@ executable tiny
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.9,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.7,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010
@@ -56,7 +56,7 @@ executable glassbr
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010
@@ -100,7 +100,7 @@ executable nopcm
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010
@@ -135,7 +135,7 @@ executable swhs
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010
@@ -172,7 +172,7 @@ executable ssp
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010
@@ -202,7 +202,7 @@ executable chipmunkdocs
     drasil-lang >= 0.1.54,
     drasil-data >= 0.1.6,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.19
   default-language: Haskell2010

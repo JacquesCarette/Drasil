@@ -103,7 +103,7 @@ $\mathbf{n}$ & Collision Normal Vector & m
 \\
 $\mathbf{p}$ & Position & m
 \\
-${\mathbf{p}_{CM}}$ & Mass-weighted average position of a rigid body's particles & m
+${\mathbf{p}_{CM}}$ & Center of Mass & m
 \\
 ${\mathbf{p}_{j}}$ & Position Vector of the J-Th Particle & m
 \\
@@ -270,10 +270,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
 \begin{itemize}
-\item[GS1:]Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
-\item[GS2:]Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
-\item[GS3:]Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
-\item[GS4:]Given the physical properties, initial positions, orientations, linear velocities, and angular velocities of a set of rigid bodies, determine the new positions, orientations, linear velocities, and angular velocities over a period of time of the rigid bodies that have undergone a collision.
+\item[GS1:]Determine their new positions and velocities over a period of time.
+\item[GS2:]Determine their new orientations and angular velocities over a period of time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -287,7 +285,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]The library uses a Cartesian coordinate system.
 \item[axesDefined:\phantomsection\label{assumpAD}]The axes are defined using right-handed coordinate system. \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
 \item[collisionType:\phantomsection\label{assumpCT}]All rigid bodies collisions are vertex-to-edge collisions. \hyperref[lcEC]{LC: Expanded-Collisions} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]There is no damping involved throughout the simulation. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[lcID]{LC: Include-Dampening} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]There is no damping involved throughout the simulation and this implies that there are no friction forces. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[lcID]{LC: Include-Dampening} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]There are no constraints and joints involved throughout the simulation. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[lcIJC]{LC: Include-Joints-Constraints} \hyperref[IM:col2D]{IM: col2D}.
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -435,7 +433,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:ctrOfMass}
 \\ \midrule \\
-Label & Mass-weighted average position of a rigid body's particles
+Label & Center of Mass
         \\ \midrule \\
         Symbol & ${\mathbf{p}_{CM}}$
                  \\ \midrule \\
@@ -446,7 +444,7 @@ Label & Mass-weighted average position of a rigid body's particles
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${\mathbf{p}_{CM}}$ is the mass-weighted average position of a rigid body's particles (m)}
+                                                  \item{${\mathbf{p}_{CM}}$ is the Center of Mass (m)}
                                                   \item{${m_{j}}$ is the mass of the j-th particle (kg)}
                                                   \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
                                                   \item{$M$ is the total mass of the rigid body (kg)}
@@ -710,6 +708,35 @@ Label & Velocity At Point B
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+                                                          \\ \midrule \\
+                                                          Source & \\ \midrule \\
+                                                                   RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+ \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:torque}
+\phantomsection 
+\label{DD:torque}
+\\ \midrule \\
+Label & Torque
+        \\ \midrule \\
+        Symbol & $τ$
+                 \\ \midrule \\
+                 Units & Nm
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    τ=\mathbf{r}\times\mathbf{F}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$τ$ is the torque (Nm)}
+                                                  \item{$\mathbf{r}$ is the displacement (m)}
+                                                  \item{$\mathbf{F}$ is the force (N)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
                                                           \\ \midrule \\
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
@@ -1013,25 +1040,25 @@ GS1 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) & X &  &  &  &  &  &
 \\
 GS2 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) &  & X &  &  &  &  & 
 \\
-GS3 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) &  &  & X &  &  &  & 
+GS3 (\hyperref[reqSS]{FR: Simulation-Space}) &  &  & X &  &  &  & 
 \\
-GS4 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) &  &  & X &  &  & X & 
+GS4 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) &  &  & X &  &  & X & 
 \\
-R1 (\hyperref[reqSS]{FR: Simulation-Space}) &  &  &  &  &  &  & 
+R1 (\hyperref[reqISP]{FR: Input-Surface-Properties}) &  &  &  &  &  &  & 
 \\
-R2 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) & X & X &  &  & X &  & 
+R2 (\hyperref[reqVPC]{FR: Verify-Physical\_Constraints}) & X & X &  &  & X &  & 
 \\
-R3 (\hyperref[reqISP]{FR: Input-Surface-Properties}) &  &  & X &  & X &  & 
+R3 (\hyperref[reqCTOT]{FR: Calculate-Translation-Over-Time}) &  &  & X &  & X &  & 
 \\
-R4 (\hyperref[reqVPC]{FR: Verify-Physical\_Constraints}) &  &  &  &  &  &  & X
+R4 (\hyperref[reqCROT]{FR: Calculate-Rotation-Over-Time}) &  &  &  &  &  &  & X
 \\
-R5 (\hyperref[reqCTOT]{FR: Calculate-Translation-Over-Time}) & X &  &  &  &  &  & 
+R5 (\hyperref[reqDC]{FR: Determine-Collisions}) & X &  &  &  &  &  & 
 \\
-R6 (\hyperref[reqCROT]{FR: Calculate-Rotation-Over-Time}) &  & X &  &  &  &  & 
+R6 (\hyperref[reqDCROT]{FR: Determine-Collision-Response-Over-Time}) &  & X &  &  &  &  & 
 \\
-R7 (\hyperref[reqDC]{FR: Determine-Collisions}) &  &  &  & X &  &  & 
+ &  &  &  & X &  &  & 
 \\
-R8 (\hyperref[reqDCROT]{FR: Determine-Collision-Response-Over-Time}) &  &  & X &  &  & X & 
+ &  &  & X &  &  & X & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements (\hyperref[Sec:Requirements]{Section: Requirements}), Goal Statements (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
@@ -1084,17 +1111,17 @@ DD8 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  & X & X &  &
 \\
 IM1 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  &  &  & X & X
 \\
-IM2 (\hyperref[IM:transMot]{IM: transMot}) & X & X &  & X &  & X & X
+IM2 (\hyperref[DD:torque]{DD: torque}) & X & X &  & X &  & X & X
 \\
-IM3 (\hyperref[IM:rotMot]{IM: rotMot}) & X & X &  &  & X & X & X
+IM3 (\hyperref[IM:transMot]{IM: transMot}) & X & X &  &  & X & X & X
 \\
-LC1 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  &  &  & 
+LC1 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  &  &  & 
 \\
-LC2 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  & X &  & 
+LC2 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  & X &  & 
 \\
-LC3 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  & X & 
+LC3 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  &  & X & 
 \\
-LC4 (\hyperref[lcID]{LC: Include-Dampening}) &  &  &  &  &  &  & X
+LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
@@ -1102,7 +1129,7 @@ LC4 (\hyperref[lcID]{LC: Include-Dampening}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:impulse]{DD: impulse}) & IM2 (\hyperref[IM:transMot]{IM: transMot}) & IM3 (\hyperref[IM:rotMot]{IM: rotMot})
+ & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:impulse]{DD: impulse}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[IM:transMot]{IM: transMot})
 \\
 \midrule
 T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1147,9 +1174,9 @@ DD8 (\hyperref[DD:impulse]{DD: impulse}) &  &  &  & X &  & X &  &  & X & X &  & 
 \\
 IM1 (\hyperref[DD:impulse]{DD: impulse}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM2 (\hyperref[DD:torque]{DD: torque}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

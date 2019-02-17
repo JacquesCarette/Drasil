@@ -40,9 +40,9 @@ parnasClements1986 = cArticle [dParnas, pcClements]
 
 smithLai2005 = cInProceedings [spencerSmith, lLai]
   "A new requirements template for scientific computing"
-  ("Proceedings of the First International Workshop on" ++
-  "Situational Requirements Engineering Processes - Methods," ++
-  "Techniques and Tools to Support Situation-Specific Requirements" ++
+  ("Proceedings of the First International Workshop on " ++
+  "Situational Requirements Engineering Processes - Methods, " ++
+  "Techniques and Tools to Support Situation-Specific Requirements " ++
   "Engineering Processes, SREP'05") 2005
   [ editor [pjAgerfalk, nKraiem, jRalyte], address "Paris, France"
   , pages [107,121], 

@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD) where
 
 import Language.Drasil
 
@@ -13,7 +13,8 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
-  linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity)
+  linearDisplacement, linearVelocity, position, restitutionCoef, time,
+  velocity, force, torque)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 
@@ -22,7 +23,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) $ map qdFromDD dataDefns
@@ -185,6 +186,8 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- Currently a super crude implementation requiring lots of custom chunks;
 -- need norms and cross products
 
+-------------------------DD8 Impulse for Collision-------------------------------
+
 impulseDD :: DataDefinition
 impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpAD, makeRef2S assumpCT]
@@ -206,7 +209,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
   (CP.collision ^. term) +:+ S "response between two" +:+ 
   irregPlur (CP.rigidBody ^. term)
 -}
-
+------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "impulse"
   [chaslesThmDesc]
@@ -231,3 +234,23 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
   (phrase r_OB) `sC` (ch r_OB), 
   (sParen $ Sy $ unit_symb r_OB)]
+
+ 
+-----------------DD13 Torque---------------------------------------
+
+torqueDD :: DataDefinition
+torqueDD = mkDD torque [{-- References --}] [{-- Derivation --}] "torque"
+ [torqueDesc] 
+
+torque :: QDefinition
+torque = mkQuantDef QP.torque torqueEqn
+
+torqueEqn :: Expr
+torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
+--will need a new parameter to define r is a position vector
+-- of the point where the force is applied, measured from the axis of rotation.
+
+torqueDesc :: Sentence
+torqueDesc = foldlSent [S "The", (phrase torque), 
+  S "on a body measures the", S "the tendency of a", (phrase QP.force), 
+  S "to rotate the body around an axis or pivot"]

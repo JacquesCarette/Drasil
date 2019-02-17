@@ -93,13 +93,13 @@ $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LDF$ & Load duration factor & --
 \\
-$LR$ & Load resistance & --
+$LR$ & Load resistance & Pa
 \\
 $LSF$ & Load share factor & --
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & --
+$NFL$ & Non-factored load & Pa
 \\
 ${P_{b}}$ & Probability of breakage & --
 \\
@@ -171,7 +171,11 @@ LC & Likely Change
 \\
 LG & Laminated Glass
 \\
+LR & Load Resistance
+\\
 N/A & Not Applicable
+\\
+NFL & Non-Factored Load
 \\
 PS & Physical System Description
 \\
@@ -395,7 +399,7 @@ Label & Safety Req-LR
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
-                                 \item{$LR$ is the load resistance (Unitless)}
+                                 \item{$LR$ is the load resistance (Pa)}
                                  \item{$q$ is the applied load (demand) (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
@@ -568,14 +572,14 @@ Label & Non-factored load
         \\ \midrule \\
         Symbol & $NFL$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & Pa
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$NFL$ is the non-factored load (Unitless)}
+                                                  \item{$NFL$ is the non-factored load (Pa)}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
                                                   \item{$E$ is the modulus of elasticity of glass (Pa)}
                                                   \item{$h$ is the minimum thickness (m)}
@@ -839,15 +843,15 @@ Label & Load resistance
         \\ \midrule \\
         Symbol & $LR$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & Pa
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     LR=NFL GTF LSF
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$LR$ is the load resistance (Unitless)}
-                                                  \item{$NFL$ is the non-factored load (Unitless)}
+                                                  \item{$LR$ is the load resistance (Pa)}
+                                                  \item{$NFL$ is the non-factored load (Pa)}
                                                   \item{$GTF$ is the glass type factor (Unitless)}
                                                   \item{$LSF$ is the load share factor (Unitless)}
                                                   \end{symbDescription}

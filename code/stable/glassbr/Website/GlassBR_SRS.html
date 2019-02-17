@@ -305,7 +305,7 @@ Load duration factor
 Load resistance
 </td>
 <td>
---
+Pa
 </td>
 </tr>
 <tr>
@@ -338,7 +338,7 @@ m<sup>12</sup>/N<sup>7</sup>
 Non-factored load
 </td>
 <td>
---
+Pa
 </td>
 </tr>
 <tr>
@@ -656,10 +656,26 @@ Laminated Glass
 </tr>
 <tr>
 <td>
+LR
+</td>
+<td>
+Load Resistance
+</td>
+</tr>
+<tr>
+<td>
 N/A
 </td>
 <td>
 Not Applicable
+</td>
+</tr>
+<tr>
+<td>
+NFL
+</td>
+<td>
+Non-Factored Load
 </td>
 </tr>
 <tr>
@@ -1279,7 +1295,7 @@ Description
 <em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
 </li>
 <li>
-<em>LR</em> is the load resistance (Unitless)
+<em>LR</em> is the load resistance (Pa)
 </li>
 <li>
 <em>q</em> is the applied load (demand) (Pa)
@@ -1863,7 +1879,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+Pa
 </p>
 </td>
 </tr>
@@ -1891,7 +1907,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>NFL</em> is the non-factored load (Unitless)
+<em>NFL</em> is the non-factored load (Pa)
 </li>
 <li>
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
@@ -2737,7 +2753,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+Pa
 </p>
 </td>
 </tr>
@@ -2758,10 +2774,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>LR</em> is the load resistance (Unitless)
+<em>LR</em> is the load resistance (Pa)
 </li>
 <li>
-<em>NFL</em> is the non-factored load (Unitless)
+<em>NFL</em> is the non-factored load (Pa)
 </li>
 <li>
 <em>GTF</em> is the glass type factor (Unitless)
@@ -2989,6 +3005,9 @@ Description
 </th>
 <td>
 <ul class="hide-list-style-no-indent">
+<li>
+<em>q</em> is the applied load (demand) (Pa)
+</li>
 <li>
 <em>q</em> is the applied load (demand) (Pa)
 </li>

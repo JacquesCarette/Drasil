@@ -67,11 +67,12 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbr
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
-  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
-  gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity,
+  char_weight, demand, demandq, dimlessLoad, explosion, gbConstants,
+  gbConstrained, gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals,
+  glassGeo, glassTy, glassTypes, glBreakage, lateralLoad, load, loadTypes,
+  pb_tol, prob_br, probBreak, sD, stressDistFac, termsWithAccDefn,
+  termsWithDefsOnly, terms)
 
 {--}
 

@@ -126,7 +126,7 @@ m/s<sup>2</sup>
 <em><b>a</b><sub>i</sub></em>
 </td>
 <td>
-The I-Th Body's Acceleration
+Force on the translational motion of a set of 2d rigid bodies
 </td>
 <td>
 m/s<sup>2</sup>
@@ -189,17 +189,6 @@ N
 </tr>
 <tr>
 <td>
-<em><b>F</b><sub>i</sub></em>
-</td>
-<td>
-Force Applied to the I-Th Body at Time T
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
 <em>G</em>
 </td>
 <td>
@@ -207,17 +196,6 @@ Gravitational constant
 </td>
 <td>
 m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
-</td>
-</tr>
-<tr>
-<td>
-<em>g</em>
-</td>
-<td>
-Gravitational acceleration
-</td>
-<td>
-m/s<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -379,7 +357,7 @@ m
 <em><b>p</b><sub>CM</sub></em>
 </td>
 <td>
-Mass-weighted average position of a rigid body's particles
+Center of Mass
 </td>
 <td>
 m
@@ -607,6 +585,17 @@ rad/s<sup>2</sup>
 </tr>
 <tr>
 <td>
+<em>α</em>
+</td>
+<td>
+Force on the rotational motion of a set of 2D rigid body
+</td>
+<td>
+rad/s<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
 <em>θ</em>
 </td>
 <td>
@@ -622,17 +611,6 @@ rad
 </td>
 <td>
 Torque
-</td>
-<td>
-N&sdot;m
-</td>
-</tr>
-<tr>
-<td>
-<em>τ<sub>i</sub></em>
-</td>
-<td>
-Torque applied to the i-th body
 </td>
 <td>
 N&sdot;m
@@ -998,16 +976,10 @@ Given the inputs, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
+GS1: Determine their new positions and velocities over a period of time.
 </p>
 <p>
-GS2: Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
-</p>
-<p>
-GS3: Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
-</p>
-<p>
-GS4: Given the physical properties, initial positions, orientations, linear velocities, and angular velocities of a set of rigid bodies, determine the new positions, orientations, linear velocities, and angular velocities over a period of time of the rigid bodies that have undergone a collision.
+GS2: Determine their new orientations and angular velocities over a period of time.
 </p>
 </div>
 </div>
@@ -1058,7 +1030,7 @@ collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a hre
 </p>
 <p>
 <div id="assumpDI">
-dampingInvolvement: There is no damping involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -1483,7 +1455,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mass-weighted average position of a rigid body's particles
+Center of Mass
 </p>
 </td>
 </tr>
@@ -1531,7 +1503,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>p</b><sub>CM</sub></em> is the mass-weighted average position of a rigid body's particles (m)
+<em><b>p</b><sub>CM</sub></em> is the Center of Mass (m)
 </li>
 <li>
 <em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
@@ -2465,6 +2437,98 @@ RefBy
 </tr>
 </table>
 </div>
+<div id="DD:torque">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Torque
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>τ</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N&sdot;m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>τ = <b>r</b>&#10799;<b>F</b></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>τ</em> is the torque (N&sdot;m)
+</li>
+<li>
+<em><b>r</b></em> is the displacement (m)
+</li>
+<li>
+<em><b>F</b></em> is the force (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -2549,13 +2613,6 @@ d&#8239;<b>v</b><sub>i</sub>(t)
 <span class="fdn">
 d&#8239;t
 </span>
-</div> = g&plus;<div class="fraction">
-<span class="fup">
-<b>F</b><sub>i</sub>(t)
-</span>
-<span class="fdn">
-m<sub>j</sub>
-</span>
 </div></em>
 </div>
 </td>
@@ -2567,22 +2624,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
+<em><b>a</b><sub>i</sub></em> is the Force on the translational motion of a set of 2d rigid bodies (m/s<sup>2</sup>)
 </li>
 <li>
 <em>t</em> is the time (s)
 </li>
 <li>
 <em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
-</li>
-<li>
-<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
-</li>
-<li>
-<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
-</li>
-<li>
-<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
 </li>
 </ul>
 </td>
@@ -2693,13 +2741,6 @@ d&#8239;ω(t)
 <span class="fdn">
 d&#8239;t
 </span>
-</div> = <div class="fraction">
-<span class="fup">
-τ<sub>i</sub>(t)
-</span>
-<span class="fdn">
-<b>I</b>
-</span>
 </div></em>
 </div>
 </td>
@@ -2711,19 +2752,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
+<em>α</em> is the Force on the rotational motion of a set of 2D rigid body (rad/s<sup>2</sup>)
 </li>
 <li>
 <em>t</em> is the time (s)
 </li>
 <li>
 <em>ω</em> is the angular velocity (rad/s)
-</li>
-<li>
-<em>τ<sub>i</sub></em> is the torque applied to the i-th body (N&sdot;m)
-</li>
-<li>
-<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
 </li>
 </ul>
 </td>
@@ -4336,7 +4371,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
+GS3 (<a href=#reqSS>FR: Simulation-Space</a>)
 </td>
 <td>
 
@@ -4362,7 +4397,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
+GS4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
 </td>
 <td>
 
@@ -4388,7 +4423,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#reqSS>FR: Simulation-Space</a>)
+R1 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
 </td>
 <td>
 
@@ -4414,7 +4449,7 @@ R1 (<a href=#reqSS>FR: Simulation-Space</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
+R2 (<a href=#reqVPC>FR: Verify-Physical_Constraints</a>)
 </td>
 <td>
 X
@@ -4440,7 +4475,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
+R3 (<a href=#reqCTOT>FR: Calculate-Translation-Over-Time</a>)
 </td>
 <td>
 
@@ -4466,7 +4501,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#reqVPC>FR: Verify-Physical_Constraints</a>)
+R4 (<a href=#reqCROT>FR: Calculate-Rotation-Over-Time</a>)
 </td>
 <td>
 
@@ -4492,7 +4527,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#reqCTOT>FR: Calculate-Translation-Over-Time</a>)
+R5 (<a href=#reqDC>FR: Determine-Collisions</a>)
 </td>
 <td>
 X
@@ -4518,7 +4553,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#reqCROT>FR: Calculate-Rotation-Over-Time</a>)
+R6 (<a href=#reqDCROT>FR: Determine-Collision-Response-Over-Time</a>)
 </td>
 <td>
 
@@ -4544,7 +4579,7 @@ X
 </tr>
 <tr>
 <td>
-R7 (<a href=#reqDC>FR: Determine-Collisions</a>)
+
 </td>
 <td>
 
@@ -4570,7 +4605,7 @@ X
 </tr>
 <tr>
 <td>
-R8 (<a href=#reqDCROT>FR: Determine-Collision-Response-Over-Time</a>)
+
 </td>
 <td>
 
@@ -5175,7 +5210,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </td>
 <td>
 X
@@ -5201,7 +5236,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 X
@@ -5227,7 +5262,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#IM:col2D>IM: col2D</a>)
+LC1 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5253,7 +5288,7 @@ LC1 (<a href=#IM:col2D>IM: col2D</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC2 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -5279,7 +5314,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#lcEC>LC: Expanded-Collisions</a>)
+LC3 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </td>
 <td>
 
@@ -5305,7 +5340,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcID>LC: Include-Dampening</a>)
+LC4 (<a href=#lcEC>LC: Expanded-Collisions</a>)
 </td>
 <td>
 
@@ -5404,10 +5439,10 @@ DD8 (<a href=#DD:impulse>DD: impulse</a>)
 IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </th>
 </tr>
 <tr>
@@ -6966,7 +7001,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:transMot>IM: transMot</a>)
+IM2 (<a href=#DD:torque>DD: torque</a>)
 </td>
 <td>
 
@@ -7040,7 +7075,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM3 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 

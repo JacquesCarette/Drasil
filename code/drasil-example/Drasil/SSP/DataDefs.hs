@@ -1,5 +1,5 @@
-module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
-  seismicLoadF, lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
+module Drasil.SSP.DataDefs (dataDefns, 
+  lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
   fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
@@ -9,14 +9,18 @@ import Language.Drasil
 --import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
  -- ofThe', sAnd)
 
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Quantities.Math as QM (pi_)
+import Data.Drasil.SentenceStructures (sAnd)
 import Drasil.SSP.Assumptions (assumpSBSBISL)
-import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, mobShrC, normToShear,
-  satWeight, scalFunc, shrResC, slcWght, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
-  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
+import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012,
+  huston2008)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
+  constF, dryWeight, fricAngle, fs, genericF, genericA, intNormForce, indxn,
+  inx, inxi, inxiM1, midpntHght, mobShrC, normStress, normToShear, satWeight,
+  scalFunc, shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght,
+  surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, waterHght,
+  waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -24,7 +28,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, 
+  lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
   convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
@@ -117,7 +121,7 @@ angleAEqn :: Expr
 angleAEqn = (inxi slipHght - inx slipHght (-1)) /
   (inxi slipDist - inx slipDist (-1))
 
---DD5.5
+--DD6
 
 angleB :: DataDefinition
 angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
@@ -131,7 +135,7 @@ angleBEqn :: Expr
 angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
   (inxi slopeDist - inx slopeDist (-1))
 
---DD6
+--DD7
 
 lengthB :: DataDefinition
 lengthB = mkDD lengthBQD [fredlund1977] [{-Derivation-}] "lengthB" []--Notes
@@ -143,7 +147,7 @@ lengthBQD = mkQuantDef baseWthX lengthBEqn
 lengthBEqn :: Expr
 lengthBEqn = inxi slipDist - inx slipDist (-1)
 
---DD6.3
+--DD8
 
 lengthLb :: DataDefinition
 lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
@@ -156,7 +160,7 @@ lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 
---DD6.6
+--DD9
 
 lengthLs :: DataDefinition
 lengthLs = mkDD lengthLsQD [fredlund1977] [{-Derivation-}] "lengthLs"
@@ -169,44 +173,51 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 
---DD7
+--DD10
 
-seismicLoadF :: DataDefinition
-seismicLoadF = mkDD seismicLoadFQD [fredlund1977] [{-Derivation-}] "seismicLoadF" []--Notes
---FIXME: fill empty lists in
+slcHeight :: DataDefinition
+slcHeight = mkDD slcHeightQD [fredlund1977] [{-Derivation-}] "slcHeight"
+  slcHeightNotes
 
-seismicLoadFQD :: QDefinition
-seismicLoadFQD = mkQuantDef earthqkLoadFctr ssmcLFEqn
-  --FIXME: K_E missing for unitals?
+slcHeightQD :: QDefinition
+slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
-ssmcLFEqn :: Expr
-ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
+-- FIXME: There should be some explicit grouping in this expression
+slcHeightEqn :: Expr
+slcHeightEqn = 0.5 * (((inxi slopeHght) - (inxi slipHght)) + 
+  ((inxiM1 slopeHght) - (inxiM1 slipHght))) 
 
---DD8
+slcHeightNotes :: [Sentence]
+slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
+  S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL)]
 
-surfLoads :: DataDefinition
-surfLoads = mkDD surfLoadsQD [chen2005] [{-Derivation-}] "surfLoads" []--Notes
---FIXME: fill empty lists in
+--DD11 
 
-surfLoadsQD :: QDefinition
-surfLoadsQD = mkQuantDef surfLoad surfLEqn
-  --FIXEME: is this data definition necessary?
+stressDD :: DataDefinition
+stressDD = mkDD stressQD [huston2008] [{-Derivation-}] "stress" []
 
-surfLEqn :: Expr
-surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
-  --FIXME: should be split into two DataDefs
+stressQD :: QDefinition
+stressQD = mkQuantDef normStress stressEqn
 
---DD9
+stressEqn :: Expr
+stressEqn = (sy genericF) / (sy genericA)
 
-intrsliceF :: DataDefinition
-intrsliceF = mkDD intrsliceFQD [chen2005] [{-Derivation-}] "intrsliceF" []--Notes
---FIXME: fill empty lists in
+--DD12
 
-intrsliceFQD :: QDefinition
-intrsliceFQD = mkQuantDef intShrForce intrsliceFEqn
+ratioVariation :: DataDefinition
+ratioVariation = mkDD ratioVarQD [fredlund1977] [{-Derivation-}] 
+  "ratioVariation" []
 
-intrsliceFEqn :: Expr
-intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
+ratioVarQD :: QDefinition
+ratioVarQD = mkQuantDef scalFunc ratioVarEqn
+
+ratioVarEqn :: Expr
+ratioVarEqn = case_ [case1, case2]
+  where case1 = (1, (sy constF))
+
+        case2 = (sin ((sy QM.pi_) * (((inxi slipDist) - (idx (sy slipDist) 0)) /
+                ((indxn slipDist) - (idx (sy slipDist) 0)))), UnaryOp Not (sy constF))
 
 --DD13
 

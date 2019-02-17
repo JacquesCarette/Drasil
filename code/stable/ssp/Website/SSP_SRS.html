@@ -115,6 +115,17 @@ m
 </tr>
 <tr>
 <td>
+<em>A</em>
+</td>
+<td>
+Area: A part of an object or surface
+</td>
+<td>
+m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
 <em>b</em>
 </td>
 <td>
@@ -170,10 +181,21 @@ Pa
 </tr>
 <tr>
 <td>
+<em>const_f</em>
+</td>
+<td>
+Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>f</em>
 </td>
 <td>
-Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
+Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
 </td>
 <td>
 --
@@ -247,6 +269,17 @@ Critical Slip Identification: Given the necessary slope inputs, a minimization a
 </tr>
 <tr>
 <td>
+<em><b>F</b></em>
+</td>
+<td>
+Force: An interaction that tends to produce change in the motion of an object
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em>G</em>
 </td>
 <td>
@@ -283,7 +316,7 @@ N
 <em>h</em>
 </td>
 <td>
-Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i
+Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice
 </td>
 <td>
 m
@@ -672,6 +705,17 @@ Pore Pressure: from water within the soil
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>π</em>
+</td>
+<td>
+Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter
+</td>
+<td>
+--
 </td>
 </tr>
 <tr>
@@ -1210,7 +1254,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -2143,7 +2187,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>G</em> is the interslice normal force (N)
@@ -2281,7 +2325,7 @@ Description
 <em>W</em> is the weight (N)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N)
@@ -3286,7 +3330,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:seismicLoadF">
+<div id="DD:slcHeight">
 <table class="ddefn">
 <tr>
 <th>
@@ -3294,7 +3338,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Earthquake load factor
+Y-direction height of a slice
 </p>
 </td>
 </tr>
@@ -3304,7 +3348,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>c</sub></em>
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -3314,7 +3358,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+m
 </p>
 </td>
 </tr>
@@ -3324,7 +3368,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
+<em>h = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>&plus;y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3335,18 +3386,28 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>W</em> is the weight (N)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the surface and base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -3371,7 +3432,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:surfLoads">
+<div id="DD:stress">
 <table class="ddefn">
 <tr>
 <th>
@@ -3379,7 +3440,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Imposed surface load
+Normal stress
 </p>
 </td>
 </tr>
@@ -3389,7 +3450,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>Q</em>
+<em>σ</em>
 </p>
 </td>
 </tr>
@@ -3399,7 +3460,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+Pa
 </p>
 </td>
 </tr>
@@ -3409,7 +3470,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>Q = Q<sub>i</sub>&#8239;ω<sub>i</sub></em>
+<em>σ = <div class="fraction">
+<span class="fup">
+<b>F</b>
+</span>
+<span class="fdn">
+A
+</span>
+</div></em>
 </div>
 </td>
 </tr>
@@ -3420,16 +3488,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>σ</em> is the normal stress (Pa)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em><b>F</b></em> is the force (N)
 </li>
 <li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
+<em>A</em> is the area (m<sup>2</sup>)
 </li>
 </ul>
 </td>
@@ -3440,7 +3505,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#chen2005>chen2005</a>
+<a href=#huston2008>huston2008</a>
 </p>
 </td>
 </tr>
@@ -3456,7 +3521,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:intrsliceF">
+<div id="DD:ratioVariation">
 <table class="ddefn">
 <tr>
 <th>
@@ -3464,7 +3529,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice shear force
+Interslice normal to shear force ratio variation function
 </p>
 </td>
 </tr>
@@ -3474,7 +3539,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>X</em>
+<em>f</em>
 </p>
 </td>
 </tr>
@@ -3484,7 +3549,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+Unitless
 </p>
 </td>
 </tr>
@@ -3494,7 +3559,28 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>X = λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub></em>
+<em>f = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+1 , <span class="case">
+const_f
+</span>
+</span>
+<span>
+sin(π&#8239;<div class="fraction">
+<span class="fup">
+x<sub>slip,i</sub>&minus;x<sub>slip,0</sub>
+</span>
+<span class="fdn">
+x<sub>slip,n</sub>&minus;x<sub>slip,0</sub>
+</span>
+</div>) , <span class="case">
+&not;const_f
+</span>
+</span>
+</div></em>
 </div>
 </td>
 </tr>
@@ -3505,19 +3591,22 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>X</em> is the interslice shear force (N)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+<em>π</em> is the circumference to diameter ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>x<sub>slip</sub></em> is the x ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>n</em> is the number of slices (Unitless)
+</li>
+<li>
+<em>const_f</em> is the decision on f (Unitless)
 </li>
 </ul>
 </td>
@@ -3528,7 +3617,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#chen2005>chen2005</a>
+<a href=#fredlund1977>fredlund1977</a>
 </p>
 </td>
 </tr>
@@ -3599,7 +3688,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3700,7 +3789,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4377,7 +4466,7 @@ Description
 <em>SpencerFixme2Please</em> is the fixme (Unitless)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
@@ -4404,7 +4493,7 @@ Description
 <em>C2<sub>i</sub></em> is the interslice shear force function (N&sdot;m)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -5240,33 +5329,38 @@ References
 </div>
 </li>
 <li>
+<div id="huston2008">
+[2]: Huston, Ronald and Josephs, Harold. <em>Practical stress analysis in engineering design</em>. 3st. ed., CRC Press, 2008. Print.
+</div>
+</li>
+<li>
 <div id="karchewski2012">
-[2]: Canadian Geotechnical Society, Karchewski, Brandon, Guo, Peijun, and Stolle, Dieter. "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis." <em>Proceedings of the 65th annual Canadian GeoTechnical Conference</em>. Winnipeg, MB, Canada: 2012.
+[3]: Canadian Geotechnical Society, Karchewski, Brandon, Guo, Peijun, and Stolle, Dieter. "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis." <em>Proceedings of the 65th annual Canadian GeoTechnical Conference</em>. Winnipeg, MB, Canada: 2012.
 </div>
 </li>
 <li>
 <div id="koothoor2013">
-[3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[4]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </div>
 </li>
 <li>
 <div id="parnasClements1986">
-[4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+[5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>
 <li>
 <div id="chen2005">
-[5]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
+[6]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
 </div>
 </li>
 <li>
 <div id="smithLai2005">
-[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop onSituational Requirements Engineering Processes - Methods,Techniques and Tools to Support Situation-Specific RequirementsEngineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>
 <div id="li2010">
-[7]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
+[8]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
 </div>
 </li>
 </ul>

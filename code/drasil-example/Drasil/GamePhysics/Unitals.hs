@@ -37,8 +37,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
 
 cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
--- FIXME: pi hack
-cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [QM.pi_]
+cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
 
 cpSymbols = (map qw cpUnits) ++ 
   (map qw cpUnitless) ++ 
@@ -149,9 +148,13 @@ r_OB    = uc' "r_OB"
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
 
-pos_CM = ucs "p_CM" (nounPhraseSP $ 
-  "mass-weighted average position of a rigid " ++
-  "body's particles") 
+{-r_F    = uc' "r_F" 
+  (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
+  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
+  
+pos_CM = ucs "p_CM" (nounPhraseSP $ "Center of Mass")
+ --"mass-weighted average position of a rigid " ++
+ -- "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.position) (Atomic "CM")) Real metre
 
@@ -242,7 +245,7 @@ mass_B      = rigidParam "B" cB
 --------------------------
 
 cpUnitless :: [QuantityDict]
-cpUnitless = [numParticles]
+cpUnitless = [numParticles] ++ map qw [QM.pi_]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer

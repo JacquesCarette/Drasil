@@ -10,6 +10,8 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
 
+import Data.Drasil.Quantities.Math (area, pi_)
+import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
@@ -25,6 +27,8 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
+genericF = force
+genericA = area
 
 -------------
 -- HELPERS --
@@ -115,7 +119,7 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, normFunc, shearFunc,
+sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
@@ -123,7 +127,7 @@ sspUnits = map ucw [normStress, normFunc, shearFunc,
   momntOfBdy, porePressure, sliceHght,
   fx, fy, mobShrC, shrResC, intNormForce, shrStress]
 
-normStress, normFunc, shearFunc, slopeDist, slipDist,
+normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
@@ -268,9 +272,9 @@ surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   "line from an interslice vertex " ++ fisi)
   (sub lEll (Atomic "s")) metre
 
-midpntHght = uc' "h_i" (cn $ "midpoint height")
-  ("distance from the slip base to the slope surface in a vertical " ++
-  "line from the midpoint of the slice " ++ fsi)
+midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
+  ("height in the y-direction from the base of a slice to the slope " ++
+  "surface, at the x-direction midpoint of the slice")
   (lH) metre
 
 momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
@@ -309,14 +313,15 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, varblU, varblV, fs_min,
+  numbSlices, minFunction, pi_, index, varblU, varblV, fs_min,
   ufixme1, ufixme2]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
-  ("boolean that determines the form of f: constant if true, or a half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
+  ("boolean decision on which form of f the user desires: constant if true," ++
+  " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
@@ -327,7 +332,8 @@ normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
   ("applied to all interslices")) (const lLambda) Real Nothing
 
-scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
+  "force ratio variation function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
   (const lF) Real Nothing 

@@ -39,7 +39,7 @@ script:
 # Build the package
 #- stack --no-terminal build --stack-yaml code/stack.yaml
 - cd code
-- make stackArgs="--no-terminal"
+- make stackArgs="--no-terminal" NOISY=yes
 - make docs haddockArgs="--no-haddock-deps"
 
 notifications:

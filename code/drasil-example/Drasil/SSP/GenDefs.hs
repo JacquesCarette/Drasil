@@ -8,26 +8,29 @@ import Language.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
+import Data.Drasil.SI_Units (metre)
+
 import Data.Drasil.Concepts.Documentation (assumption, definition, 
   method_, property, value, variable)
 import Data.Drasil.Concepts.Math (normal, perp, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6)
+import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6, newA7)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (lengthLs, sliceWght)
+import Drasil.SSP.DataDefs (lengthLs, sliceWght, stressDD)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, fricAngle, fs, intNormForce, intShrForce, inxi, inxiM1, 
+  cohesion, fricAngle, fs, genericA, intNormForce, intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
   surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
@@ -37,14 +40,15 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, 
-  mobShearWOGD, normShrRGD, momentEqlGD]
+generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
+ effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD]
 
-normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
 normForcEqGD = gd'' normForcEq  [chen2005]   "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd'' bsShrFEq    [chen2005]   "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd'' resShr      [chen2005]   "resShr"      [resShr_desc]
 mobShrGD     = gd'' mobShr      [chen2005]   "mobShr"      [mobShr_desc]
+effNormFGD   = gd'' effNormF    [chen2005]   "effNormF"    [effNormF_desc]
 resShearWOGD = gd'' resShearWO  [chen2005]   "resShearWO"  []
 mobShearWOGD = gd'' mobShearWO  [chen2005]   "mobShearWO"  []
 normShrRGD   = gd'' normShrR    [chen2005]   "normShrR"    [nmShrR_desc]
@@ -124,6 +128,24 @@ mobShr_desc = foldlSent_ [
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
   sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
   makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
+
+--
+effNormF :: RelationConcept
+effNormF = makeRC "effNormF"
+  (nounPhraseSP "effective normal force") effNormF_desc effNormF_rel
+
+effNormF_rel :: Relation
+effNormF_rel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
+
+effNormF_desc :: Sentence
+effNormF_desc = foldlSent_ [
+  S "Derived by substituting", makeRef2S stressDD, S "into", 
+  makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
+  S "by the", phrase genericA `ofThe` phrase slice +:+. 
+  S "in the shear-z plane", S "Since the", phrase slope, S "is assumed to",
+  S "extend infinitely in the z-direction", sParen (makeRef2S newA7) `sC` 
+  S "the resulting", plural force, S "are expressed per", phrase metre +:+. 
+  S "in the z-direction" ]
 
 --
 normShrR :: RelationConcept

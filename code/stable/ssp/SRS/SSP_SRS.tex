@@ -345,7 +345,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
@@ -466,7 +466,7 @@ Label & Effective stress
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
-                                                  RefBy & \hyperref[GD:resShr]{GD: resShr}.
+                                                  RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -602,6 +602,33 @@ Label & Mobile shear force
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
                                                   RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+ \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:effNormF}
+\phantomsection 
+\label{GD:effNormF}
+\\ \midrule \\
+Label & Effective normal force
+        \\ \midrule \\
+        Equation & \begin{dmath}
+                   {N'}_{i}=N_{i}-{U_{b,i}}
+                   \end{dmath}
+                   \\ \midrule \\
+                   Description & \begin{symbDescription}
+                                 \item{$N'$ is the effective normal force (N)}
+                                 \item{$i$ is the index (Unitless)}
+                                 \item{$N$ is the normal force (N)}
+                                 \item{${U_{b}}$ is the base hydrostatic force (N)}
+                                 \end{symbDescription}
+                                 \\ \midrule \\
+                                 Notes & Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (\hyperref[A:Plane-Strain-Conditions]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the z-direction.
+                                         \\ \midrule \\
+                                         Source & \cite{chen2005}
+                                                  \\ \midrule \\
+                                                  RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1089,7 +1116,7 @@ Label & Normal stress
                                                   \\ \midrule \\
                                                   Source & \cite{huston2008}
                                                            \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline

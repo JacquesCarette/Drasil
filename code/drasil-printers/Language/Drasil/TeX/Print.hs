@@ -382,8 +382,12 @@ makeList (Definitions items) = symbDescription $ vcat $ def_item items
 pl_item :: (ItemType,Maybe Label) -> D
 pl_item (i, l) = mlref l <> p_item i
 
+lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
+lspec (S s) = pure $ text s
+lspec r = spec r
+
 mlref :: Maybe Label -> D
-mlref = maybe empty $ ((<>) $ pure $ text "\\phantomsection") . label . spec
+mlref = maybe empty $ ((<>) $ pure $ text "\\phantomsection") . label . lspec
 
 p_item :: ItemType -> D
 p_item (Flat s) = item $ spec s

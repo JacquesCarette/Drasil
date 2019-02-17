@@ -890,7 +890,7 @@ systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phras
 sys_context_fig :: LabelledContent
 sys_context_fig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
   [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png"
+  $ resourcePath ++ "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents
 systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -989,7 +989,7 @@ fig_tank :: LabelledContent
 fig_tank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
-  (resourcePath ++"Tank.png")
+  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1381,11 +1381,11 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
 traceFig1 :: LabelledContent
 traceFig1 = llcc (makeFigRef "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+  S "of Different" +:+ titleize' section_)) $ resourcePath ++ "ATrace.png"
 
 traceFig2 :: LabelledContent
 traceFig2 = llcc (makeFigRef "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
-  $ map titleize' renameList2)) "RTrace.png"
+  $ map titleize' renameList2)) $ resourcePath ++ "RTrace.png"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

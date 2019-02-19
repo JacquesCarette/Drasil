@@ -139,7 +139,7 @@ item' bull s = command1oD "item" (Just bull) s
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "newline"
+newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 

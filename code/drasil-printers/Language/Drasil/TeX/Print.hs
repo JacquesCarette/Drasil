@@ -205,6 +205,7 @@ makeTable lls r bool t =
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
+  %% pure (text "\\endhead")
   %% makeRows (tail lls)
   %% (pure (text "\\bottomrule"))
   %% (if bool then caption t else empty)
@@ -329,11 +330,11 @@ makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
 
 beginDefn :: D
-beginDefn = (pure $ text "~") <> newline
-  %% (pure $ text "\\noindent \\begin{minipage}{\\textwidth}")
+beginDefn = newline
+  %% pure (text "\\noindent \\begin{minipage}{\\textwidth}")
 
 endDefn :: D
-endDefn = pure $ text "\\end{minipage}" TP.<> dbs
+endDefn = pure (text "\\end{minipage}")
 
 makeDefTable :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [(String,[LayoutObj])] -> D -> D

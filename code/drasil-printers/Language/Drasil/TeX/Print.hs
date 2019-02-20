@@ -534,7 +534,7 @@ showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
 showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
 showBibTeX  _ (Institution  i) = showField "institution" i
 showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
+showBibTeX  _ (Month        m) = S "month=" :+: bibTeXMonth m
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o

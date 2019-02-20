@@ -369,7 +369,12 @@ userChar pname understandings familiarities = foldlSP [
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
-          phrase crtSlpSrf, S "of the", phrase slope]
+          phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
+          phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+          S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
+          S "used as an educational tool for introducing", phrase slope,
+          S "stability", plural issue `sC` S "and to facilitate the",
+          phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
 
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]

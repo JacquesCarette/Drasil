@@ -16,7 +16,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   
 ssa, ssp :: CI
 ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
-ssp = commonIdeaWithDict "ssp" (cn' "slope stability problem") "SSP"   [civilEng]
+ssp = commonIdeaWithDict "ssp" (cn' "slope stability analysis program") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
 sspdef = [factor, soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm,

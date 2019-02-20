@@ -96,20 +96,20 @@ lstName Person {_surname = l} = l
 rendPersLFM :: Person -> String
 rendPersLFM Person {_surname = n, _convention = Mono} = n
 rendPersLFM Person {_given = f, _surname = l, _middle = ms} =
-  dotInitial l ++ ", " ++ dotInitial f `nameSep`
+  dotInitial l `orderSep` dotInitial f `nameSep`
   foldr (nameSep . dotInitial) "" ms
 
 -- LFM' is Last, F. M.
 rendPersLFM' :: Person -> String
 rendPersLFM' Person {_surname = n, _convention = Mono} = n
 rendPersLFM' Person {_given = f, _surname = l, _middle = ms} =
-  dotInitial l ++ ", " ++ foldr (nameSep . initial) "" (f:ms)
+  dotInitial l `orderSep` foldr (nameSep . initial) "" (f:ms)
 
 -- LFM'' is Last, First M.
 rendPersLFM'' :: Person -> String
 rendPersLFM'' Person {_surname = n, _convention = Mono} = n
 rendPersLFM'' Person {_given = f, _surname = l, _middle = ms} =
-  dotInitial l ++ ", " ++ foldr1 nameSep (dotInitial f : map initial ms)
+  dotInitial l `orderSep` foldr1 nameSep (dotInitial f : map initial ms)
 
 initial :: String -> String
 initial []    = [] -- is this right?
@@ -120,7 +120,13 @@ dotInitial :: String -> String
 dotInitial [x] = [x,'.']
 dotInitial nm  = nm
 
+joiner :: String -> String -> String -> String
+joiner _ a "" = a
+joiner _ "" b = b
+joiner j a b = a ++ j ++ b
+
+orderSep :: String -> String -> String
+orderSep = joiner ", "
+
 nameSep :: String -> String -> String
-"" `nameSep` b = b
-a `nameSep` "" = a
-a `nameSep` b = a ++ " " ++ b
+nameSep = joiner " "

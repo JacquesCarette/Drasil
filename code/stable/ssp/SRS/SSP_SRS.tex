@@ -191,6 +191,8 @@ ${ℓ_{s}}$ & Length of an Interslice Surface: from slip base to slope surface i
 Abbreviation & Full Form
 \\
 \midrule
+2D & Two-Dimensional
+\\
 A & Assumption
 \\
 DD & Data Definition
@@ -230,7 +232,7 @@ The SSA program determines the critical slip surface, and its respective factor 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, SSA identifies the most likely failure surface within the possible input range, and finds the factor of safety for the slope.
+The scope of the requirements includes stability analysis of a Two-Dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.

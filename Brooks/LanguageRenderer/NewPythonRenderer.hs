@@ -512,7 +512,7 @@ pyExtStateObj :: Label -> Doc -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
 pyInlineIf :: Doc -> Doc -> Doc -> Doc
-pyInlineIf c v1 v2 = v1 <+> text "if" <+> c <+> text "else" <+> v2
+pyInlineIf c v1 v2 = parens $ v1 <+> text "if" <+> c <+> text "else" <+> v2
 
 pyListPopAccess :: Doc -> Doc -> Doc
 pyListPopAccess v f = v <+> equals <+> f

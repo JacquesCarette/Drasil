@@ -24,15 +24,15 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  design, document, effect, element, endUser, environment, goalStmt, inModel, 
-  input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable, physSyst, doccon,
-  doccon')
+  constant, design, document, effect, element, endUser, environment,
+  goalStmt, inModel, input_, interest, interest, interface, issue, loss, 
+  method_, organization, physics, problem, product_, property, software, 
+  softwareSys, srs, srsDomains, sysCont, system, table_, template, user,
+  value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, twoD,
+import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
   physicCon, physicCon')
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
@@ -53,9 +53,9 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp, sspdef,
-  sspdef')
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
+  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil,
+  soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -281,8 +281,11 @@ purposeDoc pname what calculates how introduces analysizes =
 -- Scope of Requirements automatically generated in IScope
 scpIncl :: Sentence
 scpIncl = S "stability analysis of a" +:+ introduceAbb twoD +:+ 
-  phrase slope `sC`
-  S "composed of homogeneous" +:+ plural soilLyr
+  phrase soil +:+ S "mass" `sC` S "composed of a single homogeneous" +:+ phrase layer +:+ S "with" +:+ phrase constant +:+. plural mtrlPrpty +:+ S "The" +:+
+  phrase soil +:+ S "mass is assumed to extend infinitely in the third" +:+. phrase dimension +:+ S "The" +:+ phrase analysis +:+ S "will be at an" +:+
+  S "instant in" +:+ phrase time :+: S ";" +:+ plural factor +:+ S "that" +:+
+  S "may change the" +:+ plural soilPrpty +:+ S "over" +:+ phrase time +:+
+  S "will not be considered"
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

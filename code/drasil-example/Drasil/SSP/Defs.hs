@@ -20,15 +20,16 @@ ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng
 ssp = commonIdeaWithDict "ssp" (cn' "slope stability problem") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
-sspdef = [factor, soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
+sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
   slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr]
 
 sspdef' :: [ConceptChunk]
 sspdef' = [crtSlpSrf, plnStrn, fs_concept]
 
 ----Other Common Phrases----
-soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
+layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
 slice    = nc "slice"      (cn' "slice")
 slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
@@ -46,7 +47,7 @@ soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
 itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
-soilLyr   = compoundNC soil (nc "layer" (cn' "layer"))
+soilLyr   = compoundNC soil layer
 
 crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though

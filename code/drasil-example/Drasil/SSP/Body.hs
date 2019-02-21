@@ -53,7 +53,8 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp, sspdef,
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, 
+  soilMechanics, ssa, ssp, sspdef,
   sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
@@ -113,9 +114,10 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl scpEnd
-    , IChar (phrase solidMechanics)
-      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics)
-      EmptyS
+    , IChar EmptyS
+      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
+      phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
+      EmptyS (phrase soilMechanics)
     , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd]) :
     --FIXME: issue #235
     (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 

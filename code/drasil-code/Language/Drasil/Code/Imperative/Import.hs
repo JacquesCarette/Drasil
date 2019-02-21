@@ -686,8 +686,8 @@ genDataFunc nameTitle dd = do
       return $ [ (block [
       varDec l_infile infile,
       varDec l_line string,
-      listDec l_lines 0 string,
-      listDec l_linetokens 0 string,
+      listDec l_lines 0 (listType dynamic string),
+      listDec l_linetokens 0 (listType dynamic string),
       openFileR v_infile v_filename ])] ++
       (concat inD) ++ [(block [
       closeFile v_infile ])]

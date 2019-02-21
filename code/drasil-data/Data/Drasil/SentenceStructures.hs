@@ -150,16 +150,17 @@ underConsidertn chunk = S "The" +:+ (phrase chunk) +:+
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
-refineChain :: NamedIdea c => [c] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plural y
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain (x:y:[]) = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S (snd x))  +:+ S "are refined to the" +:+ plural (fst y)
 refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain
-rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
-  (plural y)
-rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
+rc :: NamedIdea c => [(c, Section)] -> Sentence
+rc (x:y:[]) = S "and the" +:+ (plural (fst x)) +:+ sParen (makeRef2S (snd x)) 
+  +:+ S "to the" +:+ (plural (fst y)) +:+. sParen (makeRef2S (snd y))
+rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S (snd x)) +:+ 
+  S "to the" +:+ plural (fst y) `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
 -- | helper functions for making likely change statements

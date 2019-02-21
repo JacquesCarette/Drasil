@@ -21,13 +21,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt)
+import qualified Drasil.DocLang.SRS as SRS (goalStmt, thModel, inModel,
+  physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
   physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable, physSyst, doccon,
+  sysCont, system, table_, template, thModel, user, value, variable, physSyst, doccon,
   doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
@@ -44,7 +45,7 @@ import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
-  foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
+  foldlSP, foldlSent, foldlSent_, andThe, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
@@ -298,9 +299,8 @@ orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   short srs, S "for", phrase sciCompS,
   S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
   S "Lai", makeRef2S smithLai2005]
-orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
-  S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively"
-  +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
+orgSecEnd   = foldlSent [S "The", plural inModel, S "provide the set of",
+  S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --
 -- SECTION 3.1 --

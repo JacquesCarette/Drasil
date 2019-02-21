@@ -320,7 +320,6 @@ scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
 
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
-  sParen (makeRef2S $ SRS.inModel ([]::[Contents]) ([]::[Section])),
   S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"

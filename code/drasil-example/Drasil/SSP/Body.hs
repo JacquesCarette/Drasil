@@ -32,7 +32,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, twoD,
+  physicCon, physicCon')
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
@@ -190,8 +191,8 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 sspSymMap :: ChunkDB
 sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
   map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
-  ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
+  ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' 
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
@@ -279,7 +280,8 @@ purposeDoc pname what calculates how introduces analysizes =
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scpIncl :: Sentence
-scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
+scpIncl = S "stability analysis of a" +:+ introduceAbb twoD +:+ 
+  phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
 
 -- SECTION 2.3 --

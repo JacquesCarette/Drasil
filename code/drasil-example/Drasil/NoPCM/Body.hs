@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
   thermocon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
@@ -246,7 +246,8 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans] ++ map nw check_si)
  (map cw nopcm_Symbols ++ srsDomains)

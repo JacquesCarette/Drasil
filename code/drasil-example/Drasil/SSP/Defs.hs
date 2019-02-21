@@ -5,15 +5,16 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
+import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
 import Data.Drasil.IdeaDicts hiding (dataDefn)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
-  
+
 ssa, ssp :: CI
 ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
 ssp = commonIdeaWithDict "ssp" (cn' "slope stability problem") "SSP"   [civilEng]

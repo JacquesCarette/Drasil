@@ -10,8 +10,8 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Citations (parnasClements1986)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
-  ofThe, ofThe', refineChain)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
+  foldlList, foldlsC, foldlSP, ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
@@ -78,10 +78,13 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
 scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
-  where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",
-                short programName +:+ intendedPurpose]
+scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes", mainRequirement]
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes" +:+. mainRequirement, S "Given the appropriate",
+                  S "inputs" `sC` short programName +:+ intendedPurpose]
 
 -- | constructor for characteristics of the intended reader subsection
 -- know

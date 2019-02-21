@@ -112,7 +112,7 @@ mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
-    , IScope scpIncl scpEnd
+    , IScope scpIncl EmptyS
     , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics)
       EmptyS
@@ -278,13 +278,9 @@ purposeDoc pname what calculates how introduces analysizes =
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
-scpIncl, scpEnd :: Sentence
+scpIncl :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
-scpEnd  = S "identifies the most likely failure" +:+
-  phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
-  S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
-  phrase slope
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

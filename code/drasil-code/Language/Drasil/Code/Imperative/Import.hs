@@ -263,8 +263,8 @@ genCalcBlock t' v' e' = do
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
   Reader (State repr) (repr (Block repr))
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (fmap body $ liftS $
-    genCalcBlock t v r)) cs
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
+    genCalcBlock t v e)) cs
   return $ ifNoElse ifs
 
 ----- OUTPUT -------

@@ -41,6 +41,7 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
@@ -295,7 +296,8 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short srs, S "for", phrase sciCompS,
-  S "proposed by Koothoor as well as Smith and Lai"]
+  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
+  S "Lai", makeRef2S smithLai2005]
 orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
   S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively"
   +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis

@@ -309,7 +309,7 @@ instance FunctionSym PythonCode where
     type Function PythonCode = Doc
     func l vs = liftA funcDocD (funcApp l vs)
     cast targT _ = targT
-    castListToInt = cast (listType static int) int
+    castListToInt = cast int (listType static int)
     get n = liftA funcDocD (var n)
     set n v = liftA funcDocD (assign (var n) v)
 

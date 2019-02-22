@@ -757,21 +757,29 @@ genDataFunc nameTitle dd = do
           return [block [a]]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          a <- assign' (indexData indx lineNo patNo vv) $ getCastFunc 
-            (getListType (codeType v) (toInteger $ length indx))
-            (v_linetokens $.(listAccess tokIndex))
-          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [a]]
+          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [
+            valState $ (indexData indx lineNo patNo vv) $. 
+            (listSet (getIndex indx lineNo patNo) $ 
+            getCastFunc (getListType (codeType v) (toInteger $ length indx))
+            (v_linetokens $.(listAccess tokIndex)))]]
         entryData _ _ _ JunkEntry = return []
         ---------------
         indexData :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr)) -> (repr (Value repr))
-        indexData [] _ _ v = v
+        indexData [_] _ _ v = v
         indexData ((Explicit i):is) l p v = indexData is l p (objAccess v 
           (listAccess $ litInt i))
         indexData (WithLine:is) l p v = indexData is l p (objAccess v 
           (listAccess l))
         indexData (WithPattern:is) l p v = indexData is l p (objAccess v
           (listAccess p))
+        ------------------------------
+        getIndex :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
+          (repr (Value repr)) -> (repr (Value repr))
+        getIndex [(Explicit i)] _ _ = litInt i
+        getIndex [WithLine] l _ = l
+        getIndex [WithPattern] _ p = p
+        getIndex (x:xs) l p = getIndex xs l p
         ---------------
         checkIndex :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr)) -> C.CodeType ->

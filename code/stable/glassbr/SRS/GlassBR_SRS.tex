@@ -419,7 +419,7 @@ Label & Safety Req-LR
                                  \item{$q$ is the applied load (demand) (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[TM:isSafePb]{TM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
+                                 Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[TM:isSafePb]{TM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
                                          \\ \midrule \\
                                          Source & \cite{astm2009}
                                                   \\ \midrule \\
@@ -675,7 +675,7 @@ Label & Dimensionless load
                                                   \item{$GTF$ is the glass type factor (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
+                                                  Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
                                                           $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
                                                           $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
                                                           $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
@@ -786,7 +786,7 @@ Label & Stand off distance
                                                   \\ \midrule \\
                                                   Source & \cite{astm2009}
                                                            \\ \midrule \\
-                                                           RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity} \hyperref[IM:calOfDemand]{IM: calOfDemand}.
+                                                           RefBy & \hyperref[DD:calofDemand]{DD: calofDemand} \hyperref[IM:calOfDemand]{IM: calOfDemand}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -885,9 +885,9 @@ Label & Load resistance
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:calofCapacity}
+\toprule \textbf{Refname} & \textbf{DD:calofDemand}
 \phantomsection 
-\label{DD:calofCapacity}
+\label{DD:calofDemand}
 \\ \midrule \\
 Label & Applied load (demand)
         \\ \midrule \\
@@ -1080,7 +1080,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, instance models, and data definitions with each other. \hyperref[Table:TraceyItemSecs]{Table:TraceyItemSecs} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Table:TraceyReqsItems]{Table:TraceyReqsItems} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
+ & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
 \\
 \midrule
 \hyperref[Sec:DataConstraints]{Section: Data Constraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1103,7 +1103,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[A:standardValues]{A: standardValues} &  &  &  &  &  &  &  &  & X &  & X & X &  & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 \hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

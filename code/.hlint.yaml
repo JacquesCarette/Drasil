@@ -48,7 +48,6 @@
 - ignore: {name: "Fuse foldr/map"}
 - ignore: {name: "Use catMaybes"}
 - ignore: {name: "Use fst"}
-- ignore: {name: "Use notElem"}
 - ignore: {name: "Redundant lambda"}
 - ignore: {name: "Use concatMap"}
 - ignore: {name: "Use concat"}

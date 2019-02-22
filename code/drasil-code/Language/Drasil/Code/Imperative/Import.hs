@@ -724,8 +724,8 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return $ [forRange l_j (litInt 0) ((listSizeAccess v_linetokens #/ 
-            (litInt $ toInteger $ length p)) $.(cast int float)) (litInt 1)
+          return $ [forRange l_j (litInt 0) (castObj (cast int float)
+            (listSizeAccess v_linetokens #/ (litInt $ toInteger $ length p))) (litInt 1)
             ( body pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
@@ -745,14 +745,14 @@ genDataFunc nameTitle dd = do
           [(repr (Block repr))]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
-          a <- assign' vv $ (v_linetokens $.(listAccess tokIndex))$. 
-            (cast (convType $ codeType v) string)
+          a <- assign' vv $ castObj (cast (convType $ codeType v) string)
+            (v_linetokens $.(listAccess tokIndex))
           return [block [a]]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          a <- assign' (indexData indx lineNo patNo vv) $
-            (v_linetokens $.(listAccess tokIndex))$.(cast 
-            (getListType (codeType v) (toInteger $ length indx)) string)
+          a <- assign' (indexData indx lineNo patNo vv) $ castObj 
+            (cast (getListType (codeType v) (toInteger $ length indx)) string)
+            (v_linetokens $.(listAccess tokIndex))
           return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [a]]
         entryData _ _ _ JunkEntry = return []
         ---------------

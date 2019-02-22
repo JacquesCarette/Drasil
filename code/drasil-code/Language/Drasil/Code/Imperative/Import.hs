@@ -507,7 +507,7 @@ convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = getListTypeFunc t dynamic -- new GOOL has different functions for intListType, floatListType, etc... Probably need to add these to CodeType
+convType (C.List t) = getListTypeFunc t dynamic
 convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
@@ -663,7 +663,6 @@ convBlock (FTry t c) = do
 convBlock (FContinue) = return $ block [continue]
 convBlock (FDec v (C.List t)) = return $ block [listDec (codeName v) 0 
   (getListTypeFunc t dynamic)]
--- Again, above won't work for intListType, etc. Better solution needed.
 convBlock (FDec v t) = return $ block [varDec (codeName v) (convType t)]
 convBlock (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)

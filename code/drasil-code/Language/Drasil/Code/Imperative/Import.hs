@@ -587,7 +587,7 @@ unop Tan  = tan
 unop Csc  = csc
 unop Sec  = sec
 unop Cot  = cot
-unop Dim  = ($.listSize)
+unop Dim  = listSizeAccess
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
@@ -704,7 +704,7 @@ genDataFunc nameTitle dd = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-            forRange l_i (litInt 0) (v_lines $.listSize) (litInt 1)
+            forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
               ( body $ [(block [ stringSplit d v_linetokens (v_lines $.
                 (listAccess v_i)) ])] ++ lnV)
             ]
@@ -724,7 +724,7 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return $ [forRange l_j (litInt 0) ((v_linetokens $.listSize #/ 
+          return $ [forRange l_j (litInt 0) ((listSizeAccess v_linetokens #/ 
             (litInt $ toInteger $ length p)) $.(cast int float)) (litInt 1)
             ( body pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
@@ -773,15 +773,15 @@ genDataFunc nameTitle dd = do
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          [ while (v $.listSize ?<= (litInt i)) ( bodyStatements [ valState $
+          [ while (listSizeAccess v ?<= (litInt i)) ( bodyStatements [ valState $
           v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
-          [ while (v $.listSize ?<= l) ( bodyStatements [ valState $
+          [ while (listSizeAccess  v ?<= l) ( bodyStatements [ valState $
           v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v $.listSize ?<= p) ( bodyStatements [ valState $ 
+          [ while (listSizeAccess v ?<= p) ( bodyStatements [ valState $ 
           v $.(getListExtend s) ] ) ]
           ++ checkIndex' is (n-1) l p (v $.(listAccess p)) s
         ---------------------------

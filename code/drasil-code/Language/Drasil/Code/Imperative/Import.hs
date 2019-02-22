@@ -106,7 +106,7 @@ genModules = do
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
-  moddef <- sequence $ fmap genModDef (mods s) -- hack ?
+  moddef <- traverse genModDef (mods s) -- hack ?
   return $ (mn : inp ++ out ++ moddef)
 
 -- private utilities used in generateCode

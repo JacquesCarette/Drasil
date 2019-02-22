@@ -23,7 +23,6 @@
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Use infix"}
 - ignore: {name: "Redundant $"}
-- ignore: {name: "Use traverse"}
 - ignore: {name: "Use mapM"}
 - ignore: {name: "Use :"}
 - ignore: {name: "Redundant do"}

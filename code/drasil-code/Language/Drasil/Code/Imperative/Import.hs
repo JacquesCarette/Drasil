@@ -745,13 +745,13 @@ genDataFunc nameTitle dd = do
           [(repr (Block repr))]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
-          a <- assign' vv $ castObj (cast (convType $ codeType v) string)
+          a <- assign' vv $ getCastFunc (codeType v)
             (v_linetokens $.(listAccess tokIndex))
           return [block [a]]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          a <- assign' (indexData indx lineNo patNo vv) $ castObj 
-            (cast (getListType (codeType v) (toInteger $ length indx)) string)
+          a <- assign' (indexData indx lineNo patNo vv) $ getCastFunc 
+            (getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $.(listAccess tokIndex))
           return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [a]]
         entryData _ _ _ JunkEntry = return []
@@ -823,10 +823,14 @@ getListExtend C.String = listExtendString
 getListExtend t@(C.List _) = listExtendList (convType t)
 getListExtend _ = error "No getFileInput function for the given type"
 
-getListType :: (RenderSym repr) => C.CodeType -> Integer -> (repr 
-  (StateType repr))
+getCastFunc :: (RenderSym repr) => C.CodeType -> (repr (Value repr)) ->
+   (repr (Value repr))
+getCastFunc C.Float = castStrToFloat
+getCastFunc t = castObj (cast (convType t) string)
+
+getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"
-getListType (C.List t) 1 = convType t
+getListType (C.List t) 1 = t
 getListType (C.List t) n = getListType t (n-1)
 getListType _ _ = error "Not a list type"
 

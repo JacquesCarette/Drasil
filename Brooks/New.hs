@@ -273,7 +273,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) => Selector repr w
     stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
     castObj        :: repr (Function repr) -> repr (Value repr) -> repr (Value repr)
-    castStrToFloat :: repr (Value repr) -> repr (Function repr)
+    castStrToFloat :: repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
     type Function repr

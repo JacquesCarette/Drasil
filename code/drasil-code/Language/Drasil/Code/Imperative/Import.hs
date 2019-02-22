@@ -507,7 +507,7 @@ convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = listType dynamic $ convType t -- new GOOL has different functions for intListType, floatListType, etc... Probably need to add these to CodeType
+convType (C.List t) = getListTypeFunc t dynamic -- new GOOL has different functions for intListType, floatListType, etc... Probably need to add these to CodeType
 convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
@@ -661,8 +661,8 @@ convBlock (FTry t c) = do
   blck2 <- mapM convBlock c
   return $ tryCatch (body blck1) (body blck2)
 convBlock (FContinue) = return $ block [continue]
-convBlock (FDec v (C.List t)) = return $ block [listDec (codeName v) 0 (listType
-  dynamic $ convType t)]
+convBlock (FDec v (C.List t)) = return $ block [listDec (codeName v) 0 
+  (getListTypeFunc t dynamic)]
 -- Again, above won't work for intListType, etc. Better solution needed.
 convBlock (FDec v t) = return $ block [varDec (codeName v) (convType t)]
 convBlock (FProcCall n l) = do
@@ -672,6 +672,14 @@ convBlock (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
   return $ block [valState $ a' $.(listAppend b')]
+
+getListTypeFunc :: (RenderSym repr) => C.CodeType -> (repr (Permanence repr)) ->
+  (repr (StateType repr))
+getListTypeFunc C.Integer p = intListType p
+getListTypeFunc C.Float p = floatListType p
+getListTypeFunc C.Boolean _ = boolListType
+getListTypeFunc (C.List t) p = listType p $ getListTypeFunc t p
+getListTypeFunc t p = listType p (convType t)
 
 -- this is really ugly!!
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)

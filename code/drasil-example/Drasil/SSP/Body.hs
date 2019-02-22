@@ -53,8 +53,8 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp, sspdef,
-  sspdef')
+  morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil, soilLyr, ssa,
+  ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -234,26 +234,26 @@ table_of_symbol_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 -- SECTION 2 --
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
-  phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
-  S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
-  phrase slope, S "this can cause instability in the form" +:+.
-  S "of soil/rock movement", S "The", plural effect,
-  S "of soil/rock movement can range from inconvenient to",
+  phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
+  S "water, is subject to the influence of gravity on the" +:+. phrase mass,
+  S "This can cause instability in the form of", phrase soil, S "or rock" +:+.
+  S "movement", S "The", plural effect, S "of", phrase soil,
+  S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in signifcant life and economic" +:+.
   plural loss, at_start slope, S "stability is of", phrase interest,
-  S "both when analyzing natural", plural slope `sC`
+  S "both when analysing natural", plural slope `sC`
   S "and when designing an excavated" +:+.  phrase slope, at_start ssa,
   S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
-  S "most likely to experience slip" `sAnd`
+  S "most likely to experience", phrase slip `sAnd`
   S "an index of its relative stability known as the", phrase fs]
 
-kSent = keySent ssa
+kSent = keySent ssa ssp
 
-keySent :: (Idea a) => a -> Sentence
-keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
+keySent :: (Idea a) => a -> a -> Sentence
+keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb pname, phrase program]
+  introduceAbb ssp]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose

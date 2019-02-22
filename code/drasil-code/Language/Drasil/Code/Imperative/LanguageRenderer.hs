@@ -613,7 +613,7 @@ comment c (CommentDelimit cmt len) =
     in com <> text (dashes (render com) len)
 
 dashes :: String -> Int -> String
-dashes s l = take (l - length s) (repeat '-')
+dashes s l = replicate (l - length s)  '-'
 
 end :: Config -> StatementLocation -> Doc
 end _ Loop = empty

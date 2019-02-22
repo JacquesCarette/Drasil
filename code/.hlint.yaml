@@ -30,7 +30,6 @@
 - ignore: {name: "Use fromMaybe"}
 - ignore: {name: "Use section"}
 - ignore: {name: "Avoid lambda"}
-- ignore: {name: "Use replicate"}
 - ignore: {name: "Use const"}
 - ignore: {name: "Use list comprehension"}
 - ignore: {name: "Use lambda-case"}

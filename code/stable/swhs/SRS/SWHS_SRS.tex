@@ -40,6 +40,7 @@ The unit system used throughout is SI (Système International d'Unités). In add
 Symbol & Description
 \\
 \midrule
+\endhead
 ${}^{\circ}$C & temperature (centigrade)
 \\
 J & energy (joule)
@@ -63,6 +64,7 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
+\endhead
 ${A_{C}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
 ${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
@@ -201,6 +203,7 @@ $∇$ & Gradient & --
 Abbreviation & Full Form
 \\
 \midrule
+\endhead
 A & Assumption
 \\
 DD & Data Definition
@@ -239,7 +242,7 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
-The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
@@ -396,8 +399,9 @@ This section simplifies the original problem and helps in developing the theoret
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
 \phantomsection 
@@ -425,9 +429,10 @@ Label & Conservation of thermal energy
                                                   \\ \midrule \\
                                                   RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
 \phantomsection 
@@ -461,9 +466,10 @@ Label & Sensible heat energy
                                                   \\ \midrule \\
                                                   RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:heatEInPCM]{IM: heatEInPCM}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:latentHtE}
 \phantomsection 
@@ -487,12 +493,13 @@ Label & Latent heat energy
                                                   \\ \midrule \\
                                                   RefBy & \hyperref[TM:sensHtE]{TM: sensHtE} \hyperref[IM:heatEInPCM]{IM: heatEInPCM}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
 \phantomsection 
@@ -519,9 +526,10 @@ Label & Newton's law of cooling
                                                           \\ \midrule \\
                                                           RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
@@ -551,7 +559,7 @@ Label & Simplified rate of change of temperature
                                          Source & \\ \midrule \\
                                                   RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 Detailed derivation of simplified rate of change of temperature :
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
 \begin{displaymath}
@@ -576,8 +584,9 @@ m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
 \phantomsection 
@@ -609,9 +618,10 @@ Label & Heat flux into the water from the coil
                                                                    \\ \midrule \\
                                                                    RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.P}
 \phantomsection 
@@ -643,9 +653,10 @@ Label & Heat flux into the PCM from water
                                                                    \\ \midrule \\
                                                                    RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFusion}
 \phantomsection 
@@ -671,9 +682,10 @@ Label & Specific latent heat of fusion
                                                            \\ \midrule \\
                                                            RefBy & \hyperref[DD:melt.frac]{DD: melt\_frac} \hyperref[TM:latentHtE]{TM: latentHtE} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:melt.frac}
 \phantomsection 
@@ -702,12 +714,13 @@ Label & Melt fraction
                                                                    \\ \midrule \\
                                                                    RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
@@ -746,7 +759,7 @@ Label & Energy balance on water to find the temperature of the water
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat transfer into the water from the heating coil and ${q_{P}}$ represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}). Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
@@ -776,8 +789,9 @@ Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE
 \begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{displaymath}
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnPCM}
 \phantomsection 
@@ -822,7 +836,7 @@ Label & Energy Balance on PCM to Find T\_p
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[unlikeChgNGS]{UC: No-Gaseous-State} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$ , the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
@@ -843,8 +857,9 @@ Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$ , thi
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[A:Volume-Change-Melting-PCM-Negligible]{A: Volume-Change-Melting-PCM-Negligible}).
 In the case where ${T_{P}}={{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d ${T_{P}}$ / d $t$ = 0.
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}).
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
@@ -880,9 +895,10 @@ Label & Heat energy in the water
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[findMass]{FR: Find-Mass} \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInPCM}
 \phantomsection 
@@ -932,7 +948,7 @@ Label & Heat energy in the PCM
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
@@ -941,6 +957,7 @@ Label & Heat energy in the PCM
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
+\endhead
 ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $120.0\cdot{}10^{-3}$ $\text{m}^{2}$ & 10.0$\%$
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10.0$\%$
@@ -984,6 +1001,7 @@ ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & 
 Var & Physical Constraints
 \\
 \midrule
+\endhead
 ${T_{W}}$ & ${T_{init}}\leq{}{T_{W}}\leq{}{T_{C}}$
 \\
 ${T_{P}}$ & ${T_{init}}\leq{}{T_{P}}\leq{}{T_{C}}$
@@ -1030,6 +1048,7 @@ This section provides the functional requirements, the business tasks that the s
 Symbol & Unit & Description
 \\
 \midrule
+\endhead
 $L$ & m & length of tank
 \\
 $D$ & m & diameter of tank
@@ -1096,6 +1115,7 @@ The purpose of the traceability matrices is to provide easy references on what h
  & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States} & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State} & \hyperref[IM:heatEInPCM]{IM: heatEInPCM} & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} & \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} & \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} & \hyperref[DD:melt.frac]{DD: melt\_frac} & \hyperref[TM:latentHtE]{TM: latentHtE} & \hyperref[TM:sensHtE]{TM: sensHtE}
 \\
 \midrule
+\endhead
 \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank} &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1175,6 +1195,7 @@ The purpose of the traceability matrices is to provide easy references on what h
  & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) & DD3 (\hyperref[DD:htFusion]{DD: htFusion}) & DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
 \\
 \midrule
+\endhead
 T1 (\hyperref[TM:consThermE]{TM: consThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  & 
@@ -1210,6 +1231,7 @@ IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X & X &  &  &  & X & X & X &
  & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) & Data Constraints (\hyperref[Table:InDataConstraints]{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[findMass]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}) & R7 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}) & R8 (\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}) & R9 (\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}) & R10 (\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}) & R11 (\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time})
 \\
 \midrule
+\endhead
 IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
 IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
@@ -1249,6 +1271,7 @@ R11 (\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}) &  & X &  &  & 
  & A1 (\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only}) & A2 (\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant}) & A3 (\hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}) & A4 (\hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}) & A5 (\hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume}) & A6 (\hyperref[A:Specific-Heat-Energy-Constant-over-Volume]{A: Specific-Heat-Energy-Constant-over-Volume}) & A7 (\hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water}) & A8 (\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time}) & A9 (\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length}) & A10 (\hyperref[A:Law-Convective-Cooling-Water-PCM]{A: Law-Convective-Cooling-Water-PCM}) & A11 (\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}) & A12 (\hyperref[A:Same-Initial-Temp-Water-PCM]{A: Same-Initial-Temp-Water-PCM}) & A13 (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}) & A14 (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}) & A15 (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}) & A16 (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}) & A17 (\hyperref[A:Volume-Change-Melting-PCM-Negligible]{A: Volume-Change-Melting-PCM-Negligible}) & A18 (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}) & A19 (\hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank})
 \\
 \midrule
+\endhead
 T1 (\hyperref[TM:consThermE]{TM: consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1314,6 +1337,7 @@ This section contains the standard values that are used for calculations in SWHS
 Symbol & Description & Value & Unit
 \\
 \midrule
+\endhead
 ${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -1398,14 +1422,14 @@ author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
 year={1986},
-month={feb},
+month=feb,
 volume={12},
 number={2},
 pages={"251-257"},
 address={Washington, USA}}
 
 @inproceedings{parnasClements1984,
-author={Parnas, David L. and Clements, P. C. and Wiess, },
+author={Parnas, David L. and Clements, P. C. and Wiess},
 title={The Modular Structure of Complex Systems},
 booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
 year={1984},

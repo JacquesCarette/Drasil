@@ -902,7 +902,7 @@ replaceClass n cs vs fs =
                                                        
 
 addToClass :: Class -> [Declaration] -> [Method] -> Class
-addToClass (Class n p s v m) ds fs = let containsMain = foldl (||) False (map isMain fs)
+addToClass (Class n p s v m) ds fs = let containsMain = or (map isMain fs)
   in    
     if containsMain 
       then Class n p s (addToSV ds v) (addToMethod fs m)

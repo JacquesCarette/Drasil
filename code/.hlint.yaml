@@ -33,7 +33,6 @@
 - ignore: {name: "Use list literal"}
 - ignore: {name: "Use guards"}
 - ignore: {name: "Reduce duplication"}
-- ignore: {name: "Evaluate"}
 - ignore: {name: "Fuse foldr/map"}
 - ignore: {name: "Use intercalate"}
 - ignore: {name: "Use foldr"}

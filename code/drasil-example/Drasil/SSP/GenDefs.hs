@@ -98,7 +98,7 @@ resShr_rel = inxi shrResI $= shrResEqn
 resShr_desc :: Sentence
 resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   phrase slice, ch shrStress, S "from", makeRef2S mcShrStrgth,
-  S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
+  S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle),
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
   getTandS baseLngth, S "of the plane where the", phrase normal,
@@ -108,7 +108,7 @@ resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   S "of a soil from", -- FIXME: add prime to nrmStrss
   makeRef2S effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
-  E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat,
+  E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) $= sy nrmFSubWat,
   makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
 
 --

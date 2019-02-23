@@ -85,7 +85,7 @@ print sm l = foldr ($+$) empty $ map (flip lo sm) l
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPL $ L.special s
-symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = concatMap symbol sl
 --
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)

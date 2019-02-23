@@ -113,7 +113,7 @@ p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPH $ L.special s
-symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)

@@ -44,7 +44,6 @@
 - ignore: {name: "Fuse foldr/map"}
 - ignore: {name: "Use catMaybes"}
 - ignore: {name: "Redundant lambda"}
-- ignore: {name: "Use concat"}
 - ignore: {name: "Use intercalate"}
 - ignore: {name: "Use foldr"}
 

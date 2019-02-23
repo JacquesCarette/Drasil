@@ -219,7 +219,7 @@ makeTable lls r bool t =
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields
-        anyLong = or . map longColumn . transpose
+        anyLong = any longColumn . transpose
         anyBig = map (descr . longColumn) . transpose
         longColumn = any (\x -> specLength x > 50)
 

@@ -209,7 +209,7 @@ displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals
 
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
-  let l' = filter (\(_,b) -> not $ null $ filter (not . isEmpty) b) l in 
+  let l' = filter (any (not . isEmpty) . snd) l in 
   (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
   where
     isEmpty EmptyS = True

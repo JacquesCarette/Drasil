@@ -15,8 +15,6 @@
 - ignore: {name: "Use uncurry"}
 - ignore: {name: "Use list literal pattern"}
 - ignore: {name: "Use record patterns"}
-- ignore: {name: "Use and"}
-- ignore: {name: "Use all"}
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Use infix"}
 - ignore: {name: "Redundant $"}

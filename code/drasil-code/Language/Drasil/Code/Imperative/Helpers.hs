@@ -48,7 +48,7 @@ capitalize [] = error "capitalize called on an emptry String"
 capitalize (c:cs) = (toUpper c):cs
 
 containsAll :: Eq a => [a] -> [a] -> Bool
-containsAll l = and . map (\x -> x `elem` l)
+containsAll l = all $ flip elem l
 
 makeLiteralNameValid :: String -> String
 makeLiteralNameValid s =

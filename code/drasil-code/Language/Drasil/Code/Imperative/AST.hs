@@ -879,7 +879,7 @@ notMain (MainMethod _) = False
 notMain _              = True
 
 notMainModule :: Module -> Bool
-notMainModule m = foldl (&&) True (map notMain $ functions m)
+notMainModule m = all notMain $ functions m
 
 multi :: [Statement] -> Statement
 multi = MultiState

@@ -8,7 +8,6 @@
 
 # Warnings currently triggered by your code
 - ignore: {name: "Parse error"}
-- ignore: {name: "Use fewer imports"}
 - ignore: {name: "Move brackets to avoid $"}
 - ignore: {name: "Eta reduce"}
 - ignore: {name: "Use newtype instead of data"}

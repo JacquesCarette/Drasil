@@ -5,8 +5,6 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper)
 
-import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
@@ -37,9 +35,6 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness, softwarecon, reliability)
-
-import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
-
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
@@ -47,6 +42,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
   sOf, sOr)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals)
+import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
@@ -54,11 +50,11 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dime
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, physicCon, physicCon')
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
-import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
+
 import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
@@ -70,6 +66,9 @@ import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new,
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
+
+import Control.Lens ((^.))
+import qualified Data.Map as Map
 
 authors :: People
 authors = [alex, luthfi]

@@ -5,18 +5,20 @@ module Drasil.Sections.TraceabilityMandGs
    ) where
 
 import Language.Drasil
-import Data.Drasil.SentenceStructures (ofThe', foldlSent, tableShows)
+
 import Data.Drasil.Concepts.Documentation (purpose, component, column,
-  reference, traceyGraph, traceyMatrix, item, dependency)
+  dependency, item, reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.Concepts.Documentation(section_)
+import Data.Drasil.SentenceStructures (ofThe', foldlSent, showingCxnBw,
+  tableShows)
 import Data.Drasil.Utils (makeTMatrix)
+
+import Drasil.DocumentLanguage.Definitions (helpToRefField)
 import qualified Drasil.DocLang.SRS as SRS
+
+import Control.Lens ((^.))
 import Data.List (nub)
 import qualified Data.Map as Map
-import Data.Drasil.SentenceStructures (showingCxnBw)
-import Control.Lens ((^.))
-import Drasil.DocumentLanguage.Definitions (helpToRefField)
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section

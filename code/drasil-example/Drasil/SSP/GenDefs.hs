@@ -12,11 +12,10 @@ import Data.Drasil.SI_Units (metre)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, 
   method_, property, value, variable)
-import Data.Drasil.Concepts.Math (normal, perp, surface)
+import Data.Drasil.Concepts.Math (equation, normal, perp, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
-import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 

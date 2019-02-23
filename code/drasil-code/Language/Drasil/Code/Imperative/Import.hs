@@ -216,14 +216,13 @@ genCalcFunc cdef = do
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
-genCalcBlock t' v' e' = do
-  doit t' v' e'
-    where
-    doit :: CalcType -> String -> Expr -> Reader State Body
-    doit t v (Case e)    = genCaseBlock t v e
-    doit t v e
-      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
-      | otherwise        = fmap (oneLiner . I.return) $ convExpr e
+genCalcBlock t' v' e' = doit t' v' e'
+  where
+  doit :: CalcType -> String -> Expr -> Reader State Body
+  doit t v (Case e)    = genCaseBlock t v e
+  doit t v e
+    | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
+    | otherwise        = fmap (oneLiner . I.return) $ convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do

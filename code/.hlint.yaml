@@ -19,7 +19,6 @@
 - ignore: {name: "Use infix"}
 - ignore: {name: "Redundant $"}
 - ignore: {name: "Use :"}
-- ignore: {name: "Redundant do"}
 - ignore: {name: "Use <$>"}
 - ignore: {name: "Use section"}
 - ignore: {name: "Avoid lambda"}

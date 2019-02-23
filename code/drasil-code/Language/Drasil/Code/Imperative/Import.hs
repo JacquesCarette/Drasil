@@ -443,10 +443,10 @@ convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
-convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
-convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
-convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
-convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
+convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ mapM convExpr l
+convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ mapM convExpr l
+convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ mapM convExpr l
+convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ mapM convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
@@ -529,7 +529,7 @@ bfunc Index      = (\x y -> x I.$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module
-genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
+genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
 genFunc :: Func -> Reader State Method
 genFunc (FDef (FuncDef n i o s)) = do

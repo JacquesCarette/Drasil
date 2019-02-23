@@ -15,7 +15,7 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)
-import Data.Maybe (maybeToList, fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
@@ -266,7 +266,7 @@ instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
 collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
- $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
+ $ concatMap getUnits $ mapMaybe (getUnitLup m) symb
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m

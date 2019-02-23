@@ -37,16 +37,16 @@ indent :: Doc -> Doc
 indent = nest 4
 
 dot, comm :: Doc -> Doc
-dot    = \x -> x <> text "."
-comm   = \x -> x <> text ","
+dot  x = x <> text "."
+comm x = x <> text ","
 
 -- | basic plaintext (String) wrapping
-paren,brace,dollar,sqbrac,angbrac:: String -> String
-paren  = \x -> "(" ++ x ++ ")"
-brace  = \x -> "{" ++ x ++ "}"
-dollar = \x -> "$" ++ x ++ "$"
-sqbrac = \x -> "[" ++ x ++ "]"
-angbrac = \x -> "<" ++ x ++ ">"
+paren, brace, dollar, sqbrac, angbrac :: String -> String
+paren   x = "(" ++ x ++ ")"
+brace   x = "{" ++ x ++ "}"
+dollar  x = "$" ++ x ++ "$"
+sqbrac  x = "[" ++ x ++ "]"
+angbrac x = "<" ++ x ++ ">"
 
 -- | String capitalization
 capitalize :: String -> String

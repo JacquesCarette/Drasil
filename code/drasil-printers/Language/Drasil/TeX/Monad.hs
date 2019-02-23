@@ -52,7 +52,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
     dollar = H.dlr
     bstext = TP.text "\\text"
-    br     = \doc -> TP.text "{" TP.<> doc TP.<> TP.text "}"
+    br doc = TP.text "{" TP.<> doc TP.<> TP.text "}"
     adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
     adjust Math Math gen = gen Math
     adjust Text Text gen = gen Text

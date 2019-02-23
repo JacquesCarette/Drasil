@@ -37,7 +37,6 @@
 - ignore: {name: "Redundant fromInteger"}
 - ignore: {name: "Evaluate"}
 - ignore: {name: "Fuse foldr/map"}
-- ignore: {name: "Redundant lambda"}
 - ignore: {name: "Use intercalate"}
 - ignore: {name: "Use foldr"}
 

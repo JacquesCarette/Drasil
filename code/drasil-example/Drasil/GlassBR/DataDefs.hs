@@ -215,7 +215,7 @@ calofDemandQD :: QDefinition
 calofDemandQD = mkQuantDef demand calofDemand_eq
 
 calofDemand :: DataDefinition
-calofDemand = mkDD calofDemandQD [astm2009] [{-derivation-}] "calofCapacity" (calofDemandDesc : [])
+calofDemand = mkDD calofDemandQD [astm2009] [{-derivation-}] "calofDemand" [calofDemandDesc]
 
 
 --Additional Notes--

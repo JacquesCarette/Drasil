@@ -90,9 +90,9 @@ scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [
 -- appStandd
 -- r
 charIntRdrF :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> Section
-charIntRdrF know und progName appStandd r = 
-  SRS.charOfIR (intReaderIntro know und progName appStandd r) []
+  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> Section
+charIntRdrF know und progName appStandd asset r = 
+  SRS.charOfIR (intReaderIntro know und progName appStandd asset r) []
 
 --paragraph called by charIntRdrF
 -- topic1     - sentence the reader should have knowledge in
@@ -100,13 +100,13 @@ charIntRdrF know und progName appStandd r =
 -- stdrd      - sentence of the standards the reader should be familiar with
 -- sectionRef - reference to user characteristic section
 intReaderIntro :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
-intReaderIntro EmptyS topic2 progName stdrd sectionRef = 
+  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> [Contents]
+intReaderIntro EmptyS topic2 progName stdrd asset sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
+  stdrd, S "An understanding of" +:+ asset +:+. S "would be an asset", S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef2S sectionRef)]]
-intReaderIntro topic1 topic2 progName stdrd sectionRef = 
+intReaderIntro topic1 topic2 progName stdrd EmptyS sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:

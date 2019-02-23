@@ -136,7 +136,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
-  IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
+  IChar    :: Sentence -> Sentence -> Sentence -> Sentence -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
@@ -392,8 +392,8 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
-    mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =
-      Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] [])
+    mkSubIntro SI {_sys = sys} (IChar know understand appStandd asset) =
+      Intro.charIntRdrF know understand sys appStandd asset (SRS.userChar [] [])
     mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 

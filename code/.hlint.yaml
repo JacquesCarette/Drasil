@@ -32,7 +32,6 @@
 - ignore: {name: "Use String"}
 - ignore: {name: "Use map once"}
 - ignore: {name: "Fuse concatMap/map"}
-- ignore: {name: "Unused LANGUAGE pragma"}
 - ignore: {name: "Use list literal"}
 - ignore: {name: "Use guards"}
 - ignore: {name: "Reduce duplication"}

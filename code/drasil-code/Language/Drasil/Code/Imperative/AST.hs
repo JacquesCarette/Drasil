@@ -809,11 +809,11 @@ declReplace _ _ d = d
 
 condReplace :: Value -> Value -> Conditional -> Conditional
 condReplace old new (If vbs b) = If (zip fixedVals fixedBs) (bodyReplace old new b)
-    where fixedVals = map (valueReplace old new) $ fst $ unzip vbs
-          fixedBs   = map (bodyReplace old new) $ snd $ unzip vbs
+    where fixedVals = map (valueReplace old new) $ map fst vbs
+          fixedBs   = map (bodyReplace old new) $ map snd vbs
 condReplace old new (Switch val lbs defB) = Switch (valueReplace old new val) (zip lits fixedBs) (bodyReplace old new defB)
-    where lits    = fst $ unzip lbs
-          fixedBs = map (bodyReplace old new) $ snd $ unzip lbs
+    where lits    = map fst lbs
+          fixedBs = map (bodyReplace old new . snd) lbs
 
 iterReplace :: Value -> Value -> Iteration -> Iteration
 iterReplace old new (For s val s2 b) = For (statementReplace old new s) (valueReplace old new val) (statementReplace old new s2) (bodyReplace old new b)

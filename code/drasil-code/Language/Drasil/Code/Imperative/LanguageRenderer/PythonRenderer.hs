@@ -117,7 +117,7 @@ pytop _ _ _ m =
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
 pybody c f p (Mod _ _ vs fs cs) = 
-  (vcat $ map (\x -> statementDoc c NoLoop $ DeclState x) vs)
+  (vcat $ map (statementDoc c NoLoop . DeclState) vs)
   $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$

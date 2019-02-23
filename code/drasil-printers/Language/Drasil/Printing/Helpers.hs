@@ -72,4 +72,4 @@ sufx _ = "th"
 
 -- Use on any sized Int
 sufxer :: Int -> String
-sufxer = (\x -> x ++ ".") . sufx . mod 10
+sufxer = (++ ".") . sufx . mod 10

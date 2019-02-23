@@ -21,7 +21,6 @@
 - ignore: {name: "Use :"}
 - ignore: {name: "Use <$>"}
 - ignore: {name: "Use section"}
-- ignore: {name: "Avoid lambda"}
 - ignore: {name: "Use const"}
 - ignore: {name: "Use list comprehension"}
 - ignore: {name: "Use lambda-case"}

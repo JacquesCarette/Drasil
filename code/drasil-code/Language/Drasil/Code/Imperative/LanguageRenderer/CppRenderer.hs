@@ -60,8 +60,8 @@ cppConfig options c =
         package          = namespaceD,
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
-        printFileFunc    = \f -> valueDoc c f,
-        printFileLnFunc  = \f -> valueDoc c f,
+        printFileFunc    = valueDoc c,
+        printFileLnFunc  = valueDoc c,
         stateType        = cppstateType c,
 
         blockStart = lbrace, blockEnd = rbrace,

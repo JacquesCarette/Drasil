@@ -195,8 +195,8 @@ binOpDocD And = text "&&"
 binOpDocD Or = text "||"
 
 bodyDocD :: Config -> Body -> Doc
-bodyDocD c bs = vibmap (blockDoc c) blocks
-    where blocks = filter (\b -> not $ isEmpty $ blockDoc c b) bs
+bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
+    where bdc = blockDoc c
 
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
@@ -528,15 +528,15 @@ methodDocD' c _ _ (MainMethod b) = vcat [
 methodDocD' c ft m f = methodDocD c ft m f
 
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
+methodListDocD c t m = (vibmap mdc) . filter (not . isEmpty . mdc)
+    where mdc = methodDoc c t m
 
 functionDocD :: Config -> FileType -> Label -> Method -> Doc
 functionDocD _ _ _ _ = error "Not implemented yet!"
 
 functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms
+functionListDocD c t m = (vibmap fdc) . filter (not . isEmpty . fdc)
+    where fdc = functionDoc c t m
 
 methodTypeDocD :: Config -> MethodType -> Doc
 methodTypeDocD c (MState t) = stateType c t Dec

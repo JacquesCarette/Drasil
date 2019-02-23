@@ -64,7 +64,7 @@ foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Se
 foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Numb  wt len = map (wrap wt . S . show) [1..len]
     numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
     numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence

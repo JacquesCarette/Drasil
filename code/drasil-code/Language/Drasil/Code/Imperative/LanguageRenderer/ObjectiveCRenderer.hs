@@ -432,4 +432,4 @@ transDecLine c f = transDecLine c $ convertToMethod f
 listInitObjectsDoc :: Config -> [Value] -> Doc
 listInitObjectsDoc _ [] = empty
 listInitObjectsDoc c vs = colonMapListDoc (text ", ") (valueDoc c) vals <> text ", nil"
-    where vals    = map (\e -> makeNumber c e) vs
+    where vals    = map (makeNumber c) vs

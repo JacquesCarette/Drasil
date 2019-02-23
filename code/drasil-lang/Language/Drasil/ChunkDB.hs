@@ -277,7 +277,7 @@ invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap tm = invert $ Map.map (\(x,_) -> x) tm
+generateRefbyMap tm = invert $ Map.map fst tm
 
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c m = getT $ Map.lookup c m

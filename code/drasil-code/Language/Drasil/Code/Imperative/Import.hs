@@ -22,7 +22,7 @@ import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
+import Data.Maybe (fromMaybe, maybe)
 import Control.Lens ((^.))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -303,7 +303,7 @@ genModule :: Name
                -> Reader State Module
 genModule n maybeMs maybeCs = do
   g <- ask
-  let ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
+  let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
@@ -359,7 +359,7 @@ loggedAssign a b =
 -- helpers
 
 nopfx :: String -> String
-nopfx s = maybe s id (stripPrefix funcPrefix s)
+nopfx s = fromMaybe s (stripPrefix funcPrefix s)
 
 variable :: String -> Reader State Value
 variable s' = do

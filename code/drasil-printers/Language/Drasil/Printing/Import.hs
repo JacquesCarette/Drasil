@@ -12,6 +12,7 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   Notation(Scientific, Engineering))
 
+import Data.Maybe (fromMaybe)
 import Numeric (floatToDigits)
 import Data.Tuple(fst, snd)
 -- | Render a Space
@@ -157,7 +158,8 @@ lookupT :: HasTermTable s => s -> UID -> Sentence
 lookupT sm c = phraseNP $ (termLookup c (sm^.termTable)) ^. term
 
 lookupS :: HasTermTable s => s -> UID -> Sentence
-lookupS sm c = maybe (phraseNP $ (termLookup c (sm^.termTable)) ^. term) id (fmap S $ getA $ termLookup c (sm^.termTable))
+lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
+  where l = termLookup c $ sm ^. termTable
 
 lookupP :: HasTermTable s => s -> UID -> Sentence
 lookupP sm c =  pluralNP $ (termLookup c (sm^.termTable)) ^. term
@@ -294,7 +296,8 @@ spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
 renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
+  getA . defLookup u $ ctx ^. defTable
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

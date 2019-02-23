@@ -24,14 +24,16 @@ import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
 import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
 import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, vcat, hcat, punctuate,
   brackets, int, char, quotes, double, integer, equals, empty)
 
 goolConfig :: Options -> Config -> Config
 goolConfig options c = 
-    let hsMod = case (hsModule options) of Nothing -> error "GOOLRenderer: The GOOLHsModule option must be specified in the Configuration file when generating GOOL code."
-                                           Just hsMod' -> hsMod'
+    let hsMod = fromMaybe (error "GOOLRenderer: The GOOLHsModule option must be " ++
+          "specified in the Configuration file when generating GOOL code.") $
+          hsModule options
     in Config {
         renderCode = renderCode' c,
         

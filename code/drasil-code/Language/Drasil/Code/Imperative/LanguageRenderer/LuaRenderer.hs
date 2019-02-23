@@ -29,6 +29,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 
 import Prelude hiding (break,print,return,(<>))
+import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, comma, empty, (<>), (<+>), parens, colon,
   vcat, equals, rbrace, lbrace, brackets, braces, render, quotes)
 
@@ -232,8 +233,7 @@ classDoc' c _ _ (Enum n _ es) = vcat [
 classDoc' c f _ (Class n p _ _ fs) = vcat [ 
     text n <+> equals <+> inherit c <> parens (text baseClass),
     methodListDoc c f n fs]
-    where baseClass = case p of Just pn -> pn
-                                Nothing -> "nil"
+    where baseClass = fromMaybe "nil" p
 classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 
 objAccessDoc' :: Config -> Value -> Function -> Doc

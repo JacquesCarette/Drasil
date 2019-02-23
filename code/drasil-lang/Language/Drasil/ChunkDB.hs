@@ -15,7 +15,7 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, fromMaybe)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
@@ -280,5 +280,4 @@ generateRefbyMap :: TraceMap  -> RefbyMap
 generateRefbyMap tm = invert $ Map.map fst tm
 
 refbyLookup :: UID -> RefbyMap -> [UID]
-refbyLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] id
+refbyLookup c m = fromMaybe [] $ Map.lookup c m

@@ -21,14 +21,15 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt)
+import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  design, document, effect, element, endUser, environment, goalStmt, inModel, 
-  input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable, physSyst, doccon,
-  doccon')
+  definition, design, document, effect, element, endUser, environment, goal,
+  goalStmt, information, inModel, input_, interest, interest, interface, issue,
+  loss, method_, model, organization, physics, problem, product_, property,
+  purpose, requirement, software, softwareSys, srs, srsDomains, sysCont, system,
+  systemConstraint, table_, template, thModel, user, value, variable, physSyst,
+  doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
@@ -42,8 +43,9 @@ import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
-  foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
+import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
+  FoldType(List), foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOf, sOr,
+  foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
@@ -53,8 +55,8 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp, sspdef,
-  sspdef')
+  morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil, soilLyr, ssa,
+  ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -234,47 +236,46 @@ table_of_symbol_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 -- SECTION 2 --
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
-  phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
-  S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
-  phrase slope, S "this can cause instability in the form" +:+.
-  S "of soil/rock movement", S "The", plural effect,
-  S "of soil/rock movement can range from inconvenient to",
+  phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
+  S "water, is subject to the influence of gravity on the" +:+. phrase mass,
+  S "This can cause instability in the form of", phrase soil, S "or rock" +:+.
+  S "movement", S "The", plural effect, S "of", phrase soil,
+  S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in signifcant life and economic" +:+.
   plural loss, at_start slope, S "stability is of", phrase interest,
-  S "both when analyzing natural", plural slope `sC`
+  S "both when analysing natural", plural slope `sC`
   S "and when designing an excavated" +:+.  phrase slope, at_start ssa,
   S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
-  S "most likely to experience slip" `sAnd`
+  S "most likely to experience", phrase slip `sAnd`
   S "an index of its relative stability known as the", phrase fs]
 
-kSent = keySent ssa
+kSent = keySent ssa ssp
 
-keySent :: (Idea a) => a -> Sentence
-keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
+keySent :: (Idea a) => a -> a -> Sentence
+keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb pname, phrase program]
+  introduceAbb ssp]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
 prpsOfDoc_p1 :: Sentence
-prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
-  where how = S "assessing the stability of a" +:+ phrase slope +:+
-          phrase design
-        introduces = phrase slope +:+ S "stability" +:+ plural issue
-        analysizes = S "safe" +:+ phrase slope
+prpsOfDoc_p1 = purposeDoc ssp
 
-purposeDoc :: (Idea a, NamedIdea b, NamedIdea c) =>
-              a -> b -> c -> Sentence -> Sentence -> Sentence
-              -> Sentence
-purposeDoc pname what calculates how introduces analysizes =
-  foldlSent [S "The", short pname, phrase program,
-  S "determines the", phrase what `sC` S "and its respective",
-  phrase calculates, S "as a", phrase method_,
-  S "of" +:+. how, S "The", phrase program,
-  S "is intended to be used as an educational tool for",
-  S "introducing", introduces `sC` S "and will facilitate the",
-  phrase analysis `sAnd` phrase design, S "of a", analysizes]
+purposeDoc :: (Idea a) => a -> Sentence
+purposeDoc pname =
+  foldlSent [S "The primary purpose of this", phrase document, S "is to",
+  S "record the", plural requirement `sOf` short pname `andThe` plural model,
+  S "that will be used to meet those" +:+. plural requirement, 
+  at_start' goal `sC` plural assumption `sC` plural thModel `sC` 
+  plural definition `sC` S "and other", phrase model, S "derivation",
+  phrase information, S "are specified" `sC` S "allowing the reader to fully",
+  S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
+  S "basis of" +:+. short pname, S "With the exception of", 
+  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
+  short srs, S "will remain abstract, describing what", phrase problem,
+  S "is being solved, but not how to solve it"] 
+  --FIXME: Last sentence is also present in GlassBR, SWHS and NoPCM... pull out?
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
@@ -369,7 +370,12 @@ userChar pname understandings familiarities = foldlSP [
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
-          phrase crtSlpSrf, S "of the", phrase slope]
+          phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
+          phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+          S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
+          S "used as an educational tool for introducing", phrase slope,
+          S "stability", plural issue `sC` S "and to facilitate the",
+          phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
 
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]

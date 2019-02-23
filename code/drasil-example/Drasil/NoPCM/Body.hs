@@ -57,7 +57,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (newA11, newA12, newAssumptions)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
+  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing,
   swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
@@ -96,6 +96,9 @@ nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
+
+resourcePath :: String
+resourcePath = "../../../datafiles/NoPCM/"
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -168,7 +171,7 @@ mkSRS = RefSec (RefProg intro
   UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
+  (map UlC traceIntro2)) []) :
   map Verbatim [specParamVal] ++ (Bibliography : [])
 
 nopcm_label :: TraceMap
@@ -379,7 +382,7 @@ physSystDescription = physSystDesc (getAcc progName) fig_tank
 fig_tank :: LabelledContent
 fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
-  "TankWaterOnly.png"
+  $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_

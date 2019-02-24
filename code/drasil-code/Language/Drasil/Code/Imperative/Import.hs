@@ -408,15 +408,15 @@ getArgs cs = do
 
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
-paramType (FuncParam _ _ _) = error "Function param not implemented"
+paramType FuncParam{} = error "Function param not implemented"
 
 paramVal :: Parameter -> Value
 paramVal (StateParam l _) = var l
-paramVal (FuncParam _ _ _) = error "Function param not implemented"
+paramVal FuncParam{} = error "Function param not implemented"
 
 paramName :: Parameter -> String
 paramName (StateParam l _) = l
-paramName (FuncParam _ _ _) = error "Function param not implemented"
+paramName FuncParam{} = error "Function param not implemented"
 
 valName :: Value -> String
 valName (Lit (LitBool b)) = show b
@@ -447,7 +447,7 @@ convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ mapM convExpr l
 convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ mapM convExpr l
 convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ mapM convExpr l
 convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ mapM convExpr l
-convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
+convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
   variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
@@ -456,7 +456,7 @@ convExpr  (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
-convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
@@ -466,9 +466,9 @@ convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
-convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (Operator _ _ _) = error "convExpr: Operator"
-convExpr (IsIn _ _)    = error "convExpr: IsIn"
+convExpr Matrix{}    = error "convExpr: Matrix"
+convExpr Operator{} = error "convExpr: Operator"
+convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri

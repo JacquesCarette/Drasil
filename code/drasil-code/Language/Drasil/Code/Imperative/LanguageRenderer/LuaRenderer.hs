@@ -218,7 +218,7 @@ iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (Binar
         forLabel <+> text i <+> equals <+> valueDoc c initv <> comma <> parens (valueDoc c (finalv #- litInt 1)) <> step <+> blockStart c,
         oneTab $ bodyDoc c b,
         blockEnd c]
-iterationDoc' _ (For _ _ _ _) = error "Lua: Generic form of For statement not yet implemented. Use an integer index and a Less conditional, or replace with a ForEach."
+iterationDoc' _ For{} = error "Lua: Generic form of For statement not yet implemented. Use an integer index and a Less conditional, or replace with a ForEach."
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
     iterForEachLabel c <+> text (keyLabel i) <> comma <> text i <+> iterInLabel c <+> funcAppDoc c "ipairs" [listVar] <+> blockStart c,
     oneTab $ bodyDoc c b,

@@ -362,8 +362,8 @@ litDocD (LitStr v) = doubleQuotedText v
 
 clsDecDocD :: Config -> Class -> Doc
 clsDecDocD c (Class n _ _ _ _) = (clsDec c) <+> text n <> endStatement c
-clsDecDocD _ (Enum _ _ _) = empty
-clsDecDocD c m@(MainClass _ _ _) = clsDecDoc c $ convertToClass m
+clsDecDocD _ Enum{} = empty
+clsDecDocD c m@MainClass{} = clsDecDoc c $ convertToClass m
 
 clsDecListDocD :: Config -> [Class] -> Doc
 clsDecListDocD c = vmap $ clsDecDoc c
@@ -382,7 +382,7 @@ classDocD c ft _ (Class n p s vs fs) = vcat [
     rbrace]
     where baseClass = case p of Nothing -> empty
                                 Just pn -> inherit c <+> text pn
-classDocD c ft m mod@(MainClass _ _ _) = classDoc c ft m $ convertToClass mod
+classDocD c ft m mod@MainClass{} = classDoc c ft m $ convertToClass mod
 
 -- for 'packages' which are namespaces
 namespaceD :: Label -> Doc
@@ -402,7 +402,7 @@ objVarDocD c v1 v2 = valueDoc c v1 <> dot <> valueDoc c v2
 
 paramDocD :: Config -> Parameter -> Doc
 paramDocD c (StateParam n t) = stateType c t Dec <+> text n
-paramDocD _ (FuncParam _ _ _) = error "FuncParam not yet rendered"
+paramDocD _ FuncParam{} = error "FuncParam not yet rendered"
 
 paramListDocD :: Config -> [Parameter] -> Doc
 paramListDocD c ps = himap (text ", ") (paramDoc c) ps

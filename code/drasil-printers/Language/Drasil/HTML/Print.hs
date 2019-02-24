@@ -75,7 +75,7 @@ printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
 printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
   makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
-printLO (Graph _ _ _ _ _)      = empty -- FIXME
+printLO Graph{}                = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
@@ -120,7 +120,7 @@ symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
 symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (L.Corners _ _ _ _ _)      = error "rendering of L.Corners (general)"
+symbol L.Corners{}                = error "rendering of L.Corners (general)"
 symbol (L.Atop L.Vector s)        = "<b>" ++ symbol s ++ "</b>"
 symbol (L.Atop L.Hat s)           = symbol s ++ "&#770;"
 symbol (L.Atop L.Prime s)         = symbol s ++ "&prime;"

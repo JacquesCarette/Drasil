@@ -13,7 +13,6 @@
 - ignore: {name: "Use newtype instead of data"}
 - ignore: {name: "Redundant bracket"}
 - ignore: {name: "Use list literal pattern"}
-- ignore: {name: "Use record patterns"}
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Use infix"}
 - ignore: {name: "Redundant $"}

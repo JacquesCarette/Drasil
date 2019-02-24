@@ -180,7 +180,7 @@ expr' s p e = fence $ expr e s
 neg' :: Expr -> Bool
 neg' (Dbl     _)          = True
 neg' (Int     _)          = True
-neg' (Operator _ _ _)     = True
+neg' Operator{}           = True
 neg' (AssocA Mul _)       = True
 neg' (BinaryOp Index _ _) = True
 neg' (UnaryOp _ _)        = True
@@ -236,7 +236,7 @@ symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
 symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol Corners{}                = error "rendering of Corners (general)"
 symbol (Atop f s) = sFormat f s
 symbol (Empty)    = P.Row []
 

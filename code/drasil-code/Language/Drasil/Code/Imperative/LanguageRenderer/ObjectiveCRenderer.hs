@@ -216,7 +216,7 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     text "typedef" <+> text "enum" <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <+> text n <> endStatement c]
-classDoc' _ (Source) _ (Enum _ _ _) = empty
+classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
         privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
@@ -247,7 +247,7 @@ classDoc' c ft@(Source) _ (Class n _ _ vs fs) =
         methodListDoc c ft n $ addDefaultCtor c n sagaInit funcs,
         text "@end"
     ]
-classDoc' _ (Header) _ (MainClass _ _ _) = empty
+classDoc' _ (Header) _ MainClass{} = empty
 classDoc' c ft _ (MainClass n vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
@@ -267,7 +267,7 @@ objAccessDoc' c v f = brackets (valueDoc c v <> funcDoc c f)
 
 paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t) = parens (stateType c t Dec) <+> text n
-paramDoc' c p@(FuncParam _ _ _) = paramDocD c p
+paramDoc' c p@FuncParam{} = paramDocD c p
 
 paramListDoc' :: Config -> [Parameter] -> Doc
 paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps

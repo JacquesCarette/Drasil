@@ -209,7 +209,7 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     text "enum" <+> text n <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <> endStatement c]
-classDoc' _ (Source) _ (Enum _ _ _) = empty
+classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let makeTransforms = map convertToMethod
         funcs = fs ++ [destructor c n vs]
@@ -237,7 +237,7 @@ classDoc' c ft@(Header) _ (Class n p _ vs fs) =
                 methodListDoc c ft n privFuncs]],
         rbrace <> endStatement c]
 classDoc' c ft@(Source) _ (Class n _ _ vs fs) = methodListDoc c ft n $ fs ++ [destructor c n vs]
-classDoc' _ (Header) _ (MainClass _ _ _) = empty
+classDoc' _ (Header) _ MainClass{} = empty
 classDoc' c ft _ (MainClass _ vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,

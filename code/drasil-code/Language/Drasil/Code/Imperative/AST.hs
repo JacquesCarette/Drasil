@@ -769,7 +769,7 @@ setterName s = "Set" ++ capitalize s
 
 convertToClass :: Class -> Class
 convertToClass (MainClass n vs fs) = Class n Nothing Public vs fs
-convertToClass (Enum _ _ _) = error "convertToClass: Cannot convert Enum-type Class to Class-type Class"
+convertToClass Enum{} = error "convertToClass: Cannot convert Enum-type Class to Class-type Class"
 convertToClass c = c
 
 convertToMethod :: Method -> Method

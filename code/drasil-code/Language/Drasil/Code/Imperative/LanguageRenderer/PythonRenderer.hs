@@ -203,7 +203,7 @@ classDoc' c f _ m = vcat [
     oneTab $ modInnerDoc]
     where modInnerDoc = case m of (Class n _ _ _ fs) -> methodListDoc c f n fs
                                   (Enum _ _ es) -> enumElementsDoc c es
-                                  (MainClass _ _ _) -> error "unreachable"
+                                  MainClass{} -> error "unreachable"
           baseClass = case m of (Class _ p _ _ _) -> case p of Nothing -> empty
                                                                Just pn -> parens (text pn)
                                 _ -> empty

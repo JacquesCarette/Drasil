@@ -11,14 +11,14 @@ egetDocDesc d = concatMap egetDocSec d
 egetDocSec :: DocSection -> [Expr]
 egetDocSec (Verbatim a)         = egetSec a
 egetDocSec (RefSec r)           = egetRefSec r
-egetDocSec (IntroSec _)         = []
+egetDocSec IntroSec{}           = []
 egetDocSec (StkhldrSec s)       = egetStk s
 egetDocSec (GSDSec g)           = egetGSD g
 egetDocSec (ScpOfProjSec s)     = egetScp s
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec (ReqrmntSec r)       = egetReq r
 egetDocSec (LCsSec l)           = egetLcs l
-egetDocSec (LCsSec' _)          = [] -- likely changes can't lead to Expr?
+egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
@@ -86,18 +86,18 @@ egetExist (ExistSolnVerb s) = egetSec s
 egetExist (ExistSolnProg c) = concatMap egetCon' c
 
 egetRefProg :: RefTab -> [Expr]
-egetRefProg (TUnits) = []
-egetRefProg (TUnits' _) = []
-egetRefProg (TSymb _)   = []
+egetRefProg TUnits       = []
+egetRefProg TUnits'{}    = []
+egetRefProg TSymb{}      = []
 egetRefProg (TSymb' l _) = egetFunc l
-egetRefProg (TAandA) = []
+egetRefProg TAandA       = []
 
 egetStk :: StkhldrSec -> [Expr]
-egetStk (StkhldrProg _ _) = []
+egetStk StkhldrProg{}     = []
 egetStk (StkhldrProg2 s)  = concatMap egetStkSub s
 
 egetStkSub :: StkhldrSub -> [Expr]
-egetStkSub (_) = []
+egetStkSub _ = []
 
 egetGSDSub :: GSDSub -> [Expr]
 egetGSDSub (SysCntxt c)   = concatMap egetCon' c
@@ -111,14 +111,14 @@ egetSSDSub (SSDSolChSpec s) = egetSol s
 
 egetReqSub :: ReqsSub -> [Expr]
 egetReqSub (FReqsSub c) = concatMap egetCon' c
-egetReqSub (_) = []
+egetReqSub NonFReqsSub{} = []
 
 egetFunc :: LFunc -> [Expr]
-egetFunc (Term) = []
-egetFunc (Defn) = []
-egetFunc (TermExcept _) = []
-egetFunc (DefnExcept _) = []
-egetFunc (TAD) = []
+egetFunc Term         = []
+egetFunc Defn         = []
+egetFunc TermExcept{} = []
+egetFunc DefnExcept{} = []
+egetFunc TAD          = []
 
 egetProblem :: ProblemDescription -> [Expr]
 egetProblem (PDProg _ _ _ s) = concatMap egetSec s
@@ -127,7 +127,7 @@ egetSol :: SolChSpec -> [Expr]
 egetSol (SCSProg s) = concatMap egetSCSSub s
 
 egetSCSSub :: SCSSub -> [Expr]
-egetSCSSub (Assumptions) = []
+egetSCSSub Assumptions  = []
 egetSCSSub (TMs _ x)    = concatMap egetTM x
 egetSCSSub (GDs _ x _)  = concatMap egetGD x
 egetSCSSub (DDs _ x _)  = concatMap egetDD x
@@ -166,7 +166,7 @@ getDocSec (LCsSec' l)          = getLcs' l
 getDocSec (UCsSec u)           = getUcs u
 getDocSec (TraceabilitySec t)  = getTrace t
 getDocSec (AuxConstntSec a)    = getAux a
-getDocSec (Bibliography)       = []
+getDocSec Bibliography         = []
 getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
 
@@ -183,15 +183,15 @@ getCon' c = getCon (c ^. accessContents)
 getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
-getCon (EqnBlock _)      = []
+getCon EqnBlock{}          = []
 getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _)    = [l]
-getCon (Assumption _ b)  = [b]
+getCon (Figure l _ _)      = [l]
+getCon (Assumption _ b)    = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
-getCon (Defini _ []) = []
+getCon Graph{}             = []
+getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
-getCon  _ = []
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
@@ -207,17 +207,26 @@ getBib a = map getField $ concatMap (^. getFields) a
 
 getField :: CiteField -> Sentence
 getField (Address s) = S s
+getField Author{} = EmptyS
 getField (BookTitle s) = S s
+getField Chapter{} = EmptyS
+getField Edition{} = EmptyS
+getField Editor{} = EmptyS
+getField HowPublished{} = EmptyS
 getField (Institution s) = S s
 getField (Journal s) = S s
+getField Month{} = EmptyS
 getField (Note s) = S s
+getField Number{} = EmptyS
 getField (Organization s) = S s
+getField Pages{} = EmptyS
 getField (Publisher s) = S s
 getField (School s) = S s
 getField (Series s) = S s
 getField (Title s) = S s
 getField (Type s) = S s
-getField _ = EmptyS
+getField Volume{} = EmptyS
+getField Year{} = EmptyS
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it
@@ -237,28 +246,32 @@ getRefSec :: RefSec -> [Sentence]
 getRefSec (RefProg c r) = getCon' c ++ concatMap getReftab r
 
 getReftab :: RefTab -> [Sentence]
-getReftab (TUnits) = []
+getReftab TUnits = []
 getReftab (TUnits' tu) = concatMap getTuIntro tu
 getReftab (TSymb ts) = concatMap getTsIntro ts
 getReftab (TSymb' lf ts) = getLFunc lf ++ concatMap getTsIntro ts
-getReftab (TAandA) = []
+getReftab TAandA = []
 
 getTuIntro :: TUIntro -> [Sentence]
-getTuIntro (_) = []
+getTuIntro System    = []
+getTuIntro Derived   = []
+getTuIntro TUPurpose = []
 
 getTsIntro :: TSIntro -> [Sentence]
 getTsIntro (TypogConvention tc) = concatMap getTConv tc
-getTsIntro (_) = []
+getTsIntro SymbOrder            = []
+getTsIntro SymbConvention{}     = []
+getTsIntro TSPurpose            = []
 
 getLFunc :: LFunc -> [Sentence]
-getLFunc (Term) = []
-getLFunc (Defn) = []
+getLFunc Term = []
+getLFunc Defn = []
 getLFunc (TermExcept x) = map (^. defn) x
 getLFunc (DefnExcept x) = map (^. defn) x
-getLFunc (TAD)  = []
+getLFunc TAD  = []
 
 getTConv :: TConvention -> [Sentence]
-getTConv (Vector _) = []
+getTConv Vector{} = []
 getTConv (Verb s) = [s]
 
 getIntrosec :: IntroSec -> [Sentence]
@@ -276,7 +289,7 @@ getStk (StkhldrProg2 t) = concatMap getStkSub t
 
 getStkSub :: StkhldrSub -> [Sentence]
 getStkSub (Client _ s) = [s]
-getStkSub (Cstmr _)    = []
+getStkSub Cstmr{}      = []
 
 getGSD :: GSDSec -> [Sentence]
 getGSD (GSDProg sc c cl sc1) = concatMap getSec sc ++ getCon' c
@@ -306,7 +319,7 @@ getSol :: SolChSpec -> [Sentence]
 getSol (SCSProg x) = concatMap getSCSSub x
 
 getSCSSub :: SCSSub -> [Sentence]
-getSCSSub (Assumptions) = []
+getSCSSub Assumptions  = []
 getSCSSub (TMs _ x)    = concatMap getTM x
 getSCSSub (GDs _ x _)  = concatMap getGD x
 getSCSSub (DDs _ x _)  = concatMap getDD x
@@ -351,7 +364,7 @@ getTrace (TraceabilityProg lc s c x) = (concatMap getCon (map (^. accessContents
   ++ s ++ concatMap getCon' c ++ concatMap getSec x
 
 getAux :: AuxConstntSec -> [Sentence]
-getAux (AuxConsProg _ _) = []
+getAux AuxConsProg{} = []
 
 getApp :: AppndxSec -> [Sentence]
 getApp (AppndxProg c) = concatMap getCon' c
@@ -364,30 +377,30 @@ ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec (Verbatim        _)     = []
-ciGetDocSec (RefSec          _)     = []
+ciGetDocSec Verbatim{}              = []
+ciGetDocSec RefSec{}                = []
 ciGetDocSec (IntroSec        intro) = ciGetIntro intro
 ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
-ciGetDocSec (GSDSec          _)     = []
-ciGetDocSec (ScpOfProjSec    _)     = []
+ciGetDocSec GSDSec{}                = []
+ciGetDocSec ScpOfProjSec{}          = []
 ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
-ciGetDocSec (ReqrmntSec      _)     = []
-ciGetDocSec (LCsSec          _)     = []
-ciGetDocSec (LCsSec'         _)     = []
-ciGetDocSec (UCsSec          _)     = []
-ciGetDocSec (TraceabilitySec _)     = []
+ciGetDocSec ReqrmntSec{}            = []
+ciGetDocSec LCsSec{}                = []
+ciGetDocSec LCsSec'{}               = []
+ciGetDocSec UCsSec{}                = []
+ciGetDocSec TraceabilitySec{}       = []
 ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
-ciGetDocSec (Bibliography)          = []
-ciGetDocSec (AppndxSec       _)     = []
-ciGetDocSec (ExistingSolnSec _)     = []
+ciGetDocSec Bibliography            = []
+ciGetDocSec AppndxSec{}             = []
+ciGetDocSec ExistingSolnSec{}       = []
 
 ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
 
 ciGetIntroSub :: IntroSub -> [CI]
-ciGetIntroSub (IPurpose _)        = []
-ciGetIntroSub (IScope   _ _)      = []
-ciGetIntroSub (IChar    _ _ _ _)  = []
+ciGetIntroSub IPurpose{}          = []
+ciGetIntroSub IScope{}            = []
+ciGetIntroSub IChar{}             = []
 ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
 
 ciGetStk :: StkhldrSec -> [CI]
@@ -402,25 +415,12 @@ ciGetSSD :: SSDSec -> [CI]
 ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
 
 ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub (SSDSubVerb _)   = []
-ciGetSSDSub (SSDProblem pd)  = ciGetProbDesc pd
-ciGetSSDSub (SSDSolChSpec _) = []
+ciGetSSDSub SSDSubVerb{}   = []
+ciGetSSDSub (SSDProblem pd) = ciGetProbDesc pd
+ciGetSSDSub SSDSolChSpec{} = []
 
 ciGetProbDesc :: ProblemDescription -> [CI]
 ciGetProbDesc (PDProg _ ci _ _) = [ci]
 
 ciGetAux :: AuxConstntSec -> [CI]
 ciGetAux (AuxConsProg ci _) = [ci]
-
-
-
-
-
-
-
-
-
-
-
-
-

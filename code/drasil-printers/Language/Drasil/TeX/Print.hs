@@ -92,7 +92,7 @@ symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
 symbol (L.Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (L.Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol L.Corners{}                = error "rendering of Corners (general)"
 symbol (L.Atop f s) = sFormat f s
 symbol (L.Empty)    = ""
 
@@ -251,7 +251,7 @@ needs (E _)            = Math
 needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
-needs (Ref _ _ _)      = Text
+needs Ref{}            = Text
 needs (EmptyS)         = Text
 needs (Quote _)        = Text
 
@@ -282,7 +282,7 @@ symbol_needs (L.Atomic _)          = Text
 symbol_needs (L.Special _)         = Math
 symbol_needs (L.Concat [])         = Math
 symbol_needs (L.Concat (s:_))      = symbol_needs s
-symbol_needs (L.Corners _ _ _ _ _) = Math
+symbol_needs L.Corners{}           = Math
 symbol_needs (L.Atop _ _)          = Math
 symbol_needs L.Empty               = Curr
 

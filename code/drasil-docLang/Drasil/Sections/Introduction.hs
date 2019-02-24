@@ -39,7 +39,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
   [(phrase scope, phrase system), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])

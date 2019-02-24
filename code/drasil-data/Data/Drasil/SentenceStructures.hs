@@ -61,7 +61,7 @@ data FoldType = List | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  wt len = map (wrap wt . S . show) [1..len]

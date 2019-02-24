@@ -12,7 +12,6 @@
 - ignore: {name: "Eta reduce"}
 - ignore: {name: "Use newtype instead of data"}
 - ignore: {name: "Redundant bracket"}
-- ignore: {name: "Use uncurry"}
 - ignore: {name: "Use list literal pattern"}
 - ignore: {name: "Use record patterns"}
 - ignore: {name: "Avoid lambda using `infix`"}

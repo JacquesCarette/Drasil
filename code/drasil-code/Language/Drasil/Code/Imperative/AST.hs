@@ -593,7 +593,7 @@ param :: Label -> StateType -> Parameter
 param = StateParam
 
 params :: [(Label, StateType)] -> [Parameter]
-params = map (\(l,st) -> StateParam l st)
+params = map (uncurry StateParam)
 
 paramToVar :: Parameter -> Value
 paramToVar (StateParam l _) = var l

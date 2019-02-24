@@ -443,7 +443,7 @@ fig_forceacting = llcc (makeFigRef "ForceDiagram") $
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
+goal_stmt = goalStmtF (map (uncurry ofThe) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")

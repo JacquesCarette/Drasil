@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The logic to render Objective-C code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (
     -- * Objective-C Code Configuration -- defines syntax of all Objective-C code
@@ -255,7 +256,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _ _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (var i ?< size) ((&.++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (var i ?< size) (i &.++) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)

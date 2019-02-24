@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
@@ -549,7 +550,7 @@ convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
-  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((&++) (var (codeName v)))
+  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((var (codeName v)) &++)
                [ block stmts ]
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
@@ -602,12 +603,12 @@ genDataFunc nameTitle dd = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) ((&++) v_i)
+              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) (v_i &++)
                 ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ lnV))
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
+          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) (v_i &++)
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
@@ -620,12 +621,12 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) ((&++) v_j)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) (v_j &++)
               ( body pat )
             ]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) (v_j &++)
               ( body pat )
             ]
         ---------------

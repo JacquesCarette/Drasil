@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
     -- * Some Neccessary Data Types for Rendering
@@ -424,7 +425,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) ((&.++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) (index &.++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0

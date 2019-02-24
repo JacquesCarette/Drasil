@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The logic to render C++ code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     -- * C++ Code Configuration -- defines syntax of all C++ code
@@ -396,7 +397,7 @@ destructor _ n vs =
         guard l = var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) (i &.++) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ var lbl
         deleteStatements = map deleteVar deleteVars

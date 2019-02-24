@@ -15,6 +15,6 @@ table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> Label
 table st ls f = llcc (makeTabRef "ToS") 
   $ Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
-  (mkTable [P . (flip symbol st), f, toSentence]
+  (mkTable [P . (`symbol` st), f, toSentence]
   (filter (\q -> hasStageSymbol q st) ls))  
   (titleize tOfSymb) False

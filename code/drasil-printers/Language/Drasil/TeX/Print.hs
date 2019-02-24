@@ -79,7 +79,7 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
 
 print :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [LayoutObj] -> D
-print sm l = foldr ($+$) empty $ map (flip lo sm) l
+print sm l = foldr ($+$) empty $ map (`lo` sm) l
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
@@ -352,9 +352,9 @@ makeDRows :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (flip lo sm) d)
+  (vcat $ map (`lo` sm) d)
 makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (flip lo sm) d)
+  (vcat $ map (`lo` sm) d)
                        %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs

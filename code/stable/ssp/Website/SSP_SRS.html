@@ -916,10 +916,10 @@ Typical Uncertainty
 Introduction
 </h1>
 <p class="paragraph">
-A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
+A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 </p>
 <p class="paragraph">
-The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 </p>
 <div id="Sec:DocPurpose">
 <div class="subsection">
@@ -927,7 +927,7 @@ The following section provides an overview of the Software Requirements Specific
 Purpose of Document
 </h2>
 <p class="paragraph">
-The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
+The primary purpose of this document is to record the requirements of SSP and the models that will be used to meet those requirements. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in <a href=#Sec:SysConstraints>Section: System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 </p>
 <p class="paragraph">
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
@@ -950,7 +950,7 @@ The scope of the requirements includes stability analysis of a Two-Dimensional (
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. An understanding of soil mechanics would be an asset. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -1067,7 +1067,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope.
+SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">

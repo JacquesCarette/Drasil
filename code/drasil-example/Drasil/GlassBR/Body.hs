@@ -153,7 +153,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       (short gLassBR)
     [IPurpose (purpOfDocIntro document gLassBR glaSlab),
      IScope incScoR endScoR,
-     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
+     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR EmptyS,
      IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
   StkhldrSec
     (StkhldrProg2
@@ -332,7 +332,7 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
   S "The", short srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved" `sC` S "but not how to solve it"]
-  --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
+  --FIXME: Last sentence is also present in SSP, SWHS and NoPCM... pull out?
 
 {--Scope of Requirements--}
 

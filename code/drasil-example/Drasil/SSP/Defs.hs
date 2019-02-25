@@ -6,6 +6,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD)
+import Data.Drasil.Concepts.Education (mechanics)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
 import Data.Drasil.IdeaDicts hiding (dataDefn)
@@ -17,11 +18,11 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
 
 ssa, ssp :: CI
 ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
-ssp = commonIdeaWithDict "ssp" (cn' "slope stability problem") "SSP"   [civilEng]
+ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
 sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
-  slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr]
+  slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
 
 sspdef' :: [ConceptChunk]
 sspdef' = [crtSlpSrf, plnStrn, fs_concept]
@@ -48,6 +49,7 @@ mtrlPrpty = compoundNC material property
 itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
+soilMechanics = compoundNC soil mechanics
 
 crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though

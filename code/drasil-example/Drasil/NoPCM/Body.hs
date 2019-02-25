@@ -143,7 +143,7 @@ mkSRS = RefSec (RefProg intro
   [IPurpose (purpDoc progName),
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
     water),
-  IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS,
+  IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS EmptyS,
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) (orgDocEnd inModel M.ode progName)]) :
   Verbatim genSystDesc:
   SSDSec 

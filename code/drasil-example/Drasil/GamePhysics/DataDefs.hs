@@ -218,7 +218,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "impulse"
+chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "chalses"
   [chaslesThmDesc]
 
 chasles :: QDefinition

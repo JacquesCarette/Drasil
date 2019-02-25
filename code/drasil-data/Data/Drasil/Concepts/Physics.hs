@@ -143,4 +143,4 @@ angular = dcc "angular" (cn' "angular")
 damping = dcc "damping" (cn' "damping")
   "An effect that tends to reduce the amplitude of vibrations"
 
-twoD = commonIdeaWithDict "twoD" (cn "two-dimensional") "2D" [physics]
+twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]

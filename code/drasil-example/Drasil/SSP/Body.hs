@@ -55,16 +55,9 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
-<<<<<<< HEAD
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
-  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil,
-  soilPrpty, ssa, ssp, sspdef, sspdef')
-=======
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil, soilLyr, 
-  soilMechanics, ssa, ssp, sspdef,
-  sspdef')
->>>>>>> master
+  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
+  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)

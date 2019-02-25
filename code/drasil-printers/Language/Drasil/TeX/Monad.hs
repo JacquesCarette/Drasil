@@ -27,7 +27,7 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- Curr is when the current context is fine
 data MathContext = Text | Math | Curr deriving Eq
 
-data PrintLaTeX a = PL { runPrint :: MathContext -> a }
+newtype PrintLaTeX a = PL { runPrint :: MathContext -> a }
 
 instance Functor PrintLaTeX where
   fmap f (PL ca) = PL $ \ctx -> f (ca ctx)
@@ -108,7 +108,7 @@ lub _    _    = Text -- Text is top-most
 
 -----------------
 -- Hacked up version, will get deleted
-data Latex = L { unPL :: String }
+newtype Latex = L { unPL :: String }
 
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"

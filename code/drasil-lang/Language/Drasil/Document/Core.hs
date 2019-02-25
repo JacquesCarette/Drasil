@@ -71,7 +71,7 @@ data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
-data UnlabelledContent = UnlblC { _cntnts :: RawContent }
+newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent
 makeLenses ''UnlabelledContent

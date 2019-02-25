@@ -233,12 +233,12 @@ methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ _ (Construct _) ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab $ bodyDoc c b]
-        where oneParam | not $ null ps       = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
 methodDoc' c _ _ (Method n _ _ _ ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab bodyD]
-        where oneParam | not $ null ps       = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
               bodyD | null b    = text "None"
                     | otherwise = bodyDoc c b

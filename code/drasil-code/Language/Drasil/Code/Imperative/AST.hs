@@ -58,7 +58,7 @@ type Label = String
 type Library = Label
 
 type Body = [Block]
-data Block = Block [Statement] deriving Show
+newtype Block = Block [Statement] deriving Show
 data Statement = AssignState Assignment | DeclState Declaration
                | CondState Conditional | IterState Iteration | JumpState Jump
                | RetState Return
@@ -126,7 +126,7 @@ data Exception = Throw {excMsg :: String}
                  deriving Show
 --This is only guaranteed to catch Exceptions explicitly thrown in the AbstractCode (i.e. with a Throw String), but in some languages might also catch errors thrown at different levels (e.g. index out of bounds).
 data Jump = Break | Continue deriving Show
-data Return = Ret Value deriving Show
+newtype Return = Ret Value deriving Show
 data Value = EnumElement Label Label    --EnumElement enumName elementName
            | Expr Expression
            | FuncApp (Maybe Library) Label [Value]
@@ -218,7 +218,7 @@ type FunctionDecl = Method
 type VarDecl = Declaration
 data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
-data AbstractCode = AbsCode Package
+newtype AbstractCode = AbsCode Package
 
 ---------------------------
 -- Convenience Functions --

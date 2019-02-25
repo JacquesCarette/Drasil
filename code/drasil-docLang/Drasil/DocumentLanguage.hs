@@ -166,7 +166,7 @@ data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
 {--}
 
 -- | Specific System Description section . Contains a list of subsections.
-data SSDSec = SSDProg [SSDSub]
+newtype SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
@@ -196,7 +196,7 @@ data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
 
-data ReqrmntSec = ReqsProg [ReqsSub]
+newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
@@ -204,12 +204,12 @@ data ReqsSub where
 
 {--}
 
-data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
-data LCsSec' = LCsProg' [ConceptInstance]
+newtype LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+newtype LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
-data UCsSec = UCsProg [Contents]
+newtype UCsSec = UCsProg [Contents]
 
 {--}
 
@@ -227,7 +227,7 @@ data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
-data AppndxSec = AppndxProg [Contents]
+newtype AppndxSec = AppndxProg [Contents]
 
 {--}
 

@@ -757,7 +757,7 @@ genDataFunc nameTitle dd = do
           return [block [a]]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [block [
+          return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [block [
             valState $ (indexData indx lineNo patNo vv) $. 
             (listSet (getIndex indx lineNo patNo) $ 
             getCastFunc (getListType (codeType v) (toInteger $ length indx))
@@ -781,24 +781,23 @@ genDataFunc nameTitle dd = do
         getIndex [WithPattern] _ p = p
         getIndex (x:xs) l p = getIndex xs l p
         ---------------
-        checkIndex :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
+        checkIndex :: (RenderSym repr) => [Ind] -> Integer-> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr)) -> C.CodeType ->
           [repr (Block repr)]
-        checkIndex indx l p v s = checkIndex' indx len l p v (listBase s)
-          where len = toInteger $ length indx
-        checkIndex' [] _ _ _ _ _ = []
-        checkIndex' ((Explicit i):is) n l p v s =
-          [ while (listSizeAccess v ?<= (litInt i)) ( bodyStatements [ valState $
-          v $.(getListExtend s) ] ) ]
-          ++ checkIndex' is (n-1) l p (v $.(listAccess $ litInt i)) s
-        checkIndex' ((WithLine):is) n l p v s =
+        checkIndex [] _ _ _ _ _ = []
+        checkIndex ((Explicit i):is) n l p v s =
+          [ while (listSizeAccess v ?<= (litInt i)) ( bodyStatements [ 
+            valState $
+            v $.(getListExtend (getListType s n)) ] ) ]
+            ++ checkIndex is (n+1) l p (v $.(listAccess $ litInt i)) s
+        checkIndex ((WithLine):is) n l p v s =
           [ while (listSizeAccess  v ?<= l) ( bodyStatements [ valState $
-          v $.(getListExtend s) ] ) ]
-          ++ checkIndex' is (n-1) l p (v $.(listAccess l)) s
-        checkIndex' ((WithPattern):is) n l p v s =
+          v $.(getListExtend (getListType s n)) ] ) ]
+          ++ checkIndex is (n+1) l p (v $.(listAccess l)) s
+        checkIndex ((WithPattern):is) n l p v s =
           [ while (listSizeAccess v ?<= p) ( bodyStatements [ valState $ 
-          v $.(getListExtend s) ] ) ]
-          ++ checkIndex' is (n-1) l p (v $.(listAccess p)) s
+          v $.(getListExtend (getListType s n)) ] ) ]
+          ++ checkIndex is (n+1) l p (v $.(listAccess p)) s
         ---------------------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
@@ -836,7 +835,7 @@ getListExtend C.Float = listExtendFloat
 getListExtend C.Char = listExtendChar
 getListExtend C.String = listExtendString
 getListExtend t@(C.List _) = listExtendList (convType t)
-getListExtend _ = error "No getFileInput function for the given type"
+getListExtend _ = error "No listExtend function for the given type"
 
 getCastFunc :: (RenderSym repr) => C.CodeType -> (repr (Value repr)) ->
    (repr (Value repr))

@@ -834,8 +834,12 @@ getListExtend C.Integer = listExtendInt
 getListExtend C.Float = listExtendFloat
 getListExtend C.Char = listExtendChar
 getListExtend C.String = listExtendString
-getListExtend t@(C.List _) = listExtendList (convType t)
+getListExtend t@(C.List _) = listExtendList (getNestDegree t) (convType t)
 getListExtend _ = error "No listExtend function for the given type"
+
+getNestDegree :: C.CodeType -> Integer
+getNestDegree (C.List t) = 1 + getNestDegree t
+getNestDegree _ = 0
 
 getCastFunc :: (RenderSym repr) => C.CodeType -> (repr (Value repr)) ->
    (repr (Value repr))

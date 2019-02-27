@@ -355,7 +355,7 @@ instance FunctionSym JavaCode where
     listExtendChar = liftA jListExtend defaultChar 
     listExtendBool = liftA jListExtend defaultBool
     listExtendString = liftA jListExtend defaultString
-    listExtendList t = liftA jListExtendList t
+    listExtendList _ t = liftA jListExtendList t
 
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])

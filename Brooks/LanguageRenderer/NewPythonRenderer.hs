@@ -328,7 +328,7 @@ instance FunctionSym PythonCode where
     listExtendChar = liftA pyListExtend defaultChar 
     listExtendBool = liftA pyListExtend defaultBool
     listExtendString = liftA pyListExtend defaultString
-    listExtendList _ = return $ brackets empty
+    listExtendList n _ = return $ pyListExtendList n
 
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])
@@ -528,6 +528,11 @@ pyListPop dftVal size = brackets dftVal <+> text "*" <+> size
 
 pyListExtend :: Doc -> Doc
 pyListExtend dftVal = dot <> text "append" <> parens dftVal
+
+pyListExtendList :: Integer -> Doc
+pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
+  where nestedList 0 = empty
+        nestedList n = brackets $ nestedList (n-1)
 
 pyVarDecDef :: Label -> Doc -> Doc
 pyVarDecDef l v = text l <+> equals <+> v

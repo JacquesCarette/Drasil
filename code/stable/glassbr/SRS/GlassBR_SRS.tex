@@ -546,14 +546,14 @@ Label & Stress distribution factor (Function)
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    J=J\left(\hat{q},AR\right)
+                                    J=\left(SDF.txt,AR,\hat{q}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$J$ is the stress distribution factor (Function) (Unitless)}
-                                                  \item{$J$ is the stress distribution factor (Function) (Unitless)}
-                                                  \item{$\hat{q}$ is the dimensionless load (Unitless)}
+                                                  \item{$$ is the interpZ (Unitless)}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
+                                                  \item{$\hat{q}$ is the dimensionless load (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
@@ -693,15 +693,14 @@ Label & Tolerable load
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    {\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)
+                                    {\hat{q}_{tol}}=\left(SDF.txt,AR,{J_{tol}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
-                                                  \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+                                                  \item{$$ is the interpY (Unitless)}
+                                                  \item{$AR$ is the aspect ratio (Unitless)}
                                                   \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-                                                  \item{$a$ is the plate length (long dimension) (m)}
-                                                  \item{$b$ is the plate width (short dimension) (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdf.tol]{DD: sdf\_tol}. and \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}, respectively
@@ -894,14 +893,14 @@ Label & Applied load (demand)
                  Units & Pa
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    q=q\left({w_{TNT}},SD\right)
+                                    q=\left(TSD.txt,SD,{w_{TNT}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$q$ is the applied load (demand) (Pa)}
-                                                  \item{$q$ is the applied load (demand) (Pa)}
-                                                  \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+                                                  \item{$$ is the interpY (Unitless)}
                                                   \item{$SD$ is the stand off distance (m)}
+                                                  \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.

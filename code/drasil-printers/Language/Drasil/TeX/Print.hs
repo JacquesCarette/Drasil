@@ -275,7 +275,7 @@ spec (Quote q)              = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"
-escapeChars c = c : []
+escapeChars c = [c]
 
 symbol_needs :: L.Symbol -> MathContext
 symbol_needs (L.Atomic _)          = Text

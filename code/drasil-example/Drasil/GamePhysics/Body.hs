@@ -83,45 +83,40 @@ check_si :: [UnitDefn] -- FIXME
 check_si = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
-  IntroSec (
-    IntroProg para1_introduction_intro (short chipmunk) 
-  [IPurpose (para1_purpose_of_document_intro),
-   IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
-   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS) (EmptyS), 
-   IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS]) :
-   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
-   SSDSec 
-    (SSDProg [SSDSubVerb problem_description
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions
-          , TMs ([Label]++ stdFields) 
-              [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
-          , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
-              [im1_new, im2_new, im3_new] ShowDerivation
-          , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
-              [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
-          ]
-        )
-      ]
-    ):
-    ReqrmntSec (ReqsProg [
-    FReqsSub functional_requirements_list,
-    NonFReqsSub [performance] (gmpriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
-    (S "Games are resource intensive") (S "")]) :
-    LCsSec (LCsProg likelyChangesListwithIntro) :
-    UCsSec (UCsProg unlikelyChangeswithIntro) :
-    [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
-    TraceabilitySec
-      (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-    traceMatTabDefnModel] traceability_matrices_and_graph_traces
-     (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
-    ([Verbatim values_of_auxiliary_constatnts]) ++
-    (Bibliography : [])
+mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
+  IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
+  [IPurpose para1_purpose_of_document_intro,
+   IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2,
+   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) EmptyS EmptyS,
+   IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS],
+   GSDSec $ GSDProg2 [
+    SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+    UsrChars [user_characteristics_intro], SystCons [] []],
+   SSDSec $ SSDProg [SSDSubVerb problem_description
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs ([Label] ++ stdFields)
+            [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
+        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+            [im1_new, im2_new, im3_new] ShowDerivation
+        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
+            [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+        ]
+      ],
+    ReqrmntSec $ ReqsProg [
+      FReqsSub functional_requirements_list,
+      NonFReqsSub [performance] gmpriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+        (S "Games are resource intensive") (S "")],
+    LCsSec $ LCsProg likelyChangesListwithIntro,
+    UCsSec $ UCsProg unlikelyChangeswithIntro,
+    ExistingSolnSec $ ExistSolnVerb off_the_shelf_solutions,
+    TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
+      traceMatTabDefnModel] traceability_matrices_and_graph_traces
+      (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
+    Verbatim values_of_auxiliary_constatnts,
+    Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 game_label :: TraceMap

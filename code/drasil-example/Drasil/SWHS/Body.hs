@@ -157,51 +157,48 @@ swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [
-    TUnits, 
+mkSRS = [RefSec $ RefProg intro [
+    TUnits,
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
-    TAandA]):
-  IntroSec (
-    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
+    TAandA],
+  IntroSec $
+    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl
     progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
-    progName) 
-    [IPurpose (purpDoc swhs_pcm progName),
-     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
-       (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS) (EmptyS),
+    progName)
+    [IPurpose $ purpDoc swhs_pcm progName,
+     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) $
+       scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT,
+     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) EmptyS EmptyS,
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
-       (orgDocEnd swhs_pcm progName)]):
-  Verbatim genSystDesc:
-  SSDSec 
-    (SSDProg [SSDSubVerb probDescription
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions
-          , TMs ([Label] ++ stdFields) [consThermE, sensHtE, latentHtE]
-          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty dataConTail
-           [dataConTable1, dataConTable3]
-          , CorrSolnPpties propsDeriv
-          ]
-        )
-      ]
-    ):
-  ReqrmntSec (ReqsProg [
+       $ orgDocEnd swhs_pcm progName],
+  Verbatim genSystDesc,
+  SSDSec $
+    SSDProg [SSDSubVerb probDescription
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs ([Label] ++ stdFields) [consThermE, sensHtE, latentHtE]
+        , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+        , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
+        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+         [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
+        , Constraints  EmptyS dataConstraintUncertainty dataConTail
+         [dataConTable1, dataConTable3]
+        , CorrSolnPpties propsDeriv
+        ]
+      ],
+  ReqrmntSec $ ReqsProg [
   FReqsSub funcReqsList,
-  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+  NonFReqsSub [performance] swhspriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
   (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
-  LCsSec (LCsProg likelyChgsList) :
-  UCsSec (UCsProg unlikelyChgsList) :
-  TraceabilitySec
-    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ 
-  [LlC traceFig1, LlC traceFig2]) []) :
-    AuxConstntSec (AuxConsProg progName specParamValList) :
-    Bibliography : []
+  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+  LCsSec $ LCsProg likelyChgsList,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++
+  [LlC traceFig1, LlC traceFig2]) [],
+    AuxConstntSec $ AuxConsProg progName specParamValList,
+    Bibliography]
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec swhs_si [swhsInputMod]

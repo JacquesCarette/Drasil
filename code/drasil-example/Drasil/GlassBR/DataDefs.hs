@@ -53,7 +53,7 @@ risk = mkDD riskQD
   [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
   campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
   [{-derivation-}] "risk_fun"
-  (aGrtrThanB : hRef : ldfRef : jRef : [])
+  [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--
 
@@ -94,7 +94,7 @@ strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
 
 strDisFac :: DataDefinition
 strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
-  (jRef2 : qHtRef : arRef : [])
+  [jRef2, qHtRef, arRef]
 
 --DD5--
 
@@ -122,7 +122,7 @@ glaTyFacQD = mkQuantDef gTF glaTyFac_eq
 
 glaTyFac :: DataDefinition
 glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
-  (anGlass : ftGlass : hsGlass : [])
+  [anGlass, ftGlass, hsGlass]
 
 --DD7--
 
@@ -135,7 +135,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
-  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S standardValues])
+  [qRef , aGrtrThanB , hRef, gtfRef, glassLiteRef, makeRef2S standardValues]
 
 --DD8--
 
@@ -148,7 +148,7 @@ tolPreQD = mkQuantDef tolLoad tolPre_eq
 
 tolPre :: DataDefinition
 tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
-  (qHtTlExtra : [])
+  [qHtTlExtra]
 
 --DD9--
 
@@ -185,7 +185,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
+aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
 
 --DD12--
 probOfBreak_eq :: Expr
@@ -195,7 +195,7 @@ probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
 
 probOfBreak :: DataDefinition
-probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" (glassBreak : [])
+probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" [glassBreak]
 
 --DD13--
 calofCapacity_eq :: Expr

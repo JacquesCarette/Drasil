@@ -61,12 +61,13 @@ printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration
   
 thisSRS :: DocDesc
-thisSRS = RefSec (RefProg intro 
-  [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : 
-  [SSDSec ( SSDProg [SSDSolChSpec 
-  (SCSProg [DDs [Label, Symbol, Units, DefiningEquation,
-  Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
+thisSRS = [RefSec $
+    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    SSDSec $ SSDProg [
+      SSDSolChSpec $ SCSProg [
+        DDs [Label, Symbol, Units, DefiningEquation,
+          Description Verbose IncludeUnits] hghcVarsDD HideDerivation
+      ]]]
   
 srsBody :: Document
 srsBody = mkDoc thisSRS for thisSI

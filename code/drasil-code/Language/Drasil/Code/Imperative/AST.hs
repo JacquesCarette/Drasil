@@ -809,8 +809,8 @@ declReplace _ _ d = d
 
 condReplace :: Value -> Value -> Conditional -> Conditional
 condReplace old new (If vbs b) = If (zip fixedVals fixedBs) (bodyReplace old new b)
-    where fixedVals = map (valueReplace old new) $ map fst vbs
-          fixedBs   = map (bodyReplace old new) $ map snd vbs
+    where fixedVals = map (valueReplace old new . fst) vbs
+          fixedBs   = map (bodyReplace old new . snd) vbs
 condReplace old new (Switch val lbs defB) = Switch (valueReplace old new val) (zip lits fixedBs) (bodyReplace old new defB)
     where lits    = map fst lbs
           fixedBs = map (bodyReplace old new . snd) lbs

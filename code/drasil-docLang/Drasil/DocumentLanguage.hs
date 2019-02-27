@@ -446,25 +446,25 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
+      SSD.thModF (siSys si') $ map (LlC . tmodel fields (_sysinfodb si')) ts
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds)
+      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
+      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields (_sysinfodb si')) dds
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs')
+      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
-    mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
-      (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
-    mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
+      SSD.genDefnF $ map (LlC . gdefn fields (_sysinfodb si')) gs'
+    mkSubSCS si' (IMs fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+      concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims
+    mkSubSCS si' (IMs fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields (_sysinfodb si')) ims
     mkSubSCS si' (Assumptions) =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\y -> 
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $
+      map (\y ->
         let lb = makeRef2 y in
-        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
+        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable)
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

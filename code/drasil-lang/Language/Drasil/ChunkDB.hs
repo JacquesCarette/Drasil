@@ -265,7 +265,7 @@ instance HasSectionTable     ChunkDB where sectionTable      = csec
 instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
 collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
-collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
+collectUnits m symb = map (unitWrapper . flip unitLookup (m ^. unitTable))
  $ concatMap getUnits $ mapMaybe (getUnitLup m) symb
 
 traceLookup :: UID -> TraceMap -> [UID]

@@ -309,8 +309,7 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
@@ -320,9 +319,7 @@ sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePa
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The interaction between the", phrase product_, S "and the", phrase user,
-   S "is through a user" +:+. phrase interface,
-   S "The responsibilities of the", phrase user, S "and the", phrase system,
+  [S "The responsibilities of the", phrase user, S "and the", phrase system,
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]

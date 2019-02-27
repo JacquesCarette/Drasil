@@ -3,8 +3,8 @@ module Data.Drasil.Concepts.Physics
   , cartesian, rightHand, restitutionCoef, acceleration, pressure
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
-  , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon, chgMomentum
+  , time, torque, fbd, angular, linear, tension, chgMomentum, compression, stress, strain
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon, chgInVelocity 
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -18,7 +18,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, chgMomentum]
+  joint, damping, pressure, chgMomentum, chgInVelocity]
 
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
@@ -26,7 +26,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, chgMomentum :: ConceptChunk
+  joint, damping, pressure, chgMomentum, chgInVelocity :: ConceptChunk
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -50,9 +50,10 @@ space        = dcc "space" (cn' "space")
 cartesian    = dcc "cartesian" (pn' "Cartesian coordinate system") 
   ("A coordinate system that specifies each point uniquely in a plane by a " ++
   "pair of numerical coordinates.")
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") 
+  (S "The difference between a body's initial and final" +:+ (phrase velocity)) 
 rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
   "A coordinate system where the positive z-axis comes out of the screen."
-  
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
 position     = dcc "position" (cn' "position")
@@ -77,11 +78,9 @@ tension      = dccWDS "tension" (cn' "tension")
 compression  = dccWDS "compression" (cn' "compression")
   (S "A" +:+ (phrase stress) +:+
   S "that causes displacement of the body towards its center.")
-
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
-
-chgMomentum = dccWDS "chgMomentum" (cn' "Change in momentum")
+chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
   (S "The rate of change of a body's" +:+ (phrase impulseV))
 
 --FIXME: COMBINATION HACK (for all below)

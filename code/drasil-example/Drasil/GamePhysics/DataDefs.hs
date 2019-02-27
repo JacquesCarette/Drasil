@@ -15,7 +15,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity, chgMomentum,
-  impulseV, force, torque)
+  impulseV, force, torque, chgInVelocity)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Utils (eqUnR')
 
@@ -217,7 +218,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "impulse"
+chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "ChaslesDD"
   [chaslesThmDesc]
 
 chasles :: QDefinition
@@ -243,14 +244,14 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 
 -----------------DD10 Impulse--------------------------------------
 impulseVDD :: DataDefinition
-impulseVDD = mkDD impulseV [{-- References --}] [{-- Derivation --}] "impulse"
+impulseVDD = mkDD impulseV [{-- References --}] [{-- Derivation --}] "impulseV"
  [makeRef2S newA1]
 
 impulseV :: QDefinition
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
-impulseVEqn =  int_all (codeSymb QP.time) (sy QP.force) = (sy QP.chgMomentum)
+impulseVEqn =  int_all (codeSymb QP.time) (sy QP.force) $= (sy QP.chgMomentum) $= (sy QPP.mass) * (sy QP.chgInVelocity)
 
 impulseVThmDesc :: Sentence
 impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV) ]
@@ -267,9 +268,7 @@ impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV) ]
   --((sy impulseV) $= (defint (eqSymb time) 0 (sy time)
   --((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   --(apply1 temp_PCM time))))) 
- 
- 
------------------DD13 Torque---------------------------------------
+-----------------DD13 Torque-------------------------------------------------------------
 
 torqueDD :: DataDefinition
 torqueDD = mkDD torque [{-- References --}] [{-- Derivation --}] "torque"

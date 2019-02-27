@@ -5,6 +5,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
+import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Education (mechanics)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
@@ -12,23 +13,24 @@ import Data.Drasil.IdeaDicts hiding (dataDefn)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
-  
+
 ssa, ssp :: CI
 ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
-sspdef = [factor, soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
+sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
   slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
 
 sspdef' :: [ConceptChunk]
 sspdef' = [crtSlpSrf, plnStrn, fs_concept]
 
 ----Other Common Phrases----
-soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
+layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
 slice    = nc "slice"      (cn' "slice")
 slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
@@ -40,14 +42,13 @@ soil     = nc "soil"       (cn  "soil")
 morPrice = nc "morPrice"   (cn  "morgenstern price")
 rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
-slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, 
-  soilMechanics :: NamedChunk
-slpSrf        = compoundNC slip surface
-soilPrpty     = compoundNC soil     property
-mtrlPrpty     = compoundNC material property
-itslPrpty     = compoundNC intrslce property
-slopeSrf      = compoundNC slope surface
-soilLyr       = compoundNC soil (nc "layer" (cn' "layer"))
+slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
+slpSrf    = compoundNC slip surface
+soilPrpty = compoundNC soil     property
+mtrlPrpty = compoundNC material property
+itslPrpty = compoundNC intrslce property
+slopeSrf  = compoundNC slope surface
+soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
 
 crtSlpSrf, plnStrn, fs_concept :: ConceptChunk

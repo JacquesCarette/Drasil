@@ -4,11 +4,13 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
+  , twoD, physicCon, physicCon'
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
+import Data.Drasil.IdeaDicts (physics)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
@@ -20,6 +22,9 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure]
 
+physicCon' :: [CI]
+physicCon' = [twoD]
+
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
@@ -27,6 +32,8 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure :: ConceptChunk
+
+twoD :: CI
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -135,3 +142,5 @@ angular = dcc "angular" (cn' "angular")
 
 damping = dcc "damping" (cn' "damping")
   "An effect that tends to reduce the amplitude of vibrations"
+
+twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]

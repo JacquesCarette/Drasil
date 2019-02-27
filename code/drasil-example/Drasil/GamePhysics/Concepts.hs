@@ -4,10 +4,11 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
     goalStmt, inModel, likelyChg, requirement, srs, thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.IdeaDicts (physics)
 ----- Acronyms -----
 
-centreMass, twoD, chipmunk :: CI
+centreMass, chipmunk :: CI
 
 cpAcronyms :: [CI]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
@@ -20,6 +21,5 @@ cent_mass = nounPhrase' "centre of mass" "centres of mass"
   (Replace (S "centre of mass"))
 
 centreMass    = commonIdeaWithDict "centreMass" cent_mass              "CM"   [physics]
-twoD          = commonIdeaWithDict "twoD"       (pn "Two-Dimensional") "2D"   [physics]
 
 chipmunk = commonIdeaWithDict "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  [physics]

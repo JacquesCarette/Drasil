@@ -24,16 +24,17 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  definition, design, document, effect, element, endUser, environment, goal,
-  goalStmt, information, inModel, input_, interest, interest, interface, issue,
+  constant, definition, design, document, effect, element, endUser, environment,
+  goal, goalStmt, information, inModel, input_, interest, interface, issue,
   loss, method_, model, organization, physics, problem, product_, property,
   purpose, requirement, software, softwareSys, srs, srsDomains, sysCont, system,
   systemConstraint, table_, template, thModel, user, value, variable, physSyst,
   doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
+  physicCon, physicCon')
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
@@ -54,10 +55,9 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil, soilLyr, 
-  soilMechanics, ssa, ssp, sspdef,
-  sspdef')
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
+  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
+  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -115,7 +115,7 @@ mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
-    , IScope scpIncl scpEnd
+    , IScope scpIncl EmptyS
     , IChar EmptyS
       (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
       phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
@@ -194,8 +194,8 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 sspSymMap :: ChunkDB
 sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
   map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
-  ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
+  ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' 
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
@@ -281,13 +281,13 @@ purposeDoc pname =
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
-scpIncl, scpEnd :: Sentence
-scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
-  S "composed of homogeneous" +:+ plural soilLyr
-scpEnd  = S "identifies the most likely failure" +:+
-  phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
-  S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
-  phrase slope
+scpIncl :: Sentence
+scpIncl = S "stability analysis of a" +:+ introduceAbb twoD +:+ 
+  phrase soil +:+ S "mass" `sC` S "composed of a single homogeneous" +:+ phrase layer +:+ S "with" +:+ phrase constant +:+. plural mtrlPrpty +:+ S "The" +:+
+  phrase soil +:+ S "mass is assumed to extend infinitely in the third" +:+. phrase dimension +:+ S "The" +:+ phrase analysis +:+ S "will be at an" +:+
+  S "instant in" +:+ phrase time :+: S ";" +:+ plural factor +:+ S "that" +:+
+  S "may change the" +:+ plural soilPrpty +:+ S "over" +:+ phrase time +:+
+  S "will not be considered"
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

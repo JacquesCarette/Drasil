@@ -52,7 +52,7 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, physicCon)
+  cartesian, friction, rightHand, collision, space, physicCon, physicCon')
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
 import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
@@ -196,7 +196,8 @@ chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton
 
 everything :: ChunkDB
 everything = cdb (cpSymbolsAll ++ map qw [QM.pi_]) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw prodtcon
-  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
+  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' 
+  ++ map nw CP.physicCon ++ map nw CP.physicCon'
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby

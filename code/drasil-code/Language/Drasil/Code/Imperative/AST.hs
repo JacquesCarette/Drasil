@@ -734,7 +734,7 @@ endCommentLabel :: Label
 endCommentLabel = "End"
 
 addComments :: Label -> [Block] -> [Block]
-addComments c ((Block ss):[]) =
+addComments c [Block ss] =
     let cStart = commentDelimit c
         cEnd = endCommentDelimit c
     in [Block $ cStart : ss ++ [cEnd]]

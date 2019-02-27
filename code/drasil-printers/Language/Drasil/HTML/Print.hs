@@ -265,7 +265,7 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
@@ -401,7 +401,7 @@ bookMLA (Year       y)  = dot $ text $ show y
 bookMLA (BookTitle s)   = dot $ em $ p_spec s
 bookMLA (Journal    s)  = comm $ em $ p_spec s
 bookMLA (Pages      [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages  (a:b:[])) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages  [a,b])   = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Pages _) = error "Page range specified is empty or has more than two items"
 bookMLA (Note       s)    = p_spec s
 bookMLA (Number      n)   = comm $ text $ ("no. " ++ show n)
@@ -423,7 +423,7 @@ bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the 
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages     [n])  = dot $ text $ show n
-bookAPA (Pages (a:b:[])) = dot $ text $ show a ++ "&ndash;" ++ show b
+bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
 bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA

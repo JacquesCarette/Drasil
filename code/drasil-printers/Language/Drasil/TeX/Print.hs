@@ -192,7 +192,7 @@ p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
+cases [p]    = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 -----------------------------------------------------------------
@@ -351,7 +351,7 @@ makeDefTable sm ps l = vcat [
 makeDRows :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
+makeDRows sm [(f,d)]    = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (`lo` sm) d)
 makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (`lo` sm) d)
@@ -583,6 +583,6 @@ wrapS = S . show
 
 pages :: [Int] -> Spec
 pages []  = error "Empty list of pages"
-pages (x:[]) = wrapS x
-pages (x:x2:[]) = wrapS $ show x ++ "-" ++ show x2
+pages [x] = wrapS x
+pages [x,x2] = wrapS $ show x ++ "-" ++ show x2
 pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

@@ -149,7 +149,7 @@ binOpDoc' Modulo = text "#%"
 binOpDoc' Power = text "#^"
 
 bodyDoc' :: Config -> Body -> Doc
-bodyDoc' c [Block (s:[])] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
+bodyDoc' c [Block [s]] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
 bodyDoc' c bs = hsVList (blockDoc c) bs
 
 blockDoc' :: Config -> Block -> Doc

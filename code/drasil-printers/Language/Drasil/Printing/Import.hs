@@ -48,7 +48,7 @@ mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
   (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
   (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
   (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
-mulExpr (hd:[])      sm = [expr' sm (precA Mul) hd]
+mulExpr [hd]     sm     = [expr' sm (precA Mul) hd]
 mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 
 --This function takes the digits form `floatToDigits` function

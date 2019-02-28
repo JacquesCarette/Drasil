@@ -64,8 +64,8 @@ import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
-  sspOutputs, sspSymbols)
+import Drasil.SSP.Unitals (cohesion, fricAngle, fs, index, numbSlices, 
+  sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
 --type declarations for sections--
 aux_cons :: Section
@@ -353,15 +353,17 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar ssa [S "Calculus", titleize Doc.physics]
-  [phrase soil, plural mtrlPrpty]
+userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
+  [phrase soil, plural mtrlPrpty] [phrase cohesion, phrase fricAngle, 
+  S "unit weight"]
 
-userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents
-userChar pname understandings familiarities = foldlSP [
+userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
+userChar pname understandings familiarities specifics = foldlSP [
   S "The", phrase endUser, S "of", short pname,
   S "should have an understanding of undergraduate Level 1",
   foldlList Comma List understandings `sC`
-  S "and be familiar with", foldlList Comma List familiarities]
+  S "and be familiar with", foldlList Comma List familiarities `sC` 
+  S "specifically", foldlList Comma List specifics]
 
 -- SECTION 3.2 --
 sysConstraints :: Contents

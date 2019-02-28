@@ -119,6 +119,10 @@ $SpencerFixme1Please$ & Fixme: What is this value? & --
 \\
 $SpencerFixme2Please$ & Fixme: What is this value? & --
 \\
+$SpencerFixme3Please$ & Fixme: What is this value? & --
+\\
+$SpencerFixme4Please$ & Fixme: What is this value? & --
+\\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
 $u$ & Local Index: used as a bound variable index in calculations & --
@@ -274,7 +278,7 @@ The interaction between the product and the user is through a user interface. Th
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
+The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
@@ -1102,14 +1106,13 @@ Label & Y-direction height of a slice
                  Units & m
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    h=\frac{1}{2} \left({y_{slope,i}}-{y_{slip,i}}+{y_{slope,i-1}}-{y_{slip,i-1}}\right)
+                                    h=\frac{1}{2} \left(SpencerFixme3Please+SpencerFixme4Please\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$h$ is the y-direction height of a slice (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
+                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
@@ -1300,6 +1303,64 @@ Label & Fixme
                                                   \item{$SpencerFixme2Please$ is the fixme (Unitless)}
                                                   \item{$H$ is the interslice water force (N)}
                                                   \item{$i$ is the index (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme3}
+\phantomsection 
+\label{DD:fixme3}
+\\ \midrule \\
+Label & Fixme
+        \\ \midrule \\
+        Symbol & $SpencerFixme3Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    SpencerFixme3Please={y_{slope,i}}-{y_{slip,i}}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme4}
+\phantomsection 
+\label{DD:fixme4}
+\\ \midrule \\
+Label & Fixme
+        \\ \midrule \\
+        Symbol & $SpencerFixme4Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    SpencerFixme4Please={y_{slope,i-1}}-{y_{slip,i-1}}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\

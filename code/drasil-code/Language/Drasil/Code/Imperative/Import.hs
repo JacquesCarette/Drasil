@@ -24,6 +24,7 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
+import Control.Applicative ((<$>))
 import Control.Lens ((^.))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -222,8 +223,8 @@ genCalcBlock t' v' e' = doit t' v' e'
   doit :: CalcType -> String -> Expr -> Reader State Body
   doit t v (Case e)    = genCaseBlock t v e
   doit t v e
-    | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
-    | otherwise        = fmap (oneLiner . I.return) $ convExpr e
+    | t == CalcAssign  = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
+    | otherwise        = (oneLiner . I.return) <$> convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
@@ -443,10 +444,10 @@ convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
-convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ mapM convExpr l
-convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ mapM convExpr l
-convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ mapM convExpr l
-convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ mapM convExpr l
+convExpr (AssocA Add l)  = foldr1 (#+) <$> mapM convExpr l
+convExpr (AssocA Mul l)  = foldr1 (#*) <$> mapM convExpr l
+convExpr (AssocB And l)  = foldr1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
@@ -574,8 +575,8 @@ convStmt (FTry t c) = do
 convStmt (FContinue) = return continue
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
-convStmt (FAppend a b) = fmap valStmt $
+convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
+convStmt (FAppend a b) = valStmt <$>
   liftM2 (\x y -> x I.$.(listAppend y)) (convExpr a) (convExpr b)
 
 -- this is really ugly!!

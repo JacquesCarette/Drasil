@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE LambdaCase, PostfixOperators #-}
 -- | The logic to render Objective-C code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (
     -- * Objective-C Code Configuration -- defines syntax of all Objective-C code
@@ -58,8 +58,8 @@ objcConfig options c =
         inputFunc        = text "scanf",
         iterForEachLabel = empty,
         iterInLabel      = text "in",
-        list             = \lt -> case lt of Static  -> text staticListType
-                                             Dynamic -> text "NSMutableArray",
+        list             = \case Static  -> text staticListType
+                                 Dynamic -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
         package          = \_ -> empty,

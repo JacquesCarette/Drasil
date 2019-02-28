@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 -- | The logic to render GOOL code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
     -- * GOOL Code Configuration -- defines syntax of all GOOL code
@@ -51,8 +52,8 @@ goolConfig options c =
         inputFunc        = text "Input",
         iterForEachLabel = text "ForEach",
         iterInLabel      = empty,
-        list             = \lt -> case lt of Static  -> text "List Static"
-                                             Dynamic -> text "List Dynamic",
+        list             = \case Static  -> text "List Static"
+                                 Dynamic -> text "List Dynamic",
         listObj          = empty,
         clsDec           = empty,
         package          = \p -> vcat [

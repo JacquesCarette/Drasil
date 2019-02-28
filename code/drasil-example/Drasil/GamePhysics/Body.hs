@@ -95,7 +95,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg [SSDSubVerb problem_description
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs ([Label] ++ stdFields)
+        , TMs (Label : stdFields)
             [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
         , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation

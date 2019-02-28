@@ -32,8 +32,8 @@ dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   calofCapacity, calofDemand]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
-  map (\x -> Parallel x []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
+gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on their own
+  map (flip Parallel []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
   tolStrDisFacQD {-DD9-}, tolPreQD {-DD8-}, nonFLQD {-DD5-}] 
 
 --DD1--
@@ -234,7 +234,7 @@ capacityS :: [Sentence]
 capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
   makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
-  makeRef2S glaTyFac] ++ [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
+  makeRef2S glaTyFac, makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
 
 
 glassBreak :: Sentence

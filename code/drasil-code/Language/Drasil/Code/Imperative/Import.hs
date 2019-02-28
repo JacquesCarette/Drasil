@@ -123,7 +123,7 @@ getDir Java = "java"
 getDir Python = "python"
 
 liftS :: Reader a b -> Reader a [b]
-liftS = fmap (\x -> [x])
+liftS = fmap (: [])
 
 ------- INPUT ----------
 
@@ -605,7 +605,7 @@ genDataFunc nameTitle dd = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
               for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) (v_i &++)
-                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ lnV))
+                ( body ( (stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d) : lnV))
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
@@ -660,14 +660,14 @@ genDataFunc nameTitle dd = do
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          [ while (v I.$.listSize ?<= (litInt i)) ( body [ valStmt $ v I.$.(listExtend $ listType' s n) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
+          ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
-          [ while (v I.$.listSize ?<= l) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
+          ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v I.$.listSize ?<= p) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
+          ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
         listType :: C.CodeType -> Integer -> I.StateType
         listType _ 0 = error "No index given"

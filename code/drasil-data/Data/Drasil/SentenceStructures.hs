@@ -153,7 +153,7 @@ underConsidertn chunk = S "The" +:+ (phrase chunk) +:+
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
 refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+
   S "are refined to the" +:+ plural (fst y)
-refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
+refineChain (x:y:xs) = refineChain [x,y] `sC` rc (y : xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain

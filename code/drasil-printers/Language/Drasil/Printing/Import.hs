@@ -56,11 +56,11 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess (hd:tl) pos coun ex 
-  | pos /= coun = [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+  | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
   | ex /= 0 = [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
 digitsProcess [] pos coun ex 
-  | pos > coun = [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
+  | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int 0]
 

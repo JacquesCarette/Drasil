@@ -13,7 +13,6 @@
 - ignore: {name: "Redundant bracket"}
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Redundant $"}
-- ignore: {name: "Use :"}
 - ignore: {name: "Use camelCase"}
 - ignore: {name: "Fuse concatMap/map"}
 - ignore: {name: "Reduce duplication"}

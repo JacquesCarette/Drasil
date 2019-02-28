@@ -150,7 +150,7 @@ mkSRS = [RefSec $ RefProg intro
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
       [ Assumptions
-      , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
+      , TMs (Label : stdFields) [consThermE] -- only have the same T1 with SWHS
       , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
       , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)

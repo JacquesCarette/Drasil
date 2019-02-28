@@ -28,7 +28,7 @@ lcCISLDesc = foldlSent [(makeRef2S newA3) +:+ S "- The",
   S "can be added for inconsistent soil properties throughout"]
 
 unlikelyChanges_SRS :: [Contents]
-unlikelyChanges_SRS = [ucIntro] ++ mkEnumSimpleD unlikelyChgs
+unlikelyChanges_SRS = ucIntro : mkEnumSimpleD unlikelyChgs
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikelyChgNISLO, unlikelyChg2AO]

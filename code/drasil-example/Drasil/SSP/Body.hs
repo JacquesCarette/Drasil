@@ -21,7 +21,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon)
+import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
+  datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, element, endUser, environment,
@@ -339,7 +340,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `sAnd` S "other data" +:+ plural constraint,
+  phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fs_concept +:+ S "for the" +:+ phrase slope,

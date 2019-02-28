@@ -16,7 +16,6 @@
 - ignore: {name: "Use :"}
 - ignore: {name: "Use <$>"}
 - ignore: {name: "Use camelCase"}
-- ignore: {name: "Use String"}
 - ignore: {name: "Fuse concatMap/map"}
 - ignore: {name: "Reduce duplication"}
 - ignore: {name: "Fuse foldr/map"}

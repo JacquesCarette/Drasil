@@ -54,7 +54,7 @@ capitalize [] = []
 capitalize (c:cs) = toUpper c:map toLower cs
 
 -- | Format strings and convert to Doc
-upcase, lowcase :: [Char] -> Doc
+upcase, lowcase :: String -> Doc
 upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string
 lowcase []     = text []

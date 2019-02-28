@@ -148,7 +148,7 @@ acronyms :: [CI]
 acronyms = ciGetDocDesc mkSRS
 
 shortTT :: [IdeaDict]
-shortTT = concatMap (\x -> getIdeaDict x swhsSymMap) (getDocDesc mkSRS)
+shortTT = concatMap (`getIdeaDict` swhsSymMap) $ getDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap

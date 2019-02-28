@@ -49,23 +49,23 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)]
  
 traceMRow :: ChunkDB -> [UID]
-traceMRow c = nub $ Map.keys (c ^. refbyTable)
+traceMRow = nub . Map.keys . (^. refbyTable)
 
 traceMCol :: ChunkDB -> [UID]
-traceMCol c = nub $ concat $ Map.elems (c ^. refbyTable)
+traceMCol = nub . concat . Map.elems . (^. refbyTable)
  
 traceMRowHeader :: ChunkDB -> [Sentence]
-traceMRowHeader c = map (\x -> helpToRefField x c) (traceMRow c)
+traceMRowHeader c = map (`helpToRefField` c) $ traceMRow c
 
 traceMColHeader :: ChunkDB -> [Sentence]
-traceMColHeader c = map (\x -> helpToRefField x c) (traceMCol c)
+traceMColHeader c = map (`helpToRefField` c) $ traceMCol c
 
 traceMColumns :: ChunkDB -> [[UID]]
-traceMColumns c = map (\x -> refbyLookup x (c ^. refbyTable)) (traceMRow c)
+traceMColumns c = map (`refbyLookup` (c ^. refbyTable)) $ traceMRow c
  
 generateTraceTable :: ChunkDB -> LabelledContent
 generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
-  (EmptyS:(traceMColHeader c))
-  (makeTMatrix (traceMRowHeader c) (traceMColumns c) (traceMCol c))
-  (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True 
+  (EmptyS : (traceMColHeader c))
+  (makeTMatrix (traceMRowHeader c) (traceMColumns c) $ traceMCol c)
+  (showingCxnBw traceyMatrix $
+  titleize' item +:+ S "of Different" +:+ titleize' section_) True

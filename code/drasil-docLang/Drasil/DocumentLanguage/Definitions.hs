@@ -114,7 +114,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 helperRefs :: (HasUID t, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => t -> ctx -> Sentence
-helperRefs t s = foldlSent $ map (\x -> helpToRefField x s) $ refbyLookup (t ^. uid) (s ^. refbyTable)
+helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (s ^. refbyTable)
 
 helpToRefField :: (HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,

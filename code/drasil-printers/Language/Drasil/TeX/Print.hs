@@ -226,7 +226,7 @@ makeTable lls r bool t =
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength (EmptyS)  = 0

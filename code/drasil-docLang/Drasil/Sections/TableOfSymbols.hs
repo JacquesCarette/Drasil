@@ -16,5 +16,5 @@ table st ls f = llcc (makeTabRef "ToS")
   $ Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable [P . (`symbol` st), f, toSentence]
-  (filter (\q -> hasStageSymbol q st) ls))  
+  $ filter (`hasStageSymbol`st) ls)
   (titleize tOfSymb) False

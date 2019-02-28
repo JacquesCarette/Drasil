@@ -91,7 +91,7 @@ vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
 
 reduceLibs :: [String] -> [String] -> [String]
-reduceLibs libs modules = nub $ filter (\x -> notElem x modules) libs 
+reduceLibs libs modules = nub $ filter (`notElem` modules) libs 
 
 --private
 myLiteralNameReplace :: String -> String -> String

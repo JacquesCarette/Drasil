@@ -119,21 +119,21 @@ helperRefs t s = foldlSent $ map (\x -> helpToRefField x s) $ refbyLookup (t ^. 
 helpToRefField :: (HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => UID -> ctx -> Sentence
-helpToRefField t s = if elem t (keys $ s ^. dataDefnTable) 
+helpToRefField t s = if t `elem` (keys $ s ^. dataDefnTable) 
   then makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  else if  elem t (keys $ s ^. insmodelTable)
+  else if  t `elem` (keys $ s ^. insmodelTable)
     then makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-    else if elem t (keys $ s ^. gendefTable)
+    else if t `elem` (keys $ s ^. gendefTable)
       then makeRef2S $ gendefLookup t (s ^. gendefTable)
-      else if elem t (keys $ s ^. theoryModelTable)
+      else if t `elem` (keys $ s ^. theoryModelTable)
         then makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-        else if elem t (keys $ s ^. assumpTable)
+        else if t `elem` (keys $ s ^. assumpTable)
           then makeRef2S $ assumptionLookup t (s ^. assumpTable)
-          else if elem t (keys $ s ^. conceptinsTable)
+          else if t `elem` (keys $ s ^. conceptinsTable)
             then makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-            else if elem t (keys $ s ^. sectionTable)
+            else if t `elem` (keys $ s ^. sectionTable)
               then makeRef2S $ sectionLookup t (s ^. sectionTable)
-              else if elem t (keys $ s ^. labelledcontent)
+              else if t `elem` (keys $ s ^. labelledcontent)
                 then makeRef2S $ labelledconLookup t (s ^. labelledcontent) 
                 else error $ t ++ "Caught."
 

@@ -21,7 +21,6 @@
 - ignore: {name: "Fuse concatMap/map"}
 - ignore: {name: "Reduce duplication"}
 - ignore: {name: "Fuse foldr/map"}
-- ignore: {name: "Use foldr"}
 
 
 # Specify additional command line arguments

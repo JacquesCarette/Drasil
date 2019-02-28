@@ -236,8 +236,7 @@ dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
-makeRows []     = empty
-makeRows (c:cs) = makeColumns c %% pure dbs %% makeRows cs
+makeRows cs = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty cs
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls

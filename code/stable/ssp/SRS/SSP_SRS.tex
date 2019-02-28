@@ -246,7 +246,7 @@ Reviewers of this documentation should have an understanding of undergraduate le
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern-Price Analysis.
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
@@ -281,7 +281,7 @@ The interaction between the product and the user is through a user interface. Th
 The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
-There are no system constraints.
+The Morgenstern-Price method \cite{morgenstern1965}, which involves dividing the slope into vertical slices, will be used to derive the equations for analysing the slope.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
@@ -1724,7 +1724,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[Generate-New-Critical-Slip-Surfaces:\phantomsection\label{generateCSS'}]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
 \item[Repeat-Find-Factor-of-Safety:\phantomsection\label{repeatFindFS}]Repeat \hyperref[testSlipSrf]{FR: Test-Slip-Surfaces}, \hyperref[prepareSlipS]{FR: Prepare-Slip-Surfaces}, \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}, \hyperref[rankSlope]{FR: Rank-and-Weight-Slopes}, and \hyperref[generateCSS']{FR: Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
 \item[Prepare-Critical-Slip-Surface:\phantomsection\label{prepareCSS}]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern-Price method.
 \item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface graphically. Display the the value of the factor of safety.
 \end{itemize}
 \begin{longtable}{l l l}
@@ -1801,6 +1801,15 @@ title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+
+@article{morgenstern1965,
+author={Morgenstern, N. R. and Price, P. E.},
+title={The analysis of the stability of general slip surfaces},
+journal={Géotechnique},
+year={1965},
+month=jan,
+pages={"79-93"},
+number={15}}
 
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},

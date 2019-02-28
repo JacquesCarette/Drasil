@@ -218,8 +218,8 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     rbrace <+> text n <> endStatement c]
 classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
-    let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
+    let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
+        privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubScope = if null pubVars then empty else text "@" <> scopeDoc c Public
         privScope = if null privVars then empty else text "@" <> scopeDoc c Private
         pubBlank = if null pubVars then empty else blank

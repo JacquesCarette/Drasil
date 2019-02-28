@@ -213,10 +213,10 @@ classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let makeTransforms = map convertToMethod
         funcs = fs ++ [destructor c n vs]
-        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Public then [f] else []) $ makeTransforms funcs
-        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Private then [f] else []) $ makeTransforms funcs
-        privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
+        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Public]) $ makeTransforms funcs
+        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
+        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Private]) $ makeTransforms funcs
+        privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubBlank = if null pubVars then empty else blank
         privBlank = if null privFuncs then empty else blank
         baseClass = case p of Nothing -> empty

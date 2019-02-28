@@ -19,7 +19,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   constF, dryWeight, fricAngle, fs, genericF, genericA, 
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
+  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, ufixme1, ufixme2, ufixme3, ufixme4, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -28,7 +28,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, fixme1, fixme2]
+  convertFunc1, convertFunc2, fixme1, fixme2, fixme3, fixme4]
 
 --DD1
 
@@ -181,10 +181,8 @@ slcHeight = mkDD slcHeightQD [fredlund1977] [{-Derivation-}] "slcHeight"
 slcHeightQD :: QDefinition
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
--- FIXME: There should be some explicit grouping in this expression
 slcHeightEqn :: Expr
-slcHeightEqn = 0.5 * (((inxi slopeHght) - (inxi slipHght)) + 
-  ((inxiM1 slopeHght) - (inxiM1 slipHght))) 
+slcHeightEqn = 0.5 * (sy fixme3 + sy fixme4) 
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
@@ -299,6 +297,8 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 fixme1, fixme2 :: DataDefinition
 fixme1 = mkDD fixme1QD [{-References-}] [{-Derivation-}] "fixme1" []--Notes
 fixme2 = mkDD fixme2QD [{-References-}] [{-Derivation-}] "fixme2" []--Notes
+fixme3 = mkDD fixme3QD [{-References-}] [{-Derivation-}] "fixme3" []--Notes
+fixme4 = mkDD fixme4QD [{-References-}] [{-Derivation-}] "fixme4" []--Notes
 --FIXME: fill empty lists in
 
 fixme1QD :: QDefinition
@@ -306,6 +306,14 @@ fixme1QD = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce)
 
 fixme2QD :: QDefinition
 fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
+
+fixme3QD :: QDefinition
+fixme3QD = ec ufixme3 (inxi slopeHght - inxi slipHght)
+
+fixme4QD :: QDefinition
+fixme4QD = ec ufixme4 (inxiM1 slopeHght - inxiM1 slipHght)
+
+
 
 --------------------------
 -- Derivation Sentences --

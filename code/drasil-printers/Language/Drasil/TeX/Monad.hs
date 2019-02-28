@@ -33,7 +33,7 @@ instance Functor PrintLaTeX where
   fmap f (PL ca) = PL $ \ctx -> f (ca ctx)
 
 instance Applicative PrintLaTeX where
-  pure x = PL $ \_ -> x
+  pure = PL . const
   PL f <*> PL v = PL $ \ctx -> (f ctx) (v ctx)
 
 instance Monad PrintLaTeX where

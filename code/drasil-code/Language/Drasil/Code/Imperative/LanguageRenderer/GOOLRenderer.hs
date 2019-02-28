@@ -47,7 +47,7 @@ goolConfig options c =
         dir              = "gool",
         fileName         = fileNameD c,
         include          = includeD "import",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = text "extends",
         inputFunc        = text "Input",
         iterForEachLabel = text "ForEach",
@@ -70,7 +70,7 @@ goolConfig options c =
         
         top    = gooltop c hsMod,
         body   = goolbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDoc', bodyDoc = bodyDoc' c, blockDoc = blockDoc' c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDoc' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -82,7 +82,7 @@ goolConfig options c =
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined"
+        getEnv = const $ error "getEnv for GOOL is not defined"
     }
     
 -- for convenience

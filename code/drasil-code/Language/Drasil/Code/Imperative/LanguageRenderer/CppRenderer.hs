@@ -50,12 +50,12 @@ cppConfig options c =
         dir              = "cpp",
         fileName         = fileNameD c,
         include          = includeD "#include",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = colon,
         inputFunc        = text "std::cin",
         iterForEachLabel = empty,
         iterInLabel      = empty,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = empty,
         clsDec           = classDec,
         package          = namespaceD,
@@ -82,7 +82,7 @@ cppConfig options c =
         functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
+        getEnv = const $ error "Cpp does not implement getEnv (yet)"
     }
 
 -- for convenience

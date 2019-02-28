@@ -46,19 +46,19 @@ pythonConfig _ c =
         dir              = "python",
         fileName         = fileNameD c,
         include          = include',
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = empty,
         inputFunc        = text "raw_input()",    --change to "input()" for Python 3.0+
         iterForEachLabel = forLabel,
         iterInLabel      = text "in",
-        list             = \_ -> empty,
+        list             = const empty,
         listObj          = empty,
         clsDec           = classDec,
-        package          = \_ -> empty,
+        package          = const empty,
         printFunc        = text "print",
         printLnFunc      = empty,
-        printFileFunc    = \_ -> empty,
-        printFileLnFunc  = \_ -> empty,
+        printFileFunc    = const empty,
+        printFileLnFunc  = const empty,
         stateType        = pystateType c,
         
         blockStart = colon, blockEnd = empty,
@@ -66,20 +66,20 @@ pythonConfig _ c =
         
         top    = pytop c,
         body   = pybody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD' c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDoc',
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = \_ -> empty,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = const empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
         unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
         inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "getEnv for pythong not yet implemented"
+        getEnv = const $ error "getEnv for pythong not yet implemented"
     }
 
 -- convenience

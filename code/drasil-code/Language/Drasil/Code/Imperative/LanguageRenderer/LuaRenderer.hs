@@ -47,19 +47,19 @@ luaConfig _ c =
         dir              = "lua",
         fileName         = fileNameD c,
         include          = include',
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = text "inheritsFrom",
         inputFunc        = text "io.stdin:read()",
         iterForEachLabel = forLabel,
         iterInLabel      = text "in",
-        list             = \_ -> empty,
+        list             = const empty,
         listObj          = empty,
         clsDec           = empty,
-        package          = \_ -> empty,
+        package          = const empty,
         printFunc        = text "io.write",
         printLnFunc      = text "print",
-        printFileFunc    = \_ -> error "not implemented",
-        printFileLnFunc  = \_ -> error "not implemented",
+        printFileFunc    = const $ error "not implemented",
+        printFileLnFunc  = const $ error "not implemented",
         stateType        = luastateType c,
         
         blockStart = text "do", blockEnd = text "end",
@@ -67,19 +67,19 @@ luaConfig _ c =
         
         top    = luatop c,
         body   = luabody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD' c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDoc' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = \_ -> empty,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = const empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
+        methodListDoc = methodListDocD c, methodTypeDoc = const empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
+        getEnv = const $ error "getEnv not implemented in Lua (yet)"
     }
 
 -- convenience

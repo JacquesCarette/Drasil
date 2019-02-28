@@ -15,7 +15,6 @@
 - ignore: {name: "Redundant $"}
 - ignore: {name: "Use :"}
 - ignore: {name: "Use <$>"}
-- ignore: {name: "Use const"}
 - ignore: {name: "Use camelCase"}
 - ignore: {name: "Use String"}
 - ignore: {name: "Fuse concatMap/map"}

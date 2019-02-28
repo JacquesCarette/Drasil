@@ -53,7 +53,7 @@ objcConfig options c =
         dir              = "obj-c",
         fileName         = fileNameD c,
         include          = includeD "#import",
-        includeScope     = \_ -> empty,
+        includeScope     = const $ empty,
         inherit          = colon,
         inputFunc        = text "scanf",
         iterForEachLabel = empty,
@@ -62,11 +62,11 @@ objcConfig options c =
                                  Dynamic -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
-        package          = \_ -> empty,
+        package          = const $ empty,
         printFunc        = text "printf",
         printLnFunc      = text "printf",
-        printFileFunc    = \_ -> empty,
-        printFileLnFunc  = \_ -> empty,
+        printFileFunc    = const $ empty,
+        printFileLnFunc  = const $ empty,
         stateType        = objcstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -74,7 +74,7 @@ objcConfig options c =
         
         top    = objctop c,
         body   = objcbody c,
-        bottom = \_ -> empty,
+        bottom = const $ empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDocD, bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -86,7 +86,7 @@ objcConfig options c =
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
+        getEnv = const $ error "getEnv not implemented (yet) in ObjC"
     }
 
 -- for convenience

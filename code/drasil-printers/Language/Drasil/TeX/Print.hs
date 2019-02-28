@@ -79,7 +79,7 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
 
 print :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [LayoutObj] -> D
-print sm l = foldr ($+$) empty $ map (`lo` sm) l
+print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
@@ -290,19 +290,19 @@ p_unit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
-    formatu [] l = line l 
-    formatu l [] = foldr (<>) empty $ map pow l
-    formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
+    formatu [] l = line l
+    formatu l [] = foldr ((<>) . pow) empty l
+    formatu nu de = toMath $ fraction (line nu) $ line $ map (second negate) de
     line :: [(L.Symbol,Integer)] -> D
     line []  = empty
     line [n] = pow n
-    line l   = parens $ foldr (<>) empty $ map pow l
+    line l   = parens $ foldr ((<>) . pow) empty l
     pow :: (L.Symbol,Integer) -> D
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
+    p_symb n = let cn = symbol_needs n in switch (const cn) $ pure $ text $ symbol n
 
 {-
 p_unit :: L.USymb -> D

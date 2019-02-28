@@ -81,7 +81,7 @@ printLO Graph{}                = empty -- FIXME
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map printLO l
+print l = foldr (($$) . printLO) empty l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
@@ -240,7 +240,7 @@ makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
 
 -- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc
-makeRows = foldr ($$) empty . map (tr . makeColumns)
+makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)

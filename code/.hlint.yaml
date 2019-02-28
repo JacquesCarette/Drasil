@@ -15,7 +15,6 @@
 - ignore: {name: "Redundant $"}
 - ignore: {name: "Use camelCase"}
 - ignore: {name: "Fuse concatMap/map"}
-- ignore: {name: "Fuse foldr/map"}
 
 
 # Specify additional command line arguments

@@ -229,8 +229,8 @@ getField Volume{} = EmptyS
 getField Year{} = EmptyS
 
 getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap getIL $ map fst it
-getLT (Numeric it) = concatMap getIL $ map fst it
+getLT (Bullet it) = concatMap (getIL . fst) it
+getLT (Numeric it) = concatMap (getIL . fst) it
 getLT (Simple lp) = concatMap getLP lp
 getLT (Desc lp) = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
@@ -324,7 +324,7 @@ getSCSSub (TMs _ x)    = concatMap getTM x
 getSCSSub (GDs _ x _)  = concatMap getGD x
 getSCSSub (DDs _ x _)  = concatMap getDD x
 getSCSSub (IMs _ x _)  = concatMap getIM x
-getSCSSub (Constraints s1 s2 s3 lb) = [s1]++[s2]++[s3]++(concatMap getCon (map (^. accessContents) lb))
+getSCSSub (Constraints s1 s2 s3 lb) = [s1, s2, s3] ++ concatMap (getCon . (^. accessContents)) lb
 getSCSSub (CorrSolnPpties c) = concatMap getCon' c
 
 -- The definition of IM should not be collected because even the definition is at type
@@ -360,7 +360,7 @@ getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = concatMap getCon' c
 
 getTrace :: TraceabilitySec -> [Sentence]
-getTrace (TraceabilityProg lc s c x) = (concatMap getCon (map (^. accessContents) lc))
+getTrace (TraceabilityProg lc s c x) = (concatMap (getCon . (^. accessContents)) lc)
   ++ s ++ concatMap getCon' c ++ concatMap getSec x
 
 getAux :: AuxConstntSec -> [Sentence]

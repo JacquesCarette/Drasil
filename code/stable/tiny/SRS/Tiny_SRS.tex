@@ -33,6 +33,7 @@ The unit system used throughout is SI (Système International d'Unités). In add
 Symbol & Description
 \\
 \midrule
+\endhead
 ${}^{\circ}$C & temperature (centigrade)
 \\
 m & length (metre)
@@ -50,6 +51,7 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
+\endhead
 ${h_{b}}$ & Initial coolant film conductance & --
 \\
 ${h_{c}}$ & Convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
@@ -74,8 +76,9 @@ The instance models that govern HGHC are presented in \hyperref[Sec:IMs]{Section
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htTransCladFuel}
 \phantomsection 
@@ -98,9 +101,10 @@ Label & Effective heat transfer coefficient between clad and fuel surface
                                                   \item{${τ_{c}}$ is the clad thickness (Unitless)}
                                                   \end{symbDescription}
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+    
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htTransCladCool}
 \phantomsection 
@@ -123,5 +127,5 @@ Label & Convective heat transfer coefficient between clad and coolant
                                                   \item{${τ_{c}}$ is the clad thickness (Unitless)}
                                                   \end{symbDescription}
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \end{document}

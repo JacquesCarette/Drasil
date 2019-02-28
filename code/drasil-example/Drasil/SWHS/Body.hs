@@ -37,7 +37,7 @@ import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
   understandability, reusability, maintainability)
-import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
@@ -120,7 +120,8 @@ swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
@@ -167,7 +168,7 @@ mkSRS = RefSec (RefProg intro [
     [IPurpose (purpDoc swhs_pcm progName),
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
+     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS) (EmptyS),
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:

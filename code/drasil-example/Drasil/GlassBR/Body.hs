@@ -153,7 +153,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       (short gLassBR)
     [IPurpose (purpOfDocIntro document gLassBR glaSlab),
      IScope incScoR endScoR,
-     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
+     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR EmptyS,
      IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
   StkhldrSec
     (StkhldrProg2
@@ -162,8 +162,6 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
     UsrChars [user_characteristics_intro], SystCons [] [] ]) :
-  ScpOfProjSec (ScpOfProjProg (short gLassBR) prodUseCaseTable (indivProdUseCase glaSlab
-    capacity demandq probability)) :
   SSDSec 
     (SSDProg
       [SSDProblem  (PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts])
@@ -233,7 +231,7 @@ glassBR_code = codeSpec glassSystInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 
-prodUseCaseTable, physSystDescriptionList, appdxIntro :: Contents
+physSystDescriptionList, appdxIntro :: Contents
 
 inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, 
   traceMatsAndGraphsTable3, fig_glassbr, fig_2, fig_3, fig_4, fig_5, fig_6 :: LabelledContent
@@ -332,7 +330,7 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
   S "The", short srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved" `sC` S "but not how to solve it"]
-  --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
+  --FIXME: Last sentence is also present in SSP, SWHS and NoPCM... pull out?
 
 {--Scope of Requirements--}
 
@@ -413,52 +411,6 @@ user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlS
   [S "The end user is expected to have basic computer literacy to handle the software"]]
 
 {--System Constraints--}
-
-{--SCOPE OF THE PROJECT-}
-
-{--Product Use Case Table--}
-
-prodUseCaseTable = LlC $ prodUCTbl [prodUseCaseTableUC1, prodUseCaseTableUC2]
-
-prodUseCaseTableUC1, prodUseCaseTableUC2 :: [Sentence]
-
-prodUseCaseTableUC1 = [titleize user, titleize' characteristic +:+ S "of the"
-  +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ (makeRef2S $ SRS.indPRCase ([]::[Contents]) ([]::[Section]))]
-
-prodUseCaseTableUC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
-  phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
-  `sAnd` S "supporting calculated" +:+ plural value]
-
-{--Individual Product Use Case--}
-
-indivProdUseCase :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
-  Contents
-indivProdUseCase mainObj compare1 compare2 factorOfComparison =
-  foldlSP [S "The", phrase user, S "provides the", plural input_, S "to",
-  short gLassBR, S "for use within the" +:+. phrase analysis,
-  S "There are two main", plural class_, S "of" +: plural input_ +:+.
-  (phrase glassGeo `sAnd` phrase blastTy), S "The", phrase glassGeo, S "based",
-  plural input_, S "include" +:+. (phrase glassTy `sAnd` plural dimension `ofThe`
-  phrase glaPlane), blastTy ^. defn, S "These", plural parameter, S "describe"
-  +:+. (phrase char_weight `sAnd` S "stand off blast"), S "Another",
-  phrase input_, S "the", phrase user, S "gives is the tolerable" +:+.
-  (phrase value `sOf` phrase prob_br)
-  +:+
-  short gLassBR, plural output_, S "if the", phrase mainObj,
-  S "will be safe by comparing whether", phrase compare1, S "is greater than"
-  +:+. phrase compare2, (at_start compare1 `isThe` (compare1 ^. defn))
-  `sAnd` (phrase compare2 `isThe` phrase requirement) +:+.
-  (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition,
-  S "is to check whether the calculated", phrase factorOfComparison,
-  sParen (ch prob_br), S "is less than the tolerable",
-  phrase factorOfComparison, sParen (ch pb_tol),
-  S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-  S "If both", plural condition, S "return true, then it's shown that the",
-  phrase mainObj, S "is safe to use" `sC`
-  S "else if both return false, then the", phrase mainObj +:+.
-  S "is considered unsafe", S "All the supporting calculated", plural value,
-  S "are also displayed as", phrase output_]
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 

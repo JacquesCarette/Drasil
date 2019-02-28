@@ -36,7 +36,7 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote,
+  newline, superscript, parens, fraction, quote, externalref,
   snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -205,6 +205,7 @@ makeTable lls r bool t =
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
+  %% pure (text "\\endhead")
   %% makeRows (tail lls)
   %% (pure (text "\\bottomrule"))
   %% (if bool then caption t else empty)
@@ -268,7 +269,7 @@ spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref Internal r sn)  = snref r $ spec sn
 spec (Ref Cite2 r _)      = cite $ pure $ text r
-spec (Ref External r sn)  = snref r $ spec sn
+spec (Ref External r sn)  = externalref r $ spec sn
 spec EmptyS                 = empty
 spec (Quote q)              = quote $ spec q
 
@@ -329,11 +330,11 @@ makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
 
 beginDefn :: D
-beginDefn = (pure $ text "~") <> newline
-  %% (pure $ text "\\noindent \\begin{minipage}{\\textwidth}")
+beginDefn = newline
+  %% pure (text "\\noindent \\begin{minipage}{\\textwidth}")
 
 endDefn :: D
-endDefn = pure $ text "\\end{minipage}" TP.<> dbs
+endDefn = pure (text "\\end{minipage}")
 
 makeDefTable :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [(String,[LayoutObj])] -> D -> D
@@ -533,7 +534,7 @@ showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
 showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
 showBibTeX  _ (Institution  i) = showField "institution" i
 showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
+showBibTeX  _ (Month        m) = S "month=" :+: bibTeXMonth m
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o

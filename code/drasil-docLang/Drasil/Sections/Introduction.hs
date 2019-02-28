@@ -10,8 +10,8 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Citations (parnasClements1986)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
-  ofThe, ofThe', refineChain)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
+  foldlList, foldlsC, foldlSP, ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
@@ -41,8 +41,8 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 introductionSubsections :: Sentence
 introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
   [(phrase scope, phrase system), 
-  (phrase Doc.organization, phrase document), 
-  (plural characteristic, phrase intReader)])
+  (plural characteristic, phrase intReader),
+  (phrase Doc.organization, phrase document)])
 
 -------------------------
 --                    --
@@ -78,10 +78,13 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
 scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
-  where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",
-                short programName +:+ intendedPurpose]
+scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes", mainRequirement]
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes" +:+. mainRequirement, S "Given the appropriate",
+                  S "inputs" `sC` short programName +:+ intendedPurpose]
 
 -- | constructor for characteristics of the intended reader subsection
 -- know
@@ -90,9 +93,9 @@ scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [
 -- appStandd
 -- r
 charIntRdrF :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> Section
-charIntRdrF know und progName appStandd r = 
-  SRS.charOfIR (intReaderIntro know und progName appStandd r) []
+  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> Section
+charIntRdrF know und progName appStandd asset r = 
+  SRS.charOfIR (intReaderIntro know und progName appStandd asset r) []
 
 --paragraph called by charIntRdrF
 -- topic1     - sentence the reader should have knowledge in
@@ -100,13 +103,13 @@ charIntRdrF know und progName appStandd r =
 -- stdrd      - sentence of the standards the reader should be familiar with
 -- sectionRef - reference to user characteristic section
 intReaderIntro :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
-intReaderIntro EmptyS topic2 progName stdrd sectionRef = 
+  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> [Contents]
+intReaderIntro EmptyS topic2 progName stdrd asset sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
+  stdrd, S "An understanding of" +:+ asset +:+. S "would be an asset", S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef2S sectionRef)]]
-intReaderIntro topic1 topic2 progName stdrd sectionRef = 
+intReaderIntro topic1 topic2 progName stdrd EmptyS sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:

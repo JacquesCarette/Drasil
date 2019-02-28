@@ -93,10 +93,12 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref, snref :: String -> D -> D
+ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
 ref      t x = custRef (t ++ "~\\ref") x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
+  br empty <> br x
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
 href :: String -> String -> D
@@ -139,7 +141,7 @@ item' bull s = command1oD "item" (Just bull) s
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "newline"
+newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 

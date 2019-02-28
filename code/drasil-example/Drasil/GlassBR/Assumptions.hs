@@ -15,8 +15,9 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
-  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, load_dur)
+import Drasil.GlassBR.Unitals (constant_K, constant_LoadDur, 
+  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lDurFac,
+  load_dur)
 
 assumptions :: [AssumpChunk] -- For testing
 assumptions = [glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
@@ -46,7 +47,7 @@ boundaryConditions = assump "assumpBC" boundaryConditionsDesc "boundaryCondition
 -- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 responseType       = assump "assumpRT" responseTypeDesc "responseType"
 -- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-ldfConstant        = assump "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"
+ldfConstant        = assump "assumpLDFC" (ldfConstantDesc lDurFac) "ldfConstant"
 -- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
@@ -91,7 +92,7 @@ responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
   short gLassBR, S "is flexural"]
 
-ldfConstantDesc :: QDefinition -> Sentence
+ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   makeRef2S standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,

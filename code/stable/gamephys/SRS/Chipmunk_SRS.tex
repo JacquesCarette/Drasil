@@ -40,6 +40,7 @@ The unit system used throughout is SI (Système International d'Unités). In add
 Symbol & Description
 \\
 \midrule
+\endhead
 kg & mass (kilogram)
 \\
 m & length (metre)
@@ -61,6 +62,7 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
+\endhead
 $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
@@ -171,7 +173,8 @@ $ϕ$ & Orientation & rad
 Abbreviation & Full Form
 \\
 \midrule
-2D & Two-Dimensional
+\endhead
+2D & two-dimensional
 \\
 A & Assumption
 \\
@@ -207,7 +210,7 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
-The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
@@ -286,7 +289,7 @@ The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies. \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[TM:ChaslesThm]{TM: ChaslesThm} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies. \hyperref[DD:chalses]{DD: chalses} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[TM:ChaslesThm]{TM: ChaslesThm} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimension}:]All objects are 2D. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
@@ -309,8 +312,9 @@ This section simplifies the original problem and helps in developing the theoret
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that Chipmunk2D is based on.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
 \phantomsection 
@@ -333,9 +337,10 @@ Label & Newton's second law of motion
                                          Source & \\ \midrule \\
                                                   RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonThirdLawMot}
 \phantomsection 
@@ -357,9 +362,10 @@ Label & Newton's third law of motion
                                          Source & \\ \midrule \\
                                                   RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:UniversalGravLaw}
 \phantomsection 
@@ -386,9 +392,10 @@ Label & Newton's law of universal gravitation
                                          Source & \\ \midrule \\
                                                   RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:ChaslesThm}
 \phantomsection 
@@ -412,9 +419,10 @@ Label & Chasles' theorem
                                          Source & \\ \midrule \\
                                                   RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawRotMot}
 \phantomsection 
@@ -437,15 +445,16 @@ Label & Newton's second law for rotational motion
                                          Source & \\ \midrule \\
                                                   RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 There are no general definitions.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
 \phantomsection 
@@ -474,9 +483,10 @@ Label & Center of Mass
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linDisp}
 \phantomsection 
@@ -505,9 +515,10 @@ Label & Linear Displacement
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linVel}
 \phantomsection 
@@ -536,9 +547,10 @@ Label & Linear Velocity
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linAcc}
 \phantomsection 
@@ -567,9 +579,10 @@ Label & Linear Acceleration
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angDisp}
 \phantomsection 
@@ -598,9 +611,10 @@ Label & Angular Displacement
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angVel}
 \phantomsection 
@@ -629,9 +643,10 @@ Label & Angular Velocity
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angAccel}
 \phantomsection 
@@ -660,9 +675,10 @@ Label & Angular Acceleration
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:impulse}
 \phantomsection 
@@ -700,13 +716,14 @@ Label & Impulse (scalar)
                                                           Source & \\ \midrule \\
                                                                    RefBy & \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:impulse}
+\toprule \textbf{Refname} & \textbf{DD:chalses}
 \phantomsection 
-\label{DD:impulse}
+\label{DD:chalses}
 \\ \midrule \\
 Label & Velocity At Point B
         \\ \midrule \\
@@ -730,9 +747,10 @@ Label & Velocity At Point B
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:torque}
 \phantomsection 
@@ -759,12 +777,13 @@ Label & Torque
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:transMot}
 \phantomsection 
@@ -811,9 +830,10 @@ Label & Force on the translational motion of a set of 2d rigid bodies
                                                                                                    Source & \\ \midrule \\
                                                                                                             RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:rotMot}
 \phantomsection 
@@ -859,9 +879,10 @@ Label & Force on the rotational motion of a set of 2D rigid body
                                                                                                    Source & \\ \midrule \\
                                                                                                             RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
- \noindent \begin{minipage}{\textwidth}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:col2D}
 \phantomsection 
@@ -911,7 +932,7 @@ Label & Collisions on 2D rigid bodies
                                                                                                    Source & \\ \midrule \\
                                                                                                             RefBy & 
 \\ \bottomrule \end{tabular}
-\end{minipage}\\
+\end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
@@ -920,6 +941,7 @@ Label & Collisions on 2D rigid bodies
 Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
+\endhead
 ${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $800.0\cdot{}10^{-3}$ & 10.0$\%$
 \\
 $\mathbf{F}$ & -- & $98.1$ N & 10.0$\%$
@@ -951,6 +973,7 @@ $ϕ$ & -- & $\frac{π}{2}$ rad & 10.0$\%$
 Var
 \\
 \midrule
+\endhead
 $\mathbf{p}$
 \\
 $\mathbf{v}$
@@ -1017,9 +1040,10 @@ Free open source 3D game physics libraries include:
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
+ & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
 \\
 \midrule
+\endhead
 \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1059,6 +1083,7 @@ The purpose of the traceability matrices is to provide easy references on what h
  & IM1 (\hyperref[IM:transMot]{IM: transMot}) & IM2 (\hyperref[IM:rotMot]{IM: rotMot}) & IM3 (\hyperref[IM:col2D]{IM: col2D}) & R1 (\hyperref[reqSS]{FR: Simulation-Space}) & R4 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) & R7 (\hyperref[reqISP]{FR: Input-Surface-Properties}) & Data Constraints (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification})
 \\
 \midrule
+\endhead
 GS1 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) & X &  &  &  &  &  & 
 \\
 GS2 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) &  & X &  &  &  &  & 
@@ -1092,6 +1117,7 @@ R6 (\hyperref[reqDCROT]{FR: Determine-Collision-Response-Over-Time}) &  & X &  &
  & A1 (\hyperref[A:objectTy]{A: objectTy}) & A2 (\hyperref[A:objectDimension]{A: objectDimension}) & A3 (\hyperref[A:coordinateSystemTy]{A: coordinateSystemTy}) & A4 (\hyperref[A:axesDefined]{A: axesDefined}) & A5 (\hyperref[A:collisionType]{A: collisionType}) & A6 (\hyperref[A:dampingInvolvement]{A: dampingInvolvement}) & A7 (\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement})
 \\
 \midrule
+\endhead
 T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) &  &  &  &  &  &  & 
@@ -1132,7 +1158,7 @@ DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & X & X &  &  &  & X &
 \\
 DD8 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  & X & X &  & 
 \\
-IM1 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  &  &  & X & X
+IM1 (\hyperref[DD:chalses]{DD: chalses}) & X & X &  &  &  & X & X
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) & X & X &  & X &  & X & X
 \\
@@ -1152,9 +1178,10 @@ LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:impulse]{DD: impulse}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[IM:transMot]{IM: transMot})
+ & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:chalses]{DD: chalses}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[IM:transMot]{IM: transMot})
 \\
 \midrule
+\endhead
 T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1195,7 +1222,7 @@ DD7 (\hyperref[DD:angAccel]{DD: angAccel}) &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 DD8 (\hyperref[DD:impulse]{DD: impulse}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
 \\
-IM1 (\hyperref[DD:impulse]{DD: impulse}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM1 (\hyperref[DD:chalses]{DD: chalses}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
@@ -1243,14 +1270,14 @@ author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
 year={1986},
-month={feb},
+month=feb,
 volume={12},
 number={2},
 pages={"251-257"},
 address={Washington, USA}}
 
 @inproceedings{parnasClements1984,
-author={Parnas, David L. and Clements, P. C. and Wiess, },
+author={Parnas, David L. and Clements, P. C. and Wiess},
 title={The Modular Structure of Complex Systems},
 booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
 year={1984},

@@ -52,7 +52,7 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, physicCon)
+  cartesian, friction, rightHand, collision, space, physicCon, physicCon')
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
 import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation, pi_)
@@ -89,7 +89,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     IntroProg para1_introduction_intro (short chipmunk) 
   [IPurpose (para1_purpose_of_document_intro),
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
-   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
+   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS]) :
    GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [user_characteristics_intro], SystCons [] [] ]) :
@@ -196,7 +196,8 @@ chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton
 
 everything :: ChunkDB
 everything = cdb (cpSymbolsAll ++ map qw [QM.pi_]) (map nw cpSymbolsAll ++ map nw [QM.pi_] ++ map nw cpAcronyms ++ map nw prodtcon
-  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
+  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' 
+  ++ map nw CP.physicCon ++ map nw CP.physicCon'
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby

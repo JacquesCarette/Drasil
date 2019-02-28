@@ -302,7 +302,7 @@ orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   short srs, S "for", phrase sciCompS,
   S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
   S "Lai", makeRef2S smithLai2005]
-orgSecEnd   = foldlSent [S "The", plural inModel, S "provide the set of",
+orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --

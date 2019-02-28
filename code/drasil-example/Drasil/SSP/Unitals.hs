@@ -314,10 +314,10 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, index, varblU, varblV, fs_min,
-  ufixme1, ufixme2]
+  ufixme1, ufixme2, ufixme3, ufixme4]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV, ufixme1, ufixme2, ufixme3, ufixme4 :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -351,6 +351,12 @@ ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
 
 ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
   (const $ Atomic "SpencerFixme2Please") Real Nothing 
+
+ufixme3 = dqd' (dcc "fixme3" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme3Please") Real Nothing
+
+ufixme4 = dqd' (dcc "fixme4" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme4Please") Real Nothing 
 
 --------------------
 -- Index Function --

@@ -9,9 +9,10 @@ import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
 
 sspCitations :: BibRef
 sspCitations = [chen2005, parnasClements1986, koothoor2013,
-  fredlund1977, smithLai2005, li2010, karchewski2012, huston2008]
+  fredlund1977, smithLai2005, li2010, karchewski2012, huston2008, 
+  morgenstern1965]
 
-chen2005, fredlund1977, li2010, karchewski2012, huston2008, \
+chen2005, fredlund1977, li2010, karchewski2012, huston2008,
   morgenstern1965 :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = cArticle [qhQian, dyZhu, cfLee, grChen]

@@ -39,7 +39,7 @@ slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from 
 slope    = nc "slope"      (cn' "slope")
 soil     = nc "soil"       (cn  "soil")
 
-morPrice = nc "morPrice"   (cn  "morgenstern price")
+morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
 rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
 slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk

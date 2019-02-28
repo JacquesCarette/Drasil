@@ -61,7 +61,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce,
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
-import Drasil.SSP.References (sspCitations)
+import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -123,7 +123,7 @@ mkSRS = RefSec (RefProg intro
     , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd]) :
     --FIXME: issue #235
     (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
-      UsrChars [userCharIntro], SystCons [] []]):
+      UsrChars [userCharIntro], SystCons [sysConstraints] []]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec 
@@ -364,7 +364,11 @@ userChar pname understandings familiarities = foldlSP [
   S "and be familiar with", foldlList Comma List familiarities]
 
 -- SECTION 3.2 --
--- System Constraints automatically generated
+sysConstraints :: Contents
+sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_, 
+  makeRef2S morgenstern1965 `sC` S "which involves dividing the", phrase slope,
+  S "into vertical", plural slice `sC` S "will be used to derive the",
+  plural equation, S "for analysing the", phrase slope]
 
 -- SECTION 4 --
 

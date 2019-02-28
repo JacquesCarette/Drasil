@@ -164,11 +164,11 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
-compareAuthYearTitle c1 c2 =
-  if cp /= EQ then cp
-  else if y1 /= y2 then y1 `compare` y2
-  else if t1 /= t2 then t1 `compare` t2
-  else error "Couldn't sort authors"
+compareAuthYearTitle c1 c2 
+  | cp /= EQ = cp
+  | y1 /= y2 = y1 `compare` y2
+  | t1 /= t2 = t1 `compare` t2
+  | otherwise = error "Couldn't sort authors"
   where
     cp = comparePeople (getAuthor c1) (getAuthor c2)
     y1 = getYear c1

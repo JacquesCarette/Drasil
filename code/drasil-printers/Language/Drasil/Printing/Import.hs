@@ -55,16 +55,14 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
-digitsProcess (hd:tl) pos coun ex = if pos /= coun
-  then [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
-  else if ex /= 0
-    then [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-    else [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
-digitsProcess [] pos coun ex = if pos > coun
-  then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
-  else if ex /= 0
-    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-    else [P.MO P.Point, P.Int 0]
+digitsProcess (hd:tl) pos coun ex 
+  | pos /= coun = [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
+digitsProcess [] pos coun ex 
+  | pos > coun = [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
+  | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int 0]
 
 -- THis function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent

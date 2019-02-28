@@ -983,7 +983,7 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
 <figure>
@@ -994,20 +994,20 @@ System Context
 </figure>
 </div>
 <p class="paragraph">
-The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+The responsibilities of the user and the system are as follows:
 </p>
 <ul class="list">
 <li>
 User Responsibilities
 <ul class="list">
 <li>
-Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry
+Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP
 </li>
 <li>
 Ensure that consistent units are used for input variables
 </li>
 <li>
-Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for any particular problem input to the software
+Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for the problem to which the user is applying the software
 </li>
 </ul>
 </li>
@@ -1015,16 +1015,19 @@ Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions<
 SSP Responsibilities
 <ul class="list">
 <li>
-Detect data type mismatch, such as a string of characters  input instead of a floating point number
+Detect data type mismatch, such as a string of characters input instead of a floating point number
 </li>
 <li>
-Determine if the inputs satisfy the required physical and software constraints
+Verify that the inputs satisfy the required physical and other data constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>)
 </li>
 <li>
-Identify the most likely failure surface within the possible input range
+Identify the critical slip surface within the possible input range
 </li>
 <li>
 Find the factor of safety for the slope
+</li>
+<li>
+Find the interslice normal force and shear force along the critical slip surface
 </li>
 </ul>
 </li>

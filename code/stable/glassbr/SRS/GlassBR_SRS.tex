@@ -266,28 +266,6 @@ The interaction between the product and the user is through a user interface. Th
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
-\section{Scope of the Project}
-\label{Sec:ProjScope}
-This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
-\subsection{Product Use Case Table}
-\label{Sec:UseCaseTable}
-\begin{longtabu}{l X[l]}
-\toprule
-Actor & Input and Output
-\\
-\midrule
-\endhead
-User & Characteristics of the glass slab and of the blast. Details in \hyperref[Sec:IndividualProdUC]{Section: Individual Product Use Cases}
-\\
-GlassBR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
-\\
-\bottomrule
-\caption{Use Case Table}
-\label{Table:useCaseTable}
-\end{longtabu}
-\subsection{Individual Product Use Cases}
-\label{Sec:IndividualProdUC}
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true, then it's shown that the glass slab is safe to use, else if both return false, then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
@@ -379,7 +357,7 @@ This section simplifies the original problem and helps in developing the theoret
 \label{Sec:TMs}
 This section focuses on the general equations and laws that GlassBR is based on.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:isSafePb}
@@ -406,7 +384,7 @@ Label & Safety Req-Pb
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:isSafeLR}
@@ -439,7 +417,7 @@ There are no general definitions.
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:risk.fun}
@@ -479,7 +457,7 @@ Label & Risk of failure
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:min.thick}
@@ -522,7 +500,7 @@ Label & Minimum thickness
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
@@ -554,7 +532,7 @@ Label & Load duration factor
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
@@ -588,7 +566,7 @@ Label & Stress distribution factor (Function)
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:nFL}
@@ -625,7 +603,7 @@ Label & Non-factored load
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:gTF}
@@ -661,7 +639,7 @@ Label & Glass type factor
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
@@ -701,7 +679,7 @@ Label & Dimensionless load
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:tolLoad}
@@ -734,7 +712,7 @@ Label & Tolerable load
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sdf.tol}
@@ -776,7 +754,7 @@ Label & Stress distribution factor (Function) based on Pbtol
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:standOffDist}
@@ -806,7 +784,7 @@ Label & Stand off distance
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:aspect.ratio}
@@ -837,7 +815,7 @@ Label & Aspect ratio
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:probOfBreak}
@@ -867,7 +845,7 @@ Label & Probability of breakage
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:calofCapacity}
@@ -902,7 +880,7 @@ Label & Load resistance
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:calofDemand}
@@ -937,7 +915,7 @@ Label & Applied load (demand)
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:calOfDemand}

@@ -119,6 +119,10 @@ $SpencerFixme1Please$ & Fixme: What is this value? & --
 \\
 $SpencerFixme2Please$ & Fixme: What is this value? & --
 \\
+$SpencerFixme3Please$ & Fixme: What is this value? & --
+\\
+$SpencerFixme4Please$ & Fixme: What is this value? & --
+\\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
 $u$ & Local Index: used as a bound variable index in calculations & --
@@ -194,6 +198,8 @@ Abbreviation & Full Form
 \\
 \midrule
 \endhead
+2D & two-dimensional
+\\
 A & Assumption
 \\
 DD & Data Definition
@@ -233,7 +239,7 @@ The primary purpose of this document is to record the requirements of SSP and th
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, SSA identifies the most likely failure surface within the possible input range, and finds the factor of safety for the slope.
+The scope of the requirements includes stability analysis of a two-dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. An understanding of soil mechanics would be an asset. The users of SSA can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
@@ -272,7 +278,7 @@ The interaction between the product and the user is through a user interface. Th
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
+The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
@@ -369,7 +375,7 @@ This section simplifies the original problem and helps in developing the theoret
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SSA is based on.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:factOfSafety}
@@ -396,7 +402,7 @@ Label & Factor of safety
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:equilibrium}
@@ -423,7 +429,7 @@ Label & Equilibrium
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:mcShrStrgth}
@@ -451,7 +457,7 @@ Label & Mohr-Coulumb shear strength
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:effStress}
@@ -480,7 +486,7 @@ Label & Effective stress
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normForcEq}
@@ -516,7 +522,7 @@ Label & Normal force equilibrium
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:bsShrFEq}
@@ -552,7 +558,7 @@ Label & Base shear force equilibrium
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShr}
@@ -583,7 +589,7 @@ Label & Resistive shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShr}
@@ -616,7 +622,7 @@ Label & Mobile shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:effNormF}
@@ -644,7 +650,7 @@ Label & Effective normal force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShearWO}
@@ -680,7 +686,7 @@ Label & Resistive shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShearWO}
@@ -712,7 +718,7 @@ Label & Mobilized shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normShrR}
@@ -740,7 +746,7 @@ Label & Interslice normal/shear relationship
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:momentEql}
@@ -781,7 +787,7 @@ Label & Moment equilibrium
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sliceWght}
@@ -819,7 +825,7 @@ Label & Weight
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:baseWtrF}
@@ -856,7 +862,7 @@ Label & Base hydrostatic force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:surfWtrF}
@@ -893,7 +899,7 @@ Label & Surface hydrostatic force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:intersliceWtrF}
@@ -929,7 +935,7 @@ Label & Interslice water force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleA}
@@ -961,7 +967,7 @@ Label & Angle
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleB}
@@ -993,7 +999,7 @@ Label & Angle
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthB}
@@ -1022,7 +1028,7 @@ Label & Base width of a slice
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLb}
@@ -1054,7 +1060,7 @@ Label & Total base length of a slice
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLs}
@@ -1086,7 +1092,7 @@ Label & Length of an interslice surface
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:slcHeight}
@@ -1100,14 +1106,13 @@ Label & Y-direction height of a slice
                  Units & m
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    h=\frac{1}{2} \left({y_{slope,i}}-{y_{slip,i}}+{y_{slope,i-1}}-{y_{slip,i-1}}\right)
+                                    h=\frac{1}{2} \left(SpencerFixme3Please+SpencerFixme4Please\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$h$ is the y-direction height of a slice (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
+                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
@@ -1118,7 +1123,7 @@ Label & Y-direction height of a slice
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stress}
@@ -1147,7 +1152,7 @@ Label & Normal stress
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ratioVariation}
@@ -1182,7 +1187,7 @@ Label & Interslice normal to shear force ratio variation function
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc1}
@@ -1215,7 +1220,7 @@ Label & First function for incorporating interslice forces into shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc2}
@@ -1249,7 +1254,7 @@ Label & Second function for incorporating interslice forces into shear force
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme1}
@@ -1277,7 +1282,7 @@ Label & Fixme
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme2}
@@ -1304,11 +1309,69 @@ Label & Fixme
                                                            RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme3}
+\phantomsection 
+\label{DD:fixme3}
+\\ \midrule \\
+Label & Fixme
+        \\ \midrule \\
+        Symbol & $SpencerFixme3Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    SpencerFixme3Please={y_{slope,i}}-{y_{slip,i}}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme4}
+\phantomsection 
+\label{DD:fixme4}
+\\ \midrule \\
+Label & Fixme
+        \\ \midrule \\
+        Symbol & $SpencerFixme4Please$
+                 \\ \midrule \\
+                 Units & Unitless
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    SpencerFixme4Please={y_{slope,i-1}}-{y_{slip,i-1}}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:fctSfty}
@@ -1437,7 +1500,7 @@ Isolating the factor of safety on the left-hand side and using compact notation 
 \end{displaymath}
 ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:nrmShrFor}
@@ -1513,7 +1576,7 @@ Taking a summation of each slice, and applying the boundary condition that $G_{0
 \end{displaymath}
 equation (11) for $λ$, is a function of the unknown interslice normal force $G$ \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:intsliceFs}
@@ -1578,7 +1641,7 @@ G_{i}=\frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}
 \end{displaymath}
 The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and the factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:crtSlpId}

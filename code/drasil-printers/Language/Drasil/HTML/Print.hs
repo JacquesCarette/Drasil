@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print,(<>))
-import Data.List (sortBy,partition,intersperse)
+import Prelude hiding (print, (<>))
+import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
@@ -132,12 +132,12 @@ uSymb (L.US ls) = formatu t b
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String
     formatu [] l = line l
-    formatu l [] = concat $ intersperse "&sdot;" $ map pow l
+    formatu l [] = intercalate "&sdot;" $ map pow l
     formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
     line :: [(L.Symbol,Integer)] -> String
     line []  = ""
     line [x] = pow x
-    line l   = '(' : (concat $ intersperse "&sdot;" $ map pow l) ++ ")"
+    line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
     pow :: (L.Symbol,Integer) -> String
     pow (x,1) = symbol x
     pow (x,p) = symbol x ++ sup (show p)

@@ -23,7 +23,6 @@
 - ignore: {name: "Use guards"}
 - ignore: {name: "Reduce duplication"}
 - ignore: {name: "Fuse foldr/map"}
-- ignore: {name: "Use intercalate"}
 - ignore: {name: "Use foldr"}
 
 

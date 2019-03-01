@@ -42,6 +42,7 @@
 #
 # Will suggest replacing "wibbleMany [myvar]" with "wibbleOne myvar"
 # - error: {lhs: "wibbleMany [x]", rhs: wibbleOne x}
+- suggest: {lhs: "[x] ++ [y]", rhs: "[x, y]", name: Combine Lists}
 
 
 # Turn on hints that are off by default

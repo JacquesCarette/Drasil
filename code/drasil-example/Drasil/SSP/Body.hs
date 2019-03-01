@@ -146,7 +146,7 @@ mkSRS = [RefSec $ RefProg intro
     (S "SSA is intended to be an educational tool")
     (S "")]
   , LCsSec $ LCsProg likelyChanges_SRS
-  , UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ [Bibliography]
+  , UCsSec $ UCsProg unlikelyChanges_SRS, Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
 ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)

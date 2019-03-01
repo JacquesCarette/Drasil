@@ -37,8 +37,8 @@ indent :: Doc -> Doc
 indent = nest 4
 
 dot, comm :: Doc -> Doc
-dot  x = x <> text "."
-comm x = x <> text ","
+dot  = (<> text ".")
+comm = (<> text ",")
 
 -- | basic plaintext (String) wrapping
 paren, brace, dollar, sqbrac, angbrac :: String -> String

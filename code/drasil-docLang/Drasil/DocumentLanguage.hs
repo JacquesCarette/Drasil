@@ -463,8 +463,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $
       map (\y ->
-        let lb = makeRef2 y in
-        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable)
+        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y $ _sysinfodb si')) $ makeRef2 y) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable)
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

@@ -879,7 +879,7 @@ notMain (MainMethod _) = False
 notMain _              = True
 
 notMainModule :: Module -> Bool
-notMainModule m = all notMain $ functions m
+notMainModule = all notMain . functions
 
 multi :: [Statement] -> Statement
 multi = MultiState
@@ -913,7 +913,7 @@ addToClass (MainClass n v m) ds fs = MainClass n (addToSV ds v) (addToMethod fs 
 addToClass _ _ _ = error "Unsupported class for Java imperative to OO conversion"
 
 addToMethod :: [Method] -> [Method] -> [Method]
-addToMethod f m = m ++ (map fToM f)
+addToMethod f = (++ (map fToM f))
 
 fToM :: Method -> Method
 fToM (Method l _ _ t ps b) = Method l Public Static t ps b

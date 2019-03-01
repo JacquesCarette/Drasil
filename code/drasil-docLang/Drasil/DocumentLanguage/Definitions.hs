@@ -1,4 +1,4 @@
-{-# Language GADTs, RankNTypes #-}
+{-# Language GADTs #-}
 
 module Drasil.DocumentLanguage.Definitions
   ( Fields
@@ -159,8 +159,8 @@ buildDescription Verbose u e m cs = (UlC . ulcc .
 buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefinition -> ctx ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
-buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions
-  (firstPair' u d : descPairs u (flip vars m $ d ^. defnExpr))]
+buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $ 
+  firstPair' u d : descPairs u (flip vars m $ d ^. defnExpr)]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx

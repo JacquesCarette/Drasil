@@ -125,7 +125,7 @@ sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
   surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
   momntOfBdy, porePressure, sliceHght,
-  fx, fy, mobShrC, shrResC, intNormForce, shrStress]
+  fx, fy, nrmForceSum, mobShrC, shrResC, intNormForce, shrStress]
 
 normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
@@ -133,7 +133,7 @@ normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy,
+  momntOfBdy, fx, fy, nrmForceSum,
   porePressure, mobShrC, shrResC,
   intNormForce, shrStress :: UnitalChunk
   
@@ -306,6 +306,9 @@ fx = uc' "fx" (cn "x-component of the net force") ""
 
 fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
+
+nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") ""
+  (sup (sub cF lX) cG) newton
   
 ----------------------
 -- Unitless Symbols --
@@ -314,10 +317,10 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, index, varblU, varblV, fs_min,
-  ufixme1, ufixme2, ufixme3, ufixme4]
+  ufixme2, ufixme3, ufixme4]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme1, ufixme2, ufixme3, ufixme4 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV, ufixme2, ufixme3, ufixme4 :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -345,9 +348,6 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
-
-ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme1Please") Real Nothing 
 
 ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
   (const $ Atomic "SpencerFixme2Please") Real Nothing 

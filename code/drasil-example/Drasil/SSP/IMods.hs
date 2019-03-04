@@ -19,7 +19,7 @@ import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_,
 import Drasil.SSP.Assumptions (newA2, newA4, newA6, newA10, newA11, newA12)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
-import Drasil.SSP.DataDefs (nrmForceSumDD, fixme2, convertFunc1, convertFunc2,
+import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, convertFunc2,
   lengthLs, sliceWght)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
@@ -86,7 +86,7 @@ nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
-          (sy nrmForceSumDD + sy fixme2)
+          (sy nrmForceSumDD + sy watForceSumDD)
            * tan (inxi baseAngle)+ (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
           2 * inxi surfHydroForce * sin (inxi surfAngle) -
           2 * inxi surfLoad * cos (inxi impLoadAngle)),
@@ -533,7 +533,7 @@ eq2 = sy normToShear $= momExpr (+)
   inxiM1 intNormForce * inxiM1 scalFunc))
 
 eq3 = inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy nrmForceSumDD + sy fixme2) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 
@@ -674,7 +674,7 @@ nrmShrDerivation = [
   
   eqUnR' $
   inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy nrmForceSumDD + sy fixme2) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 

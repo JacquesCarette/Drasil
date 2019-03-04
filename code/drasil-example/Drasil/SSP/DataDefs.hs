@@ -1,6 +1,6 @@
 module Drasil.SSP.DataDefs (dataDefns, sliceWght,
   lengthLs, lengthLb, stressDD, convertFunc1, convertFunc2,
-  nrmForceSumDD, fixme2) where 
+  nrmForceSumDD, watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -19,7 +19,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   constF, dryWeight, fricAngle, fs, genericF, genericA, 
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, nrmForceSum, ufixme2, ufixme3, ufixme4, waterHght, waterWeight, watrForce)
+  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, nrmForceSum, watForceSum, ufixme3, ufixme4, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -28,7 +28,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, fixme2, fixme3, fixme4]
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, fixme3, fixme4]
 
 --DD1
 
@@ -294,10 +294,11 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-nrmForceSumDD, fixme2 :: DataDefinition
+nrmForceSumDD, watForceSumDD :: DataDefinition
 nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
-fixme2 = mkDD fixme2QD [{-References-}] [{-Derivation-}] "fixme2" []--Notes
+watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
+  "watForceSumDD" []--Notes
 fixme3 = mkDD fixme3QD [{-References-}] [{-Derivation-}] "fixme3" []--Notes
 fixme4 = mkDD fixme4QD [{-References-}] [{-Derivation-}] "fixme4" []--Notes
 --FIXME: fill empty lists in
@@ -305,8 +306,8 @@ fixme4 = mkDD fixme4QD [{-References-}] [{-Derivation-}] "fixme4" []--Notes
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
 
-fixme2QD :: QDefinition
-fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
+watForceSumQD :: QDefinition
+watForceSumQD = ec watForceSum (inxi watrForce + inxiM1 watrForce)
 
 fixme3QD :: QDefinition
 fixme3QD = ec ufixme3 (inxi slopeHght - inxi slipHght)

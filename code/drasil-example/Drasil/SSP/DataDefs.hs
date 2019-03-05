@@ -189,7 +189,10 @@ slcHeightEqn = 0.5 * (sy sliceHghtRight + sy sliceHghtLeft)
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
   S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
-  S "are straight lines" +:+. sParen (makeRef2S newA9)]
+  S "are straight lines" +:+. sParen (makeRef2S newA9), 
+  ch sliceHghtRight `sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
+  makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
+  S "respectively."]
 
 --DD11 
 

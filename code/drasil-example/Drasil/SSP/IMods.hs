@@ -29,10 +29,10 @@ import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   cohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
   indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
-  minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmFSubWat,
+  minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmForceSum, nrmFSubWat,
   numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
   shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght, sum1toN, surfAngle, surfHydroForce, surfLoad, totNrmForce, 
-  varblU, varblV, watrForce, waterHght, waterWeight, wiif)
+  varblU, varblV, watForceSum, watrForce, waterHght, waterWeight, wiif)
 
 -----------------------
 --  Instance Models  --
@@ -103,8 +103,10 @@ nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
   S "The inclination function", ch scalFunc,
   S "determines the relative magnitude ratio between the",
   S "different interslices, while", ch normToShear, S "determines the" +:+.
-  S "magnitude", ch normToShear, S "uses the sum of interslice normal",
-  S "and shear forces taken from each interslice"]
+  S "magnitude", ch normToShear, S "uses the sum of interslice normal" +:+.
+  S "and shear forces taken from each interslice", ch nrmForceSum `sAnd` 
+  ch watForceSum, S "are defined in", makeRef2S nrmForceSumDD `sAnd` 
+  makeRef2S watForceSumDD `sC` S "respectively"]
 
 --
 

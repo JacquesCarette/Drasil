@@ -308,16 +308,20 @@ fx = uc' "fx" (cn "x-component of the net force") ""
 fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
 
-nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") ""
+nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") 
+  "for two adjacent interslice boundaries"
   (sup (sub cF lX) cG) newton
 
-watForceSum = uc' "F_x^H" (cn "sum of the interslice water forces") ""
+watForceSum = uc' "F_x^H" (cn "sum of the interslice water forces") 
+  "for two adjacent interslice boundaries"
   (sup (sub cF lX) cH) newton
 
-sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice") ""
+sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice") 
+  "assuming slice surface has negative slope"
   (sup lH cR) metre
 
-sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") ""
+sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") 
+  "assuming slice surface has negative slope"
   (sup lH cL) metre
   
 ----------------------

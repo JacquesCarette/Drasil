@@ -213,8 +213,8 @@ shearRNoIntsl = uc' "R_i"
 slcWght = uc' "W_i" (cn $ "weight")
   ("downward force caused by gravity on slice i") (cW) newton
 
-watrForce = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
-  "x-ordinate direction between adjacent slices " ++ fisi)
+watrForce = uc' "H_i" (cn $ "interslice normal water force") ("exerted in " ++
+  "the x-ordinate direction between adjacent slices " ++ fisi)
   (cH) newton
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
@@ -312,7 +312,7 @@ nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces")
   "for two adjacent interslice boundaries"
   (sup (sub cF lX) cG) newton
 
-watForceSum = uc' "F_x^H" (cn "sum of the interslice water forces") 
+watForceSum = uc' "F_x^H" (cn "sum of the interslice normal water forces") 
   "for two adjacent interslice boundaries"
   (sup (sub cF lX) cH) newton
 

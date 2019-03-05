@@ -19,7 +19,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   constF, dryWeight, fricAngle, fs, genericF, genericA, 
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, nrmForceSum, watForceSum, sliceHghtLeft, ufixme4, waterHght, waterWeight, watrForce)
+  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
+  surfLngth, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, waterHght,
+  waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -28,8 +30,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtLeftDD,
-  fixme4]
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD1
 
@@ -183,7 +184,7 @@ slcHeightQD :: QDefinition
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = 0.5 * (sy sliceHghtLeft + sy fixme4) 
+slcHeightEqn = 0.5 * (sy sliceHghtRight + sy sliceHghtLeft) 
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
@@ -295,15 +296,16 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-nrmForceSumDD, watForceSumDD, sliceHghtLeftDD :: DataDefinition
+nrmForceSumDD, watForceSumDD, sliceHghtRightDD, 
+  sliceHghtLeftDD :: DataDefinition
 nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
 watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
   "watForceSumDD" []--Notes
+sliceHghtRightDD = mkDD sliceHghtRightQD [{-References-}] [{-Derivation-}] 
+  "sliceHghtRightDD" []--Notes
 sliceHghtLeftDD = mkDD sliceHghtLeftQD [{-References-}] [{-Derivation-}] 
   "sliceHghtLeftDD" []--Notes
-fixme4 = mkDD fixme4QD [{-References-}] [{-Derivation-}] "fixme4" []--Notes
---FIXME: fill empty lists in
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -311,11 +313,11 @@ nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
 watForceSumQD :: QDefinition
 watForceSumQD = ec watForceSum (inxi watrForce + inxiM1 watrForce)
 
-sliceHghtLeftQD :: QDefinition
-sliceHghtLeftQD = ec sliceHghtLeft (inxi slopeHght - inxi slipHght)
+sliceHghtRightQD :: QDefinition
+sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght - inxi slipHght)
 
-fixme4QD :: QDefinition
-fixme4QD = ec ufixme4 (inxiM1 slopeHght - inxiM1 slipHght)
+sliceHghtLeftQD :: QDefinition
+sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght - inxiM1 slipHght)
 
 
 

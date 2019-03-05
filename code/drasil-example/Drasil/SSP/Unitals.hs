@@ -122,10 +122,11 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
-  surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
-  momntOfBdy, porePressure, sliceHght,
-  fx, fy, nrmForceSum, watForceSum, sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress]
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
+  sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  mobShrC, shrResC, intNormForce, shrStress]
 
 normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
@@ -133,7 +134,7 @@ normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtLeft,
+  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   porePressure, mobShrC, shrResC,
   intNormForce, shrStress :: UnitalChunk
   
@@ -313,8 +314,11 @@ nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") ""
 watForceSum = uc' "F_x^H" (cn "sum of the interslice water forces") ""
   (sup (sub cF lX) cH) newton
 
-sliceHghtLeft = uc' "h^R" (cn "height of the right side of a slice") ""
+sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice") ""
   (sup lH cR) metre
+
+sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") ""
+  (sup lH cL) metre
   
 ----------------------
 -- Unitless Symbols --
@@ -322,11 +326,10 @@ sliceHghtLeft = uc' "h^R" (cn "height of the right side of a slice") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, varblU, varblV, fs_min,
-  ufixme4]
+  numbSlices, minFunction, index, varblU, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme4 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -354,9 +357,6 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
-
-ufixme4 = dqd' (dcc "fixme4" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme4Please") Real Nothing 
 
 --------------------
 -- Index Function --

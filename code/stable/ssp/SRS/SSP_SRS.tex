@@ -1116,6 +1116,7 @@ Label & Y-direction height of a slice
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
+                                                          ${h^{R}}$ and ${h^{L}}$ are defined in \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} and \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}, respectively.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1278,7 +1279,7 @@ Label & Sum of the interslice normal forces
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1306,7 +1307,7 @@ Label & Sum of the interslice normal water forces
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1335,7 +1336,7 @@ Label & Height of the right side of a slice
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1364,7 +1365,7 @@ Label & Height of the left side of a slice
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -1555,7 +1556,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
+                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice. ${{F_{x}}^{G}}$ and ${{F_{x}}^{H}}$ are defined in \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} and \hyperref[DD:watForceSumDD]{DD: watForceSumDD}, respectively.
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\

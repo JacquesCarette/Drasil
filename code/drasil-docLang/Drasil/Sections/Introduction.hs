@@ -2,7 +2,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
   charIntRdrF) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
@@ -131,5 +131,8 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           S "in", makeRef2S bottomSec +:+
           S "and trace back to find any additional information they require"],
           mkParagraph $ lastS trailingSentence]
-          where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
-                lastS t = refineChain [goalStmt, thModel, inModel] +:+. t
+          where lastS EmptyS = refineChain $ zip [goalStmt, thModel, inModel]
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]
+                lastS t = refineChain (zip [goalStmt, thModel, inModel] 
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) 
+                  +:+. t

@@ -21,7 +21,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon)
+import qualified Drasil.DocLang.SRS as SRS (goalStmt, thModel, inModel,
+  physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
@@ -43,6 +44,7 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
   FoldType(List), foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOf, sOr,
@@ -298,10 +300,10 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short srs, S "for", phrase sciCompS,
-  S "proposed by Koothoor as well as Smith and Lai"]
-orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
-  S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively"
-  +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
+  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
+  S "Lai", makeRef2S smithLai2005]
+orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
+  S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --
 -- SECTION 3.1 --

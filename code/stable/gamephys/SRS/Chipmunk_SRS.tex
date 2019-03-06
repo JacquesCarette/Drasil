@@ -89,6 +89,8 @@ ${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
 \\
 $j$ & Impulse (scalar) & Ns
 \\
+$\mathbf{J}$ & Impulse (vector) & Ns
+\\
 $L$ & Length & m
 \\
 $M$ & Total Mass of the Rigid Body & kg
@@ -136,6 +138,8 @@ ${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of a and B & $\frac{\text{m}}{\text{s}}$
+\\
+$Δ\mathbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -286,7 +290,7 @@ The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies. \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[TM:ChaslesThm]{TM: ChaslesThm} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies. \hyperref[DD:ChaslesDD]{DD: ChaslesDD} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulseV]{DD: impulseV} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[TM:ChaslesThm]{TM: ChaslesThm} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimension}:]All objects are 2D. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
@@ -704,9 +708,9 @@ Label & Impulse (scalar)
 ~\newline
  \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:impulse}
+\toprule \textbf{Refname} & \textbf{DD:ChaslesDD}
 \phantomsection 
-\label{DD:impulse}
+\label{DD:ChaslesDD}
 \\ \midrule \\
 Label & Velocity At Point B
         \\ \midrule \\
@@ -755,6 +759,36 @@ Label & Torque
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+                                                          \\ \midrule \\
+                                                          Source & \\ \midrule \\
+                                                                   RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+ \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:impulseV}
+\phantomsection 
+\label{DD:impulseV}
+\\ \midrule \\
+Label & Impulse (vector)
+        \\ \midrule \\
+        Symbol & $\mathbf{J}$
+                 \\ \midrule \\
+                 Units & Ns
+                         \\ \midrule \\
+                         Equation & \begin{dmath}
+                                    \mathbf{J}=m Δ\mathbf{v}
+                                    \end{dmath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$\mathbf{J}$ is the impulse (vector) (Ns)}
+                                                  \item{$m$ is the mass (kg)}
+                                                  \item{$Δ\mathbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time.
+                                                          \hyperref[A:objectTy]{A: objectTy}
                                                           \\ \midrule \\
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
@@ -1015,40 +1049,40 @@ Free open source 3D game physics libraries include:
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
+ & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:ChaslesDD]{DD: ChaslesDD} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
 \\
 \midrule
-\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angDisp]{DD: angDisp} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angDisp]{DD: angDisp} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angVel]{DD: angVel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angVel]{DD: angVel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:axesDefined]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:axesDefined]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} &  & X &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} &  & X &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:collisionType]{A: collisionType} &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:collisionType]{A: collisionType} &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:dampingInvolvement]{A: dampingInvolvement} &  & X &  & X & X &  &  & X & X & X & X & X & X & X &  &  &  & 
+\hyperref[A:dampingInvolvement]{A: dampingInvolvement} &  & X &  & X & X &  &  & X & X & X & X & X & X & X &  &  &  &  & 
 \\
-\hyperref[A:objectDimension]{A: objectDimension} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X & X &  & 
+\hyperref[A:objectDimension]{A: objectDimension} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X & X &  &  & 
 \\
-\hyperref[A:objectTy]{A: objectTy} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X &  & X & X
+\hyperref[A:objectTy]{A: objectTy} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X &  & X & X & X
 \\
-\hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1132,19 +1166,19 @@ DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & X & X &  &  &  & X &
 \\
 DD8 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  & X & X &  & 
 \\
-IM1 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  &  &  & X & X
+IM1 (\hyperref[DD:ChaslesDD]{DD: ChaslesDD}) & X & X &  &  &  & X & X
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) & X & X &  & X &  & X & X
 \\
-IM3 (\hyperref[IM:transMot]{IM: transMot}) & X & X &  &  & X & X & X
+IM3 (\hyperref[DD:impulseV]{DD: impulseV}) & X & X &  &  & X & X & X
 \\
-LC1 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  &  &  & 
+LC1 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  &  & 
 \\
-LC2 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  & X &  & 
+LC2 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  & X &  & 
 \\
-LC3 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  &  & X & 
+LC3 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  &  & X & 
 \\
-LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
+LC4 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  &  &  & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
@@ -1152,7 +1186,7 @@ LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:impulse]{DD: impulse}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[IM:transMot]{IM: transMot})
+ & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:ChaslesDD]{DD: ChaslesDD}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[DD:impulseV]{DD: impulseV})
 \\
 \midrule
 T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1195,11 +1229,11 @@ DD7 (\hyperref[DD:angAccel]{DD: angAccel}) &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 DD8 (\hyperref[DD:impulse]{DD: impulse}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
 \\
-IM1 (\hyperref[DD:impulse]{DD: impulse}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM1 (\hyperref[DD:ChaslesDD]{DD: ChaslesDD}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[DD:impulseV]{DD: impulseV}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

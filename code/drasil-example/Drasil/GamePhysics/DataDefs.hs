@@ -1,15 +1,11 @@
-module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
+ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
   angVelDD, angAccelDD, impulseDD, torqueDD, impulseVDD) where
-
 import Language.Drasil
-
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
   perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB)
-
-
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
@@ -18,9 +14,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   impulseV, force, torque, chgInVelocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Utils (eqUnR')
-
-
 
 ----- Data Definitions -----
 
@@ -245,22 +238,19 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 -----------------DD10 Impulse--------------------------------------
 impulseVDD :: DataDefinition
 impulseVDD = mkDD impulseV [{-- References --}] [{-- Derivation --}] "impulseV"
- [makeRef2S newA1]
+ [impulseVThmDesc, makeRef2S newA1]
 
 impulseV :: QDefinition
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
-impulseVEqn =  int_all (codeSymb QP.time) (sy QP.force) $= (sy QP.chgMomentum) $= (sy QPP.mass) * (sy QP.chgInVelocity)
+impulseVEqn =   (sy QPP.mass) * (sy QP.chgInVelocity)
+
+-- int_all (codeSymb QP.time) (sy QP.force) $= (sy QP.chgMomentum) $=
 
 impulseVThmDesc :: Sentence
-impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV) ]
---An impulse J occurs when a force F acts over an interval of time
-
---(sy changeInMomentum)(sy changeInVelocity)
-  --(sy impulseV) $= (defint (sy force_1)(sy QP.time) (sy momtInert_B))
-  --((sy QP.time) * ( sy mass_A) * ((apply1 r_OB) - 
-  --(apply1 sy QP.time))))
+impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV), S "occurs when a", 
+  (phrase QP.force), (ch QP.force), S "acts over a body over an interval of",(phrase QP.time)]
 
 --defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 --propCorSolDeriv4 :: Contents

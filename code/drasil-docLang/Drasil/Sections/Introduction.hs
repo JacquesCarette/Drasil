@@ -1,5 +1,5 @@
 module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
-  charIntRdrF) where
+  charIntRdrF, charIntRdrF') where
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)

@@ -268,6 +268,7 @@ getIntroSub :: IntroSub -> [Sentence]
 getIntroSub (IPurpose s) = [s]
 getIntroSub (IScope s1 s2) = [s1] ++ [s2]
 getIntroSub (IChar s1 s2 s3 s4) = [s1] ++ [s2] ++ [s3] ++ [s4]
+getIntroSub (IChar' s1 s2 s3) = s1 ++ s2 ++ s3
 getIntroSub (IOrgSec s1 _ _ s2) = [s1] ++ [s2]
 
 getStk :: StkhldrSec -> [Sentence]

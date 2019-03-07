@@ -487,7 +487,7 @@ instance ModuleSym PythonCode where
 
 -- convenience
 imp, incl, initName :: Label
-imp = "import*"
+imp = "import"
 incl = "from"
 initName = "__init__"
 
@@ -498,7 +498,7 @@ pytop = vcat [   -- There are also imports from the libraries supplied by module
     text "import math"] 
 
 pyInclude :: Label -> Doc
-pyInclude n = text incl <+> text n <+> text imp
+pyInclude n = text imp <+> text n
 
 pyLogOp :: Doc
 pyLogOp = text "math.log10"

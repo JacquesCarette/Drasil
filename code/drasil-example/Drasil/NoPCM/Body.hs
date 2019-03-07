@@ -41,7 +41,7 @@ import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
-  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar', IPurpose), Literature(Lit, Doc'),
+  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
@@ -144,7 +144,7 @@ mkSRS = RefSec (RefProg intro
   [IPurpose (purpDoc progName),
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
     water),
-  IChar' [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
+  IChar [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) (orgDocEnd inModel M.ode progName)]) :
   Verbatim genSystDesc:
   SSDSec 

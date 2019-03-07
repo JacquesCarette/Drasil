@@ -10,7 +10,7 @@ import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
-  IntroSub(IChar', IOrgSec, IPurpose, IScope), RefSec (RefProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
@@ -170,7 +170,7 @@ mkSRS = RefSec (RefProg intro [
     [IPurpose (purpDoc swhs_pcm progName),
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-     IChar' [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
+     IChar [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:

@@ -118,7 +118,7 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
-    , IChar' []
+    , IChar []
       [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
       phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
       [phrase soilMechanics]

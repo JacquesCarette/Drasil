@@ -27,7 +27,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
-import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, charIntRdrF',
+import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
@@ -136,8 +136,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
-  IChar    :: Sentence -> Sentence -> Sentence -> Sentence -> IntroSub
-  IChar'   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
+  IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
@@ -393,10 +392,8 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
-    mkSubIntro SI {_sys = sys} (IChar know understand appStandd asset) =
-      Intro.charIntRdrF know understand sys appStandd asset (SRS.userChar [] [])
-    mkSubIntro SI {_sys = sys} (IChar' assumed topic asset) =
-      Intro.charIntRdrF' sys assumed topic asset (SRS.userChar [] [])
+    mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
+      Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
     mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 

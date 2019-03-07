@@ -267,8 +267,7 @@ getIntrosec (IntroProg s1 s2 is) = [s1] ++ [s2] ++ concatMap getIntroSub is
 getIntroSub :: IntroSub -> [Sentence]
 getIntroSub (IPurpose s) = [s]
 getIntroSub (IScope s1 s2) = [s1] ++ [s2]
-getIntroSub (IChar s1 s2 s3 s4) = [s1] ++ [s2] ++ [s3] ++ [s4]
-getIntroSub (IChar' s1 s2 s3) = s1 ++ s2 ++ s3
+getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
 getIntroSub (IOrgSec s1 _ _ s2) = [s1] ++ [s2]
 
 getStk :: StkhldrSec -> [Sentence]
@@ -388,7 +387,7 @@ ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
 ciGetIntroSub :: IntroSub -> [CI]
 ciGetIntroSub (IPurpose _)        = []
 ciGetIntroSub (IScope   _ _)      = []
-ciGetIntroSub (IChar    _ _ _ _)  = []
+ciGetIntroSub (IChar    _ _ _)  = []
 ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
 
 ciGetStk :: StkhldrSec -> [CI]

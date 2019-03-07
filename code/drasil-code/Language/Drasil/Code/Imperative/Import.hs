@@ -308,7 +308,7 @@ genMethodCall s pr doComments doLog t n p st l b = do
       commBody CommentFunc = commMethod n l
       commBody _           = id
   bod <- commBody doComments (loggedBody doLog)
-  return $ method n s pr t p (body bod)
+  return $ function n s pr t p (body bod)
 
 commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) 
   [(repr (Block repr))] -> Reader (State repr) [(repr (Block repr))]

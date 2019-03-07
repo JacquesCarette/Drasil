@@ -252,7 +252,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of SWHS can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{parnasClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
@@ -400,7 +400,7 @@ This section simplifies the original problem and helps in developing the theoret
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
@@ -431,7 +431,7 @@ Label & Conservation of thermal energy
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
@@ -468,7 +468,7 @@ Label & Sensible heat energy
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:latentHtE}
@@ -498,7 +498,7 @@ Label & Latent heat energy
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
@@ -528,7 +528,7 @@ Label & Newton's law of cooling
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
@@ -585,7 +585,7 @@ m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
@@ -620,7 +620,7 @@ Label & Heat flux into the water from the coil
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.P}
@@ -655,7 +655,7 @@ Label & Heat flux into the PCM from water
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFusion}
@@ -684,7 +684,7 @@ Label & Specific latent heat of fusion
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:melt.frac}
@@ -719,7 +719,7 @@ Label & Melt fraction
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
@@ -790,7 +790,7 @@ Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{displaymath}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnPCM}
@@ -858,7 +858,7 @@ Equation (6) applies for the solid PCM. In the case where all of the PCM is melt
 In the case where ${T_{P}}={{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d ${T_{P}}$ / d $t$ = 0.
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}).
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
@@ -897,7 +897,7 @@ Label & Heat energy in the water
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInPCM}

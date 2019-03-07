@@ -10,7 +10,7 @@ import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
-  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
+  IntroSub(IChar', IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
@@ -34,6 +34,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
+import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
   understandability, reusability, maintainability)
@@ -122,7 +123,8 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
   ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
+  ++ map nw fundamentals ++ map nw educon ++ map nw derived 
+  ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
   swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
@@ -168,7 +170,7 @@ mkSRS = RefSec (RefProg intro [
     [IPurpose (purpDoc swhs_pcm progName),
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS) (EmptyS),
+     IChar' [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:
@@ -828,14 +830,13 @@ scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-charReader1 :: ConceptChunk -> Sentence
-charReader1 htt = foldlSent_ [EmptyS +:+. phrase htt,
-  S "A third or fourth year Mechanical Engineering course on this topic",
-  S "is recommended"]
+charReader1 :: ConceptChunk -> [Sentence]
+charReader1 htt = [phrase htt +:+ S "from level 3 or 4" +:+
+  S "mechanical" +:+ phrase engineering]
 
-charReader2 :: CI -> Sentence
-charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
-  S "as typically covered in first and second year Calculus courses"]
+charReader2 :: CI -> [Sentence]
+charReader2 diffeq = [(plural diffeq) +:+
+  S "from level 1 and 2" +:+ phrase calculus]
 
 ------------------------------------
 -- 2.4 : Organization of Document --

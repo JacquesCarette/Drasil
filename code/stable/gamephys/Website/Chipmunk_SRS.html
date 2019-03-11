@@ -464,6 +464,28 @@ s
 </tr>
 <tr>
 <td>
+<em><b>v</b><sup>AP</sup></em>
+</td>
+<td>
+Velocity Of the Point of Collision P in Body a
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+<em><b>v</b><sup>BP</sup></em>
+</td>
+<td>
+Velocity Of the Point of Collision P in Body B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
 <em><b>v</b><sub>A</sub></em>
 </td>
 <td>
@@ -2538,6 +2560,98 @@ Notes
 <td>
 <p class="paragraph">
 The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:relVelInColl">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Relative Velocity Between Rigid Bodies of a and B
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
+</li>
+<li>
+<em><b>v</b><sup>AP</sup></em> is the velocity of the point of collision P in body A (m/s)
+</li>
+<li>
+<em><b>v</b><sup>BP</sup></em> is the velocity of the point of collision P in body B (m/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The linear velocity.
 </p>
 </td>
 </tr>
@@ -5299,7 +5413,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:transMot>IM: transMot</a>)
+IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
 </td>
 <td>
 X
@@ -5325,7 +5439,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#IM:rotMot>IM: rotMot</a>)
+LC1 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -5351,7 +5465,7 @@ LC1 (<a href=#IM:rotMot>IM: rotMot</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#IM:col2D>IM: col2D</a>)
+LC2 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5377,7 +5491,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC3 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -5403,7 +5517,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcEC>LC: Expanded-Collisions</a>)
+LC4 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </td>
 <td>
 
@@ -5505,7 +5619,7 @@ IM1 (<a href=#DD:chalses>DD: chalses</a>)
 IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#IM:transMot>IM: transMot</a>)
+IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
 </th>
 </tr>
 <tr>
@@ -7138,7 +7252,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:transMot>IM: transMot</a>)
+IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
 </td>
 <td>
 

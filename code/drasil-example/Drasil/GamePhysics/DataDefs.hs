@@ -1,13 +1,13 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, relVelInCollDD) where
 
 import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB)
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, velA_P, velB_P, pointOfCollision)
 
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -18,15 +18,13 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   impulseV, force, torque)
 
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Utils (eqUnR')
-
-
+--import Data.Drasil.Utils (eqUnR')
 
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, relVelInCollDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
@@ -242,8 +240,21 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (phrase r_OB) `sC` (ch r_OB), 
   (sParen $ Sy $ unit_symb r_OB)]
 
- 
------------------DD13 Torque---------------------------------------
+-----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
+relVelInCollDD :: DataDefinition
+relVelInCollDD = mkDD relVelInColl [{-- References --}] [{-- Derivation --}] "relVelInColl"
+  [relVelInCollDesc]
+
+relVelInColl :: QDefinition
+relVelInColl = mkQuantDef initRelVel relVelInCollEqn
+
+relVelInCollEqn :: Expr
+relVelInCollEqn = (sy velA_P) - (sy velB_P)
+
+relVelInCollDesc :: Sentence
+relVelInCollDesc = foldlSent [S "The linear", (phrase QP.velocity)]
+--update description
+-----------------DD13 Torque-------------------------------------------------------------------------------
 
 torqueDD :: DataDefinition
 torqueDD = mkDD torque [{-- References --}] [{-- Derivation --}] "torque"

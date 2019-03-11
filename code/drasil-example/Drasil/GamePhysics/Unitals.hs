@@ -29,7 +29,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -60,7 +60,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime,  
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -123,7 +123,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -217,10 +217,16 @@ collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase'
                 (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
-
 force_i = ucs' (dccWDS "force_i" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the i-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
+
+velA_P = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
+              (cn "of the point of collision P in body A")) 
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cA, cP])) Real velU
+velB_P = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
+              (cn "of the point of collision P in body B")) 
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cB, cP])) Real velU
 
 force_1     = forceParam "1" "first"
 force_2     = forceParam "2" "second"

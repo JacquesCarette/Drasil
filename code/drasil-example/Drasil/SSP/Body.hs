@@ -58,8 +58,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
-  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
-  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
+  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -388,10 +387,10 @@ termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
+  [fs_concept, slpSrf, crtSlpSrf, stress, strain, normForce, shearForce,
+  plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
-  -- except for crtSlpSrf & plnStrn which is in defs.hs
-  -- and fs which is in Unitals.hs
+  -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst

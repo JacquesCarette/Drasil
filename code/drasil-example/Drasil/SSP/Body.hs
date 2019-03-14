@@ -38,7 +38,8 @@ import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
   physicCon, physicCon')
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
+  shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math as QM (pi_)
@@ -387,7 +388,8 @@ termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce, shearForce,
+  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  shearForce, mobShear, shearRes,
   plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs

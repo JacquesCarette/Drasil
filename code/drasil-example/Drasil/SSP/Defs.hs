@@ -52,7 +52,7 @@ slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
 
-slpSrf, crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
+slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
 slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+. plural force)
@@ -76,6 +76,9 @@ fs_concept = dccWDS "FS" factorOfSafety
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
+
+waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
+  " saturated zone in the ground.")
 
 --
 factor :: NamedChunk --FIXME: this is here becuase this phrase is

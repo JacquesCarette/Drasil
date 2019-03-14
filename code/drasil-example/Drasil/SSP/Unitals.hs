@@ -49,7 +49,7 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [cohesion, fricAngle, dryWeight, satWeight, waterWeight]
+sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -63,7 +63,7 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-cohesion, fricAngle, dryWeight, satWeight,
+effCohesion, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ
   
 fs, coords :: ConstrConcept
@@ -71,7 +71,7 @@ fs, coords :: ConstrConcept
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-cohesion = uqc "c'" (cn $ "effective cohesion")
+effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 

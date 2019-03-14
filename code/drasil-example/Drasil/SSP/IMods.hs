@@ -27,7 +27,7 @@ import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, sl
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
+  effCohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
   indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
   minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmFSubWat,
   numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
@@ -43,7 +43,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
 
 --
 fctSfty :: InstanceModel
-fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw cohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] [chen2005, karchewski2012] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
@@ -332,7 +332,7 @@ fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
 fctSftyDerivEqn1 :: Expr
 fctSftyDerivEqn1 = --FIXME: pull the right side of this from GD4
   eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
-  $= ((inxi nrmFSubWat) * tan (sy fricAngle) + (sy cohesion) *
+  $= ((inxi nrmFSubWat) * tan (sy fricAngle) + (sy effCohesion) *
   (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn2 :: Expr
@@ -343,7 +343,7 @@ fctSftyDerivEqn3 :: Expr
 fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + 
   inxi intShrForce + y) $= ((eqlExprN cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn4 :: Expr
 fctSftyDerivEqn4 = (eqlExprSepG sin cos (\x y -> x + y)) + 
@@ -351,7 +351,7 @@ fctSftyDerivEqn4 = (eqlExprSepG sin cos (\x y -> x + y)) +
   (((eqlExprNSepG cos sin (\x y -> x + y)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn5 :: Expr
 fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (\x y -> x + y)) + 
@@ -359,7 +359,7 @@ fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (\x y -> x + y)) +
   (((eqlExprNNoKQ cos sin (\x y -> x + y)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn6 :: Expr
 fctSftyDerivEqn6 = (inxi shearFNoIntsl + (- inxiM1 intShrForce + 
@@ -596,7 +596,7 @@ eq4 = inxi nrmFSubWat $= eqlExpr cos sin (\x y -> x -
   sy normToShear * inxi scalFunc * inxi intNormForce + y)
   - (inxi baseHydroForce)
 
-eq5 = ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
+eq5 = ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)) / (sy fs) $=
   --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - sy normToShear * inxiM1 scalFunc *
@@ -713,7 +713,7 @@ intrSlcDerivation = [
   -- to get equation #" pattern
   
   eqUnR' $
-  ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
+  ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)) / (sy fs) $=
   --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - sy normToShear * inxiM1 scalFunc *

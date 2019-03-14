@@ -30,7 +30,7 @@ import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, fricAngle, fs, genericA, intNormForce, intShrForce, inxi, inxiM1, 
+  effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
   surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
@@ -86,7 +86,7 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 
 --
 shrResEqn :: Expr
-shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion *
+shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
   inxi baseWthX * sec (inxi baseAngle)
 
 resShr :: RelationConcept
@@ -179,7 +179,7 @@ resShearWO_rel = sy shearRNoIntsl $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 resShearWO_desc :: Sentence

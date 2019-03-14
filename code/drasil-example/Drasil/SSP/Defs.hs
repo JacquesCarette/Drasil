@@ -8,9 +8,11 @@ import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.Education (mechanics)
-import Data.Drasil.Concepts.SolidMechanics (mobShear, shearRes)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,
+  shearRes)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
+import Data.Drasil.SentenceStructures (andThe, sOr)
 import Data.Drasil.IdeaDicts hiding (dataDefn)
 
 ----Acronyms-----
@@ -53,7 +55,15 @@ slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
 
-slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
+effFandS, slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
+effFandS = dccWDS "effective forces and stresses" 
+  (cn "effective forces and stresses") 
+  (S "The" +:+ phrase normForce `sOr` phrase nrmStrss +:+
+  S "carried by the" +:+ phrase soil +:+ S "skeleton. The total" +:+
+  phrase normForce `sOr` phrase nrmStrss +:+ S "is composed of the" +:+
+  S "effective" +:+ phrase force `sOr` phrase stress `andThe` 
+  phrase force `sOr` phrase stress +:+ S "exerted by water.")
+
 slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+. plural force)

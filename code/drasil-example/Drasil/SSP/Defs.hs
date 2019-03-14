@@ -5,7 +5,8 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Concepts.Physics (twoD, force)
+import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, shearRes)
 
@@ -58,12 +59,14 @@ slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   S "potential to fail or displace due to load or other" +:+. plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
-plnStrn = dcc "plane strain" (cn' "plane strain") 
-  ("The resultant stresses in one of the directions of a " ++
-  "3 dimensional material can be approximated as 0. Results " ++
-  "when the length of one dimension of the body dominates the " ++
-  "others. Stresses in the dominant dimensions direction are " ++
-  "the ones that can be approximated as 0.")
+plnStrn = dccWDS "plane strain" (cn' "plane strain") 
+  (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
+  S "the directions of a " +:+ phrase threeD +:+ S "material can be" +:+
+  S "approximated as zero. Results when the" +:+ phrase len +:+ S "of one" +:+
+  phrase dimension +:+ S "of the body dominates the others, to the point" +:+
+  S "where it can be assumed as infinite." +:+ at_start' stress +:+
+  S "in the direction of the dominant" +:+ phrase dimension +:+ 
+  S "can be approximated as zero.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+

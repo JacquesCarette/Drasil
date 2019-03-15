@@ -276,4 +276,7 @@ coeffRestitutionEqn = -(sy finRelVel) $.
 coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.restitutionCoef), 
   S "is a unitless, dimensionless quantity that determines the", 
-  S "the elasticity of a collision between two", (plural CP.rigidBody)]
+  S "elasticity of a collision between two", (plural CP.rigidBody),
+  S "[CR = 1] results in an elastic",
+  S "collision, while [CR < 1] results in an inelastic collision,",
+  S "and [CR = 0] results in a totally inelastic collision"]

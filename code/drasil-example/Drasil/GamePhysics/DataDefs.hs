@@ -1,13 +1,13 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, coeffRestitutionDD) where
 
 import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB)
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel)
 
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -26,11 +26,11 @@ import Data.Drasil.Utils (eqUnR')
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, coeffRestitutionDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque]
+  angVel, angAccel, impulse, chasles, torque, coeffRestitution]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -254,10 +254,26 @@ torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
 torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
---will need a new parameter to define r is a position vector
--- of the point where the force is applied, measured from the axis of rotation.
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", (phrase torque), 
   S "on a body measures the", S "the tendency of a", (phrase QP.force), 
   S "to rotate the body around an axis or pivot"]
+
+----------------------DD14 Coefficient of Restitution--------------------------
+coeffRestitutionDD :: DataDefinition
+coeffRestitutionDD = mkDD coeffRestitution [{-- References --}] [{-- Derivation --}] "coeffRestitution"
+ [coeffRestitutionDesc]
+
+coeffRestitution :: QDefinition
+coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
+
+coeffRestitutionEqn :: Expr
+coeffRestitutionEqn = -(sy finRelVel) $.
+  (sy normalVect)/ (sy initRelVel) $.
+  (sy normalVect)
+
+coeffRestitutionDesc :: Sentence
+coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.restitutionCoef), 
+  S "is a unitless, dimensionless quantity that determines the", 
+  S "the elasticity of a collision between two", (plural CP.rigidBody)]

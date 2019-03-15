@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  probOfBreak, calofCapacity, calofDemand) where
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
+  eqTNTWDD, probOfBreak, calofCapacity, calofDemand) where
 import Control.Lens ((^.))
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -15,12 +15,12 @@ import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
+import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br, lRe, loadSF, demandq,
-  eqTNTWeight, wtntWithEqn)
+  sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
+  demandq, eqTNTWeight)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -28,7 +28,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 
 dataDefns :: [DataDefinition] 
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
-  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak,
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
 
 gbQDefns :: [Block QDefinition]
@@ -188,6 +188,16 @@ aspRat :: DataDefinition
 aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
 
 --DD12--
+eqTNTW_eq :: Expr
+eqTNTW_eq = (sy char_weight) * (sy tNT)
+
+eqTNTWQD :: QDefinition
+eqTNTWQD = mkQuantDef eqTNTWeight eqTNTW_eq
+
+eqTNTWDD :: DataDefinition
+eqTNTWDD = mkDD eqTNTWQD [astm2009] [] "eqTNTW" []
+
+--DD13--
 probOfBreak_eq :: Expr
 probOfBreak_eq = 1 - (exp (negate (sy risk)))
 
@@ -197,7 +207,7 @@ probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
 probOfBreak :: DataDefinition
 probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" (glassBreak : [])
 
---DD13--
+--DD14--
 calofCapacity_eq :: Expr
 calofCapacity_eq = ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
 
@@ -207,7 +217,7 @@ calofCapacityQD = mkQuantDef lRe calofCapacity_eq
 calofCapacity :: DataDefinition
 calofCapacity = mkDD calofCapacityQD [astm2009] [{-derivation-}] "calofCapacity" capacityS
 
---DD14--
+--DD15--
 calofDemand_eq :: Expr
 calofDemand_eq = apply2 demand eqTNTWeight standOffDist
 
@@ -226,8 +236,8 @@ calofDemandDesc =
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
   (phrase standOffDist), sParen (ch standOffDist) `sAnd`
   (ch eqTNTWeight), S "as" +:+. plural parameter, 
-  (ch eqTNTWeight), S "is defined as" +:+.
-  E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
+  (ch eqTNTWeight), S "is defined in" +:+.
+  makeRef2S eqTNTWDD, (ch standOffDist) `isThe`
   (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
 
 capacityS :: [Sentence]

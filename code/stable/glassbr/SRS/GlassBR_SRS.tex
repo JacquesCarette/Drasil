@@ -818,6 +818,35 @@ Label & Aspect ratio
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:eqTNTW}
+\phantomsection 
+\label{DD:eqTNTW}
+\\ \midrule \\
+Label & Explosive mass in equivalent weight of TNT
+        \\ \midrule \\
+        Symbol & ${w_{TNT}}$
+                 \\ \midrule \\
+                 Units & kg
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {w_{TNT}}=w TNT
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+                                                  \item{$w$ is the charge weight (kg)}
+                                                  \item{$TNT$ is the TNT equivalent factor (Unitless)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{astm2009}
+                                                           \\ \midrule \\
+                                                           RefBy & \hyperref[DD:calofDemand]{DD: calofDemand} \hyperref[IM:calOfDemand]{IM: calOfDemand}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:probOfBreak}
 \phantomsection 
 \label{DD:probOfBreak}
@@ -904,7 +933,7 @@ Label & Applied load (demand)
                                                   \item{$SD$ is the stand off distance (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+                                                  Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
                                                           \\ \midrule \\
                                                           Source & \cite{astm2009}
                                                                    \\ \midrule \\
@@ -949,7 +978,7 @@ Label & Calculation of Demand
                                                                                            \item{$SD$ is the stand off distance (m)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+                                                                                           Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{astm2009}
                                                                                                             \\ \midrule \\
@@ -1082,7 +1111,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, instance models, and data definitions with each other. \hyperref[Table:TraceyItemSecs]{Table:TraceyItemSecs} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Table:TraceyReqsItems]{Table:TraceyReqsItems} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
+ & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[IM:calOfDemand]{IM: calOfDemand} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
 \\
 \midrule
 \endhead
@@ -1110,33 +1139,35 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[DD:eqTNTW]{DD: eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  & 
+\\
 \hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
 \hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  & 
+\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[DD:min.thick]{DD: min\_thick} &  &  &  &  &  &  &  &  & X &  &  &  &  & X & X &  &  & X &  &  &  &  & 
+\hyperref[DD:min.thick]{DD: min\_thick} &  &  &  &  &  &  &  &  & X &  &  &  &  & X & X &  &  &  &  & X &  &  & 
 \\
 \hyperref[DD:nFL]{DD: nFL} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-\hyperref[DD:risk.fun]{DD: risk\_fun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[DD:risk.fun]{DD: risk\_fun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
 \\
-\hyperref[TM:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  & 
+\hyperref[TM:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X
 \\
-\hyperref[TM:isSafePb]{TM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  & 
+\hyperref[TM:isSafePb]{TM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X
 \\
 \hyperref[DD:sdf.tol]{DD: sdf\_tol} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
+\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  & 
 \\
-\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
 \hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\

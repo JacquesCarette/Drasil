@@ -464,21 +464,10 @@ s
 </tr>
 <tr>
 <td>
-<em><b>v</b><sup>AP</sup></em>
+<em><b>v</b><sub>f</sub><sup>AB</sup></em>
 </td>
 <td>
-Velocity Of the Point of Collision P in Body a
-</td>
-<td>
-m/s
-</td>
-</tr>
-<tr>
-<td>
-<em><b>v</b><sup>BP</sup></em>
-</td>
-<td>
-Velocity Of the Point of Collision P in Body B
+Final Relative Velocity Between Rigid Bodies of a and B
 </td>
 <td>
 m/s
@@ -544,7 +533,7 @@ m/s
 <em><b>v</b><sub>i</sub><sup>AB</sup></em>
 </td>
 <td>
-Relative Velocity Between Rigid Bodies of a and B
+Initial Relative Velocity Between Rigid Bodies of a and B
 </td>
 <td>
 m/s
@@ -2328,7 +2317,7 @@ Description
 <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
 </li>
 <li>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
 </li>
 <li>
 <em><b>n</b></em> is the collision normal vector (m)
@@ -2585,7 +2574,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:relVelInColl">
+<div id="DD:coeffRestitution">
 <table class="ddefn">
 <tr>
 <th>
@@ -2593,7 +2582,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Relative Velocity Between Rigid Bodies of a and B
+Coefficient of restitution
 </p>
 </td>
 </tr>
@@ -2603,7 +2592,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+<em>C<sub>R</sub></em>
 </p>
 </td>
 </tr>
@@ -2613,7 +2602,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-m/s
+Unitless
 </p>
 </td>
 </tr>
@@ -2623,7 +2612,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
+<em>C<sub>R</sub> = &minus;(<div class="fraction">
+<span class="fup">
+<b>v</b><sub>f</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+<span class="fdn">
+<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+</div>)</em>
 </div>
 </td>
 </tr>
@@ -2634,13 +2630,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
+<em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
 </li>
 <li>
-<em><b>v</b><sup>AP</sup></em> is the velocity of the point of collision P in body A (m/s)
+<em><b>v</b><sub>f</sub><sup>AB</sup></em> is the final relative velocity between rigid bodies of A and B (m/s)
 </li>
 <li>
-<em><b>v</b><sup>BP</sup></em> is the velocity of the point of collision P in body B (m/s)
+<em><b>n</b></em> is the collision normal vector (m)
+</li>
+<li>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
 </li>
 </ul>
 </td>
@@ -2651,7 +2650,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity.
+The coefficient of restitution <em>C<sub>R</sub></em> is a unitless, dimensionless quantity that determines the the elasticity of a collision between two rigid bodies.
 </p>
 </td>
 </tr>
@@ -5413,7 +5412,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 </td>
 <td>
 X
@@ -5619,7 +5618,7 @@ IM1 (<a href=#DD:chalses>DD: chalses</a>)
 IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 </th>
 </tr>
 <tr>
@@ -7252,7 +7251,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 </td>
 <td>
 

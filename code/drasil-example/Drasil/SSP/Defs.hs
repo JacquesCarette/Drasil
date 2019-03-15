@@ -72,11 +72,12 @@ slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
 plnStrn = dccWDS "plane strain" (cn' "plane strain") 
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
   S "the directions of a " +:+ phrase threeD +:+ S "material can be" +:+
-  S "approximated as zero. Results when the" +:+ phrase len +:+ S "of one" +:+
-  phrase dimension +:+ S "of the body dominates the others, to the point" +:+
-  S "where it can be assumed as infinite." +:+ at_start' stress +:+
-  S "in the direction of the dominant" +:+ phrase dimension +:+ 
-  S "can be approximated as zero.")
+  S "approximated as zero. This condition results when a body is" +:+ 
+  S "constrained to not deform in one direction, or when the" +:+ 
+  phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
+  S "dominates the others, to the point where it can be assumed as" +:+.
+  S "infinite" +:+ at_start' stress +:+ S "in the direction of the" +:+
+  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+

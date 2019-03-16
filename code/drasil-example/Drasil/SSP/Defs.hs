@@ -28,7 +28,8 @@ sspdef' :: [ConceptChunk]
 sspdef' = [crtSlpSrf, plnStrn, fs_concept]
 
 ----Other Common Phrases----
-soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
+  soilMechanics :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")

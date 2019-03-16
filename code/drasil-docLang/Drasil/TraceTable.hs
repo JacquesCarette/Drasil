@@ -77,7 +77,7 @@ generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
     gd = getTraceMapFromGD $ getSCSSub a
     im = getTraceMapFromIM $ getSCSSub a
     dd = getTraceMapFromDD $ getSCSSub a
-    ordering a b = if a == b then a else error "Expected ordering between smaller TraceMaps to be the same"
+    ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.
 generateTraceMap' :: [ConceptInstance] -> TraceMap

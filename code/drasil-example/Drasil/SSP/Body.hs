@@ -256,7 +256,7 @@ kSent = keySent ssa ssp
 keySent :: (Idea a) => a -> a -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb ssp]
+  introduceAbb pname]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose

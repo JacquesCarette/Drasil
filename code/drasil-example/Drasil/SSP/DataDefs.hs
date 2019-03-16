@@ -294,7 +294,7 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-fixme1, fixme2 :: DataDefinition
+fixme1, fixme2, fixme3, fixme4 :: DataDefinition
 fixme1 = mkDD fixme1QD [{-References-}] [{-Derivation-}] "fixme1" []--Notes
 fixme2 = mkDD fixme2QD [{-References-}] [{-Derivation-}] "fixme2" []--Notes
 fixme3 = mkDD fixme3QD [{-References-}] [{-Derivation-}] "fixme3" []--Notes

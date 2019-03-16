@@ -120,9 +120,8 @@ itemRefToSent a b = S a +:+ sParen b
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
 -- l - list whos length is to be matched
--- r - reference to be repeated
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l r = take (length l) $ repeat $ Ref $ makeRef2 r
+makeListRef l = replicate (length l) . Ref . makeRef2
 
 -- | bulletFlat applies Bullet and Flat to a list.
 bulletFlat :: [Sentence] -> ListType

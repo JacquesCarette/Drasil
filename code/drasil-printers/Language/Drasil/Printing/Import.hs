@@ -12,6 +12,7 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   Notation(Scientific, Engineering))
 
+import Data.Maybe (fromMaybe)
 import Numeric (floatToDigits)
 import Data.Tuple(fst, snd)
 -- | Render a Space
@@ -47,23 +48,21 @@ mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
   (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
   (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
   (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
-mulExpr (hd:[])      sm = [expr' sm (precA Mul) hd]
+mulExpr [hd]     sm     = [expr' sm (precA Mul) hd]
 mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
-digitsProcess (hd:tl) pos coun ex = if pos /= coun
-  then [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
-  else if ex /= 0
-    then [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-    else [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
-digitsProcess [] pos coun ex = if pos > coun
-  then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
-  else if ex /= 0
-    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-    else [P.MO P.Point, P.Int 0]
+digitsProcess (hd:tl) pos coun ex 
+  | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
+  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
+digitsProcess [] pos coun ex 
+  | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
+  | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int 0]
 
 -- THis function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
@@ -112,11 +111,11 @@ expr (Deriv Total a b)sm =
 expr (C c)            sm = symbol $ lookupC sm c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) l]
+  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
 expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
+expr (Matrix a)         sm = P.Mtx $ map (map (`expr` sm)) a
 expr (UnaryOp Log u)    sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)     sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)    sm = mkCall sm P.Sin u
@@ -157,7 +156,8 @@ lookupT :: HasTermTable s => s -> UID -> Sentence
 lookupT sm c = phraseNP $ (termLookup c (sm^.termTable)) ^. term
 
 lookupS :: HasTermTable s => s -> UID -> Sentence
-lookupS sm c = maybe (phraseNP $ (termLookup c (sm^.termTable)) ^. term) id (fmap S $ getA $ termLookup c (sm^.termTable))
+lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
+  where l = termLookup c $ sm ^. termTable
 
 lookupP :: HasTermTable s => s -> UID -> Sentence
 lookupP sm c =  pluralNP $ (termLookup c (sm^.termTable)) ^. term
@@ -178,7 +178,7 @@ expr' s p e = fence $ expr e s
 neg' :: Expr -> Bool
 neg' (Dbl     _)          = True
 neg' (Int     _)          = True
-neg' (Operator _ _ _)     = True
+neg' Operator{}           = True
 neg' (AssocA Mul _)       = True
 neg' (BinaryOp Index _ _) = True
 neg' (UnaryOp _ _)        = True
@@ -234,7 +234,7 @@ symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
 symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol Corners{}                = error "rendering of Corners (general)"
 symbol (Atop f s) = sFormat f s
 symbol (Empty)    = P.Row []
 
@@ -294,7 +294,8 @@ spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
 renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
+  getA . defLookup u $ ctx ^. defTable
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

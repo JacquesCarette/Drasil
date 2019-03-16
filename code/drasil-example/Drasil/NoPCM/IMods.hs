@@ -64,7 +64,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
-  [S "Derivation of the" +:+ phrase energy +:+ S "balance on water:"] ++
+  S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
   (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]

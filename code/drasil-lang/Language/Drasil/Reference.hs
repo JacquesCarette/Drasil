@@ -143,15 +143,15 @@ instance Referable LabelledContent where
   renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
-refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
-refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
-refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
-refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
-refLabelledCon (Assumption _ _)      = raw "Assump:" +::+ name
-refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
-refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
-refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
-refLabelledCon (Bib _)               = error $ 
+refLabelledCon Table{}             = raw "Table:" +::+ name 
+refLabelledCon Figure{}            = raw "Fig:" +::+ name
+refLabelledCon Graph{}             = raw "Fig:" +::+ name
+refLabelledCon Defini{}            = raw "Def:" +::+ name
+refLabelledCon Assumption{}        = raw "Assump:" +::+ name
+refLabelledCon EqnBlock{}          = raw "EqnB:" +::+ name
+refLabelledCon Enumeration{}       = raw "Lst:" +::+ name 
+refLabelledCon Paragraph{}         = error "Shouldn't reference paragraphs"
+refLabelledCon Bib{}               = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
@@ -164,11 +164,11 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
-compareAuthYearTitle c1 c2 =
-  if cp /= EQ then cp
-  else if y1 /= y2 then y1 `compare` y2
-  else if t1 /= t2 then t1 `compare` t2
-  else error "Couldn't sort authors"
+compareAuthYearTitle c1 c2 
+  | cp /= EQ = cp
+  | y1 /= y2 = y1 `compare` y2
+  | t1 /= t2 = t1 `compare` t2
+  | otherwise = error "Couldn't sort authors"
   where
     cp = comparePeople (getAuthor c1) (getAuthor c2)
     y1 = getYear c1

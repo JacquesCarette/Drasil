@@ -15,7 +15,7 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)
-import Data.Maybe (maybeToList)
+import Data.Maybe (fromMaybe, mapMaybe)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Concept, ConceptDomain, Idea, IsUnit, Quantity)
@@ -265,8 +265,8 @@ instance HasSectionTable     ChunkDB where sectionTable      = csec
 instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
 collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
-collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
- $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
+collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
+ . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m
@@ -277,8 +277,7 @@ invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap tm = invert $ Map.map (\(x,_) -> x) tm
+generateRefbyMap = invert . Map.map fst
 
 refbyLookup :: UID -> RefbyMap -> [UID]
-refbyLookup c m = getT $ Map.lookup c m
-  where getT = maybe [] id
+refbyLookup c = fromMaybe [] . Map.lookup c

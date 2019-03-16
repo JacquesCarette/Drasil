@@ -147,54 +147,51 @@ glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
-  IntroSec (
+mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+  IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
-    [IPurpose (purpOfDocIntro document gLassBR glaSlab),
+    [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR EmptyS,
-     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
-  StkhldrSec
-    (StkhldrProg2
-      [Client gLassBR (S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
-      Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
-    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
-  SSDSec 
-    (SSDProg
-      [SSDProblem  (PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts])
-      , SSDSolChSpec 
-        (SCSProg
-          [ Assumptions
-          , TMs ([Label] ++ stdFields) gbrTMods
-          , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
-          , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]),
-                        S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRef2S inputDataConstraints)])
-                        [inputDataConstraints, outputDataConstraints]
-          ]
-        )
-      ]
-    ) :
-  ReqrmntSec (ReqsProg [
+     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+  StkhldrSec $
+    StkhldrProg2
+      [Client gLassBR $ S "a" +:+ phrase company
+        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
+      Cstmr gLassBR],
+  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+    UsrChars [user_characteristics_intro], SystCons [] [] ],
+  SSDSec $
+    SSDProg
+      [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
+       SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs (Label : stdFields) gbrTMods
+        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
+        , Constraints EmptyS dataConstraintUncertainty
+                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
+                      S "gives", (plural value `ofThe` S "specification"),
+                      plural parameter, S "used in", makeRef2S inputDataConstraints])
+                      [inputDataConstraints, outputDataConstraints]
+        ]
+      ],
+  ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub [performance] (gBRpriorityNFReqs)
+    NonFReqsSub [performance] gBRpriorityNFReqs
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
-    (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec' (LCsProg' likelyChgs) :
-  UCsSec (UCsProg unlikelyChgsList) :
-  TraceabilitySec
-    (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
-    ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) []) :
-  AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
-  Bibliography :
-  AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
+    (S "will be very quick" `sAnd` S "use minimal storage"))],
+  LCsSec' $ LCsProg' likelyChgs,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
+    ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
+  AuxConstntSec $ AuxConsProg gLassBR auxiliaryConstants,
+  Bibliography,
+  AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

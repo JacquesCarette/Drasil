@@ -39,7 +39,7 @@ funcReqsList = (mkEnumSimple (uncurry $ flip mkReqCI) $ zip funcReqs
   funcReqsDetails) ++ [LlC inputGlassPropsTable]
 
 mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
-mkReqCI e = mkListTuple $ if length e == 0 then \x -> Flat $ x ^. defn else
+mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
   \x -> Nested (x ^. defn) $ bulletFlat e
 
 funcReqs :: [ConceptInstance]

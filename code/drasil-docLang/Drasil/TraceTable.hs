@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
+{-# LANGUAGE GADTs #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.

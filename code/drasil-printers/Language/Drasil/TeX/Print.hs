@@ -79,20 +79,20 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
 
 print :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [LayoutObj] -> D
-print sm l = foldr ($+$) empty $ map (flip lo sm) l
+print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPL $ L.special s
-symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = concatMap symbol sl
 --
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
 symbol (L.Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (L.Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol L.Corners{}                = error "rendering of Corners (general)"
 symbol (L.Atop f s) = sFormat f s
 symbol (L.Empty)    = ""
 
@@ -192,7 +192,7 @@ p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
+cases [p]    = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 -----------------------------------------------------------------
@@ -219,14 +219,14 @@ makeTable lls r bool t =
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields
-        anyLong = or . map longColumn . transpose
+        anyLong = any longColumn . transpose
         anyBig = map (descr . longColumn) . transpose
         longColumn = any (\x -> specLength x > 50)
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength (EmptyS)  = 0
@@ -236,8 +236,7 @@ dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
-makeRows []     = empty
-makeRows (c:cs) = makeColumns c %% pure dbs %% makeRows cs
+makeRows cs = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty cs
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls
@@ -251,7 +250,7 @@ needs (E _)            = Math
 needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
-needs (Ref _ _ _)      = Text
+needs Ref{}            = Text
 needs (EmptyS)         = Text
 needs (Quote _)        = Text
 
@@ -275,14 +274,14 @@ spec (Quote q)              = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"
-escapeChars c = c : []
+escapeChars c = [c]
 
 symbol_needs :: L.Symbol -> MathContext
 symbol_needs (L.Atomic _)          = Text
 symbol_needs (L.Special _)         = Math
 symbol_needs (L.Concat [])         = Math
 symbol_needs (L.Concat (s:_))      = symbol_needs s
-symbol_needs (L.Corners _ _ _ _ _) = Math
+symbol_needs L.Corners{}           = Math
 symbol_needs (L.Atop _ _)          = Math
 symbol_needs L.Empty               = Curr
 
@@ -291,19 +290,19 @@ p_unit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
-    formatu [] l = line l 
-    formatu l [] = foldr (<>) empty $ map pow l
-    formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
+    formatu [] l = line l
+    formatu l [] = foldr ((<>) . pow) empty l
+    formatu nu de = toMath $ fraction (line nu) $ line $ map (second negate) de
     line :: [(L.Symbol,Integer)] -> D
     line []  = empty
     line [n] = pow n
-    line l   = parens $ foldr (<>) empty $ map pow l
+    line l   = parens $ foldr ((<>) . pow) empty l
     pow :: (L.Symbol,Integer) -> D
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
+    p_symb n = let cn = symbol_needs n in switch (const cn) $ pure $ text $ symbol n
 
 {-
 p_unit :: L.USymb -> D
@@ -351,10 +350,10 @@ makeDefTable sm ps l = vcat [
 makeDRows :: (L.HasSymbolTable s, L.HasTermTable s, L.HasDefinitionTable s,
  HasPrintingOptions s) => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (flip lo sm) d)
+makeDRows sm [(f,d)]    = dBoilerplate %% (pure $ text (f ++ " & ")) <>
+  (vcat $ map (`lo` sm) d)
 makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (flip lo sm) d)
+  (vcat $ map (`lo` sm) d)
                        %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
@@ -583,6 +582,6 @@ wrapS = S . show
 
 pages :: [Int] -> Spec
 pages []  = error "Empty list of pages"
-pages (x:[]) = wrapS x
-pages (x:x2:[]) = wrapS $ show x ++ "-" ++ show x2
+pages [x] = wrapS x
+pages [x,x2] = wrapS $ show x ++ "-" ++ show x2
 pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

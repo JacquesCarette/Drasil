@@ -82,9 +82,9 @@ t3NewtonLUG_new = tm (cw newtonLUG)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [(sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
-  (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
+  (sy mass_2) / ((sy dispNorm) $^ 2)) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
-  $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
+  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
   "UniversalGravLaw" [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
@@ -94,9 +94,9 @@ newtonLUG = makeRC "newtonLUG"
 newtonLUGRel :: Relation
 newtonLUGRel = (sy QP.force) $=
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) /
-  ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $=
+  ((sy dispNorm) $^ 2)) * (sy dispUnit) $=
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) /
-  ((sy dispNorm) $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))
+  ((sy dispNorm) $^ 2)) * ((sy QP.displacement) / (sy dispNorm))
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

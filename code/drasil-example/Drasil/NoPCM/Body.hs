@@ -134,45 +134,42 @@ probDescription, termAndDefn, physSystDescription, goalStates,
 --------------------------------
   
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
-  TAandA]) :
-  IntroSec (IntroProg (introStart ener_src energy progName)
+mkSRS = [RefSec $ RefProg intro
+  [TUnits,
+  tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
+  TAandA],
+  IntroSec $ IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
-  [IPurpose (purpDoc progName),
+  [IPurpose $ purpDoc progName,
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
     water),
   IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS EmptyS,
-  IOrgSec orgDocIntro inModel (SRS.inModel [] []) (orgDocEnd inModel M.ode progName)]) :
-  Verbatim genSystDesc:
-  SSDSec 
-    (SSDProg [SSDSubVerb probDescription
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions 
-          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
-          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-            [eBalanceOnWtr, heatEInWtr] ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty dataContMid
-            [dataConstTable1, dataConstTable2]
-          ]
-        )
+  IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
+  Verbatim genSystDesc,
+  SSDSec $
+    SSDProg [SSDSubVerb probDescription
+    , SSDSolChSpec $ SCSProg
+      [ Assumptions
+      , TMs (Label : stdFields) [consThermE] -- only have the same T1 with SWHS
+      , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+      , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        [eBalanceOnWtr, heatEInWtr] ShowDerivation
+      , Constraints  EmptyS dataConstraintUncertainty dataContMid
+        [dataConstTable1, dataConstTable2]
       ]
-    ):
-  ReqrmntSec (ReqsProg [
+    ],
+  ReqrmntSec $ ReqsProg [
   FReqsSub funcReqsList,
   NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
   (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
-  LCsSec (LCsProg likelyChgsList) :
-  UCsSec (UCsProg unlikelyChgsList) :
-  TraceabilitySec
-    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2)) []) :
-  map Verbatim [specParamVal] ++ (Bibliography : [])
+  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+  LCsSec $ LCsProg likelyChgsList,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2)) []] ++
+  map Verbatim [specParamVal] ++ [Bibliography]
 
 nopcm_label :: TraceMap
 nopcm_label = Map.union (generateTraceMap mkSRS)

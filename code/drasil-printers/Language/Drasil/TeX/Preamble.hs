@@ -94,30 +94,30 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
-   (nub $ concat $ map fst res)
-  , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ (nub $ concat $ map snd res))
+   (nub $ concatMap fst res)
+  , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ (nub $ concatMap snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
-    parseDoc' (Table _ _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
+    parseDoc' Table{} = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
     parseDoc' (HDiv _ slos _) = 
       let res1 = map parseDoc' slos in
-      let pp = concat $ map fst res1 in
-      let dd = concat $ map snd res1 in
+      let pp = concatMap fst res1 in
+      let dd = concatMap snd res1 in
       (pp, dd)
     parseDoc' (Definition _ ps _) =
-      let res1 = concat $ map (map parseDoc' . snd) ps in
-      let pp = concat $ map fst res1 in
-      let dd = concat $ map snd res1 in
+      let res1 = concatMap (map parseDoc' . snd) ps in
+      let pp = concatMap fst res1 in
+      let dd = concatMap snd res1 in
       (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
-    parseDoc' (Figure _ _ _ _) = ([Graphics,Caption],[])
+    parseDoc' Figure{}       = ([Graphics,Caption],[])
     parseDoc' (ALUR Requirement _ _ _) = ([], [ReqCounter])
     parseDoc' (ALUR Assumption _ _ _) = ([], [AssumpCounter])
     parseDoc' (ALUR LikelyChange _ _ _) = ([], [LCCounter])
     parseDoc' (ALUR UnlikelyChange _ _ _) = ([], [UCCounter])
-    parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
-    parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
-    parseDoc' (Header _ _ _) = ([], [])
+    parseDoc' Graph{}        = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
+    parseDoc' (Bib _)        = ([FileContents,BibLaTeX,URL],[Bibliography])
+    parseDoc' Header{}       = ([], [])
     parseDoc' (Paragraph _)  = ([], [])
     parseDoc' (List _)       = ([EnumItem], [])
     parseDoc' (EqnBlock _)   = ([], [])

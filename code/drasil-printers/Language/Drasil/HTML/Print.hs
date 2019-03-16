@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print,(<>))
-import Data.List (sortBy,partition,intersperse)
+import Prelude hiding (print, (<>))
+import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
@@ -75,13 +75,13 @@ printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
 printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
   makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
-printLO (Graph _ _ _ _ _)      = empty -- FIXME
+printLO Graph{}                = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map printLO l
+print l = foldr (($$) . printLO) empty l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
@@ -113,14 +113,14 @@ p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPH $ L.special s
-symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
 symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (L.Corners _ _ _ _ _)      = error "rendering of L.Corners (general)"
+symbol L.Corners{}                = error "rendering of L.Corners (general)"
 symbol (L.Atop L.Vector s)        = "<b>" ++ symbol s ++ "</b>"
 symbol (L.Atop L.Hat s)           = symbol s ++ "&#770;"
 symbol (L.Atop L.Prime s)         = symbol s ++ "&prime;"
@@ -132,12 +132,12 @@ uSymb (L.US ls) = formatu t b
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String
     formatu [] l = line l
-    formatu l [] = concat $ intersperse "&sdot;" $ map pow l
+    formatu l [] = intercalate "&sdot;" $ map pow l
     formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
     line :: [(L.Symbol,Integer)] -> String
     line []  = ""
     line [x] = pow x
-    line l   = '(' : (concat $ intersperse "&sdot;" $ map pow l) ++ ")"
+    line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
     pow :: (L.Symbol,Integer) -> String
     pow (x,1) = symbol x
     pow (x,p) = symbol x ++ sup (show p)
@@ -240,7 +240,7 @@ makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
 
 -- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc
-makeRows = foldr ($$) empty . map (tr . makeColumns)
+makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
@@ -265,7 +265,7 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
@@ -401,7 +401,7 @@ bookMLA (Year       y)  = dot $ text $ show y
 bookMLA (BookTitle s)   = dot $ em $ p_spec s
 bookMLA (Journal    s)  = comm $ em $ p_spec s
 bookMLA (Pages      [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages  (a:b:[])) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages  [a,b])   = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Pages _) = error "Page range specified is empty or has more than two items"
 bookMLA (Note       s)    = p_spec s
 bookMLA (Number      n)   = comm $ text $ ("no. " ++ show n)
@@ -423,7 +423,7 @@ bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the 
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages     [n])  = dot $ text $ show n
-bookAPA (Pages (a:b:[])) = dot $ text $ show a ++ "&ndash;" ++ show b
+bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
 bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA

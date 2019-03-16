@@ -197,7 +197,7 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models, and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 \section{General System Description}
 \label{Sec:GenSysDesc}
-This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
 \subsection{System Context}
 \label{Sec:SysContext}
 \hyperref[Figure:SysCon]{Fig:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
@@ -316,7 +316,7 @@ This section simplifies the original problem and helps in developing the theoret
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
@@ -350,7 +350,7 @@ Label & Conservation of thermal energy
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
@@ -380,7 +380,7 @@ Label & Newton's law of cooling
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
@@ -437,7 +437,7 @@ m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
@@ -475,7 +475,7 @@ Label & Heat flux into the water from the coil
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
@@ -532,7 +532,7 @@ Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) ca
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
 \par~
-    
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}

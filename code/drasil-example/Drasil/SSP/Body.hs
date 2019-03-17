@@ -34,11 +34,12 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
-  physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
+  stress, time, twoD, physicCon, physicCon')
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
+  shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math as QM (pi_)
@@ -57,16 +58,17 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
-  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
-  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
+  intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
+  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
+  waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, index, numbSlices, 
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, numbSlices, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
 --type declarations for sections--
@@ -353,7 +355,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharIntro :: Contents
 userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
-  [phrase soil, plural mtrlPrpty] [phrase cohesion, phrase fricAngle, 
+  [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle, 
   S "unit weight"]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
@@ -370,7 +372,7 @@ userChar pname understandings familiarities specifics = foldlSP [
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
+problem_desc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
@@ -385,10 +387,11 @@ termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
+  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
+  plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
-  -- except for crtSlpSrf & plnStrn which is in defs.hs
-  -- and fs which is in Unitals.hs
+  -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst

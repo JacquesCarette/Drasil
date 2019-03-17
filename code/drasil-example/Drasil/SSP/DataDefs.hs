@@ -264,7 +264,7 @@ resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 resShr_deriv_ssp :: Derivation
@@ -368,13 +368,13 @@ eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce))
 
 eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
-  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
+  (inxi effCohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 eq8 = inxi shearRNoIntsl $=
@@ -382,7 +382,7 @@ eq8 = inxi shearRNoIntsl $=
   (- (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 -------old chunk---------
@@ -422,13 +422,13 @@ resShrDerivation = [
   
   eqUnR' $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
-  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
+  (inxi effCohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
   ]

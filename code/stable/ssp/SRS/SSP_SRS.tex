@@ -75,7 +75,7 @@ $const_f$ & Decision on F: boolean decision on which form of f the user desires:
 \\
 $f$ & Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & --
 \\
-${F_{S}}$ & Factor of Safety: The global stability of a surface in a slope & --
+${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force & --
 \\
 ${F_{x}}$ & X-Component of the Net Force:  & N
 \\
@@ -198,6 +198,8 @@ Abbreviation & Full Form
 \endhead
 2D & two-dimensional
 \\
+3D & three-dimensional
+\\
 A & Assumption
 \\
 DD & Data Definition
@@ -285,18 +287,25 @@ There are no system constraints.
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
+SSP is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{itemize}
-\item[Factor of Safety:]The global stability of a surface in a slope
-\item[Critical Slip Surface:]Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
+\item[Factor of Safety:]The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force
+\item[Slip Surface:]A surface within a slope that has the potential to fail or displace due to load or other forces.
+\item[Critical Slip Surface:]Slip surface of the slope that has the lowest factor of safety, and is therefore most likely to experience failure.
+\item[Water Table:]The upper boundary of a saturated zone in the ground.
 \item[Stress:]Forces that are exerted between planes internal to a larger body subject to external loading.
-\item[Strain:]Stress forces that result in deformation of the body/plane.
+\item[Strain:]A measure of deformation of a body or plane under stress.
 \item[Normal Force:]A force applied perpendicular to the plane of the material.
 \item[Shear Force:]A force applied parallel to the plane of the material.
-\item[Plane Strain:]The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominant dimensions direction are the ones that can be approximated as 0.
+\item[Mobilized Shear Force:]Shear force in the direction of potential motion, thus encouraging motion along the plane.
+\item[Resistive Shear Force:]Shear force in the direction opposite to the direction of potential motion, thus hindering motion along the plane.
+\item[Effective Forces and Stresses:]The normal force or normal stress carried by the soil skeleton. The total normal force or normal stress is composed of the effective force or stress and the force or stress exerted by water.
+\item[Cohesion:]An attractive force between adjacent particles that holds the matter together.
+\item[Isotropy:]A condition where the value of a property is independent of the direction in which it is measured.
+\item[Plane Strain:]A condition where the resultant stresses in one of the directions of a  three-dimensional material can be approximated as zero. This condition results when a body is constrained to not deform in one direction, or when the length of one dimension of the body dominates the others, to the point where it can be assumed as infinite. Stresses in the direction of the dominant dimension can be approximated as zero.
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -425,7 +434,7 @@ Label & Mohr-Coulumb shear strength
                                  \item{$c'$ is the effective cohesion (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the cohesion $c'$ represents the $τ$ intercept of the fitted line.
+                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the effective cohesion $c'$ represents the $τ$ intercept of the fitted line.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\

@@ -19,7 +19,7 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 --------------------------
@@ -74,7 +74,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
-  [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+  [qw shrStress, qw normStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
@@ -84,7 +84,7 @@ mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear stren
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
+mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy effCohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -102,8 +102,9 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRef2S assumpSBSBISL), S "where the cohesion", ch cohesion,
-  S "represents the", ch shrStress, S "intercept of the fitted line"]
+  S "fit", sParen (makeRef2S assumpSBSBISL), S "where the", phrase effCohesion, 
+  ch effCohesion, S "represents the", ch shrStress,
+  S "intercept of the fitted line"]
 
 --
 ------------- New Chunk -----------

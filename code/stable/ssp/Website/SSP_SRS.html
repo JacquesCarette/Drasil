@@ -195,7 +195,7 @@ Interslice Normal to Shear Force Ratio Variation Function: magnitude of intersli
 <em>F<sub>S</sub></em>
 </td>
 <td>
-Factor of Safety: The global stability of a surface in a slope
+Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force
 </td>
 <td>
 --
@@ -824,6 +824,14 @@ two-dimensional
 </tr>
 <tr>
 <td>
+3D
+</td>
+<td>
+three-dimensional
+</td>
+</tr>
+<tr>
+<td>
 A
 </td>
 <td>
@@ -1089,7 +1097,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
+SSP is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
@@ -1101,16 +1109,22 @@ This subsection provides a list of terms that are used in the subsequent section
 </p>
 <div class="list">
 <p>
-Factor of Safety: The global stability of a surface in a slope
+Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force
 </p>
 <p>
-Critical Slip Surface: Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
+Slip Surface: A surface within a slope that has the potential to fail or displace due to load or other forces.
+</p>
+<p>
+Critical Slip Surface: Slip surface of the slope that has the lowest factor of safety, and is therefore most likely to experience failure.
+</p>
+<p>
+Water Table: The upper boundary of a saturated zone in the ground.
 </p>
 <p>
 Stress: Forces that are exerted between planes internal to a larger body subject to external loading.
 </p>
 <p>
-Strain: Stress forces that result in deformation of the body/plane.
+Strain: A measure of deformation of a body or plane under stress.
 </p>
 <p>
 Normal Force: A force applied perpendicular to the plane of the material.
@@ -1119,7 +1133,22 @@ Normal Force: A force applied perpendicular to the plane of the material.
 Shear Force: A force applied parallel to the plane of the material.
 </p>
 <p>
-Plane Strain: The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominant dimensions direction are the ones that can be approximated as 0.
+Mobilized Shear Force: Shear force in the direction of potential motion, thus encouraging motion along the plane.
+</p>
+<p>
+Resistive Shear Force: Shear force in the direction opposite to the direction of potential motion, thus hindering motion along the plane.
+</p>
+<p>
+Effective Forces and Stresses: The normal force or normal stress carried by the soil skeleton. The total normal force or normal stress is composed of the effective force or stress and the force or stress exerted by water.
+</p>
+<p>
+Cohesion: An attractive force between adjacent particles that holds the matter together.
+</p>
+<p>
+Isotropy: A condition where the value of a property is independent of the direction in which it is measured.
+</p>
+<p>
+Plane Strain: A condition where the resultant stresses in one of the directions of a  three-dimensional material can be approximated as zero. This condition results when a body is constrained to not deform in one direction, or when the length of one dimension of the body dominates the others, to the point where it can be assumed as infinite. Stresses in the direction of the dominant dimension can be approximated as zero.
 </p>
 </div>
 </div>
@@ -1469,7 +1498,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
+For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the effective cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
 </p>
 </td>
 </tr>

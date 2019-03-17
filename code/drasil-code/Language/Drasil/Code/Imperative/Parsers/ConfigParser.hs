@@ -78,8 +78,7 @@ parseConfig = do
                                <|?> (Nothing, Just `liftM` (try $ parseOption "ExampleImplementation"))
                                <||> (try parseOptions)
     -- parsing the options above always fails (puts Nothing in all Options fields, even if they have been specified), for some reason. Fix it by trying again:
-    newcfg <- permute $ Config (genLang config) (exImp config) <$$> try parseOptions
-    return newcfg
+    permute $ Config (genLang config) (exImp config) <$$> try parseOptions
 
 parseLang :: Parser String
 parseLang = do

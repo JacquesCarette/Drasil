@@ -12,7 +12,7 @@ data Notation = Scientific
 class HasPrintingOptions c where
     getSetting :: Lens' c Notation
 
-data PrintingConfiguration = PC { _notation :: Notation }
+newtype PrintingConfiguration = PC { _notation :: Notation }
 makeLenses ''PrintingConfiguration
 
 instance HasPrintingOptions  PrintingConfiguration where getSetting = notation

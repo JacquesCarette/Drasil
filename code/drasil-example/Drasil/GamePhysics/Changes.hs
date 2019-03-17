@@ -25,9 +25,9 @@ likelyChangesIntro :: Contents
 likelyChangesList :: [Contents]
 
 likelyChangesListwithIntro :: [Contents]
-likelyChangesListwithIntro = [likelyChangesIntro] ++ likelyChangesList
+likelyChangesListwithIntro = likelyChangesIntro : likelyChangesList
 
-likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
+likelyChanges = SRS.likeChg likelyChangesListwithIntro []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
   S "lists the", plural likelyChg, S "to be made to the",
@@ -71,9 +71,9 @@ unlikelyChanges :: Section
 unlikelyChangesIntro :: Contents
 
 unlikelyChangeswithIntro :: [Contents]
-unlikelyChangeswithIntro = [unlikelyChangesIntro] ++ unlikelyChangesList
+unlikelyChangeswithIntro = unlikelyChangesIntro : unlikelyChangesList
 
-unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
+unlikelyChanges = SRS.unlikeChg unlikelyChangeswithIntro []
 
 unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
   plural unlikelyChg, S "to be made to the", phrase game, phrase Doc.physics,

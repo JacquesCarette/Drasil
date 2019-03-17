@@ -22,7 +22,7 @@ import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.Symbol.Helpers (eqSymb)
 import Language.Drasil.UID (UID)
 
-data Scope = Scp { _spec :: UID } {-indirect reference-}
+newtype Scope = Scp { _spec :: UID } {-indirect reference-}
 
 data ScopeType =
     Local Scope {- only visible within a limited scope -}

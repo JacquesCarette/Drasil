@@ -165,7 +165,7 @@ data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
 {--}
 
 -- | Specific System Description section . Contains a list of subsections.
-data SSDSec = SSDProg [SSDSub]
+newtype SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
@@ -195,7 +195,7 @@ data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
 
-data ReqrmntSec = ReqsProg [ReqsSub]
+newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
@@ -203,12 +203,12 @@ data ReqsSub where
 
 {--}
 
-data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
-data LCsSec' = LCsProg' [ConceptInstance]
+newtype LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+newtype LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
-data UCsSec = UCsProg [Contents]
+newtype UCsSec = UCsProg [Contents]
 
 {--}
 
@@ -226,7 +226,7 @@ data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
-data AppndxSec = AppndxProg [Contents]
+newtype AppndxSec = AppndxProg [Contents]
 
 {--}
 
@@ -367,7 +367,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
-mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
+mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = ((S . getStringSN $ shortname x), f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
@@ -445,23 +445,23 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map LlC (map (tmodel fields si') ts))
+      SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds)
+      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields si') dds))
+      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs')
+      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map LlC (map (gdefn fields si') gs'))
-    mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
-      (concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims)
-    mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields si') ims))
-    mkSubSCS si' (Assumptions) =
+      SSD.genDefnF $ map (LlC . gdefn fields si') gs'
+    mkSubSCS si' (IMs fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+      concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
+    mkSubSCS si' (IMs fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
-      map (flip helperCI si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ (_sysinfodb si') ^. conceptinsTable
       where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang

@@ -72,8 +72,8 @@ balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
 -- type Derivation = [Sentence]
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
-  [S "Derivation of the" +:+ phrase energy +:+ S "balance on water:"] ++
-  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1])
+  S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
+  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1]
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [

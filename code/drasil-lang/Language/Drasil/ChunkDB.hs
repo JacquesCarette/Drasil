@@ -15,7 +15,7 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Control.Lens ((^.), makeLenses)
-import Data.Maybe (maybeToList)
+import Data.Maybe (fromMaybe, mapMaybe)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Concept, Idea, IsUnit, Quantity)
@@ -175,8 +175,8 @@ cdb s t c u tc rfm dd ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
   (idMap ci) (idMap sec) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
- $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
+collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
+ . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = maybe [] fst $ Map.lookup c m
@@ -189,4 +189,4 @@ generateRefbyMap :: TraceMap  -> RefbyMap
 generateRefbyMap = invert . Map.map fst
 
 refbyLookup :: UID -> RefbyMap -> [UID]
-refbyLookup c m = maybe [] id $ Map.lookup c m
+refbyLookup c = fromMaybe [] . Map.lookup c

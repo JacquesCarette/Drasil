@@ -10,7 +10,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -20,12 +20,12 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
   generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (datCon, indPRCase, 
-  reference, valsOfAuxCons, assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
+  assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, class_, code, company, condition, content, 
+  assumption, characteristic, code, company, condition, content,
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
   goal, goalStmt, implementation, information, inModel, input_, interface, item, 
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
@@ -34,7 +34,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   theory, thModel, traceyMatrix, user, userInput, value, doccon, doccon')
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
-import Data.Drasil.Concepts.Math (graph, parameter, probability, mathcon, mathcon')
+import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -53,7 +53,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
   isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
   underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
-  makeTMatrix, noRefs, prodUCTbl)
+  makeTMatrix, noRefs)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
@@ -67,9 +67,9 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbr
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
-  gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
+  gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
 
@@ -139,54 +139,51 @@ glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
-  IntroSec (
+mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+  IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
-    [IPurpose (purpOfDocIntro document gLassBR glaSlab),
+    [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR EmptyS,
-     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
-  StkhldrSec
-    (StkhldrProg2
-      [Client gLassBR (S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
-      Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
-    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
-  SSDSec 
-    (SSDProg
-      [SSDProblem  (PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts])
-      , SSDSolChSpec 
-        (SCSProg
-          [ Assumptions
-          , TMs ([Label] ++ stdFields) gbrTMods
-          , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
-          , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]),
-                        S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRef2S inputDataConstraints)])
-                        [inputDataConstraints, outputDataConstraints]
-          ]
-        )
-      ]
-    ) :
-  ReqrmntSec (ReqsProg [
+     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+  StkhldrSec $
+    StkhldrProg2
+      [Client gLassBR $ S "a" +:+ phrase company
+        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
+      Cstmr gLassBR],
+  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+    UsrChars [user_characteristics_intro], SystCons [] [] ],
+  SSDSec $
+    SSDProg
+      [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
+       SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs (Label : stdFields) gbrTMods
+        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
+        , Constraints EmptyS dataConstraintUncertainty
+                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
+                      S "gives", (plural value `ofThe` S "specification"),
+                      plural parameter, S "used in", makeRef2S inputDataConstraints])
+                      [inputDataConstraints, outputDataConstraints]
+        ]
+      ],
+  ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub [performance] (gBRpriorityNFReqs)
+    NonFReqsSub [performance] gBRpriorityNFReqs
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
-    (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec' (LCsProg' likelyChgs) :
-  UCsSec (UCsProg unlikelyChgsList) :
-  TraceabilitySec
-    (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
-    ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) []) :
-  AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
-  Bibliography :
-  AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
+    (S "will be very quick" `sAnd` S "use minimal storage"))],
+  LCsSec' $ LCsProg' likelyChgs,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
+    ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
+  AuxConstntSec $ AuxConsProg gLassBR auxiliaryConstants,
+  Bibliography,
+  AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

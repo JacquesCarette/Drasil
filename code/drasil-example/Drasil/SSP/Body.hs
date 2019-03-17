@@ -20,7 +20,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (goalStmt, thModel, inModel,
+import qualified Drasil.DocLang.SRS as SRS (inModel,
   physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
@@ -55,7 +55,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
-  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
+  itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
   soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
@@ -109,43 +109,40 @@ ssp_srs :: Document
 ssp_srs = mkDoc mkSRS for ssp_si
   
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
-  IntroSec (IntroProg startIntro kSent
+mkSRS = [RefSec $ RefProg intro
+  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA],
+  IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
     , IChar EmptyS
       (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
       phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
-      EmptyS (phrase soilMechanics)
-    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd]) :
+      EmptyS $ phrase soilMechanics
+    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
-      UsrChars [userCharIntro], SystCons [] []]):
-    SSDSec 
-      (SSDProg [SSDSubVerb problem_desc
-        , SSDSolChSpec 
-          (SCSProg 
-            [Assumptions 
-            ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-             effStress]
-            , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-            , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-             sspIMods ShowDerivation
-            , Constraints  EmptyS dataConstraintUncertainty EmptyS
-              [data_constraint_Table2, data_constraint_Table3]
-            ]
-          )
-        ]
-      ):
-    ReqrmntSec (ReqsProg [
+    GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+      UsrChars [userCharIntro], SystCons [] []],
+    SSDSec $
+      SSDProg [SSDSubVerb problem_desc
+        , SSDSolChSpec $ SCSProg
+          [Assumptions
+          ,TMs (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+           effStress]
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           sspIMods ShowDerivation
+          , Constraints  EmptyS dataConstraintUncertainty EmptyS
+            [data_constraint_Table2, data_constraint_Table3]
+          ]
+        ],
+    ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub [accuracy,performance] (ssppriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
     (S "SSA is intended to be an educational tool")
-    (S "")]) :
-  [LCsSec $ LCsProg likelyChanges_SRS]
-  ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
+    (S "")]
+  , LCsSec $ LCsProg likelyChanges_SRS
+  , UCsSec $ UCsProg unlikelyChanges_SRS, Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
 ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
@@ -250,7 +247,7 @@ kSent = keySent ssa ssp
 keySent :: (Idea a) => a -> a -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb ssp]
+  introduceAbb pname]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
@@ -434,7 +431,7 @@ fig_forceacting = llcc (makeFigRef "ForceDiagram") $
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
+goal_stmt = goalStmtF (map (uncurry ofThe) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")

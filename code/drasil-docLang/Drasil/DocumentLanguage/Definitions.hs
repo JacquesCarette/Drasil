@@ -90,9 +90,9 @@ nonEmpty _   f xs = f xs
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
+mkTMField t _ l@Label fs  = (show l, [mkParagraph $ at_start t]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map eqUnR' (t ^. invariants))) : fs 
+  (show l, map eqUnR' (t ^. invariants)) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -103,34 +103,29 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
-helperRefs t s = foldlSent $ map (\x -> helpToRefField x (_sysinfodb s) $ citeDB s) $
-  refbyLookup (t ^. uid) ((_sysinfodb s) ^. refbyTable)
+helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) ((_sysinfodb s) ^. refbyTable)
 
-helpToRefField :: UID -> ChunkDB -> BibRef -> Sentence
-helpToRefField t s r = if elem t (keys $ s ^. dataDefnTable)
-  then makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  else if  elem t (keys $ s ^. insmodelTable)
-    then makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-    else if elem t (keys $ s ^. gendefTable)
-      then makeRef2S $ gendefLookup t (s ^. gendefTable)
-      else if elem t (keys $ s ^. theoryModelTable)
-        then makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-        else if elem t (keys $ s ^. conceptinsTable)
-          then makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-          else if elem t (keys $ s ^. sectionTable)
-            then makeRef2S $ sectionLookup t (s ^. sectionTable)
-            else if elem t (keys $ s ^. labelledcontentTable)
-              then makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
-              else if elem t $ map (^. uid) r
-                then EmptyS
-                else error $ t ++ "Caught."
+helpToRefField :: UID -> SystemInformation -> Sentence
+helpToRefField t si
+  | t `elem` (keys $ s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
+  | t `elem` (keys $ s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
+  | t `elem` (keys $ s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
+  | t `elem` (keys $ s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` (keys $ s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
+  | t `elem` (keys $ s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
+  | t `elem` (keys $ s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+  | t `elem` (map (^. uid) r) = EmptyS
+  | otherwise = error $ t ++ "Caught."
+  where
+    s = _sysinfodb si
+    r = citeDB si
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
-mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
-mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (eqUnR' (sy d $= d ^. defnExpr)) :[]) : fs 
+mkDDField d _ l@Label fs = (show l, [mkParagraph $ at_start d]) : fs
+mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
+mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
+mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -144,23 +139,23 @@ mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 buildDescription :: Verbosity -> InclUnits -> Expr -> SystemInformation -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
-buildDescription Verbose u e m cs = (UlC $ ulcc $
-  Enumeration (Definitions (descPairs u (vars e $ _sysinfodb m)))) : cs
+buildDescription Verbose u e m cs = (UlC . ulcc .
+  Enumeration . Definitions . descPairs u $ vars e $ _sysinfodb m) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
 buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformation ->
   [Contents]
-buildDDescription' Succinct u d _ = map (UlC . ulcc) [Enumeration (Definitions $ (firstPair' u d):[])]
-buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
-  (firstPair' u d : descPairs u (vars (d^.defnExpr) $ _sysinfodb m)))]
+buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
+buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $ 
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ d ^. defnExpr)]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
-mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
+mkGDField g _ l@Label fs = (show l, [mkParagraph $ at_start g]) : fs
 mkGDField g _ l@Units fs = 
-  maybe fs (\udef -> (show l, (mkParagraph $ Sy (usymb udef)):[]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, (eqUnR' (g ^. relat)):[]) : fs
+  maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
+mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField g m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
@@ -170,8 +165,8 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, (eqUnR' (i ^. relat)):[]) : fs
+mkIMField i _ l@Label fs  = (show l, [mkParagraph $ at_start i]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField i m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
@@ -182,7 +177,7 @@ mkIMField i _ l@(Input) fs =
   case (i ^. imInputs) of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
-  where (x:xs) = map (P . eqSymb) (i ^. imInputs)
+  where (x:xs) = map (P . eqSymb) $ i ^. imInputs
 mkIMField i _ l@(InConstraints) fs  = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
 mkIMField i _ l@(OutConstraints) fs = 

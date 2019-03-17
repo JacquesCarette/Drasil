@@ -71,7 +71,7 @@ data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
-data UnlabelledContent = UnlblC { _cntnts :: RawContent }
+newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent
 makeLenses ''UnlabelledContent
@@ -96,13 +96,13 @@ instance Referable LabelledContent where
   renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
-refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
-refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
-refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
-refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
-refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
-refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
-refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
-refLabelledCon (Bib _)               = error $ 
+refLabelledCon Table{}        = raw "Table:" +::+ name 
+refLabelledCon Figure{}       = raw "Fig:" +::+ name
+refLabelledCon Graph{}        = raw "Fig:" +::+ name
+refLabelledCon Defini{}       = raw "Def:" +::+ name
+refLabelledCon EqnBlock{}     = raw "EqnB:" +::+ name
+refLabelledCon Enumeration{}  = raw "Lst:" +::+ name 
+refLabelledCon Paragraph{}    = error "Shouldn't reference paragraphs"
+refLabelledCon Bib{}          = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."

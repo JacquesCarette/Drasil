@@ -4,8 +4,6 @@ import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
-import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
@@ -35,9 +33,6 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness, softwarecon, reliability)
-
-import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
-
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
@@ -45,6 +40,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
   sOf, sOr)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals)
+import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
@@ -52,7 +48,6 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dime
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, physicCon)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
-import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
@@ -69,6 +64,9 @@ import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new,
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
+import Control.Lens ((^.))
+import qualified Data.Map as Map
+
 authors :: People
 authors = [alex, luthfi]
 
@@ -82,45 +80,40 @@ check_si :: [UnitDefn] -- FIXME
 check_si = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
-  IntroSec (
-    IntroProg para1_introduction_intro (short chipmunk) 
-  [IPurpose (para1_purpose_of_document_intro),
-   IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
-   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS) (EmptyS), 
-   IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS]) :
-   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
-   SSDSec 
-    (SSDProg [SSDSubVerb problem_description
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions
-          , TMs ([Label]++ stdFields) 
-              [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
-          , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
-              [im1_new, im2_new, im3_new] ShowDerivation
-          , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
-              [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
-          ]
-        )
-      ]
-    ):
-    ReqrmntSec (ReqsProg [
-    FReqsSub functional_requirements_list,
-    NonFReqsSub [performance] (gmpriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
-    (S "Games are resource intensive") (S "")]) :
-    LCsSec (LCsProg likelyChangesListwithIntro) :
-    UCsSec (UCsProg unlikelyChangeswithIntro) :
-    [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
-    TraceabilitySec
-      (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-    traceMatTabDefnModel] traceability_matrices_and_graph_traces
-     (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
-    ([Verbatim values_of_auxiliary_constatnts]) ++
-    (Bibliography : [])
+mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
+  IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
+  [IPurpose para1_purpose_of_document_intro,
+   IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2,
+   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) EmptyS EmptyS,
+   IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS],
+   GSDSec $ GSDProg2 [
+    SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+    UsrChars [user_characteristics_intro], SystCons [] []],
+   SSDSec $ SSDProg [SSDSubVerb problem_description
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs (Label : stdFields)
+            [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
+        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+            [im1_new, im2_new, im3_new] ShowDerivation
+        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
+            [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+        ]
+      ],
+    ReqrmntSec $ ReqsProg [
+      FReqsSub functional_requirements_list,
+      NonFReqsSub [performance] gmpriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+        (S "Games are resource intensive") (S "")],
+    LCsSec $ LCsProg likelyChangesListwithIntro,
+    UCsSec $ UCsProg unlikelyChangeswithIntro,
+    ExistingSolnSec $ ExistSolnVerb off_the_shelf_solutions,
+    TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
+      traceMatTabDefnModel] traceability_matrices_and_graph_traces
+      (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
+    Verbatim values_of_auxiliary_constatnts,
+    Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 game_label :: TraceMap

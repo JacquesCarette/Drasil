@@ -347,17 +347,17 @@ fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x - inxiM1 intShrForce +
   tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn4 :: Expr
-fctSftyDerivEqn4 = (eqlExprSepG sin cos (\x y -> x + y)) + 
+fctSftyDerivEqn4 = (eqlExprSepG sin cos (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (sin (inxi baseAngle)) $= 
-  (((eqlExprNSepG cos sin (\x y -> x + y)) + 
+  (((eqlExprNSepG cos sin (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
   tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn5 :: Expr
-fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (\x y -> x + y)) + 
+fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (sin (inxi baseAngle)) $= 
-  (((eqlExprNNoKQ cos sin (\x y -> x + y)) + 
+  (((eqlExprNNoKQ cos sin (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
   tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)

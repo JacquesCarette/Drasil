@@ -58,7 +58,7 @@ import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
   intrslce, itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope,
-  slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
+  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)

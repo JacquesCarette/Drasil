@@ -12,7 +12,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.SentenceStructures (sAnd)
-import Drasil.SSP.Assumptions (newA9)
+import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -55,7 +55,7 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 
 baseWtrF :: DataDefinition
 baseWtrF = mkDD baseWtrFQD [fredlund1977] [{-Derivation-}] "baseWtrF"
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 baseWtrFQD :: QDefinition
@@ -72,7 +72,7 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 
 surfWtrF :: DataDefinition
 surfWtrF = mkDD surfWtrFQD [fredlund1977] [{-Derivation-}] "surfWtrF"
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 surfWtrFQD :: QDefinition
@@ -110,7 +110,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 
 angleA :: DataDefinition
 angleA = mkDD angleAQD [fredlund1977] [{-Derivation-}] "angleA" 
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 angleAQD :: QDefinition
@@ -124,7 +124,7 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 
 angleB :: DataDefinition
 angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 angleBQD :: QDefinition
@@ -150,7 +150,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 
 lengthLb :: DataDefinition
 lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 lengthLbQD :: QDefinition
@@ -163,7 +163,7 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 
 lengthLs :: DataDefinition
 lengthLs = mkDD lengthLsQD [fredlund1977] [{-Derivation-}] "lengthLs"
-  [makeRef2S newA9]--Notes
+  [makeRef2S assumpSBSBISL]--Notes
 --FIXME: fill empty lists in
 
 lengthLsQD :: QDefinition
@@ -187,7 +187,7 @@ slcHeightEqn = 0.5 * (sy fixme3 + sy fixme4)
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
   S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
-  S "are straight lines" +:+. sParen (makeRef2S newA9)]
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL)]
 
 --DD11 
 
@@ -264,7 +264,7 @@ resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 resShr_deriv_ssp :: Derivation
@@ -294,7 +294,7 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-fixme1, fixme2 :: DataDefinition
+fixme1, fixme2, fixme3, fixme4 :: DataDefinition
 fixme1 = mkDD fixme1QD [{-References-}] [{-Derivation-}] "fixme1" []--Notes
 fixme2 = mkDD fixme2QD [{-References-}] [{-Derivation-}] "fixme2" []--Notes
 fixme3 = mkDD fixme3QD [{-References-}] [{-Derivation-}] "fixme3" []--Notes
@@ -368,13 +368,13 @@ eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce))
 
 eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
-  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
+  (inxi effCohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 eq8 = inxi shearRNoIntsl $=
@@ -382,7 +382,7 @@ eq8 = inxi shearRNoIntsl $=
   (- (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
 -------old chunk---------
@@ -422,13 +422,13 @@ resShrDerivation = [
   
   eqUnR' $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
-  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
+  (inxi effCohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
   ]

@@ -30,7 +30,7 @@ commonIdea :: String -> NP -> String -> [UID] -> CI
 commonIdea = CI
 
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-commonIdeaWithDict = (\x y z i -> CI x y z (map (^.uid) i))
+commonIdeaWithDict x y z = CI x y z . map (^.uid)
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv

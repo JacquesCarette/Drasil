@@ -1,9 +1,7 @@
 -- Standard code to make a table of symbols.
-module Drasil.Sections.TableOfSymbols 
-  (table) where
+module Drasil.Sections.TableOfSymbols (table) where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
 
 import qualified Data.Drasil.Concepts.Math as CM
 import Drasil.DocumentLanguage.Units (toSentence)
@@ -15,6 +13,6 @@ table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> Label
 table st ls f = llcc (makeTabRef "ToS") 
   $ Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
-  (mkTable [P . (flip symbol st), f, toSentence]
-  (filter (\q -> hasStageSymbol q st) ls))  
+  (mkTable [P . (`symbol` st), f, toSentence]
+  $ filter (`hasStageSymbol`st) ls)
   (titleize tOfSymb) False

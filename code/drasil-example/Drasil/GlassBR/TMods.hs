@@ -1,9 +1,7 @@
 module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
-import qualified Data.Map as Map
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
-import Language.Drasil.Development (UnitDefn) -- FIXME
 
 import Control.Lens ((^.))
 
@@ -15,6 +13,8 @@ import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 
+import qualified Data.Map as Map
+
 {--}
 
 gbrTMods :: [TheoryModel]
@@ -24,8 +24,8 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- needs to be updated properly.
 -- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
-glass_concept :: [ConceptInstance]
-glass_concept = []
+-- glass_concept :: [ConceptInstance]
+-- glass_concept = []
 
 
 lrIsSafe :: TheoryModel
@@ -34,8 +34,8 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
    where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
-                        ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-                        glass_concept [] []
+                          ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+                           [] []
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

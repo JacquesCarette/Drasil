@@ -397,15 +397,9 @@ ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
 
 ciGetIntroSub :: IntroSub -> [CI]
-<<<<<<< HEAD
-ciGetIntroSub (IPurpose _)        = []
-ciGetIntroSub (IScope   _ _)      = []
-ciGetIntroSub (IChar    _ _ _)  = []
-=======
 ciGetIntroSub IPurpose{}          = []
 ciGetIntroSub IScope{}            = []
 ciGetIntroSub IChar{}             = []
->>>>>>> master
 ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
 
 ciGetStk :: StkhldrSec -> [CI]

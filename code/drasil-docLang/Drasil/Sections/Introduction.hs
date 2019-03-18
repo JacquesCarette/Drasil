@@ -39,7 +39,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
   [(phrase scope, phrase system), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
@@ -77,7 +77,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
+scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
   where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                   S "includes", mainRequirement]

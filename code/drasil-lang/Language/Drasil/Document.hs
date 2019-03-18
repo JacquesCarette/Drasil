@@ -3,9 +3,10 @@
 module Language.Drasil.Document where
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd)
+import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
+import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.RefProg (Reference(Reference))
@@ -31,6 +32,9 @@ makeLenses ''Section
 
 instance HasUID        Section where uid = lab . uid
 instance HasShortName  Section where shortname = shortname . view lab
+instance Referable Section where
+  refAdd    (Section _ _ lb ) = getRefAdd lb
+  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
 
 sectionci :: CI
 sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                   "DD"        [documentc]

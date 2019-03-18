@@ -5,15 +5,19 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Concepts.Physics (twoD)
+import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.Education (mechanics)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,
+  shearRes)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
+import Data.Drasil.SentenceStructures (andThe, sOr)
 import Data.Drasil.IdeaDicts hiding (dataDefn)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
 
 ssa, ssp :: CI
@@ -22,13 +26,14 @@ ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   
 
 sspdef :: [NamedChunk]
 sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
-  slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
+  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
 
 sspdef' :: [ConceptChunk]
-sspdef' = [crtSlpSrf, plnStrn, fs_concept]
+sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept]
 
 ----Other Common Phrases----
-soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
+  soilMechanics :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
@@ -42,8 +47,8 @@ soil     = nc "soil"       (cn  "soil")
 morPrice = nc "morPrice"   (cn  "morgenstern price")
 rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
-slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
-slpSrf    = compoundNC slip surface
+soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
+--slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
 itslPrpty = compoundNC intrslce property
@@ -51,24 +56,44 @@ slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
 
-crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
+effFandS, slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
+effFandS = dccWDS "effective forces and stresses" 
+  (cn "effective forces and stresses") 
+  (S "The" +:+ phrase normForce `sOr` phrase nrmStrss +:+
+  S "carried by the" +:+ phrase soil +:+ S "skeleton. The total" +:+
+  phrase normForce `sOr` phrase nrmStrss +:+ S "is composed of the" +:+
+  S "effective" +:+ phrase force `sOr` phrase stress `andThe` 
+  phrase force `sOr` phrase stress +:+ S "exerted by water.")
+
+slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
+  phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
+  S "potential to fail or displace due to load or other" +:+. plural force)
+
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
-plnStrn = dcc "plane strain" (cn' "plane strain") 
-  ("The resultant stresses in one of the directions of a " ++
-  "3 dimensional material can be approximated as 0. Results " ++
-  "when the length of one dimension of the body dominates the " ++
-  "others. Stresses in the dominant dimensions direction are " ++
-  "the ones that can be approximated as 0.")
+plnStrn = dccWDS "plane strain" (cn' "plane strain") 
+  (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
+  S "the directions of a " +:+ phrase threeD +:+ S "material can be" +:+
+  S "approximated as zero. This condition results when a body is" +:+ 
+  S "constrained to not deform in one direction, or when the" +:+ 
+  phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
+  S "dominates the others, to the point where it can be assumed as" +:+.
+  S "infinite" +:+ at_start' stress +:+ S "in the direction of the" +:+
+  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+
-  S "that has the lowest global" +:+ phrase fs_concept `sC`
-  S "and therefore most likely to experience failure.")
+  S "that has the lowest" +:+ phrase fs_concept `sC`
+  S "and is therefore most likely to experience failure.")
 
-fs_concept = dcc "FS" factorOfSafety
-  "The global stability of a surface in a slope"
+fs_concept = dccWDS "FS" factorOfSafety
+  (S "The global stability metric of a" +:+ phrase slpSrf +:+ S "of a" +:+
+  phrase slope `sC` S "defined as the ratio of" +:+ phrase shearRes +:+ 
+  S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
+
+waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
+  " saturated zone in the ground.")
 
 --
 factor :: NamedChunk --FIXME: this is here becuase this phrase is

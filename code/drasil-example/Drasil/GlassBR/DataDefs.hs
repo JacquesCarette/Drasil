@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 
-import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
+import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
@@ -32,8 +32,8 @@ dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   calofCapacity, calofDemand]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
-  map (\x -> Parallel x []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
+gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on their own
+  map (flip Parallel []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
   tolStrDisFacQD {-DD9-}, tolPreQD {-DD8-}, nonFLQD {-DD5-}] 
 
 --DD1--
@@ -53,7 +53,7 @@ risk = mkDD riskQD
   [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
   campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
   [{-derivation-}] "risk_fun"
-  (aGrtrThanB : hRef : ldfRef : jRef : [])
+  [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--
 
@@ -79,8 +79,8 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDF_eq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S standardValues,
-  makeRef2S ldfConstant]
+loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S assumpSV,
+  makeRef2S assumpLDFC]
 
 --DD4--
 
@@ -94,7 +94,7 @@ strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
 
 strDisFac :: DataDefinition
 strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
-  (jRef2 : qHtRef : arRef : [])
+  [jRef2, qHtRef, arRef]
 
 --DD5--
 
@@ -107,7 +107,7 @@ nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
 nonFL :: DataDefinition
 nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
-  (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S standardValues])
+  (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S assumpSV])
 
 --DD6--
 
@@ -122,7 +122,7 @@ glaTyFacQD = mkQuantDef gTF glaTyFac_eq
 
 glaTyFac :: DataDefinition
 glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
-  (anGlass : ftGlass : hsGlass : [])
+  [anGlass, ftGlass, hsGlass]
 
 --DD7--
 
@@ -135,7 +135,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
-  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S standardValues])
+  [qRef , aGrtrThanB , hRef, gtfRef, glassLiteRef, makeRef2S assumpSV]
 
 --DD8--
 
@@ -148,7 +148,7 @@ tolPreQD = mkQuantDef tolLoad tolPre_eq
 
 tolPre :: DataDefinition
 tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
-  (qHtTlExtra : [])
+  [qHtTlExtra]
 
 --DD9--
 
@@ -163,7 +163,7 @@ tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFac :: DataDefinition
 tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
-  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S standardValues])
+  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S assumpSV])
 
 --DD10--
 
@@ -185,7 +185,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
+aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
 
 --DD12--
 eqTNTW_eq :: Expr
@@ -205,7 +205,7 @@ probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
 
 probOfBreak :: DataDefinition
-probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" (glassBreak : [])
+probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" [glassBreak]
 
 --DD14--
 calofCapacity_eq :: Expr
@@ -244,7 +244,7 @@ capacityS :: [Sentence]
 capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
   makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
-  makeRef2S glaTyFac] ++ [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
+  makeRef2S glaTyFac, makeRef2S assumpGL, makeRef2S glaTyFac, makeRef2S nonFL]
 
 
 glassBreak :: Sentence
@@ -315,4 +315,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S glassLite)
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL)

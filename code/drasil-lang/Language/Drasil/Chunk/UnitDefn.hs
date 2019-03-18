@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Development.Unit (
+module Language.Drasil.Chunk.UnitDefn (
     UnitDefn(..)
   , from_udefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit

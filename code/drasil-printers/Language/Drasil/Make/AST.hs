@@ -1,7 +1,7 @@
 -- | Makefile abstract syntax tree
 module Language.Drasil.Make.AST where
 
-data Makefile = M [Rule]
+newtype Makefile = M [Rule]
 
 type Rule = (Type, Target, [Dependencies])
 

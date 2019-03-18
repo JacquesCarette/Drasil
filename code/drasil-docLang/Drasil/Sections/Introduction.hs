@@ -2,7 +2,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
   charIntRdrF) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
@@ -39,7 +39,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
   [(phrase scope, phrase system), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
@@ -77,7 +77,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
+scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
   where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                   S "includes", mainRequirement]
@@ -131,5 +131,8 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           S "in", makeRef2S bottomSec +:+
           S "and trace back to find any additional information they require"],
           mkParagraph $ lastS trailingSentence]
-          where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
-                lastS t = refineChain [goalStmt, thModel, inModel] +:+. t
+          where lastS EmptyS = refineChain $ zip [goalStmt, thModel, inModel]
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]
+                lastS t = refineChain (zip [goalStmt, thModel, inModel] 
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) 
+                  +:+. t

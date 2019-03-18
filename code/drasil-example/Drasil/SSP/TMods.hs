@@ -16,10 +16,10 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
 
-import Drasil.SSP.Assumptions (newA8, newA9)
+import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 --------------------------
@@ -60,13 +60,12 @@ equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
-eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
-  where summ = sum_all (Atomic "i") . sy
+eq_rel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -75,7 +74,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
-  [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+  [qw shrStress, qw normStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
@@ -85,7 +84,7 @@ mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear stren
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
+mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy effCohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -103,8 +102,9 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRef2S newA9), S "where the cohesion", ch cohesion,
-  S "represents the", ch shrStress, S "intercept of the fitted line"]
+  S "fit", sParen (makeRef2S assumpSBSBISL), S "where the", phrase effCohesion, 
+  ch effCohesion, S "represents the", ch shrStress,
+  S "intercept of the fitted line"]
 
 --
 ------------- New Chunk -----------

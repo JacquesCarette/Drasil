@@ -13,29 +13,15 @@ import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11, newA12]
 
--- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
--- Assumptions has been migrated to using assumpDom
+assumptions :: [ConceptInstance]
+assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
+  assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
+  assumpSL]
 
-newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11,  
-  newA12 :: AssumpChunk
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
   assumpSL :: ConceptInstance
-newA1  = assump "assumpSSC" monotonicF "Slip-Surface-Concave"
-newA2  = assump "assumpFOS" slopeS "Factor-of-Safety"
-newA3  = assump "assumpSLH" homogeneousL "Soil-Layer-Homogeneous"
-newA4  = assump "assumpSP" propertiesS "Soil-Properties"
-newA5  = assump "assumpSLI" isotropicP "Soil-Layers-Isotropic"
-newA6  = assump "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear"
-newA7  = assump "assumpPSC" planeS "Plane-Strain-Conditions"
-newA8  = assump "assumpENSL" largeN "Effective-Norm-Stress-Large"
-newA9  = assump "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines"
-newA10 = assump "assumpES" edgeS "Edge-Slices"
-newA11 = assump "assumpSF" seismicF "Seismic-Force"
-newA12 = assump "assumpSL" surfaceL "Surface-Load"
 
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom

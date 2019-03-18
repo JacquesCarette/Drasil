@@ -10,7 +10,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
 
-import Data.Drasil.Quantities.Math (area)
+import Data.Drasil.Quantities.Math (area, pi_)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
@@ -49,7 +49,7 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [cohesion, fricAngle, dryWeight, satWeight, waterWeight]
+sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -63,7 +63,7 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-cohesion, fricAngle, dryWeight, satWeight,
+effCohesion, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ
   
 fs, coords :: ConstrConcept
@@ -71,7 +71,7 @@ fs, coords :: ConstrConcept
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-cohesion = uqc "c'" (cn $ "effective cohesion")
+effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
@@ -313,11 +313,11 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, varblU, varblV, fs_min,
-  ufixme1, ufixme2]
+  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min,
+  ufixme1, ufixme2, ufixme3, ufixme4]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV, ufixme1, ufixme2, ufixme3, ufixme4 :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -351,6 +351,12 @@ ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
 
 ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
   (const $ Atomic "SpencerFixme2Please") Real Nothing 
+
+ufixme3 = dqd' (dcc "fixme3" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme3Please") Real Nothing
+
+ufixme4 = dqd' (dcc "fixme4" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme4Please") Real Nothing 
 
 --------------------
 -- Index Function --

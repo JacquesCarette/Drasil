@@ -94,9 +94,10 @@ real_interval c = RealI (c ^. uid)
 euclidean :: [Expr] -> Expr
 euclidean = sqrt . sum' . map square
 
+{-# ANN sum' "HLint: ignore Use sum" #-}
 -- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
 sum' :: (Num a, Foldable t) => t a -> a
-sum' x = foldr1 (+) x
+sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr

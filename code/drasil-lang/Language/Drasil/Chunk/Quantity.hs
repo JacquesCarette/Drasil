@@ -7,7 +7,7 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), Quantity)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
@@ -34,7 +34,7 @@ qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 -- For when the symbol is constant through stages
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (\_ -> s) u
+mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (const s) u
 
 -- For when the symbol changes depending on the stage
 mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
@@ -50,7 +50,7 @@ implVar i des sym ty = vcSt i des f ty
 
 -- | Creates a Quantity from an uid, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
-vc i des sym space = QD (nw $ nc i des) space (\_ -> sym) Nothing
+vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
 
 -- | Like cv, but creates a QuantityDict from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict

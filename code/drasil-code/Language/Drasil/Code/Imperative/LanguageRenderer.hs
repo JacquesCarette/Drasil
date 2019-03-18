@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
     -- * Some Neccessary Data Types for Rendering
@@ -195,8 +196,8 @@ binOpDocD And = text "&&"
 binOpDocD Or = text "||"
 
 bodyDocD :: Config -> Body -> Doc
-bodyDocD c bs = vibmap (blockDoc c) blocks
-    where blocks = filter (\b -> not $ isEmpty $ blockDoc c b) bs
+bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
+    where bdc = blockDoc c
 
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
@@ -361,8 +362,8 @@ litDocD (LitStr v) = doubleQuotedText v
 
 clsDecDocD :: Config -> Class -> Doc
 clsDecDocD c (Class n _ _ _ _) = (clsDec c) <+> text n <> endStatement c
-clsDecDocD _ (Enum _ _ _) = empty
-clsDecDocD c m@(MainClass _ _ _) = clsDecDoc c $ convertToClass m
+clsDecDocD _ Enum{} = empty
+clsDecDocD c m@MainClass{} = clsDecDoc c $ convertToClass m
 
 clsDecListDocD :: Config -> [Class] -> Doc
 clsDecListDocD c = vmap $ clsDecDoc c
@@ -381,7 +382,7 @@ classDocD c ft _ (Class n p s vs fs) = vcat [
     rbrace]
     where baseClass = case p of Nothing -> empty
                                 Just pn -> inherit c <+> text pn
-classDocD c ft m mod@(MainClass _ _ _) = classDoc c ft m $ convertToClass mod
+classDocD c ft m mod@MainClass{} = classDoc c ft m $ convertToClass mod
 
 -- for 'packages' which are namespaces
 namespaceD :: Label -> Doc
@@ -401,7 +402,7 @@ objVarDocD c v1 v2 = valueDoc c v1 <> dot <> valueDoc c v2
 
 paramDocD :: Config -> Parameter -> Doc
 paramDocD c (StateParam n t) = stateType c t Dec <+> text n
-paramDocD _ (FuncParam _ _ _) = error "FuncParam not yet rendered"
+paramDocD _ FuncParam{} = error "FuncParam not yet rendered"
 
 paramListDocD :: Config -> [Parameter] -> Doc
 paramListDocD c ps = himap (text ", ") (paramDoc c) ps
@@ -424,7 +425,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) ((&.++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) (index &.++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
@@ -528,15 +529,15 @@ methodDocD' c _ _ (MainMethod b) = vcat [
 methodDocD' c ft m f = methodDocD c ft m f
 
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
+methodListDocD c t m = (vibmap mdc) . filter (not . isEmpty . mdc)
+    where mdc = methodDoc c t m
 
 functionDocD :: Config -> FileType -> Label -> Method -> Doc
 functionDocD _ _ _ _ = error "Not implemented yet!"
 
 functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms
+functionListDocD c t m = (vibmap fdc) . filter (not . isEmpty . fdc)
+    where fdc = functionDoc c t m
 
 methodTypeDocD :: Config -> MethodType -> Doc
 methodTypeDocD c (MState t) = stateType c t Dec
@@ -613,7 +614,7 @@ comment c (CommentDelimit cmt len) =
     in com <> text (dashes (render com) len)
 
 dashes :: String -> Int -> String
-dashes s l = take (l - length s) (repeat '-')
+dashes s l = replicate (l - length s)  '-'
 
 end :: Config -> StatementLocation -> Doc
 end _ Loop = empty

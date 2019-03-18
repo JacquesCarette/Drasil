@@ -3,7 +3,6 @@ module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -21,28 +20,29 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon)
+import qualified Drasil.DocLang.SRS as SRS (inModel,
+  physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, input_, interest, interface, issue,
-  loss, method_, model, organization, physics, problem, product_, property,
-  purpose, requirement, software, softwareSys, srs, srsDomains, sysCont, system,
-  systemConstraint, table_, template, thModel, user, value, variable, physSyst,
-  doccon, doccon')
+  goal, goalStmt, information, inModel, interest, interface, issue, loss, model,
+  organization, physics, problem, product_, property, purpose, requirement,
+  software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
+  table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, time, twoD,
-  physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
+  stress, time, twoD, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
+import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
+  shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
-import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
   FoldType(List), foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOf, sOr,
@@ -50,21 +50,22 @@ import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
-import Drasil.SSP.Assumptions (newAssumptions)
+import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, factor, fs_concept, intrslce, 
-  itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf,
-  soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef')
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
+  intrslce, itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope,
+  slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
+  waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, index, numbSlices, 
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, numbSlices, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
 --type declarations for sections--
@@ -89,7 +90,6 @@ ssp_si = SI {
   _sys = ssa, 
   _kind = srs, 
   _authors = [henryFrankis],
-  _units = check_si,
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
@@ -101,7 +101,7 @@ ssp_si = SI {
   _constants = [],
   _sysinfodb = sspSymMap,
   _usedinfodb = usedDB,
-  _refdb = sspRefDB
+   refdb = sspRefDB
 }
 
 resourcePath :: String
@@ -111,46 +111,43 @@ ssp_srs :: Document
 ssp_srs = mkDoc mkSRS for ssp_si
   
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
-  IntroSec (IntroProg startIntro kSent
+mkSRS = [RefSec $ RefProg intro
+  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA],
+  IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
     , IChar EmptyS
       (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
       phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
-      EmptyS (phrase soilMechanics)
-    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd]) :
+      EmptyS $ phrase soilMechanics
+    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
-      UsrChars [userCharIntro], SystCons [sysConstraints] []]):
-    SSDSec 
-      (SSDProg [SSDSubVerb problem_desc
-        , SSDSolChSpec 
-          (SCSProg 
-            [Assumptions 
-            ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-             effStress]
-            , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-            , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-             sspIMods ShowDerivation
-            , Constraints  EmptyS dataConstraintUncertainty EmptyS
-              [data_constraint_Table2, data_constraint_Table3]
-            ]
-          )
-        ]
-      ):
-    ReqrmntSec (ReqsProg [
+    GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+      UsrChars [userCharIntro], SystCons [sysConstraints] []],
+    SSDSec $
+      SSDProg [SSDSubVerb problem_desc
+        , SSDSolChSpec $ SCSProg
+          [Assumptions
+          ,TMs (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+           effStress]
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           sspIMods ShowDerivation
+          , Constraints  EmptyS dataConstraintUncertainty EmptyS
+            [data_constraint_Table2, data_constraint_Table3]
+          ]
+        ],
+    ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub [accuracy,performance] (ssppriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
     (S "SSA is intended to be an educational tool")
-    (S "")]) :
-  [LCsSec $ LCsProg likelyChanges_SRS]
-  ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
+    (S "")]
+  , LCsSec $ LCsProg likelyChanges_SRS
+  , UCsSec $ UCsProg unlikelyChanges_SRS, Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
-ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)
+ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
  
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
@@ -167,11 +164,8 @@ ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_assump :: [AssumpChunk]
-ssp_assump = newAssumptions
-
 ssp_concins :: [ConceptInstance]
-ssp_concins = sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -192,25 +186,23 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
-  map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
-  ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' 
+sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw sspIMods
+  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
-  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
+  (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si ssp_label
+  ssp_refby ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
   ssp_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
- ssp_section []
+usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
+ map nw check_si) ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section []
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
-  likelyChgs ++ unlikelyChgs)
+sspRefDB = rdb sspCitations ssp_concins
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration
@@ -257,7 +249,7 @@ kSent = keySent ssa ssp
 keySent :: (Idea a) => a -> a -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb ssp]
+  introduceAbb pname]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
@@ -298,10 +290,10 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short srs, S "for", phrase sciCompS,
-  S "proposed by Koothoor as well as Smith and Lai"]
-orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
-  S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively"
-  +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
+  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
+  S "Lai", makeRef2S smithLai2005]
+orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
+  S "algebraic", plural equation, S "that must be solved"]
 
 -- SECTION 3 --
 -- SECTION 3.1 --
@@ -354,7 +346,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharIntro :: Contents
 userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
-  [phrase soil, plural mtrlPrpty] [phrase cohesion, phrase fricAngle, 
+  [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle, 
   S "unit weight"]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
@@ -375,7 +367,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
+problem_desc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
@@ -390,10 +382,11 @@ termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
+  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
+  plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
-  -- except for crtSlpSrf & plnStrn which is in defs.hs
-  -- and fs which is in Unitals.hs
+  -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst
@@ -445,7 +438,7 @@ fig_forceacting = llcc (makeFigRef "ForceDiagram") $
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
+goal_stmt = goalStmtF (map (uncurry ofThe) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")

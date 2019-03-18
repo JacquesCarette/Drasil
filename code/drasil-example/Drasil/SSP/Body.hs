@@ -25,7 +25,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel,
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, interest, interface, issue, loss, model,
+  goal, goalStmt, information, inModel, interest, interface, issue, loss, method_, model,
   organization, physics, problem, product_, property, purpose, requirement,
   software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
   table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
@@ -56,7 +56,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
-  intrslce, itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope,
+  intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)

@@ -79,7 +79,7 @@ v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 v       = var "v"         lV                          Real
 i       = var "i"         lI                          Natural
 j       = var "j"         lJ                          Natural
-k       = var "k"         lK                          Natural
+k       = var "k"         (sub lK two)                Natural
 y       = var "y"         lY                          Real
 z       = var "z"         lZ                          Real
 z_vector = var "z_vector" (sub lZ (Atomic "vector")) (Vect Real)

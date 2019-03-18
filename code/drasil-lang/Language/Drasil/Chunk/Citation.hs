@@ -15,13 +15,15 @@ import Language.Drasil.People (People)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
+import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
+import Language.Drasil.Label.Type (LblType(Citation))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, (^.))
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -40,6 +42,9 @@ makeLenses ''Citation
 instance HasUID       Citation where uid       = citeID
 instance HasShortName Citation where shortname = sn
 instance HasFields    Citation where getFields = fields
+instance Referable    Citation where
+  refAdd    c = c ^. citeID -- citeID should be unique.
+  renderRef c = Citation $ refAdd c
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: CitationKind -> [CiteField] -> String -> Citation

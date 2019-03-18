@@ -16,7 +16,8 @@ import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
   foldlSentCol, foldlSP, getTandS, isThe, ofThe, ofThe', sAnd, sOf)
 
-import Drasil.SSP.Assumptions (newA2, newA4, newA6, newA10, newA11, newA12)
+import Drasil.SSP.Assumptions (assumpFOSL, assumpSP, assumpINSFL, assumpES,
+  assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
 import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, convertFunc2,
@@ -27,7 +28,7 @@ import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, sl
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
+  effCohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
   indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
   minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmForceSum, nrmFSubWat,
   numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
@@ -43,7 +44,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
 
 --
 fctSfty :: InstanceModel
-fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw cohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] [chen2005, karchewski2012] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
@@ -134,8 +135,8 @@ sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
   ch intNormForce, S "at interface", ch index +:+. S "The net force"
   `isThe` S "weight",
   S "of the slices adjacent to interface", ch index +:+.
-  S "exert horizontally on each other", makeRef2S newA2,
-  makeRef2S newA11, makeRef2S newA12]
+  S "exert horizontally on each other", makeRef2S assumpFOSL,
+  makeRef2S assumpSF, makeRef2S assumpSL]
 
 --
 crtSlpId :: InstanceModel
@@ -156,7 +157,7 @@ crtSlpId_desc = foldlSent_ [S "Given the necessary", phrase slope,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", ch critCoords, 
   S "and the", phrase fs_min, E (sy fs_min) +:+. S "that results",
-  makeRef2S newA4]
+  makeRef2S assumpSP]
 
 -----------
 -- Intro --
@@ -249,9 +250,9 @@ fctSftyDerivSentence4 = [S "Since the" +:+ phrase intShrForce +:+
   S "are unknown, they are separated from the other terms as follows"]
 
 fctSftyDerivSentence5 :: [Sentence]
-fctSftyDerivSentence5 = [S "Applying assumptions" +:+ makeRef2S newA11 `sAnd`   
-  makeRef2S newA12 `sC` S "which state that the" +:+ 
-  phrase earthqkLoadFctr `andThe` phrase surfLoad `sC` 
+fctSftyDerivSentence5 = [S "Applying assumptions" +:+ makeRef2S assumpSF `sAnd`
+  makeRef2S assumpSL `sC` S "which state that the" +:+
+  phrase earthqkLoadFctr `andThe` phrase surfLoad `sC`
   S "respectively, are zero, allows for further simplification as shown below"]
 
 fctSftyDerivSentence6 :: [Sentence]
@@ -263,7 +264,7 @@ fctSftyDerivSentence6 = [S "The definitions of" +:+ makeRef2S resShearWOGD
 fctSftyDerivSentence7 :: [Sentence]
 fctSftyDerivSentence7 = [S "The" +:+ phrase intShrForce +:+ ch intShrForce +:+
   S "can be expressed in terms of the" +:+ phrase intNormForce +:+
-  ch intNormForce +:+ S "using" +:+ makeRef2S newA6 `sAnd` 
+  ch intNormForce +:+ S "using" +:+ makeRef2S assumpINSFL `sAnd`
   makeRef2S normShrRGD `sC` S "resulting in"]
 
 fctSftyDerivSentence8 :: [Sentence]
@@ -282,8 +283,8 @@ fctSftyDerivEllipsis :: Sentence
 fctSftyDerivEllipsis = S "..."
 
 fctSftyDerivSentence11 :: [Sentence]
-fctSftyDerivSentence11 = [S "Applying", makeRef2S newA10 `sC` 
-  S "which says that", E (idx (sy intNormForce) 0) `sAnd` 
+fctSftyDerivSentence11 = [S "Applying", makeRef2S assumpES `sC`
+  S "which says that", E (idx (sy intNormForce) 0) `sAnd`
   E (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
 
 fctSftyDerivSentence12 :: [Sentence]
@@ -334,7 +335,7 @@ fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
 fctSftyDerivEqn1 :: Expr
 fctSftyDerivEqn1 = --FIXME: pull the right side of this from GD4
   eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
-  $= ((inxi nrmFSubWat) * tan (sy fricAngle) + (sy cohesion) *
+  $= ((inxi nrmFSubWat) * tan (sy fricAngle) + (sy effCohesion) *
   (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn2 :: Expr
@@ -345,23 +346,23 @@ fctSftyDerivEqn3 :: Expr
 fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + 
   inxi intShrForce + y) $= ((eqlExprN cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn4 :: Expr
-fctSftyDerivEqn4 = (eqlExprSepG sin cos (\x y -> x + y)) + 
+fctSftyDerivEqn4 = (eqlExprSepG sin cos (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (sin (inxi baseAngle)) $= 
-  (((eqlExprNSepG cos sin (\x y -> x + y)) + 
+  (((eqlExprNSepG cos sin (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn5 :: Expr
-fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (\x y -> x + y)) + 
+fctSftyDerivEqn5 = (eqlExprNoKQ sin cos (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (sin (inxi baseAngle)) $= 
-  (((eqlExprNNoKQ cos sin (\x y -> x + y)) + 
+  (((eqlExprNNoKQ cos sin (+)) + 
   (- inxiM1 intShrForce + inxi intShrForce) * (cos (inxi baseAngle)) - 
   (inxi baseHydroForce)) * 
-  tan (sy fricAngle) + (sy cohesion) * (inxi baseLngth)) / (sy fs)
+  tan (sy fricAngle) + (sy effCohesion) * (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn6 :: Expr
 fctSftyDerivEqn6 = (inxi shearFNoIntsl + (- inxiM1 intShrForce + 
@@ -499,7 +500,7 @@ nrmShrDeriv = (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns]) ++ nrmS
 
 nrmShrDerivSentence1 :: [Sentence]
 nrmShrDerivSentence1 = [S "From the moment equilibrium of", makeRef2S momentEqlGD,
-  S "with the primary assumption for the Morgenstern-Price method of", makeRef2S newA6 `sAnd`
+  S "with the primary assumption for the Morgenstern-Price method of", makeRef2S assumpINSFL `sAnd`
   S "associated definition", makeRef2S normShrRGD, S "equation", eqN 9, S "can be derived"]
 
 nrmShrDerivSentence2 :: [Sentence]
@@ -508,7 +509,7 @@ nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of", c
 
 nrmShrDerivSentence3 :: [Sentence]
 nrmShrDerivSentence3 = [S "Taking a summation of each slice, and", boundaryCon `sC`
-  S "and removing the seismic and external forces due to", makeRef2S newA11 `sAnd` makeRef2S newA12
+  S "and removing the seismic and external forces due to", makeRef2S assumpSF `sAnd` makeRef2S assumpSL
   `sC` S "a general", phrase equation, S "for the constant", ch normToShear,
   S "is developed in", eqN 11 `sC` S "also found in", makeRef2S nrmShrFor]
 
@@ -557,7 +558,7 @@ intrSlcDeriv = weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++ fUn
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "Substituting the", S "normal force equilibrium" `sOf`
-  (makeRef2S normForcEqGD) `sAnd` S "the assumption", makeRef2S newA6,
+  (makeRef2S normForcEqGD) `sAnd` S "the assumption", makeRef2S assumpINSFL,
   S "represented by", makeRef2S momentEqlGD, 
   S "into the effective normal force definition from", makeRef2S normShrRGD,
   S "yields equation", eqN 12] 
@@ -598,7 +599,7 @@ eq4 = inxi nrmFSubWat $= eqlExpr cos sin (\x y -> x -
   sy normToShear * inxi scalFunc * inxi intNormForce + y)
   - (inxi baseHydroForce)
 
-eq5 = ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
+eq5 = ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)) / (sy fs) $=
   --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - sy normToShear * inxiM1 scalFunc *
@@ -715,7 +716,7 @@ intrSlcDerivation = [
   -- to get equation #" pattern
   
   eqUnR' $
-  ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
+  ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)) / (sy fs) $=
   --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - sy normToShear * inxiM1 scalFunc *

@@ -19,6 +19,7 @@ module Language.Drasil.Classes (
   , Quantity
   , UncertainQuantity(uncert)
   , Concept
+  , Referable(refAdd, renderRef)
 
   -- the unsorted rest
   , IsUnit(udefn, getUnits)
@@ -33,6 +34,7 @@ import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
@@ -105,6 +107,11 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class Quantity c => UncertainQuantity c where
   uncert :: Lens' c (Maybe Double)
+
+class HasUID s => Referable s where
+  refAdd    :: s -> String  -- The referencing address (what we're linking to).
+                            -- Only visible in the source (tex/html).
+  renderRef :: s -> LblType -- alternate
 
 -----------------------------------------------------
 -- Below are for units only

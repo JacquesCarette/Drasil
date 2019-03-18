@@ -43,18 +43,18 @@ prec1 _ = 250
 
 -- | eprec - "Expression" precedence
 eprec :: Expr -> Int
-eprec (Dbl _)           = 500
-eprec (Int _)           = 500
-eprec (Str _)           = 500
+eprec Dbl{}             = 500
+eprec Int{}             = 500
+eprec Str{}             = 500
 eprec (AssocA op _)     = precA op
 eprec (AssocB op _)     = precB op
-eprec (C _)             = 500
-eprec (Deriv _ _ _)     = prec2 Frac
-eprec (FCall _ _)       = 210
-eprec (Case _)          = 200
-eprec (Matrix _)        = 220
+eprec C{}               = 500
+eprec Deriv{}           = prec2 Frac
+eprec FCall{}           = 210
+eprec Case{}            = 200
+eprec Matrix{}          = 220
 eprec (UnaryOp fn _)    = prec1 fn
 eprec (Operator o _ _)  = precA o
 eprec (BinaryOp bo _ _) = prec2 bo
-eprec (IsIn  _ _)       = 170
-eprec (RealI _ _)       = 170
+eprec IsIn{}            = 170
+eprec RealI{}           = 170

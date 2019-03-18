@@ -4,10 +4,10 @@ module Language.Drasil.Chunk.Unitary
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  ConceptDomain, IsUnit, usymb, Quantity, HasSpace(typ))
+  IsUnit, usymb, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 import Language.Drasil.UnitLang (USymb)
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
@@ -35,7 +35,7 @@ instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (IsUnit u, ConceptDomain u) =>
+unitary :: (IsUnit u) =>
   String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u

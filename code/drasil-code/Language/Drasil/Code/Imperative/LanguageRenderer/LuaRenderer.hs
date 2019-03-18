@@ -29,6 +29,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 
 import Prelude hiding (break,print,return,(<>))
+import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, comma, empty, (<>), (<+>), parens, colon,
   vcat, equals, rbrace, lbrace, brackets, braces, render, quotes)
 
@@ -46,19 +47,19 @@ luaConfig _ c =
         dir              = "lua",
         fileName         = fileNameD c,
         include          = include',
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = text "inheritsFrom",
         inputFunc        = text "io.stdin:read()",
         iterForEachLabel = forLabel,
         iterInLabel      = text "in",
-        list             = \_ -> empty,
+        list             = const empty,
         listObj          = empty,
         clsDec           = empty,
-        package          = \_ -> empty,
+        package          = const empty,
         printFunc        = text "io.write",
         printLnFunc      = text "print",
-        printFileFunc    = \_ -> error "not implemented",
-        printFileLnFunc  = \_ -> error "not implemented",
+        printFileFunc    = const $ error "not implemented",
+        printFileLnFunc  = const $ error "not implemented",
         stateType        = luastateType c,
         
         blockStart = text "do", blockEnd = text "end",
@@ -66,19 +67,19 @@ luaConfig _ c =
         
         top    = luatop c,
         body   = luabody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD' c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDoc' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = \_ -> empty,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = const empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
+        methodListDoc = methodListDocD c, methodTypeDoc = const empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
+        getEnv = const $ error "getEnv not implemented in Lua (yet)"
     }
 
 -- convenience
@@ -217,7 +218,7 @@ iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (Binar
         forLabel <+> text i <+> equals <+> valueDoc c initv <> comma <> parens (valueDoc c (finalv #- litInt 1)) <> step <+> blockStart c,
         oneTab $ bodyDoc c b,
         blockEnd c]
-iterationDoc' _ (For _ _ _ _) = error "Lua: Generic form of For statement not yet implemented. Use an integer index and a Less conditional, or replace with a ForEach."
+iterationDoc' _ For{} = error "Lua: Generic form of For statement not yet implemented. Use an integer index and a Less conditional, or replace with a ForEach."
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
     iterForEachLabel c <+> text (keyLabel i) <> comma <> text i <+> iterInLabel c <+> funcAppDoc c "ipairs" [listVar] <+> blockStart c,
     oneTab $ bodyDoc c b,
@@ -232,8 +233,7 @@ classDoc' c _ _ (Enum n _ es) = vcat [
 classDoc' c f _ (Class n p _ _ fs) = vcat [ 
     text n <+> equals <+> inherit c <> parens (text baseClass),
     methodListDoc c f n fs]
-    where baseClass = case p of Just pn -> pn
-                                Nothing -> "nil"
+    where baseClass = fromMaybe "nil" p
 classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 
 objAccessDoc' :: Config -> Value -> Function -> Doc

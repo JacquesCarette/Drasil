@@ -9,6 +9,7 @@ module Drasil.TraceTable where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
+import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
@@ -46,9 +47,9 @@ getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
 getTraceMapFromGD []                = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
-getTraceMapFromDD ((DDs _ dd _):_)  = dd
-getTraceMapFromDD  (_:tl)           = getTraceMapFromDD tl
-getTraceMapFromDD []                = []
+getTraceMapFromDD l = concat $ mapMaybe getDD l
+  where getDD (DDs _ d _) = Just d
+        getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
 getTraceMapFromIM ((IMs _ im _):_)  = im

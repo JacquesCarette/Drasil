@@ -9,7 +9,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept,
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)

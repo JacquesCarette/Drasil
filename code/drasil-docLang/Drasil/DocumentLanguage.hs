@@ -12,10 +12,9 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
-import Language.Drasil.Development (comp_unitdefn, MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
@@ -38,7 +37,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
 import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
@@ -278,7 +277,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems (db ^. termTable)
+      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -446,24 +445,30 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') $ map (LlC . tmodel fields (_sysinfodb si')) ts
+      SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds
+      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields (_sysinfodb si')) dds
+      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs'
+      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF $ map (LlC . gdefn fields (_sysinfodb si')) gs'
+      SSD.genDefnF $ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs fields ims ShowDerivation) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
-      concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims
+      concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
     mkSubSCS si' (IMs fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields (_sysinfodb si')) ims
-    mkSubSCS si' (Assumptions) =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $
-      map (\y ->
-        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y $ _sysinfodb si')) $ makeRef2 y) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable)
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' Assumptions =
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
+      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      asOrderedList $ (_sysinfodb si') ^. conceptinsTable
+      where
+        -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        sDom :: [UID] -> UID
+        sDom [u] = u
+        sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
+          show (length u) ++ " instead."
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -472,8 +477,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
-helperAssump :: AssumpChunk -> ChunkDB -> Sentence
-helperAssump a c = foldlSent_ $ ([assuming a, helperRefs a c])
+helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing

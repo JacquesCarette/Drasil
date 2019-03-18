@@ -5,7 +5,6 @@ import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
@@ -85,11 +84,11 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
   glassBR_section glassBR_labelledcon
 
 glassBR_label :: TraceMap
-glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+glassBR_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBR_concins
  
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 
@@ -106,11 +105,8 @@ glassBR_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 glassBR_theory :: [TheoryModel]
 glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBR_assump :: [AssumpChunk]
-glassBR_assump = assumptions
-
 glassBR_concins :: [ConceptInstance]
-glassBR_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
+glassBR_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 glassBR_section :: [Section]
 glassBR_section = glassBR_sec
@@ -124,18 +120,14 @@ glassBR_sec = extractSection glassBR_srs
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
   glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
-  unlikelyChgs
+gbRefDB = rdb gbCitations glassBR_concins
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
-
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
 
 check_si :: [UnitDefn]
 check_si = collectUnits gbSymbMap this_symbols 
@@ -201,7 +193,6 @@ glassSystInfo = SI {
   _sys         = gLassBR,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = check_si,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
@@ -219,7 +210,7 @@ glassSystInfo = SI {
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
   _usedinfodb = usedDB,
-  _refdb       = gbRefDB
+   refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
 
@@ -497,7 +488,7 @@ outputDataConstraints = outDataConstTbl [prob_br]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable gbSymbMap
+traceTable1 = generateTraceTable glassSystInfo
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

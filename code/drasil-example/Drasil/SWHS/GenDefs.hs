@@ -4,7 +4,6 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Language.Drasil.Development (UnitDefn, getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
@@ -20,7 +19,8 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
+import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
+  assumpDWPCoV, assumpSHECoV)
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
@@ -64,7 +64,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (makeRef2S newA2) +:+.
+  S "assumed independant of", ch QT.temp, sParen (makeRef2S assumpHTCC) +:+.
   sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
   apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
   S "time-dependant thermal gradient between the environment and the object",
@@ -113,8 +113,8 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRef2S newA3, makeRef2S newA4, 
-                 makeRef2S newA5, makeRef2S newA6],
+    QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
+                 makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]

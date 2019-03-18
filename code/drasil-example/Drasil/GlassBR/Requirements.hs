@@ -18,11 +18,11 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
-  foldlList, foldlSent, foldlSent_, followA, ofThe, sAnd, sOf)
+  foldlList, foldlSent, foldlSent_, follows, ofThe, sAnd, sOf)
 import Data.Drasil.SI_Units (metre, millimetre)
 import Data.Drasil.Utils (bulletFlat)
 
-import Drasil.GlassBR.Assumptions (standardValues, glassLite, assumptionConstants)
+import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass, lShareFac)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
@@ -90,9 +90,9 @@ sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall se
     plural value +: S "as follows"]
 
 sysSetValsFollowingAssumpsList :: [Sentence]
-sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
+sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `follows` assumpSV,
   ch loadDF +:+ S "from" +:+ makeRef2S loadDF, 
-  short lShareFac `followA` glassLite,
+  short lShareFac `follows` assumpGL,
   ch hFromt +:+ S "from" +:+ makeRef2S hFromt,
   ch glaTyFac +:+ S "from" +:+ makeRef2S glaTyFac,
   ch standOffDis +:+ S "from" +:+ makeRef2S standOffDis,

@@ -10,8 +10,8 @@ import qualified Language.Drasil as L (People, Person,
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
+  Decoration(Prime, Hat, Vector), Document,
+  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -37,15 +37,14 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
-  HDiv, ALUR))
+  HDiv))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, L.HasTermTable ctx, L.HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
+genHTML :: PrintingInformation -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -72,8 +71,6 @@ printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
-printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
-  makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 

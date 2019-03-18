@@ -3,7 +3,6 @@ module Drasil.SWHS.Body where
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -37,7 +36,7 @@ import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
   understandability, reusability, maintainability)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
@@ -58,7 +57,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
   heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
-import Drasil.SWHS.Assumptions (newA13, newAssumptions)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
@@ -98,7 +97,6 @@ swhs_si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
-  _units = check_si,
   _quants = swhsSymbols,
   _concepts = symbTT,
   _definitions = swhsQDefs,
@@ -110,32 +108,32 @@ swhs_si = SI {
   _constants = [],
   _sysinfodb = swhsSymMap,
   _usedinfodb = usedDB,
-  _refdb = swhsRefDB
+   refdb = swhsRefDB
 }
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
+swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+  (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
-  (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
+  (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (this_si ++ [m_2, m_3]) swhs_label swhs_refby
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
  ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
- swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
+ swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
-  likelyChgs ++ unlikelyChgs)
+swhsRefDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration
@@ -212,7 +210,7 @@ swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS for swhs_si
 
 swhs_label :: TraceMap
-swhs_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
  
 swhs_refby :: RefbyMap
 swhs_refby = generateRefbyMap swhs_label 
@@ -229,11 +227,8 @@ swhs_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 swhs_theory :: [TheoryModel]
 swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-swhs_assump :: [AssumpChunk]
-swhs_assump = newAssumptions
-
 swhs_concins :: [ConceptInstance]
-swhs_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
+swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 swhs_section :: [Section]
 swhs_section = swhs_sec
@@ -555,7 +550,7 @@ traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
 
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable swhsSymMap
+traceTableAll = generateTraceTable swhs_si
 
 traceTrailing :: [Sentence]
 traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]
@@ -578,7 +573,7 @@ traceDataRef = [makeRef2S dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef2S newAssumptions 
+traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map makeRef2S swhsTMods
@@ -1238,7 +1233,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef2S newA13)],
+  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
 
   [sParen (S "++"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.

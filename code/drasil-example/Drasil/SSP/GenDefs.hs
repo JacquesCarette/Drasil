@@ -21,7 +21,8 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6, newA7)
+import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
+  assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght, stressDD)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
@@ -109,7 +110,7 @@ resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   makeRef2S effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) $= sy nrmFSubWat,
-  makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
+  makeRef2S assumpSLH, makeRef2S assumpSP, makeRef2S assumpSLI]
 
 --
 mobShr :: RelationConcept
@@ -126,7 +127,8 @@ mobShr_desc = foldlSent_ [
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
   sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
-  makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
+  makeRef2S assumpFOSL, makeRef2S assumpSLH, makeRef2S assumpSP,
+  makeRef2S assumpSLI]
 
 --
 effNormF :: RelationConcept
@@ -142,7 +144,7 @@ effNormF_desc = foldlSent_ [
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
   S "by the", phrase genericA `ofThe` phrase slice +:+. 
   S "in the shear-z plane", S "Since the", phrase slope, S "is assumed to",
-  S "extend infinitely in the z-direction", sParen (makeRef2S newA7) `sC` 
+  S "extend infinitely in the z-direction", sParen (makeRef2S assumpPSC) `sC` 
   S "the resulting", plural force, S "are expressed per", phrase metre +:+. 
   S "in the z-direction" ]
 
@@ -156,7 +158,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -183,7 +185,7 @@ resShearWO_rel = sy shearRNoIntsl $= (((inxi slcWght) + (inxi surfHydroForce) *
 
 resShearWO_desc :: Sentence
 resShearWO_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -209,7 +211,7 @@ mobShearWO_rel = sy shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
 
 mobShearWO_desc :: Sentence
 mobShearWO_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -241,4 +243,4 @@ momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
   plural intrslce, S "following convention in" +:+.
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), at_start variable, plural definition,
   S "can be found in", makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
-  makeRef2S newA6]
+  makeRef2S assumpINSFL]

@@ -3,11 +3,10 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 import Data.List (nub)
 
 import Language.Drasil.Printing.LayoutObj (LayoutObj(Paragraph, Header, Bib, Graph, 
-  List, EqnBlock, Figure, ALUR, Table, Definition, HDiv), 
-  ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
+  List, EqnBlock, Figure, Table, Definition, HDiv))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
 import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command3, 
-  comm, count, usepackage)
+  usepackage)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
@@ -60,11 +59,7 @@ addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 
-data Def = AssumpCounter
-         | LCCounter
-         | ReqCounter
-         | UCCounter
-         | Bibliography
+data Def = Bibliography
          | TabuLine
          | SetMathFont
          | SymbDescriptionP1
@@ -72,14 +67,6 @@ data Def = AssumpCounter
          deriving Eq
 
 addDef :: Def -> D
-addDef AssumpCounter = count "assumpnum" %%
-                       comm "atheassumpnum" "A\\theassumpnum" Nothing
-addDef LCCounter     = count "lcnum" %%
-                       comm "lcthelcnum" "LC\\thelcnum" Nothing
-addDef ReqCounter    = count "reqnum" %%
-                       comm "rthereqnum" "R\\thereqnum" Nothing
-addDef UCCounter     = count "ucnum" %%
-                       comm "uctheucnum" "UC\\theucnum" Nothing
 addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
@@ -111,13 +98,9 @@ parseDoc los' =
       let dd = concatMap snd res1 in
       (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
     parseDoc' Figure{}       = ([Graphics,Caption],[])
-    parseDoc' (ALUR Requirement _ _ _) = ([], [ReqCounter])
-    parseDoc' (ALUR Assumption _ _ _) = ([], [AssumpCounter])
-    parseDoc' (ALUR LikelyChange _ _ _) = ([], [LCCounter])
-    parseDoc' (ALUR UnlikelyChange _ _ _) = ([], [UCCounter])
     parseDoc' Graph{}        = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
-    parseDoc' (Bib _)        = ([FileContents,BibLaTeX,URL],[Bibliography])
+    parseDoc' Bib{}          = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' Header{}       = ([], [])
-    parseDoc' (Paragraph _)  = ([], [])
-    parseDoc' (List _)       = ([EnumItem], [])
-    parseDoc' (EqnBlock _)   = ([], [])
+    parseDoc' Paragraph{}    = ([], [])
+    parseDoc' List{}         = ([EnumItem], [])
+    parseDoc' EqnBlock{}    = ([], [])

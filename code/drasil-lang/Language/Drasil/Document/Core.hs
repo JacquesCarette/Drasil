@@ -5,10 +5,11 @@ import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
+import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
@@ -61,7 +62,6 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Defini DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Assumption UID Sentence -- FIXME: hack, remove
                | Bib BibRef
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
@@ -90,3 +90,19 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+
+instance Referable LabelledContent where
+  refAdd     (LblC lb _) = getRefAdd lb
+  renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
+
+refLabelledCon :: RawContent -> IRefProg
+refLabelledCon Table{}        = raw "Table:" +::+ name 
+refLabelledCon Figure{}       = raw "Fig:" +::+ name
+refLabelledCon Graph{}        = raw "Fig:" +::+ name
+refLabelledCon Defini{}       = raw "Def:" +::+ name
+refLabelledCon EqnBlock{}     = raw "EqnB:" +::+ name
+refLabelledCon Enumeration{}  = raw "Lst:" +::+ name 
+refLabelledCon Paragraph{}    = error "Shouldn't reference paragraphs"
+refLabelledCon Bib{}          = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."

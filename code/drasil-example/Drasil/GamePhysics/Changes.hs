@@ -14,7 +14,7 @@ import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 
-import Drasil.GamePhysics.Assumptions (newA5, newA6, newA7)
+import Drasil.GamePhysics.Assumptions (assumpCT, assumpDI, assumpCAJI)
 
 ---------------------
 --  LIKELY CHANGES --
@@ -43,13 +43,13 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+
-  plural CP.collision) +:+ makeRef2S newA5
+  plural CP.collision) +:+ makeRef2S assumpCT
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRef2S newA6
+  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRef2S assumpDI
 
 likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
-  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ (makeRef2S newA7)
+  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ makeRef2S assumpCAJI
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 

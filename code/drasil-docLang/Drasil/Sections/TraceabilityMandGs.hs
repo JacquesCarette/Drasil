@@ -53,19 +53,22 @@ traceMRow = nub . Map.keys . (^. refbyTable)
 
 traceMCol :: ChunkDB -> [UID]
 traceMCol = nub . concat . Map.elems . (^. refbyTable)
- 
-traceMRowHeader :: ChunkDB -> [Sentence]
-traceMRowHeader c = map (`helpToRefField` c) $ traceMRow c
 
-traceMColHeader :: ChunkDB -> [Sentence]
-traceMColHeader c = map (`helpToRefField` c) $ traceMCol c
+traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
+traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
+ 
+traceMRowHeader :: SystemInformation -> [Sentence]
+traceMRowHeader = traceMHeader traceMRow
+
+traceMColHeader :: SystemInformation -> [Sentence]
+traceMColHeader = traceMHeader traceMCol
 
 traceMColumns :: ChunkDB -> [[UID]]
 traceMColumns c = map (`refbyLookup` (c ^. refbyTable)) $ traceMRow c
  
-generateTraceTable :: ChunkDB -> LabelledContent
+generateTraceTable :: SystemInformation -> LabelledContent
 generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
   (EmptyS : (traceMColHeader c))
-  (makeTMatrix (traceMRowHeader c) (traceMColumns c) $ traceMCol c)
+  (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMCol $ _sysinfodb c)
   (showingCxnBw traceyMatrix $
   titleize' item +:+ S "of Different" +:+ titleize' section_) True

@@ -17,7 +17,6 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,

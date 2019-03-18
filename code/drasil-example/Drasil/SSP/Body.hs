@@ -3,7 +3,6 @@ module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -21,28 +20,26 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (goalStmt, thModel, inModel,
+import qualified Drasil.DocLang.SRS as SRS (inModel,
   physSyst, assumpt, sysCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, input_, interest, interface, issue,
-  loss, method_, model, organization, physics, problem, product_, property,
-  purpose, requirement, software, softwareSys, srs, srsDomains, sysCont, system,
-  systemConstraint, table_, template, thModel, user, value, variable, physSyst,
-  doccon, doccon')
+  goal, goalStmt, information, inModel, interest, interface, issue, loss, model,
+  organization, physics, problem, product_, property, purpose, requirement,
+  software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
+  table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
-  stress, time, twoD, physicCon, physicCon')
+  stress, time, twoD, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
-import Data.Drasil.Quantities.Math as QM (pi_)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -53,14 +50,14 @@ import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
-import Drasil.SSP.Assumptions (newAssumptions)
+import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
-  intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
-  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
+  intrslce, itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope,
+  slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
@@ -93,7 +90,6 @@ ssp_si = SI {
   _sys = ssa, 
   _kind = srs, 
   _authors = [henryFrankis],
-  _units = check_si,
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
@@ -105,7 +101,7 @@ ssp_si = SI {
   _constants = [],
   _sysinfodb = sspSymMap,
   _usedinfodb = usedDB,
-  _refdb = sspRefDB
+   refdb = sspRefDB
 }
 
 resourcePath :: String
@@ -151,7 +147,7 @@ mkSRS = [RefSec $ RefProg intro
   , UCsSec $ UCsProg unlikelyChanges_SRS, Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
-ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)
+ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
  
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
@@ -168,11 +164,8 @@ ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_assump :: [AssumpChunk]
-ssp_assump = newAssumptions
-
 ssp_concins :: [ConceptInstance]
-ssp_concins = sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -193,25 +186,23 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb (map qw (sspSymbols ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++
-  map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
-  ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' 
+sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw sspIMods
+  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
-  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw sspSymbols ++ map cw [QM.pi_] ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
+  (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si ssp_label
+  ssp_refby ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
   ssp_section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw (symbTT ++ [QM.pi_])) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
- ssp_section []
+usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
+ map nw check_si) ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section []
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
-  likelyChgs ++ unlikelyChgs)
+sspRefDB = rdb sspCitations ssp_concins
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration

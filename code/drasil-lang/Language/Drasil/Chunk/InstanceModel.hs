@@ -17,9 +17,11 @@ import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn))
+  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn),
+  Referable(refAdd, renderRef))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -66,6 +68,9 @@ instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
+instance Referable          InstanceModel where
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

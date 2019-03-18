@@ -4,7 +4,7 @@ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
 
 import Language.Drasil
 
-import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
+import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
   perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB)
@@ -37,7 +37,7 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 
 ctrOfMassDD :: DataDefinition
 ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}] "ctrOfMass" 
-  [makeRef2S newA1, makeRef2S newA2]
+  [makeRef2S assumpOT, makeRef2S assumpOD]
 
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
@@ -66,7 +66,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 
 linDispDD :: DataDefinition
 linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp" 
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linDisp :: QDefinition
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
@@ -96,7 +96,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 
 linVelDD :: DataDefinition
 linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linVel :: QDefinition
 linVel = mkQuantDef QP.linearVelocity velEqn
@@ -115,7 +115,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 
 linAccDD :: DataDefinition
 linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linAcc :: QDefinition
 linAcc = mkQuantDef QP.linearAccel accelEqn
@@ -134,7 +134,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 
 angDispDD :: DataDefinition
 angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angDisp :: QDefinition
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
@@ -153,7 +153,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 
 angVelDD :: DataDefinition
 angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angVel :: QDefinition
 angVel = mkQuantDef QP.angularVelocity angVelEqn
@@ -172,7 +172,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 
 angAccelDD :: DataDefinition
 angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA6]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angAccel :: QDefinition
 angAccel = mkQuantDef QP.angularAccel angAccelEqn
@@ -196,7 +196,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 impulseDD :: DataDefinition
 impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
-  [makeRef2S newA1, makeRef2S newA2, makeRef2S newA4, makeRef2S newA5]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpAD, makeRef2S assumpCT]
 
 impulse :: QDefinition
 impulse = mkQuantDef QP.impulseS impulseEqn
@@ -230,7 +230,7 @@ chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
-  (phrase CP.rigidBody), makeRef2S newA1, S "is the sum of the linear",
+  (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
   (phrase QP.velocity), (ch vel_O),
   (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
   S "at the origin (axis of rotation) and the",

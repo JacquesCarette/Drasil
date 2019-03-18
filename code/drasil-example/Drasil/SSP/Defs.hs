@@ -17,7 +17,7 @@ import Data.Drasil.IdeaDicts hiding (dataDefn)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
 
 ssa, ssp :: CI

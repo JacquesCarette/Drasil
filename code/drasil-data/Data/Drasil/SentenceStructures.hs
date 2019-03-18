@@ -8,7 +8,7 @@ module Data.Drasil.SentenceStructures
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
-  , followA
+  , follows
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
@@ -61,10 +61,10 @@ data FoldType = List | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Numb  wt len = map (wrap wt . S . show) [1..len]
     numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
     numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
@@ -132,7 +132,7 @@ tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char] -> String -> LabelledContent
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> String -> String -> LabelledContent
 figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
   Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
@@ -151,16 +151,17 @@ underConsidertn chunk = S "The" +:+ (phrase chunk) +:+
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S (snd x))  +:+ S "are refined to the" +:+ plural (fst y)
-refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+
+  S "are refined to the" +:+ plural (fst y)
+refineChain (x:y:xs) = refineChain [x,y] `sC` rc (y : xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain
 rc :: NamedIdea c => [(c, Section)] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (plural (fst x)) +:+ sParen (makeRef2S (snd x)) 
-  +:+ S "to the" +:+ (plural (fst y)) +:+. sParen (makeRef2S (snd y))
-rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S (snd x)) +:+ 
-  S "to the" +:+ plural (fst y) `sC` rc ([y] ++ xs)
+rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
+  +:+ S "to the" +:+ (plural $ fst y) +:+. sParen (makeRef2S $ snd y)
+rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
+  S "to the" +:+ plural (fst y) `sC` rc (y : xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
 -- | helper functions for making likely change statements
@@ -186,8 +187,8 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ (makeRef2S assumpt)
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence
@@ -209,7 +210,7 @@ displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals
 
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
-  let l' = filter (\(_,b) -> not $ null $ filter (not . isEmpty) b) l in 
+  let l' = filter (any (not . isEmpty) . snd) l in 
   (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
   where
     isEmpty EmptyS = True

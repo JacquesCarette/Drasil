@@ -116,7 +116,7 @@ the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWord
 the :: (NamedIdea t) => t -> NP
 the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
 
-theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NP
+theCustom :: (t -> Sentence) -> t -> NP
 theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
 
 -- | Combinator for combining two 'NamedChunk's into one.

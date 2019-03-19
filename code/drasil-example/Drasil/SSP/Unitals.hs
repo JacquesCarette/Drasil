@@ -122,10 +122,11 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
-  surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
-  momntOfBdy, porePressure, sliceHght,
-  fx, fy, mobShrC, shrResC, intNormForce, shrStress]
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
+  sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  mobShrC, shrResC, intNormForce, shrStress]
 
 normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
@@ -133,7 +134,7 @@ normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy,
+  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   porePressure, mobShrC, shrResC,
   intNormForce, shrStress :: UnitalChunk
   
@@ -212,8 +213,8 @@ shearRNoIntsl = uc' "R_i"
 slcWght = uc' "W_i" (cn $ "weight")
   ("downward force caused by gravity on slice i") (cW) newton
 
-watrForce = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
-  "x-ordinate direction between adjacent slices " ++ fisi)
+watrForce = uc' "H_i" (cn $ "interslice normal water force") ("exerted in " ++
+  "the x-ordinate direction between adjacent slices " ++ fisi)
   (cH) newton
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
@@ -306,6 +307,22 @@ fx = uc' "fx" (cn "x-component of the net force") ""
 
 fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
+
+nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") 
+  "for two adjacent interslice boundaries"
+  (sup (sub cF lX) cG) newton
+
+watForceSum = uc' "F_x^H" (cn "sum of the interslice normal water forces") 
+  "for two adjacent interslice boundaries"
+  (sup (sub cF lX) cH) newton
+
+sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice") 
+  "assuming slice surface has negative slope"
+  (sup lH cR) metre
+
+sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") 
+  "assuming slice surface has negative slope"
+  (sup lH cL) metre
   
 ----------------------
 -- Unitless Symbols --
@@ -313,11 +330,10 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min,
-  ufixme1, ufixme2, ufixme3, ufixme4]
+  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme1, ufixme2, ufixme3, ufixme4 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -345,18 +361,6 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
-
-ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme1Please") Real Nothing 
-
-ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme2Please") Real Nothing 
-
-ufixme3 = dqd' (dcc "fixme3" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme3Please") Real Nothing
-
-ufixme4 = dqd' (dcc "fixme4" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme4Please") Real Nothing 
 
 --------------------
 -- Index Function --

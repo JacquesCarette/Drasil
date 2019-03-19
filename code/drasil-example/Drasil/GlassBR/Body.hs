@@ -70,8 +70,8 @@ import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
+  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
 
@@ -145,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       (short gLassBR)
     [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
      IScope incScoR endScoR,
-     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR EmptyS,
+     IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg2
@@ -197,11 +197,7 @@ glassSystInfo = SI {
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
-                 (concatMap (^. defined_fun) gbrTMods) ++
-                  [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
-                                             -- in the description of the Calculation of Demand instance model;
-                                             -- should this be included as a Data Definition?
-                                             -- (same for sdWithEqn)
+                 (concatMap (^. defined_fun) gbrTMods),
   _datadefs    = dataDefns,
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
@@ -286,18 +282,15 @@ startIntro prgm sfwrPredicts progName = foldlSent [
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
   phrase interface]
 
-rdrKnldgbleIn :: (NamedIdea n, NamedIdea n1) => n1 -> n -> Sentence
-rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
-  phrase undrstd1 `sAnd` phrase undrstd2)
-
-undIR, appStanddIR, incScoR, endScoR :: Sentence
-undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
-  plural computerApp `sIn` phrase Edu.civilEng]
-appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
-  S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", (foldlList Comma List
+undIR, appStanddIR :: [Sentence]
+undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
+  phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
+appStanddIR = [S "applicable" +:+ plural standard +:+
+  S "for constructions using glass from" +:+ (foldlList Comma List
   $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
   (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
+
+incScoR, endScoR :: Sentence
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]

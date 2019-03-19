@@ -4,11 +4,11 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 
-import Drasil.GlassBR.DataDefs (standOffDis, calofDemand)
+import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (char_weight, demand, 
   demandq, eqTNTWeight, plate_len, plate_width, 
-  standOffDist, wtntWithEqn)
+  standOffDist)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
@@ -41,6 +41,6 @@ calofDemandDesc =
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
   (phrase standOffDist), sParen (ch standOffDist) `sAnd`
   (ch eqTNTWeight), S "as" +:+. plural parameter, 
-  (ch eqTNTWeight), S "is defined as" +:+.
-  E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
+  (ch eqTNTWeight), S "is defined in" +:+.
+  makeRef2S eqTNTWDD, (ch standOffDist) `isThe`
   (phrase standOffDist), S "as defined in", makeRef2S standOffDis]

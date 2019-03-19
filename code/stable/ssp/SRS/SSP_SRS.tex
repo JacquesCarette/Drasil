@@ -83,15 +83,23 @@ ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
 ${{F_{S}}_{min}}$ & Minimum Factor of Safety: The minimum factor of safety & --
 \\
+${{F_{x}}^{G}}$ & Sum of the Interslice Normal Forces: for two adjacent interslice boundaries & N
+\\
+${{F_{x}}^{H}}$ & Sum of the Interslice Normal Water Forces: for two adjacent interslice boundaries & N
+\\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
 \\
-$H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
+$H$ & Interslice Normal Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
 $h$ & Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice & m
 \\
 $ΔH$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
+\\
+${h^{L}}$ & Height of the Left Side of a Slice: assuming slice surface has negative slope & m
+\\
+${h^{R}}$ & Height of the Right Side of a Slice: assuming slice surface has negative slope & m
 \\
 $i$ & Index: used to show a quantity applies to only one slice & --
 \\
@@ -112,14 +120,6 @@ $Q$ & Imposed Surface Load: a downward force acting into the surface from midpoi
 $R$ & Resistive Shear Force: without the influence of interslice forces for slice index i & N
 \\
 $S$ & Mobilized Shear Force: for slice index i & N
-\\
-$SpencerFixme1Please$ & Fixme: What is this value? & --
-\\
-$SpencerFixme2Please$ & Fixme: What is this value? & --
-\\
-$SpencerFixme3Please$ & Fixme: What is this value? & --
-\\
-$SpencerFixme4Please$ & Fixme: What is this value? & --
 \\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
@@ -242,7 +242,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes stability analysis of a two-dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. An understanding of soil mechanics would be an asset. The users of SSA can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSA can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor \cite{koothoor2013} as well as Smith and Lai \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
@@ -282,7 +282,7 @@ The responsibilities of the user and the system are as follows:
 The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
-There are no system constraints.
+The Morgenstern-Price method \cite{morgenstern1965}, which involves dividing the slope into vertical slices, will be used to derive the equations for analysing the slope.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
@@ -497,7 +497,7 @@ Label & Normal force equilibrium
                                  \item{$α$ is the angle (${}^{\circ}$)}
                                  \item{${K_{c}}$ is the earthquake load factor (Unitless)}
                                  \item{$G$ is the interslice normal force (N)}
-                                 \item{$H$ is the interslice water force (N)}
+                                 \item{$H$ is the interslice normal water force (N)}
                                  \end{symbDescription}
                                  \\ \midrule \\
                                  Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
@@ -533,7 +533,7 @@ Label & Base shear force equilibrium
                                  \item{$α$ is the angle (${}^{\circ}$)}
                                  \item{${K_{c}}$ is the earthquake load factor (Unitless)}
                                  \item{$G$ is the interslice normal force (N)}
-                                 \item{$H$ is the interslice water force (N)}
+                                 \item{$H$ is the interslice normal water force (N)}
                                  \end{symbDescription}
                                  \\ \midrule \\
                                  Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
@@ -751,7 +751,7 @@ Label & Moment equilibrium
                                  \item{$z$ is the center of slice height (m)}
                                  \item{$b$ is the base width of a slice (m)}
                                  \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{$H$ is the interslice water force (N)}
+                                 \item{$H$ is the interslice normal water force (N)}
                                  \item{$X$ is the interslice shear force (N)}
                                  \item{${K_{c}}$ is the earthquake load factor (Unitless)}
                                  \item{$W$ is the weight (N)}
@@ -892,7 +892,7 @@ Label & Surface hydrostatic force
 \phantomsection 
 \label{DD:intersliceWtrF}
 \\ \midrule \\
-Label & Interslice water force
+Label & Interslice normal water force
         \\ \midrule \\
         Symbol & $H$
                  \\ \midrule \\
@@ -907,7 +907,7 @@ Label & Interslice water force
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$H$ is the interslice water force (N)}
+                                                  \item{$H$ is the interslice normal water force (N)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
@@ -1092,16 +1092,17 @@ Label & Y-direction height of a slice
                  Units & m
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    h=\frac{1}{2} \left(SpencerFixme3Please+SpencerFixme4Please\right)
+                                    h=\frac{1}{2} \left({h^{R}}+{h^{L}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$h$ is the y-direction height of a slice (m)}
-                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
-                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
+                                                  \item{${h^{R}}$ is the height of the right side of a slice (m)}
+                                                  \item{${h^{L}}$ is the height of the left side of a slice (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
+                                                          ${h^{R}}$ and ${h^{L}}$ are defined in \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} and \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}, respectively.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1243,114 +1244,114 @@ Label & Second function for incorporating interslice forces into shear force
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:fixme1}
+\toprule \textbf{Refname} & \textbf{DD:nrmForceSumDD}
 \phantomsection 
-\label{DD:fixme1}
+\label{DD:nrmForceSumDD}
 \\ \midrule \\
-Label & Fixme
+Label & Sum of the interslice normal forces
         \\ \midrule \\
-        Symbol & $SpencerFixme1Please$
+        Symbol & ${{F_{x}}^{G}}$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & N
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    SpencerFixme1Please=G_{i}+G_{i-1}
+                                    {{F_{x}}^{G}}=G_{i}+G_{i-1}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$SpencerFixme1Please$ is the fixme (Unitless)}
+                                                  \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
                                                   \item{$G$ is the interslice normal force (N)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:fixme2}
+\toprule \textbf{Refname} & \textbf{DD:watForceSumDD}
 \phantomsection 
-\label{DD:fixme2}
+\label{DD:watForceSumDD}
 \\ \midrule \\
-Label & Fixme
+Label & Sum of the interslice normal water forces
         \\ \midrule \\
-        Symbol & $SpencerFixme2Please$
+        Symbol & ${{F_{x}}^{H}}$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & N
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    SpencerFixme2Please=H_{i}+H_{i-1}
+                                    {{F_{x}}^{H}}=H_{i}+H_{i-1}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$SpencerFixme2Please$ is the fixme (Unitless)}
-                                                  \item{$H$ is the interslice water force (N)}
+                                                  \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
+                                                  \item{$H$ is the interslice normal water force (N)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:fixme3}
+\toprule \textbf{Refname} & \textbf{DD:sliceHghtRightDD}
 \phantomsection 
-\label{DD:fixme3}
+\label{DD:sliceHghtRightDD}
 \\ \midrule \\
-Label & Fixme
+Label & Height of the right side of a slice
         \\ \midrule \\
-        Symbol & $SpencerFixme3Please$
+        Symbol & ${h^{R}}$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & m
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    SpencerFixme3Please={y_{slope,i}}-{y_{slip,i}}
+                                    {h^{R}}={y_{slope,i}}-{y_{slip,i}}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$SpencerFixme3Please$ is the fixme (Unitless)}
+                                                  \item{${h^{R}}$ is the height of the right side of a slice (m)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:fixme4}
+\toprule \textbf{Refname} & \textbf{DD:sliceHghtLeftDD}
 \phantomsection 
-\label{DD:fixme4}
+\label{DD:sliceHghtLeftDD}
 \\ \midrule \\
-Label & Fixme
+Label & Height of the left side of a slice
         \\ \midrule \\
-        Symbol & $SpencerFixme4Please$
+        Symbol & ${h^{L}}$
                  \\ \midrule \\
-                 Units & Unitless
+                 Units & m
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    SpencerFixme4Please={y_{slope,i-1}}-{y_{slip,i-1}}
+                                    {h^{L}}={y_{slope,i-1}}-{y_{slip,i-1}}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$SpencerFixme4Please$ is the fixme (Unitless)}
+                                                  \item{${h^{L}}$ is the height of the left side of a slice (m)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -1500,17 +1501,17 @@ Label & Normal/shear force ratio
                 Output & ${C2_{i}}$
                          \\ \midrule \\
                          Input Constraints & \begin{displaymath}
-                                             SpencerFixme1Please<SpencerFixme1Please
+                                             {{F_{x}}^{G}}<{{F_{x}}^{G}}
                                              \end{displaymath}
                                              \\ \midrule \\
                                              Output Constraints & \begin{displaymath}
-                                                                  0<SpencerFixme1Please<SpencerFixme1Please
+                                                                  0<{{F_{x}}^{G}}<{{F_{x}}^{G}}
                                                                   \end{displaymath}
                                                                   \\ \midrule \\
                                                                   Equation & \begin{displaymath}
                                                                              {C1_{i}}=\begin{cases}
 b_{1} \left(G_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
-b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
+b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(G_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
 \end{cases}={C2_{i}}=\begin{cases}
 b_{1} f_{1} G_{1}, & i=1\\
@@ -1523,11 +1524,11 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{${C1_{i}}$ is the interslice normal force function (Nm)}
                                                                                            \item{$b$ is the base width of a slice (m)}
                                                                                            \item{$G$ is the interslice normal force (N)}
-                                                                                           \item{$H$ is the interslice water force (N)}
+                                                                                           \item{$H$ is the interslice normal water force (N)}
                                                                                            \item{$α$ is the angle (${}^{\circ}$)}
                                                                                            \item{$i$ is the index (Unitless)}
-                                                                                           \item{$SpencerFixme1Please$ is the fixme (Unitless)}
-                                                                                           \item{$SpencerFixme2Please$ is the fixme (Unitless)}
+                                                                                           \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
+                                                                                           \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
                                                                                            \item{$h$ is the y-direction height of a slice (m)}
                                                                                            \item{${K_{c}}$ is the earthquake load factor (Unitless)}
                                                                                            \item{$W$ is the weight (N)}
@@ -1541,7 +1542,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
+                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice. ${{F_{x}}^{G}}$ and ${{F_{x}}^{H}}$ are defined in \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} and \hyperref[DD:watForceSumDD]{DD: watForceSumDD}, respectively.
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\
@@ -1558,7 +1559,7 @@ Rearranging the equation in terms of $λ$ leads to equation (10):
 \end{displaymath}
 Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, and removing the seismic and external forces due to \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, a general equation for the constant $λ$ is developed in equation (11), also found in \hyperref[IM:nrmShrFor]{IM: nrmShrFor}:
 \begin{displaymath}
-λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \sin\left(ω_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
+λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \sin\left(ω_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
 \end{displaymath}
 equation (11) for $λ$, is a function of the unknown interslice normal force $G$ \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \par~
@@ -1710,7 +1711,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[Generate-New-Critical-Slip-Surfaces:\phantomsection\label{generateCSS'}]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
 \item[Repeat-Find-Factor-of-Safety:\phantomsection\label{repeatFindFS}]Repeat \hyperref[testSlipSrf]{FR: Test-Slip-Surfaces}, \hyperref[prepareSlipS]{FR: Prepare-Slip-Surfaces}, \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}, \hyperref[rankSlope]{FR: Rank-and-Weight-Slopes}, and \hyperref[generateCSS']{FR: Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
 \item[Prepare-Critical-Slip-Surface:\phantomsection\label{prepareCSS}]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern-Price method.
 \item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface graphically. Display the the value of the factor of safety.
 \end{itemize}
 \begin{longtable}{l l l}
@@ -1787,6 +1788,15 @@ title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+
+@article{morgenstern1965,
+author={Morgenstern, N. R. and Price, P. E.},
+title={The analysis of the stability of general slip surfaces},
+journal={Géotechnique},
+year={1965},
+month=jan,
+pages={"79-93"},
+number={15}}
 
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},

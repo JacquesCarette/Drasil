@@ -70,8 +70,8 @@ import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
+  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
 
@@ -197,11 +197,7 @@ glassSystInfo = SI {
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
-                 (concatMap (^. defined_fun) gbrTMods) ++
-                  [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
-                                             -- in the description of the Calculation of Demand instance model;
-                                             -- should this be included as a Data Definition?
-                                             -- (same for sdWithEqn)
+                 (concatMap (^. defined_fun) gbrTMods),
   _datadefs    = dataDefns,
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,

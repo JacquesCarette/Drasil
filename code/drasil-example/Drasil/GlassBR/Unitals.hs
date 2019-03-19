@@ -382,33 +382,11 @@ constant_LoadDur = mkQuantDef load_dur     $ 3
 constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
 
-sdWithEqn :: QDefinition
-sdWithEqn = mkQuantDef standOffDist sdCalculation
-
-sdCalculation :: Relation
-sdCalculation = euclidean (map sy sdVector)
-
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map (ch) sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]
-
---
-
-wtntWithEqn :: QDefinition
-wtntWithEqn = mkQuantDef eqTNTWeight wtntCalculation
-
-wtntCalculation :: Relation
---wtntCalculation = (sy eqTNTWeight) := (sy char_weight) * (sy tNT)
-wtntCalculation = (sy char_weight) * (sy tNT)
---
-
-aspectRWithEqn :: QDefinition
-aspectRWithEqn = mkQuantDef aspect_ratio aspectRCalculation
-
-aspectRCalculation :: Relation
-aspectRCalculation = (sy aspect_ratio) $= (sy plate_len)/(sy plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

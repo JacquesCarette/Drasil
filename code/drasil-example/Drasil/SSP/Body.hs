@@ -116,10 +116,10 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
-    , IChar EmptyS
-      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
-      phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
-      EmptyS $ phrase soilMechanics
+    , IChar []
+        [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
+        phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
+        [phrase soilMechanics]
     , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
     --FIXME: issue #235
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],

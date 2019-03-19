@@ -20,7 +20,7 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSP, assumpINSFL, assumpES,
   assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
-import Drasil.SSP.DataDefs (fixme1, fixme2, convertFunc1, convertFunc2,
+import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, convertFunc2,
   lengthLs, sliceWght)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
@@ -30,10 +30,10 @@ import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
   indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
-  minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmFSubWat,
+  minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmForceSum, nrmFSubWat,
   numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
   shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght, sum1toN, surfAngle, surfHydroForce, surfLoad, totNrmForce, 
-  varblU, varblV, watrForce, waterHght, waterWeight, wiif)
+  varblU, varblV, watForceSum, watrForce, waterHght, waterWeight, wiif)
 
 -----------------------
 --  Instance Models  --
@@ -65,8 +65,8 @@ nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
-  [sy fixme1 $< sy fixme1] (qw shearFunc)
-   [0 $< sy fixme1 $< sy fixme1] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw shearFunc)
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
@@ -87,7 +87,7 @@ nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
-          (sy fixme1 + sy fixme2)
+          (sy nrmForceSumDD + sy watForceSumDD)
            * tan (inxi baseAngle)+ (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
           2 * inxi surfHydroForce * sin (inxi surfAngle) -
           2 * inxi surfLoad * cos (inxi impLoadAngle)),
@@ -104,8 +104,10 @@ nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
   S "The inclination function", ch scalFunc,
   S "determines the relative magnitude ratio between the",
   S "different interslices, while", ch normToShear, S "determines the" +:+.
-  S "magnitude", ch normToShear, S "uses the sum of interslice normal",
-  S "and shear forces taken from each interslice"]
+  S "magnitude", ch normToShear, S "uses the sum of interslice normal" +:+.
+  S "and shear forces taken from each interslice", ch nrmForceSum `sAnd` 
+  ch watForceSum, S "are defined in", makeRef2S nrmForceSumDD `sAnd` 
+  makeRef2S watForceSumDD `sC` S "respectively"]
 
 --
 
@@ -534,7 +536,7 @@ eq2 = sy normToShear $= momExpr (+)
   inxiM1 intNormForce * inxiM1 scalFunc))
 
 eq3 = inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy fixme1 + sy fixme2) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 
@@ -675,7 +677,7 @@ nrmShrDerivation = [
   
   eqUnR' $
   inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy fixme1 + sy fixme2) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 

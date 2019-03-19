@@ -25,7 +25,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel,
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, interest, interface, issue, loss, model,
+  goal, goalStmt, information, inModel, interest, interface, issue, loss, method_, model,
   organization, physics, problem, product_, property, purpose, requirement,
   software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
   table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
@@ -56,13 +56,13 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
-  intrslce, itslPrpty, layer, mtrlPrpty, plnStrn, slice, slip, slope,
+  intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
-import Drasil.SSP.References (sspCitations)
+import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, numbSlices, 
@@ -116,14 +116,14 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
-    , IChar EmptyS
-      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics `sAnd`
-      phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics)
-      EmptyS $ phrase soilMechanics
+    , IChar []
+        [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
+        phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
+        [phrase soilMechanics]
     , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
     --FIXME: issue #235
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-      UsrChars [userCharIntro], SystCons [] []],
+      UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
       SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec $ SCSProg
@@ -358,7 +358,11 @@ userChar pname understandings familiarities specifics = foldlSP [
   S "specifically", foldlList Comma List specifics]
 
 -- SECTION 3.2 --
--- System Constraints automatically generated
+sysConstraints :: Contents
+sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_, 
+  makeRef2S morgenstern1965 `sC` S "which involves dividing the", phrase slope,
+  S "into vertical", plural slice `sC` S "will be used to derive the",
+  plural equation, S "for analysing the", phrase slope]
 
 -- SECTION 4 --
 

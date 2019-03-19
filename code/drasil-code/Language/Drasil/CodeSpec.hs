@@ -213,6 +213,17 @@ asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 asExpr :: Func -> Expr
 asExpr f = sy $ asVC f
 
+-- FIXME: hack. Use for implementation-stage functions that need to be displayed in the SRS.
+asExpr' :: Func -> Expr
+asExpr' f = sy $ asVC' f
+
+-- FIXME: Part of above hack
+asVC' :: Func -> QuantityDict
+asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
+
+
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 

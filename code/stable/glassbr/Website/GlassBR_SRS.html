@@ -233,6 +233,28 @@ m
 </tr>
 <tr>
 <td>
+<em>interpY</em>
+</td>
+<td>
+InterpY
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>interpZ</em>
+</td>
+<td>
+InterpZ
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>is-safeLR</em>
 </td>
 <td>
@@ -1730,7 +1752,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>J = J(q&#770;,AR)</em>
+<em>J = interpZ(SDF.txt,AR,q&#770;)</em>
 </div>
 </td>
 </tr>
@@ -1744,13 +1766,13 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 <li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-<li>
-<em>q&#770;</em> is the dimensionless load (Unitless)
+<em>interpZ</em> is the interpZ (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
+</li>
+<li>
+<em>q&#770;</em> is the dimensionless load (Unitless)
 </li>
 </ul>
 </td>
@@ -2188,14 +2210,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div>)</em>
+<em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2209,16 +2224,13 @@ Description
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
 </li>
 <li>
-<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+<em>interpY</em> is the interpY (Unitless)
+</li>
+<li>
+<em>AR</em> is the aspect ratio (Unitless)
 </li>
 <li>
 <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
 </td>
@@ -2891,7 +2903,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = q(w<sub>TNT</sub>,SD)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2905,13 +2917,13 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>q</em> is the applied load (demand) (Pa)
-</li>
-<li>
-<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
+</li>
+<li>
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
 </li>
 </ul>
 </td>

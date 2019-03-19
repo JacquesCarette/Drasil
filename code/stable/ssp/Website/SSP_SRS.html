@@ -236,6 +236,28 @@ Minimum Factor of Safety: The minimum factor of safety
 </tr>
 <tr>
 <td>
+<em>F<sub>x</sub><sup>G</sup></em>
+</td>
+<td>
+Sum of the Interslice Normal Forces: for two adjacent interslice boundaries
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+<em>F<sub>x</sub><sup>H</sup></em>
+</td>
+<td>
+Sum of the Interslice Normal Water Forces: for two adjacent interslice boundaries
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em><b>F</b></em>
 </td>
 <td>
@@ -261,7 +283,7 @@ N
 <em>H</em>
 </td>
 <td>
-Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i
+Interslice Normal Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i
 </td>
 <td>
 N
@@ -287,6 +309,28 @@ Difference Between Interslice Forces: exerted in the x-ordinate direction betwee
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sup>L</sup></em>
+</td>
+<td>
+Height of the Left Side of a Slice: assuming slice surface has negative slope
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sup>R</sup></em>
+</td>
+<td>
+Height of the Right Side of a Slice: assuming slice surface has negative slope
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -397,50 +441,6 @@ Mobilized Shear Force: for slice index i
 </td>
 <td>
 N
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme1Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme2Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme3Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme4Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -1665,7 +1665,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 </ul>
 </td>
@@ -1764,7 +1764,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 </ul>
 </td>
@@ -2403,7 +2403,7 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>X</em> is the interslice shear force (N)
@@ -2828,7 +2828,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice water force
+Interslice normal water force
 </p>
 </td>
 </tr>
@@ -2902,7 +2902,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>y<sub>slope</sub></em> is the slope y-ordinate (m)
@@ -3465,7 +3465,7 @@ Equation
 <span class="fdn">
 2
 </span>
-</div>&#8239;(SpencerFixme3Please&plus;SpencerFixme4Please)</em>
+</div>&#8239;(h<sup>R</sup>&plus;h<sup>L</sup>)</em>
 </div>
 </td>
 </tr>
@@ -3479,10 +3479,10 @@ Description
 <em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>SpencerFixme3Please</em> is the fixme (Unitless)
+<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
 </li>
 <li>
-<em>SpencerFixme4Please</em> is the fixme (Unitless)
+<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
 </li>
 </ul>
 </td>
@@ -3494,6 +3494,9 @@ Notes
 <td>
 <p class="paragraph">
 This equation is based on the assumption that the surface and base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
+</p>
+<p class="paragraph">
+<em>h<sup>R</sup></em> and <em>h<sup>L</sup></em> are defined in <a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a> and <a href=#DD:sliceHghtLeftDD>DD: sliceHghtLeftDD</a>, respectively.
 </p>
 </td>
 </tr>
@@ -3918,7 +3921,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:fixme1">
+<div id="DD:nrmForceSumDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -3926,7 +3929,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Sum of the interslice normal forces
 </p>
 </td>
 </tr>
@@ -3936,7 +3939,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme1Please</em>
+<em>F<sub>x</sub><sup>G</sup></em>
 </p>
 </td>
 </tr>
@@ -3946,7 +3949,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+N
 </p>
 </td>
 </tr>
@@ -3956,7 +3959,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>SpencerFixme1Please = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
+<em>F<sub>x</sub><sup>G</sup> = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -3967,7 +3970,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
 <em>G</em> is the interslice normal force (N)
@@ -3994,13 +3997,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:fixme2">
+<div id="DD:watForceSumDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -4008,7 +4011,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Sum of the interslice normal water forces
 </p>
 </td>
 </tr>
@@ -4018,7 +4021,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme2Please</em>
+<em>F<sub>x</sub><sup>H</sup></em>
 </p>
 </td>
 </tr>
@@ -4028,7 +4031,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+N
 </p>
 </td>
 </tr>
@@ -4038,7 +4041,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>SpencerFixme2Please = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
+<em>F<sub>x</sub><sup>H</sup> = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -4049,10 +4052,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4076,13 +4079,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:fixme3">
+<div id="DD:sliceHghtRightDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -4090,7 +4093,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Height of the right side of a slice
 </p>
 </td>
 </tr>
@@ -4100,7 +4103,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme3Please</em>
+<em>h<sup>R</sup></em>
 </p>
 </td>
 </tr>
@@ -4110,7 +4113,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+m
 </p>
 </td>
 </tr>
@@ -4120,7 +4123,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>SpencerFixme3Please = y<sub>slope,i</sub>&minus;y<sub>slip,i</sub></em>
+<em>h<sup>R</sup> = y<sub>slope,i</sub>&minus;y<sub>slip,i</sub></em>
 </div>
 </td>
 </tr>
@@ -4131,7 +4134,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme3Please</em> is the fixme (Unitless)
+<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
 </li>
 <li>
 <em>y<sub>slope</sub></em> is the slope y-ordinate (m)
@@ -4161,13 +4164,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:slcHeight>DD: slcHeight</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:fixme4">
+<div id="DD:sliceHghtLeftDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -4175,7 +4178,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Height of the left side of a slice
 </p>
 </td>
 </tr>
@@ -4185,7 +4188,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme4Please</em>
+<em>h<sup>L</sup></em>
 </p>
 </td>
 </tr>
@@ -4195,7 +4198,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+m
 </p>
 </td>
 </tr>
@@ -4205,7 +4208,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>SpencerFixme4Please = y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub></em>
+<em>h<sup>L</sup> = y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -4216,7 +4219,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme4Please</em> is the fixme (Unitless)
+<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
 </li>
 <li>
 <em>y<sub>slope</sub></em> is the slope y-ordinate (m)
@@ -4246,7 +4249,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:slcHeight>DD: slcHeight</a>.
 </p>
 </td>
 </tr>
@@ -4623,7 +4626,7 @@ Input Constraints
 </th>
 <td>
 <div class="equation">
-<em>SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
+<em>F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
 </div>
 </td>
 </tr>
@@ -4633,7 +4636,7 @@ Output Constraints
 </th>
 <td>
 <div class="equation">
-<em>0&thinsp;&lt;&thinsp;SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
+<em>0&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
 </div>
 </td>
 </tr>
@@ -4653,7 +4656,7 @@ i = 1
 </span>
 </span>
 <span>
-b<sub>i</sub>&#8239;(SpencerFixme1Please&plus;SpencerFixme2Please)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
+b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
 2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
 </span>
 </span>
@@ -4708,7 +4711,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>α</em> is the angle (&deg;)
@@ -4717,10 +4720,10 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
 <em>h</em> is the y-direction height of a slice (m)
@@ -4764,7 +4767,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice.
+<em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice. <em>F<sub>x</sub><sup>G</sup></em> and <em>F<sub>x</sub><sup>H</sup></em> are defined in <a href=#DD:nrmForceSumDD>DD: nrmForceSumDD</a> and <a href=#DD:watForceSumDD>DD: watForceSumDD</a>, respectively.
 </p>
 </td>
 </tr>
@@ -4899,7 +4902,7 @@ Taking a summation of each slice, and applying the boundary condition that <em>G
 <div class="equation">
 <em>λ<sub>i</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(SpencerFixme1Please&plus;SpencerFixme2Please)&#8239;tan(α<sub>i</sub>)&plus;h<sub>i</sub>&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))
+&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h<sub>i</sub>&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))
 </span>
 <span class="fdn">
 &sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)

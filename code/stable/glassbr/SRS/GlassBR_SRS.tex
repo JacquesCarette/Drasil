@@ -83,6 +83,10 @@ $GTF$ & Glass type factor & --
 \\
 $h$ & Minimum thickness & m
 \\
+$interpY$ & InterpY & --
+\\
+$interpZ$ & InterpZ & --
+\\
 $is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
 \\
 $is-safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
@@ -210,7 +214,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, GlassBR predicts whether a glass slab is safe or not.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from \cite{astm2009}, \cite{astm2012}, and \cite{astm2016} in \hyperref[Sec:References]{Section: References}. The users of GlassBR can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from \cite{astm2009}, \cite{astm2012}, and \cite{astm2016} in \hyperref[Sec:References]{Section: References}. The users of GlassBR can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
@@ -530,12 +534,12 @@ Label & Stress distribution factor (Function)
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    J=\left(SDF.txt,AR,\hat{q}\right)
+                                    J=interpZ\left(SDF.txt,AR,\hat{q}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$J$ is the stress distribution factor (Function) (Unitless)}
-                                                  \item{$$ is the interpZ (Unitless)}
+                                                  \item{$interpZ$ is the interpZ (Unitless)}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
                                                   \item{$\hat{q}$ is the dimensionless load (Unitless)}
                                                   \end{symbDescription}
@@ -677,12 +681,12 @@ Label & Tolerable load
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    {\hat{q}_{tol}}=\left(SDF.txt,AR,{J_{tol}}\right)
+                                    {\hat{q}_{tol}}=interpY\left(SDF.txt,AR,{J_{tol}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
-                                                  \item{$$ is the interpY (Unitless)}
+                                                  \item{$interpY$ is the interpY (Unitless)}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
                                                   \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
                                                   \end{symbDescription}
@@ -906,12 +910,12 @@ Label & Applied load (demand)
                  Units & Pa
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    q=\left(TSD.txt,SD,{w_{TNT}}\right)
+                                    q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$q$ is the applied load (demand) (Pa)}
-                                                  \item{$$ is the interpY (Unitless)}
+                                                  \item{$interpY$ is the interpY (Unitless)}
                                                   \item{$SD$ is the stand off distance (m)}
                                                   \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
                                                   \end{symbDescription}

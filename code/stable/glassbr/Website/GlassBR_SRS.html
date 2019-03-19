@@ -233,6 +233,28 @@ m
 </tr>
 <tr>
 <td>
+<em>interpY</em>
+</td>
+<td>
+InterpY
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>interpZ</em>
+</td>
+<td>
+InterpZ
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>is-safeLR</em>
 </td>
 <td>
@@ -780,7 +802,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -1730,7 +1752,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>J = (SDF.txt,AR,q&#770;)</em>
+<em>J = interpZ(SDF.txt,AR,q&#770;)</em>
 </div>
 </td>
 </tr>
@@ -1744,7 +1766,7 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 <li>
-<em></em> is the interpZ (Unitless)
+<em>interpZ</em> is the interpZ (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2188,7 +2210,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q&#770;<sub>tol</sub> = (SDF.txt,AR,J<sub>tol</sub>)</em>
+<em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2202,7 +2224,7 @@ Description
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
 </li>
 <li>
-<em></em> is the interpY (Unitless)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2881,7 +2903,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = (TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2895,7 +2917,7 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em></em> is the interpY (Unitless)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)

@@ -252,7 +252,7 @@ The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refi
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SSP/SystemContextFigure.png}
@@ -260,20 +260,21 @@ This section provides general information about the system. It identifies the in
 \label{Figure:sysCtxDiag}
 \end{center}
 \end{figure}
-The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+The responsibilities of the user and the system are as follows:
 \begin{itemize}
 \item{User Responsibilities}
 \begin{itemize}
-\item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry}
+\item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP}
 \item{Ensure that consistent units are used for input variables}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem input to the software}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for the problem to which the user is applying the software}
 \end{itemize}
 \item{SSP Responsibilities}
 \begin{itemize}
-\item{Detect data type mismatch, such as a string of characters  input instead of a floating point number}
-\item{Determine if the inputs satisfy the required physical and software constraints}
-\item{Identify the most likely failure surface within the possible input range}
+\item{Detect data type mismatch, such as a string of characters input instead of a floating point number}
+\item{Verify that the inputs satisfy the required physical and other data constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints})}
+\item{Identify the critical slip surface within the possible input range}
 \item{Find the factor of safety for the slope}
+\item{Find the interslice normal force and shear force along the critical slip surface}
 \end{itemize}
 \end{itemize}
 \subsection{User Characteristics}

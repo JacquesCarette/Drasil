@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 
-import Language.Drasil hiding (organization, Verb)
+import Language.Drasil hiding (number, organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
@@ -20,17 +20,18 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (inModel,
-  physSyst, assumpt, sysCon)
+import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
+  datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, definition, design, document, effect, element, endUser, environment,
-  goal, goalStmt, information, inModel, interest, interface, issue, loss, method_, model,
-  organization, physics, problem, product_, property, purpose, requirement,
-  software, softwareSys, srs, srsDomains, sysCont, system, systemConstraint,
-  table_, template, thModel, user, value, variable, physSyst, doccon, doccon')
+  constant, constraint, definition, design, document, effect, element, endUser,
+  environment, goal, goalStmt, information, inModel, input_, interest, 
+  interface, issue, loss, method_, model, organization, physical, physics,
+  problem, product_, property, purpose, requirement, software, softwareSys, srs,
+  srsDomains, sysCont, system, systemConstraint, table_, template, thModel, 
+  type_, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
+import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon', number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
@@ -57,7 +58,7 @@ import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
   intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
-  slpSrf, soil, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
+  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
@@ -301,8 +302,7 @@ orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
@@ -312,25 +312,31 @@ sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePa
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The interaction between the", phrase product_, S "and the", phrase user,
-   S "is through a user" +:+. phrase interface,
-   S "The responsibilities of the", phrase user, S "and the", phrase system,
+  [S "The responsibilities of the", phrase user, S "and the", phrase system,
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and water" +:+
-  S "table (if applicable), ensuring no errors in the data entry",
-  S "Ensure that consistent units are used for input variables",
+sysCtxUsrResp = [S "Provide the" +:+ phrase input_ +:+ S "data related to" +:+
+  S "the" +:+ phrase soilLyr :+: S "(s) and water table (if applicable)" `sC`
+  S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
+  S "required by" +:+ short ssp,
+  S "Ensure that consistent units are used for" +:+ phrase input_ +:+ 
+  plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are appropriate for any particular" +:+
-  phrase problem +:+ S "input to the" +:+ phrase software]
+  makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are" +:+ 
+  S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
+  phrase user +:+ S "is applying the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+ 
-  S " input instead of a floating point number",
-  S "Determine if the inputs satisfy the required physical and software constraints",
-  S "Identify the most likely failure surface within the possible input range",
-  S "Find the factor of safety for the slope"]
+sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
+  S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
+  S "point" +:+ phrase number,
+  S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
+  phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+  S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
+  phrase input_ +:+ S "range",
+  S "Find the" +:+ phrase fs_concept +:+ S "for the" +:+ phrase slope,
+  S "Find the" +:+ phrase intrslce +:+ phrase normForce `sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",

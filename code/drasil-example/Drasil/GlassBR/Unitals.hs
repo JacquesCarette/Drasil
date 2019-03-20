@@ -47,7 +47,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QuantityDict]
 gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
-  (map qw gbInputsNoUncrtn) ++ (map qw sdVector) ++ (map qw [is_safeLR, is_safePb]) ++ [qw prob_br]
+  (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]

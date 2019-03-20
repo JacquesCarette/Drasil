@@ -137,7 +137,7 @@ physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
 sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
-sfwrLookup m q = constraintLookup' q m (filter isPhysC)
+sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
 constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])

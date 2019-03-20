@@ -5,13 +5,13 @@ import Language.Drasil.Code (Mod(Mod), asVC, asVC')
 
 import Drasil.GlassBR.IMods (gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ)
-import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, 
+import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, gbOutputs,
     gBRSpecParamVals, glassBRSymbols, glassBRSymbolsWithDefns, glassBRUnitless)
 
 import Data.List ((\\))
 
 symbolsForTable :: [QuantityDict]
-symbolsForTable = gbInputs ++ (map qw gBRSpecParamVals) ++ 
+symbolsForTable = gbInputs ++ gbOutputs ++ (map qw gBRSpecParamVals) ++ 
   (map qw glassBRSymbolsWithDefns) ++ (map qw glassBRSymbols) ++
   (map qw glassBRUnitless) ++ (map qw gbInputDataConstraints) ++
   (map asVC' [interpY, interpZ]) 

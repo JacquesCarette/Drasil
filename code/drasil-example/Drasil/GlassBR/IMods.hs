@@ -3,12 +3,14 @@ module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi) where
 import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
+import Language.Drasil.Code (asExpr')
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (char_weight, demand, 
   demandq, eqTNTWeight, plate_len, plate_width, 
   standOffDist)
+import Drasil.GlassBR.ModuleDefs (interpY)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
@@ -31,8 +33,8 @@ calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
 
 calofDemand_RCi :: RelationConcept
 calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
-  calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
-  --calofDemandDesc $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
+  --calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
+  calofDemandDesc $ (sy demand) $= apply (asExpr' interpY) [Str "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 calofDemandDesc :: Sentence
 calofDemandDesc = 

@@ -956,13 +956,14 @@ Label & Calculation of Demand
                                              \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
                                                                   Equation & \begin{displaymath}
-                                                                             q=q\left({w_{TNT}},SD\right)
+                                                                             q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
                                                                              \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$q$ is the applied load (demand) (Pa)}
-                                                                                           \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+                                                                                           \item{$interpY$ is the interpY (Unitless)}
                                                                                            \item{$SD$ is the stand off distance (m)}
+                                                                                           \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.

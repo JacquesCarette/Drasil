@@ -10,9 +10,10 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, Constrai
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
-import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
+import qualified Data.Map as Map
+import Data.Maybe (maybeToList)
 
 import Prelude hiding (const)
 
@@ -55,10 +56,10 @@ assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
 
 funcTerm :: String -> FunctionMap -> String
-funcTerm cname m = maybe "" (\cd -> getStr (phrase cd)) (Map.lookup cname m)
+funcTerm cname = maybe "" (getStr . phrase) . Map.lookup cname
        
 varTerm :: String -> VarMap -> String
-varTerm cname m = maybe "" (\cch -> getStr (phrase cch)) (Map.lookup cname m)
+varTerm cname = maybe "" (getStr . phrase) . Map.lookup cname
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)
@@ -253,7 +254,7 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
                                                                           -- will fix later
   where getModDep (Mod name' funcs) = 
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
-        getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
+        getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
@@ -268,7 +269,7 @@ fstdep sm (FRet e)  = codevars  e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
 fstdep _  (FContinue) = []
-fstdep sm (FProcCall _ l)  = concatMap (\x -> codevars  x sm) l
+fstdep sm (FProcCall _ l)  = concatMap (`codevars` sm) l
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
@@ -284,7 +285,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  (FContinue) = []
-    fstvars sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
+    fstvars sm (FProcCall _ l) = concatMap (`codevars` sm) l
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
@@ -315,7 +316,7 @@ getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins consts sm  =
   let refSet = ins ++ map codevar consts
-  in  if (ddefs == []) then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
+  in  if null ddefs then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
 type Known = CodeChunk
@@ -336,7 +337,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  
-xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs
+xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]

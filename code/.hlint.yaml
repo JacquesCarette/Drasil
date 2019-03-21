@@ -7,7 +7,6 @@
 
 
 # Warnings currently triggered by your code
-- ignore: {name: "Parse error"}
 - ignore: {name: "Move brackets to avoid $"}
 - ignore: {name: "Eta reduce"}
 - ignore: {name: "Redundant bracket"}

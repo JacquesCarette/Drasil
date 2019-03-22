@@ -406,16 +406,16 @@ physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of"
   short ssp `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 
-phys_sys_convention = physSystConvention morPrice slope how index slice 
-  intrslce fig_indexconv
+phys_sys_convention = physSystConvention morPrice morgenstern1965 slope how 
+  index slice intrslce fig_indexconv
   where how = S "as a series of vertical" +:+ plural slice
 
-physSystConvention :: (NamedIdea a, NamedIdea b, NamedIdea c, HasSymbol c, 
-  NamedIdea d, NamedIdea e, HasShortName f, Referable f) => a -> b -> 
-  Sentence -> c -> d -> e -> f -> Contents
-physSystConvention anlsys what how ix ixd intrfce indexref = foldlSP [
-  at_start anlsys, phrase analysis, S "of the", phrase what, S "involves", 
-  S "representing the", phrase what +:+. how, S "As shown in",
+physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
+  NamedIdea d, HasSymbol d, NamedIdea e, NamedIdea f, HasShortName g, 
+  Referable g) => a -> b -> c -> Sentence -> d -> e -> f -> g -> Contents
+physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
+  at_start anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
+  S "involves representing the", phrase what +:+. how, S "As shown in",
   makeRef2S indexref `sC` S "the", phrase ix, ch ix, S "is used to denote a",
   phrase value, S "for a single", phrase ixd `sC` S "and an", phrase intrfce, 
   phrase value, S "at a given", phrase ix, ch ix, S "refers to the",

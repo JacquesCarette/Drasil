@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.SentenceStructures (andThe)
 
-import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slice, slope, slpSrf)
+import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slice, slope)
 import Drasil.SSP.Unitals (intNormForce, intShrForce)
 
 -----------

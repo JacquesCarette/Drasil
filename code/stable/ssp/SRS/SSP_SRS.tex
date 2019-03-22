@@ -310,23 +310,31 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in \hyperref[Figure:IndexConvention]{Fig:IndexConvention}.
+The Physical System Description (PS) of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements.
 \begin{itemize}
-\item[PS1:]Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$.
-\item[PS2:]Slice properties convention is noted by $i$.
+\item[PS1:]A slope comprised of one soil layer.
+\item[PS2:]A water table, which may or may not exist.
 \end{itemize}
-A free body diagram of the forces acting on the slice is displayed in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{../../../datafiles/SSP/PhysSyst.png}
+\caption{An example slope for analysis by SSP, where the dashed line represents the water table}
+\label{Figure:PhysicalSystem}
+\end{center}
+\end{figure}
+Morgenstern-Price analysis of the slope involves representing the slope as a series of vertical slices. As shown in \hyperref[Figure:IndexConvention]{Fig:IndexConvention}, the index $i$ is used to denote a value for a single slice, and an interslice value at a given index $i$ refers to the value between slice $i$ and adjacent slice $i+1$.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SSP/IndexConvention.png}
-\caption{Index convention for numbering slice and interslice force variables}
+\caption{Index convention for slice and interslice values}
 \label{Figure:IndexConvention}
 \end{center}
 \end{figure}
+A free body diagram of the forces acting on a slice is displayed in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The specific forces and symbols will be discussed in detail in \hyperref[Sec:GDs]{Section: General Definitions} and \hyperref[Sec:DDs]{Section: Data Definitions}.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SSP/ForceDiagram.png}
-\caption{Forces acting on a slice}
+\caption{Free body diagram of forces acting on a slice}
 \label{Figure:ForceDiagram}
 \end{center}
 \end{figure}

@@ -402,7 +402,7 @@ phys_sys_desc = SRS.physSyst
 phys_sys_intro = physSystIntro ssp fig_physsyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
-physSystIntro what indexref = foldlSP [S "The", introduceAbb physSyst, S "of",
+physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
   short ssp `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 

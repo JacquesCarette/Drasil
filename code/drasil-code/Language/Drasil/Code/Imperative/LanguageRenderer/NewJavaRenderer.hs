@@ -411,14 +411,14 @@ instance StatementSym JavaCode where
     printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
     printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
 
-    getIntInput v = liftA3 jInput (return $ text "nextInt()") v inputFunc
-    getFloatInput v = liftA3 jInput (return $ text "nextDouble()") v inputFunc
+    getIntInput v = liftA3 jInput' (return $ text "Integer.parseInteger") v inputFunc
+    getFloatInput v = liftA3 jInput' (return $ text "Double.parseDouble") v inputFunc
     getBoolInput v = liftA3 jInput (return $ text "nextBoolean()") v inputFunc
     getStringInput v = liftA3 jInput (return $ text "nextLine()") v inputFunc
     getCharInput _ = return empty
     discardInput = liftA jDiscardInput inputFunc
-    getIntFileInput f v = liftA3 jInput (return $ text "nextInt()") v f
-    getFloatFileInput f v = liftA3 jInput (return $ text "nextDouble()") v f
+    getIntFileInput f v = liftA3 jInput' (return $ text "Integer.parseInteger") v f
+    getFloatFileInput f v = liftA3 jInput' (return $ text "Double.parseDouble") v f
     getBoolFileInput f v = liftA3 jInput (return $ text "nextBoolean()") v f
     getStringFileInput f v = liftA3 jInput (return $ text "nextLine()") v f
     getCharFileInput _ _ = return empty
@@ -566,6 +566,9 @@ jDiscardInput inFn = inFn <> dot <> text "next()"
 
 jInput :: Doc -> Doc -> Doc -> Doc
 jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
+
+jInput' :: Doc -> Doc -> Doc -> Doc
+jInput' it v inFn = v <+> equals <+> it <> parens (inFn <> dot <> text "nextLine()")
 
 jOpenFileR :: Doc -> Doc -> Doc
 jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)

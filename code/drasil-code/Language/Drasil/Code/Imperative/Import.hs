@@ -535,6 +535,7 @@ convExpr (FCall _ _)   = return $
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) (convExpr b) -- hack to deal with string equality
 convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where

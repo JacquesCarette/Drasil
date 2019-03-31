@@ -36,11 +36,10 @@ install:
 - stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/stack.yaml
 
 script:
-# Build the package
-#- stack --no-terminal build --stack-yaml code/stack.yaml
-- cd code
-- make stackArgs="--no-terminal" NOISY=yes
-- make docs haddockArgs="--no-haddock-deps"
+ - cd code
+ - curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+ - make stackArgs="--no-terminal" NOISY=yes
+ - make docs haddockArgs="--no-haddock-deps"
 
 notifications:
   email:

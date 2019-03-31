@@ -239,7 +239,7 @@ fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
-replaceEmptyS s@_ = s
+replaceEmptyS s = s
 
 -- | Get the source citations (if any)
 getSource' :: HasCitation c => c -> Sentence

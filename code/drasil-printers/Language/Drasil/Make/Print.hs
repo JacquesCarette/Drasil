@@ -34,7 +34,7 @@ lualatex :: Target -> Doc
 lualatex = text . (++) "lualatex $(TEXFLAGS) "
 
 bibtex :: Target -> Doc
-bibtex = text . (++) "-bibtex $(TEXFLAGS) "
+bibtex = text . (++) "-bibtex $(BIBTEXFLAGS) "
 
 -- | Renders LaTeX commands in the makefile
 printLatexCmd :: Target -> Doc

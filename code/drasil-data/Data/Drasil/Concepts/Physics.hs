@@ -5,7 +5,7 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
   , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
-  , twoD, physicCon, physicCon'
+  , twoD, physicCon, physicCon',kEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -20,7 +20,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure]
+  joint, damping, pressure, kEnergy]
 
 physicCon' :: [CI]
 physicCon' = [twoD]
@@ -31,7 +31,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure :: ConceptChunk
+  joint, damping, pressure, kEnergy :: ConceptChunk
 
 twoD :: CI
 
@@ -62,6 +62,9 @@ rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
+kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
+  (S "The measure of the" +:+ (phrase energy) +:+ 
+   S "a body possess due to its motion.")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
@@ -111,7 +114,6 @@ linAccel = dcc "linearAcceleration"
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
 -- FIXME: plurals below?
-
 restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
    "A measure of the restitution of a collision between two objects"
 momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")

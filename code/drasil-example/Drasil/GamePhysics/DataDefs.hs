@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD) where
 
 import Language.Drasil
 
@@ -15,22 +15,20 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  impulseV, force, torque)
+  impulseV, force, torque, kEnergy, energy)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Utils (eqUnR')
-
-
 
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque]
+  angVel, angAccel, impulse, chasles, torque, kEnergy]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -261,3 +259,20 @@ torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", (phrase torque), 
   S "on a body measures the", S "the tendency of a", (phrase QP.force), 
   S "to rotate the body around an axis or pivot"]
+
+-----------------------DD15 Kinetic Energy--------------------------------  
+kEnergyDD :: DataDefinition
+kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kinetic energy"
+ [kEnergyDesc] 
+
+kEnergy :: QDefinition
+kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
+
+kEnergyEqn :: Expr
+kEnergyEqn = ((sy QPP.mass)*(sy  QP.velocity) $^ 2)/2
+
+kEnergyDesc :: Sentence
+kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
+ S "of an object is the", (phrase QP.energy),
+ S "it possesses due to its motion"]
+  

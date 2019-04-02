@@ -274,5 +274,5 @@ kEnergyEqn = ((sy QPP.mass)*(sy  QP.velocity) $^ 2)/2
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
  S "of an object is the", (phrase QP.energy),
- S "it possesses due to its motion"]
+ S "it possess due to its motion"]
   

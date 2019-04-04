@@ -31,7 +31,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   srsDomains, sysCont, system, systemConstraint, table_, template, thModel, 
   type_, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon', number)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+  number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
@@ -445,9 +446,9 @@ fig_forceacting = llcc (makeFigRef "ForceDiagram") $
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (uncurry ofThe) [
-  (S "geometry", S "water" +:+ phrase table_),
-  (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
-  (plural mtrlPrpty, S "layers")
+  (phrase shape, phrase soil +:+ S "mass"),
+  (S "location", phrase waterTable),
+  (plural mtrlPrpty, phrase soil)
   ]) [goals_list]
 
 goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals

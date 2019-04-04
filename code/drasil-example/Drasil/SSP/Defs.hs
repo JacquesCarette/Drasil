@@ -29,7 +29,7 @@ sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
 
 sspdef' :: [ConceptChunk]
-sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept]
+sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm,

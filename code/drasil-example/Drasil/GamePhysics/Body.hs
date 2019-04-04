@@ -39,12 +39,8 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
   foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
   sOf, sOr)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
-<<<<<<< HEAD
   derived, fundamentals, joule)
-=======
-  derived, fundamentals)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
->>>>>>> master
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 

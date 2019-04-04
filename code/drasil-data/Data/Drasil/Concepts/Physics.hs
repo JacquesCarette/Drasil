@@ -5,11 +5,7 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
   , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
-<<<<<<< HEAD
-  , twoD, physicCon, physicCon',kEnergy
-=======
-  , cohesion, isotropy, twoD, threeD, physicCon, physicCon'
->>>>>>> master
+  , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -26,11 +22,8 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-<<<<<<< HEAD
-  joint, damping, pressure, kEnergy]
-=======
-  joint, damping, pressure, cohesion, isotropy]
->>>>>>> master
+  joint, damping, pressure, cohesion, isotropy, kEnergy]
+
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
@@ -41,11 +34,9 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-<<<<<<< HEAD
-  joint, damping, pressure, kEnergy :: ConceptChunk
-=======
-  joint, damping, pressure, cohesion, isotropy :: ConceptChunk
->>>>>>> master
+  joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
+
+  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
 twoD, threeD :: CI
 

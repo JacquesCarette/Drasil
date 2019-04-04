@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, isThe, sAnd)
-import Drasil.SWHS.Assumptions (newA20)
+import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
   heatEInPCM, swhsIMods)
@@ -48,7 +48,7 @@ inputInitQuants = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
   makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
   plural parameter `sC` S "material", plural property, S "and initial" +:+.
-  plural condition, makeRef2S newA20]) "Input-Initial-Quantities" funcReqDom
+  plural condition, makeRef2S assumpVCN]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = cic "findMass" ( foldlSent [
   S "Use the", plural input_, S "in", makeRef2S inputInitQuants,

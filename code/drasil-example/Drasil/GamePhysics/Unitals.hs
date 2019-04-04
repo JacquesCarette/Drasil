@@ -246,7 +246,7 @@ mass_B      = rigidParam "B" cB
 --------------------------
 
 cpUnitless :: [QuantityDict]
-cpUnitless = [numParticles]
+cpUnitless = qw QM.pi_ : [numParticles]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer

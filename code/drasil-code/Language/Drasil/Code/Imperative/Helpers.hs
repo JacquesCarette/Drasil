@@ -48,7 +48,7 @@ capitalize [] = error "capitalize called on an emptry String"
 capitalize (c:cs) = (toUpper c):cs
 
 containsAll :: Eq a => [a] -> [a] -> Bool
-containsAll l = and . map (\x -> x `elem` l)
+containsAll = all . flip elem
 
 makeLiteralNameValid :: String -> String
 makeLiteralNameValid s =
@@ -70,28 +70,28 @@ powerSet :: Eq a => [a] -> [[a]]
 powerSet = filterM (const [True, False]) . nub
 
 hmap :: (a -> Doc) -> [a] -> Doc
-hmap f l = hcat $ map f l
+hmap f = hcat . map f
 
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
-himap c f l = hcat $ intersperse c (map f l)
+himap c f = hcat . intersperse c . map f
 
 vicat :: Doc -> [Doc] -> Doc
-vicat c l = vcat $ intersperse c l
+vicat c = vcat . intersperse c
 
 vibcat :: [Doc] -> Doc
 vibcat = vicat blank
 
 vmap :: (a -> Doc) -> [a] -> Doc
-vmap f l = vcat $ map f l
+vmap f = vcat . map f
 
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
-vimap c f l = vicat c (map f l)
+vimap c f = vicat c . map f
 
 vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
 
 reduceLibs :: [String] -> [String] -> [String]
-reduceLibs libs modules = nub $ filter (\x -> notElem x modules) libs 
+reduceLibs libs modules = nub $ filter (`notElem` modules) libs 
 
 --private
 myLiteralNameReplace :: String -> String -> String

@@ -39,7 +39,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
   [(phrase scope, phrase system), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
@@ -77,7 +77,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
+scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
   where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                   S "includes", mainRequirement]
@@ -87,34 +87,36 @@ scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [
                   S "inputs" `sC` short programName +:+ intendedPurpose]
 
 -- | constructor for characteristics of the intended reader subsection
--- know
--- und
 -- progName
--- appStandd
+-- assumed
+-- topic
+-- asset
 -- r
-charIntRdrF :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> Section
-charIntRdrF know und progName appStandd asset r = 
-  SRS.charOfIR (intReaderIntro know und progName appStandd asset r) []
+charIntRdrF :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> 
+  Section -> Section
+charIntRdrF progName assumed topic asset r = 
+  SRS.charOfIR (intReaderIntro progName assumed topic asset r) []
 
 --paragraph called by charIntRdrF
--- topic1     - sentence the reader should have knowledge in
--- topic2     - sentence the reader should understand
--- stdrd      - sentence of the standards the reader should be familiar with
+-- assumed    - subjects the reader is assumed to understand
+-- topic      - topic-related subjects that the reader should understand
+-- asset      - subjects that would be an asset if the reader understood them
 -- sectionRef - reference to user characteristic section
-intReaderIntro :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Sentence -> Section -> [Contents]
-intReaderIntro EmptyS topic2 progName stdrd asset sectionRef = 
-  [foldlSP [S "Reviewers of this",
-  (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
-  stdrd, S "An understanding of" +:+ asset +:+. S "would be an asset", S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef2S sectionRef)]]
-intReaderIntro topic1 topic2 progName stdrd EmptyS sectionRef = 
-  [foldlSP [S "Reviewers of this",
-  (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
-  S "The reviewers should also have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef2S sectionRef)]]
+intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
+  Section -> [Contents]
+intReaderIntro progName assumed topic [] sectionRef = 
+  [foldlSP [S "Reviewers of this", (phrase documentation), 
+  S "should have an understanding of" +:+. 
+  foldlList Comma List (assumed ++ topic), S "The", (plural user), 
+  S "of", (short progName), S "can have a lower level of expertise, as", 
+  S "explained in", (makeRef2S sectionRef)]]
+intReaderIntro progName assumed topic asset sectionRef = 
+  [foldlSP [S "Reviewers of this", (phrase documentation), 
+  S "should have an understanding of" +:+. 
+  foldlList Comma List (assumed ++ topic), S "It would be an asset to",
+  S "understand" +:+. foldlList Comma List asset, S "The", (plural user), 
+  S "of", (short progName), S "can have a lower level of expertise, as", 
+  S "explained in", (makeRef2S sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section

@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec) where
 
 import Control.Lens ((^.), makeLenses, view)
-import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),

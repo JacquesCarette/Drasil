@@ -5,13 +5,15 @@ import Language.Drasil
 import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986, smithLai2005)
 import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
   grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
-  rHuston, hJosephs)
+  rHuston, hJosephs, nrMorgenstern, vePrice)
 
 sspCitations :: BibRef
 sspCitations = [chen2005, parnasClements1986, koothoor2013,
-  fredlund1977, smithLai2005, li2010, karchewski2012, huston2008]
+  fredlund1977, smithLai2005, li2010, karchewski2012, huston2008, 
+  morgenstern1965]
 
-chen2005, fredlund1977, li2010, karchewski2012, huston2008 :: Citation
+chen2005, fredlund1977, li2010, karchewski2012, huston2008,
+  morgenstern1965 :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = cArticle [qhQian, dyZhu, cfLee, grChen]
   "A concise algorithm for computing the factor of safety using the morgenstern price method"
@@ -37,3 +39,6 @@ karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
 
 huston2008 = cBookA [rHuston, hJosephs] ("Practical stress analysis in " ++  
   "engineering design") "CRC Press" 2008 [edition 3] "huston2008"
+
+morgenstern1965 = cArticle [nrMorgenstern, vePrice] ("The analysis of the " ++   "stability of general slip surfaces") "Géotechnique" 1965 [month Jan,
+  pages [79,93], number 15] "morgenstern1965"

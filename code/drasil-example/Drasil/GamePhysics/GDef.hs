@@ -34,7 +34,7 @@ impulseDeriv :: Sentence
 impulseDeriv = foldlSent [S "Newton's second law of motion (ref to T1)", 
   S "states" +: S "(expr1)", 
   S "rearranging" +: S "(expr2)", 
-  S "Integrating the right side" +: S "(expr3)",
+  S "Integrating the right side" +: S "(expr3)"
   ]
 
 conservationOfMomentGDef :: RelationConcept
@@ -42,13 +42,13 @@ conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation 
   conservationOfMomentDesc conservationOfMomentRel
 
 conservationOfMomentRel :: Relation
-conservationOfMomentRel = (UnaryOp (Summation Nothing
-C mass_i)) --
+conservationOfMomentRel = UnaryOp $ Summation Nothing
+  C mass_i
 
 conservationOfMomentDesc :: Sentence
 conservationOfMomentDesc = foldlSent [S "In an isolated system,",
   S "where the sum of external", (phrase impulseS), S "acting on the system is zero,",
-  S "the total momentum of the bodies is constant (conserved)",
+  S "the total momentum of the bodies is constant (conserved)"
   ]
 
 --[mass, initialVelocity, finalVelocity]

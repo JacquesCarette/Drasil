@@ -34,7 +34,7 @@ mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br] ++ [cnstrw prob_fail]
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk

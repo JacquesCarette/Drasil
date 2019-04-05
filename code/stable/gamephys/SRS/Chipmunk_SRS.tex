@@ -39,6 +39,8 @@ Symbol & Description
 \\
 \midrule
 \endhead
+J & energy (joule)
+\\
 kg & mass (kilogram)
 \\
 m & length (metre)
@@ -88,6 +90,8 @@ ${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body A & kg$\text{m}^{2}$
 ${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
 \\
 $j$ & Impulse (scalar) & Ns
+\\
+$KE$ & Kinetic energy & J
 \\
 $L$ & Length & m
 \\
@@ -764,6 +768,36 @@ Label & Torque
                                                                    RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:kinetic energy}
+\phantomsection 
+\label{DD:kinetic energy}
+\\ \midrule \\
+Label & Kinetic energy
+        \\ \midrule \\
+        Symbol & $KE$
+                 \\ \midrule \\
+                 Units & J
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    KE=\frac{m \mathbf{v}^{2}}{2}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{$KE$ is the kinetic energy (J)}
+                                                  \item{$m$ is the mass (kg)}
+                                                  \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & The kinetic energy of an object is the energy it possess due to its motion.
+                                                          \\ \midrule \\
+                                                          Source & \\ \midrule \\
+                                                                   RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
@@ -1148,15 +1182,15 @@ IM1 (\hyperref[DD:chalses]{DD: chalses}) & X & X &  &  &  & X & X
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) & X & X &  & X &  & X & X
 \\
-IM3 (\hyperref[IM:transMot]{IM: transMot}) & X & X &  &  & X & X & X
+IM3 (\hyperref[DD:kinetic energy]{DD: kinetic energy}) & X & X &  &  & X & X & X
 \\
-LC1 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  &  &  & 
+LC1 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  &  & 
 \\
-LC2 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  & X &  & 
+LC2 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  & X &  & 
 \\
-LC3 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  &  & X & 
+LC3 (\hyperref[IM:col2D]{IM: col2D}) &  &  &  &  &  & X & 
 \\
-LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
+LC4 (\hyperref[lcVODES]{LC: Variable-ODE-Solver}) &  &  &  &  &  &  & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
@@ -1164,7 +1198,7 @@ LC4 (\hyperref[lcEC]{LC: Expanded-Collisions}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:chalses]{DD: chalses}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[IM:transMot]{IM: transMot})
+ & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:chalses]{DD: chalses}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[DD:kinetic energy]{DD: kinetic energy})
 \\
 \midrule
 \endhead
@@ -1212,7 +1246,7 @@ IM1 (\hyperref[DD:chalses]{DD: chalses}) & X &  &  &  &  &  &  & X &  &  &  &  &
 \\
 IM2 (\hyperref[DD:torque]{DD: torque}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[DD:kinetic energy]{DD: kinetic energy}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

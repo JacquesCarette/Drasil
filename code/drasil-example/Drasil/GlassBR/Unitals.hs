@@ -34,7 +34,7 @@ mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br] 
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk
@@ -85,7 +85,7 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Atomic "btol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
-pb_fail = uvc "pb_fail" (nounPhraseSP "tolerable probability of fail") 
+pb_fail = uvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Atomic "ftol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
@@ -124,25 +124,20 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 
 {--}
 
-
-
 gbOutputs :: [QuantityDict]
 gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] 
 
---gbProbs :: [ConstrainedChunk]
---gbProbs = [prob_fail, prob_br]
 prob_br :: ConstrainedChunk
-
-gbProbs :: [QuantityDict]
-gbProbs = map qw [prob_fail]
-prob_fail :: ConstrainedChunk
-
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-  
-prob_fail = cvc "prob_fail" (nounPhraseSP "probability of fail")
+
+gbProbs :: [QuantityDict]
+gbProbs = map qw [prob_fail]
+
+prob_fail :: ConstrainedChunk
+prob_fail = cvc "prob_fail" (nounPhraseSP "probability of failure")
   (sub cP lF) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 

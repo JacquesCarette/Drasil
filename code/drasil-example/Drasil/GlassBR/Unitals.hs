@@ -127,13 +127,15 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] ++ map qw [prob_fail]
+gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] 
 
-gbProbs :: [ConstrainedChunk]
-gbProbs = [prob_fail, prob_br]
---prob_br :: ConstrainedChunk
+--gbProbs :: [ConstrainedChunk]
+--gbProbs = [prob_fail, prob_br]
+prob_br :: ConstrainedChunk
 
---prob_fail :: ConstrainedChunk
+gbProbs :: [QuantityDict]
+gbProbs = map qw [prob_fail]
+prob_fail :: ConstrainedChunk
 
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational

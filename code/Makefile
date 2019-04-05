@@ -38,6 +38,7 @@ PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
 NOISY=no
+SUMMARIZE_TEX=no
 
 all: test
 
@@ -89,8 +90,9 @@ $(filter %-docs, $(DOCS_PACKAGES)): %-docs: FORCE
 
 %_tex: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_tex: EDIR=$($(EXAMPLE)_DIR)
+%_tex: EPREF=$($(EXAMPLE)_PREF)
 $(filter %_tex, $(TEX_EXAMPLES)): %_tex: %_build
-	cd ./build/$(EDIR)/SRS/ && $(MAKE) TEXFLAGS=--interaction=nonstopmode
+	EDIR=$(EDIR) EPREF=$(EPREF) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 

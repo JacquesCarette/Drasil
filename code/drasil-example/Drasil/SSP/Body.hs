@@ -21,17 +21,18 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   goalStmt_label, physSystDescription_label, generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
-  datCon)
+  genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, element, endUser,
   environment, goal, goalStmt, information, inModel, input_, interest, 
   interface, issue, loss, method_, model, organization, physical, physics,
   problem, product_, property, purpose, requirement, software, softwareSys, srs,
-  srsDomains, sysCont, system, systemConstraint, table_, template, thModel, 
-  type_, user, value, variable, physSyst, doccon, doccon')
+  srsDomains, symbol_, sysCont, system, systemConstraint, table_, template, 
+  thModel, type_, user, value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon', number)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+  number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
@@ -75,8 +76,8 @@ aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
-goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2 :: Contents
+goals_list, termi_defi_list, phys_sys_intro, phys_sys_convention, 
+  phys_sys_desc_bullets, phys_sys_fbd :: Contents
 
 
 --Document Setup--
@@ -396,21 +397,31 @@ termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst
-  [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
-   LlC fig_indexconv, LlC fig_forceacting] []
+  [phys_sys_intro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
+   LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
 
-phys_sys_desc_p1 = physSystIntro slope how intrslce slice 
-  (S "slice base") fig_indexconv
-  where how = S "as a series of" +:+ phrase slice +:+. plural element
+phys_sys_intro = physSystIntro ssp fig_physsyst
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
-  a -> Sentence -> b -> c -> Sentence -> d -> Contents
-physSystIntro what how p1 p2 p3 indexref = foldlSP [
-  at_start analysis, S "of the", phrase what, S "is performed by looking at",
-  plural property, S "of the", phrase what, how, S "Some", plural property,
-  S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
-  p3 +:+. plural property, S "The index convention for referencing which",
-  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef2S indexref]
+physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
+physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
+  short ssp `sC` S "as shown in", makeRef2S indexref `sC` 
+  S "includes the following elements"]
+
+phys_sys_convention = physSystConvention morPrice morgenstern1965 slope how 
+  index slice intrslce fig_indexconv
+  where how = S "as a series of vertical" +:+ plural slice
+
+physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
+  NamedIdea d, HasSymbol d, NamedIdea e, NamedIdea f, HasShortName g, 
+  Referable g) => a -> b -> c -> Sentence -> d -> e -> f -> g -> Contents
+physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
+  at_start anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
+  S "involves representing the", phrase what +:+. how, S "As shown in",
+  makeRef2S indexref `sC` S "the", phrase ix, ch ix, S "is used to denote a",
+  phrase value, S "for a single", phrase ixd `sC` S "and an", phrase intrfce, 
+  phrase value, S "at a given", phrase ix, ch ix, S "refers to the",
+  phrase value, S "between", phrase ixd, ch ix `sAnd` S "adjacent", phrase ixd,
+  E $ sy ix + 1]
 
 phys_sys_desc_bullets = LlC $ enumSimple physSystDescription_label 1 (short Doc.physSyst) physSystDescriptionListPhysys
 
@@ -420,34 +431,39 @@ physSystDescriptionListPhysys2 :: Sentence
 
 physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2]
 
-physSystDescriptionListPhysys1 = foldlSent_ [at_start' itslPrpty, S "convention is noted by j. The end",
-  plural itslPrpty, S "are usually not of", phrase interest `sC`
-  S "therefore use the", plural itslPrpty, S "from" +:+.
-  (E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1))]
+physSystDescriptionListPhysys1 = foldlSent [S "A", phrase slope, 
+  S "comprised of one", phrase soilLyr]
 
-physSystDescriptionListPhysys2 = foldlSent_ [at_start slice, plural property +:+ S "convention is noted by" +:+.
-  (ch index)]
+physSystDescriptionListPhysys2 = foldlSent [S "A", phrase waterTable `sC` 
+  S "which may or may not exist"]
 
-phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
-  plural force, S "acting on the", phrase slice, 
-  S "is displayed in", makeRef2S fig_forceacting]
+phys_sys_fbd = foldlSP [S "A", phrase fbd, S "of the", 
+  plural force, S "acting on a", phrase slice, 
+  S "is displayed in" +:+. makeRef2S fig_forceacting, S "The specific",
+  plural force `sAnd` plural symbol_, S "will be discussed in detail in",
+  makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
+
+fig_physsyst :: LabelledContent
+fig_physsyst = llcc (makeFigRef "PhysicalSystem") $
+  fig (foldlSent_ [S "An example", phrase slope, S "for", phrase analysis,
+  S "by", short ssp `sC` S "where the dashed line represents the",
+  phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
 fig_indexconv :: LabelledContent
 fig_indexconv = llcc (makeFigRef "IndexConvention") $ 
-  fig (foldlSent_ [S "Index convention for numbering",
-  phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png")
+  fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
+  phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
 fig_forceacting :: LabelledContent
 fig_forceacting = llcc (makeFigRef "ForceDiagram") $
-  fig (at_start' force +:+ S "acting on a" +:+
+  fig (at_start fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (uncurry ofThe) [
-  (S "geometry", S "water" +:+ phrase table_),
-  (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
-  (plural mtrlPrpty, S "layers")
+  (phrase shape, phrase soil +:+ S "mass"),
+  (S "location", phrase waterTable),
+  (plural mtrlPrpty, phrase soil)
   ]) [goals_list]
 
 goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals

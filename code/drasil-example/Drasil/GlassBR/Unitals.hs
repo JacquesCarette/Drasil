@@ -34,10 +34,10 @@ mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br]
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br] ++ [cnstrw prob_fail]
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
-aspect_ratio, pb_tol, tNT :: UncertainChunk
+aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -55,7 +55,7 @@ gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
+gbInputsWUncrtn = [aspect_ratio, pb_tol, pb_fail, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -83,6 +83,10 @@ aspect_ratio = uvc "aspect_ratio" (aR ^. term)
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
+
+pb_fail = uvc "pb_fail" (nounPhraseSP "tolerable probability of fail") 
+  (sub cP (Atomic "ftol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
@@ -120,13 +124,27 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 
 {--}
 
-gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br]
 
-prob_br :: ConstrainedChunk
+
+gbOutputs :: [QuantityDict]
+gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] ++ map qw [prob_fail]
+
+gbProbs :: [ConstrainedChunk]
+gbProbs = [prob_fail, prob_br]
+--prob_br :: ConstrainedChunk
+
+--prob_fail :: ConstrainedChunk
+
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
+  
+prob_fail = cvc "prob_fail" (nounPhraseSP "probability of fail")
+  (sub cP lF) Rational
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
+
   --FIXME: no typical value!
 
 {--}
@@ -219,6 +237,7 @@ glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
 
 risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
+
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real

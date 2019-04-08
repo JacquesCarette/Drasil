@@ -227,7 +227,7 @@ genCalcBlock t' v' e' = doit t' v' e'
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (genCalcBlock t v e)) cs
   return $ oneLiner $ ifCond ifs noElse
 
 ----- OUTPUT -------

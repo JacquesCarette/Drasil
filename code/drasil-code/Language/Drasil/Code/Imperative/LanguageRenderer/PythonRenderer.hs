@@ -253,6 +253,8 @@ valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (call
         prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
+valueDoc' c (Condi cond te ee) = parens (valueDoc' c te <+> text "if" <+>
+          parens (valueDoc' c cond) <+> text "else" <+> valueDoc' c ee)
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc

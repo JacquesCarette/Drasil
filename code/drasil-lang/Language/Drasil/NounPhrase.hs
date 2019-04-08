@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , at_startNP, at_startNP', titleizeNP, titleizeNP', phraseNP
+  , at_startNP, at_startNP', titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -197,8 +197,12 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S (toUpper s : ss)
-cap (S s)        CapWords = S $ findNotCaps $ findHyph $ unwords 
-  (map (\x -> toUpper (head x) : tail x) (words s))
+cap (S s)        CapWords = 
+  let w = words s in
+  let l = case w of [] -> [[]]
+                    [x] -> [capFirstWord x]
+                    (x:xs) -> capFirstWord x : map capWords xs in
+  S $ findHyph $ unwords l
 cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
   --could change associativity of :+: instead?
@@ -208,20 +212,25 @@ cap a _ = a
 
 findHyph :: String -> String
 findHyph "" = ""
-findHyph s
-      | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
-      | otherwise = head s : findHyph (tail s)
+findHyph [x] = [x]
+findHyph (x:y:xs) 
+      | x == '-'    = '-' : (toUpper y : xs)
+      | otherwise   = x : findHyph (y:xs)
 
--- Finds words that should not be capitalized in a title and changes them back to lowercase
-findNotCaps :: String -> String
-findNotCaps "" = ""
-findNotCaps s = unwords (head (words s) : map isNotCaps (tail $ words s))
+capFirstWord :: String -> String
+capFirstWord (c:cs)
+    | not (isLetter c)          = c : cs
+    | not (isLatin1 c)          = c : cs
+    | otherwise                 = toUpper c : cs
+capFirstWord "" = ""
 
-isNotCaps :: String -> String
-isNotCaps (c:cs)
-    | not (isLetter c && isLatin1 c)  = toLower c : cs
-    | (toLower c : cs) `elem` doNotCaps = toLower c : cs
-isNotCaps s = s
+capWords :: String -> String
+capWords (c:cs)
+    | not (isLetter c)          = c : cs
+    | not (isLatin1 c)          = c : cs
+    | (c : cs) `elem` doNotCaps = toLower c : cs
+    | otherwise                 = toUpper c : cs
+capWords "" = ""
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

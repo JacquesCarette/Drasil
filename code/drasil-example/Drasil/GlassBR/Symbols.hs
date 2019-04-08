@@ -1,20 +1,23 @@
 module Drasil.GlassBR.Symbols where
 
 import Language.Drasil (QuantityDict, qw)
-import Language.Drasil.Code (Mod(Mod), asVC)
+import Language.Drasil.Code (Mod(Mod), asVC, asVC')
 
 import Drasil.GlassBR.IMods (gbrIMods)
-import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, 
+import Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ)
+import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, gbOutputs,
     gBRSpecParamVals, glassBRSymbols, glassBRSymbolsWithDefns, glassBRUnitless)
 
+import Data.List ((\\))
+
 symbolsForTable :: [QuantityDict]
-symbolsForTable = gbInputs ++ (map qw gBRSpecParamVals) ++ 
+symbolsForTable = gbInputs ++ gbOutputs ++ (map qw gBRSpecParamVals) ++ 
   (map qw glassBRSymbolsWithDefns) ++ (map qw glassBRSymbols) ++
-  (map qw glassBRUnitless) ++ (map qw gbInputDataConstraints)
-  -- include all module functions as symbols
-  ++ (map (qw . asVC) $ concatMap (\(Mod _ l) -> l) allMods)
-  ++ map qw implVars
+  (map qw glassBRUnitless) ++ (map qw gbInputDataConstraints) ++
+  (map asVC' [interpY, interpZ]) 
 
 this_symbols :: [QuantityDict]
-this_symbols = (map qw gbrIMods) ++ symbolsForTable
+this_symbols = (map qw gbrIMods) 
+  -- include all module functions as symbols
+  ++ ((map asVC $ concatMap (\(Mod _ l) -> l) allMods) \\ symbolsForTable)
+  ++ map qw implVars ++ symbolsForTable

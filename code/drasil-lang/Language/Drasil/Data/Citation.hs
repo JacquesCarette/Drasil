@@ -3,7 +3,7 @@ module Language.Drasil.Data.Citation
     CiteField(..), HP(..), CitationKind(..)
     -- "smart" constructors
   , author, editor
-      -- Sentence -> CiteField
+      -- CiteField
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
       -- FIXME: these should be checked for bounds
@@ -17,35 +17,34 @@ module Language.Drasil.Data.Citation
   ) where
 
 import Language.Drasil.People (People)
-import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Data.Date (Month(..))
 
 -- | Fields used in citations.
-data CiteField = Address      Sentence
+data CiteField = Address      String
                | Author       People
-               | BookTitle    Sentence -- Used for 'InCollection' references only.
+               | BookTitle    String -- Used for 'InCollection' references only.
                | Chapter      Int
                | Edition      Int
                | Editor       People
                | HowPublished HP
-               | Institution  Sentence
-               | Journal      Sentence
+               | Institution  String
+               | Journal      String
                | Month        Month
-               | Note         Sentence
+               | Note         String
                | Number       Int
-               | Organization Sentence
+               | Organization String
                | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
-               | Publisher    Sentence
-               | School       Sentence
-               | Series       Sentence
-               | Title        Sentence
-               | Type         Sentence -- BibTeX "type" field
+               | Publisher    String
+               | School       String
+               | Series       String
+               | Title        String
+               | Type         String -- BibTeX "type" field
                | Volume       Int
                | Year         Int
 
 -- | How Published. Necessary for URLs to work properly.
-data HP = URL Sentence
-        | Verb Sentence
+data HP = URL String
+        | Verb String
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)
@@ -68,9 +67,9 @@ author = Author
 editor = Editor
 
 -- | Smart field constructor
-address, bookTitle, howPublished, howPublishedU, institution, journal, note,
-  organization, publisher, school, series, title,
-  typeField :: Sentence -> CiteField
+address, bookTitle, institution, journal,
+  howPublished, howPublishedU, note, organization, publisher, school, series, title,
+  typeField :: String -> CiteField
 
 address       = Address
 bookTitle     = BookTitle

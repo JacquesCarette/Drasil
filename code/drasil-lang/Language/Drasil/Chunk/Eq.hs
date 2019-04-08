@@ -2,11 +2,11 @@
 module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec) where
 
 import Control.Lens ((^.), makeLenses, view)
-import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, DefiningExpr(defnExpr), Definition(defn),
-  ConceptDomain, Quantity, HasSpace(typ))
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 
 import Language.Drasil.Expr (Expr)
@@ -34,8 +34,7 @@ instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.
 --FIXME: Space hack
-fromEqn :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc def symb un eqn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn
 

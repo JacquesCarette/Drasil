@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.14
+Version:	0.1.19
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -19,14 +19,14 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.38,
+    drasil-lang >= 0.1.58,
     drasil-data >= 0.1.9,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.6,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.15
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall -O2
+  ghc-options:      -Wall -O2 -Wredundant-constraints
 
 executable glassbr
   hs-source-dirs: .
@@ -39,7 +39,6 @@ executable glassbr
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.IMods
-    , Drasil.GlassBR.Labels
     , Drasil.GlassBR.References
     , Drasil.GlassBR.Requirements
     , Drasil.GlassBR.Symbols
@@ -54,14 +53,14 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.23,
-    drasil-data >= 0.1.7,
+    drasil-lang >= 0.1.58,
+    drasil-data >= 0.1.10,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.13
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
 
 executable nopcm
   hs-source-dirs: .
@@ -69,6 +68,7 @@ executable nopcm
   other-modules:
       Drasil.NoPCM.Assumptions
     , Drasil.NoPCM.Body
+    , Drasil.NoPCM.Changes
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
@@ -77,6 +77,7 @@ executable nopcm
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
+    , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc
@@ -84,6 +85,7 @@ executable nopcm
     , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
+    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
@@ -95,14 +97,14 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.23,
+    drasil-lang >= 0.1.58,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.11
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall -O2
+  ghc-options:      -Wall -Wredundant-constraints
 
 executable swhs
   hs-source-dirs: .
@@ -120,6 +122,7 @@ executable swhs
     , Drasil.SWHS.Labels
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
+    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.Unitals
   Build-Depends:
@@ -129,14 +132,14 @@ executable swhs
     pretty >= 1.1.1.1,
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
-    drasil-lang >= 0.1.23,
+    drasil-lang >= 0.1.58,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.11
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
 
 executable ssp
   hs-source-dirs: .
@@ -149,6 +152,7 @@ executable ssp
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
+    , Drasil.SSP.Figures
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
@@ -165,14 +169,14 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.23,
+    drasil-lang >= 0.1.58,
     drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.11
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
 
 executable chipmunkdocs
   hs-source-dirs: .
@@ -195,14 +199,14 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.23,
+    drasil-lang >= 0.1.58,
     drasil-data >= 0.1.6,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
-    drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.8
+    drasil-printers >= 0.1.8,
+    drasil-gen >= 0.1.3,
+    drasil-docLang >= 0.1.22
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -Wredundant-constraints
 
 source-repository head
   type:     git

@@ -1,27 +1,30 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
-  , im, im', im'', im'''
+  , im', im''
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
 
+import Data.Drasil.IdeaDicts (instanceMod)
+import Language.Drasil.Chunk.Citation (Citation)
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd), HasSymbol(symbol))
+import Language.Drasil.Classes.Document (HasCitation(getCitations))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Quantity, HasSpace(typ),
+  HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
+  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn),
+  Referable(refAdd, renderRef))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
+import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
-import Language.Drasil.NounPhrase (cn')
+import Language.Drasil.ShortName (ShortName, shortname')
 
 import Control.Lens (makeLenses, view)
 
@@ -41,55 +44,42 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _inCons :: InputConstraints
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
-                        , _ref :: [Reference]
+                        , _cit :: [Citation]
                         , _deri :: Derivation
-                        , _lb :: Label
+                        ,  lb :: ShortName
+                        ,  ra :: String
                         , _notes :: [Sentence]
-                        , ci :: CI
                         }
 makeLenses ''InstanceModel
 
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA = getA . view rc
-instance Concept            InstanceModel where
 instance Definition         InstanceModel where defn = rc . defn
-instance ConceptDomain      InstanceModel where cdom = rc . cdom
+instance ConceptDomain      InstanceModel where cdom = cdom . view rc
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
-instance HasReference       InstanceModel where getReferences = ref
-instance HasLabel           InstanceModel where getLabel = lb
-instance HasShortName       InstanceModel where shortname = lb . shortname
+instance HasCitation        InstanceModel where getCitations = cit
+instance HasShortName       InstanceModel where shortname = lb
+instance HasRefAddress      InstanceModel where getRefAdd = ra
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 instance HasSymbol          InstanceModel where symbol = symbol . view imOutput -- ???
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
+instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
+instance Referable          InstanceModel where
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
-
-instanceMod :: CI
-instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]
-
--- | Smart constructor for instance models; no derivations or notes
-im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> [Reference] -> Label -> InstanceModel
-im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn [] instanceMod
-
--- | Same as `im`, with an additional field for notes to be passed in; no derivation
+-- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
+  OutputConstraints -> [Citation] -> String -> [Sentence] -> InstanceModel
+im' rcon i ic o oc src lbe addNotes =
+  IM rcon i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe) addNotes
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
- addNotes instanceMod
-
--- | im with no notes
-im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
-im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
-  (mkLabelSame sn (Def Instance)) [] instanceMod
+  OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
+im'' rcon i ic o oc src der sn addNotes = 
+  IM rcon i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn) addNotes

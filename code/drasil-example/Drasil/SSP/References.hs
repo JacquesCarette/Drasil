@@ -2,32 +2,43 @@ module Drasil.SSP.References where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (crtSlpSrf, fs_concept, ssa)
-
 import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986, smithLai2005)
-import Data.Drasil.Concepts.Documentation (analysis)
-import Data.Drasil.People (cfLee, dgFredlund, dyZhu, grChen, jKrahn, 
-  pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen)
+import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
+  grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
+  rHuston, hJosephs, nrMorgenstern, vePrice)
 
 sspCitations :: BibRef
 sspCitations = [chen2005, parnasClements1986, koothoor2013,
-  fredlund1977, smithLai2005, li2010]
+  fredlund1977, smithLai2005, li2010, karchewski2012, huston2008, 
+  morgenstern1965]
 
-chen2005, fredlund1977, li2010 :: Citation
+chen2005, fredlund1977, li2010, karchewski2012, huston2008,
+  morgenstern1965 :: Citation
 --See Language.Drasil.People for all person constructors
-chen2005 = cArticle "chen2005" [qhQian, dyZhu, cfLee, grChen]
-  (S "A concise algorithm for computing the" +:+
-  phrase fs_concept +:+ S "using the" +:+ S "morgenstern price method")
+chen2005 = cArticle [qhQian, dyZhu, cfLee, grChen]
+  "A concise algorithm for computing the factor of safety using the morgenstern price method"
   jnlCGJ 2005 [month Feb, volume 42, number 1, pages [272,278]]
-  (mkLabelSame "chen2005" Cite)
+  "chen2005"
 
-fredlund1977 = cArticle "fredlund1977" [dgFredlund, jKrahn]
-  (S "Comparison of slope stability methods of" +:+ phrase analysis)
+fredlund1977 = cArticle [dgFredlund, jKrahn]
+  "Comparison of slope stability methods of analysis"
   jnlCGJ 1977 [month Apr, pages [429, 439], volume 14, number 3]
-  (mkLabelSame "fredlund1977" Cite)
+  "fredlund1977"
 
-li2010 = cArticle "li2010" [yCLi, ymChen, tltZhan, ssLing, pjCleall]
-  (S "An efficient approach for locating the" +:+ phrase crtSlpSrf +:+ 
-  S "in" +:+ plural ssa +:+ S "using a real-coded genetic algorithm")
+li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
+  ("An efficient approach for locating the critical slip surface in" ++
+  " slope stability analyses using a real-coded genetic algorithm")
   jnlCGJ 2010 [month Jun, pages [806,820], volume 47, number 7]
-  (mkLabelSame "li2010" Cite)
+  "li2010"
+
+karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
+  ("Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis") 
+  "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012 
+  [address "Winnipeg, MB, Canada", organization "Canadian Geotechnical Society"] 
+  "karchewski2012"
+
+huston2008 = cBookA [rHuston, hJosephs] ("Practical stress analysis in " ++  
+  "engineering design") "CRC Press" 2008 [edition 3] "huston2008"
+
+morgenstern1965 = cArticle [nrMorgenstern, vePrice] ("The analysis of the " ++   "stability of general slip surfaces") "Géotechnique" 1965 [month Jan,
+  pages [79,93], number 15] "morgenstern1965"

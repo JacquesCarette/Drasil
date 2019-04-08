@@ -107,7 +107,7 @@ for' t1 t2 = (titleize t1) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+for'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
 
 the' :: (NamedIdea t) => t -> NP
@@ -116,7 +116,7 @@ the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWord
 the :: (NamedIdea t) => t -> NP
 the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
 
-theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NP
+theCustom :: (t -> Sentence) -> t -> NP
 theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
 
 -- | Combinator for combining two 'NamedChunk's into one.

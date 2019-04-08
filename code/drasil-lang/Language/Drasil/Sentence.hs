@@ -1,21 +1,19 @@
 {-# LANGUAGE GADTs #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
-  (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
-   sParen, sSqBr, (+:+), sC, (+:+.), (+:), Reference2(Reference2), RefProg,
+  (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
+   sParen, (+:+), sC, (+:+.), (+:), ch,
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (Reference, RefAdd)
-import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 
--- Trying different pieces of information for a reference
-data RefProg
-data Reference2 = Reference2 RefProg RefAdd ShortName
+import Control.Lens ((^.))
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -34,17 +32,23 @@ data Sentence where
   Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-  Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence       -- should not be used in examples?
   E     :: Expr -> Sentence
-  Ref2  :: Reference2 -> Sentence
-  Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
-                                                       -- See Reference.hs
+  Ref   :: Reference -> Sentence
+
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
+  Percent :: Sentence               -- % symbol
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
+
+-- The HasSymbol is redundant, but on purpose
+ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch x = Ch SymbolStyle (x ^. uid)
+
+instance Semigroup Sentence where
+  (<>) = (:+:)
 
 instance Monoid Sentence where
   mempty = EmptyS
@@ -64,10 +68,6 @@ sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
-
--- | Helper function for wrapping sentences in square brackets.
-sSqBr :: Sentence -> Sentence
-sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

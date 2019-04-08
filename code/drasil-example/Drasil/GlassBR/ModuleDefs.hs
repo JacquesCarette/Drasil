@@ -2,9 +2,10 @@
 -- when 'name' and 'nameCT' both appear, 'name' is the Haskell function and
 -- 'nameCT' is the "Code Template" that 'name' builds.
 
-module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
+module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
   fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
   repeated, singleLine, singleton)
@@ -78,7 +79,7 @@ v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 v       = var "v"         lV                          Real
 i       = var "i"         lI                          Natural
 j       = var "j"         lJ                          Natural
-k       = var "k"         lK                          Natural
+k       = var "k"         (sub lK two)                Natural
 y       = var "y"         lY                          Real
 z       = var "z"         lZ                          Real
 z_vector = var "z_vector" (sub lZ (Atomic "vector")) (Vect Real)
@@ -98,12 +99,12 @@ filename= var "filename"  (Atomic "filename")         String
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Num a, Fractional a) => (a, a) -> (a, a) -> a
+slope :: (Fractional a) => (a, a) -> (a, a) -> a
 slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
 onLine p1@(x1,y1) p2 x_ = 
   let m = slope p1 p2 in
   m * (x_ - x1) + y1

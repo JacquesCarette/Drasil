@@ -104,17 +104,6 @@ Units
 </tr>
 <tr>
 <td>
-<em>{x<sub>cs</sub>,y<sub>cs</sub>}</em>
-</td>
-<td>
-The Set of X and Y Coordinates: describe the vertices of the critical slip surface
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
 <em>(x,y)</em>
 </td>
 <td>
@@ -122,6 +111,17 @@ Cartesian Position Coordinates: y is considered parallel to the direction of the
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>A</em>
+</td>
+<td>
+Area: A part of an object or surface
+</td>
+<td>
+m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -170,10 +170,32 @@ Pa
 </tr>
 <tr>
 <td>
+<em>const_f</em>
+</td>
+<td>
+Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>f</em>
 </td>
 <td>
-Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
+Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>F<sub>S</sub></em>
+</td>
+<td>
+Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force
 </td>
 <td>
 --
@@ -203,10 +225,10 @@ N
 </tr>
 <tr>
 <td>
-<em>FS</em>
+<em>F<sub>S</sub><sub>min</sub></em>
 </td>
 <td>
-Factor of Safety: The global stability of a surface in a slope
+Minimum Factor of Safety: The minimum factor of safety
 </td>
 <td>
 --
@@ -214,13 +236,35 @@ Factor of Safety: The global stability of a surface in a slope
 </tr>
 <tr>
 <td>
-<em>FS<sub>min</sub></em>
+<em>F<sub>x</sub><sup>G</sup></em>
 </td>
 <td>
-Minimum Factor of Safety: The minimum factor of safety
+Sum of the Interslice Normal Forces: for two adjacent interslice boundaries
 </td>
 <td>
---
+N
+</td>
+</tr>
+<tr>
+<td>
+<em>F<sub>x</sub><sup>H</sup></em>
+</td>
+<td>
+Sum of the Interslice Normal Water Forces: for two adjacent interslice boundaries
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+<em><b>F</b></em>
+</td>
+<td>
+Force: An interaction that tends to produce change in the motion of an object
+</td>
+<td>
+N
 </td>
 </tr>
 <tr>
@@ -239,7 +283,7 @@ N
 <em>H</em>
 </td>
 <td>
-Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i
+Interslice Normal Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i
 </td>
 <td>
 N
@@ -250,7 +294,7 @@ N
 <em>h</em>
 </td>
 <td>
-Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i
+Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice
 </td>
 <td>
 m
@@ -265,6 +309,28 @@ Difference Between Interslice Forces: exerted in the x-ordinate direction betwee
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sup>L</sup></em>
+</td>
+<td>
+Height of the Left Side of a Slice: assuming slice surface has negative slope
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sup>R</sup></em>
+</td>
+<td>
+Height of the Right Side of a Slice: assuming slice surface has negative slope
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -335,17 +401,6 @@ N
 </tr>
 <tr>
 <td>
-<em>N*</em>
-</td>
-<td>
-Effective Normal Force: for a soil surface, without the influence of interslice forces
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
 <em>P</em>
 </td>
 <td>
@@ -386,28 +441,6 @@ Mobilized Shear Force: for slice index i
 </td>
 <td>
 N
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme1Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>SpencerFixme2Please</em>
-</td>
-<td>
-Fixme: What is this value?
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -500,6 +533,17 @@ m
 </tr>
 <tr>
 <td>
+<em>x<sub>cs</sub>,y<sub>cs</sub></em>
+</td>
+<td>
+The Set of X and Y Coordinates: describe the vertices of the critical slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>x<sub>slip</sub></em>
 </td>
 <td>
@@ -511,10 +555,10 @@ m
 </tr>
 <tr>
 <td>
-<em>x<sub>us</sub></em>
+<em>x<sub>slope</sub></em>
 </td>
 <td>
-X Ordinate: distance of the edge of the slope at i, refers to either slice i midpoint, or slice interface i
+Slope X-Ordinate: x-ordinate of a point on the slope
 </td>
 <td>
 m
@@ -533,10 +577,10 @@ m
 </tr>
 <tr>
 <td>
-<em>y<sub>us</sub></em>
+<em>y<sub>slope</sub></em>
 </td>
 <td>
-Y Ordinate: height of the top of the slope at i, refers to either slice i midpoint, or slice interface i
+Slope Y-Ordinate: y-ordinate of a point on the slope
 </td>
 <td>
 m
@@ -643,6 +687,17 @@ Pa
 </tr>
 <tr>
 <td>
+<em>π</em>
+</td>
+<td>
+Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>σ</em>
 </td>
 <td>
@@ -679,7 +734,7 @@ Function: generic minimization function or algorithm
 <em>Φ</em>
 </td>
 <td>
-Constant: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces
+First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces
 </td>
 <td>
 N
@@ -701,7 +756,7 @@ Effective Angle of Friction: The angle of inclination with respect to the horizo
 <em>Ψ</em>
 </td>
 <td>
-Constant: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces
+Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces
 </td>
 <td>
 N
@@ -758,6 +813,22 @@ Abbreviation
 <th>
 Full Form
 </th>
+</tr>
+<tr>
+<td>
+2D
+</td>
+<td>
+two-dimensional
+</td>
+</tr>
+<tr>
+<td>
+3D
+</td>
+<td>
+three-dimensional
+</td>
 </tr>
 <tr>
 <td>
@@ -875,10 +946,10 @@ Typical Uncertainty
 Introduction
 </h1>
 <p class="paragraph">
-A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
+A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 </p>
 <p class="paragraph">
-The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 </p>
 <div id="Sec:DocPurpose">
 <div class="subsection">
@@ -886,7 +957,7 @@ The following section provides an overview of the Software Requirements Specific
 Purpose of Document
 </h2>
 <p class="paragraph">
-The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
+The primary purpose of this document is to record the requirements of SSP and the models that will be used to meet those requirements. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in <a href=#Sec:SysConstraints>Section: System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 </p>
 <p class="paragraph">
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
@@ -899,7 +970,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h2>
 <p class="paragraph">
-The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, SSA identifies the most likely failure surface within the possible input range, and finds the factor of safety for the slope.
+The scope of the requirements includes stability analysis of a two-dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
 </p>
 </div>
 </div>
@@ -909,7 +980,7 @@ The scope of the requirements includes stability analysis of a 2 dimensional slo
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -919,10 +990,10 @@ Reviewers of this documentation should have a strong knowledge in solid mechanic
 Organization of Document
 </h2>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor <a href=#koothoor2013>koothoor2013</a> as well as Smith and Lai <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
+The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models, and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models provide the set of algebraic equations that must be solved.
 </p>
 </div>
 </div>
@@ -934,7 +1005,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
 </p>
 <div id="Sec:SysContext">
 <div class="subsection">
@@ -942,7 +1013,7 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:sysCtxDiag>sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
 <figure>
@@ -953,20 +1024,20 @@ System Context
 </figure>
 </div>
 <p class="paragraph">
-The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+The responsibilities of the user and the system are as follows:
 </p>
 <ul class="list">
 <li>
 User Responsibilities
 <ul class="list">
 <li>
-Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry
+Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP
 </li>
 <li>
 Ensure that consistent units are used for input variables
 </li>
 <li>
-Ensure required software assumptions (<a href=#Sec:Assumps>Assumptions</a>) are appropriate for any particular problem input to the software
+Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for the problem to which the user is applying the software
 </li>
 </ul>
 </li>
@@ -974,16 +1045,19 @@ Ensure required software assumptions (<a href=#Sec:Assumps>Assumptions</a>) are 
 SSP Responsibilities
 <ul class="list">
 <li>
-Detect data type mismatch, such as a string of characters  input instead of a floating point number
+Detect data type mismatch, such as a string of characters input instead of a floating point number
 </li>
 <li>
-Determine if the inputs satisfy the required physical and software constraints
+Verify that the inputs satisfy the required physical and other data constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>)
 </li>
 <li>
-Identify the most likely failure surface within the possible input range
+Identify the critical slip surface within the possible input range
 </li>
 <li>
 Find the factor of safety for the slope
+</li>
+<li>
+Find the interslice normal force and shear force along the critical slip surface
 </li>
 </ul>
 </li>
@@ -996,7 +1070,7 @@ Find the factor of safety for the slope
 User Characteristics
 </h2>
 <p class="paragraph">
-The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
+The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
 </p>
 </div>
 </div>
@@ -1006,7 +1080,7 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 System Constraints
 </h2>
 <p class="paragraph">
-There are no system constraints.
+The Morgenstern-Price method <a href=#morgenstern1965>morgenstern1965</a>, which involves dividing the slope into vertical slices, will be used to derive the equations for analysing the slope.
 </p>
 </div>
 </div>
@@ -1026,7 +1100,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope.
+SSP is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
@@ -1038,16 +1112,22 @@ This subsection provides a list of terms that are used in the subsequent section
 </p>
 <div class="list">
 <p>
-Factor of Safety: The global stability of a surface in a slope
+Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force
 </p>
 <p>
-Critical Slip Surface: Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
+Slip Surface: A surface within a slope that has the potential to fail or displace due to load or other forces.
+</p>
+<p>
+Critical Slip Surface: Slip surface of the slope that has the lowest factor of safety, and is therefore most likely to experience failure.
+</p>
+<p>
+Water Table: The upper boundary of a saturated zone in the ground.
 </p>
 <p>
 Stress: Forces that are exerted between planes internal to a larger body subject to external loading.
 </p>
 <p>
-Strain: Stress forces that result in deformation of the body/plane.
+Strain: A measure of deformation of a body or plane under stress.
 </p>
 <p>
 Normal Force: A force applied perpendicular to the plane of the material.
@@ -1056,7 +1136,22 @@ Normal Force: A force applied perpendicular to the plane of the material.
 Shear Force: A force applied parallel to the plane of the material.
 </p>
 <p>
-Plane Strain: The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominant dimensions direction are the ones that can be approximated as 0.
+Mobilized Shear Force: Shear force in the direction of potential motion, thus encouraging motion along the plane.
+</p>
+<p>
+Resistive Shear Force: Shear force in the direction opposite to the direction of potential motion, thus hindering motion along the plane.
+</p>
+<p>
+Effective Forces and Stresses: The normal force or normal stress carried by the soil skeleton. The total normal force or normal stress is composed of the effective force or stress and the force or stress exerted by water.
+</p>
+<p>
+Cohesion: An attractive force between adjacent particles that holds the matter together.
+</p>
+<p>
+Isotropy: A condition where the value of a property is independent of the direction in which it is measured.
+</p>
+<p>
+Plane Strain: A condition where the resultant stresses in one of the directions of a  three-dimensional material can be approximated as zero. This condition results when a body is constrained to not deform in one direction, or when the length of one dimension of the body dominates the others, to the point where it can be assumed as infinite. Stresses in the direction of the dominant dimension can be approximated as zero.
 </p>
 </div>
 </div>
@@ -1067,32 +1162,43 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 Physical System Description
 </h3>
 <p class="paragraph">
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:IndexConvention>IndexConvention</a>.
+The Physical System Description (PS) of SSP, as shown in <a href=#Figure:PhysicalSystem>Fig:PhysicalSystem</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
-PS1: Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from <em>1&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1</em>.
+PS1: A slope comprised of one soil layer.
 </p>
 <p>
-PS2: Slice properties convention is noted by <em>i</em>.
+PS2: A water table, which may or may not exist.
 </p>
 </div>
-<p class="paragraph">
-A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:ForceDiagram>ForceDiagram</a>.
-</p>
-<div id="Figure:IndexConvention">
+<div id="Figure:PhysicalSystem">
 <figure>
-<img src="../../../datafiles/SSP/IndexConvention.png" alt="Index convention for numbering slice and interslice force variables" >
+<img src="../../../datafiles/SSP/PhysSyst.png" alt="An example slope for analysis by SSP, where the dashed line represents the water table" >
 <figcaption>
-Index convention for numbering slice and interslice force variables
+An example slope for analysis by SSP, where the dashed line represents the water table
 </figcaption>
 </figure>
 </div>
+<p class="paragraph">
+Morgenstern-Price analysis <a href=#morgenstern1965>morgenstern1965</a> of the slope involves representing the slope as a series of vertical slices. As shown in <a href=#Figure:IndexConvention>Fig:IndexConvention</a>, the index <em>i</em> is used to denote a value for a single slice, and an interslice value at a given index <em>i</em> refers to the value between slice <em>i</em> and adjacent slice <em>i&plus;1</em>.
+</p>
+<div id="Figure:IndexConvention">
+<figure>
+<img src="../../../datafiles/SSP/IndexConvention.png" alt="Index convention for slice and interslice values" >
+<figcaption>
+Index convention for slice and interslice values
+</figcaption>
+</figure>
+</div>
+<p class="paragraph">
+A free body diagram of the forces acting on a slice is displayed in <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a>. The specific forces and symbols will be discussed in detail in <a href=#Sec:GDs>Section: General Definitions</a> and <a href=#Sec:DDs>Section: Data Definitions</a>.
+</p>
 <div id="Figure:ForceDiagram">
 <figure>
-<img src="../../../datafiles/SSP/ForceDiagram.png" alt="Forces acting on a slice" >
+<img src="../../../datafiles/SSP/ForceDiagram.png" alt="Free body diagram of forces acting on a slice" >
 <figcaption>
-Forces acting on a slice
+Free body diagram of forces acting on a slice
 </figcaption>
 </figure>
 </div>
@@ -1104,14 +1210,17 @@ Forces acting on a slice
 Goal Statements
 </h3>
 <p class="paragraph">
-Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers, the goal statements are:
+Given the shape of the soil mass, the location of the water table, and the material properties of the soil, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Evaluate the factor of safety along a given slip surface.
+GS1: Identify the critical slip surface and the corresponding factor of safety.
 </p>
 <p>
-GS2: Identify the critical slip surface for the slope, with the lowest factor of safety.
+GS2: Determine the interslice normal force between each pair of vertical slices of the slope.
+</p>
+<p>
+GS3: Determine the interslice shear force between each pair of vertical slices of the slope.
 </p>
 </div>
 </div>
@@ -1124,7 +1233,7 @@ GS2: Identify the critical slip surface for the slope, with the lowest factor of
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern SSA are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SSA are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1132,85 +1241,70 @@ The instance models that govern SSA are presented in <a href=#Sec:IMs>Instance M
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
-<ul class="hide-list-style">
-<li>
-<div id="A:Slip-Surface-Concave">
+<div class="list">
+<p>
+<div id="assumpSSC">
 Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The <em>(x,y)</em> coordinates of the failure surface follow a monotonic function.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Factor-of-Safety">
-Factor-of-Safety: The factor of safety is assumed to be constant across a whole slip surface.
+</p>
+<p>
+<div id="assumpFOS">
+Factor-of-Safety: The factor of safety is assumed to be constant across a whole slip surface. <a href=#GD:mobShr>GD: mobShr</a> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Soil-Layer-Homogeneous">
-Soil-Layer-Homogeneous: The different layers of the soil are homogeneous, with consistent soil properties throughout.
+</p>
+<p>
+<div id="assumpSLH">
+Soil-Layer-Homogeneous: The different layers of the soil are homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Soil-Properties">
-Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight.
+</p>
+<p>
+<div id="assumpSP">
+Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#IM:crtSlpId>IM: crtSlpId</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Soil-Layers-Isotropic">
-Soil-Layers-Isotropic: Soil layers are treated as if they have isotropic properties.
+</p>
+<p>
+<div id="assumpSLI">
+Soil-Layers-Isotropic: Soil layers are treated as if they have isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Interslice-Norm-Shear-Forces-Linear">
-Interslice-Norm-Shear-Forces-Linear: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>λ</em>) and an interslice force function (<em>f</em>) depending on x position.
+</p>
+<p>
+<div id="assumpINSFL">
+Interslice-Norm-Shear-Forces-Linear: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>λ</em>) and an interslice force function (<em>f</em>) depending on x position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Plane-Strain-Conditions">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+</p>
+<p>
+<div id="assumpPSC">
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:effNormF>GD: effNormF</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Effective-Norm-Stress-Large">
-Effective-Norm-Stress-Large: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+</p>
+<p>
+<div id="assumpENSL">
+Effective-Norm-Stress-Large: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. <a href=#TM:equilibrium>TM: equilibrium</a> <a href=#UC_2donly>UC: 2D-Analysis-Only</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Surface-Base-Slice-between-Interslice-Straight-Lines">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines.
+</p>
+<p>
+<div id="assumpSBSBISL">
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Seismic-Force">
-Seismic-Force: There is no seismic force acting on the slope.
+</p>
+<p>
+<div id="assumpES">
+Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. <a href=#IM:fctSfty>IM: fctSfty</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Surface-Load">
-Surface-Load: There is no imposed surface, load and therefore no external force, acting on the slope.
+</p>
+<p>
+<div id="assumpSF">
+Seismic-Force: There is no seismic force acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </div>
-</li>
-</ul>
+</p>
+<p>
+<div id="assumpSL">
+Surface-Load: There is no imposed surface, load and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+</div>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:TMs">
@@ -1221,7 +1315,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SSA is based on.
 </p>
-<div id="T:factOfSafety">
+<div id="TM:factOfSafety">
 <table class="tdefn">
 <tr>
 <th>
@@ -1238,9 +1332,8 @@ Factor of safety
 Equation
 </th>
 <td>
-<div id="Eqn:T:factOfSafety">
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
 P
 </span>
@@ -1248,7 +1341,6 @@ P
 S
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1259,7 +1351,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>P</em> is the resistive shear force (N)
@@ -1276,7 +1368,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The stability metric of the slope, known as the factor of safety (<em>FS</em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
+The stability metric of the slope, known as the factor of safety (<em>F<sub>S</sub></em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
 </p>
 </td>
 </tr>
@@ -1296,13 +1388,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:equilibrium">
+<div id="TM:equilibrium">
 <table class="tdefn">
 <tr>
 <th>
@@ -1319,10 +1411,8 @@ Equilibrium
 Equation
 </th>
 <td>
-<div id="Eqn:T:equilibrium">
 <div class="equation">
 <em>&sum;F<sub>x</sub> = &sum;F<sub>y</sub> = &sum;M = 0</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1350,7 +1440,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#A:Effective-Norm-Stress-Large>A: Effective-Norm-Stress-Large</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
+For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#assumpENSL>A: Effective-Norm-Stress-Large</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
 </p>
 </td>
 </tr>
@@ -1370,13 +1460,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:mcShrStrgth">
+<div id="TM:mcShrStrgth">
 <table class="tdefn">
 <tr>
 <th>
@@ -1393,10 +1483,8 @@ Mohr-Coulumb shear strength
 Equation
 </th>
 <td>
-<div id="Eqn:T:mcShrStrgth">
 <div class="equation">
 <em>τ = σ&#8239;tan(φ&prime;)&plus;c&prime;</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1427,7 +1515,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
+For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the effective cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
 </p>
 </td>
 </tr>
@@ -1447,13 +1535,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:resShr>GD: resShr</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:effStress">
+<div id="TM:effStress">
 <table class="tdefn">
 <tr>
 <th>
@@ -1470,10 +1558,8 @@ Effective stress
 Equation
 </th>
 <td>
-<div id="Eqn:T:effStress">
 <div class="equation">
 <em>σ = σ&minus;μ</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1518,7 +1604,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -1551,10 +1637,8 @@ Normal force equilibrium
 Equation
 </th>
 <td>
-<div id="Eqn:GD:normForcEq">
 <div class="equation">
-<em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)</em>
-</div>
+<em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1598,7 +1682,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 </ul>
 </td>
@@ -1609,7 +1693,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#T:equilibrium>T: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>ForceDiagram</a> in <a href=#Sec:PhysSyst>Physical System Description</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
 </p>
 </td>
 </tr>
@@ -1629,7 +1713,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -1652,10 +1736,8 @@ Base shear force equilibrium
 Equation
 </th>
 <td>
-<div id="Eqn:GD:bsShrFEq">
 <div class="equation">
-<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
+<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1699,7 +1781,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 </ul>
 </td>
@@ -1710,7 +1792,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#T:equilibrium>T: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>ForceDiagram</a> in <a href=#Sec:PhysSyst>Physical System Description</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
 </p>
 </td>
 </tr>
@@ -1730,7 +1812,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -1753,10 +1835,8 @@ Resistive shear force
 Equation
 </th>
 <td>
-<div id="Eqn:GD:resShr">
 <div class="equation">
 <em>P<sub>i</sub> = N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1796,7 +1876,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The Mohr-Coulomb resistive shear strength of a slice <em>τ</em> from <a href=#T:mcShrStrgth>T: mcShrStrgth</a> is multiplied by the area <em>b&#8239;sec(α)&sdot;1</em> to obtain the resistive shear force <em>P</em>. Note the extra <em>1</em> is to represent a unit of width which is multiplied by the total base length of a slice <em>ℓ<sub>b</sub></em> of the plane where the normal occurs, where <em>ℓ<sub>b</sub> = b&#8239;sec(α)</em> and <em>b</em> is the x width of the base. This accounts for the effective normal force <em>N&prime; = N&minus;U<sub>b</sub></em> of a soil from <a href=#T:effStress>T: effStress</a> where the normal stress is multiplied by the same area to obtain the effective normal force <em>σ&#8239;b&#8239;sec(α)&sdot;1 = N&prime;</em> <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> <a href=#A:Soil-Properties>A: Soil-Properties</a> <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
+The Mohr-Coulomb resistive shear strength of a slice <em>τ</em> from <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> is multiplied by the area <em>b&#8239;sec(α)</em> to obtain the resistive shear force <em>P</em>. Note the extra <em>1</em> is to represent a unit of width which is multiplied by the total base length of a slice <em>ℓ<sub>b</sub></em> of the plane where the normal occurs, where <em>ℓ<sub>b</sub> = b&#8239;sec(α)</em> and <em>b</em> is the x width of the base. This accounts for the effective normal force <em>N&prime; = N&minus;U<sub>b</sub></em> of a soil from <a href=#TM:effStress>TM: effStress</a> where the normal stress is multiplied by the same area to obtain the effective normal force <em>σ&#8239;b&#8239;sec(α) = N&prime;</em> <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> <a href=#assumpSP>A: Soil-Properties</a> <a href=#assumpSLI>A: Soil-Layers-Isotropic</a>
 </p>
 </td>
 </tr>
@@ -1816,7 +1896,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
@@ -1839,24 +1919,22 @@ Mobile shear force
 Equation
 </th>
 <td>
-<div id="Eqn:GD:mobShr">
 <div class="equation">
 <em>S<sub>i</sub> = <div class="fraction">
 <span class="fup">
 P<sub>i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div> = <div class="fraction">
 <span class="fup">
 N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -1876,7 +1954,7 @@ Description
 <em>P</em> is the resistive shear force (N)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>N&prime;</em> is the effective normal force (N)
@@ -1902,7 +1980,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-From the definition of the factor of safety in <a href=#T:factOfSafety>T: factOfSafety</a>, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (<a href=#GD:resShr>GD: resShr</a>) divided by the factor of safety <em>FS</em>. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> <a href=#A:Soil-Properties>A: Soil-Properties</a> <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
+From the definition of the factor of safety in <a href=#TM:factOfSafety>TM: factOfSafety</a>, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (<a href=#GD:resShr>GD: resShr</a>) divided by the factor of safety <em>F<sub>S</sub></em>. <a href=#assumpFOS>A: Factor-of-Safety</a> <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> <a href=#assumpSP>A: Soil-Properties</a> <a href=#assumpSLI>A: Soil-Layers-Isotropic</a>
 </p>
 </td>
 </tr>
@@ -1922,7 +2000,260 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GD:effNormF">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Effective normal force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>N&prime;<sub>i</sub> = N<sub>i</sub>&minus;U<sub>b,i</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>N&prime;</em> is the effective normal force (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>N</em> is the normal force (N)
+</li>
+<li>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+Derived by substituting <a href=#DD:stress>DD: stress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the z-direction.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GD:resShearWO">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Resistive shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>R</em> is the resistive shear force (N)
+</li>
+<li>
+<em>W</em> is the weight (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</li>
+<li>
+<em>β</em> is the angle (&deg;)
+</li>
+<li>
+<em>Q</em> is the imposed surface load (N)
+</li>
+<li>
+<em>ω</em> is the angle (&deg;)
+</li>
+<li>
+<em>α</em> is the angle (&deg;)
+</li>
+<li>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</li>
+<li>
+<em>ΔH</em> is the difference between interslice forces (N)
+</li>
+<li>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</li>
+<li>
+<em>φ&prime;</em> is the effective angle of friction (&deg;)
+</li>
+<li>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GD:mobShearWO">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Mobilized shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>T</em> is the mobilized shear force (N)
+</li>
+<li>
+<em>W</em> is the weight (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</li>
+<li>
+<em>β</em> is the angle (&deg;)
+</li>
+<li>
+<em>Q</em> is the imposed surface load (N)
+</li>
+<li>
+<em>ω</em> is the angle (&deg;)
+</li>
+<li>
+<em>α</em> is the angle (&deg;)
+</li>
+<li>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</li>
+<li>
+<em>ΔH</em> is the difference between interslice forces (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -1945,10 +2276,8 @@ Interslice normal/shear relationship
 Equation
 </th>
 <td>
-<div id="Eqn:GD:normShrR">
 <div class="equation">
 <em>X = λ&#8239;f&#8239;G</em>
-</div>
 </div>
 </td>
 </tr>
@@ -1965,7 +2294,7 @@ Description
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>G</em> is the interslice normal force (N)
@@ -1979,7 +2308,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The assumption for the Morgenstern Price method (<a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a>) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>G</em> by a proportionality constant <em>λ</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant
+The assumption for the Morgenstern Price method (<a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>G</em> by a proportionality constant <em>λ</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant
 </p>
 </td>
 </tr>
@@ -1999,7 +2328,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -2022,7 +2351,6 @@ Moment equilibrium
 Equation
 </th>
 <td>
-<div id="Eqn:GD:momentEql">
 <div class="equation">
 <em>0 = &minus;G<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
 <span class="fup">
@@ -2068,7 +2396,6 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </span>
 </div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub></em>
 </div>
-</div>
 </td>
 </tr>
 <tr>
@@ -2093,7 +2420,7 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>X</em> is the interslice shear force (N)
@@ -2105,7 +2432,7 @@ Description
 <em>W</em> is the weight (N)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N)
@@ -2128,7 +2455,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the moment equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>. <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a>
+For a slice of mass in the slope the moment equilibrium to satisfy <a href=#TM:equilibrium>TM: equilibrium</a> in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Section: Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Section: Physical System Description</a>. Variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>. <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
 </p>
 </td>
 </tr>
@@ -2148,7 +2475,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
 </p>
 </td>
 </tr>
@@ -2201,29 +2528,27 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:sliceWght">
 <div class="equation">
 <em>W = b<sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>us,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>us,i</sub>
+(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
 </span>
 </span>
 <span>
-(y<sub>us,i</sub>&minus;y<sub>wt,i</sub>)&#8239;γ&plus;(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>us,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+(y<sub>slope,i</sub>&minus;y<sub>wt,i</sub>)&#8239;γ&plus;(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 <span>
-(y<sub>us,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ , <span class="case">
+(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ , <span class="case">
 y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2243,7 +2568,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>y<sub>slip</sub></em> is the y ordinate (m)
@@ -2276,7 +2601,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:momentEql>GD: momentEql</a>.
 </p>
 </td>
 </tr>
@@ -2319,7 +2644,6 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:baseWtrF">
 <div class="equation">
 <em>U<sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
 {
@@ -2336,7 +2660,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2373,7 +2696,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -2393,7 +2716,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2436,24 +2759,22 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:surfWtrF">
 <div class="equation">
 <em>U<sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>wt,i</sub>&minus;y<sub>us,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>us,i</sub>
+(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slope,i</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
+y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slope,i</sub>
 </span>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2476,7 +2797,7 @@ Description
 <em>y<sub>wt</sub></em> is the y ordinate (m)
 </li>
 <li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -2490,7 +2811,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -2510,7 +2831,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2524,7 +2845,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice water force
+Interslice normal water force
 </p>
 </td>
 </tr>
@@ -2553,7 +2874,6 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:intersliceWtrF">
 <div class="equation">
 <em>H = <span class="casebr">
 {
@@ -2562,13 +2882,13 @@ Equation
 <span>
 <div class="fraction">
 <span class="fup">
-(y<sub>us,i</sub>&minus;y<sub>slip,i</sub>)<sup>2</sup>
+(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)<sup>2</sup>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;γ<sub>Sat</sub>&plus;(y<sub>wt,i</sub>&minus;y<sub>us,i</sub>)<sup>2</sup>&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>us,i</sub>
+</div>&#8239;γ<sub>Sat</sub>&plus;(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)<sup>2</sup>&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
 </span>
 </span>
 <span>
@@ -2580,7 +2900,7 @@ y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>us,i</sub>
 2
 </span>
 </div>&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>us,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 <span>
@@ -2589,7 +2909,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2600,10 +2919,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -2636,7 +2955,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2679,7 +2998,6 @@ Units
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angleA">
 <div class="equation">
 <em>α = <div class="fraction">
 <span class="fup">
@@ -2689,7 +3007,6 @@ y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2720,7 +3037,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -2740,7 +3057,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2783,17 +3100,15 @@ Units
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angleB">
 <div class="equation">
 <em>β = <div class="fraction">
 <span class="fup">
-y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
+y<sub>slope,i</sub>&minus;y<sub>slope,i&minus;1</sub>
 </span>
 <span class="fdn">
-x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
+x<sub>slope,i</sub>&minus;x<sub>slope,i&minus;1</sub>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2807,13 +3122,13 @@ Description
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>x<sub>us</sub></em> is the x ordinate (m)
+<em>x<sub>slope</sub></em> is the slope x-ordinate (m)
 </li>
 </ul>
 </td>
@@ -2824,7 +3139,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -2844,7 +3159,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2887,10 +3202,8 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:lengthB">
 <div class="equation">
 <em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2928,7 +3241,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2971,10 +3284,8 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:lengthLb">
 <div class="equation">
 <em>ℓ<sub>b</sub> = b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
-</div>
 </div>
 </td>
 </tr>
@@ -3005,7 +3316,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -3025,7 +3336,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3068,10 +3379,8 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:lengthLs">
 <div class="equation">
 <em>ℓ<sub>s</sub> = b<sub>i</sub>&#8239;sec(β<sub>i</sub>)</em>
-</div>
 </div>
 </td>
 </tr>
@@ -3102,7 +3411,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
 </p>
 </td>
 </tr>
@@ -3122,13 +3431,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#GD:momentEql>GD: momentEql</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:seismicLoadF">
+<div id="DD:slcHeight">
 <table class="ddefn">
 <tr>
 <th>
@@ -3136,7 +3445,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Earthquake load factor
+Y-direction height of a slice
 </p>
 </td>
 </tr>
@@ -3146,7 +3455,198 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>c</sub></em>
+<em>h</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>h = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(h<sup>R</sup>&plus;h<sup>L</sup>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>h</em> is the y-direction height of a slice (m)
+</li>
+<li>
+<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
+</li>
+<li>
+<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the surface and base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
+</p>
+<p class="paragraph">
+<em>h<sup>R</sup></em> and <em>h<sup>L</sup></em> are defined in <a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a> and <a href=#DD:sliceHghtLeftDD>DD: sliceHghtLeftDD</a>, respectively.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:stress">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Normal stress
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>σ</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Pa
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>σ = <div class="fraction">
+<span class="fup">
+<b>F</b>
+</span>
+<span class="fdn">
+A
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>σ</em> is the normal stress (Pa)
+</li>
+<li>
+<em><b>F</b></em> is the force (N)
+</li>
+<li>
+<em>A</em> is the area (m<sup>2</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#huston2008>huston2008</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#GD:effNormF>GD: effNormF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:ratioVariation">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Interslice normal to shear force ratio variation function
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>f</em>
 </p>
 </td>
 </tr>
@@ -3165,10 +3665,29 @@ Unitless
 Equation
 </th>
 <td>
-<div id="Eqn:DD:seismicLoadF">
 <div class="equation">
-<em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
-</div>
+<em>f = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+1 , <span class="case">
+const_f
+</span>
+</span>
+<span>
+sin(π&#8239;<div class="fraction">
+<span class="fup">
+x<sub>slip,i</sub>&minus;x<sub>slip,0</sub>
+</span>
+<span class="fdn">
+x<sub>slip,n</sub>&minus;x<sub>slip,0</sub>
+</span>
+</div>) , <span class="case">
+&not;const_f
+</span>
+</span>
+</div></em>
 </div>
 </td>
 </tr>
@@ -3179,16 +3698,22 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>π</em> is the circumference to diameter ratio (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>x<sub>slip</sub></em> is the x ordinate (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>n</em> is the number of slices (Unitless)
+</li>
+<li>
+<em>const_f</em> is the decision on f (Unitless)
 </li>
 </ul>
 </td>
@@ -3209,13 +3734,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:surfLoads">
+<div id="DD:convertFunc1">
 <table class="ddefn">
 <tr>
 <th>
@@ -3223,7 +3748,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Imposed surface load
+First function for incorporating interslice forces into shear force
 </p>
 </td>
 </tr>
@@ -3233,7 +3758,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>Q</em>
+<em>Φ</em>
 </p>
 </td>
 </tr>
@@ -3252,10 +3777,8 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:surfLoads">
 <div class="equation">
-<em>Q = Q<sub>i</sub>&#8239;ω<sub>i</sub></em>
-</div>
+<em>Φ = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub></em>
 </div>
 </td>
 </tr>
@@ -3266,241 +3789,27 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#chen2005>chen2005</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:intrsliceF">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Interslice shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>X</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:intrsliceF">
-<div class="equation">
-<em>X = λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>X</em> is the interslice shear force (N)
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#chen2005>chen2005</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:resShearWO">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Resistive shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>R</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:resShearWO">
-<div class="equation">
-<em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>R</em> is the resistive shear force (N)
-</li>
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</li>
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
 </li>
 <li>
 <em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>ΔH</em> is the difference between interslice forces (N)
-</li>
-<li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
 </li>
 <li>
-<em>c&prime;</em> is the effective cohesion (Pa)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 </ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a>
-</p>
-<p class="paragraph">
-<a href=#A:Soil-Properties>A: Soil-Properties</a>
-</p>
-<p class="paragraph">
-<a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
-</p>
 </td>
 </tr>
 <tr>
@@ -3509,7 +3818,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#chen2005>chen2005</a>
+<a href=#chen2005>chen2005</a> and <a href=#karchewski2012>karchewski2012</a>
 </p>
 </td>
 </tr>
@@ -3519,45 +3828,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<p class="paragraph">
-The resistive shear force of a slice is defined as <em>P</em> in <a href=#GD:resShr>GD: resShr</a>. The effective normal force in the equation for <em>P</em> of the soil is defined in the perpendicular force equilibrium of a slice from <a href=#GD:bsShrFEq>GD: bsShrFEq</a>, using the effective normal force <em>N&prime;</em> of <a href=#T:effStress>T: effStress</a> shown in equation (1):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
-</div>
-</div>
-<p class="paragraph">
-The values of the interslice forces <em>G</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>N*<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
-</div>
-</div>
-<p class="paragraph">
-Using <em>N*</em>, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>R<sub>i</sub> = N*<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>) = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
-</div>
-</div>
-<p class="paragraph">
-This can be further simplified by considering assumptions <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (4):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>R<sub>i</sub> = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
-</div>
-</div>
-<div id="DD:mobShearWO">
+<div id="DD:convertFunc2">
 <table class="ddefn">
 <tr>
 <th>
@@ -3565,7 +3842,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mobilized shear force
+Second function for incorporating interslice forces into shear force
 </p>
 </td>
 </tr>
@@ -3575,7 +3852,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>T</em>
+<em>Ψ</em>
 </p>
 </td>
 </tr>
@@ -3594,10 +3871,15 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:mobShearWO">
 <div class="equation">
-<em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
+<em>Ψ = <div class="fraction">
+<span class="fup">
+(λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>
+</span>
+<span class="fdn">
+Φ<sub>i&minus;1</sub>
+</span>
+</div></em>
 </div>
 </td>
 </tr>
@@ -3608,52 +3890,30 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>T</em> is the mobilized shear force (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+</li>
+<li>
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</li>
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-<li>
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>φ&prime;</em> is the effective angle of friction (&deg;)
 </li>
 <li>
-<em>ΔH</em> is the difference between interslice forces (N)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
+</li>
+<li>
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 </ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a>
-</p>
-<p class="paragraph">
-<a href=#A:Soil-Properties>A: Soil-Properties</a>
-</p>
-<p class="paragraph">
-<a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
-</p>
 </td>
 </tr>
 <tr>
@@ -3662,7 +3922,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#chen2005>chen2005</a>
+<a href=#chen2005>chen2005</a> and <a href=#karchewski2012>karchewski2012</a>
 </p>
 </td>
 </tr>
@@ -3672,37 +3932,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<p class="paragraph">
-The mobilized shear force acting on a slice is defined as <em>S</em> from the force equilibrium in <a href=#GD:bsShrFEq>GD: bsShrFEq</a>, also shown in equation (5):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
-</div>
-<p class="paragraph">
-The equation is unsolvable, containing the unknown interslice normal force <em>G</em> and interslice shear force <em>X</em>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force <em>T</em>, as done in equation (6):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
-</div>
-<p class="paragraph">
-The values of <em>T</em> is now defined completely in terms of the known values. This can be further simplified by considering assumptions <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (7):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
-</div>
-<div id="DD:fixme1">
+<div id="DD:nrmForceSumDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -3710,7 +3946,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Sum of the interslice normal forces
 </p>
 </td>
 </tr>
@@ -3720,7 +3956,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme1Please</em>
+<em>F<sub>x</sub><sup>G</sup></em>
 </p>
 </td>
 </tr>
@@ -3730,7 +3966,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+N
 </p>
 </td>
 </tr>
@@ -3739,10 +3975,8 @@ Unitless
 Equation
 </th>
 <td>
-<div id="Eqn:DD:fixme1">
 <div class="equation">
-<em>SpencerFixme1Please = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
-</div>
+<em>F<sub>x</sub><sup>G</sup> = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -3753,7 +3987,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
 <em>G</em> is the interslice normal force (N)
@@ -3780,13 +4014,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:fixme2">
+<div id="DD:watForceSumDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -3794,7 +4028,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Fixme
+Sum of the interslice normal water forces
 </p>
 </td>
 </tr>
@@ -3804,7 +4038,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme2Please</em>
+<em>F<sub>x</sub><sup>H</sup></em>
 </p>
 </td>
 </tr>
@@ -3814,7 +4048,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+N
 </p>
 </td>
 </tr>
@@ -3823,10 +4057,8 @@ Unitless
 Equation
 </th>
 <td>
-<div id="Eqn:DD:fixme2">
 <div class="equation">
-<em>SpencerFixme2Please = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
-</div>
+<em>F<sub>x</sub><sup>H</sup> = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -3837,10 +4069,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3864,7 +4096,177 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:sliceHghtRightDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Height of the right side of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sup>R</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>h<sup>R</sup> = y<sub>slope,i</sub>&minus;y<sub>slip,i</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:slcHeight>DD: slcHeight</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:sliceHghtLeftDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Height of the left side of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sup>L</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>h<sup>L</sup> = y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:slcHeight>DD: slcHeight</a>.
 </p>
 </td>
 </tr>
@@ -3878,7 +4280,7 @@ FIXME: This needs to be filled in
 Instance Models
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
 <div id="IM:fctSfty">
 <table class="idefn">
@@ -3898,7 +4300,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>, <em>v</em>
+<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -3908,7 +4310,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>FS</em>
+<em>F<sub>S</sub></em>
 </p>
 </td>
 </tr>
@@ -3931,31 +4333,15 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:IM:fctSfty">
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
-<span class="fup">
-Ψ<sub>u</sub>
+&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
 </span>
 <span class="fdn">
-Φ<sub>u</sub>
-</span>
-</div>&plus;R<sub>n</sub>
-</span>
-<span class="fdn">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
-<span class="fup">
-Ψ<sub>u</sub>
-</span>
-<span class="fdn">
-Φ<sub>u</sub>
-</span>
-</div>&plus;T<sub>n</sub>
+&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;T<sub>n</sub>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -3966,7 +4352,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>R</em> is the resistive shear force (N)
@@ -3975,13 +4361,10 @@ Description
 <em>v</em> is the local index (Unitless)
 </li>
 <li>
-<em>Ψ</em> is the constant (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>u</em> is the local index (Unitless)
-</li>
-<li>
-<em>Φ</em> is the constant (N)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -3998,7 +4381,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants <em>Φ</em> and <em>Ψ</em> convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> <a href=#A:Seismic-Force>A: Seismic-Force</a> <a href=#A:Surface-Load>A: Surface-Load</a>
+
 </p>
 </td>
 </tr>
@@ -4008,7 +4391,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#chen2005>chen2005</a>
+<a href=#chen2005>chen2005</a> and <a href=#karchewski2012>karchewski2012</a>
 </p>
 </td>
 </tr>
@@ -4018,43 +4401,209 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
 <p class="paragraph">
-Using equation (21) from <a href=#IM:intsliceFs>IM: intsliceFs</a>, rearranging, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
+The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding equation (1) below:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
 <span class="fup">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
-<span class="fup">
-Ψ<sub>u</sub>
+N&prime;<sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
-Φ<sub>u</sub>
-</span>
-</div>&plus;R<sub>n</sub>
-</span>
-<span class="fdn">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
-<span class="fup">
-Ψ<sub>u</sub>
-</span>
-<span class="fdn">
-Φ<sub>u</sub>
-</span>
-</div>&plus;T<sub>n</sub>
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
+<p class="paragraph">
+An expression for the effective normal force, <em>N&prime;</em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in equation (2):
+</p>
+<div class="equation">
+<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
 </div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>FS</em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+Substituting equation (2) into equation (1) gives:
+</p>
+<div class="equation">
+<em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<span class="fup">
+((W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+</span>
+<span class="fdn">
+F<sub>S</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+Since the interslice shear force <em>X</em> and interslice normal force <em>G</em> are unknown, they are separated from the other terms as follows:
+</p>
+<div class="equation">
+<em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>) = <div class="fraction">
+<span class="fup">
+((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+</span>
+<span class="fdn">
+F<sub>S</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
+</p>
+<div class="equation">
+<em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>) = <div class="fraction">
+<span class="fup">
+((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+</span>
+<span class="fdn">
+F<sub>S</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+The definitions of <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> are present in this equation, and thus can be replaced by <em>R<sub>i</sub></em> and <em>T<sub>i</sub></em>, respectively:
+</p>
+<div class="equation">
+<em>T<sub>i</sub>&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<span class="fup">
+R<sub>i</sub>&plus;((&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
+</span>
+<span class="fdn">
+F<sub>S</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+The interslice shear force <em>X</em> can be expressed in terms of the interslice normal force <em>G</em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
+</p>
+<div class="equation">
+<em>T<sub>i</sub>&plus;(&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>)&#8239;sin(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<span class="fup">
+R<sub>i</sub>&plus;((&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
+</span>
+<span class="fdn">
+F<sub>S</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+Rearranging yields the following:
+</p>
+<div class="equation">
+<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+</div>
+<p class="paragraph">
+The definitions for <em>Φ</em> and <em>Ψ</em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to equation (3):
+</p>
+<div class="equation">
+<em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+</div>
+<p class="paragraph">
+Versions of equation (3) instantiated for slices 1 to <em>n</em> are shown below:
+</p>
+<div class="equation">
+<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = Ψ<sub>0</sub>&#8239;G<sub>0</sub>&#8239;Φ<sub>0</sub>&plus;F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+</div>
+<div class="equation">
+<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;G<sub>1</sub>&#8239;Φ<sub>1</sub>&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+</div>
+<div class="equation">
+<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;G<sub>2</sub>&#8239;Φ<sub>2</sub>&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+</div>
+<p class="paragraph">
+...
+</p>
+<div class="equation">
+<em>G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub> = Ψ<sub>n&minus;3</sub>&#8239;G<sub>n&minus;3</sub>&#8239;Φ<sub>n&minus;3</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub></em>
+</div>
+<div class="equation">
+<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+</div>
+<div class="equation">
+<em>G<sub>n</sub>&#8239;Φ<sub>n</sub> = Ψ<sub>n&minus;1</sub>&#8239;G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub></em>
+</div>
+<p class="paragraph">
+Applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, results in the following special cases: equation (8) for the first slice:
+</p>
+<div class="equation">
+<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+</div>
+<p class="paragraph">
+and equation (9) for the <em>n</em>th slice:
+</p>
+<div class="equation">
+<em>&minus;(<div class="fraction">
+<span class="fup">
+F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+</span>
+<span class="fdn">
+Ψ<sub>n&minus;1</sub>
+</span>
+</div>) = G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub></em>
+</div>
+<p class="paragraph">
+Substituting equation (8) into equation (4) yields equation (10):
+</p>
+<div class="equation">
+<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+</div>
+<p class="paragraph">
+which can be substituted into equation (5) to get equation (11):
+</p>
+<div class="equation">
+<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+</div>
+<p class="paragraph">
+and so on until equation (12) is obtained from equation (7):
+</p>
+<div class="equation">
+<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+</div>
+<p class="paragraph">
+equation (9) can then be substituted into the left-hand side of equation (12), resulting in:
+</p>
+<div class="equation">
+<em>&minus;(<div class="fraction">
+<span class="fup">
+F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+</span>
+<span class="fdn">
+Ψ<sub>n&minus;1</sub>
+</span>
+</div>) = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+</div>
+<p class="paragraph">
+This can be rearranged by multiplying boths sides by <em>Ψ<sub>n&minus;1</sub></em> and then distributing the multiplication of each <em>Ψ</em> over addition to obtain:
+</p>
+<div class="equation">
+<em>&minus;(F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub>)</em>
+</div>
+<p class="paragraph">
+The multiplication of the <em>Ψ</em> terms can be further distributed over the subtractins, resulting in the equation having terms that each either contain an <em>R</em> or a <em>T</em>. The equation can then be rearranged so terms containing an <em>R</em> are on one side of the equality, and terms containing a <em>T</em> are on the other. The multiplication by the factor of safety is common to all of the <em>T</em> terms, and thus can be factored out, resulting in:
+</p>
+<div class="equation">
+<em>F<sub>S</sub>&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
+</div>
+<p class="paragraph">
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
+</p>
+<div class="equation">
+<em>F<sub>S</sub> = <div class="fraction">
+<span class="fup">
+&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
+</span>
+<span class="fdn">
+&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;T<sub>n</sub>
+</span>
+</div></em>
+</div>
+<p class="paragraph">
+<em>F<sub>S</sub></em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>).
 </p>
 <div id="IM:nrmShrFor">
 <table class="idefn">
@@ -4093,10 +4642,8 @@ Output
 Input Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
-<em>SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
-</div>
+<em>F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
 </div>
 </td>
 </tr>
@@ -4105,10 +4652,8 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
-<em>0&thinsp;&lt;&thinsp;SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
-</div>
+<em>0&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
 </div>
 </td>
 </tr>
@@ -4117,7 +4662,6 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:IM:nrmShrFor">
 <div class="equation">
 <em>C1<sub>i</sub> = <span class="casebr">
 {
@@ -4129,7 +4673,7 @@ i = 1
 </span>
 </span>
 <span>
-b<sub>i</sub>&#8239;(SpencerFixme1Please&plus;SpencerFixme2Please)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
+b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
 2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
 </span>
 </span>
@@ -4166,7 +4710,6 @@ i = 1
 </span>
 </div></em>
 </div>
-</div>
 </td>
 </tr>
 <tr>
@@ -4185,7 +4728,7 @@ Description
 <em>G</em> is the interslice normal force (N)
 </li>
 <li>
-<em>H</em> is the interslice water force (N)
+<em>H</em> is the interslice normal water force (N)
 </li>
 <li>
 <em>α</em> is the angle (&deg;)
@@ -4194,13 +4737,13 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
+<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>h</em> is the midpoint height (m)
+<em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
@@ -4227,7 +4770,7 @@ Description
 <em>C2<sub>i</sub></em> is the interslice shear force function (N&sdot;m)
 </li>
 <li>
-<em>f</em> is the scaling function (Unitless)
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -4241,7 +4784,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice.
+<em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice. <em>F<sub>x</sub><sup>G</sup></em> and <em>F<sub>x</sub><sup>H</sup></em> are defined in <a href=#DD:nrmForceSumDD>DD: nrmForceSumDD</a> and <a href=#DD:watForceSumDD>DD: watForceSumDD</a>, respectively.
 </p>
 </td>
 </tr>
@@ -4261,16 +4804,15 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
 <p class="paragraph">
-From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a> equation equation (9) can be derived:
+From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a> equation equation (9) can be derived:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>0 = &minus;G<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
 <span class="fup">
@@ -4316,11 +4858,9 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </span>
 </div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub></em>
 </div>
-</div>
 <p class="paragraph">
 Rearranging the equation in terms of <em>λ</em> leads to equation (10):
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
@@ -4373,21 +4913,18 @@ b<sub>i</sub>
 </span>
 </div></em>
 </div>
-</div>
 <p class="paragraph">
-Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, and removing the seismic and external forces due to <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, a general equation for the constant <em>λ</em> is developed in equation (11), also found in <a href=#IM:nrmShrFor>IM: nrmShrFor</a>:
+Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, and removing the seismic and external forces due to <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, a general equation for the constant <em>λ</em> is developed in equation (11), also found in <a href=#IM:nrmShrFor>IM: nrmShrFor</a>:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>λ<sub>i</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(SpencerFixme1Please&plus;SpencerFixme2Please)&#8239;tan(α<sub>i</sub>)&plus;h<sub>i</sub>&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))
+&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h<sub>i</sub>&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))
 </span>
 <span class="fdn">
 &sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)
 </span>
 </div></em>
-</div>
 </div>
 <p class="paragraph">
 equation (11) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
@@ -4410,7 +4947,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>i</em>, <em>FS</em>, <em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>
+<em>i</em>, <em>F<sub>S</sub></em>, <em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>
 </p>
 </td>
 </tr>
@@ -4443,7 +4980,6 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:IM:intsliceFs">
 <div class="equation">
 <em>G<sub>i</sub> = <span class="casebr">
 {
@@ -4452,7 +4988,7 @@ Equation
 <span>
 <div class="fraction">
 <span class="fup">
-FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>
+F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>
 </span>
 <span class="fdn">
 Φ<sub>1</sub>
@@ -4464,7 +5000,7 @@ i = 1
 <span>
 <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
 </span>
 <span class="fdn">
 Φ<sub>i</sub>
@@ -4479,7 +5015,6 @@ i = 0 &or; i = n
 </span>
 </span>
 </div></em>
-</div>
 </div>
 </td>
 </tr>
@@ -4496,7 +5031,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>T</em> is the mobilized shear force (N)
@@ -4505,10 +5040,10 @@ Description
 <em>R</em> is the resistive shear force (N)
 </li>
 <li>
-<em>Φ</em> is the constant (N)
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 <li>
-<em>Ψ</em> is the constant (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -4522,7 +5057,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The value of the interslice normal force <em>G</em> at interface <em>i</em> The net force. is the weight of the slices adjacent to interface <em>i</em> exert horizontally on each other. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Seismic-Force>A: Seismic-Force</a> <a href=#A:Surface-Load>A: Surface-Load</a>
+The value of the interslice normal force <em>G</em> at interface <em>i</em> The net force. is the weight of the slices adjacent to interface <em>i</em> exert horizontally on each other. <a href=#assumpFOS>A: Factor-of-Safety</a> <a href=#assumpSF>A: Seismic-Force</a> <a href=#assumpSL>A: Surface-Load</a>
 </p>
 </td>
 </tr>
@@ -4542,70 +5077,58 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
 <p class="paragraph">
-Substituting the normal force equilibrium of <a href=#GD:normForcEq>GD: normForcEq</a> and the assumption <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> represented by <a href=#GD:momentEql>GD: momentEql</a> into the effective normal force definition from <a href=#GD:normShrR>GD: normShrR</a> yields equation equation (12):
+Substituting the normal force equilibrium of <a href=#GD:normForcEq>GD: normForcEq</a> and the assumption <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> represented by <a href=#GD:momentEql>GD: momentEql</a> into the effective normal force definition from <a href=#GD:normShrR>GD: normShrR</a> yields equation equation (12):
 </p>
-<div id="Eqn:empty">
 <div class="equation">
-<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
-</div>
+<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
 </div>
 <p class="paragraph">
 Taking the base shear force equilibrium of <a href=#GD:bsShrFEq>GD: bsShrFEq</a> with the definition of mobilized shear force from <a href=#GD:mobShr>GD: mobShr</a> and the assumption of <a href=#GD:normShrR>GD: normShrR</a>, the equilibrium equation can be rewritten as equation (17):
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
 N<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
-</div> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
-</div>
-</div>
-<p class="paragraph">
-Substituting the equation for <em>N&prime;</em> from equation (16) <a href=#DD:resShearWO>DD: resShearWO</a> and <a href=#DD:mobShearWO>DD: mobShearWO</a> into equation (17) and rearranging results in equation (18):
-</p>
-<div id="Eqn:empty">
-<div class="equation">
-<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS)&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
-</div>
+</div> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
 <p class="paragraph">
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:resShearWO>DD: resShearWO</a> and <a href=#DD:mobShearWO>DD: mobShearWO</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
+Substituting the equation for <em>N&prime;</em> from equation (16) <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> into equation (17) and rearranging results in equation (18):
 </p>
-<div id="Eqn:empty">
 <div class="equation">
-<em>Φ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS</em>
+<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
-</div>
-<div id="Eqn:empty">
+<p class="paragraph">
+Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
+</p>
 <div class="equation">
-<em>Ψ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i&plus;1</sub>)&minus;sin(α<sub>i&plus;1</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i&plus;1</sub>)&minus;cos(α<sub>i&plus;1</sub>))&#8239;FS</em>
+<em>Φ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub></em>
 </div>
+<div class="equation">
+<em>Ψ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i&plus;1</sub>)&minus;sin(α<sub>i&plus;1</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i&plus;1</sub>)&minus;cos(α<sub>i&plus;1</sub>))&#8239;F<sub>S</sub></em>
 </div>
-<div id="Eqn:empty">
 <div class="equation">
 <em>G<sub>i</sub> = <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
 </span>
 <span class="fdn">
 Φ<sub>i</sub>
 </span>
 </div></em>
 </div>
-</div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>FS</em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:crtSlpId">
 <table class="idefn">
@@ -4635,7 +5158,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>FS<sub>min</sub></em>
+<em>F<sub>S</sub><sub>min</sub></em>
 </p>
 </td>
 </tr>
@@ -4658,10 +5181,8 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:IM:crtSlpId">
 <div class="equation">
-<em>FS<sub>min</sub> = Υ({x<sub>cs</sub>,y<sub>cs</sub>})</em>
-</div>
+<em>F<sub>S</sub><sub>min</sub> = Υ(x<sub>cs</sub>,y<sub>cs</sub>)</em>
 </div>
 </td>
 </tr>
@@ -4672,13 +5193,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS<sub>min</sub></em> is the minimum factor of safety (Unitless)
+<em>F<sub>S</sub><sub>min</sub></em> is the minimum factor of safety (Unitless)
 </li>
 <li>
 <em>Υ</em> is the function (Unitless)
 </li>
 <li>
-<em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> is the the set of x and y coordinates (m)
+<em>x<sub>cs</sub>,y<sub>cs</sub></em> is the the set of x and y coordinates (m)
 </li>
 </ul>
 </td>
@@ -4689,7 +5210,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety <em>FS<sub>min</sub></em> that results. <a href=#A:Soil-Properties>A: Soil-Properties</a>
+Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>x<sub>cs</sub>,y<sub>cs</sub></em> and the minimum factor of safety <em>F<sub>S</sub><sub>min</sub></em> that results. <a href=#assumpSP>A: Soil-Properties</a>
 </p>
 </td>
 </tr>
@@ -4709,7 +5230,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4723,7 +5244,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -4752,7 +5273,7 @@ Uncert.
 <em>10.0</em> Pa
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -4766,7 +5287,7 @@ Uncert.
 <em>20.0</em> N/m<sup>3</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -4780,7 +5301,7 @@ Uncert.
 <em>20.0</em> N/m<sup>3</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -4794,7 +5315,7 @@ Uncert.
 <em>9.8</em> N/m<sup>3</sup>
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 <tr>
@@ -4808,7 +5329,7 @@ Uncert.
 <em>25.0</em> &deg;
 </td>
 <td>
-10.0%
+10.0<em>%</em>
 </td>
 </tr>
 </table>
@@ -4828,10 +5349,10 @@ Physical Constraints
 </tr>
 <tr>
 <td>
-<em>FS</em>
+<em>F<sub>S</sub></em>
 </td>
 <td>
-<em>FS&thinsp;&gt;&thinsp;0</em>
+<em>F<sub>S</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 </tr>
 <tr>
@@ -4869,7 +5390,7 @@ Functional Requirements
 <div class="list">
 <p>
 <div id="readAndStore">
-Read-and-Store: Read the input file and store the data. Necessary input data summarized in <a href=#Table:inDataTable>inDataTable</a>.
+Read-and-Store: Read the input file and store the data. Necessary input data summarized in <a href=#Table:inDataTable>Table:inDataTable</a>.
 </div>
 </p>
 <p>
@@ -4914,7 +5435,7 @@ Prepare-Critical-Slip-Surface: Prepare the critical slip surface for method of s
 </p>
 <p>
 <div id="calculateFS'">
-Calculate-Final-Factor-of-Safety: Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+Calculate-Final-Factor-of-Safety: Calculate the factor of safety of the critical slip surface using the Morgenstern-Price method.
 </div>
 </p>
 <p>
@@ -5015,7 +5536,7 @@ Required Inputs
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+SSA is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 </p>
 </div>
 </div>
@@ -5029,7 +5550,7 @@ Likely Changes
 <div class="list">
 <p>
 <div id="LC_inhomogeneous">
-Calculate-Inhomogeneous-Soil-Layers: <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+Calculate-Inhomogeneous-Soil-Layers: <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 </div>
 </p>
 </div>
@@ -5046,12 +5567,12 @@ If changes were to be made with regard to the following, a different algorithm w
 <div class="list">
 <p>
 <div id="UC_normshearlinear">
-Normal-And-Shear-Linear-Only: Changes related to <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a> and <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpSLI>A: Soil-Layers-Isotropic</a> and <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
 </div>
 </p>
 <p>
 <div id="UC_2donly">
-2D-Analysis-Only: <a href=#A:Effective-Norm-Stress-Large>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+2D-Analysis-Only: <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 </div>
 </p>
 </div>
@@ -5079,28 +5600,43 @@ References
 </div>
 </li>
 <li>
+<div id="huston2008">
+[2]: Huston, Ronald and Josephs, Harold. <em>Practical stress analysis in engineering design</em>. 3st. ed., CRC Press, 2008. Print.
+</div>
+</li>
+<li>
+<div id="karchewski2012">
+[3]: Canadian Geotechnical Society, Karchewski, Brandon, Guo, Peijun, and Stolle, Dieter. "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis." <em>Proceedings of the 65th annual Canadian GeoTechnical Conference</em>. Winnipeg, MB, Canada: 2012.
+</div>
+</li>
+<li>
 <div id="koothoor2013">
-[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[4]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+</div>
+</li>
+<li>
+<div id="morgenstern1965">
+[5]: Morgenstern, N. R. and Price, P. E. "The analysis of the stability of general slip surfaces." <em>Géotechnique</em>, no. 15, January, 1965. pp. 79&ndash;93. Print.
 </div>
 </li>
 <li>
 <div id="parnasClements1986">
-[3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>
 <li>
 <div id="chen2005">
-[4]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
+[7]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
 </div>
 </li>
 <li>
 <div id="smithLai2005">
-[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 <li>
 <div id="li2010">
-[6]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
+[9]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
 </div>
 </li>
 </ul>

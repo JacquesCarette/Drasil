@@ -4,7 +4,6 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Language.Drasil.Development (UnitDefn, getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
@@ -20,9 +19,9 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
+import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
+  assumpDWPCoV, assumpSHECoV)
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
@@ -42,7 +41,7 @@ swhsGDs = [nwtnCooling, rocTempSimp]
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) 
-  [makeRef incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+  [incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
 rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
                  "rocTempSimp" [rocTempSimp_desc]
 
@@ -65,7 +64,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (makeRefS newA2) +:+.
+  S "assumed independant of", ch QT.temp, sParen (makeRef2S assumpHTCC) +:+.
   sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
   apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
   S "time-dependant thermal gradient between the environment and the object",
@@ -104,9 +103,9 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
-  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
-    phrase temp +:+ S ":"] ++
-  (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
+  S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
+    phrase temp +:+ S ":" :
+  weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns]
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
@@ -114,13 +113,13 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRefS newA3, makeRefS newA4, 
-                 makeRefS newA5, makeRefS newA6],
+    QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
+                 makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRefS t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -140,7 +139,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRefS rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   (foldlList Comma List assumps) `sC` S "we have"]
 

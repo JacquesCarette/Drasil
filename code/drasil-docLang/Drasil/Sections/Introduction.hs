@@ -2,7 +2,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
   charIntRdrF) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
@@ -10,8 +10,8 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Citations (parnasClements1986)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
-  ofThe, ofThe', refineChain)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
+  foldlList, foldlsC, foldlSP, ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
@@ -32,17 +32,17 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out", makeRefS parnasClements1986 `sC`
+  S "Parnas and Clements point out", makeCiteS parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
   [(phrase scope, phrase system), 
-  (phrase Doc.organization, phrase document), 
-  (plural characteristic, phrase intReader)])
+  (plural characteristic, phrase intReader),
+  (phrase Doc.organization, phrase document)])
 
 -------------------------
 --                    --
@@ -77,56 +77,64 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
-  where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",
-                short programName +:+ intendedPurpose]
+scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
+scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes", mainRequirement]
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [scpBody] []
+  where scpBody = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+                  S "includes" +:+. mainRequirement, S "Given the appropriate",
+                  S "inputs" `sC` short programName +:+ intendedPurpose]
 
 -- | constructor for characteristics of the intended reader subsection
--- know
--- und
 -- progName
--- appStandd
+-- assumed
+-- topic
+-- asset
 -- r
-charIntRdrF :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> Section
-charIntRdrF know und progName appStandd r = 
-  SRS.charOfIR (intReaderIntro know und progName appStandd r) []
+charIntRdrF :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> 
+  Section -> Section
+charIntRdrF progName assumed topic asset r = 
+  SRS.charOfIR (intReaderIntro progName assumed topic asset r) []
 
 --paragraph called by charIntRdrF
--- topic1     - sentence the reader should have knowledge in
--- topic2     - sentence the reader should understand
--- stdrd      - sentence of the standards the reader should be familiar with
+-- assumed    - subjects the reader is assumed to understand
+-- topic      - topic-related subjects that the reader should understand
+-- asset      - subjects that would be an asset if the reader understood them
 -- sectionRef - reference to user characteristic section
-intReaderIntro :: (Idea a) => 
-  Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
-intReaderIntro EmptyS topic2 progName stdrd sectionRef = 
-  [foldlSP [S "Reviewers of this",
-  (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRefS sectionRef)]]
-intReaderIntro topic1 topic2 progName stdrd sectionRef = 
-  [foldlSP [S "Reviewers of this",
-  (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
-  S "The reviewers should also have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRefS sectionRef)]]
+intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
+  Section -> [Contents]
+intReaderIntro progName assumed topic [] sectionRef = 
+  [foldlSP [S "Reviewers of this", (phrase documentation), 
+  S "should have an understanding of" +:+. 
+  foldlList Comma List (assumed ++ topic), S "The", (plural user), 
+  S "of", (short progName), S "can have a lower level of expertise, as", 
+  S "explained in", (makeRef2S sectionRef)]]
+intReaderIntro progName assumed topic asset sectionRef = 
+  [foldlSP [S "Reviewers of this", (phrase documentation), 
+  S "should have an understanding of" +:+. 
+  foldlList Comma List (assumed ++ topic), S "It would be an asset to",
+  S "understand" +:+. foldlList Comma List asset, S "The", (plural user), 
+  S "of", (short progName), S "can have a lower level of expertise, as", 
+  S "explained in", (makeRef2S sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
-orgSec :: NamedIdea c => Sentence -> c -> Label -> Sentence -> Section
+orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: NamedIdea c => Sentence -> c -> Label -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom,
-          S "in", makeRefS bottomSec +:+
+          S "in", makeRef2S bottomSec +:+
           S "and trace back to find any additional information they require"],
           mkParagraph $ lastS trailingSentence]
-          where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
-                lastS t = refineChain [goalStmt, thModel, inModel] +:+. t
+          where lastS EmptyS = refineChain $ zip [goalStmt, thModel, inModel]
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]
+                lastS t = refineChain (zip [goalStmt, thModel, inModel] 
+                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) 
+                  +:+. t

@@ -1,6 +1,7 @@
 module Language.Drasil.Make.Print where
 
-import Text.PrettyPrint (Doc, text, (<>), (<+>), ($+$), hsep, vcat) 
+import Prelude hiding ((<>))
+import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), hsep, vcat) 
 
 import Language.Drasil.Output.Formats (DocSpec(..))
 import Language.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
@@ -29,9 +30,13 @@ printRule _                     = error "Unimplemented makefile rule"
 printTarget :: Target -> [Dependencies] -> Doc
 printTarget nameLb deps = text (nameLb ++ ": ") <+> hsep (map text deps)
 
+lualatex :: Target -> Doc
+lualatex = text . (++) "lualatex $(TEXFLAGS) "
+
+bibtex :: Target -> Doc
+bibtex = text . (++) "-bibtex $(BIBTEXFLAGS) "
+
 -- | Renders LaTeX commands in the makefile
 printLatexCmd :: Target -> Doc
-printLatexCmd t =   tab <> text ("lualatex " ++ t) $+$
-                    tab <> text ("-bibtex " ++ t) $+$
-                    tab <> text ("lualatex " ++ t) $+$
-                    tab <> text ("lualatex " ++ t)
+printLatexCmd t = foldr (\x -> (tab <> x t $+$)) empty
+  [lualatex, bibtex, lualatex, lualatex]

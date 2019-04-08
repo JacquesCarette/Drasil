@@ -1,11 +1,13 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil hiding (ItemType, ListType, Expr, Label)
+import Language.Drasil hiding (ItemType, ListType, Expr)
+
+data LinkType = Internal | Cite2 | External
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
   | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
-  | Add | Mul | Summ | Inte | Prod | Point
+  | Add | Mul | Summ | Inte | Prod | Point | Perc
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
@@ -39,8 +41,7 @@ data Spec = E Expr
           | Spec :+: Spec -- concat
           | Sy USymb
           | Sp Special
-          | Ref RefType RefAdd Spec ShortName
-          | Ref2 RefProg RefAdd Spec ShortName
+          | Ref LinkType String Spec
           | EmptyS
           | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 

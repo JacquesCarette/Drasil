@@ -1,9 +1,8 @@
 module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new) where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
-import Drasil.GamePhysics.Assumptions (newA1, newA2, newA3, newA4, newA5, newA6,
-  newA7)
+import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
+  assumpCAJI)
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
   col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
@@ -16,12 +15,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 import Data.Drasil.Utils (fmtU, foldle1)
 
--- Labels
-l1, l2, l3 :: Label
-l1 = mkLabelSame "transMot" (Def Instance)
-l2 = mkLabelSame "rotMot" (Def Instance)
-l3 = mkLabelSame "col2D" (Def Instance)
-
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]
 
@@ -32,11 +25,10 @@ iModels_new = [im1_new, im2_new, im3_new]
 im1_new :: InstanceModel
 im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] l1
-  [transMotDesc]
+            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
 
 transMot :: RelationConcept
-transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel -- l1
+transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
 
 transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -50,14 +42,14 @@ transMotRel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
 transMotDesc, transMotLeg :: Sentence
 transMotDesc = foldlSent [S "The above equation expresses the total",
   (phrase QP.acceleration), S "of the", (phrase CP.rigidBody),
-  makeRefS newA1, makeRefS newA2, S "i as the sum of",
+  makeRef2S assumpOT, makeRef2S assumpOD, S "i as the sum of",
   (phrase QP.gravitationalAccel),
   S "(GD3) and", (phrase QP.acceleration), S "due to applied",
   (phrase QP.force), S "Fi(t) (T1). The resultant outputs are",
-  S "then obtained from this equation using", makeRefS linDispDD,
-  makeRefS linVelDD +:+. makeRefS linAccDD, S" It is currently",
-  S "assumed that there is no damping", makeRefS newA6,
-  S "or constraints", makeRefS newA7 +:+. S "involved", makeRefS ctrOfMassDD]
+  S "then obtained from this equation using", makeRef2S linDispDD,
+  makeRef2S linVelDD +:+. makeRef2S linAccDD, S" It is currently",
+  S "assumed that there is no damping", makeRef2S assumpDI,
+  S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S ctrOfMassDD]
 
 transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 
@@ -66,11 +58,11 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 im2_new :: InstanceModel
 im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
-    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] l2
+    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
   [rotMotDesc]
 
 rotMot :: RelationConcept
-rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel -- l2
+rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
@@ -83,12 +75,12 @@ rotMotRel = (sy QP.angularAccel) $= deriv
 --fixme: need referencing
 rotMotDesc, rotMotLeg :: Sentence
 rotMotDesc = foldlSent_ [S "The above equation for the total angular acceleration",
-  S "of the rigid body", makeRefS newA1, makeRefS newA2,
+  S "of the rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
   S "i is derived from T5, and the resultant outputs",
-  S "are then obtained from this equation using", makeRefS angDispDD,
-  makeRefS angVelDD +:+. makeRefS angAccelDD, S "It is",
-  S "currently assumed that there is no damping", makeRefS newA6, 
-  S "or constraints", makeRefS newA7 +:+. S "involved", makeRefS newA4]
+  S "are then obtained from this equation using", makeRef2S angDispDD,
+  makeRef2S angVelDD +:+. makeRef2S angAccelDD, S "It is",
+  S "currently assumed that there is no damping", makeRef2S assumpDI,
+  S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S assumpAD]
 
 rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 
@@ -97,11 +89,11 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 im3_new :: InstanceModel
 im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
   [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
-  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] l3
+  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] "col2D"
   [col2DDesc]
 
 col2D :: RelationConcept
-col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel -- l3
+col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
@@ -124,11 +116,11 @@ col2DRel = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
 --fixme: need referencing
 col2DDesc, col2DLeg :: Sentence
 col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
-  S "regarding rigid body", makeRefS newA1, makeRefS newA2,
-  S "collisions", makeRefS newA5, S "Again, this does not take",
-  S "damping", makeRefS newA6, S "or constraints",
-  makeRefS newA7 +:+. S "into account" +:+. makeRefS newA4,
-  makeRefS ctrOfMassDD, makeRefS impulseDD]
+  S "regarding rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
+  S "collisions", makeRef2S assumpCT, S "Again, this does not take",
+  S "damping", makeRef2S assumpDI, S "or constraints",
+  makeRef2S assumpCAJI +:+. S "into account" +:+. makeRef2S assumpAD,
+  makeRef2S ctrOfMassDD, makeRef2S impulseDD]
 
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",

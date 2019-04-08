@@ -4,16 +4,27 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{cite}
 
 \begin{document}
 \title{The Contents of (Scientific) Software}
 
 %\titlerunning{Dummy short title}%optional, please use if title is longer than one line
 
-\author{Jacques Carette}{Department of Computing and Software, McMaster University, Canada}{carette@mcmaster.ca}{orcid}{[funding]}
+%\author{Jacques Carette}{Department of Computing and Software, McMaster University, Canada}{carette@mcmaster.ca}{orcid}{[funding]}
 
-\author{W. Spencer Smith}{Department of Computing and Software, McMaster University, Canada}{smiths@mcmaster.ca}{orcid}{[funding]}
+%\author{W. Spencer Smith}{Department of Computing and Software, McMaster University, Canada}{smiths@mcmaster.ca}{orcid}{[funding]}
 
+\author{\IEEEauthorblockN{Jacques Carette}
+\IEEEauthorblockA{Department of Computing and Software\\
+McMaster University, Canada\\
+Email: carette@mcmaster.ca}
+\and
+\IEEEauthorblockN{W. Spencer Smith}
+\IEEEauthorblockA{Department of Computing and Software\\
+McMaster University, Canada\\
+Email: smiths@mcmaster.ca}
+}
 %\authorrunning{J. Carette and S. Smith}
 
 % \Copyright{Jacques Carette and W. Spencer Smith}
@@ -35,62 +46,69 @@
 \maketitle
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis orci arcu, eu mollis dolor. Aliquam eleifend suscipit lacinia. Maecenas quam mi, porta ut lacinia sed, convallis ac dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. 
- \end{abstract}
+To do when the paper is mostly written.
+\end{abstract}
 
-\section{Typesetting instructions -- please read carefully}
-Please comply with the following instructions when preparing your article for a LIPIcs proceedings volume. 
+\section{Main Ideas}
 \begin{itemize}
-\item Use pdflatex and an up-to-date LaTeX system.
-\item Use further LaTeX packages only if required. Avoid usage of packages like \verb+enumitem+, \verb+paralist+, \verb+cleverref+. Keep it simple, i.e. use as few additional packages as possible.
-\item  The \texttt{enumerate} package is preloaded, so you can use
- \verb+\begin{enumerate}[(a)]+ or the like.
-\item Add custom made macros carefully and only those which are needed in the article (i.e., do not simply add your convolute of macros collected over the years).
-\item Do not use a different main font. For example, the usage of the \verb+times+-package is forbidden.
-\item Provide full author names (especially with regard to the first name) in the \verb+\author+ macro and in the \verb+\Copyright+ macro.
-\item Provide only one author per \verb+\author+ macro, even if two or more authors have the same affiliation.
-\item Fill out the \verb+\subjclass+ and \verb+\keywords+ macros. For the \verb+\subjclass+, please refer to the ACM classification at \url{https://www.acm.org/publications/class-2012}.
-\item If you refer to a longer version of the paper (``full version''), please make sure to provide a persistent URL, e.g., at arXiv. Please  mention this full version using the \verb+\relatedversion+ macro.
-\item Take care of suitable linebreaks and pagebreaks. No overfull \verb+\hboxes+ should occur in the warnings log.
-\item Provide suitable graphics of at least 300dpi (preferrably in pdf format).
-\item Use the provided sectioning macros: \verb+\section+, \verb+\subsection+, \verb+\subsection*+, \verb+\paragraph+, \verb+\subparagraph*+, ... ``Self-made'' sectioning commands (for example, \verb+\noindent{\bf My+ \verb+subparagraph.}+ will be removed and replaced by standard LIPIcs style sectioning commands.
-\item Do not alter the spacing of the  \verb+lipics-v2018.cls+ style file. Such modifications will be removed.
-\item Do not use conditional structures to include/exclude content. Instead, please provide only the content that should be published -- in one file -- and nothing else.
-\item Remove all comments, especially avoid commenting large text blocks and using \verb+\iffalse+ $\ldots$ \verb+\fi+ constructions.
-\item Keep the standard style (\verb+plainurl+) for the bibliography as provided by the\linebreak \verb+lipics-v2018.cls+ style file.
-\item Use BibTex and provide exactly one BibTex file for your article. Please make sure that there are no errors and warnings with the referenced BibTex entries.
-\item Use a spellchecker to get rid of typos.
-\item A manual for the LIPIcs style is available at \url{http://drops.dagstuhl.de/styles/lipics-v2018/lipics-v2018-authors/lipics-v2018-manual.pdf}.
+\item Software is way more than just code
+\item Let's call the collection of artifacts a 'software product' [better name?]
+\item (Scientific) software products are 'made up' of distinct pieces of knowledge
+\item From a working prototype of a "knowlege ---assemble--> software product", we can witness what the ingredients are
+\item Here's an explained list of all these pieces, why they occur, and some design ideas related to them 
 \end{itemize}
 
-\begin{lstlisting}[caption={Useless code},label=list:8-6,captionpos=t,float,abovecaptionskip=-\medskipamount]
-for i:=maxint to 0 do 
-begin 
-    j:=square(root(i));
-end;
-\end{lstlisting}
+\section{Introduction}
+\begin{enumerate}
+  \item Software is more than just code.
+  \item The collection of artifacts is highly redundant -- on purpose. Different views of the same thing.
+  \item Some software is better understood than others (scientific), so easier to analyze
+  \item "Better understood" ~~ DSL + generator(s)
+  \item Traceability, coherence, parsimony, quantum of re-use 
+\end{enumerate}
 
-\subsection{Proin ac fermentum augue}
+\section{What is 'Software'}
+\begin{enumerate}
+  \item Basically a list of all (potential) artifacts that make up a 'software product'
+  \item Some explanation of each (most?), how they differ, how they are the same/linked
+    (some emphasis again on the 'views' idea)
+  \item Natural explanation that the "knowlege ---assemble--> software product" picture is more of a sequence of trees
+  \item Reminder that 'assemble' is (procedural) knowledge, but knowledge nevertheless 
+\end{enumerate}
 
-Proin ac fermentum augue. Nullam bibendum enim sollicitudin tellus egestas lacinia euismod orci mollis. Nulla facilisi. Vivamus volutpat venenatis sapien, vitae feugiat arcu fringilla ac. Mauris sapien tortor, sagittis eget auctor at, vulputate pharetra magna. Sed congue, dui nec vulputate convallis, sem nunc adipiscing dui, vel venenatis mauris sem in dui. Praesent a pretium quam. Mauris non mauris sit amet eros rutrum aliquam id ut sapien. Nulla aliquet fringilla sagittis. Pellentesque eu metus posuere nunc tincidunt dignissim in tempor dolor. Nulla cursus aliquet enim. Cras sapien risus, accumsan eu cursus ut, commodo vel velit. Praesent aliquet consectetur ligula, vitae iaculis ligula interdum vel. Integer faucibus faucibus felis. 
+\section{Background}
+\begin{enumerate}
+  \item Drasil as a prototype.
+  \item Examples in Drasil.
+  \item Drasil as itself a source of knowledge. 
+\end{enumerate}
 
+\section{The Contents}
+  A bottom-up analysis of the 'content'. [incomplete list]
+  \begin{enumerate}
+  \item People, Space, UID, ShortName, Label, Symbol, Stage, Expr, UnitLang, Sentence, NounPhrase, Date, Citation, Reference, Uncertainty, ReasValue, Constraint
+  \item HasUID (Chunk), NamedIdea, Idea, CommonIdea, Concept, Quantity, Unitary, Equation, DataDefinition, UnitaryConcept,
+    Theory, General Definition, Defined Quantity, Instance Model, Unital, Constrained, UncertainQuantity
+  [need to analyze drasil-code, -data, -docLang, -gen and -printers too. -example?]
+  \item generic information about units, concepts in physics (etc) that recur
+  \item some CS knowledge 
+  \end{enumerate}
+
+\section{Discussion}
+\begin{enumerate}
+  \item Representing software-related knowledge in a (re)usable way
+  \item Traceability, coherence, parsimony, quantum of re-use
+  \item Ultimate: self-representation 
+\end{enumerate}
+
+\section{Conclusion}
+
+Take home:
 \begin{itemize}
-\item Ut vitae diam augue. 
-\item Integer lacus ante, pellentesque sed sollicitudin et, pulvinar adipiscing sem. 
-\item Maecenas facilisis, leo quis tincidunt egestas, magna ipsum condimentum orci, vitae facilisis nibh turpis et elit. 
+\item Software is way more than just code
+\item ``knowledge'' is a better unit of re-use than code
+\item There is some 'unexpected' (but easily explained) knowledge in Software 
 \end{itemize}
-
-\section{Pellentesque quis tortor}
-
-Nec urna malesuada sollicitudin. Nulla facilisi. Vivamus aliquam tempus ligula eget ornare. Praesent eget magna ut turpis mattis cursus. Aliquam vel condimentum orci. Nunc congue, libero in gravida convallis \cite{DBLP:conf/focs/HopcroftPV75}, orci nibh sodales quam, id egestas felis mi nec nisi. Suspendisse tincidunt, est ac vestibulum posuere, justo odio bibendum urna, rutrum bibendum dolor sem nec tellus. 
-
-Fusce eu leo nisi. Cras eget orci neque, eleifend dapibus felis. Duis et leo dui. Nam vulputate, velit et laoreet porttitor, quam arcu facilisis dui, sed malesuada risus massa sit amet neque.
-
-\appendix
-\section{Morbi eros magna}
-
-Morbi eros magna, vestibulum non posuere non, porta eu quam. Maecenas vitae orci risus, eget imperdiet mauris. Donec massa mauris, pellentesque vel lobortis eu, molestie ac turpis. Sed condimentum convallis dolor, a dignissim est ultrices eu. Donec consectetur volutpat eros, et ornare dui ultricies id. Vivamus eu augue eget dolor euismod ultrices et sit amet nisi. Vivamus malesuada leo ac leo ullamcorper tempor. Donec justo mi, tempor vitae aliquet non, faucibus eu lacus. Donec dictum gravida neque, non porta turpis imperdiet eget. Curabitur quis euismod ligula. 
-
 
 %%
 %% Bibliography

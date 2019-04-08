@@ -1,14 +1,20 @@
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
-module Language.Drasil.Development.Sentence where
+module Language.Drasil.Development.Sentence (short, introduceAbb, at_start,
+  at_start', titleize, titleize', phrase, plural, phrase's, plural's) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
-import Language.Drasil.Chunk.NamedIdea (short)
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
-	sentencePlural)
+  sentencePlural, sentenceShort)
 import qualified Language.Drasil.NounPhrase as NP
+
+-- | Get short form (if it exists), else get term.
+short :: (Idea c, HasUID c) => c -> Sentence
+short c = sentenceShort (c ^. uid)
 
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from an Idea)

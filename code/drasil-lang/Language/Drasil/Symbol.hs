@@ -34,6 +34,9 @@ data Symbol =
   | Empty
   deriving Eq
 
+instance Semigroup Symbol where
+ a <> b = Concat [a , b]
+
 instance Monoid Symbol where
   mempty = Empty
   mappend a b = Concat [a , b]
@@ -48,7 +51,7 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 -- Comparation is used twice for each case,
 -- Once for making sure they are the same letter, once for case sensitive.
 compsy :: Symbol -> Symbol -> Ordering
-compsy (Concat (x:[]))       (Concat (y:[]))       = compsy x y
+compsy (Concat [x])       (Concat [y])       = compsy x y
 compsy (Concat (Atomic "Δ":(Atomic x):_)) (Atomic y)      = 
   case compare (map toLower x) (map toLower y) of
     EQ -> GT

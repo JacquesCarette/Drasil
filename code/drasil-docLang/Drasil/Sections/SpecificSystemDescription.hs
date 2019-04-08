@@ -16,8 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
   , listofTablesToRefs
   ) where
 
-import Language.Drasil hiding (Sect)
-import Language.Drasil.Development (MayHaveUnit)
+import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol)
 
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
@@ -68,7 +67,7 @@ physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
   where intro = mkParagraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
-                S "as shown in", (makeRefS fg) `sC` S "includes the following", 
+                S "as shown in", (makeRef2S fg) `sC` S "includes the following", 
                 plural element]
 
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
@@ -81,7 +80,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRefS (instModelSection), S "The", phrase information, S "to understand", 
+  makeRef2S (instModelSection), S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -103,7 +102,7 @@ assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent
           foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
           refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRefS ref) 
+          where refs (chunk, ref) = (titleize' chunk) +:+ (Ref $ makeRef2 ref) 
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
                                 (inModel, r4)]
 
@@ -143,19 +142,19 @@ dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase sec
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Label -> [Contents] -> Section
+inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
   ((inModelIntro probDes datDef theMod genDef):(otherContents)) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Label -> Contents
+inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
-  S "transforms the", phrase problem, S "defined in", (makeRefS r1), 
+  S "transforms the", phrase problem, S "defined in", (makeRef2S r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", (makeRefS r2), 
+  plural symbol_, S "defined in", (makeRef2S r2), 
   S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", (makeRefS r3) :+: end]
-    where end = S " and" +:+ (makeRefS r4)
+  plural model, S "identified in", (makeRef2S r3) :+: end]
+    where end = S " and" +:+ (makeRef2S r4)
 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
@@ -174,10 +173,10 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkPara
 -- outputs a sentence containing references to the layout objects 
 listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = (makeRefS x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRefS x) +:+ S "and" +:+ (makeRefS y) +:+ S "show" -- for proper grammar with multiple tables
+listofTablesToRefs  [x]    = (makeRef2S x) +:+ S "shows"
+listofTablesToRefs  [x,y]  = (makeRef2S x) +:+ S "and" +:+ (makeRef2S y) +:+ S "show" -- for proper grammar with multiple tables
                                                                                   -- no Oxford comma in case there is only two tables to be referenced
-listofTablesToRefs  (x:xs) = (makeRefS x) `sC` listofTablesToRefs (xs)
+listofTablesToRefs  (x:xs) = (makeRef2S x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 
@@ -201,29 +200,23 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
 
+mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
+mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
+  (mkTableFromColumns col) lab True
+
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
-inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table 
-  titl cts (S "Input Data Constraints") True
-  where
-   columns = [(S "Var", map ch $ sortBySymbol qlst),
+inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] 
-   tbl = mkTableFromColumns columns
-   titl = fst tbl
-   cts = snd tbl
+            (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
+            S "Input Data Constraints"
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table 
-  titl cts (S "Output Data Constraints") True
-  where
-   columns = [(S "Var", map ch qlst),
+outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst)]
-   tbl = mkTableFromColumns columns
-   titl = fst tbl
-   cts = snd tbl
+            (titleize' softwareConstraint, map fmtSfwr qlst)] "OutDataConstraints" $
+            S "Output Data Constraints"

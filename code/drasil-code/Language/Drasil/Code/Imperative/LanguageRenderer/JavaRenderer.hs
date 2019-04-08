@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
-import Prelude hiding (break,print)
+import Prelude hiding (break,print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
@@ -55,7 +55,7 @@ javaConfig options c =
         inputFunc        = parens(text "new Scanner(System.in)"),
         iterForEachLabel = forLabel,
         iterInLabel      = colon,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = new,
         clsDec           = classDec,
         package          = package',
@@ -70,7 +70,7 @@ javaConfig options c =
         
         top    = jtop c,
         body   = jbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
@@ -82,7 +82,7 @@ javaConfig options c =
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "no environment has been set"
+        getEnv = const $ error "no environment has been set"
     }
 
 -- short names, packaged up above (and used below)

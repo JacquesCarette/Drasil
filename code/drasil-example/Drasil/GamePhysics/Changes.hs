@@ -14,7 +14,7 @@ import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 
-import Drasil.GamePhysics.Assumptions (newA5, newA6, newA7)
+import Drasil.GamePhysics.Assumptions (assumpCT, assumpDI, assumpCAJI)
 
 ---------------------
 --  LIKELY CHANGES --
@@ -24,7 +24,10 @@ likelyChanges :: Section
 likelyChangesIntro :: Contents
 likelyChangesList :: [Contents]
 
-likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
+likelyChangesListwithIntro :: [Contents]
+likelyChangesListwithIntro = likelyChangesIntro : likelyChangesList
+
+likelyChanges = SRS.likeChg likelyChangesListwithIntro []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
   S "lists the", plural likelyChg, S "to be made to the",
@@ -40,13 +43,13 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+
-  plural CP.collision) +:+ makeRefS newA5
+  plural CP.collision) +:+ makeRef2S assumpCT
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRefS newA6
+  S "to include motion with" +:+ (phrase CP.damping)) +:+ makeRef2S assumpDI
 
 likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
-  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ (makeRefS newA7)
+  (plural CP.joint) `sAnd` (plural CM.constraint)) +:+ makeRef2S assumpCAJI
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 
@@ -67,7 +70,10 @@ likelyChangesList = mkEnumSimpleD likelyChangesList'
 unlikelyChanges :: Section
 unlikelyChangesIntro :: Contents
 
-unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
+unlikelyChangeswithIntro :: [Contents]
+unlikelyChangeswithIntro = unlikelyChangesIntro : unlikelyChangesList
+
+unlikelyChanges = SRS.unlikeChg unlikelyChangeswithIntro []
 
 unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
   plural unlikelyChg, S "to be made to the", phrase game, phrase Doc.physics,

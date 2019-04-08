@@ -9,8 +9,7 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil-- hiding (CodeType(..))
-import Language.Drasil.Development (MayHaveUnit(getUnit))
+import Language.Drasil
 
 import qualified Language.Drasil.Code.Code as G
 
@@ -46,71 +45,10 @@ decorate s Hat = s ++ "_hat"
 decorate s Vector = s ++ "_vect"
 decorate s Prime = s ++ "'"
 
---greekToCodeName :: Greek -> String
---greekToCodeName Alpha_L   = "alpha"
---greekToCodeName Alpha     = "Alpha"
---greekToCodeName Beta_L    = "beta"
---greekToCodeName Beta      = "Beta"
---greekToCodeName Chi_L     = "chi"
---greekToCodeName Chi       = "Chi"
---greekToCodeName Delta_L   = "delta"
---greekToCodeName Delta     = "Delta"
---greekToCodeName Ell       = "ell"
---greekToCodeName Epsilon_L = "epsilon"
---greekToCodeName Epsilon_V = "varepsilon"
---greekToCodeName Epsilon   = "Epsilon"
---greekToCodeName Eta_L     = "eta"
---greekToCodeName Eta       = "Eta"
---greekToCodeName Gamma_L   = "gamma"
---greekToCodeName Gamma     = "Gamma"
---greekToCodeName Iota_L    = "iota"
---greekToCodeName Iota      = "Iota"
---greekToCodeName Kappa_L   = "kappa"
---greekToCodeName Kappa     = "Kappa"
---greekToCodeName Lambda_L  = "lambda"
---greekToCodeName Lambda    = "Lambda"
---greekToCodeName Mu_L      = "mu"
---greekToCodeName Mu        = "Mu"
---greekToCodeName Nabla     = "nabla"
---greekToCodeName Nu_L      = "nu"
---greekToCodeName Nu        = "Nu"
---greekToCodeName Omega_L   = "omega"
---greekToCodeName Omega     = "Omega"
---greekToCodeName Omicron_L = "omicron"
---greekToCodeName Omicron   = "Omicron"
---greekToCodeName Pi_L      = "pi"
---greekToCodeName Pi        = "Pi"
---greekToCodeName Phi_L     = "phi"
---greekToCodeName Phi_V     = "varphi"
---greekToCodeName Phi       = "Phi"
---greekToCodeName Psi_L     = "psi"
---greekToCodeName Psi       = "Psi"
---greekToCodeName Rho_L     = "rho"
---greekToCodeName Rho       = "Rho"
---greekToCodeName Sigma_L   = "sigma"
---greekToCodeName Sigma     = "Sigma"
---greekToCodeName Tau_L     = "tau"
---greekToCodeName Tau       = "Tau"
---greekToCodeName Theta_L   = "theta"
---greekToCodeName Theta     = "Theta"
---greekToCodeName Upsilon_L = "upsilon"
---greekToCodeName Upsilon   = "Upsilon"
---greekToCodeName Xi_L      = "xi"
---greekToCodeName Xi        = "Xi"
---greekToCodeName Zeta_L    = "zeta"
---greekToCodeName Zeta      = "Zeta"
-
+-- TODO: Double check that this is valid in all output languages
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"
 specialToCodeName Partial       = "partial"
-specialToCodeName UScore        = "_"
-specialToCodeName Percent       = "%"
-specialToCodeName CurlyBrOpen   = "{"
-specialToCodeName CurlyBrClose  = "}"
-specialToCodeName SqBrOpen      = "["
-specialToCodeName SqBrClose     = "]"
-specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for
-                                      -- all of the output langs.
 
 toCodeName :: String -> String
 toCodeName s =
@@ -195,12 +133,12 @@ type ConstraintMap = Map.Map UID [Constraint]
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
-physLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
-sfwrLookup m q = constraintLookup' q m (filter isPhysC)
+sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
-constraintLookup' :: (Quantity q, MayHaveUnit q) => q -> ConstraintMap
+constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

@@ -1,13 +1,13 @@
+{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Math where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), RealInterval, Relation,
-  DerivType(..), ($^), BinOp(..), RTopology(..), DomainDesc(..),
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..), 
   ArithOper(..), UFunc(..))
-import Language.Drasil.Space (Space)
-import Language.Drasil.Classes (HasUID(uid), HasSymbol)
+import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -94,9 +94,10 @@ real_interval c = RealI (c ^. uid)
 euclidean :: [Expr] -> Expr
 euclidean = sqrt . sum' . map square
 
+{-# ANN sum' "HLint: ignore Use sum" #-}
 -- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
 sum' :: (Num a, Foldable t) => t a -> a
-sum' x = foldr1 (+) x
+sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
@@ -134,6 +135,7 @@ apply2 f a b = FCall (sy f) [sy a, sy b]
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 
+-- This also wants a symbol constraint.
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)

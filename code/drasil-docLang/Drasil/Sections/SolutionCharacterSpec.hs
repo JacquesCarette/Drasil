@@ -17,7 +17,7 @@ module Drasil.Sections.SolutionCharacterSpec
   siUQO
   ) where
 
-import Language.Drasil hiding (Sect)
+import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
@@ -211,7 +211,7 @@ pullUQO xs = pullFunc xs getUQO hasUQO
 -- Section Assembler --
 -----------------------
 
-assembler :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> [SubSec] -> Section
+assembler :: (Idea c) => c -> s -> SubSec -> [SubSec] -> Section
 assembler progName symMap thisSection subsecs = 
   (sectionMap progName thisSection) subsections
   where subsections = map (render progName symMap) subsecs 
@@ -232,7 +232,7 @@ sectionMap progName (SectionModel niname xs)
 -- Section Render --
 --------------------
 
-render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
+render :: c -> s -> SubSec -> Section
 render _ symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
@@ -252,7 +252,7 @@ render _ symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (mkLabelRASec (niname ^. uid) (niname ^. uid)) --fixme
+  (pullContents xs) (pullSections xs) (makeSecRef (niname ^. uid) (niname ^. uid)) --FIXME
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -304,14 +304,11 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
         symMap          = Definition . Data'
         dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
 
-generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+generalDefinitionSect :: SubSec -> s -> Section
 generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
-
-
-
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon

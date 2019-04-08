@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   classDocD, exceptionDocD, exprDocD'', declarationDocD, conditionalDocD)
 import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), semi, parens, equals, vcat, doubleQuotes,
   render, rbrace, lbrace, empty, colon)
 
@@ -49,7 +49,7 @@ csharpConfig _ c =
         inputFunc        = text "Console.ReadLine()",
         iterForEachLabel = text "foreach",
         iterInLabel      = text "in",
-        list             = \_ -> text "List",
+        list             = const $ text "List",
         listObj          = new,
         clsDec           = classDec,
         package          = namespaceD,
@@ -64,7 +64,7 @@ csharpConfig _ c =
         
         top    = cstop c,
         body   = csbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD c, declarationDoc = declarationDocD c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDocD c, exprDoc = exprDocD'' c, funcAppDoc = funcAppDocD c,
@@ -76,7 +76,7 @@ csharpConfig _ c =
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
+        getEnv = const $ error "getEnv not implemented in CSharp (yet)"
     }
 
 -- short names, packaged up above (and used below)

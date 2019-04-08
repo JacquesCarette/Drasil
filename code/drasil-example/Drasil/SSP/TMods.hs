@@ -16,18 +16,11 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
 
-import Drasil.SSP.Assumptions (newA8, newA9)
+import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
-
--- Pre-defined some labels. They will be re-used for tings which are 'the same'
-l1, l2, l3, l4 :: Label
-l1 = mkLabelSame "factOfSafety" (Def TM)
-l2 = mkLabelSame "equilibrium"  (Def TM)
-l3 = mkLabelSame "mcShrStrgth"  (Def TM)
-l4 = mkLabelSame "effStress"    (Def TM)
 
 --------------------------
 --  Theoretical Models  --
@@ -37,11 +30,11 @@ l4 = mkLabelSame "effStress"    (Def TM)
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
   [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeRef fredlund1977] l1 [factOfSafety_desc]
+  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel -- l1
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel
 
 factOfSafety_rel :: Relation
 factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -59,21 +52,20 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibrium_rc)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeRef fredlund1977] l2 [eq_desc]
+  [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel -- l2
+equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
-eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
-  where summ = sum_all (Atomic "i") . sy
+eq_rel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRefS newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -82,17 +74,17 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
-  [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+  [qw shrStress, qw normStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeRef fredlund1977] l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
 mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel -- l3
+  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
+mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy effCohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -110,8 +102,9 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRefS newA9), S "where the cohesion", ch cohesion,
-  S "represents the", ch shrStress, S "intercept of the fitted line"]
+  S "fit", sParen (makeRef2S assumpSBSBISL), S "where the", phrase effCohesion, 
+  ch effCohesion, S "represents the", ch shrStress,
+  S "intercept of the fitted line"]
 
 --
 ------------- New Chunk -----------
@@ -119,7 +112,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeRef fredlund1977] l4 [effS_desc]
+  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept

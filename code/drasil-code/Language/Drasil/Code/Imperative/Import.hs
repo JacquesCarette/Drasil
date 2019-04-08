@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
@@ -28,8 +29,8 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
-import Control.Lens ((^.))
+import Data.Maybe (fromMaybe, maybe)
+import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -121,7 +122,7 @@ genModules = do
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
-  moddef <- sequence $ fmap genModDef (mods s) -- hack ?
+  moddef <- traverse genModDef (mods s) -- hack ?
   return $ (mn : inp ++ out ++ moddef)
 
 -- private utilities used in generateCode
@@ -137,7 +138,7 @@ getExt Python = [".py"]
 getExt _ = error "Language not yet implemented"
 
 liftS :: Reader a b -> Reader a [b]
-liftS = fmap (\x -> [x])
+liftS = fmap (: [])
 
 ------- INPUT ----------
 
@@ -249,16 +250,15 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
   repr) (repr (Block repr))
-genCalcBlock t' v' e' = do
-  doit t' v' e'
-    where
-    doit :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
-      repr) (repr (Block repr))
-    doit t v (Case e)    = genCaseBlock t v e
-    doit t v e
-      | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
-        convExpr e; assign' vv ee}
-      | otherwise        = fmap block $ liftS $ fmap returnState $ convExpr e
+genCalcBlock t' v' e' = doit t' v' e'
+  where
+  doit :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
+    repr) (repr (Block repr))
+  doit t v (Case e)    = genCaseBlock t v e
+  doit t v e
+    | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
+      convExpr e; assign' vv ee}
+    | otherwise        = fmap block $ liftS $ fmap returnState $ convExpr e
 
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
   Reader (State repr) (repr (Block repr))
@@ -352,7 +352,7 @@ genModule :: (RenderSym repr) => Name
                -> Reader (State repr) (repr (Module repr))
 genModule n maybeMs maybeCs = do
   g <- ask
-  let ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
+  let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
@@ -411,7 +411,7 @@ loggedAssign a b =
 -- helpers
 
 nopfx :: String -> String
-nopfx s = maybe s id (stripPrefix funcPrefix s)
+nopfx s = fromMaybe s (stripPrefix funcPrefix s)
 
 variable :: (RenderSym repr) => String -> Reader (State repr) 
   (repr (Value repr))
@@ -515,23 +515,21 @@ convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
-convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
-convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
-convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
-convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
-convExpr (Deriv _ _ _) = return $ 
-  litString "**convExpr :: Deriv unimplemented**"
+convExpr (AssocA Add l)  = foldr1 (#+) <$> mapM convExpr l
+convExpr (AssocA Mul l)  = foldr1 (#*) <$> mapM convExpr l
+convExpr (AssocB And l)  = foldr1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
+convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^.
-    symbolTable))
+  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ codeSpec g))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
-  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
-convExpr (FCall _ _)   = return $ 
-  litString "**convExpr :: FCall unimplemented**"
+
+  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
@@ -543,9 +541,9 @@ convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
       (convExpr (Case xs))
-convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (Operator _ _ _) = error "convExpr: Operator"
-convExpr (IsIn _ _)    = error "convExpr: IsIn"
+convExpr Matrix{}    = error "convExpr: Matrix"
+convExpr Operator{} = error "convExpr: Operator"
+convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
@@ -554,8 +552,8 @@ getUpperBound :: Expr -> Expr
 getUpperBound (BinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
-lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
-lookupC sm c = symbLookup c $ sm^.symbolTable
+lookupC :: ChunkDB -> UID -> QuantityDict
+lookupC sm c = symbLookup c $ symbolTable sm
 
 renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l
@@ -613,7 +611,7 @@ bfunc Index      = (\x y -> x $.(listAccess y))
 -- medium hacks --
 genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
   (repr (Module repr))
-genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
+genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
 genFunc (FDef (FuncDef n i o s)) = do
@@ -713,8 +711,8 @@ genDataFunc nameTitle dd = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
             forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
-              ( body $ [(block [ stringSplit d v_linetokens (v_lines $.
-                (listAccess v_i)) ])] ++ lnV)
+              ( body $ (block [ stringSplit d v_linetokens (v_lines $.
+                (listAccess v_i)) ]) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
@@ -787,18 +785,18 @@ genDataFunc nameTitle dd = do
           [repr (Block repr)]
         checkIndex [] _ _ _ _ _ = []
         checkIndex ((Explicit i):is) n l p v s =
-          [ while (listSizeAccess v ?<= (litInt i)) ( bodyStatements [ 
+          ( while (listSizeAccess v ?<= (litInt i)) $ bodyStatements [ 
             valState $
-            v $.(getListExtend (getListType s n)) ] ) ]
-            ++ checkIndex is (n+1) l p (v $.(listAccess $ litInt i)) s
+            v $.(getListExtend (getListType s n)) ] )
+            : checkIndex is (n+1) l p (v $.(listAccess $ litInt i)) s
         checkIndex ((WithLine):is) n l p v s =
-          [ while (listSizeAccess  v ?<= l) ( bodyStatements [ valState $
-          v $.(getListExtend (getListType s n)) ] ) ]
-          ++ checkIndex is (n+1) l p (v $.(listAccess l)) s
+          ( while (listSizeAccess  v ?<= l) $ bodyStatements [ valState $
+          v $.(getListExtend (getListType s n)) ] )
+          : checkIndex is (n+1) l p (v $.(listAccess l)) s
         checkIndex ((WithPattern):is) n l p v s =
-          [ while (listSizeAccess v ?<= p) ( bodyStatements [ valState $ 
-          v $.(getListExtend (getListType s n)) ] ) ]
-          ++ checkIndex is (n+1) l p (v $.(listAccess p)) s
+          ( while (listSizeAccess v ?<= p) $ bodyStatements [ valState $ 
+          v $.(getListExtend (getListType s n)) ] )
+          : checkIndex is (n+1) l p (v $.(listAccess p)) s
         ---------------------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::

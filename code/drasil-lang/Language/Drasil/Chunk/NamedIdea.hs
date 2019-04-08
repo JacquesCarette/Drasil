@@ -1,17 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, short, nw, mkIdea) where
+module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Classes.Core (HasUID(uid))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
+import Control.Lens ((^.), makeLenses)
 
-import Language.Drasil.Sentence (Sentence(S), SentenceStyle (ShortStyle),
-	sentenceShort)
-import Language.Drasil.NounPhrase (NP, phraseNP)
-
--- | Get short form (if it exists), else get term.
-short :: (Idea c, HasUID c) => c -> Sentence
-short c = sentenceShort (c ^. uid)
+import Language.Drasil.NounPhrase (NP)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation
@@ -22,7 +17,7 @@ makeLenses ''NamedChunk
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasUID    NamedChunk where uid = uu
 instance NamedIdea NamedChunk where term = np
-instance Idea      NamedChunk where getA = \_ -> Nothing
+instance Idea      NamedChunk where getA _ = Nothing
   
 -- | 'NamedChunk' constructor, takes an uid and a term.
 nc :: String -> NP -> NamedChunk
@@ -30,13 +25,13 @@ nc = NC
 
 -- | |IdeaDict| is the canonical dictionary associated to |Idea|
 -- don't export the record accessors
-data IdeaDict = IdeaDict { _nc' :: NamedChunk, _mabbr :: Maybe String }
+data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
 instance HasUID    IdeaDict where uid = nc' . uid
 instance NamedIdea IdeaDict where term = nc' . term
-instance Idea      IdeaDict where getA = view mabbr
+instance Idea      IdeaDict where getA = mabbr
   
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' ms = IdeaDict (nc s np') ms

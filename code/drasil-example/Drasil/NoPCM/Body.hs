@@ -3,10 +3,9 @@ module Drasil.NoPCM.Body where
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
   itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
@@ -15,20 +14,20 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains, doccon,
-  doccon')
+  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Education (calculus, educon, engineering)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
-  thermocon, heat_trans)
+  thermocon, phase_change)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon)
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux)
+  heat_cap_spec, ht_flux, sens_heat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -37,16 +36,18 @@ import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
-  funcReq, likeChg, unlikeChg)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -54,18 +55,20 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
+import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
-import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
+  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing,
+  swhspriorityNFReqs)
+import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
-import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
+import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
@@ -74,6 +77,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
 
 import Drasil.NoPCM.Assumptions
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
@@ -92,6 +96,9 @@ nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
+
+resourcePath :: String
+resourcePath = "../../../datafiles/NoPCM/"
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -107,7 +114,7 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W]
+  vol, w_mass, w_vol, tau_W, QT.sens_heat]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
@@ -115,7 +122,7 @@ nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, specParamVal :: Section
+  reqS, funcReqs, specParamVal :: Section
 
 
 -------------------
@@ -127,39 +134,74 @@ probDescription, termAndDefn, physSystDescription, goalStates,
 --------------------------------
   
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
-  TAandA]) :
-  IntroSec (IntroProg (introStart ener_src energy progName)
+mkSRS = [RefSec $ RefProg intro
+  [TUnits,
+  tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
+  TAandA],
+  IntroSec $ IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
-  [IPurpose (purpDoc progName),
+  [IPurpose $ purpDoc progName,
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
     water),
-  IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS,
-  IOrgSec orgDocIntro inModel SRS.inModelLabel (orgDocEnd inModel M.ode progName)]) :
-  Verbatim genSystDesc:
-  SSDSec 
-    (SSDProg [SSDSubVerb probDescription
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions 
-          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
-          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-            [eBalanceOnWtr, heatEInWtr] ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty dataContMid
-            [dataConstTable1, dataConstTable2]
-          ]
-        )
+  IChar [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
+  IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
+  Verbatim genSystDesc,
+  SSDSec $
+    SSDProg [SSDSubVerb probDescription
+    , SSDSolChSpec $ SCSProg
+      [ Assumptions
+      , TMs (Label : stdFields) theoretical_models
+      , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+      , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        [eBalanceOnWtr, heatEInWtr] ShowDerivation
+      , Constraints EmptyS dataConstraintUncertainty dataContMid
+        [dataConstTable1, dataConstTable2]
       ]
-    ):
-  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect] ++
-  TraceabilitySec
-    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
-  map Verbatim [specParamVal] ++ (Bibliography : [])
+    ],
+  ReqrmntSec $ ReqsProg [
+  FReqsSub funcReqsList,
+  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+  (S "This problem is small in size and relatively simple")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+  LCsSec $ LCsProg likelyChgsList,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2)) []] ++
+  map Verbatim [specParamVal] ++ [Bibliography]
+
+nopcm_label :: TraceMap
+nopcm_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
+ 
+nopcm_refby :: RefbyMap
+nopcm_refby = generateRefbyMap nopcm_label
+
+nopcm_datadefn :: [DataDefinition]
+nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+
+nopcm_insmodel :: [InstanceModel]
+nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+
+nopcm_gendef :: [GenDefn]
+nopcm_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+
+nopcm_theory :: [TheoryModel]
+nopcm_theory = getTraceMapFromTM $ getSCSSub mkSRS
+
+nopcm_concins :: [ConceptInstance]
+nopcm_concins =
+ reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ [likeChgTLH] ++ unlikelyChgs
+
+nopcm_section :: [Section]
+nopcm_section = nopcm_sec
+
+nopcm_labcon :: [LabelledContent]
+nopcm_labcon = [inputInitQuantsTblabled, dataConstTable1]
+
+nopcm_sec :: [Section]
+nopcm_sec = extractSection nopcm_srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -169,7 +211,6 @@ nopcm_si = SI {
   _sys = srs_swhs,
   _kind = srs,
   _authors = [thulasi],
-  _units = check_si,
   _quants = symbTT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
@@ -181,12 +222,11 @@ nopcm_si = SI {
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
   _usedinfodb = usedDB,
-  _refdb = nopcmRefDB
+   refdb = nopcmRefDB
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb assumps_Nopcm_list_new referencesRefList (reqs ++
-  likelyChgs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb referencesRefList nopcm_concins
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -198,15 +238,20 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
-  nw ht_trans])
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw fundamentals ++ map nw educon ++ map nw derived 
+  ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
+  nw ht_trans] ++ map nw check_si)
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si
+  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
+  nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si nopcm_label nopcm_refby
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
+ nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration
@@ -269,8 +314,7 @@ scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
 
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
-  sParen (makeRefS SRS.inModelLabel),
-  S "to be solved is referred to as" +:+. makeRefS eBalanceOnWtr,
+  S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
@@ -329,12 +373,12 @@ physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
 
 fig_tank :: LabelledContent
-fig_tank = llcc (mkLabelRAFig "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
+fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
-  "TankWaterOnly.png"
+  $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
-physSystDescList = enumSimple 1 (short physSyst) $ map foldlSent_
+physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
 goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
@@ -346,19 +390,24 @@ goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
   plural property `sC` S "the", phrase goalStmt, S "are"]
 
 goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = enumSimple 1 (short goalStmt) [
+goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
+
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
-  
-  {--end = foldlSent [S "The", phrase uncertCol,
-    S "provides an estimate of the confidence with which the physical",
-    plural quantity, S "can be measured. This", phrase information,
-    S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]-}
+
+theoretical_models :: [TheoryModel]
+theoretical_models = [consThermE, sensHtE]
+
+sensHtE :: TheoryModel
+sensHtE = sensHtE_template Liquid sensHtEdesc
+
+sensHtEdesc :: Sentence
+sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -417,13 +466,13 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRefS newA11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRefS newA12) `sC`
+  phrase purin +:+. sParen (makeRef2S assumpCTNOD), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef2S assumpSITWP) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  makeRefS rocTempSimp, S "can be written as"]
+  makeRef2S rocTempSimp, S "can be written as"]
 
 iModDesc2 :: DataDefinition -> [Sentence]
-iModDesc2 d1hf = [S "Using", (makeRefS d1hf) `sC` S "this can be written as"]
+iModDesc2 d1hf = [S "Using", (makeRef2S d1hf) `sC` S "this can be written as"]
 
 iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]
 iModDesc3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
@@ -495,35 +544,35 @@ reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
 
 reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
 reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRefS reqIVRTable `sC` S "which define the" +:+
+    S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRefS reqIIV +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRefS eBalanceOnWtr +:+
-    S "to" +:+ makeRefS eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
+reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
+    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr `sC`
+    S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
     S "satisfy the required" +:+ phrase physicalConstraint +:+
-    S "shown in" +:+. makeRefS dataConstTable1)
+    S "shown in" +:+. makeRef2S dataConstTable1)
     "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
 reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
     +:+ plural quantity +:+
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-    plural quantity +:+ S "from" +:+ (makeRefS reqIIV) `sC` S "the" +:+
-    phrase mass +:+ S "from" +:+ makeRefS reqFM `sAnd` ch tau_W +:+.
-    sParen (S "from" +:+ makeRefS eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
+    plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
+    phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
+    sParen (S "from" +:+ makeRef2S eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
 reqCCHEWT = cic "reqCCHEWT" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ makeRefS heatEInWtr))
+    phrase sim_time +:+. sParen (S "from" +:+ makeRef2S heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
 reqIVRTable :: LabelledContent
-reqIVRTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
+reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch, U.toSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
@@ -544,88 +593,23 @@ funcReqsListWordsNum =
 ----------------------------
 --Section 6 : LIKELY CHANGES
 ----------------------------
-
-likelyChgsSect = SRS.likeChg likelyChgsList []
-
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
-
-likelyChgs :: [ConceptInstance]
-likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
-
-likeChgDT :: ConceptInstance
-likeChgDT = cic "likeChgDT" (
-  (makeRefS newA9NoPCM) :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
-  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
-  +:+ phrase model +:+. S "would also account for discharging of the tank") 
-  "Discharging-Tank" likeChgDom
--- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
-  -- nounPhraseSent (makeRefS assump11 :+: S "- Any real" +:+ phrase tank +:+
-  -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))
-  -- []) EmptyS
-
----- Empty list is supposed to take a ModuleChunk. Not sure what to put there.
--- likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $
-  -- nounPhraseSent (makeRefS assump7 :+: S "- The" +:+ phrase temp_C +:+
-  -- S "will change over" +:+ (S "course" `ofThe` S "day, depending") +:+
-  -- S "on the" +:+ phrase energy +:+ S "received from the sun."))
-  -- []) EmptyS
--- likeChg2 = LikelyChange (LCChunk (nw $ npnc "likeChg2" $
-  -- nounPhraseSent (makeRefS assump8 :+: S "- The" +:+ phrase temp_C +:+
-  -- S "will actually change along its length as the" +:+ phrase water +:+
-  -- S "within it cools."))
-  -- []) EmptyS
-
--- s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4]
--- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
-
--- likeChg1 = [s6_start 7, S "The", phrase temp_C,
-  -- S "will change over", S "course" `ofThe` S "day, depending",
-  -- S "on the", phrase energy, S "received from the sun"]
-
--- likeChg2 = [s6_start 8, S "The", phrase temp_C,
-  -- S "will actually change along its length as the",
-  -- phrase water, S "within it cools"]
-
--- likeChg3 = [s6_start 9, S "The", phrase model +:+.
-  -- S "currently only accounts for charging of the tank",
-  -- S "A more complete", phrase model, S "would also",
-  -- S "account for discharging of the tank"]
-
--- likeChg4 = [s6_start 11, S "Any real", phrase tank,
-  -- S "cannot be perfectly insulated and will lose",
-  -- phrase heat]
+likelyChgsList = mkEnumSimpleD $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH]
 
 -------------------------------
 --Section 6b : UNLIKELY CHANGES
 -------------------------------
-
-unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
-
-unlikelyChgs :: [ConceptInstance]
-unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
-
 unlikelyChgsList :: [Contents]
 unlikelyChgsList = mkEnumSimpleD unlikelyChgs
-
-unlikeChgWFS :: ConceptInstance
-unlikeChgWFS = cic "unlikeChgWFS" (
-  foldlSent [chgsStart newA14, S "It is unlikely for the change of",
-  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"])
-  "Water-Fixed-States" unlikeChgDom
-
-unlikeChgNIHG :: ConceptInstance
-unlikeChgNIHG = cic "unlikeChgNIHG" (
-  foldlSent [chgsStart newA16, S "Is used for the derivations of",
-  makeRefS eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
+traceTableAll :: LabelledContent
+traceTableAll = generateTraceTable nopcm_si
 
 traceRefList :: [LabelledContent]
-traceRefList = [traceTable1, traceTable2, traceTable3]
+traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
 
 traceInstaModel, traceData, traceFuncReq, traceLikelyChg, traceDataDefs, traceGenDefs,
   traceAssump, traceTheories :: [String]
@@ -633,29 +617,29 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRefS [eBalanceOnWtr, heatEInWtr]
+traceInstaModelRef = map makeRef2S [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRefS reqs
+traceFuncReqRef = map makeRef2S reqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRefS dataConstTable1] --FIXME: Reference section?
+traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-traceAssumpRef = map makeRefS assumps_Nopcm_list_new
+traceAssumpRef = map makeRef2S assumptions
 
-traceTheories = ["T1"]
-traceTheoriesRef = map makeRefS [consThermE]
+traceTheories = ["T1", "T2"]
+traceTheoriesRef = map makeRef2S theoretical_models
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRefS swhsGDs
+traceGenDefRef = map makeRef2S swhsGDs
 
 traceDataDefs = ["DD1"]
-traceDataDefRef = map makeRefS [dd1HtFluxC]
+traceDataDefRef = map makeRef2S [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map makeRefS likelyChgs
+traceLikelyChgRef = map makeRef2S $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH]
 
 {-Traceability Matrix 1-}
 
@@ -681,7 +665,7 @@ trace1IM1 = ["GD2", "DD1"]
 trace1IM2 = []
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "TraceyRI" Tab) $
+traceTable1 = llcc (makeTabRef "TraceyRI") $
   Table (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
@@ -720,7 +704,7 @@ trace2R5 = ["IM1"]
 trace2R6 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelSame "TraceyRIs" Tab) $ Table
+traceTable2 = llcc (makeTabRef "TraceyRIs") $ Table
   (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
   (showingCxnBw traceyMatrix
@@ -755,7 +739,7 @@ trace3LC3 = ["A9"]
 trace3LC4 = ["A11"]
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table
+traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
   (EmptyS : traceRowHeader3)
   (makeTMatrix traceColHeader3 traceColumns3 traceAssump)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+

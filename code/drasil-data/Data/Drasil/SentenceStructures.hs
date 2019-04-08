@@ -8,14 +8,14 @@ module Data.Drasil.SentenceStructures
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
-  , followA
+  , follows
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
-  , getSource
+  , getSource'
   ) where
 
 import Language.Drasil
@@ -61,10 +61,10 @@ data FoldType = List | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Numb  wt len = map (wrap wt . S . show) [1..len]
     numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
     numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
@@ -127,13 +127,13 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (Ref $ mkRefFrmLbl ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char] -> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (mkLabelRAFig rn) $
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> String -> String -> LabelledContent
+figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
   Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
 
@@ -150,16 +150,18 @@ underConsidertn chunk = S "The" +:+ (phrase chunk) +:+
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
-refineChain :: NamedIdea c => [c] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plural y
-refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+
+  S "are refined to the" +:+ plural (fst y)
+refineChain (x:y:xs) = refineChain [x,y] `sC` rc (y : xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain
-rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
-  (plural y)
-rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
+rc :: NamedIdea c => [(c, Section)] -> Sentence
+rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
+  +:+ S "to the" +:+ (plural $ fst y) +:+. sParen (makeRef2S $ snd y)
+rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
+  S "to the" +:+ plural (fst y) `sC` rc (y : xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
 -- | helper functions for making likely change statements
@@ -185,11 +187,11 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ (Ref $ makeRef assumpt)
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
 
 -- | get term, definition, and symbol
@@ -208,7 +210,7 @@ displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals
 
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
-  let l' = filter (\(_,b) -> not $ null $ filter (not . isEmpty) b) l in 
+  let l' = filter (any (not . isEmpty) . snd) l in 
   (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
   where
     isEmpty EmptyS = True
@@ -237,11 +239,8 @@ fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
-replaceEmptyS s@_ = s
+replaceEmptyS s = s
 
--- Should this get only the first one or all potential sources?
--- Should we change the source ref to have a list (to keep things clean in case
---    of multiple sources)?
--- | Get the source reference from the references (if it exists)
-getSource :: HasReference c => c -> Sentence
-getSource c = foldlList Comma List $ map Ref $ c ^. getReferences
+-- | Get the source citations (if any)
+getSource' :: HasCitation c => c -> Sentence
+getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations

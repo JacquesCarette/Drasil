@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
-import Prelude hiding (print)
-import Data.List (sortBy,partition,intersperse)
+import Prelude hiding (print, (<>))
+import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (render, Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
@@ -9,9 +9,9 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
-  Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
+  DType(DD, TM, Instance, General), MaxWidthPercent,
+  Decoration(Prime, Hat, Vector), Document,
+  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -26,25 +26,25 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn, Point), 
+  Real, Rational, Natural, Integer, IsIn, Point, Perc), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, Ref2, HARDNL, Sp, Sy, S, E, (:+:)),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
+  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
+  LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
-  HDiv, ALUR))
+  HDiv))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, L.HasTermTable ctx, L.HasDefinitionTable ctx,
- HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
+genHTML :: PrintingInformation -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -61,6 +61,7 @@ build fn (Document t a c) =
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
+printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
                                  div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ p_spec contents
@@ -70,16 +71,14 @@ printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
-printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
-  makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
-printLO (Graph _ _ _ _ _)      = empty -- FIXME
+printLO Graph{}                = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map printLO l
+print l = foldr (($$) . printLO) empty l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
@@ -99,11 +98,11 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref L.Link r a _)  = reflinkURI r $ p_spec a
-p_spec (Ref _      r a _)  = reflink    r $ p_spec a
-p_spec (Ref2 _     r a _)  = reflink    r $ p_spec a -- FIXME
-p_spec EmptyS            = text "" -- Expected in the output
-p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
+p_spec (Ref Internal r a )  = reflink  r $ p_spec a
+p_spec (Ref Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
+p_spec (Ref External r a ) = reflinkURI  r $ p_spec a
+p_spec EmptyS             = text "" -- Expected in the output
+p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 
@@ -111,14 +110,14 @@ p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPH $ L.special s
-symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
 symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (L.Corners _ _ _ _ _)      = error "rendering of L.Corners (general)"
+symbol L.Corners{}                = error "rendering of L.Corners (general)"
 symbol (L.Atop L.Vector s)        = "<b>" ++ symbol s ++ "</b>"
 symbol (L.Atop L.Hat s)           = symbol s ++ "&#770;"
 symbol (L.Atop L.Prime s)         = symbol s ++ "&prime;"
@@ -130,12 +129,12 @@ uSymb (L.US ls) = formatu t b
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String
     formatu [] l = line l
-    formatu l [] = concat $ intersperse "&sdot;" $ map pow l
+    formatu l [] = intercalate "&sdot;" $ map pow l
     formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
     line :: [(L.Symbol,Integer)] -> String
     line []  = ""
     line [x] = pow x
-    line l   = '(' : (concat $ intersperse "&sdot;" $ map pow l) ++ ")"
+    line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
     pow :: (L.Symbol,Integer) -> String
     pow (x,1) = symbol x
     pow (x,p) = symbol x ++ sup (show p)
@@ -205,6 +204,7 @@ p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
 p_ops Point    = "."
+p_ops Perc     = "%"
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("
@@ -237,7 +237,7 @@ makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
 
 -- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc
-makeRows = foldr ($$) empty . map (tr . makeColumns)
+makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
@@ -262,7 +262,7 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
 makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
@@ -398,7 +398,7 @@ bookMLA (Year       y)  = dot $ text $ show y
 bookMLA (BookTitle s)   = dot $ em $ p_spec s
 bookMLA (Journal    s)  = comm $ em $ p_spec s
 bookMLA (Pages      [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages  (a:b:[])) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages  [a,b])   = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Pages _) = error "Page range specified is empty or has more than two items"
 bookMLA (Note       s)    = p_spec s
 bookMLA (Number      n)   = comm $ text $ ("no. " ++ show n)
@@ -420,7 +420,7 @@ bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the 
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages     [n])  = dot $ text $ show n
-bookAPA (Pages (a:b:[])) = dot $ text $ show a ++ "&ndash;" ++ show b
+bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
 bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA

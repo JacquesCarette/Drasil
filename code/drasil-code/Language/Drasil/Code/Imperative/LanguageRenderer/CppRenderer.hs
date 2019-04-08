@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The logic to render C++ code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     -- * C++ Code Configuration -- defines syntax of all C++ code
@@ -26,7 +27,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   classDec, namespaceD, includeD, fileNameD, cpplist)
 import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, oneTabbed, vmap, vibmap)
 
-import Prelude hiding (break, print, return)
+import Prelude hiding (break, print, return,(<>))
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
 validListTypes :: [Label]
@@ -49,19 +50,19 @@ cppConfig options c =
         dir              = "cpp",
         fileName         = fileNameD c,
         include          = includeD "#include",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = colon,
         inputFunc        = text "std::cin",
         iterForEachLabel = empty,
         iterInLabel      = empty,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = empty,
         clsDec           = classDec,
         package          = namespaceD,
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
-        printFileFunc    = \f -> valueDoc c f,
-        printFileLnFunc  = \f -> valueDoc c f,
+        printFileFunc    = valueDoc c,
+        printFileLnFunc  = valueDoc c,
         stateType        = cppstateType c,
 
         blockStart = lbrace, blockEnd = rbrace,
@@ -81,7 +82,7 @@ cppConfig options c =
         functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
+        getEnv = const $ error "Cpp does not implement getEnv (yet)"
     }
 
 -- for convenience
@@ -208,14 +209,14 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     text "enum" <+> text n <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <> endStatement c]
-classDoc' _ (Source) _ (Enum _ _ _) = empty
+classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let makeTransforms = map convertToMethod
         funcs = fs ++ [destructor c n vs]
-        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Public then [f] else []) $ makeTransforms funcs
-        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Private then [f] else []) $ makeTransforms funcs
-        privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
+        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Public]) $ makeTransforms funcs
+        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
+        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Private]) $ makeTransforms funcs
+        privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubBlank = if null pubVars then empty else blank
         privBlank = if null privFuncs then empty else blank
         baseClass = case p of Nothing -> empty
@@ -236,7 +237,7 @@ classDoc' c ft@(Header) _ (Class n p _ vs fs) =
                 methodListDoc c ft n privFuncs]],
         rbrace <> endStatement c]
 classDoc' c ft@(Source) _ (Class n _ _ vs fs) = methodListDoc c ft n $ fs ++ [destructor c n vs]
-classDoc' _ (Header) _ (MainClass _ _ _) = empty
+classDoc' _ (Header) _ MainClass{} = empty
 classDoc' c ft _ (MainClass _ vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
@@ -396,7 +397,7 @@ destructor _ n vs =
         guard l = var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) (i &.++) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ var lbl
         deleteStatements = map deleteVar deleteVars

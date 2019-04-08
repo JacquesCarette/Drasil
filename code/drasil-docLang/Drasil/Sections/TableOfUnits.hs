@@ -6,18 +6,17 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (symbol_, description)
-import Data.Drasil.Concepts.Documentation as Doc (sec)
 
 -- | Table of units section builder. Takes a list of units and an introduction
 table_of_units :: IsUnit s => [s] -> Contents -> Section
 table_of_units u intro = Section (S "Table of Units") [Con intro, Con $ LlC (unit_table u)]
-  (mkLabelRASec "ToU" "ToU") Doc.sec
+  (makeSecRef "ToU" "ToU")
 
 -- | Creates the actual table of units from a list of units
 unit_table :: IsUnit s => [s] -> LabelledContent
-unit_table u = llcc (mkLabelSame "ToU" Tab) $ Table
+unit_table u = llcc (makeTabRef "ToU") $ Table
   (map (at_start) [symbol_, description])  (mkTable
-  [(\x -> Sy (x ^. usymb)),
+  [Sy . usymb,
    (\x -> (x ^. defn) +:+ sParen (phrase x))
   ] u)
   (S "Table of Units") False

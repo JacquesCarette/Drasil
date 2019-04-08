@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 -- | The logic to render GOOL code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
     -- * GOOL Code Configuration -- defines syntax of all GOOL code
@@ -24,14 +25,16 @@ import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
 import Data.Char (toLower)
-import Prelude hiding (print)
+import Data.Maybe (fromMaybe)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, vcat, hcat, punctuate,
   brackets, int, char, quotes, double, integer, equals, empty)
 
 goolConfig :: Options -> Config -> Config
 goolConfig options c = 
-    let hsMod = case (hsModule options) of Nothing -> error "GOOLRenderer: The GOOLHsModule option must be specified in the Configuration file when generating GOOL code."
-                                           Just hsMod' -> hsMod'
+    let hsMod = fromMaybe (error "GOOLRenderer: The GOOLHsModule option must be " ++
+          "specified in the Configuration file when generating GOOL code.") $
+          hsModule options
     in Config {
         renderCode = renderCode' c,
         
@@ -44,13 +47,13 @@ goolConfig options c =
         dir              = "gool",
         fileName         = fileNameD c,
         include          = includeD "import",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = text "extends",
         inputFunc        = text "Input",
         iterForEachLabel = text "ForEach",
         iterInLabel      = empty,
-        list             = \lt -> case lt of Static  -> text "List Static"
-                                             Dynamic -> text "List Dynamic",
+        list             = \case Static  -> text "List Static"
+                                 Dynamic -> text "List Dynamic",
         listObj          = empty,
         clsDec           = empty,
         package          = \p -> vcat [
@@ -67,7 +70,7 @@ goolConfig options c =
         
         top    = gooltop c hsMod,
         body   = goolbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDoc', bodyDoc = bodyDoc' c, blockDoc = blockDoc' c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDoc' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -79,7 +82,7 @@ goolConfig options c =
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined"
+        getEnv = const $ error "getEnv for GOOL is not defined"
     }
     
 -- for convenience
@@ -147,7 +150,7 @@ binOpDoc' Modulo = text "#%"
 binOpDoc' Power = text "#^"
 
 bodyDoc' :: Config -> Body -> Doc
-bodyDoc' c [Block (s:[])] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
+bodyDoc' c [Block [s]] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
 bodyDoc' c bs = hsVList (blockDoc c) bs
 
 blockDoc' :: Config -> Block -> Doc

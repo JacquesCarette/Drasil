@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 
 import Drasil.SSP.Defs (fs_concept)
 
@@ -9,6 +10,8 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
 
+import Data.Drasil.Quantities.Math (area, pi_)
+import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
@@ -24,6 +27,8 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
+genericF = force
+genericA = area
 
 -------------
 -- HELPERS --
@@ -44,7 +49,7 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [cohesion, fricAngle, dryWeight, satWeight, waterWeight]
+sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -58,7 +63,7 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-cohesion, fricAngle, dryWeight, satWeight,
+effCohesion, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ
   
 fs, coords :: ConstrConcept
@@ -66,7 +71,7 @@ fs, coords :: ConstrConcept
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-cohesion = uqc "c'" (cn $ "effective cohesion")
+effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
@@ -93,7 +98,7 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (dbl 9.8) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing)
+fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
@@ -114,21 +119,22 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, normFunc, shearFunc,
+sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
-  surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
-  momntOfBdy, porePressure, sliceHght,
-  fx, fy, mobShrC, shrResC, intNormForce, shrStress]
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
+  sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  mobShrC, shrResC, intNormForce, shrStress]
 
-normStress, normFunc, shearFunc, slopeDist, slipDist,
+normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy,
+  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   porePressure, mobShrC, shrResC,
   intNormForce, shrStress :: UnitalChunk
   
@@ -144,17 +150,17 @@ waterHght = uc' "y_wt,i"
   ("height of the water table at i, " ++ smsi)
   (sub lY (Atomic "wt")) metre
 
-slopeHght = uc' "y_us,i" (cn $ "y ordinate")
-  ("height of the top of the slope at i, " ++ smsi)
-  (sub lY (Atomic "us")) metre
+slopeHght = uc' "y_slope,i" (cn $ "slope y-ordinate")
+  ("y-ordinate of a point on the slope")
+  (sub lY (Atomic "slope")) metre
 
 slipHght = uc' "y_slip,i" (cn $ "y ordinate")
   ("height of the slip surface at i, " ++ smsi)
   (sub lY (Atomic "slip")) metre
 
-slopeDist = uc' "x_us,i" (cn $ "x ordinate")
-  ("distance of the edge of the slope at i, " ++ smsi)
-  (sub lX (Atomic "us")) metre 
+slopeDist = uc' "x_slope,i" (cn $ "slope x-ordinate")
+  ("x-ordinate of a point on the slope")
+  (sub lX (Atomic "slope")) metre
 
 slipDist = uc' "x_slip,i" (cn $ "x ordinate")
   ("distance of the slip surface at i, " ++ smsi)
@@ -164,10 +170,12 @@ yi = uc' "y_i" (cn $ "y ordinate") smsi lY metre
   
 xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
+-- FIXME: the 'symbol' for this should not have { and } embedded in it.
+-- They have been removed now, but we need a reasonable notation.
 critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"),
-  sub (Atomic ",y") (Atomic "cs")])) metre
+  (Concat [sub (Atomic "x") (Atomic "cs"), Atomic ",",
+  sub (Atomic "y") (Atomic "cs")]) metre
 
 mobShrI = uc' "mobShear" (cn $ "mobilized shear force")
   fsi
@@ -184,11 +192,13 @@ shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
   
-mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
+mobShrC = uc' "Psi" (cn $ "second function for incorporating interslice " ++
+  "forces into shear force") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
   cPsi newton
 
-shrResC = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
+shrResC = uc' "Phi" (cn $ "first function for incorporating interslice " ++
+  "forces into shear force") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
   cPhi newton
 
@@ -203,8 +213,8 @@ shearRNoIntsl = uc' "R_i"
 slcWght = uc' "W_i" (cn $ "weight")
   ("downward force caused by gravity on slice i") (cW) newton
 
-watrForce = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
-  "x-ordinate direction between adjacent slices " ++ fisi)
+watrForce = uc' "H_i" (cn $ "interslice normal water force") ("exerted in " ++
+  "the x-ordinate direction between adjacent slices " ++ fisi)
   (cH) newton
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
@@ -263,9 +273,9 @@ surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   "line from an interslice vertex " ++ fisi)
   (sub lEll (Atomic "s")) metre
 
-midpntHght = uc' "h_i" (cn $ "midpoint height")
-  ("distance from the slip base to the slope surface in a vertical " ++
-  "line from the midpoint of the slice " ++ fsi)
+midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
+  ("height in the y-direction from the base of a slice to the slope " ++
+  "surface, at the x-direction midpoint of the slice")
   (lH) metre
 
 momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
@@ -297,18 +307,37 @@ fx = uc' "fx" (cn "x-component of the net force") ""
 
 fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
+
+nrmForceSum = uc' "F_x^G" (cn "sum of the interslice normal forces") 
+  "for two adjacent interslice boundaries"
+  (sup (sub cF lX) cG) newton
+
+watForceSum = uc' "F_x^H" (cn "sum of the interslice normal water forces") 
+  "for two adjacent interslice boundaries"
+  (sup (sub cF lX) cH) newton
+
+sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice") 
+  "assuming slice surface has negative slope"
+  (sup lH cR) metre
+
+sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") 
+  "assuming slice surface has negative slope"
+  (sup lH cL) metre
   
 ----------------------
 -- Unitless Symbols --
 ----------------------
 
 sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, index, varblU, varblV, fs_min,
-  ufixme1, ufixme2]
+sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
+  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min]
 
-earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
+constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
+  minFunction, index, varblU, varblV :: DefinedQuantityDict
+
+constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
+  ("boolean decision on which form of f the user desires: constant if true," ++
+  " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
@@ -319,7 +348,8 @@ normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
   ("applied to all interslices")) (const lLambda) Real Nothing
 
-scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
+  "force ratio variation function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
   (const lF) Real Nothing 
@@ -331,12 +361,6 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
-
-ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme1Please") Real Nothing 
-
-ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme2Please") Real Nothing 
 
 --------------------
 -- Index Function --

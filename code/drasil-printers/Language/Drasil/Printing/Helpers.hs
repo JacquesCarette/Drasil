@@ -1,6 +1,7 @@
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, nest, (<>))
 import Data.Char (toUpper, toLower)
 
@@ -36,16 +37,16 @@ indent :: Doc -> Doc
 indent = nest 4
 
 dot, comm :: Doc -> Doc
-dot    = \x -> x <> text "."
-comm   = \x -> x <> text ","
+dot  = (<> text ".")
+comm = (<> text ",")
 
 -- | basic plaintext (String) wrapping
-paren,brace,dollar,sqbrac,angbrac:: String -> String
-paren  = \x -> "(" ++ x ++ ")"
-brace  = \x -> "{" ++ x ++ "}"
-dollar = \x -> "$" ++ x ++ "$"
-sqbrac = \x -> "[" ++ x ++ "]"
-angbrac = \x -> "<" ++ x ++ ">"
+paren, brace, dollar, sqbrac, angbrac :: String -> String
+paren   x = "(" ++ x ++ ")"
+brace   x = "{" ++ x ++ "}"
+dollar  x = "$" ++ x ++ "$"
+sqbrac  x = "[" ++ x ++ "]"
+angbrac x = "<" ++ x ++ ">"
 
 -- | String capitalization
 capitalize :: String -> String
@@ -53,7 +54,7 @@ capitalize [] = []
 capitalize (c:cs) = toUpper c:map toLower cs
 
 -- | Format strings and convert to Doc
-upcase, lowcase :: [Char] -> Doc
+upcase, lowcase :: String -> Doc
 upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string
 lowcase []     = text []
@@ -71,4 +72,4 @@ sufx _ = "th"
 
 -- Use on any sized Int
 sufxer :: Int -> String
-sufxer = (\x -> x ++ ".") . sufx . mod 10
+sufxer = (++ ".") . sufx . mod 10

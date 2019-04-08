@@ -565,6 +565,9 @@ jDiscardInput inFn = inFn <> dot <> text "next()"
 jInput :: Doc -> Doc -> Doc -> Doc
 jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
 
+jInput' :: Doc -> Doc -> Doc -> Doc
+jInput' it v inFn = v <+> equals <+> it <> parens (inFn <> dot <> text "nextLine()")
+
 jOpenFileR :: Doc -> Doc -> Doc
 jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
 

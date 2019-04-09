@@ -200,6 +200,28 @@ Pa
 </tr>
 <tr>
 <td>
+<em>func_interpY</em>
+</td>
+<td>
+InterpY
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>func_interpZ</em>
+</td>
+<td>
+InterpZ
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>g</em>
 </td>
 <td>
@@ -229,28 +251,6 @@ Minimum thickness
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-<em>interpY</em>
-</td>
-<td>
-InterpY
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>interpZ</em>
-</td>
-<td>
-InterpZ
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -1752,7 +1752,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>J = interpZ(SDF.txt,AR,q&#770;)</em>
+<em>J = func_interpZ(SDF.txt,AR,q&#770;)</em>
 </div>
 </td>
 </tr>
@@ -1766,7 +1766,7 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 <li>
-<em>interpZ</em> is the interpZ (Unitless)
+<em>func_interpZ</em> is the interpZ (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2210,7 +2210,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
+<em>q&#770;<sub>tol</sub> = func_interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2224,7 +2224,7 @@ Description
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
 </li>
 <li>
-<em>interpY</em> is the interpY (Unitless)
+<em>func_interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2903,7 +2903,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>q = func_interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2917,7 +2917,7 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>interpY</em> is the interpY (Unitless)
+<em>func_interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
@@ -3031,7 +3031,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>q = func_interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3045,7 +3045,7 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>interpY</em> is the interpY (Unitless)
+<em>func_interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)

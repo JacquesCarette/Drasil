@@ -5,7 +5,7 @@ import Language.Drasil
 import Language.Drasil.Development (dep, names')
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
-  codevar, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,
+  codevar, codefunc, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,
   qtov, qtoc, symbToCodeName, codeType)
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
@@ -252,16 +252,12 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
-  where getModDep (Mod name' funcs) = 
+  where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
-        fdep (FDef (FuncDef _ i _ fs)) = concatMap fcallname fs ++ (map codeName (i ++ concatMap (fstdep sm ) fs))
+        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
-
-fcallname :: FuncStmt -> [String]
-fcallname (FProcCall f _ ) = [funcPrefix ++ (fname f)]
-fcallname _ = []
 
 fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
 fstdep _  (FDec cch _) = [cch]
@@ -273,7 +269,7 @@ fstdep sm (FRet e)  = codevars  e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
 fstdep _  (FContinue) = []
-fstdep sm (FProcCall _ l)  = concatMap (`codevars` sm) l
+fstdep sm (FProcCall f l)  = (codefunc (asVC f)) : (concatMap (`codevars` sm) l)
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
@@ -340,7 +336,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                         ++ " and Knowns as " ++ (show $ map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
-subsetOf :: (Eq a) => [a] -> [a] -> Bool  
+subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Get a list of CodeChunks from an equation

@@ -456,7 +456,7 @@ convExpr  (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
 
-  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+  fApp (codeName (codevar (symbLookup c (symbolTable info)))) args
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

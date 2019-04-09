@@ -220,8 +220,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic (funcPrefix++n)) Real
+asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic (funcPrefix++n)) Real
 asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 
 

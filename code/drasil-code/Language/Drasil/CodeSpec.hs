@@ -256,10 +256,14 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
-        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
+        fdep (FDef (FuncDef _ i _ fs)) = concatMap fcallname fs ++ (map codeName (i ++ concatMap (fstdep sm ) fs))
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
-fstdep :: ChunkDB -> FuncStmt ->[CodeChunk]
+fcallname :: FuncStmt -> [String]
+fcallname (FProcCall f _ ) = [funcPrefix ++ (fname f)]
+fcallname _ = []
+
+fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
 fstdep _  (FDec cch _) = [cch]
 fstdep sm (FAsg cch e) = cch:codevars e sm
 fstdep sm (FFor cch e fs) = delete cch $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)

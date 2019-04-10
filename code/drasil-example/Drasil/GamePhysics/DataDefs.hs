@@ -15,7 +15,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  impulseV, force, torque, kEnergy, energy)
+  force, torque, kEnergy, energy)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SentenceStructures (foldlSent)
 

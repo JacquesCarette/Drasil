@@ -45,7 +45,7 @@ install:
 script:
  - cd code
  - curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
- - make stackArgs="--no-terminal" NOISY=yes
+ - make stackArgs="--no-terminal" NOISY=yes GHCFLAGS=-Werror
  - make tex SUMMARIZE_TEX=yes
  - make docs haddockArgs="--no-haddock-deps"
 

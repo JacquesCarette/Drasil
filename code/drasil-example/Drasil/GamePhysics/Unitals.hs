@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 
-import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second, joule)
+import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, angularDisplacement, angularVelocity, displacement, distance, 

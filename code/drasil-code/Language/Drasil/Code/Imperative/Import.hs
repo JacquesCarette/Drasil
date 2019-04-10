@@ -68,6 +68,12 @@ chooseLogging LogVar = loggedAssign
 chooseLogging LogAll = loggedAssign
 chooseLogging _      = (\x y -> return $ assign x y)
 
+initLogFileVar :: (RenderSym repr) => Logging -> [(repr (Statement repr))]
+initLogFileVar LogVar = [varDec "outfile" outfile]
+initLogFileVar LogAll = [varDec "outfile" outfile]
+initLogFileVar _ = []
+
+
 generator :: (RenderSym repr) => Choices -> CodeSpec -> (State repr)
 generator chs spec = State {
   -- constants
@@ -175,7 +181,7 @@ genInputClass = do
       vals         = map (getDefaultValue . codeType) ins
   asgs <- zipWithM assign' varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
-    [ constructor "InputParameters" [] (body [block asgs]) ]
+    [ constructor "InputParameters" [] (body [block ((initLogFileVar (logKind g)) ++ asgs)]) ]
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
   (repr (Method repr))
@@ -277,7 +283,7 @@ genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $
 genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
   (Method repr))
 genOutputFormat outs =
-  let l_outfile = "outfile"
+  let l_outfile = "outputfile"
       v_outfile = var l_outfile
   in do
     parms <- getParams outs
@@ -400,7 +406,6 @@ loggedAssign a b =
     g <- ask
     return $ multi [
       assign a b,
-      varDec l_outfile outfile,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
       printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g))

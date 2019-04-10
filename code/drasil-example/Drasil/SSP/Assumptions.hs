@@ -4,12 +4,15 @@ import Language.Drasil
 
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   soil, soilLyr, soilPrpty, intrslce, slice)
-import Drasil.SSP.Unitals (coords, normToShear, numbSlices, scalFunc)
+import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
+  normToShear, numbSlices, scalFunc, slipDist, slipHght, xi)
+import Drasil.SSP.References (morgenstern1965)
 
 import Data.Drasil.SentenceStructures (ofThe', foldlSent, sAnd)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, condition)
-import Data.Drasil.Concepts.Physics (force, stress, strain)
+import Data.Drasil.Concepts.Documentation (assumpDom, assumption, condition,
+  constant)
+import Data.Drasil.Concepts.Physics (force, position, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
@@ -40,27 +43,27 @@ monotonicF, slopeS, homogeneousL, isotropicP, linearS,
   planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave with respect to", S "the" +:+. phrase slopeSrf,
-  ((ch coords +:+ S "coordinates") `ofThe'` S "failure"),
-  phrase surface, S "follow a monotonic function"]
+  S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
+  sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
+  phrase slpSrf, S "follow a concave up function"]
 
-slopeS = foldlSent [S "The factor of safety is assumed to be constant across a whole",
+slopeS = foldlSent [S "The factor of safety is assumed to be constant across the entire",
   phrase slpSrf]
+
+homogeneousL = foldlSent [S "The", phrase soil, S "mass is homogeneous" `sC`
+  S "with consistent", plural soilPrpty +:+ S "throughout"]
 
 propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or saturated",
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
-homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
-  S "are homogeneous" `sC` S "with consistent", plural soilPrpty +:+
-  S "throughout"]
+isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
+  phrase effCohesion `sAnd` phrase fricAngle, S "are isotropic properties"]
 
-isotropicP = foldlSent [at_start' soilLyr, S "are treated as if they have",
-  S "isotropic properties"]
-
-linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
-  S "have a linear relationship, proportional to a constant",
-  sParen (ch normToShear), S "and an", phrase intrslce, phrase force,
-  S "function", sParen (ch scalFunc), S "depending on x position"]
+linearS = foldlSent [S "Following the", phrase assumption, S "of", 
+  makeRef2S morgenstern1965 `sC` phrase intNormForce `sAnd` phrase intShrForce,
+  S "have a proportional relationship, depending on a proportionality constant",
+  sParen (ch normToShear), S "and a function", sParen (ch scalFunc),
+  S "describing variation depending on", ch xi, phrase position]
 
 planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.
   S "extends far into and out of the geometry (z coordinate)",

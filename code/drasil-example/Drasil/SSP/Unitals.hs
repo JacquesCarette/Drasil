@@ -291,10 +291,10 @@ shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
   lTau pascal
 
-sliceHght = uc' "z_i" (cn "center of slice height")
+sliceHght = uc' "h_z,i" (cn "center of slice height")
   ("the distance from the lowest part " ++
   "of the slice to the height of the centers of slice")
-  (lZ) metre
+  (sub lH lZ) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
   "the normal force at the interslice interface for slice i"

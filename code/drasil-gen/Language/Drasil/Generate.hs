@@ -10,7 +10,7 @@ import Language.Drasil
 import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
   genTeX, PrintingInformation)
-import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
+import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec)
 import Language.Drasil.Code (Lang(..), unJC, unPC)
 
 -- | Generate a number of artifacts based on a list of recipes.

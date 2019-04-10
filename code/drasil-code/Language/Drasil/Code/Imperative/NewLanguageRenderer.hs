@@ -35,7 +35,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,
     oneTab,capitalize,oneTabbed,hicat,vibcat,vmap)
 
 import Data.List (intersperse)
-import Prelude hiding (break,print,return,last,mod)
+import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
     brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
     integer, semi, equals, braces, int, comma, colon, hcat)

@@ -76,7 +76,7 @@ pythonConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
-        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
+        unOpDoc = unOpDocD'', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
         inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
         getEnv = const $ error "getEnv for pythong not yet implemented"
@@ -87,6 +87,11 @@ imp, incl, initName :: Label
 imp = "import*"
 incl = "from"
 initName = "__init__"
+
+unOpDocD'' :: UnaryOp -> Doc
+unOpDocD'' Ln = text "math.log"
+unOpDocD'' Log = text "math.log10"
+unOpDocD'' op = unOpDocD' op
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
@@ -253,6 +258,8 @@ valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (call
         prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
+valueDoc' c (Condi cond te ee) = parens (valueDoc' c te <+> text "if" <+>
+          parens (valueDoc' c cond) <+> text "else" <+> valueDoc' c ee)
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc

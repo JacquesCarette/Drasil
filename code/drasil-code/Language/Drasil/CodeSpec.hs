@@ -349,7 +349,7 @@ codevars' :: Expr -> ChunkDB -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
   where  resolve x = codevar (symbLookup x (symbolTable m))
 
--- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by wither Var or Func
+-- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
 codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
 codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 

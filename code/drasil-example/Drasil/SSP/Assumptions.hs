@@ -2,17 +2,18 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
+import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
   soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
-  normToShear, numbSlices, scalFunc, slipDist, slipHght, xi)
+  normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
+  xi, zcoord)
 import Drasil.SSP.References (morgenstern1965)
 
 import Data.Drasil.SentenceStructures (ofThe', foldlSent, sAnd)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, assumption, condition,
-  constant)
-import Data.Drasil.Concepts.Physics (force, position, stress, strain)
+import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
+  condition, constant, interface)
+import Data.Drasil.Concepts.Physics (force, position, stress, strain, twoD)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
@@ -65,26 +66,23 @@ linearS = foldlSent [S "Following the", phrase assumption, S "of",
   sParen (ch normToShear), S "and a function", sParen (ch scalFunc),
   S "describing variation depending on", ch xi, phrase position]
 
-planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.
-  S "extends far into and out of the geometry (z coordinate)",
-  S "This implies plane", phrase strain, plural condition `sC`
-  S "making 2D analysis appropriate"]
+planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+
+  S "extends far into and out of the geometry" +:+. sParen (ch zcoord +:+ 
+  S "coordinate"), S "This implies", phrase plnStrn, plural condition `sC`
+  S "making", short twoD, phrase analysis, S "appropriate"]
 
 largeN = foldlSent [S "The effective normal", phrase stress,
-  S "is large enough that the resistive shear to effective normal",
-  phrase stress, S "relationship can be approximated as a",
-  S "linear relationship"]
+  S "is large enough that the", phrase shrStress, S "to effective normal",
+  phrase stress, S "relationship can be approximated as a linear relationship"]
 
 straightS = foldlSent [S "The", phrase surface, S "and base of a",
-  phrase slice, S "between", phrase intrslce,
-  S "nodes are approximated as straight lines"]
+  phrase slice, S "are approximated as straight lines"]
 
 edgeS = foldlSent [S "The", phrase intrslce, plural force, 
   S "at the 0th" `sAnd` ch numbSlices :+: S "th", phrase intrslce,
-  S "interfaces are zero"]
+  plural interface, S "are zero"]
 
-seismicF = foldlSent [S "There is no seismic force acting on the slope"]
+seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
 
-surfaceL = foldlSent [S "There is no imposed", phrase surface `sC` 
-  S "load and therefore no external", phrase force `sC` S "acting on the",
-  phrase slope]
+surfaceL = foldlSent [S "There is no", phrase surfLoad, S "and therefore no", 
+  S "external", phrase force `sC` S "acting on the", phrase slope]

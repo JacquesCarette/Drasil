@@ -3,19 +3,18 @@ module Drasil.SSP.Assumptions where
 import Language.Drasil
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
-  soil, soilLyr, soilPrpty, intrslce, slice)
+  soil, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
   normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
   xi, zcoord)
 import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.SentenceStructures (ofThe', foldlSent, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
   condition, constant, interface)
-import Data.Drasil.Concepts.Physics (force, position, stress, strain, twoD)
+import Data.Drasil.Concepts.Physics (force, position, stress, twoD)
 import Data.Drasil.Concepts.Math (surface, unit_)
-import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
 
 assumptions :: [ConceptInstance]
@@ -48,8 +47,8 @@ monotonicF = foldlSent [S "The", phrase slpSrf,
   sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
   phrase slpSrf, S "follow a concave up function"]
 
-slopeS = foldlSent [S "The factor of safety is assumed to be constant across the entire",
-  phrase slpSrf]
+slopeS = foldlSent [S "The factor of safety is assumed to be", phrase constant,
+  S "across the entire", phrase slpSrf]
 
 homogeneousL = foldlSent [S "The", phrase soil, S "mass is homogeneous" `sC`
   S "with consistent", plural soilPrpty +:+ S "throughout"]
@@ -63,9 +62,10 @@ isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the",
 linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
   S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
   phrase intNormForce `sAnd` phrase intShrForce,
-  S "have a proportional relationship, depending on a proportionality constant",
-  sParen (ch normToShear), S "and a function", sParen (ch scalFunc),
-  S "describing variation depending on", ch xi, phrase position]
+  S "have a proportional relationship, depending on a proportionality",
+  phrase constant, sParen (ch normToShear), S "and a function", 
+  sParen (ch scalFunc), S "describing variation depending on", ch xi, 
+  phrase position]
 
 planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+
   S "extends far into and out of the geometry" +:+. sParen (ch zcoord +:+ 

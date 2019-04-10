@@ -399,6 +399,7 @@ instance StatementSym PythonCode where
 
     openFileR f n = f &= (funcApp "open" [n, litString "r"])
     openFileW f n = f &= (funcApp "open" [n, litString "w"])
+    openFileA f n = f &= (funcApp "open" [n, litString "a"])
     closeFile f = valState $ objMethodCall f "close" []
 
     getFileInputLine f v = v &= (objMethodCall f "readline" [])

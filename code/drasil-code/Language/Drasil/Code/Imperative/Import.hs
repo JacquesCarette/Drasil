@@ -333,7 +333,7 @@ loggedMethod n st l b =
     rest <- b
     return $ (block [
       varDec l_outfile outfile,
-      openFileW v_outfile (litString $ logName g),
+      openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
       printParams st l v_outfile,
       printFileStrLn v_outfile ") called",
@@ -401,7 +401,7 @@ loggedAssign a b =
     return $ multi [
       assign a b,
       varDec l_outfile outfile,
-      openFileW v_outfile (litString $ logName g),
+      openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
       printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g))
         b,
@@ -528,7 +528,7 @@ convExpr  (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
 
-  fApp (codeName (codevar (symbLookup c (symbolTable info)))) args
+  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

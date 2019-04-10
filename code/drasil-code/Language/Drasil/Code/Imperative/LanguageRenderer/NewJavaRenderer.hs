@@ -38,7 +38,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-    semi, vcat, lbrace, rbrace, render, colon, isEmpty, render)
+    semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
 
 newtype JavaCode a = JC {unJC :: a}
 
@@ -425,7 +425,8 @@ instance StatementSym JavaCode where
     discardFileInput f = liftA jDiscardInput f
 
     openFileR f n = liftA2 jOpenFileR f n
-    openFileW f n = liftA2 jOpenFileW f n
+    openFileW f n = liftA3 jOpenFileWorA f n litFalse
+    openFileA f n = liftA3 jOpenFileWorA f n litTrue
     closeFile f = valState $ objMethodCall f "close" []
 
     getFileInputLine f v = v &= (f $. (func "nextLine" []))
@@ -519,6 +520,7 @@ jtop end inc lst = vcat [
     inc <+> text "java.util.BitSet" <> end,     --TODO: only include these if they are used in the code?
     inc <+> text "java.util.Scanner" <> end,
     inc <+> text "java.io.PrintWriter" <> end,
+    inc <+> text "java.io.FileWriter" <> end,
     inc <+> text "java.io.File" <> end,
     inc <+> text ("java.util." ++ render (lst)) <> end]
 
@@ -573,8 +575,8 @@ jInput' it v inFn = v <+> equals <+> it <> parens (inFn <> dot <> text "nextLine
 jOpenFileR :: Doc -> Doc -> Doc
 jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
 
-jOpenFileW :: Doc -> Doc -> Doc
-jOpenFileW f n = f <+> equals <+> new <+> text "PrintWriter" <> parens n
+jOpenFileWorA :: Doc -> Doc -> Doc -> Doc
+jOpenFileWorA f n wa = f <+> equals <+> new <+> text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> parens n <> comma <+> wa))
 
 jListExtend :: Doc -> Doc
 jListExtend v = dot <> text "add" <> parens v

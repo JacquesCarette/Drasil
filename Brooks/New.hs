@@ -382,6 +382,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
 
     openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    openFileA :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     closeFile :: repr (Value repr) -> repr (Statement repr)
 
     getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)

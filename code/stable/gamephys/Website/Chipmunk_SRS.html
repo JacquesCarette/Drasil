@@ -483,10 +483,21 @@ s
 </tr>
 <tr>
 <td>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+</td>
+<td>
+Relative Velocity Between Rigid Bodies of A and B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
 <em><b>v</b><sup>AP</sup></em>
 </td>
 <td>
-Velocity Of the Point of Collision P in Body a
+Velocity Of the Point of Collision P in Body A
 </td>
 <td>
 m/s
@@ -553,17 +564,6 @@ m/s
 </td>
 <td>
 Velocity
-</td>
-<td>
-m/s
-</td>
-</tr>
-<tr>
-<td>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
-</td>
-<td>
-Relative Velocity Between Rigid Bodies of A and B
 </td>
 <td>
 m/s
@@ -1068,7 +1068,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpOT">
-objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:relVelInColl>DD: relVelInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -2592,15 +2592,7 @@ RefBy
 </tr>
 </table>
 </div>
-<<<<<<< HEAD
 <div id="DD:relVelInColl">
-=======
-<<<<<<< HEAD
-<div id="DD:relVelInColl">
-=======
-<div id="DD:kinetic energy">
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 <table class="ddefn">
 <tr>
 <th>
@@ -2608,15 +2600,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
-Relative Velocity Between Rigid Bodies of a and B
-=======
-<<<<<<< HEAD
-Relative Velocity Between Rigid Bodies of a and B
-=======
-Kinetic energy
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
+Relative Velocity Between Rigid Bodies of A and B
 </p>
 </td>
 </tr>
@@ -2626,15 +2610,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 <em><b>v</b><sub>i</sub><sup>AB</sup></em>
-=======
-<<<<<<< HEAD
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
-=======
-<em>KE</em>
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -2644,15 +2620,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 m/s
-=======
-<<<<<<< HEAD
-m/s
-=======
-J
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -2662,22 +2630,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<<<<<<< HEAD
 <em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
-=======
-<<<<<<< HEAD
-<em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
-=======
-<em>KE = <div class="fraction">
-<span class="fup">
-m&#8239;<b>v</b><sup>2</sup>
-</span>
-<span class="fdn">
-2
-</span>
-</div></em>
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </div>
 </td>
 </tr>
@@ -2688,10 +2641,6 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> master
 <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
 </li>
 <li>
@@ -2699,18 +2648,6 @@ Description
 </li>
 <li>
 <em><b>v</b><sup>BP</sup></em> is the velocity of the point of collision P in body B (m/s)
-<<<<<<< HEAD
-=======
-=======
-<em>KE</em> is the kinetic energy (J)
-</li>
-<li>
-<em>m</em> is the mass (kg)
-</li>
-<li>
-<em><b>v</b></em> is the velocity (m/s)
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </li>
 </ul>
 </td>
@@ -2721,15 +2658,106 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
-The linear velocity.
-=======
-<<<<<<< HEAD
-The linear velocity.
-=======
+In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:kinetic energy">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Kinetic energy
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>KE</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+J
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>KE = <div class="fraction">
+<span class="fup">
+m&#8239;<b>v</b><sup>2</sup>
+</span>
+<span class="fdn">
+2
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>KE</em> is the kinetic energy (J)
+</li>
+<li>
+<em>m</em> is the mass (kg)
+</li>
+<li>
+<em><b>v</b></em> is the velocity (m/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 The kinetic energy of an object is the energy it possess due to its motion.
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -3651,6 +3679,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:chalses>DD: chalses</a>
 </th>
 <th>
+<a href=#DD:relVelInColl>DD: relVelInColl</a>
+</th>
+<th>
 <a href=#TM:ChaslesThm>TM: ChaslesThm</a>
 </th>
 </tr>
@@ -3660,6 +3691,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3771,6 +3805,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -3781,6 +3818,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3889,6 +3929,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -3905,6 +3948,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4007,6 +4053,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4032,6 +4081,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4125,6 +4177,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4177,6 +4232,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4243,6 +4301,9 @@ X
 <td>
 X
 </td>
+<td>
+X
+</td>
 </tr>
 <tr>
 <td>
@@ -4259,6 +4320,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4361,6 +4425,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4380,6 +4447,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4479,6 +4549,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4498,6 +4571,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5491,15 +5567,7 @@ X
 </tr>
 <tr>
 <td>
-<<<<<<< HEAD
 IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-<<<<<<< HEAD
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-IM3 (<a href=#DD:kinetic energy>DD: kinetic energy</a>)
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </td>
 <td>
 X
@@ -5525,7 +5593,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#IM:transMot>IM: transMot</a>)
+LC1 (<a href=#DD:kinetic energy>DD: kinetic energy</a>)
 </td>
 <td>
 
@@ -5551,7 +5619,7 @@ LC1 (<a href=#IM:transMot>IM: transMot</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#IM:rotMot>IM: rotMot</a>)
+LC2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -5577,7 +5645,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#IM:col2D>IM: col2D</a>)
+LC3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5603,7 +5671,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC4 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -5705,15 +5773,7 @@ IM1 (<a href=#DD:chalses>DD: chalses</a>)
 IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-<<<<<<< HEAD
 IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-<<<<<<< HEAD
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-IM3 (<a href=#DD:kinetic energy>DD: kinetic energy</a>)
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </th>
 </tr>
 <tr>
@@ -7346,15 +7406,7 @@ X
 </tr>
 <tr>
 <td>
-<<<<<<< HEAD
 IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-<<<<<<< HEAD
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
-=======
-IM3 (<a href=#DD:kinetic energy>DD: kinetic energy</a>)
->>>>>>> 00cd3d789053cc8b8ddca13f3200d4d8484b08b2
->>>>>>> master
 </td>
 <td>
 

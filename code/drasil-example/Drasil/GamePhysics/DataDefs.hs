@@ -1,42 +1,34 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, torqueDD, relVelInCollDD) where
-=======
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD) where
->>>>>>> master
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, relVelInCollDD) where
+
 
 import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
+
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
   perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, velA_P, velB_P, pointOfCollision)
 
-
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
+
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
+
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Data.Drasil.SentenceStructures (foldlSent)
-<<<<<<< HEAD
---import Data.Drasil.Utils (eqUnR')
-=======
 
->>>>>>> master
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+
+import Data.Drasil.SentenceStructures (foldlSent)
 
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, relVelInCollDD]
-=======
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD]
->>>>>>> master
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, relVelInCollDD, kEnergyDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
@@ -264,8 +256,12 @@ relVelInCollEqn :: Expr
 relVelInCollEqn = (sy velA_P) - (sy velB_P)
 
 relVelInCollDesc :: Sentence
-relVelInCollDesc = foldlSent [S "The linear", (phrase QP.velocity)]
---update description
+relVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
+  S "of a", (phrase $ CP.rigidBody),makeRef2S assumpOT, 
+  S "A colliding with another", (phrase CP.rigidBody),
+  S "B relative to that body", (ch initRelVel),
+  S "is the difference between the", (plural QP.velocity),
+  S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
 
 torqueDD :: DataDefinition

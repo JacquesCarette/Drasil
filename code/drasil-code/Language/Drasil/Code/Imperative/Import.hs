@@ -11,7 +11,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
-  codevar, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
+  codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit), 

@@ -8,7 +8,7 @@ import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
-import Data.Drasil.Units.Physics (momentOfForceU)
+import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
 import Data.Drasil.Quantities.Physics (force)
@@ -177,17 +177,17 @@ critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   (Concat [sub (Atomic "x") (Atomic "cs"), Atomic ",",
   sub (Atomic "y") (Atomic "cs")]) metre
 
-mobShrI = uc' "mobShear" (cn $ "mobilized shear force")
+mobShrI = uc' "mobShr" (cn $ "mobilized shear force per meter in the z-direction")
   fsi
-  (cS) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
+  (cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+shrResI = uc' "shrRes" (cn $ "resistive shear force per meter in the z-direction") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++
   "slice i can withstand before failure")
-  (cP) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
+  (cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
@@ -278,7 +278,7 @@ midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
   "surface, at the x-direction midpoint of the slice")
   (lH) metre
 
-momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
+momntOfBdy = uc' "M" (cn' $ "net moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 

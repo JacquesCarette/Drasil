@@ -19,8 +19,8 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy,
-  momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy, mobShrI,
+  momntOfBdy, normStress, porePressure, shrResI, shrStress, surfHydroForce)
 
 --------------------------
 --  Theoretical Models  --
@@ -29,23 +29,15 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy,
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
-  [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" [factOfSafety_desc]
+  [qw fs, qw shrResI, qw mobShrI] ([] :: [ConceptChunk])
+  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety EmptyS factOfSafety_rel
 
 factOfSafety_rel :: Relation
-factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
-
-factOfSafety_desc :: Sentence
-factOfSafety_desc = foldlSent [
-  S "The stability metric of the", phrase slope `sC` S "known as the",
-  phrase factor `sOf` phrase safety, sParen (ch fs) `sC`
-  S "is determined by", S "ratio" `ofThe` phrase shearForce,
-  S "at the base of the", phrase slope, sParen (ch mobShear) `sC`
-  S "and the resistive shear", sParen (ch shearRes)]
+factOfSafety_rel = (sy fs) $= (sy shrResI) / (sy mobShrI)
 
 --
 ------------- New Chunk -----------
@@ -64,11 +56,11 @@ eq_rel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
-  plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL), S "the", getTandS fx `sAnd`
+  plural force, S "and", plural momntOfBdy +:+. S "acting on the body will cancel out",
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net moment equal to" +:+ E 0]
+  S "will create a", phrase momntOfBdy, S "equal to" +:+ E 0]
 
 --
 ------------- New Chunk -----------

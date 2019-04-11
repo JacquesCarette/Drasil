@@ -24,12 +24,12 @@ import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, constraint, definition, design, document, effect, element, endUser,
+  constant, constraint, definition, design, document, effect, endUser,
   environment, goal, goalStmt, information, inModel, input_, interest, 
-  interface, issue, loss, method_, model, organization, physical, physics,
-  problem, product_, property, purpose, requirement, software, softwareSys, srs,
-  srsDomains, symbol_, sysCont, system, systemConstraint, table_, template, 
-  thModel, type_, user, value, variable, physSyst, doccon, doccon')
+  issue, loss, method_, model, organization, physical, physics, problem,
+  purpose, requirement, software, softwareSys, srs, srsDomains, symbol_,
+  sysCont, system, systemConstraint, template, thModel, type_, user, value,
+  variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
@@ -58,7 +58,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
-  intrslce, itslPrpty, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
+  intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
@@ -67,7 +67,7 @@ import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, numbSlices, 
+import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
 --type declarations for sections--
@@ -404,7 +404,7 @@ phys_sys_intro = physSystIntro ssp fig_physsyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
 physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
-  short ssp `sC` S "as shown in", makeRef2S indexref `sC` 
+  short what `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 
 phys_sys_convention = physSystConvention morPrice morgenstern1965 slope how 

@@ -37,6 +37,10 @@ PROGS =  $(addsuffix _prog, $(EXAMPLES))
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
+GHCTHREADS += 2
+override GHCFLAGS += -Wall -j$(GHCTHREADS)
+override stackArgs += --ghc-options="$(GHCFLAGS)"
+
 NOISY=no
 SUMMARIZE_TEX=no
 
@@ -57,7 +61,7 @@ debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
 $(filter build_%, $(BUILD_PACKAGES)): build_%: FORCE
-	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-$* --dump-logs --interleaved-output
+	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
 %_build: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_build: EDIR=$($(EXAMPLE)_DIR)

@@ -227,7 +227,7 @@ genCalcBlock t' v' e' = doit t' v' e'
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (genCalcBlock t v e)) cs
   return $ oneLiner $ ifCond ifs noElse
 
 ----- OUTPUT -------
@@ -456,7 +456,7 @@ convExpr  (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
 
-  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+  fApp (codeName (codevar (symbLookup c (symbolTable info)))) args
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

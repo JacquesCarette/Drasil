@@ -77,15 +77,15 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & m
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$func_interpY$ & InterpY & --
-\\
-$func_interpZ$ & InterpZ & --
-\\
 $g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 \\
 $GTF$ & Glass type factor & --
 \\
 $h$ & Minimum thickness & m
+\\
+$interpY$ & InterpY & --
+\\
+$interpZ$ & InterpZ & --
 \\
 $is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
 \\
@@ -538,12 +538,12 @@ Label & Stress distribution factor (Function)
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    J=func_interpZ\left(SDF.txt,AR,\hat{q}\right)
+                                    J=interpZ\left(SDF.txt,AR,\hat{q}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$J$ is the stress distribution factor (Function) (Unitless)}
-                                                  \item{$func_interpZ$ is the interpZ (Unitless)}
+                                                  \item{$interpZ$ is the interpZ (Unitless)}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
                                                   \item{$\hat{q}$ is the dimensionless load (Unitless)}
                                                   \end{symbDescription}
@@ -685,12 +685,12 @@ Label & Tolerable load
                  Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    {\hat{q}_{tol}}=func_interpY\left(SDF.txt,AR,{J_{tol}}\right)
+                                    {\hat{q}_{tol}}=interpY\left(SDF.txt,AR,{J_{tol}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
-                                                  \item{$func_interpY$ is the interpY (Unitless)}
+                                                  \item{$interpY$ is the interpY (Unitless)}
                                                   \item{$AR$ is the aspect ratio (Unitless)}
                                                   \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
                                                   \end{symbDescription}
@@ -914,12 +914,12 @@ Label & Applied load (demand)
                  Units & Pa
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    q=func_interpY\left(TSD.txt,SD,{w_{TNT}}\right)
+                                    q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$q$ is the applied load (demand) (Pa)}
-                                                  \item{$func_interpY$ is the interpY (Unitless)}
+                                                  \item{$interpY$ is the interpY (Unitless)}
                                                   \item{$SD$ is the stand off distance (m)}
                                                   \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
                                                   \end{symbDescription}
@@ -960,12 +960,12 @@ Label & Calculation of Demand
                                              \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
                                                                   Equation & \begin{displaymath}
-                                                                             q=func_interpY\left(TSD.txt,SD,{w_{TNT}}\right)
+                                                                             q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
                                                                              \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{$q$ is the applied load (demand) (Pa)}
-                                                                                           \item{$func_interpY$ is the interpY (Unitless)}
+                                                                                           \item{$interpY$ is the interpY (Unitless)}
                                                                                            \item{$SD$ is the stand off distance (m)}
                                                                                            \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
                                                                                            \end{symbDescription}

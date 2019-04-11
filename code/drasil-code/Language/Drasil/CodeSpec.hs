@@ -220,8 +220,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic (funcPrefix++n)) Real
-asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic (funcPrefix++n)) Real
+asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 
 
@@ -255,7 +255,7 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
-        fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
+        fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
@@ -348,3 +348,10 @@ codevars e m = map resolve $ dep e
 codevars' :: Expr -> ChunkDB -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
   where  resolve x = codevar (symbLookup x (symbolTable m))
+
+-- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
+codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
+codevarsandfuncs e m mem = map resolve $ dep e
+  where resolve x 
+          | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
+          | otherwise = codevar (symbLookup x $ symbolTable m)

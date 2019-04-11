@@ -120,7 +120,7 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
-  waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
+  waterHght, slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
@@ -129,7 +129,7 @@ sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
   mobShrC, shrResC, intNormForce, shrStress]
 
 normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
-  waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
+  waterHght, slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
@@ -166,9 +166,11 @@ slipDist = uc' "x_slip,i" (cn $ "x ordinate")
   ("distance of the slip surface at i, " ++ smsi)
   (sub lX (Atomic "slip")) metre
 
-yi = uc' "y_i" (cn $ "y ordinate") smsi lY metre
+yi = uc' "y_i" (cn $ "y-ordinate") smsi lY metre
   
-xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
+xi = uc' "x_i" (cn $ "x-ordinate") smsi lX metre
+
+zcoord = uc' "z" (cn $ "z-ordinate") "in the Cartesian coordinate system" lZ metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
@@ -289,10 +291,10 @@ shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
   lTau pascal
 
-sliceHght = uc' "z_i" (cn "center of slice height")
+sliceHght = uc' "h_z,i" (cn "center of slice height")
   ("the distance from the lowest part " ++
   "of the slice to the height of the centers of slice")
-  (lZ) metre
+  (sub lH lZ) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
   "the normal force at the interslice interface for slice i"

@@ -9,7 +9,7 @@ module Language.Drasil.Code.CodeGeneration (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST (AbstractCode)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config(renderCode))
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(renderCode), Options)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (csharpConfig)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (cppConfig)
 import Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (goolConfig)
@@ -17,14 +17,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (javaConfig
 import Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (objcConfig)
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (pythonConfig)
 import Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (luaConfig)
-import Language.Drasil.Code.Imperative.Parsers.ConfigParser (cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
+import Language.Drasil.Code.Imperative.Parsers.ConfigParser (cSharpLabel, cppLabel,
+    goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel)
 
+import Data.Function (fix)
 import Data.List (intercalate)
 import qualified Data.Map as Map (fromList,keys,lookup,Map)
-import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
-import Data.Function (fix)
+import Text.PrettyPrint.HughesPJ (Doc,render)
 
 -- | Map of (label,config) pairs for all supported languages.
 langs :: Map.Map String (Options -> Config -> Config)

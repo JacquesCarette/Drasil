@@ -5,12 +5,14 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
   , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
-  , twoD, physicCon, physicCon'
+  , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
 import Data.Drasil.IdeaDicts (physics)
+import Data.Drasil.Concepts.Documentation (property, value)
+import Data.Drasil.SentenceStructures (sOf)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
@@ -20,10 +22,11 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure]
+  joint, damping, pressure, cohesion, isotropy, kEnergy]
+
 
 physicCon' :: [CI]
-physicCon' = [twoD]
+physicCon' = [twoD, threeD]
 
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
@@ -31,9 +34,11 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
 
-twoD :: CI
+  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
+
+twoD, threeD :: CI
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -62,6 +67,9 @@ rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
+kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
+  (S "The measure of the" +:+ (phrase energy) +:+ 
+   S "a body possess due to its motion.")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
@@ -72,12 +80,11 @@ force        = dcc "force" (cn' "force")
   "An interaction that tends to produce change in the motion of an object"
 distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
-stress       = dcc "stress" (cn'' "stress")
-  ("Forces that are exerted between planes internal to" ++
-  " a larger body subject to external loading.")            --definition used in SSP, can be made clearer
+stress       = dccWDS "stress" (cn''' "stress")
+  (at_start' force +:+ S "that are exerted between planes internal to" +:+
+  S "a larger body subject to external loading.")            --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
-  ((titleize stress) +:+
-  S "forces that result in deformation of the body/plane.") --definition used in SSP, can be made clearer
+  (S "A measure of deformation of a body or plane under" +:+. phrase stress) --definition used in SSP, can be made clearer
 tension      = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase stress) +:+
   S "that causes displacement of the body away from its center.")
@@ -111,7 +118,6 @@ linAccel = dcc "linearAcceleration"
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
 -- FIXME: plurals below?
-
 restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
    "A measure of the restitution of a collision between two objects"
 momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
@@ -143,4 +149,14 @@ angular = dcc "angular" (cn' "angular")
 damping = dcc "damping" (cn' "damping")
   "An effect that tends to reduce the amplitude of vibrations"
 
+cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+ 
+  phrase force +:+ S "between adjacent particles that holds the matter" +:+
+  S "together.")
+
+isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
+  phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
+  S "the direction in which it is measured.")
+
 twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
+
+threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]

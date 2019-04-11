@@ -6,7 +6,6 @@ import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses)
 
-import Language.Drasil.Sentence (Sentence, sentenceShort)
 import Language.Drasil.NounPhrase (NP)
 
 -- === DATA TYPES/INSTANCES === --

@@ -23,7 +23,7 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 -- \ Returns the string if it doesn't contain spaces and throws an error if it does
 noSpaces :: String -> String
 noSpaces s
-  | not (' ' `elem` s) = s
+  | ' ' `notElem` s = s
   | otherwise          = error "String has at least one space in it."
 
 -- | repUnd - Replace Underscore (with '.').

@@ -45,10 +45,10 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
-normForcEqGD = gd'' normForcEq  [chen2005]   "normForcEq"  [nmFEq_desc]
-bsShrFEqGD   = gd'' bsShrFEq    [chen2005]   "bsShrFEq"    [bShFEq_desc]
-resShrGD     = gd'' resShr      [chen2005]   "resShr"      [resShr_desc]
-mobShrGD     = gd'' mobShr      [chen2005]   "mobShr"      [mobShr_desc]
+normForcEqGD = gd' normForcEq (getUnit totNrmForce) [nmFEq_deriv]   [chen2005]   "normForcEq"  [nmFEq_desc]
+bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)     [bShFEq_deriv]  [chen2005]   "bsShrFEq"    [bShFEq_desc]
+resShrGD     = gd' resShr     (getUnit shrResI)     [resShr_deriv]  [chen2005]   "resShr"      [resShr_desc]
+mobShrGD     = gd' mobShr     (getUnit mobShrI)     [mobShr_deriv]  [chen2005]   "mobShr"      [mobShr_desc]
 effNormFGD   = gd'' effNormF    [chen2005]   "effNormF"    [effNormF_desc]
 resShearWOGD = gd'' resShearWO  [chen2005]   "resShearWO"  []
 mobShearWOGD = gd'' mobShearWO  [chen2005]   "mobShearWO"  []
@@ -66,13 +66,16 @@ nmFEq_rel = inxi totNrmForce $= eqlExprN cos sin
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
-  S "in the normal direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in" +:+. (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])),
-  ch slcWght, S "is defined in", makeRef2S sliceWght `sC` ch surfHydroForce,
-  S "is defined in", makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
+  S "in the normal direction", ch slcWght, S "is defined in", 
+  makeRef2S sliceWght `sC` ch surfHydroForce,  S "is defined in", 
+  makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
+
+nmFEq_deriv :: Sentence
+nmFEq_deriv = foldlSent [at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRef2S fig_forceacting,
+  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 bsShrFEq :: RelationConcept
@@ -85,13 +88,16 @@ bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
-  S "in the shear direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in" +:+. (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), 
-  ch slcWght, S "is defined in", makeRef2S sliceWght `sC` ch surfHydroForce,
-  S "is defined in", makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
+  S "in the shear direction", ch slcWght, S "is defined in", 
+  makeRef2S sliceWght `sC` ch surfHydroForce, S "is defined in", 
+  makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
+
+bShFEq_deriv :: Sentence
+bShFEq_deriv = foldlSent [at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRef2S fig_forceacting,
+  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 shrResEqn :: Expr
@@ -106,7 +112,11 @@ resShr_rel :: Relation
 resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
-resShr_desc = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
+resShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+  makeRef2S lengthLb]
+
+resShr_deriv :: Sentence
+resShr_deriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
   S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
   S "and multiplying both sides of the", phrase equation, S "by", 
   phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord  +:+. 
@@ -118,8 +128,7 @@ resShr_desc = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
   ch index, S "becaused they are assumed to be isotropic", 
   sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
   S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout" +:+.
-  sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP), ch baseLngth, 
-  S "is defined in" +:+. makeRef2S lengthLb]
+  sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP)]
 
 --
 mobShr :: RelationConcept
@@ -130,13 +139,16 @@ mobShr_rel :: Relation
 mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
-mobShr_desc = foldlSent_ [at_start mobShrI, S "as derived from",
-  phrase definition `ofThe` phrase fs, S "in", makeRef2S factOfSafety `sC`
-  S "and the", phrase definition, S "of", ch shrResI, S "in" +:+. 
-  makeRef2S resShrGD, S "The", getTandS fs, S "is not indexed by", ch index,
+mobShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+  makeRef2S lengthLb]
+
+mobShr_deriv :: Sentence
+mobShr_deriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
+  phrase definition `ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
+  S "by", phrase definition `ofThe` phrase fs, S "from" +:+.
+  makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,
   S "because it is assumed to be", phrase constant, S "for the entire",
-  phrase slpSrf +:+. sParen (makeRef2S assumpFOSL), ch baseLngth, 
-  S "is defined in" +:+. makeRef2S lengthLb]
+  phrase slpSrf +:+. sParen (makeRef2S assumpFOSL)]
 
 --
 effNormF :: RelationConcept

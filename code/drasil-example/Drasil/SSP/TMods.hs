@@ -100,7 +100,7 @@ effStress = tm (cw effStress_rc)
 ------------------------------------
 effStress_rc :: RelationConcept
 effStress_rc = makeRC "effStress_rc"
-  (nounPhraseSP "effective stress") EmptyS effS_rel -- l4
+  (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
 
 effS_rel :: Relation
 effS_rel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)

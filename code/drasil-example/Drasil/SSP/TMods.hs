@@ -21,6 +21,7 @@ import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, fricAngle, fs, fx, fy, mobShrI,
   momntOfBdy, nrmFSubWat, porePressure, shrResI, shrStress, surfHydroForce, totStress)
+import Drasil.SSP.DataDefs (stressDD)
 
 --------------------------
 --  Theoretical Models  --
@@ -98,7 +99,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeCite fredlund1977] "effStress" []
+  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept
@@ -107,3 +108,6 @@ effStress_rc = makeRC "effStress_rc"
 
 effS_rel :: Relation
 effS_rel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)
+
+effS_desc :: Sentence
+effS_desc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]

@@ -283,12 +283,10 @@ momntOfBdy = uc' "M" (cn' $ "net moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
-porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
-  lMu pascal
+porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
+  lU pascal
   
-shrStress = uc' "tau_i" (cn "shear strength")
-  ""
-  lTau pascal
+shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
 sliceHght = uc' "h_z,i" (cn "center of slice height")
   ("the distance from the lowest part " ++

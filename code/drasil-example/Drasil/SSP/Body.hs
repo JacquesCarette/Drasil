@@ -89,7 +89,7 @@ check_si = collectUnits sspSymMap symbTT
 
 ssp_si :: SystemInformation
 ssp_si = SI {
-  _sys = ssa, 
+  _sys = ssp, 
   _kind = srs, 
   _authors = [henryFrankis],
   _quants = sspSymbols,

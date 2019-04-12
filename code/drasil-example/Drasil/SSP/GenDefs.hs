@@ -10,7 +10,7 @@ import Drasil.DocLang.SRS as SRS (physSyst)
 
 import Data.Drasil.SI_Units (metre)
 
-import Data.Drasil.Concepts.Documentation (assumption, definition, 
+import Data.Drasil.Concepts.Documentation (assumption, constant, definition, 
   method_, property, value, variable)
 import Data.Drasil.Concepts.Math (equation, normal, perp, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -19,23 +19,23 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd, andThe)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (lengthLs, sliceWght, surfWtrF, angleA, angleB, 
-  stressDD)
-import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
+import Drasil.SSP.DataDefs (sliceWght, surfWtrF, angleA, angleB, 
+  lengthLb, lengthLs, stressDD)
+import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, inxi, inxiM1, 
-  mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
+  effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
+  inxiM1, mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
   surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
-  watrForceDif)
+  watrForceDif, zcoord)
 
 ---------------------------
 --  General Definitions  --
@@ -96,7 +96,7 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 --
 shrResEqn :: Expr
 shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
-  inxi baseWthX * sec (inxi baseAngle)
+  inxi baseLngth
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
@@ -106,20 +106,20 @@ resShr_rel :: Relation
 resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
-resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, ch shrStress, S "from", makeRef2S mcShrStrgth,
-  S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle),
-  S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
-  S "is to represent a unit of width which is multiplied by the",
-  getTandS baseLngth, S "of the plane where the", phrase normal,
-  S "occurs, where", (E $ sy baseLngth $= sy baseWthX * sec(sy baseAngle))
-  `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
-  phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
-  S "of a soil from", -- FIXME: add prime to nrmStrss
-  makeRef2S effStress, S "where the", phrase nrmStrss,
-  S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
-  E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) $= sy nrmFSubWat,
-  makeRef2S assumpSLH, makeRef2S assumpSP, makeRef2S assumpSLI]
+resShr_desc = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
+  S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
+  S "and multiplying both sides of the", phrase equation, S "by", 
+  phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord  +:+. 
+  S "plane", S "Since the", phrase slope, S "is assumed to extend infinitely",
+  S "in the", ch zcoord :+: S "-direction", sParen (makeRef2S assumpPSC) `sC` 
+  S "the resulting", plural force, S "are expressed per", phrase metre,
+  S "in the", ch zcoord :+: S "-direction.", S "The", 
+  getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
+  ch index, S "becaused they are assumed to be isotropic", 
+  sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
+  S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout" +:+.
+  sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP), ch baseLngth, 
+  S "is defined in" +:+. makeRef2S lengthLb]
 
 --
 mobShr :: RelationConcept

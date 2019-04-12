@@ -268,8 +268,8 @@ baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
   (lB) metre
 
-baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub lEll (Atomic "b")) metre
+baseLngth = uc' "l_b,i" (cn $ "width of the base of a slice") 
+  "in the x-direction" (sub lEll (Atomic "b")) metre
 
 surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   ("from slip base to slope surface in a vertical " ++

@@ -86,4 +86,4 @@ edgeS = foldlSent [S "The", phrase intrslce, plural force,
 seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
 
 surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
-  S "and therefore no", phrase surfLoad, `sC` S "acting on the", phrase slope]
+  S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]

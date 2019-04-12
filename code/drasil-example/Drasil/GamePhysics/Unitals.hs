@@ -60,11 +60,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime,  
-<<<<<<< HEAD
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel]
-=======
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy]
->>>>>>> master
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy, finRelVel]
 
 -----------------------
 -- PARAMETRIZED HACK --

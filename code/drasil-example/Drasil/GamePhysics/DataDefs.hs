@@ -1,10 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, torqueDD, coeffRestitutionDD) where
-=======
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD) where
->>>>>>> master
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergy, coeffRestitutionDD) where
 
 import Language.Drasil
 
@@ -28,19 +24,11 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, coeffRestitutionDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, coeffRestitution]
-=======
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD]
-
-cpDDefs :: [QDefinition]
-cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, kEnergy]
->>>>>>> master
+  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -270,7 +258,6 @@ torqueDesc = foldlSent [S "The", (phrase torque),
   S "on a body measures the", S "the tendency of a", (phrase QP.force), 
   S "to rotate the body around an axis or pivot"]
 
-<<<<<<< HEAD
 ----------------------DD14 Coefficient of Restitution--------------------------
 coeffRestitutionDD :: DataDefinition
 coeffRestitutionDD = mkDD coeffRestitution [{-- References --}] [{-- Derivation --}] "coeffRestitution"
@@ -291,7 +278,6 @@ coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.r
   (E $ sy QP.restitutionCoef $= 1), S "results in an elastic collision, while",
   (E $ sy QP.restitutionCoef $< 1), S "results in an inelastic collision,",
   S "and", (E $ sy QP.restitutionCoef $= 0), S "results in a totally inelastic collision"]
-=======
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kinetic energy"
@@ -308,4 +294,3 @@ kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
  S "of an object is the", (phrase QP.energy),
  S "it possess due to its motion"]
   
->>>>>>> master

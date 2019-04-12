@@ -1068,12 +1068,12 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpOT">
-objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:relVelInColl>DD: relVelInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
 <div id="assumpOD">
-objectDimension: All objects are 2D. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectDimension: All objects are 2D. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -1093,7 +1093,7 @@ collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a hre
 </p>
 <p>
 <div id="assumpDI">
-dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -2474,7 +2474,13 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+<a href=#assumpOT>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#assumpOD>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -2592,7 +2598,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:relVelInColl">
+<div id="DD:reVeInColl">
 <table class="ddefn">
 <tr>
 <th>
@@ -2684,7 +2690,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:kinetic energy">
+<div id="DD:kEnergy">
 <table class="ddefn">
 <tr>
 <th>
@@ -2758,6 +2764,15 @@ Notes
 <td>
 <p class="paragraph">
 The kinetic energy of an object is the energy it possess due to its motion.
+</p>
+<p class="paragraph">
+<a href=#assumpOT>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#assumpOD>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#assumpDI>A: dampingInvolvement</a>
 </p>
 </td>
 </tr>
@@ -3649,6 +3664,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#lcEC>LC: Expanded-Collisions</a>
 </th>
 <th>
+<a href=#DD:chalses>DD: chalses</a>
+</th>
+<th>
 <a href=#DD:linVel>DD: linVel</a>
 </th>
 <th>
@@ -3659,6 +3677,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 </th>
 <th>
 <a href=#lcID>LC: Include-Dampening</a>
+</th>
+<th>
+<a href=#DD:kEnergy>DD: kEnergy</a>
 </th>
 <th>
 <a href=#DD:angVel>DD: angVel</a>
@@ -3676,10 +3697,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>
 </th>
 <th>
-<a href=#DD:chalses>DD: chalses</a>
-</th>
-<th>
-<a href=#DD:relVelInColl>DD: relVelInColl</a>
+<a href=#DD:reVeInColl>DD: reVeInColl</a>
 </th>
 <th>
 <a href=#TM:ChaslesThm>TM: ChaslesThm</a>
@@ -3746,6 +3764,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -3756,6 +3777,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3870,6 +3894,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -3880,6 +3907,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3994,6 +4024,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4016,6 +4049,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4118,6 +4154,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4166,7 +4205,10 @@ X
 X
 </td>
 <td>
-
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -4216,25 +4258,28 @@ X
 X
 </td>
 <td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 X
 </td>
 <td>
 
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -4278,18 +4323,6 @@ X
 X
 </td>
 <td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 X
 </td>
 <td>
@@ -4297,6 +4330,21 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -4320,6 +4368,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4428,6 +4479,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4447,6 +4501,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4552,6 +4609,9 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4571,6 +4631,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5567,7 +5630,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
 </td>
 <td>
 X
@@ -5593,7 +5656,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#DD:kinetic energy>DD: kinetic energy</a>)
+LC1 (<a href=#DD:kEnergy>DD: kEnergy</a>)
 </td>
 <td>
 
@@ -5773,7 +5836,7 @@ IM1 (<a href=#DD:chalses>DD: chalses</a>)
 IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
 </th>
 </tr>
 <tr>
@@ -7406,7 +7469,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:relVelInColl>DD: relVelInColl</a>)
+IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
 </td>
 <td>
 

@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="SSP_SRS.css">
 <title>
-Software Requirements Specification for Slope Stability Analysis
+Software Requirements Specification for Slope Stability analysis Program
 </title>
 <meta charset="utf-8">
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
@@ -11,7 +11,7 @@ Software Requirements Specification for Slope Stability Analysis
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for Slope Stability Analysis
+Software Requirements Specification for Slope Stability analysis Program
 </h1>
 </div>
 <div class="author">
@@ -335,6 +335,17 @@ m
 </tr>
 <tr>
 <td>
+<em>h<sub>z</sub></em>
+</td>
+<td>
+Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>i</em>
 </td>
 <td>
@@ -525,7 +536,7 @@ N
 <em>x</em>
 </td>
 <td>
-X Ordinate: refers to either slice i midpoint, or slice interface i
+X-Ordinate: refers to either slice i midpoint, or slice interface i
 </td>
 <td>
 m
@@ -592,17 +603,6 @@ m
 </td>
 <td>
 Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-<em>z</em>
-</td>
-<td>
-Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice
 </td>
 <td>
 m
@@ -980,7 +980,7 @@ The scope of the requirements includes stability analysis of a two-dimensional (
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -1233,7 +1233,7 @@ GS3: Determine the interslice shear force between each pair of vertical slices o
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern SSA are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SSP are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1246,17 +1246,17 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpSSC">
-Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The <em>(x,y)</em> coordinates of the failure surface follow a monotonic function.
+Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>) coordinates of a slip surface follow a concave up function.
 </div>
 </p>
 <p>
 <div id="assumpFOS">
-Factor-of-Safety: The factor of safety is assumed to be constant across a whole slip surface. <a href=#GD:mobShr>GD: mobShr</a> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
+Factor-of-Safety: The factor of safety is assumed to be constant across the entire slip surface. <a href=#GD:mobShr>GD: mobShr</a> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
 </div>
 </p>
 <p>
 <div id="assumpSLH">
-Soil-Layer-Homogeneous: The different layers of the soil are homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
+Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
 </p>
 <p>
@@ -1266,27 +1266,27 @@ Soil-Properties: The soil properties are independent of dry or saturated conditi
 </p>
 <p>
 <div id="assumpSLI">
-Soil-Layers-Isotropic: Soil layers are treated as if they have isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
 <div id="assumpINSFL">
-Interslice-Norm-Shear-Forces-Linear: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>λ</em>) and an interslice force function (<em>f</em>) depending on x position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em>f</em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
 <div id="assumpPSC">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:effNormF>GD: effNormF</a>.
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:effNormF>GD: effNormF</a>.
 </div>
 </p>
 <p>
 <div id="assumpENSL">
-Effective-Norm-Stress-Large: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. <a href=#TM:equilibrium>TM: equilibrium</a> <a href=#UC_2donly>UC: 2D-Analysis-Only</a>.
+Effective-Norm-Stress-Large: The effective normal stress is large enough that the resistive shear stress to effective normal stress relationship can be approximated as a linear relationship. <a href=#TM:equilibrium>TM: equilibrium</a> <a href=#UC_2donly>UC: 2D-Analysis-Only</a>.
 </div>
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -1301,7 +1301,7 @@ Seismic-Force: There is no seismic force acting on the slope. <a href=#IM:nrmShr
 </p>
 <p>
 <div id="assumpSL">
-Surface-Load: There is no imposed surface, load and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+Surface-Load: There is no imposed surface load, and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </div>
 </p>
 </div>
@@ -1313,7 +1313,7 @@ Surface-Load: There is no imposed surface, load and therefore no external force,
 Theoretical Models
 </h3>
 <p class="paragraph">
-This section focuses on the general equations and laws that SSA is based on.
+This section focuses on the general equations and laws that SSP is based on.
 </p>
 <div id="TM:factOfSafety">
 <table class="tdefn">
@@ -2352,28 +2352,28 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>0 = &minus;G<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+<em>0 = &minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
@@ -2411,7 +2411,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>z</em> is the center of slice height (m)
+<em>h<sub>z</sub></em> is the center of slice height (m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
@@ -4814,28 +4814,28 @@ RefBy
 From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a> equation equation (9) can be derived:
 </p>
 <div class="equation">
-<em>0 = &minus;G<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+<em>0 = &minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
@@ -4864,28 +4864,28 @@ Rearranging the equation in terms of <em>λ</em> leads to equation (10):
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
-&minus;G<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+&minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(z<sub>i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>

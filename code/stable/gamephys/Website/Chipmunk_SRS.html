@@ -483,6 +483,17 @@ s
 </tr>
 <tr>
 <td>
+<em><b>v</b><sub>f</sub><sup>AB</sup></em>
+</td>
+<td>
+Final Relative Velocity Between Rigid Bodies of A and B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
 <em><b>v</b><sub>A</sub></em>
 </td>
 <td>
@@ -541,7 +552,7 @@ m/s
 <em><b>v</b><sub>i</sub><sup>AB</sup></em>
 </td>
 <td>
-Relative Velocity Between Rigid Bodies of A and B
+Initial Relative Velocity Between Rigid Bodies of A and B
 </td>
 <td>
 m/s
@@ -2313,7 +2324,7 @@ Description
 <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
 </li>
 <li>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
 </li>
 <li>
 <em><b>n</b></em> is the collision normal vector (m)
@@ -2644,6 +2655,108 @@ Notes
 <td>
 <p class="paragraph">
 The kinetic energy of an object is the energy it possess due to its motion.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:coeffRestitution">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Coefficient of restitution
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>C<sub>R</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Unitless
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>C<sub>R</sub> = &minus;(<div class="fraction">
+<span class="fup">
+<b>v</b><sub>f</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+<span class="fdn">
+<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+</div>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
+</li>
+<li>
+<em><b>v</b><sub>f</sub><sup>AB</sup></em> is the final relative velocity between rigid bodies of A and B (m/s)
+</li>
+<li>
+<em><b>n</b></em> is the collision normal vector (m)
+</li>
+<li>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The coefficient of restitution <em>C<sub>R</sub></em> is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1</em> results in an elastic collision, while <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0</em> results in a totally inelastic collision.
 </p>
 </td>
 </tr>
@@ -5431,7 +5544,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#IM:transMot>IM: transMot</a>)
+LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 </td>
 <td>
 
@@ -5457,7 +5570,7 @@ LC1 (<a href=#IM:transMot>IM: transMot</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#IM:rotMot>IM: rotMot</a>)
+LC2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -5483,7 +5596,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#IM:col2D>IM: col2D</a>)
+LC3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5509,7 +5622,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC4 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 

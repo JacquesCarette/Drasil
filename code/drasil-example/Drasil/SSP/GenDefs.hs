@@ -17,7 +17,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd, andThe)
 

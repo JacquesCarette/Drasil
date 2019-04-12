@@ -19,8 +19,8 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, fx, fy, mobShrI,
-  momntOfBdy, normStress, porePressure, shrResI, shrStress, surfHydroForce)
+import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, fricAngle, fs, fx, fy, mobShrI,
+  momntOfBdy, nrmFSubWat, porePressure, shrResI, shrStress, surfHydroForce, totStress)
 
 --------------------------
 --  Theoretical Models  --
@@ -66,7 +66,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
-  [qw shrStress, qw normStress, qw fricAngle, qw effCohesion] 
+  [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
@@ -76,23 +76,17 @@ mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear stren
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy effCohesion))
+mcSS_rel = (sy shrStress) $= ((sy effNormStress) * (tan (sy fricAngle)) + (sy effCohesion))
 
 mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
-  S "it will exert a shear resistive strength based on the",
-  S "Coulomb sliding law. The resistive shear is",
-  S "the maximum amount of shear a", phrase surface,
-  S "can experience while remaining rigid, analogous to",
-  S "a maximum" +:+. phrase normForce, S "In this", phrase model, S "the",
+mcSS_desc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
-  phrase normStress, S "on the plane", ch normStress,
-  S "with it's static", phrase friction, S "in the angular form" +:+.
-  (E $ tan (sy fricAngle) $= sy surfHydroForce),
-  --FIXME: sould say U_s but there is no way to say that yet
-  S "The", ch shrStress, S "versus", ch normStress,
+  phrase effNormStress, ch effNormStress, S "on the plane", 
+  S "with its static", phrase friction, S "in the angular form" +:+.
+  (E $ tan (sy fricAngle)),
+  S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship is not truly",
-  phrase linear `sC` S "but assuming the effective", phrase normForce, 
+  phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 
   S "is strong enough, it can be approximated with a", phrase linear,
   S "fit", sParen (makeRef2S assumpSBSBISL), S "where the", phrase effCohesion, 
   ch effCohesion, S "represents the", ch shrStress,
@@ -102,28 +96,14 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
 ------------- New Chunk -----------
 effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
-  [qw normStress, qw porePressure] 
+  [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
+  [] [effS_rel] [] [makeCite fredlund1977] "effStress" []
 
 ------------------------------------
 effStress_rc :: RelationConcept
 effStress_rc = makeRC "effStress_rc"
-  (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
+  (nounPhraseSP "effective stress") EmptyS effS_rel -- l4
 
 effS_rel :: Relation
-effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
-
-effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
-                      -- Add a prime. Symbol inconsistency.
-effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
-  S "a soil", phrase mass,
-  S "needs to maintain itself as a rigid collection of particles.",
-  phrase source `ofThe'` phrase stress,
-  S "can be provided by the soil skeleton", ch normStress `sC`
-  S "or by the pore pressure from water within the soil" +:+.
-  ch porePressure, S "The", phrase stress,
-  S "from the soil skeleton is known as the effective",
-  phrase stress, ch normStress, S "and is the difference between the",
-  S "total", phrase stress, ch normStress, S "and the pore",
-  phrase stress, ch porePressure]
+effS_rel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)

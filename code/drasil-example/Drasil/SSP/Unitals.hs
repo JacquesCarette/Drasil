@@ -12,7 +12,6 @@ import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
 import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -26,7 +25,6 @@ sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++
 SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
-normStress  = SM.nrmStrss
 genericF = force
 genericA = area
 
@@ -119,24 +117,25 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
+sspUnits = map ucw [genericF, genericA, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
   sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  mobShrC, shrResC, intNormForce, shrStress]
+  mobShrC, shrResC, intNormForce, shrStress, totStress, effectiveStress, 
+  effNormStress]
 
-normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
+genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
   momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  porePressure, mobShrC, shrResC,
-  intNormForce, shrStress :: UnitalChunk
+  porePressure, mobShrC, shrResC, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -285,8 +284,8 @@ momntOfBdy = uc' "M" (cn' $ "net moment") ("a measure of the tendency of " ++
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   lMu pascal
   
-shrStress = uc' "tau_i" (cn "resistive shear stress")
-  ("acting on the base of a slice")
+shrStress = uc' "tau_i" (cn "shear strength")
+  ""
   lTau pascal
 
 sliceHght = uc' "z_i" (cn "center of slice height")
@@ -323,6 +322,12 @@ sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice")
 sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") 
   "assuming slice surface has negative slope"
   (sup lH cL) metre
+
+totStress = uc' "sigma" (cn' $ "total stress") "on the soil mass" lSigma pascal
+
+effectiveStress = uc' "sigma'" (cn' $ "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
+
+effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
   
 ----------------------
 -- Unitless Symbols --

@@ -17,7 +17,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
 
@@ -30,7 +29,8 @@ import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, inxi, inxiM1, 
+  effCohesion, effNormStress, fricAngle, fs, genericA, intNormForce,
+  intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
   surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
@@ -106,10 +106,10 @@ resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   S "occurs, where", (E $ sy baseLngth $= sy baseWthX * sec(sy baseAngle))
   `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
-  S "of a soil from", -- FIXME: add prime to nrmStrss
-  makeRef2S effStress, S "where the", phrase nrmStrss,
+  S "of a soil from",
+  makeRef2S effStress, S "where the", phrase effNormStress,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
-  E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) $= sy nrmFSubWat,
+  E $ sy effNormStress * sy baseWthX * sec(sy baseAngle) $= sy nrmFSubWat,
   makeRef2S assumpSLH, makeRef2S assumpSP, makeRef2S assumpSLI]
 
 --

@@ -200,28 +200,6 @@ Pa
 </tr>
 <tr>
 <td>
-<em>func_interpY</em>
-</td>
-<td>
-InterpY
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>func_interpZ</em>
-</td>
-<td>
-InterpZ
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
 <em>g</em>
 </td>
 <td>
@@ -251,6 +229,28 @@ Minimum thickness
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>interpY</em>
+</td>
+<td>
+InterpY
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>interpZ</em>
+</td>
+<td>
+InterpZ
+</td>
+<td>
+--
 </td>
 </tr>
 <tr>
@@ -380,6 +380,28 @@ Probability of breakage
 </td>
 <td>
 Tolerable probability of breakage
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>f</sub></em>
+</td>
+<td>
+Probability of failure
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>ftol</sub></em>
+</td>
+<td>
+Tolerable probability of failure
 </td>
 <td>
 --
@@ -1752,7 +1774,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>J = func_interpZ(SDF.txt,AR,q&#770;)</em>
+<em>J = interpZ(SDF.txt,AR,q&#770;)</em>
 </div>
 </td>
 </tr>
@@ -1766,7 +1788,7 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 <li>
-<em>func_interpZ</em> is the interpZ (Unitless)
+<em>interpZ</em> is the interpZ (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2210,7 +2232,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q&#770;<sub>tol</sub> = func_interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
+<em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2224,7 +2246,7 @@ Description
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
 </li>
 <li>
-<em>func_interpY</em> is the interpY (Unitless)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
@@ -2903,7 +2925,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = func_interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2917,7 +2939,7 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>func_interpY</em> is the interpY (Unitless)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
@@ -3031,7 +3053,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = func_interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3045,7 +3067,7 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>func_interpY</em> is the interpY (Unitless)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
@@ -3174,6 +3196,23 @@ Uncert.
 </td>
 <td>
 <em>0&thinsp;&lt;&thinsp;P<sub>btol</sub>&thinsp;&lt;&thinsp;1</em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>8.0&sdot;10<sup>-3</sup></em>
+</td>
+<td>
+0.1<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>ftol</sub></em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;P<sub>ftol</sub>&thinsp;&lt;&thinsp;1</em>
 </td>
 <td>
 --
@@ -8115,7 +8154,7 @@ load share factor
 surface flaw parameter
 </td>
 <td>
-<em>7</em>
+<em>7.0</em>
 </td>
 <td>
 m<sup>12</sup>/N<sup>7</sup>
@@ -8157,7 +8196,7 @@ m
 duration of load
 </td>
 <td>
-<em>3</em>
+<em>3.0</em>
 </td>
 <td>
 s

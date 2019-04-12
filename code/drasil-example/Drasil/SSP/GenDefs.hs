@@ -124,20 +124,19 @@ resShr_desc = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel -- genDef4Label
+  (nounPhraseSP "mobilized shear force") mobShr_desc mobShr_rel -- genDef4Label
 
 mobShr_rel :: Relation
 mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
-mobShr_desc = foldlSent_ [
-  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef2S factOfSafety `sC`
-  S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
-  S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
-  ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
-  sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
-  makeRef2S assumpFOSL, makeRef2S assumpSLH, makeRef2S assumpSP,
-  makeRef2S assumpSLI]
+mobShr_desc = foldlSent_ [at_start mobShrI, S "as derived from",
+  phrase definition `ofThe` phrase fs, S "in", makeRef2S factOfSafety `sC`
+  S "and the", phrase definition, S "of", ch shrResI, S "in" +:+. 
+  makeRef2S resShrGD, S "The", getTandS fs, S "is not indexed by", ch index,
+  S "because it is assumed to be", phrase constant, S "for the entire",
+  phrase slpSrf +:+. sParen (makeRef2S assumpFOSL), ch baseLngth, 
+  S "is defined in" +:+. makeRef2S lengthLb]
 
 --
 effNormF :: RelationConcept

@@ -142,7 +142,7 @@ genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght,
 
 intNormForce = uc' "G_i" (cn $ "interslice normal force")
   ("per meter in the z-direction exerted between adjacent slices")
-  (cG) newton
+  (cG) forcePerMeterU
 
 waterHght = uc' "y_wt,i"
   (cn $ "y ordinate")
@@ -178,16 +178,16 @@ critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   (Concat [sub (Atomic "x") (Atomic "cs"), Atomic ",",
   sub (Atomic "y") (Atomic "cs")]) metre
 
-mobShrI = uc' "mobShr" (cn $ "mobilized shear force per meter in the z-direction")
-  fsi
+mobShrI = uc' "mobShr" (cn $ "mobilized shear force")
+  "per meter in the z-direction"
   (cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shrResI = uc' "shrRes" (cn $ "resistive shear force per meter in the z-direction") ("Mohr Coulomb " ++
-  "frictional force that describes the limit of mobilized shear force the " ++
-  "slice i can withstand before failure")
+shrResI = uc' "shrRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+  "frictional force per meter in the z-direction that describes the limit of" ++
+  "mobilized shear force a slice can withstand before failure")
   (cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
@@ -212,12 +212,12 @@ shearRNoIntsl = uc' "R_i"
   (cR) newton
 
 slcWght = uc' "W_i" (cn $ "weight")
-  ("downward force per meter in the z-direction caused by gravity on slice i") (cW) newton
+  ("downward force per meter in the z-direction caused by gravity on slice i") (cW) forcePerMeterU
 
 watrForce = uc' "H_i" (cn $ "interslice normal water force ") 
   ("per meter in the z-direction exerted in the x-ordinate direction between" ++
   " adjacent slices")
-  (cH) newton
+  (cH) forcePerMeterU
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
   ("exerted in the x-ordinate direction between adjacent slices " ++ fisi)
@@ -225,7 +225,7 @@ watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("per meter in the z-direction exerted between adjacent slices")
-  (cX) newton
+  (cX) forcePerMeterU
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   ("from water pressure within the slice " ++ fsi)
@@ -234,11 +234,11 @@ baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
   ("per meter in the z-direction from water pressure acting into the slice from standing " ++
   "water on the slope surface " ++ fsi)
-  (sub cU (Atomic "t")) newton
+  (sub cU (Atomic "t")) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn $ "normal force")
   ("total reactive force per meter in the z-direction for a soil surface subject to a body resting on it")
-  cN newton
+  cN forcePerMeterU
 
 nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
   ("for a soil surface, subtracting pore water reactive force from total " ++
@@ -249,7 +249,7 @@ nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
 
 surfLoad = uc' "Q_i" (cn $ "external force") 
   "a downward force per meter in the z-direction acting into the surface from midpoint of slice i"
-  (cQ) newton
+  (cQ) forcePerMeterU
 
 baseAngle = uc' "alpha_i" (cn $ "angle")
   ("between the base of a slice and the horizontal")

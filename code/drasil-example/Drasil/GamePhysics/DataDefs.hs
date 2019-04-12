@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, relVelInCollDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, reVelInCollDD) where
 
 
 import Language.Drasil
@@ -28,7 +28,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, relVelInCollDD, kEnergyDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, reVelInCollDD, kEnergyDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
@@ -172,7 +172,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
 -}
 -- DD7 : Angular acceleration --
-
+-----------------------------------DD8 Angular Acceleration-------------------
 angAccelDD :: DataDefinition
 angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
@@ -221,7 +221,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "chalses"
-  [chaslesThmDesc]
+  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition
 chasles = mkQuantDef vel_B chaslesEqn
@@ -230,7 +230,7 @@ chasles = mkQuantDef vel_B chaslesEqn
 chaslesEqn :: Expr
 chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
 
-chaslesThmDesc :: Sentence
+{-chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
@@ -242,21 +242,21 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
   (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]
+  (sParen $ Sy $ unit_symb r_OB)]-}
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
-relVelInCollDD :: DataDefinition
-relVelInCollDD = mkDD relVelInColl [{-- References --}] [{-- Derivation --}] "relVelInColl"
-  [relVelInCollDesc]
+reVelInCollDD :: DataDefinition
+reVelInCollDD = mkDD reVelInColl [{-- References --}] [{-- Derivation --}] "reVeInColl"
+  [reVelInCollDesc]
 
-relVelInColl :: QDefinition
-relVelInColl = mkQuantDef initRelVel relVelInCollEqn
+reVelInColl :: QDefinition
+reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
-relVelInCollEqn :: Expr
-relVelInCollEqn = (sy velA_P) - (sy velB_P)
+reVelInCollEqn :: Expr
+reVelInCollEqn = (sy velA_P) - (sy velB_P)
 
-relVelInCollDesc :: Sentence
-relVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
+reVelInCollDesc :: Sentence
+reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
   S "of a", (phrase $ CP.rigidBody),makeRef2S assumpOT, 
   S "A colliding with another", (phrase CP.rigidBody),
   S "B relative to that body", (ch initRelVel),
@@ -283,8 +283,8 @@ torqueDesc = foldlSent [S "The", (phrase torque),
 
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
-kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kinetic energy"
- [kEnergyDesc] 
+kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kEnergy"
+ [kEnergyDesc,makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI] 
 
 kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn

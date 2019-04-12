@@ -8,11 +8,10 @@ import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
-import Data.Drasil.Units.Physics (momentOfForceU)
+import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
 import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -26,7 +25,6 @@ sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++
 SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
-normStress  = SM.nrmStrss
 genericF = force
 genericA = area
 
@@ -119,24 +117,25 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, genericF, genericA, normFunc, shearFunc,
-  waterHght, slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
+sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
   sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  mobShrC, shrResC, intNormForce, shrStress]
+  mobShrC, shrResC, intNormForce, shrStress, totStress, effectiveStress, 
+  effNormStress]
 
-normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
-  waterHght, slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
+genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
   momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  porePressure, mobShrC, shrResC,
-  intNormForce, shrStress :: UnitalChunk
+  porePressure, mobShrC, shrResC, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -179,17 +178,17 @@ critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   (Concat [sub (Atomic "x") (Atomic "cs"), Atomic ",",
   sub (Atomic "y") (Atomic "cs")]) metre
 
-mobShrI = uc' "mobShear" (cn $ "mobilized shear force")
+mobShrI = uc' "mobShr" (cn $ "mobilized shear force per meter in the z-direction")
   fsi
-  (cS) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
+  (cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
 
-shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+shrResI = uc' "shrRes" (cn $ "resistive shear force per meter in the z-direction") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++
   "slice i can withstand before failure")
-  (cP) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
+  (cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
@@ -280,16 +279,14 @@ midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
   "surface, at the x-direction midpoint of the slice")
   (lH) metre
 
-momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
+momntOfBdy = uc' "M" (cn' $ "net moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
-porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
-  lMu pascal
+porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
+  lU pascal
   
-shrStress = uc' "tau_i" (cn "resistive shear stress")
-  ("acting on the base of a slice")
-  lTau pascal
+shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
 sliceHght = uc' "h_z,i" (cn "center of slice height")
   ("the distance from the lowest part " ++
@@ -325,6 +322,12 @@ sliceHghtRight = uc' "h^R" (cn "height of the right side of a slice")
 sliceHghtLeft = uc' "h^L" (cn "height of the left side of a slice") 
   "assuming slice surface has negative slope"
   (sup lH cL) metre
+
+totStress = uc' "sigma" (cn' $ "total stress") "on the soil mass" lSigma pascal
+
+effectiveStress = uc' "sigma'" (cn' $ "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
+
+effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
   
 ----------------------
 -- Unitless Symbols --

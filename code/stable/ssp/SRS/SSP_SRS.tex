@@ -107,7 +107,7 @@ $i$ & Index: used to show a quantity applies to only one slice & --
 \\
 ${K_{c}}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
-$M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
+$M$ & Net Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
 $N$ & Normal Force: total reactive force for a soil surface subject to a body resting on it & N
 \\
@@ -115,17 +115,19 @@ $n$ & Number of Slices: the slip mass has been divided into & --
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
-$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
+$P$ & Resistive Shear Force Per Meter in the Z-Direction: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & $\frac{\text{N}}{\text{m}}$
 \\
 $Q$ & Imposed Surface Load: a downward force acting into the surface from midpoint of slice i & N
 \\
 $R$ & Resistive Shear Force: without the influence of interslice forces for slice index i & N
 \\
-$S$ & Mobilized Shear Force: for slice index i & N
+$S$ & Mobilized Shear Force Per Meter in the Z-Direction: for slice index i & $\frac{\text{N}}{\text{m}}$
 \\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
 $u$ & Local Index: used as a bound variable index in calculations & --
+\\
+$u$ & Pore Pressure: from water within the soil & Pa
 \\
 ${U_{b}}$ & Base Hydrostatic Force: from water pressure within the slice for slice index i & N
 \\
@@ -163,13 +165,15 @@ ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\f
 \\
 $λ$ & Interslice Normal/shear Force Ratio: applied to all interslices & --
 \\
-$μ$ & Pore Pressure: from water within the soil & Pa
-\\
 $π$ & Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter & --
 \\
-$σ$ & Normal Stress: The stress exerted perpendicular to the plane of the object & Pa
+$σ$ & Total Stress: on the soil mass & Pa
 \\
-$τ$ & Resistive Shear Stress: acting on the base of a slice & Pa
+$σ'$ & Effective Stress: provided by the soil skeleton & Pa
+\\
+${σ_{N}}'$ & Effective Normal Stress:  & Pa
+\\
+$τ$ & Shear Strength:  & Pa
 \\
 $Υ$ & Function: generic minimization function or algorithm & --
 \\
@@ -360,7 +364,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
-\item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the resistive shear stress to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
+\item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
 \item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -385,15 +389,13 @@ Label & Factor of safety
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                 \item{$P$ is the resistive shear force (N)}
-                                 \item{$S$ is the mobilized shear force (N)}
+                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
+                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & The stability metric of the slope, known as the factor of safety (${F_{S}}$), is determined by the ratio of the shear force at the base of the slope ($S$), and the resistive shear ($P$).
-                                         \\ \midrule \\
-                                         Source & \cite{fredlund1977}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+                                 Source & \cite{fredlund1977}
+                                          \\ \midrule \\
+                                          RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -413,10 +415,10 @@ Label & Equilibrium
                    Description & \begin{symbDescription}
                                  \item{${F_{x}}$ is the x-component of the net force (N)}
                                  \item{${F_{y}}$ is the y-component of the net force (N)}
-                                 \item{$M$ is the moment (Nm)}
+                                 \item{$M$ is the net moment (Nm)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+                                 Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
@@ -434,17 +436,17 @@ Label & Equilibrium
 Label & Mohr-Coulumb shear strength
         \\ \midrule \\
         Equation & \begin{displaymath}
-                   τ=σ \tan\left(φ'\right)+c'
+                   τ={σ_{N}}' \tan\left(φ'\right)+c'
                    \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
-                                 \item{$τ$ is the resistive shear stress (Pa)}
-                                 \item{$σ$ is the normal stress (Pa)}
+                                 \item{$τ$ is the shear strength (Pa)}
+                                 \item{${σ_{N}}'$ is the effective normal stress (Pa)}
                                  \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                  \item{$c'$ is the effective cohesion (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $τ$ is proportional to the product of the normal stress on the plane $σ$ with it's static friction in the angular form $\tan\left(φ'\right)={U_{t}}$. The $τ$ versus $σ$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the effective cohesion $c'$ represents the $τ$ intercept of the fitted line.
+                                 Notes & In this model the shear strength $τ$ is proportional to the product of the effective normal stress ${σ_{N}}'$ on the plane with its static friction in the angular form $\tan\left(φ'\right)$. The $τ$ versus ${σ_{N}}'$ relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the effective cohesion $c'$ represents the $τ$ intercept of the fitted line.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
@@ -462,15 +464,16 @@ Label & Mohr-Coulumb shear strength
 Label & Effective stress
         \\ \midrule \\
         Equation & \begin{displaymath}
-                   σ=σ-μ
+                   σ'=σ-u
                    \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
-                                 \item{$σ$ is the normal stress (Pa)}
-                                 \item{$μ$ is the pore pressure (Pa)}
+                                 \item{$σ'$ is the effective stress (Pa)}
+                                 \item{$σ$ is the total stress (Pa)}
+                                 \item{$u$ is the pore pressure (Pa)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & $σ$ is the total stress a soil mass needs to maintain itself as a rigid collection of particles. The source of the stress can be provided by the soil skeleton $σ$, or by the pore pressure from water within the soil $μ$. The stress from the soil skeleton is known as the effective stress $σ$ and is the difference between the total stress $σ$ and the pore stress $μ$.
+                                 Notes & $σ$ is defined in \hyperref[DD:stress]{DD: stress}.
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
@@ -531,7 +534,7 @@ Label & Base shear force equilibrium
                    \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
-                                 \item{$S$ is the mobilized shear force (N)}
+                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
                                  \item{$i$ is the index (Unitless)}
                                  \item{$W$ is the weight (N)}
                                  \item{$X$ is the interslice shear force (N)}
@@ -567,7 +570,7 @@ Label & Resistive shear force
                    \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
-                                 \item{$P$ is the resistive shear force (N)}
+                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
                                  \item{$i$ is the index (Unitless)}
                                  \item{$N'$ is the effective normal force (N)}
                                  \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
@@ -576,7 +579,7 @@ Label & Resistive shear force
                                  \item{$α$ is the angle (${}^{\circ}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
-                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)=N'$ \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
+                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)$ to obtain the resistive shear force per meter in the z-direction $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the effective normal stress is multiplied by the same area to obtain the effective normal force ${σ_{N}}' b \sec\left(α\right)=N'$ \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
                                          \\ \midrule \\
                                          Source & \cite{chen2005}
                                                   \\ \midrule \\
@@ -598,9 +601,9 @@ Label & Mobile shear force
                    \end{displaymath}
                    \\ \midrule \\
                    Description & \begin{symbDescription}
-                                 \item{$S$ is the mobilized shear force (N)}
+                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
                                  \item{$i$ is the index (Unitless)}
-                                 \item{$P$ is the resistive shear force (N)}
+                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
                                  \item{${F_{S}}$ is the factor of safety (Unitless)}
                                  \item{$N'$ is the effective normal force (N)}
                                  \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
@@ -1126,7 +1129,7 @@ Label & Y-direction height of a slice
 \phantomsection 
 \label{DD:stress}
 \\ \midrule \\
-Label & Normal stress
+Label & Total stress
         \\ \midrule \\
         Symbol & $σ$
                  \\ \midrule \\
@@ -1137,14 +1140,14 @@ Label & Normal stress
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$σ$ is the normal stress (Pa)}
+                                                  \item{$σ$ is the total stress (Pa)}
                                                   \item{$\mathbf{F}$ is the force (N)}
                                                   \item{$A$ is the area ($\text{m}^{2}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \cite{huston2008}
                                                            \\ \midrule \\
-                                                           RefBy & \hyperref[GD:effNormF]{GD: effNormF}.
+                                                           RefBy & \hyperref[TM:effStress]{TM: effStress} \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1402,7 +1405,7 @@ Label & Factor of safety
                                                                                                             RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
+The mobilized shear force per meter in the z-direction defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force per meter in the z-direction based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
 \begin{displaymath}
 \left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{{N'}_{i} \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
@@ -1617,7 +1620,7 @@ Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normFo
 \begin{displaymath}
 {N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{displaymath}
-Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
+Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force per meter in the z-direction from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
 \begin{displaymath}
 \frac{N_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{{F_{S}}}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{displaymath}

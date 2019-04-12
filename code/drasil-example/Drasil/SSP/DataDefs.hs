@@ -18,10 +18,10 @@ import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012,
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   constF, dryWeight, fricAngle, fs, genericF, genericA, 
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  mobShrC, normStress, normToShear, satWeight, scalFunc, shrResC, slcWght, 
+  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
-  surfLngth, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, waterHght,
-  waterWeight, watrForce)
+  surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
+  waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -200,7 +200,7 @@ stressDD :: DataDefinition
 stressDD = mkDD stressQD [huston2008] [{-Derivation-}] "stress" []
 
 stressQD :: QDefinition
-stressQD = mkQuantDef normStress stressEqn
+stressQD = mkQuantDef totStress stressEqn
 
 stressEqn :: Expr
 stressEqn = (sy genericF) / (sy genericA)

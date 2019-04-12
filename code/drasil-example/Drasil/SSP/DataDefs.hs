@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght,
+module Drasil.SSP.DataDefs (dataDefns, sliceWght, surfWtrF, angleA, angleB, 
   lengthLs, lengthLb, stressDD, convertFunc1, convertFunc2,
   nrmForceSumDD, watForceSumDD) where 
 

@@ -24,7 +24,8 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, s
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (lengthLs, sliceWght, stressDD)
+import Drasil.SSP.DataDefs (lengthLs, sliceWght, surfWtrF, angleA, angleB, 
+  stressDD)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
@@ -60,14 +61,18 @@ normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
   nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
-nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
+nmFEq_rel = inxi totNrmForce $= eqlExprN cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
-  S "in the shear direction", at_start force, S "equilibrium is",
+  S "in the normal direction", at_start force, S "equilibrium is",
   S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
+  S "in" +:+. (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])),
+  ch slcWght, S "is defined in", makeRef2S sliceWght `sC` ch surfHydroForce,
+  S "is defined in", makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
+  makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
+  makeRef2S angleA]
 
 --
 bsShrFEq :: RelationConcept
@@ -75,14 +80,18 @@ bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
   bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
+bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
   S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
+  S "in" +:+. (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), 
+  ch slcWght, S "is defined in", makeRef2S sliceWght `sC` ch surfHydroForce,
+  S "is defined in", makeRef2S surfWtrF `sC` ch surfAngle, S "is defined in",
+  makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
+  makeRef2S angleA]
 
 --
 shrResEqn :: Expr

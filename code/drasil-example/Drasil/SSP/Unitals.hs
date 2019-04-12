@@ -142,7 +142,7 @@ normStress, genericF, genericA, normFunc, shearFunc, slopeDist, slipDist,
          their defns are mixed into the terms.-}
 
 intNormForce = uc' "G_i" (cn $ "interslice normal force")
-  ("exerted between adjacent slices " ++ fisi)
+  ("per meter in the z-direction exerted between adjacent slices")
   (cG) newton
 
 waterHght = uc' "y_wt,i"
@@ -213,10 +213,11 @@ shearRNoIntsl = uc' "R_i"
   (cR) newton
 
 slcWght = uc' "W_i" (cn $ "weight")
-  ("downward force caused by gravity on slice i") (cW) newton
+  ("downward force per meter in the z-direction caused by gravity on slice i") (cW) newton
 
-watrForce = uc' "H_i" (cn $ "interslice normal water force") ("exerted in " ++
-  "the x-ordinate direction between adjacent slices " ++ fisi)
+watrForce = uc' "H_i" (cn $ "interslice normal water force ") 
+  ("per meter in the z-direction exerted in the x-ordinate direction between" ++
+  " adjacent slices")
   (cH) newton
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
@@ -224,7 +225,7 @@ watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
   (Concat [cDelta, cH]) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
-  ("exerted between adjacent slices " ++ fisi)
+  ("per meter in the z-direction exerted between adjacent slices")
   (cX) newton
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
@@ -232,12 +233,12 @@ baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   (sub cU (Atomic "b")) newton
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
-  ("from water pressure acting into the slice from standing " ++
+  ("per meter in the z-direction from water pressure acting into the slice from standing " ++
   "water on the slope surface " ++ fsi)
   (sub cU (Atomic "t")) newton
 
-totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
-  "for a soil surface subject to a body resting on it")
+totNrmForce = uc' "N_i" (cn $ "normal force")
+  ("total reactive force per meter in the z-direction for a soil surface subject to a body resting on it")
   cN newton
 
 nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
@@ -247,21 +248,21 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
   ("for a soil surface, " ++ wiif) (Atomic "N*") newton
 
-surfLoad = uc' "Q_i" (cn $ "imposed surface load") 
-  "a downward force acting into the surface from midpoint of slice i"
+surfLoad = uc' "Q_i" (cn $ "external force") 
+  "a downward force per meter in the z-direction acting into the surface from midpoint of slice i"
   (cQ) newton
 
 baseAngle = uc' "alpha_i" (cn $ "angle")
-  ("base of the mass relative to the horizontal " ++ fsi)
+  ("between the base of a slice and the horizontal")
   lAlpha degree
 
 surfAngle = uc' "beta_i" (cn $ "angle")
-  ("surface of the mass relative to the horizontal " ++ fsi)
+  ("between the surface of a slice and the horizontal")
   lBeta degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
-  ("of imposed surface load acting into the surface " ++
-  "relative to the vertical " ++ fsi) lOmega degree
+  ("between the external force acting into the surface and the vertical")
+  lOmega degree
 
 baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
@@ -341,7 +342,7 @@ constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f")
   ("boolean decision on which form of f the user desires: constant if true," ++
   " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
-earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "seismic coefficient")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
   (const $ sub cK lC) Real Nothing 
@@ -376,7 +377,7 @@ varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   (const lV) Natural Nothing
 
 index = dqd' (dcc "index" (nounPhraseSP "index")
-  ("used to show a quantity applies to only one slice")) (const lI) Natural Nothing 
+  ("representing a single slice")) (const lI) Natural Nothing 
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

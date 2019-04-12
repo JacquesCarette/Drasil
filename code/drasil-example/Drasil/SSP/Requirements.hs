@@ -80,5 +80,5 @@ displayGraph = cic "displayGraph" ( foldlSent [
 
 ------------------
 sspInputDataTable :: LabelledContent
-sspInputDataTable = mkInputDatTb ([dqdWr coords] ++ map dqdWr sspInputs)
+sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
   --FIXME: this has to be seperate since coords is a different type

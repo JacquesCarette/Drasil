@@ -10,6 +10,7 @@
 
 # Use new container infrastructure to enable caching
 sudo: false
+dist: xenial
 
 # Do not choose a language; we provide our own build tools.
 language: generic
@@ -24,6 +25,12 @@ addons:
   apt:
     packages:
       - libgmp-dev
+      - fonts-lmodern
+      - texlive-bibtex-extra
+      - texlive-latex-extra
+      - texlive-math-extra
+      - texlive-xetex
+      - texlive-luatex
 
 before_install:
 # Download and unpack the stack executable
@@ -36,11 +43,11 @@ install:
 - stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/stack.yaml
 
 script:
-# Build the package
-#- stack --no-terminal build --stack-yaml code/stack.yaml
-- cd code
-- make stackArgs="--no-terminal" NOISY=yes
-- make docs haddockArgs="--no-haddock-deps"
+ - cd code
+ - curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+ - make stackArgs="--no-terminal" NOISY=yes GHCFLAGS=-Werror
+ - make tex SUMMARIZE_TEX=yes
+ - make docs haddockArgs="--no-haddock-deps"
 
 notifications:
   email:

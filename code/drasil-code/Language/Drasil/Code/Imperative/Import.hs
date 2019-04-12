@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
@@ -22,8 +23,8 @@ import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
-import Control.Lens ((^.))
+import Data.Maybe (fromMaybe, maybe)
+import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
@@ -106,7 +107,7 @@ genModules = do
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
-  moddef <- sequence $ fmap genModDef (mods s) -- hack ?
+  moddef <- traverse genModDef (mods s) -- hack ?
   return $ (mn : inp ++ out ++ moddef)
 
 -- private utilities used in generateCode
@@ -121,7 +122,7 @@ getDir Java = "java"
 getDir Python = "python"
 
 liftS :: Reader a b -> Reader a [b]
-liftS = fmap (\x -> [x])
+liftS = fmap (: [])
 
 ------- INPUT ----------
 
@@ -216,18 +217,17 @@ genCalcFunc cdef = do
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
-genCalcBlock t' v' e' = do
-  doit t' v' e'
-    where
-    doit :: CalcType -> String -> Expr -> Reader State Body
-    doit t v (Case e)    = genCaseBlock t v e
-    doit t v e
-      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
-      | otherwise        = fmap (oneLiner . I.return) $ convExpr e
+genCalcBlock t' v' e' = doit t' v' e'
+  where
+  doit :: CalcType -> String -> Expr -> Reader State Body
+  doit t v (Case e)    = genCaseBlock t v e
+  doit t v e
+    | t == CalcAssign  = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
+    | otherwise        = (oneLiner . I.return) <$> convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (genCalcBlock t v e)) cs
   return $ oneLiner $ ifCond ifs noElse
 
 ----- OUTPUT -------
@@ -303,7 +303,7 @@ genModule :: Name
                -> Reader State Module
 genModule n maybeMs maybeCs = do
   g <- ask
-  let ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
+  let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
@@ -359,7 +359,7 @@ loggedAssign a b =
 -- helpers
 
 nopfx :: String -> String
-nopfx s = maybe s id (stripPrefix funcPrefix s)
+nopfx s = fromMaybe s (stripPrefix funcPrefix s)
 
 variable :: String -> Reader State Value
 variable s' = do
@@ -408,15 +408,15 @@ getArgs cs = do
 
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
-paramType (FuncParam _ _ _) = error "Function param not implemented"
+paramType FuncParam{} = error "Function param not implemented"
 
 paramVal :: Parameter -> Value
 paramVal (StateParam l _) = var l
-paramVal (FuncParam _ _ _) = error "Function param not implemented"
+paramVal FuncParam{} = error "Function param not implemented"
 
 paramName :: Parameter -> String
 paramName (StateParam l _) = l
-paramName (FuncParam _ _ _) = error "Function param not implemented"
+paramName FuncParam{} = error "Function param not implemented"
 
 valName :: Value -> String
 valName (Lit (LitBool b)) = show b
@@ -443,20 +443,21 @@ convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
-convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
-convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
-convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
-convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
-convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
+convExpr (AssocA Add l)  = foldr1 (#+) <$> mapM convExpr l
+convExpr (AssocA Mul l)  = foldr1 (#*) <$> mapM convExpr l
+convExpr (AssocB And l)  = foldr1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
+convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
+  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ codeSpec g))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
-  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
-convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+
+  fApp (codeName (codevar (symbLookup c (symbolTable info)))) args
+convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
@@ -466,15 +467,15 @@ convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
-convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (Operator _ _ _) = error "convExpr: Operator"
-convExpr (IsIn _ _)    = error "convExpr: IsIn"
+convExpr Matrix{}    = error "convExpr: Matrix"
+convExpr Operator{} = error "convExpr: Operator"
+convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
 
-lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
-lookupC sm c = symbLookup c $ sm^.symbolTable
+lookupC :: ChunkDB -> UID -> QuantityDict
+lookupC sm c = symbLookup c $ symbolTable sm
 
 renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l
@@ -529,7 +530,7 @@ bfunc Index      = (\x y -> x I.$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module
-genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
+genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
 genFunc :: Func -> Reader State Method
 genFunc (FDef (FuncDef n i o s)) = do
@@ -550,7 +551,7 @@ convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
-  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((&++) (var (codeName v)))
+  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((var (codeName v)) &++)
                [ block stmts ]
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
@@ -574,8 +575,8 @@ convStmt (FTry t c) = do
 convStmt (FContinue) = return continue
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
-convStmt (FAppend a b) = fmap valStmt $
+convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
+convStmt (FAppend a b) = valStmt <$>
   liftM2 (\x y -> x I.$.(listAppend y)) (convExpr a) (convExpr b)
 
 -- this is really ugly!!
@@ -603,12 +604,12 @@ genDataFunc nameTitle dd = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) ((&++) v_i)
-                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ lnV))
+              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) (v_i &++)
+                ( body ( (stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d) : lnV))
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
+          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) (v_i &++)
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
@@ -621,12 +622,12 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) ((&++) v_j)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) (v_j &++)
               ( body pat )
             ]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) (v_j &++)
               ( body pat )
             ]
         ---------------
@@ -659,14 +660,14 @@ genDataFunc nameTitle dd = do
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          [ while (v I.$.listSize ?<= (litInt i)) ( body [ valStmt $ v I.$.(listExtend $ listType' s n) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
+          ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
-          [ while (v I.$.listSize ?<= l) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
+          ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v I.$.listSize ?<= p) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
+          ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+          : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
         listType :: C.CodeType -> Integer -> I.StateType
         listType _ 0 = error "No index given"

@@ -9,7 +9,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, angularDisplacement, angularVelocity, displacement, distance, 
   force, gravitationalAccel, gravitationalConst, impulseS, impulseV, 
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
-  restitutionCoef, time, torque, velocity)
+  restitutionCoef, time, torque, velocity, kEnergy)
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
@@ -45,7 +45,7 @@ cpSymbols = (map qw cpUnits) ++
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
-  QPP.len, QP.momentOfInertia, QP.torque] ++ [qw QP.restitutionCoef]
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy] ++ [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity]
@@ -60,7 +60,11 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime,  
+<<<<<<< HEAD
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel]
+=======
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy]
+>>>>>>> master
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -251,7 +255,7 @@ mass_B      = rigidParam "B" cB
 --------------------------
 
 cpUnitless :: [QuantityDict]
-cpUnitless = [numParticles]
+cpUnitless = qw QM.pi_ : [numParticles]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer

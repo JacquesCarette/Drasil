@@ -1,4 +1,4 @@
-module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, latentHtE) where
+module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
 import Data.Drasil.SI_Units (joule)
-import Drasil.SWHS.Assumptions (newA1)
+import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
@@ -62,31 +62,45 @@ consThermEdesc = foldlSent [
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef2S newA1)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]
 
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
+
 sensHtE :: TheoryModel
-sensHtE = tm sensHtE_rc
+sensHtE = sensHtE_template AllPhases sensHtEdesc
+
+data PhaseChange = AllPhases
+                 | Liquid
+
+sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
+sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [sensHtESrc] "sensHtE" [sensHtEdesc]
+  [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
+    eqn = sensHtEEqn pc
 
-sensHtE_rc :: RelationConcept
-sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
+
+sensHtE_rc :: PhaseChange -> Relation -> Sentence -> RelationConcept
+sensHtE_rc pc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP ("Sensible heat energy" ++ case pc of
+  Liquid -> " (no state change)"
+  AllPhases -> "")) desc eqn
 
 sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
   shortname' "Definition of Sensible Heat"
 
-sensHtEEqn :: Relation
-sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
-  ((sy temp) $< (sy melt_pt))), ((sy htCap_L) *
-  (sy mass) * (sy deltaT), ((sy melt_pt) $< (sy temp) $<
-  (sy boil_pt))), ((sy htCap_V) * (sy mass) *
-  (sy deltaT), ((sy boil_pt) $< (sy temp)))]
+sensHtEEqn :: PhaseChange -> Relation
+sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
+  Liquid -> liquidFormula
+  AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
+      ((sy temp) $< (sy melt_pt))), (liquidFormula, ((sy melt_pt) $< (sy temp) $<
+      (sy boil_pt))), ((sy htCap_V) * (sy mass) *
+      (sy deltaT), ((sy boil_pt) $< (sy temp)))]
+  where
+    liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 

@@ -1,7 +1,8 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- SystemInformation
-    SystemInformation(..), Block(..), citeDB, getRefDB
+    SystemInformation(..), Block(..), citeDB
+  , ReferenceDB, rdb, RefMap, simpleMap
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation
@@ -142,25 +143,18 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
-  , HasSymbolTable, symbolMap, symbLookup, symbolTable
-  , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, traceMap, defTable, defLookup, labelledconLookup
-  , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap
-  , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
-  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap, HasLabelledContent(..)
-  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
-  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
-  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
-  , HasAssumpTable(..), HasConceptInstance(..), SectionMap
-  -- AssumpChunk
-  , AssumpChunk(AC), assuming, assump
+  , symbLookup, symbolTable
+  , termLookup, termTable
+  , conceptMap, traceMap, defTable, defLookup, labelledconLookup
+  , unitTable, collectUnits
+  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
+  , refbyLookup, refbyTable, labelledcontentTable
+  , datadefnLookup, insmodelLookup, sectionLookup
+  , gendefLookup, theoryModelLookup, conceptinsLookup, dataDefnTable
+  , insmodelTable, gendefTable, theoryModelTable, sectionTable
+  , conceptinsTable, asOrderedList
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
-  , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable, HasAssumpRefs
-  , RefBy(..)
-  , assumpDB, RefMap, simpleMap
-  , citationRefTable
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Label.Type
@@ -187,6 +181,14 @@ module Language.Drasil (
   , pages
       -- Month -> CiteField
   , month
+  -- Chunk.UnitDefn
+  , UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , unitWrapper, getCu, MayHaveUnit(getUnit)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -217,13 +219,12 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ),
+  HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
   DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
-import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -273,9 +274,7 @@ import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
-import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
- , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
- , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
+import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
@@ -290,3 +289,10 @@ import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(
 import Language.Drasil.UnitLang (USymb(US))
 
 import Language.Drasil.Development.Sentence -- are these really development?
+import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))

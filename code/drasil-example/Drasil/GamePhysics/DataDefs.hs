@@ -221,7 +221,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "chalses"
-  [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
+  [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition
 chasles = mkQuantDef vel_B chaslesEqn
@@ -230,7 +230,7 @@ chasles = mkQuantDef vel_B chaslesEqn
 chaslesEqn :: Expr
 chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
 
-{-chaslesThmDesc :: Sentence
+chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
@@ -242,7 +242,7 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
   (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]-}
+  (sParen $ Sy $ unit_symb r_OB)]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition

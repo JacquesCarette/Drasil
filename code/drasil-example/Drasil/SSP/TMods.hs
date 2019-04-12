@@ -5,22 +5,18 @@ import Prelude hiding (tan)
 import Language.Drasil
 
 import Data.Drasil.Quantities.Physics (distance, force)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes)
 
-import Data.Drasil.Concepts.Documentation (model, safety, source)
-import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Concepts.Physics (friction, linear, stress)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+import Data.Drasil.Concepts.Documentation (model)
+import Data.Drasil.Concepts.Physics (friction, linear)
 
-import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
-  sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, sAnd)
 
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
-import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
+import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
-import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, fricAngle, fs, fx, fy, mobShrI,
-  momntOfBdy, nrmFSubWat, porePressure, shrResI, shrStress, surfHydroForce, totStress)
+import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
+  fricAngle, fs, fx, fy, mobShrI, momntOfBdy, nrmFSubWat, porePressure, shrResI,
+  shrStress, totStress)
 import Drasil.SSP.DataDefs (stressDD)
 
 --------------------------

@@ -533,6 +533,28 @@ N
 </tr>
 <tr>
 <td>
+<em>W<sup>L</sup></em>
+</td>
+<td>
+Left Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em>W<sup>R</sup></em>
+</td>
+<td>
+Right Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
 <em>X</em>
 </td>
 <td>
@@ -646,7 +668,7 @@ Angle: surface of the mass relative to the horizontal for slice index i
 <em>γ</em>
 </td>
 <td>
-Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer.
+Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer.
 </td>
 <td>
 N/m<sup>3</sup>
@@ -657,7 +679,7 @@ N/m<sup>3</sup>
 <em>γ<sub>Sat</sub></em>
 </td>
 <td>
-Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer.
+Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer.
 </td>
 <td>
 N/m<sup>3</sup>
@@ -1278,7 +1300,7 @@ Factor-of-Safety: The factor of safety is assumed to be constant across the enti
 </p>
 <p>
 <div id="assumpSLH">
-Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
+Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
 </p>
 <p>
@@ -1308,7 +1330,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -2544,26 +2566,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>W = b<sub>i</sub>&#8239;<span class="casebr">
-{
+<em>W = <div class="fraction">
+<span class="fup">
+1
 </span>
-<div class="cases">
-<span>
-(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
+<span class="fdn">
+2
 </span>
-</span>
-<span>
-(y<sub>slope,i</sub>&minus;y<sub>wt,i</sub>)&#8239;γ&plus;(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
-</span>
-</span>
-<span>
-(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
-</span>
-</span>
-</div></em>
+</div>&#8239;(W<sup>L</sup><sub>i</sub>&plus;W<sup>R</sup><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2577,27 +2587,25 @@ Description
 <em>W</em> is the weight (N)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em>W<sup>L</sup></em> is the left weight of a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
-</li>
-<li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ</em> is the dry unit weight (N/m<sup>3</sup>)
+<em>W<sup>R</sup></em> is the right weight of a slice (N/m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ</em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -2946,7 +2954,7 @@ Description
 <em>y<sub>slip</sub></em> is the y ordinate (m)
 </li>
 <li>
-<em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
+<em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
 <em>y<sub>wt</sub></em> is the y ordinate (m)
@@ -4287,6 +4295,238 @@ RefBy
 </tr>
 </table>
 </div>
+<div id="DD:slcWghtRDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Right weight of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>W<sup>R</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>W<sup>R</sup> = b<sub>i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
+</span>
+</span>
+<span>
+(y<sub>slope,i</sub>&minus;y<sub>wt,i</sub>)&#8239;γ&plus;(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+</span>
+</span>
+<span>
+(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ , <span class="case">
+y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>W<sup>R</sup></em> is the right weight of a slice (N/m)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:slcWghtRDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Left weight of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>W<sup>L</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>W<sup>L</sup> = b<sub>i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;y<sub>slope,i&minus;1</sub>
+</span>
+</span>
+<span>
+(y<sub>slope,i&minus;1</sub>&minus;y<sub>wt,i&minus;1</sub>)&#8239;γ&plus;(y<sub>wt,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+y<sub>slope,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slip,i&minus;1</sub>
+</span>
+</span>
+<span>
+(y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slip,i&minus;1</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>W<sup>L</sup></em> is the left weight of a slice (N/m)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -5513,7 +5753,7 @@ effective angle of friction
 N/m<sup>3</sup>
 </td>
 <td>
-dry unit weight
+soil dry unit weight
 </td>
 </tr>
 <tr>
@@ -5524,7 +5764,7 @@ dry unit weight
 N/m<sup>3</sup>
 </td>
 <td>
-saturated unit weight
+soil saturated unit weight
 </td>
 </tr>
 <tr>

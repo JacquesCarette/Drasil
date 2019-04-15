@@ -9,16 +9,18 @@ import Language.Drasil
 --import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
  -- ofThe', sAnd)
 
+import Data.Drasil.Concepts.Documentation (assumption, constant)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (sAnd)
-import Drasil.SSP.Assumptions (assumpSBSBISL)
+import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, getTandS)
+import Drasil.SSP.Defs (slice, soil, soilPrpty)
+import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  constF, dryWeight, fricAngle, fs, genericF, genericA, 
+  constF, dryWeight, fricAngle, fs, genericF, genericA, index,
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, 
+  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
   surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   waterHght, waterWeight, watrForce)
@@ -30,28 +32,29 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD]
 
 --DD1
 
 sliceWght :: DataDefinition
-sliceWght = mkDD sliceWghtQD [fredlund1977] [{-Derivation-}] "sliceWght" []--Notes
+sliceWght = mkDD sliceWghtQD [fredlund1977] [{-Derivation-}] "sliceWght" 
+  [sliceWghtNotes]
 --FIXME: fill empty lists in
 
 sliceWghtQD :: QDefinition
-sliceWghtQD = mkQuantDef slcWght slcWgtEqn
+sliceWghtQD = mkQuantDef slcWght sliceWghtEqn
 
-slcWgtEqn :: Expr
-slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
-  where case1 = (((inxi slopeHght)-(inxi slipHght ))*(sy satWeight),
-          (inxi waterHght) $>= (inxi slopeHght))
+sliceWghtEqn :: Expr
+sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
 
-        case2 = (((inxi slopeHght)-(inxi waterHght))*(sy dryWeight) +
-          ((inxi waterHght)-(inxi slipHght))*(sy satWeight),
-          (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
-
-        case3 = (((inxi slopeHght)-(inxi slipHght ))*(sy dryWeight),
-          (inxi waterHght) $<= (inxi slipHght))
+sliceWghtNotes :: Sentence
+sliceWghtNotes = foldlSent [S "This equation is based on the", 
+  phrase assumption, S "that the surface and the base of a", phrase slice, 
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The",
+  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
+  ch index, S "because the", phrase soil,
+  S "is assumed to be homogeneous, with", phrase constant, plural soilPrpty, 
+  S "throughout", sParen (makeRef2S assumpSLH)]
 
 --DD2
 
@@ -299,8 +302,8 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-nrmForceSumDD, watForceSumDD, sliceHghtRightDD, 
-  sliceHghtLeftDD :: DataDefinition
+nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD,
+  slcWghtRDD, slcWghtLDD :: DataDefinition
 nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
 watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
@@ -309,6 +312,10 @@ sliceHghtRightDD = mkDD sliceHghtRightQD [{-References-}] [{-Derivation-}]
   "sliceHghtRightDD" []--Notes
 sliceHghtLeftDD = mkDD sliceHghtLeftQD [{-References-}] [{-Derivation-}] 
   "sliceHghtLeftDD" []--Notes
+slcWghtRDD = mkDD slcWghtRQD [fredlund1977] [{-Derivation-}] 
+  "slcWghtRDD" []--Notes
+slcWghtLDD = mkDD slcWghtLQD [fredlund1977] [{-Derivation-}] 
+  "slcWghtRDD" []--Notes
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -322,7 +329,23 @@ sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght - inxi slipHght)
 sliceHghtLeftQD :: QDefinition
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght - inxiM1 slipHght)
 
+slcWghtRQD :: QDefinition
+slcWghtRQD = mkQuantDef slcWghtR $ slcWgtEqn inxi
 
+slcWghtLQD :: QDefinition
+slcWghtLQD = mkQuantDef slcWghtL $ slcWgtEqn inxiM1
+  
+slcWgtEqn :: (UnitalChunk -> Expr) -> Expr
+slcWgtEqn idxf = (inxi baseWthX) * (case_ [case1,case2,case3])
+  where case1 = (((idxf slopeHght)-(idxf slipHght ))*(sy satWeight),
+          (idxf waterHght) $>= (idxf slopeHght))
+
+        case2 = (((idxf slopeHght)-(idxf waterHght))*(sy dryWeight) +
+          ((idxf waterHght)-(idxf slipHght))*(sy satWeight),
+          (idxf slopeHght) $> (idxf waterHght) $> (idxf slipHght))
+
+        case3 = (((idxf slopeHght)-(idxf slipHght ))*(sy dryWeight),
+          (idxf waterHght) $<= (idxf slipHght))
 
 --------------------------
 -- Derivation Sentences --

@@ -137,6 +137,10 @@ $v$ & Local Index: used as a bound variable index in calculations & --
 \\
 $W$ & Weight: downward force caused by gravity on slice i & N
 \\
+${W^{L}}$ & Left Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
+${W^{R}}$ & Right Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
 $X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
 \\
 $x$ & X-Ordinate: refers to either slice i midpoint, or slice interface i & m
@@ -157,9 +161,9 @@ $α$ & Angle: base of the mass relative to the horizontal for slice index i & ${
 \\
 $β$ & Angle: surface of the mass relative to the horizontal for slice index i & ${}^{\circ}$
 \\
-$γ$ & Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+$γ$ & Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{Sat}}$ & Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{Sat}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -359,13 +363,13 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The (${x_{slip}}$, ${y_{slip}}$) coordinates of a slip surface follow a concave up function.
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
-\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
+\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
 \item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -799,27 +803,21 @@ Label & Weight
                  Units & N
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    W=b_{i} \begin{cases}
-\left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
-\left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
-\left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
-\end{cases}
+                                    W=\frac{1}{2} \left({{W^{L}}}_{i}+{{W^{R}}}_{i}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$W$ is the weight (N)}
-                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{${W^{L}}$ is the left weight of a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${W^{R}}$ is the right weight of a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Source & \cite{fredlund1977}
-                                                           \\ \midrule \\
-                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+                                                  Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight $γ$ and the soil saturated unit weight ${γ_{Sat}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}).
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -923,7 +921,7 @@ Label & Interslice normal water force
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \item{${y_{wt}}$ is the y ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -1366,6 +1364,82 @@ Label & Height of the left side of a slice
                                                            RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:slcWghtRDD}
+\phantomsection 
+\label{DD:slcWghtRDD}
+\\ \midrule \\
+Label & Right weight of a slice
+        \\ \midrule \\
+        Symbol & ${W^{R}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {W^{R}}=b_{i} \begin{cases}
+\left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
+\left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${W^{R}}$ is the right weight of a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{$γ$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:slcWghtRDD}
+\phantomsection 
+\label{DD:slcWghtRDD}
+\\ \midrule \\
+Label & Left weight of a slice
+        \\ \midrule \\
+        Symbol & ${W^{L}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {W^{L}}=b_{i} \begin{cases}
+\left({y_{slope,i-1}}-{y_{slip,i-1}}\right) {γ_{Sat}}, & {y_{wt,i-1}}\geq{}{y_{slope,i-1}}\\
+\left({y_{slope,i-1}}-{y_{wt,i-1}}\right) γ+\left({y_{wt,i-1}}-{y_{slip,i-1}}\right) {γ_{Sat}}, & {y_{slope,i-1}}>{y_{wt,i-1}}>{y_{slip,i-1}}\\
+\left({y_{slope,i-1}}-{y_{slip,i-1}}\right) γ, & {y_{wt,i-1}}\leq{}{y_{slip,i-1}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${W^{L}}$ is the left weight of a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{$γ$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Source & \cite{fredlund1977}
+                                                           \\ \midrule \\
+                                                           RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
@@ -1738,9 +1812,9 @@ $c'$ & Pa & effective cohesion
 \\
 $φ'$ & ${}^{\circ}$ & effective angle of friction
 \\
-$γ$ & $\frac{\text{N}}{\text{m}^{3}}$ & dry unit weight
+$γ$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil dry unit weight
 \\
-${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & saturated unit weight
+${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil saturated unit weight
 \\
 ${γ_{w}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 \\

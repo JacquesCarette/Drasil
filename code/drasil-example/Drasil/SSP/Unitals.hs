@@ -79,12 +79,12 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   (prime $ vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defultUncrt
 
-dryWeight = uqc "gamma" (cn $ "dry unit weight")
+dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   lGamma specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
-satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
+satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
@@ -119,7 +119,7 @@ coords = cuc' "(x,y)"
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
-  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
+  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
@@ -129,7 +129,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
-  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
+  shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
@@ -213,6 +213,15 @@ shearRNoIntsl = uc' "R_i"
 
 slcWght = uc' "W_i" (cn $ "weight")
   ("downward force caused by gravity on slice i") (cW) newton
+  
+slcWghtR = uc' "W^R" (cn $ "right weight of a slice") 
+  ("weight of a slice per meter in the z-direction, assuming the entire " ++ "slice has the height of the right side of the slice") 
+  (sup cW cR) forcePerMeterU
+
+slcWghtL = uc' "W^L" (cn $ "left weight of a slice") 
+  ("weight of a slice per meter in the z-direction, assuming the entire " ++
+  "slice has the height of the left side of the slice") 
+  (sup cW cL) forcePerMeterU
 
 watrForce = uc' "H_i" (cn $ "interslice normal water force") ("exerted in " ++
   "the x-ordinate direction between adjacent slices " ++ fisi)

@@ -54,7 +54,9 @@ sliceWghtNotes = foldlSent [S "This equation is based on the",
   getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
   ch index, S "because the", phrase soil,
   S "is assumed to be homogeneous, with", phrase constant, plural soilPrpty, 
-  S "throughout", sParen (makeRef2S assumpSLH)]
+  S "throughout" +:+. sParen (makeRef2S assumpSLH), ch slcWghtL, 
+  S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
+  S "is defined in" +:+. makeRef2S slcWghtRDD]
 
 --DD2
 
@@ -313,9 +315,9 @@ sliceHghtRightDD = mkDD sliceHghtRightQD [{-References-}] [{-Derivation-}]
 sliceHghtLeftDD = mkDD sliceHghtLeftQD [{-References-}] [{-Derivation-}] 
   "sliceHghtLeftDD" []--Notes
 slcWghtRDD = mkDD slcWghtRQD [fredlund1977] [{-Derivation-}] 
-  "slcWghtRDD" []--Notes
+  "slcWghtRDD" [slcWghtNotes]--Notes
 slcWghtLDD = mkDD slcWghtLQD [fredlund1977] [{-Derivation-}] 
-  "slcWghtRDD" []--Notes
+  "slcWghtRDD" [slcWghtNotes]--Notes
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -346,6 +348,9 @@ slcWgtEqn idxf = (inxi baseWthX) * (case_ [case1,case2,case3])
 
         case3 = (((idxf slopeHght)-(idxf slipHght ))*(sy dryWeight),
           (idxf waterHght) $<= (idxf slipHght))
+
+slcWghtNotes :: Sentence
+slcWghtNotes = ch baseWthX +:+ S "is defined in" +:+. makeRef2S lengthB
 
 --------------------------
 -- Derivation Sentences --

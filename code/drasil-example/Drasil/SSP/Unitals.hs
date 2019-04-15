@@ -120,7 +120,7 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, totNrmForce, 
+  watrForceDif, intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
   sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
@@ -130,7 +130,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, watrForceDif, shrResI,
-  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, totNrmForce, nrmFSubWat,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
   momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
@@ -240,19 +240,30 @@ baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   (sub cU (Atomic "b")) newton
 
 baseHydroForceR = uc' "U^R_b,i" (cn $ "right base hydrostatic force on a slice")
-  ("from water pressure within a slice, assuming the entire slice has the " ++
-  "height of the right side of the slice")
+  ("per meter in the z-direction from water pressure within a slice, " ++
+  "assuming the entire slice has the height of the right side of the slice")
   (sub (sup cU cR) lB) forcePerMeterU
 
 baseHydroForceL = uc' "U^L_b,i" (cn $ "left base hydrostatic force on a slice")
-  ("from water pressure within a slice, assuming the entire slice has the " ++
-  "height of the left side of the slice")
+  ("per meter in the z-direction from water pressure within a slice, " ++
+  "assuming the entire slice has the height of the left side of the slice")
   (sub (sup cU cL) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
   ("from water pressure acting into the slice from standing " ++
-  "water on the slope surface " ++ fsi)
+  "water on the slope surface")
   (sub cU (Atomic "t")) newton
+
+surfHydroForceR = uc' "U^R_t,i" (cn $ "right surface hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure acting into the slice " ++ "from standing water on the slope surface, assuming the entire slice has " ++
+  "the height of the right side of the slice")
+  (sub (sup cU cR) lT) forcePerMeterU
+
+surfHydroForceL = uc' "U^L_t,i" (cn $ "left surface hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure acting into the slice " ++
+  "from standing water on the slope surface, assuming the entire slice has " ++
+  "the height of the left side of the slice")
+  (sub (sup cU cL) lT) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
   "for a soil surface subject to a body resting on it")
@@ -285,13 +296,13 @@ baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
   (lB) metre
 
-baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub lEll (Atomic "b")) metre
+baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") 
+  "in the direction parallel to the slope of the base"
+  (sub lEll lB) metre
 
-surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
-  ("from slip base to slope surface in a vertical " ++
-  "line from an interslice vertex " ++ fisi)
-  (sub lEll (Atomic "s")) metre
+surfLngth = uc' "l_s,i" (cn $ "surface length of a slice")
+  "in the direction parallel to the slope of the surface"
+  (sub lEll lS) metre
 
 midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
   ("height in the y-direction from the base of a slice to the slope " ++

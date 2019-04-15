@@ -22,7 +22,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, baseHydro
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
-  surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
+  surfHydroForceR, surfHydroForceL, surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   waterHght, waterWeight, watrForce)
 
 ------------------------
@@ -32,7 +32,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, baseHydro
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD]
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
+  sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD, 
+  surfWtrFRDD, surfWtrFLDD]
 
 --DD1
 
@@ -62,7 +64,7 @@ sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the",
 
 baseWtrF :: DataDefinition
 baseWtrF = mkDD baseWtrFQD [fredlund1977] [{-Derivation-}] "baseWtrF"
-  [bsWtrFNotes]--Notes
+  [bsWtrFNotes]
 --FIXME: fill empty lists in
 
 baseWtrFQD :: QDefinition
@@ -81,19 +83,22 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD3
 
 surfWtrF :: DataDefinition
-surfWtrF = mkDD surfWtrFQD [fredlund1977] [{-Derivation-}] "surfWtrF"
-  [makeRef2S assumpSBSBISL]--Notes
+surfWtrF = mkDD srfWtrFQD [fredlund1977] [{-Derivation-}] "surfWtrF"
+  [srfWtrFNotes]
 --FIXME: fill empty lists in
 
-surfWtrFQD :: QDefinition
-surfWtrFQD = mkQuantDef surfHydroForce surfWtrFEqn
+srfWtrFQD :: QDefinition
+srfWtrFQD = mkQuantDef surfHydroForce srfWtrFEqn
 
-surfWtrFEqn :: Expr
-surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
-  where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
-          (inxi waterHght) $> (inxi slopeHght))
+srfWtrFEqn :: Expr
+srfWtrFEqn = 0.5 * ((inxi surfHydroForceL) + (inxi surfHydroForceR))
 
-        case2 = (0, (inxi waterHght) $<= (inxi slopeHght))
+srfWtrFNotes :: Sentence
+srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the surface of a slice is a straight line" +:+.
+  sParen (makeRef2S assumpSBSBISL), ch surfHydroForceL, S "is defined in",
+  makeRef2S surfWtrFLDD `sAnd` ch surfHydroForceR, S "is defined in",
+  makeRef2S surfWtrFRDD]
 
 --DD4
 
@@ -308,7 +313,8 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -----------------
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD,
-  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD :: DataDefinition
+  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD, surfWtrFRDD, 
+  surfWtrFLDD :: DataDefinition
 nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
 watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
@@ -325,6 +331,10 @@ baseWtrFRDD = mkDD baseWtrFRQD [fredlund1977] [{-Derivation-}]
   "baseWtrFRDD" [baseWtrFNotes]
 baseWtrFLDD = mkDD baseWtrFLQD [fredlund1977] [{-Derivation-}] 
   "baseWtrFLDD" [baseWtrFNotes]
+surfWtrFRDD = mkDD surfWtrFRQD [fredlund1977] [{-Derivation-}] 
+  "surfWtrFRDD" [surfWtrFNotes]
+surfWtrFLDD = mkDD surfWtrFLQD [fredlund1977] [{-Derivation-}] 
+  "surfWtrFLDD" [surfWtrFNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -374,6 +384,22 @@ baseWtrFEqn idxf = (inxi baseLngth)*(case_ [case1,case2])
 
 baseWtrFNotes :: Sentence
 baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
+
+surfWtrFRQD :: QDefinition
+surfWtrFRQD = mkQuantDef surfHydroForceR $ surfWtrFEqn inxi
+
+surfWtrFLQD :: QDefinition
+surfWtrFLQD = mkQuantDef surfHydroForceL $ surfWtrFEqn inxiM1
+
+surfWtrFEqn :: (UnitalChunk -> Expr) -> Expr
+surfWtrFEqn idxf = (inxi surfLngth)*(case_ [case1,case2])
+  where case1 = (((idxf waterHght)-(idxf slopeHght))*(sy waterWeight),
+          (idxf waterHght) $> (idxf slopeHght))
+
+        case2 = (0, (idxf waterHght) $<= (idxf slopeHght))
+
+surfWtrFNotes :: Sentence
+surfWtrFNotes = ch surfLngth +:+ S "is defined in" +:+. makeRef2S lengthLs
 
 --------------------------
 -- Derivation Sentences --

@@ -492,7 +492,7 @@ Pa
 <em>U<sub>b</sub></em>
 </td>
 <td>
-Base Hydrostatic Force: from water pressure within the slice for slice index i
+Base Hydrostatic Force: from water pressure within a slice
 </td>
 <td>
 N
@@ -503,10 +503,54 @@ N
 <em>U<sub>t</sub></em>
 </td>
 <td>
-Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface for slice index i
+Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>U<sup>L</sup><sub>b</sub></em>
+</td>
+<td>
+Left Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the left side of the slice
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em>U<sup>L</sup><sub>t</sub></em>
+</td>
+<td>
+Left Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the left side of the slice
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em>U<sup>R</sup><sub>b</sub></em>
+</td>
+<td>
+Right Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the right side of the slice
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em>U<sup>R</sup><sub>t</sub></em>
+</td>
+<td>
+Right Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the right side of the slice
+</td>
+<td>
+N/m
 </td>
 </tr>
 <tr>
@@ -822,7 +866,7 @@ Angle: of imposed surface load acting into the surface relative to the vertical 
 <em>ℓ<sub>b</sub></em>
 </td>
 <td>
-Total Base Length of a Slice: for slice index i
+Total Base Length of a Slice: in the direction parallel to the slope of the base
 </td>
 <td>
 m
@@ -833,7 +877,7 @@ m
 <em>ℓ<sub>s</sub></em>
 </td>
 <td>
-Length of an Interslice Surface: from slip base to slope surface in a vertical line from an interslice vertex for interslice index i
+Surface Length of a Slice: in the direction parallel to the slope of the surface
 </td>
 <td>
 m
@@ -2604,7 +2648,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ</em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>).
+This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ</em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em>W<sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em>W<sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
 </p>
 </td>
 </tr>
@@ -2668,21 +2712,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
-{
+<em>U<sub>b</sub> = <div class="fraction">
+<span class="fup">
+1
 </span>
-<div class="cases">
-<span>
-(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+<span class="fdn">
+2
 </span>
-</span>
-<span>
-0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
-</span>
-</span>
-</div></em>
+</div>&#8239;(U<sup>L</sup><sub>b,i</sub>&plus;U<sup>R</sup><sub>b,i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2696,19 +2733,13 @@ Description
 <em>U<sub>b</sub></em> is the base hydrostatic force (N)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em>U<sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+<em>U<sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
 </li>
 </ul>
 </td>
@@ -2719,7 +2750,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em>U<sup>L</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a> and <em>U<sup>R</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>.
 </p>
 </td>
 </tr>
@@ -2783,21 +2814,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
-{
+<em>U<sub>t</sub> = <div class="fraction">
+<span class="fup">
+1
 </span>
-<div class="cases">
-<span>
-(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slope,i</sub>
+<span class="fdn">
+2
 </span>
-</span>
-<span>
-0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slope,i</sub>
-</span>
-</span>
-</div></em>
+</div>&#8239;(U<sup>L</sup><sub>t,i</sub>&plus;U<sup>R</sup><sub>t,i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2811,19 +2835,13 @@ Description
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N)
 </li>
 <li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
+<em>U<sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+<em>U<sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
 </li>
 </ul>
 </td>
@@ -2834,7 +2852,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em>U<sup>L</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> and <em>U<sup>R</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>.
 </p>
 </td>
 </tr>
@@ -3264,7 +3282,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
 </p>
 </td>
 </tr>
@@ -3359,7 +3377,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a> <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>.
 </p>
 </td>
 </tr>
@@ -3373,7 +3391,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Length of an interslice surface
+Surface length of a slice
 </p>
 </td>
 </tr>
@@ -3414,7 +3432,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
+<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
@@ -3454,7 +3472,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:momentEql>GD: momentEql</a>.
+<a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a> <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a>.
 </p>
 </td>
 </tr>
@@ -4391,6 +4409,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -4405,7 +4433,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:sliceWght>DD: sliceWght</a>.
 </p>
 </td>
 </tr>
@@ -4507,6 +4535,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -4521,7 +4559,467 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:sliceWght>DD: sliceWght</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:baseWtrFRDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Right base hydrostatic force on a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sup>R</sup><sub>b</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>U<sup>R</sup><sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>U<sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
+</li>
+<li>
+<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:baseWtrF>DD: baseWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:baseWtrFLDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Left base hydrostatic force on a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sup>L</sup><sub>b</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>U<sup>L</sup><sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slip,i&minus;1</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slip,i&minus;1</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>U<sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
+</li>
+<li>
+<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:baseWtrF>DD: baseWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:surfWtrFRDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Right surface hydrostatic force on a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sup>R</sup><sub>t</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>U<sup>R</sup><sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slope,i</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slope,i</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>U<sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
+</li>
+<li>
+<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>ℓ<sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:surfWtrF>DD: surfWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:surfWtrFLDD">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Left surface hydrostatic force on a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sup>L</sup><sub>t</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>U<sup>L</sup><sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i&minus;1</sub>&minus;y<sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slope,i&minus;1</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slope,i&minus;1</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>U<sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
+</li>
+<li>
+<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>ℓ<sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:surfWtrF>DD: surfWtrF</a>.
 </p>
 </td>
 </tr>

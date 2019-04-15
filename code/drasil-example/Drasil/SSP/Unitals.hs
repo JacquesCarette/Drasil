@@ -187,7 +187,7 @@ mobShrI = uc' "mobShr" (cn $ "mobilized shear force")
 
 shrResI = uc' "shrRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   "frictional force per meter in the z-direction that describes the limit of" ++
-  "mobilized shear force a slice can withstand before failure")
+  " mobilized shear force a slice can withstand before failure")
   (cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in

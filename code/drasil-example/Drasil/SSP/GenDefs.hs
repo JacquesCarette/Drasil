@@ -8,7 +8,7 @@ import Language.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
-import Data.Drasil.SI_Units (metre)
+import Data.Drasil.SI_Units (metre, newton)
 
 import Data.Drasil.Concepts.Documentation (assumption, constant, definition, 
   method_)
@@ -17,8 +17,6 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Physics (force)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd, andThe)
-
-import Data.Drasil.SI_Units (newton)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)

@@ -125,9 +125,7 @@ generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
-  S "that will be used in", S "deriving the", 
-  plural dataDefn `sC` S "which in turn are used to", S "build the", 
-  plural inModel]
+  S "that will be used to build the", plural inModel]
 
                        
 -- uses EmptyS if ending sentence is not needed

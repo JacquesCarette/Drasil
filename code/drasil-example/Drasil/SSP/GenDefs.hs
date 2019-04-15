@@ -23,7 +23,7 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, s
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (sliceWght, surfWtrF, angleA, angleB, 
+import Drasil.SSP.DataDefs (sliceWght, baseWtrF, surfWtrF, angleA, angleB, 
   lengthLb, lengthLs, stressDD)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
@@ -44,11 +44,11 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
-normForcEqGD = gd' normForcEq (getUnit totNrmForce) [nmFEq_deriv]   [chen2005]   "normForcEq"  [nmFEq_desc]
-bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)     [bShFEq_deriv]  [chen2005]   "bsShrFEq"    [bShFEq_desc]
-resShrGD     = gd' resShr     (getUnit shrResI)     [resShr_deriv]  [chen2005]   "resShr"      [resShr_desc]
-mobShrGD     = gd' mobShr     (getUnit mobShrI)     [mobShr_deriv]  [chen2005]   "mobShr"      [mobShr_desc]
-effNormFGD   = gd'' effNormF    [chen2005]   "effNormF"    [effNormF_desc]
+normForcEqGD = gd' normForcEq (getUnit totNrmForce) [nmFEq_deriv]    [chen2005]   "normForcEq"  [nmFEq_desc]
+bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)     [bShFEq_deriv]   [chen2005]   "bsShrFEq"    [bShFEq_desc]
+resShrGD     = gd' resShr     (getUnit shrResI)     [resShr_deriv]   [chen2005]   "resShr"      [resShr_desc]
+mobShrGD     = gd' mobShr     (getUnit mobShrI)     [mobShr_deriv]   [chen2005]   "mobShr"      [mobShr_desc]
+effNormFGD   = gd' effNormF   (getUnit nrmFSubWat)  [effNormF_deriv] [chen2005]   "effNormF"    [effNormF_desc]
 resShearWOGD = gd'' resShearWO  [chen2005]   "resShearWO"  []
 mobShearWOGD = gd'' mobShearWO  [chen2005]   "mobShearWO"  []
 normShrRGD   = gd'' normShrR    [chen2005]   "normShrR"    [nmShrR_desc]
@@ -158,14 +158,16 @@ effNormF_rel :: Relation
 effNormF_rel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 
 effNormF_desc :: Sentence
-effNormF_desc = foldlSent_ [
+effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrF
+
+effNormF_deriv :: Sentence
+effNormF_deriv = foldlSent [
   S "Derived by substituting", makeRef2S stressDD, S "into", 
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
-  S "by the", phrase genericA `ofThe` phrase slice +:+. 
-  S "in the shear-z plane", S "Since the", phrase slope, S "is assumed to",
-  S "extend infinitely in the z-direction", sParen (makeRef2S assumpPSC) `sC` 
-  S "the resulting", plural force, S "are expressed per", phrase metre +:+. 
-  S "in the z-direction" ]
+  S "by the", phrase genericA `ofThe` phrase slice, S "in the shear-" :+: 
+  ch zcoord +:+. S "plane", S "Since the", phrase slope, 
+  S "is assumed to extend infinitely in the", ch zcoord :+: S "-direction", 
+  sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force, S "are expressed per", phrase metre, S "in the", ch zcoord :+: S "-direction" ]
 
 --
 normShrR :: RelationConcept

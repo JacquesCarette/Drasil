@@ -228,8 +228,8 @@ intShrForce = uc' "X_i" (cn $ "interslice shear force")
   (cX) forcePerMeterU
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
-  ("from water pressure within the slice " ++ fsi)
-  (sub cU (Atomic "b")) newton
+  ("per meter in the z-direction from water pressure within the slice")
+  (sub cU (Atomic "b")) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
   ("per meter in the z-direction from water pressure acting into the slice from standing " ++
@@ -241,8 +241,8 @@ totNrmForce = uc' "N_i" (cn $ "normal force")
   cN forcePerMeterU
 
 nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
-  ("for a soil surface, subtracting pore water reactive force from total " ++
-  "reactive force") (prime $ Atomic "N") newton
+  ("per meter in the z-direction for a soil surface, subtracting pore water reactive force from total " ++
+  "reactive force") (prime $ Atomic "N") forcePerMeterU
 
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
   ("for a soil surface, " ++ wiif) (Atomic "N*") newton

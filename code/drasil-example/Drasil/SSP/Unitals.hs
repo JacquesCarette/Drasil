@@ -119,23 +119,25 @@ coords = cuc' "(x,y)"
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
-  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, totNrmForce, 
-  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
-  sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  mobShrC, shrResC, intNormForce, shrStress, totStress, effectiveStress, 
-  effNormStress]
+  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
+  watrForce, watrForceDif, intShrForce, baseHydroForce, baseHydroForceR, 
+  baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
+  totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
+  porePressure, sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight,
+  sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, totStress,
+  effectiveStress, effNormStress]
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
-  shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, watrForceDif, shrResI,
-  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat,
-  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
-  baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  porePressure, mobShrC, shrResC, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress :: UnitalChunk
+  shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, 
+  watrForceDif, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
+  baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
+  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, mobShrC, shrResC, 
+  intNormForce, shrStress, totStress, effectiveStress, 
+  effNormStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}

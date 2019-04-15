@@ -17,13 +17,13 @@ import Drasil.SSP.Defs (slice, soil, soilPrpty)
 import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, baseHydroForceL, baseLngth, baseWthX, 
-  constF, dryWeight, fricAngle, fs, genericF, genericA, index,
-  intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, 
-  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
-  surfHydroForceR, surfHydroForceL, surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  waterHght, waterWeight, watrForce)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
+  baseHydroForceL, baseLngth, baseWthX, constF, dryWeight, fricAngle, fs, 
+  genericF, genericA, index, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
+  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, 
+  slcWghtL, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
+  surfHydroForceR, surfHydroForceL, surfLngth, totStress, nrmForceSum, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --

@@ -123,13 +123,13 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
-  sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  mobShrC, shrResC, intNormForce, shrStress, totStress, effectiveStress, 
-  effNormStress]
+  sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
+  sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress]
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
-  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, shrResI,
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght, 
+  sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
@@ -287,10 +287,15 @@ porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
   
 shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
-sliceHght = uc' "h_z,i" (cn "center of slice height")
-  ("the distance from the lowest part " ++
-  "of the slice to the height of the centers of slice")
+sliceHght = uc' "h_z,i" (cn "height of center of slice")
+  ("the height in the y-direction from the base of a slice to the " ++
+  "center of the slice")
   (sub lH lZ) metre
+
+sliceHghtW = uc' "h_z,w,i" (cn "height halfway to water table")
+  ("the height in the y-direction from the base of a slice halfway to the " ++
+  "water table")
+  (sub lH (Atomic "z,w")) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
   "the normal force at the interslice interface for slice i"
@@ -354,8 +359,7 @@ normToShear = dqd' (dcc "lambda"
 
 scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
   "force ratio variation function")
-  ("magnitude of interslice forces as a function " ++
-  "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
+  ("function of distance in the x-direction"))
   (const lF) Real Nothing 
 
 numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")

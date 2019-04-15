@@ -20,18 +20,21 @@ import Data.Drasil.Quantities.Physics (force)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd, andThe)
 
+import Data.Drasil.SI_Units (newton)
+
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, baseWtrF, surfWtrF, intersliceWtrF,
-  angleA, angleB, lengthLb, lengthLs, stressDD)
+  angleA, angleB, lengthB, lengthLb, lengthLs, slcHeight, stressDD, 
+  ratioVariation)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
-  inxiM1, mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
+  inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
   surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
   watrForce, zcoord)
@@ -58,8 +61,10 @@ resShearWOGD = gd' resShearWO (getUnit shearRNoIntsl) []
   [chen2005]   "resShearWO"  [resShearWO_desc]
 mobShearWOGD = gd' mobShearWO (getUnit shearFNoIntsl) []
   [chen2005]   "mobShearWO"  [mobShearWO_desc]
-normShrRGD   = gd'' normShrR    [chen2005]   "normShrR"    [nmShrR_desc]
-momentEqlGD  = gd'' momentEql   [chen2005]   "momentEql"   [momEql_desc]
+normShrRGD   = gd' normShrR   (getUnit intShrForce)   [] 
+  [chen2005]   "normShrR"    [nmShrR_desc]
+momentEqlGD  = gd' momentEql  (Just newton)           [momEql_deriv]  
+  [chen2005]   "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept
@@ -179,23 +184,17 @@ effNormF_deriv = foldlSent [
 --
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel -- genDef5Label
+  (nounPhraseSP "interslice normal and shear force proportionality") 
+  nmShrR_desc nmShrR_rel -- genDef5Label
 
 nmShrR_rel :: Relation
 nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
-nmShrR_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S assumpINSFL),
-  S "that the", phrase intrslce, phrase shearForce, ch xi,
-  S "is proportional to the", phrase intrslce, 
-  phrase normForce, ch intNormForce, S "by a proportionality constant",
-  ch normToShear, S "and a predetermined scaling function",
-  ch scalFunc `sC` S "that changes",
-  (S "proportionality as a function" `ofThe`
-  S "x-ordinate position of the") +:+. phrase intrslce, ch scalFunc,
-  S "is typically either a half-sine along the", phrase slpSrf `sC`
-  S "or a constant"]
+nmShrR_desc = foldlSent [S "Mathematical representation of the primary", 
+  phrase assumption, S "for the Morgenstern-Price", phrase method_ +:+.
+  sParen (makeRef2S assumpINSFL), ch scalFunc, S "is defined in", 
+  makeRef2S ratioVariation]
 
 --
 resShearWO :: RelationConcept
@@ -257,14 +256,15 @@ momEql_rel = 0 $= momExpr (\ x y -> x -
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence
-momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef2S equilibrium,
-  S "in the direction", phrase perp,
-  S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
-  S "Moment equilibrium is derived from the free body diagram of" +:+.
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), S "Index i refers to",
-  plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
-  plural intrslce, S "following convention in" +:+.
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), at_start variable, plural definition,
-  S "can be found in", makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
-  makeRef2S assumpINSFL]
+momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
+  makeRef2S equilibrium, S "for the" +:+. phrase momntOfBdy, ch baseWthX,
+  S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
+  makeRef2S angleA `sC` ch slcWght, S "is defined in", makeRef2S sliceWght `sC`
+  ch midpntHght, S "is defined in", makeRef2S slcHeight `sC` ch surfHydroForce,
+  S "is defined in", makeRef2S surfWtrF `sC` S "and", ch surfAngle, 
+  S "is defined in", makeRef2S angleB]
+
+momEql_deriv :: Sentence
+momEql_deriv = foldlSent_ [S "Moment equilibrium is derived from the free",
+  S "body diagram of" +:+. 
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]

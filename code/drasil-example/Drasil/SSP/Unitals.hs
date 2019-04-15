@@ -120,7 +120,7 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
   sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
@@ -129,7 +129,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
-  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
+  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
@@ -204,12 +204,14 @@ shrResC = uc' "Phi" (cn $ "first function for incorporating interslice " ++
   cPhi newton
 
 shearFNoIntsl = uc' "T_i"
-  (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)
-  cT newton
+  (cn $ ("mobilized shear force " ++ wiif)) 
+  "per meter in the z-direction"
+  cT forcePerMeterU
 
 shearRNoIntsl = uc' "R_i"
-  (cn $ "resistive shear force") (wiif ++ " " ++ fsi)
-  (cR) newton
+  (cn $ ("resistive shear force " ++ wiif))
+  "per meter in the z-direction"
+  (cR) forcePerMeterU
 
 slcWght = uc' "W_i" (cn $ "weight")
   ("downward force per meter in the z-direction caused by gravity on slice i") (cW) forcePerMeterU
@@ -218,10 +220,6 @@ watrForce = uc' "H_i" (cn $ "interslice normal water force ")
   ("per meter in the z-direction exerted in the x-ordinate direction between" ++
   " adjacent slices")
   (cH) forcePerMeterU
-
-watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
-  ("exerted in the x-ordinate direction between adjacent slices " ++ fisi)
-  (Concat [cDelta, cH]) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("per meter in the z-direction exerted between adjacent slices")
@@ -248,18 +246,18 @@ nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
   ("for a soil surface, " ++ wiif) (Atomic "N*") newton
 
 surfLoad = uc' "Q_i" (cn $ "external force") 
-  "a downward force per meter in the z-direction acting into the surface from midpoint of slice i"
+  "a force per meter in the z-direction acting into the surface from the midpoint of a slice"
   (cQ) forcePerMeterU
 
-baseAngle = uc' "alpha_i" (cn $ "angle")
+baseAngle = uc' "alpha_i" (cn $ "base angle")
   ("between the base of a slice and the horizontal")
   lAlpha degree
 
-surfAngle = uc' "beta_i" (cn $ "angle")
+surfAngle = uc' "beta_i" (cn $ "surface angle")
   ("between the surface of a slice and the horizontal")
   lBeta degree
 
-impLoadAngle = uc' "omega_i" (cn $ "angle")
+impLoadAngle = uc' "omega_i" (cn $ "imposed load angle")
   ("between the external force acting into the surface and the vertical")
   lOmega degree
 

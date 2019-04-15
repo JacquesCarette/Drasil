@@ -11,10 +11,8 @@ import Drasil.DocLang.SRS as SRS (physSyst)
 import Data.Drasil.SI_Units (metre)
 
 import Data.Drasil.Concepts.Documentation (assumption, constant, definition, 
-  method_, property, value, variable)
-import Data.Drasil.Concepts.Math (equation, normal, perp, surface)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+  method_)
+import Data.Drasil.Concepts.Math (equation)
 
 import Data.Drasil.Quantities.Physics (force)
 
@@ -26,18 +24,17 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, baseWtrF, surfWtrF, intersliceWtrF,
-  angleA, angleB, lengthB, lengthLb, lengthLs, slcHeight, stressDD, 
+  angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
   ratioVariation)
-import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf, soil, soilPrpty)
+import Drasil.SSP.Defs (slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
-  inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
-  shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
-  surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
-  watrForce, zcoord)
+  inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
+  shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
+  shrResI, slcWght, surfHydroForce, surfAngle, watrForce, zcoord)
 
 ---------------------------
 --  General Definitions  --
@@ -219,10 +216,6 @@ resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in",
   makeRef2S baseWtrF `sC` S "and", ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
--- resShearWO_deriv :: Sentence
--- resShearWO_deriv = foldlSent_ [S "This", phrase equation, S "for", 
---   ch shearRNoIntsl, S "arises as part of the derivation for", makeRef2S fctSfty]
-
 --
 --
 mobShearWO :: RelationConcept
@@ -241,9 +234,6 @@ mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in",
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` S "and", ch watrForce, S "is defined in" +:+.
   makeRef2S intersliceWtrF]
-
--- mobShearWO_deriv :: Sentence
--- mobShearWO_deriv = foldlSent_ []
 
 --
 

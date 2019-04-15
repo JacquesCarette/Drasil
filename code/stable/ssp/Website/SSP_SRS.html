@@ -184,7 +184,7 @@ Decision on F: boolean decision on which form of f the user desires: constant if
 <em>f</em>
 </td>
 <td>
-Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
+Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction
 </td>
 <td>
 --
@@ -302,17 +302,6 @@ m
 </tr>
 <tr>
 <td>
-<em>ΔH</em>
-</td>
-<td>
-Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
 <em>h<sup>L</sup></em>
 </td>
 <td>
@@ -338,7 +327,18 @@ m
 <em>h<sub>z</sub></em>
 </td>
 <td>
-Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice
+Height of Center of Slice: the height in the y-direction from the base of a slice to the center of the slice
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sub>z,w</sub></em>
+</td>
+<td>
+Height Halfway to Water Table: the height in the y-direction from the base of a slice halfway to the water table
 </td>
 <td>
 m
@@ -426,7 +426,7 @@ N/m
 <em>Q</em>
 </td>
 <td>
-External Force: a downward force per meter in the z-direction acting into the surface from midpoint of slice i
+External Force: a force per meter in the z-direction acting into the surface from the midpoint of a slice
 </td>
 <td>
 N/m
@@ -437,10 +437,10 @@ N/m
 <em>R</em>
 </td>
 <td>
-Resistive Shear Force: without the influence of interslice forces for slice index i
+Resistive Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -459,10 +459,10 @@ N/m
 <em>T</em>
 </td>
 <td>
-Mobilized Shear Force: without the influence of interslice forces for slice index i
+Mobilized Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -540,17 +540,6 @@ Interslice Shear Force: per meter in the z-direction exerted between adjacent sl
 </td>
 <td>
 N/m
-</td>
-</tr>
-<tr>
-<td>
-<em>x</em>
-</td>
-<td>
-X-Ordinate: refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
 </td>
 </tr>
 <tr>
@@ -635,7 +624,7 @@ m
 <em>α</em>
 </td>
 <td>
-Angle: between the base of a slice and the horizontal
+Base Angle: between the base of a slice and the horizontal
 </td>
 <td>
 &deg;
@@ -646,7 +635,7 @@ Angle: between the base of a slice and the horizontal
 <em>β</em>
 </td>
 <td>
-Angle: between the surface of a slice and the horizontal
+Surface Angle: between the surface of a slice and the horizontal
 </td>
 <td>
 &deg;
@@ -800,7 +789,7 @@ N
 <em>ω</em>
 </td>
 <td>
-Angle: between the external force acting into the surface and the vertical
+Imposed Load Angle: between the external force acting into the surface and the vertical
 </td>
 <td>
 &deg;
@@ -1304,7 +1293,7 @@ Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and
 </p>
 <p>
 <div id="assumpINSFL">
-Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em>f</em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em>f</em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
@@ -1700,16 +1689,16 @@ Description
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
 <em>Q</em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
+<em>ω</em> is the imposed load angle (&deg;)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
@@ -1812,16 +1801,16 @@ Description
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
 <em>Q</em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
+<em>ω</em> is the imposed load angle (&deg;)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
@@ -2174,7 +2163,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Resistive shear force
+Resistive shear force, without interslice normal and shear forces
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
 </p>
 </td>
 </tr>
@@ -2184,7 +2183,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+<em>R<sub>i</sub> = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub></em>
 </div>
 </td>
 </tr>
@@ -2195,34 +2194,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>R</em> is the resistive shear force (N)
-</li>
-<li>
-<em>W</em> is the weight (N/m)
+<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
+<em>W</em> is the weight (N/m)
+</li>
+<li>
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the external force (N/m)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
-</li>
-<li>
-<em>ΔH</em> is the difference between interslice forces (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
 <em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
@@ -2234,9 +2224,19 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em>ℓ<sub>b</sub></em> is the width of the base of a slice (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em>H</em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em>U<sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+</p>
 </td>
 </tr>
 <tr>
@@ -2269,7 +2269,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mobilized shear force
+Mobilized shear force, without interslice normal and shear forces
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
 </p>
 </td>
 </tr>
@@ -2279,7 +2289,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2290,36 +2300,37 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>T</em> is the mobilized shear force (N)
-</li>
-<li>
-<em>W</em> is the weight (N/m)
+<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
+<em>W</em> is the weight (N/m)
+</li>
+<li>
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the external force (N/m)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
-</li>
-<li>
-<em>ΔH</em> is the difference between interslice forces (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em>H</em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
+</p>
 </td>
 </tr>
 <tr>
@@ -2352,7 +2363,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice normal/shear relationship
+Interslice normal and shear force proportionality
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
 </p>
 </td>
 </tr>
@@ -2393,7 +2414,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The assumption for the Morgenstern Price method (<a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>G</em> by a proportionality constant <em>λ</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant
+Mathematical representation of the primary assumption for the Morgenstern-Price method (<a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>). <em>f</em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>.
 </p>
 </td>
 </tr>
@@ -2433,6 +2454,16 @@ Moment equilibrium
 </tr>
 <tr>
 <th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
@@ -2444,21 +2475,21 @@ b<sub>i</sub>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
@@ -2496,16 +2527,19 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>h<sub>z</sub></em> is the center of slice height (m)
+<em>h<sub>z</sub></em> is the height of center of slice (m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>H</em> is the interslice normal water force  (N/m)
+</li>
+<li>
+<em>h<sub>z,w</sub></em> is the height halfway to water table (m)
 </li>
 <li>
 <em>X</em> is the interslice shear force (N/m)
@@ -2523,13 +2557,13 @@ Description
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
 <em>Q</em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
+<em>ω</em> is the imposed load angle (&deg;)
 </li>
 </ul>
 </td>
@@ -2540,7 +2574,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the moment equilibrium to satisfy <a href=#TM:equilibrium>TM: equilibrium</a> in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Section: Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Section: Physical System Description</a>. Variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>. <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>h</em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -2566,6 +2600,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+</p>
 </div>
 </div>
 <div id="Sec:DDs">
@@ -2686,7 +2723,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -2801,7 +2838,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:effNormF>GD: effNormF</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -2916,7 +2953,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3040,7 +3077,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShearWO>GD: mobShearWO</a>.
 </p>
 </td>
 </tr>
@@ -3054,7 +3091,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Angle
+Base angle
 </p>
 </td>
 </tr>
@@ -3102,7 +3139,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>y<sub>slip</sub></em> is the y ordinate (m)
@@ -3142,7 +3179,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3156,7 +3193,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Angle
+Surface angle
 </p>
 </td>
 </tr>
@@ -3204,7 +3241,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
 <em>y<sub>slope</sub></em> is the slope y-ordinate (m)
@@ -3244,7 +3281,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3326,7 +3363,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:momentEql>GD: momentEql</a>.
 </p>
 </td>
 </tr>
@@ -3390,7 +3427,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 </ul>
 </td>
@@ -3421,7 +3458,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
@@ -3485,7 +3522,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 </ul>
 </td>
@@ -3516,7 +3553,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:momentEql>GD: momentEql</a>.
+
 </p>
 </td>
 </tr>
@@ -3618,7 +3655,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:momentEql>GD: momentEql</a>.
 </p>
 </td>
 </tr>
@@ -3819,7 +3856,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:normShrR>GD: normShrR</a>.
 </p>
 </td>
 </tr>
@@ -3886,7 +3923,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -3987,7 +4024,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -4440,7 +4477,7 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>R</em> is the resistive shear force (N)
+<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>v</em> is the local index (Unitless)
@@ -4455,7 +4492,7 @@ Description
 <em>n</em> is the number of slices (Unitless)
 </li>
 <li>
-<em>T</em> is the mobilized shear force (N)
+<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 </ul>
 </td>
@@ -4816,7 +4853,7 @@ Description
 <em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>α</em> is the angle (&deg;)
+<em>α</em> is the base angle (&deg;)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4840,13 +4877,13 @@ Description
 <em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the angle (&deg;)
+<em>β</em> is the surface angle (&deg;)
 </li>
 <li>
 <em>Q</em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the angle (&deg;)
+<em>ω</em> is the imposed load angle (&deg;)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -4906,21 +4943,21 @@ b<sub>i</sub>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
@@ -4956,21 +4993,21 @@ b<sub>i</sub>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&minus;<div class="fraction">
+</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
 </span>
@@ -5119,10 +5156,10 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>T</em> is the mobilized shear force (N)
+<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 <li>
-<em>R</em> is the resistive shear force (N)
+<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>Φ</em> is the first function for incorporating interslice forces into shear force (N)

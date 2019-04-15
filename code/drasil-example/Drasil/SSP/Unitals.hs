@@ -120,7 +120,7 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  watrForceDif, intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, totNrmForce, 
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
   sliceHght, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
@@ -130,7 +130,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, watrForceDif, shrResI,
-  intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght,
   momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
@@ -236,8 +236,18 @@ intShrForce = uc' "X_i" (cn $ "interslice shear force")
   (cX) newton
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
-  ("from water pressure within the slice " ++ fsi)
+  ("from water pressure within a slice")
   (sub cU (Atomic "b")) newton
+
+baseHydroForceR = uc' "U^R_b,i" (cn $ "right base hydrostatic force on a slice")
+  ("from water pressure within a slice, assuming the entire slice has the " ++
+  "height of the right side of the slice")
+  (sub (sup cU cR) lB) forcePerMeterU
+
+baseHydroForceL = uc' "U^L_b,i" (cn $ "left base hydrostatic force on a slice")
+  ("from water pressure within a slice, assuming the entire slice has the " ++
+  "height of the left side of the slice")
+  (sub (sup cU cL) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
   ("from water pressure acting into the slice from standing " ++

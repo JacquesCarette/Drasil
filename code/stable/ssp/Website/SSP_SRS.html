@@ -272,10 +272,10 @@ N
 <em>G</em>
 </td>
 <td>
-Interslice Normal Force: exerted between adjacent slices for interslice index i
+Interslice Normal Force: per meter in the z-direction exerted between adjacent slices
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -283,10 +283,10 @@ N
 <em>H</em>
 </td>
 <td>
-Interslice Normal Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i
+Interslice Normal Water Force: per meter in the z-direction exerted in the x-ordinate direction between adjacent slices
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -349,7 +349,7 @@ m
 <em>i</em>
 </td>
 <td>
-Index: used to show a quantity applies to only one slice
+Index: representing a single slice
 </td>
 <td>
 --
@@ -360,7 +360,7 @@ Index: used to show a quantity applies to only one slice
 <em>K<sub>c</sub></em>
 </td>
 <td>
-Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements
+Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements
 </td>
 <td>
 --
@@ -382,10 +382,10 @@ N&sdot;m
 <em>N</em>
 </td>
 <td>
-Normal Force: total reactive force for a soil surface subject to a body resting on it
+Normal Force: total reactive force per meter in the z-direction for a soil surface subject to a body resting on it
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -404,10 +404,10 @@ Number of Slices: the slip mass has been divided into
 <em>N&prime;</em>
 </td>
 <td>
-Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force
+Effective Normal Force: per meter in the z-direction for a soil surface, subtracting pore water reactive force from total reactive force
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -415,7 +415,7 @@ N
 <em>P</em>
 </td>
 <td>
-Resistive Shear Force Per Meter in the Z-Direction: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
+Resistive Shear Force: Mohr Coulomb frictional force per meter in the z-direction that describes the limit ofmobilized shear force a slice can withstand before failure
 </td>
 <td>
 N/m
@@ -426,10 +426,10 @@ N/m
 <em>Q</em>
 </td>
 <td>
-Imposed Surface Load: a downward force acting into the surface from midpoint of slice i
+External Force: a downward force per meter in the z-direction acting into the surface from midpoint of slice i
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -448,7 +448,7 @@ N
 <em>S</em>
 </td>
 <td>
-Mobilized Shear Force Per Meter in the Z-Direction: for slice index i
+Mobilized Shear Force: per meter in the z-direction
 </td>
 <td>
 N/m
@@ -492,10 +492,10 @@ Pa
 <em>U<sub>b</sub></em>
 </td>
 <td>
-Base Hydrostatic Force: from water pressure within the slice for slice index i
+Base Hydrostatic Force: per meter in the z-direction from water pressure within the slice
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -503,10 +503,10 @@ N
 <em>U<sub>t</sub></em>
 </td>
 <td>
-Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface for slice index i
+Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface for slice index i
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -525,10 +525,10 @@ Local Index: used as a bound variable index in calculations
 <em>W</em>
 </td>
 <td>
-Weight: downward force caused by gravity on slice i
+Weight: downward force per meter in the z-direction caused by gravity on slice i
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -536,10 +536,10 @@ N
 <em>X</em>
 </td>
 <td>
-Interslice Shear Force: exerted between adjacent slices for interslice index i
+Interslice Shear Force: per meter in the z-direction exerted between adjacent slices
 </td>
 <td>
-N
+N/m
 </td>
 </tr>
 <tr>
@@ -621,10 +621,21 @@ m
 </tr>
 <tr>
 <td>
+<em>z</em>
+</td>
+<td>
+Z-Ordinate: in the Cartesian coordinate system
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>α</em>
 </td>
 <td>
-Angle: base of the mass relative to the horizontal for slice index i
+Angle: between the base of a slice and the horizontal
 </td>
 <td>
 &deg;
@@ -635,7 +646,7 @@ Angle: base of the mass relative to the horizontal for slice index i
 <em>β</em>
 </td>
 <td>
-Angle: surface of the mass relative to the horizontal for slice index i
+Angle: between the surface of a slice and the horizontal
 </td>
 <td>
 &deg;
@@ -789,7 +800,7 @@ N
 <em>ω</em>
 </td>
 <td>
-Angle: of imposed surface load acting into the surface relative to the vertical for slice index i
+Angle: between the external force acting into the surface and the vertical
 </td>
 <td>
 &deg;
@@ -800,7 +811,7 @@ Angle: of imposed surface load acting into the surface relative to the vertical 
 <em>ℓ<sub>b</sub></em>
 </td>
 <td>
-Total Base Length of a Slice: for slice index i
+Width of the Base of a Slice: in the x-direction
 </td>
 <td>
 m
@@ -1278,17 +1289,17 @@ Factor-of-Safety: The factor of safety is assumed to be constant across the enti
 </p>
 <p>
 <div id="assumpSLH">
-Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
+Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
 </p>
 <p>
 <div id="assumpSP">
-Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#IM:crtSlpId>IM: crtSlpId</a>.
+Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. <a href=#GD:resShr>GD: resShr</a> <a href=#IM:crtSlpId>IM: crtSlpId</a>.
 </div>
 </p>
 <p>
 <div id="assumpSLI">
-Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
@@ -1298,7 +1309,7 @@ Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and
 </p>
 <p>
 <div id="assumpPSC">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:effNormF>GD: effNormF</a>.
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </div>
 </p>
 <p>
@@ -1376,10 +1387,10 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>P</em> is the resistive shear force per meter in the z-direction (N/m)
+<em>P</em> is the resistive shear force (N/m)
 </li>
 <li>
-<em>S</em> is the mobilized shear force per meter in the z-direction (N/m)
+<em>S</em> is the mobilized shear force (N/m)
 </li>
 </ul>
 </td>
@@ -1619,7 +1630,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
+<a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -1649,11 +1660,21 @@ Normal force equilibrium
 </tr>
 <tr>
 <th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div class="equation">
-<em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)</em>
+<em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1664,25 +1685,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>N</em> is the normal force (N)
+<em>N</em> is the normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N)
+<em>X</em> is the interslice shear force (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -1691,13 +1712,13 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 </ul>
 </td>
@@ -1708,7 +1729,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -1734,6 +1755,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+</p>
 <div id="GD:bsShrFEq">
 <table class="gdefn">
 <tr>
@@ -1748,11 +1772,21 @@ Base shear force equilibrium
 </tr>
 <tr>
 <th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div class="equation">
-<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1763,25 +1797,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>S</em> is the mobilized shear force per meter in the z-direction (N/m)
+<em>S</em> is the mobilized shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N)
+<em>X</em> is the interslice shear force (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -1790,13 +1824,13 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 </ul>
 </td>
@@ -1807,7 +1841,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -1833,6 +1867,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+</p>
 <div id="GD:resShr">
 <table class="gdefn">
 <tr>
@@ -1847,11 +1884,21 @@ Resistive shear force
 </tr>
 <tr>
 <th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div class="equation">
-<em>P<sub>i</sub> = N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+<em>P<sub>i</sub> = N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub></em>
 </div>
 </td>
 </tr>
@@ -1862,13 +1909,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>P</em> is the resistive shear force per meter in the z-direction (N/m)
+<em>P</em> is the resistive shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>N&prime;</em> is the effective normal force (N)
+<em>N&prime;</em> is the effective normal force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -1877,10 +1924,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
+<em>ℓ<sub>b</sub></em> is the width of the base of a slice (m)
 </li>
 </ul>
 </td>
@@ -1891,7 +1935,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The Mohr-Coulomb resistive shear strength of a slice <em>τ</em> from <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> is multiplied by the area <em>b&#8239;sec(α)</em> to obtain the resistive shear force per meter in the z-direction <em>P</em>. Note the extra <em>1</em> is to represent a unit of width which is multiplied by the total base length of a slice <em>ℓ<sub>b</sub></em> of the plane where the normal occurs, where <em>ℓ<sub>b</sub> = b&#8239;sec(α)</em> and <em>b</em> is the x width of the base. This accounts for the effective normal force <em>N&prime; = N&minus;U<sub>b</sub></em> of a soil from <a href=#TM:effStress>TM: effStress</a> where the effective normal stress is multiplied by the same area to obtain the effective normal force <em>σ<sub>N</sub>&prime;&#8239;b&#8239;sec(α) = N&prime;</em> <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> <a href=#assumpSP>A: Soil-Properties</a> <a href=#assumpSLI>A: Soil-Layers-Isotropic</a>
+<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -1917,6 +1961,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Derived by substituting <a href=#DD:stress>DD: stress</a> into the Mohr-Coulomb shear strength, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction. The effective angle of friction <em>φ&prime;</em> and the effective cohesion <em>c&prime;</em> are not indexed by <em>i</em> becaused they are assumed to be isotropic (<a href=#assumpSLI>A: Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>, <a href=#assumpSP>A: Soil-Properties</a>).
+</p>
 <div id="GD:mobShr">
 <table class="gdefn">
 <tr>
@@ -1925,7 +1972,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mobile shear force
+Mobilized shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
 </p>
 </td>
 </tr>
@@ -1944,7 +2001,7 @@ F<sub>S</sub>
 </span>
 </div> = <div class="fraction">
 <span class="fup">
-N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)
+N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -1960,19 +2017,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>S</em> is the mobilized shear force per meter in the z-direction (N/m)
+<em>S</em> is the mobilized shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>P</em> is the resistive shear force per meter in the z-direction (N/m)
+<em>P</em> is the resistive shear force (N/m)
 </li>
 <li>
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>N&prime;</em> is the effective normal force (N)
+<em>N&prime;</em> is the effective normal force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -1981,10 +2038,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
+<em>ℓ<sub>b</sub></em> is the width of the base of a slice (m)
 </li>
 </ul>
 </td>
@@ -1995,7 +2049,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-From the definition of the factor of safety in <a href=#TM:factOfSafety>TM: factOfSafety</a>, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (<a href=#GD:resShr>GD: resShr</a>) divided by the factor of safety <em>F<sub>S</sub></em>. <a href=#assumpFOS>A: Factor-of-Safety</a> <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> <a href=#assumpSP>A: Soil-Properties</a> <a href=#assumpSLI>A: Soil-Layers-Isotropic</a>
+<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2021,6 +2075,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Mobilized shear force is derived by dividing the definition of the <em>P</em> from <a href=#GD:resShr>GD: resShr</a>. by the definition of the factor of safety from <a href=#TM:factOfSafety>TM: factOfSafety</a>. The factor of safety <em>F<sub>S</sub></em> is not indexed by <em>i</em> because it is assumed to be constant for the entire slip surface (<a href=#assumpFOS>A: Factor-of-Safety</a>).
+</p>
 <div id="GD:effNormF">
 <table class="gdefn">
 <tr>
@@ -2030,6 +2087,16 @@ Label
 <td>
 <p class="paragraph">
 Effective normal force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
 </p>
 </td>
 </tr>
@@ -2050,16 +2117,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>N&prime;</em> is the effective normal force (N)
+<em>N&prime;</em> is the effective normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>N</em> is the normal force (N)
+<em>N</em> is the normal force (N/m)
 </li>
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 </ul>
 </td>
@@ -2070,7 +2137,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Derived by substituting <a href=#DD:stress>DD: stress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the z-direction.
+<em>U<sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </p>
 </td>
 </tr>
@@ -2096,6 +2163,9 @@ RefBy
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Derived by substituting <a href=#DD:stress>DD: stress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction.
+</p>
 <div id="GD:resShearWO">
 <table class="gdefn">
 <tr>
@@ -2128,19 +2198,19 @@ Description
 <em>R</em> is the resistive shear force (N)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -2149,13 +2219,13 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
 <em>ΔH</em> is the difference between interslice forces (N)
 </li>
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -2223,19 +2293,19 @@ Description
 <em>T</em> is the mobilized shear force (N)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -2244,7 +2314,7 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
 <em>ΔH</em> is the difference between interslice forces (N)
@@ -2303,7 +2373,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>X</em> is the interslice shear force (N)
+<em>X</em> is the interslice shear force (N/m)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -2312,7 +2382,7 @@ Description
 <em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 </ul>
 </td>
@@ -2420,7 +2490,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -2435,28 +2505,28 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N)
+<em>X</em> is the interslice shear force (N/m)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
 <em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -2534,7 +2604,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+N/m
 </p>
 </td>
 </tr>
@@ -2574,7 +2644,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
@@ -2616,7 +2686,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:momentEql>GD: momentEql</a>.
+<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -2650,7 +2720,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+N/m
 </p>
 </td>
 </tr>
@@ -2685,10 +2755,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em>ℓ<sub>b</sub></em> is the width of the base of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -2731,7 +2801,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -2765,7 +2835,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+N/m
 </p>
 </td>
 </tr>
@@ -2800,7 +2870,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
@@ -2846,7 +2916,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -2860,7 +2930,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice normal water force
+Interslice normal water force 
 </p>
 </td>
 </tr>
@@ -2880,7 +2950,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+N/m
 </p>
 </td>
 </tr>
@@ -2934,7 +3004,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
 <em>y<sub>slope</sub></em> is the slope y-ordinate (m)
@@ -3072,7 +3142,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3174,7 +3244,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3270,7 +3340,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Total base length of a slice
+Width of the base of a slice
 </p>
 </td>
 </tr>
@@ -3311,7 +3381,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em>ℓ<sub>b</sub></em> is the width of the base of a slice (m)
 </li>
 <li>
 <em>b</em> is the base width of a slice (m)
@@ -3351,7 +3421,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
@@ -3637,7 +3707,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:effStress>TM: effStress</a> <a href=#GD:effNormF>GD: effNormF</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#TM:effStress>TM: effStress</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -4005,7 +4075,7 @@ Description
 <em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4087,7 +4157,7 @@ Description
 <em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4423,7 +4493,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-The mobilized shear force per meter in the z-direction defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force per meter in the z-direction based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding equation (1) below:
+The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding equation (1) below:
 </p>
 <div class="equation">
 <em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
@@ -4468,7 +4538,7 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
+Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are zero, allows for further simplification as shown below:
 </p>
 <div class="equation">
 <em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>) = <div class="fraction">
@@ -4740,10 +4810,10 @@ Description
 <em>b</em> is the base width of a slice (m)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force (N)
+<em>H</em> is the interslice normal water force  (N/m)
 </li>
 <li>
 <em>α</em> is the angle (&deg;)
@@ -4761,19 +4831,19 @@ Description
 <em>h</em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N)
+<em>W</em> is the weight (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the imposed surface load (N)
+<em>Q</em> is the external force (N/m)
 </li>
 <li>
 <em>ω</em> is the angle (&deg;)
@@ -5040,7 +5110,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>G</em> is the interslice normal force (N)
+<em>G</em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -5105,7 +5175,7 @@ Substituting the normal force equilibrium of <a href=#GD:normForcEq>GD: normForc
 <em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
 </div>
 <p class="paragraph">
-Taking the base shear force equilibrium of <a href=#GD:bsShrFEq>GD: bsShrFEq</a> with the definition of mobilized shear force per meter in the z-direction from <a href=#GD:mobShr>GD: mobShr</a> and the assumption of <a href=#GD:normShrR>GD: normShrR</a>, the equilibrium equation can be rewritten as equation (17):
+Taking the base shear force equilibrium of <a href=#GD:bsShrFEq>GD: bsShrFEq</a> with the definition of mobilized shear force from <a href=#GD:mobShr>GD: mobShr</a> and the assumption of <a href=#GD:normShrR>GD: normShrR</a>, the equilibrium equation can be rewritten as equation (17):
 </p>
 <div class="equation">
 <em><div class="fraction">

@@ -165,11 +165,11 @@ slipDist = uc' "x_slip,i" (cn $ "x-coordinate of the slip surface")
   ("distance of the slip surface")
   (sub lX (Atomic "slip")) metre
 
-yi = uc' "y_i" (cn $ "y-ordinate") smsi lY metre
+yi = uc' "y_i" (cn $ "y-coordinate") "in the Cartesian coordinate system" lY metre
   
-xi = uc' "x_i" (cn $ "x-ordinate") smsi lX metre
+xi = uc' "x_i" (cn $ "x-coordinate") "in the Cartesian coordinate system" lX metre
 
-zcoord = uc' "z" (cn $ "z-ordinate") "in the Cartesian coordinate system" lZ metre
+zcoord = uc' "z" (cn $ "z-coordinate") "in the Cartesian coordinate system" lZ metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.

@@ -63,7 +63,7 @@ $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direct
 \\
 $A$ & Area: A part of an object or surface & $\text{m}^{2}$
 \\
-$b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
+$b$ & Base Width of a Slice: in the x-direction & m
 \\
 ${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
 \\
@@ -143,15 +143,15 @@ $x$ & X-Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 ${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
-${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
+${x_{slip}}$ & X-Coordinate of the Slip Surface: distance of the slip surface & m
 \\
-${x_{slope}}$ & Slope X-Ordinate: x-ordinate of a point on the slope & m
+${x_{slope}}$ & X-Coordinate of the Slope: x-coordinate of a point on the slope & m
 \\
-${y_{slip}}$ & Y Ordinate: height of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
+${y_{slip}}$ & Y-Coordinate of the Slip Surface: height of the slip surface & m
 \\
-${y_{slope}}$ & Slope Y-Ordinate: y-ordinate of a point on the slope & m
+${y_{slope}}$ & Y-Coordinate of the Slope: y-coordinate of a point on the soil slope & m
 \\
-${y_{wt}}$ & Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i & m
+${y_{wt}}$ & Y-Coordinate of Water Table: height of the water table & m
 \\
 $α$ & Angle: base of the mass relative to the horizontal for slice index i & ${}^{\circ}$
 \\
@@ -163,7 +163,7 @@ ${γ_{Sat}}$ & Saturated Unit Weight: The weight of saturated soil/ground layer 
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-$λ$ & Interslice Normal/shear Force Ratio: applied to all interslices & --
+$λ$ & Proportionality Constant: for the interslice normal to shear force ratio & --
 \\
 $π$ & Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter & --
 \\
@@ -365,7 +365,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -731,7 +731,7 @@ Label & Interslice normal/shear relationship
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{$X$ is the interslice shear force (N)}
-                                 \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                 \item{$λ$ is the proportionality constant (Unitless)}
                                  \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                  \item{$G$ is the interslice normal force (N)}
                                  \end{symbDescription}
@@ -810,10 +810,10 @@ Label & Weight
                                                   \item{$W$ is the weight (N)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
                                                   \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{wt}}$ is the y-coordinate of water table (m)}
                                                   \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -847,8 +847,8 @@ Label & Base hydrostatic force
                                                   \item{${U_{b}}$ is the base hydrostatic force (N)}
                                                   \item{${ℓ_{b}}$ is the total base length of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${y_{wt}}$ is the y-coordinate of water table (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
                                                   \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -884,8 +884,8 @@ Label & Surface hydrostatic force
                                                   \item{${U_{t}}$ is the surface hydrostatic force (N)}
                                                   \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{wt}}$ is the y-coordinate of water table (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
                                                   \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -912,19 +912,19 @@ Label & Interslice normal water force
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     H=\begin{cases}
-\frac{\left({y_{slope,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}+\left({y_{wt,i}}-{y_{slope,i}}\right)^{2} {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
-\frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\frac{\left({y_{slope,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{w}}+\left({y_{wt,i}}-{y_{slope,i}}\right)^{2} {γ_{w}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
+\frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{w}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$H$ is the interslice normal water force (N)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y-coordinate of water table (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
@@ -952,16 +952,16 @@ Label & Angle
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$α$ is the angle (${}^{\circ}$)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \item{${x_{slip}}$ is the x-coordinate of the slip surface (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -984,16 +984,16 @@ Label & Angle
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$β$ is the angle (${}^{\circ}$)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${x_{slope}}$ is the slope x-ordinate (m)}
+                                                  \item{${x_{slope}}$ is the x-coordinate of the slope (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[DD:lengthLs]{DD: lengthLs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1016,13 +1016,13 @@ Label & Base width of a slice
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$b$ is the base width of a slice (m)}
-                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \item{${x_{slip}}$ is the x-coordinate of the slip surface (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1050,7 +1050,7 @@ Label & Total base length of a slice
                                                   \item{$α$ is the angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & $b$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $α$ is defined in \hyperref[DD:angleA]{DD: angleA}.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1082,7 +1082,7 @@ Label & Length of an interslice surface
                                                   \item{$β$ is the angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & $b$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $β$ is defined in \hyperref[DD:angleB]{DD: angleB}.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -1174,7 +1174,7 @@ Label & Interslice normal to shear force ratio variation function
                                     Description & \begin{symbDescription}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$π$ is the circumference to diameter ratio (Unitless)}
-                                                  \item{${x_{slip}}$ is the x ordinate (m)}
+                                                  \item{${x_{slip}}$ is the x-coordinate of the slip surface (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$n$ is the number of slices (Unitless)}
                                                   \item{$const_f$ is the decision on f (Unitless)}
@@ -1205,7 +1205,7 @@ Label & First function for incorporating interslice forces into shear force
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
-                                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                  \item{$λ$ is the proportionality constant (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the angle (${}^{\circ}$)}
@@ -1238,7 +1238,7 @@ Label & Second function for incorporating interslice forces into shear force
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
-                                                  \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                  \item{$λ$ is the proportionality constant (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the angle (${}^{\circ}$)}
@@ -1328,9 +1328,9 @@ Label & Height of the right side of a slice
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${h^{R}}$ is the height of the right side of a slice (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
@@ -1357,9 +1357,9 @@ Label & Height of the left side of a slice
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${h^{L}}$ is the height of the left side of a slice (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slope}}$ is the y-coordinate of the slope (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y-coordinate of the slip surface (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
@@ -1551,7 +1551,7 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \item{${C2_{i}}$ is the interslice shear force function (Nm)}
                                                                                            \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
-                                                                                           \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                                                                           \item{$λ$ is the proportionality constant (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice. ${{F_{x}}^{G}}$ and ${{F_{x}}^{H}}$ are defined in \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} and \hyperref[DD:watForceSumDD]{DD: watForceSumDD}, respectively.
@@ -1638,7 +1638,7 @@ Where $R$ and $T$ are the resistive and mobile shear of the slice, without the i
 \begin{displaymath}
 G_{i}=\frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}
 \end{displaymath}
-The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and the factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
+The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the proportionality constant $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and the factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}

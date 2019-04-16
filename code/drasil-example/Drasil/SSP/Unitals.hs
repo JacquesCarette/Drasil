@@ -145,24 +145,24 @@ intNormForce = uc' "G_i" (cn $ "interslice normal force")
   (cG) newton
 
 waterHght = uc' "y_wt,i"
-  (cn $ "y ordinate")
-  ("height of the water table at i, " ++ smsi)
+  (cn $ "y-coordinate of water table")
+  ("height of the water table")
   (sub lY (Atomic "wt")) metre
 
-slopeHght = uc' "y_slope,i" (cn $ "slope y-ordinate")
-  ("y-ordinate of a point on the slope")
+slopeHght = uc' "y_slope,i" (cn $ "y-coordinate of the slope")
+  ("y-coordinate of a point on the soil slope")
   (sub lY (Atomic "slope")) metre
 
-slipHght = uc' "y_slip,i" (cn $ "y ordinate")
-  ("height of the slip surface at i, " ++ smsi)
+slipHght = uc' "y_slip,i" (cn $ "y-coordinate of the slip surface")
+  ("height of the slip surface")
   (sub lY (Atomic "slip")) metre
 
-slopeDist = uc' "x_slope,i" (cn $ "slope x-ordinate")
-  ("x-ordinate of a point on the slope")
+slopeDist = uc' "x_slope,i" (cn $ "x-coordinate of the slope")
+  ("x-coordinate of a point on the slope")
   (sub lX (Atomic "slope")) metre
 
-slipDist = uc' "x_slip,i" (cn $ "x ordinate")
-  ("distance of the slip surface at i, " ++ smsi)
+slipDist = uc' "x_slip,i" (cn $ "x-coordinate of the slip surface")
+  ("distance of the slip surface")
   (sub lX (Atomic "slip")) metre
 
 yi = uc' "y_i" (cn $ "y-ordinate") smsi lY metre
@@ -350,8 +350,8 @@ earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   (const $ sub cK lC) Real Nothing 
 
 normToShear = dqd' (dcc "lambda"
-  (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (const lLambda) Real Nothing
+  (nounPhraseSP $ "proportionality constant")
+  ("for the interslice normal to shear force ratio")) (const lLambda) Real Nothing
 
 scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
   "force ratio variation function")

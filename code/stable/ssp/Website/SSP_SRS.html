@@ -129,7 +129,7 @@ m<sup>2</sup>
 <em>b</em>
 </td>
 <td>
-Base Width of a Slice: in the x-ordinate direction only for slice index i
+Base Width of a Slice: in the x-direction
 </td>
 <td>
 m
@@ -569,7 +569,7 @@ m
 <em>x<sub>slip</sub></em>
 </td>
 <td>
-X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i
+X-Coordinate of the Slip Surface: distance of the slip surface
 </td>
 <td>
 m
@@ -580,7 +580,7 @@ m
 <em>x<sub>slope</sub></em>
 </td>
 <td>
-Slope X-Ordinate: x-ordinate of a point on the slope
+X-Coordinate of the Slope: x-coordinate of a point on the slope
 </td>
 <td>
 m
@@ -591,7 +591,7 @@ m
 <em>y<sub>slip</sub></em>
 </td>
 <td>
-Y Ordinate: height of the slip surface at i, refers to either slice i midpoint, or slice interface i
+Y-Coordinate of the Slip Surface: height of the slip surface
 </td>
 <td>
 m
@@ -602,7 +602,7 @@ m
 <em>y<sub>slope</sub></em>
 </td>
 <td>
-Slope Y-Ordinate: y-ordinate of a point on the slope
+Y-Coordinate of the Slope: y-coordinate of a point on the soil slope
 </td>
 <td>
 m
@@ -613,7 +613,7 @@ m
 <em>y<sub>wt</sub></em>
 </td>
 <td>
-Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i
+Y-Coordinate of Water Table: height of the water table
 </td>
 <td>
 m
@@ -679,7 +679,7 @@ N/m<sup>3</sup>
 <em>λ</em>
 </td>
 <td>
-Interslice Normal/shear Force Ratio: applied to all interslices
+Proportionality Constant: for the interslice normal to shear force ratio
 </td>
 <td>
 --
@@ -1308,7 +1308,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -2306,7 +2306,7 @@ Description
 <em>X</em> is the interslice shear force (N)
 </li>
 <li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+<em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
 <em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
@@ -2583,16 +2583,16 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
+<em>y<sub>wt</sub></em> is the y-coordinate of water table (m)
 </li>
 <li>
 <em>γ</em> is the dry unit weight (N/m<sup>3</sup>)
@@ -2694,10 +2694,10 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
+<em>y<sub>wt</sub></em> is the y-coordinate of water table (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -2809,10 +2809,10 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
+<em>y<sub>wt</sub></em> is the y-coordinate of water table (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -2902,7 +2902,7 @@ Equation
 <span class="fdn">
 2
 </span>
-</div>&#8239;γ<sub>Sat</sub>&plus;(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)<sup>2</sup>&#8239;γ<sub>Sat</sub> , <span class="case">
+</div>&#8239;γ<sub>w</sub>&plus;(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)<sup>2</sup>&#8239;γ<sub>w</sub> , <span class="case">
 y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
 </span>
 </span>
@@ -2914,7 +2914,7 @@ y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
 <span class="fdn">
 2
 </span>
-</div>&#8239;γ<sub>Sat</sub> , <span class="case">
+</div>&#8239;γ<sub>w</sub> , <span class="case">
 y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
@@ -2937,19 +2937,19 @@ Description
 <em>H</em> is the interslice normal water force (N)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
-<em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
+<em>y<sub>wt</sub></em> is the y-coordinate of water table (m)
 </li>
 </ul>
 </td>
@@ -3035,13 +3035,13 @@ Description
 <em>α</em> is the angle (&deg;)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x ordinate (m)
+<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -3052,7 +3052,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
 </p>
 </td>
 </tr>
@@ -3072,7 +3072,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -3137,13 +3137,13 @@ Description
 <em>β</em> is the angle (&deg;)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>x<sub>slope</sub></em> is the slope x-ordinate (m)
+<em>x<sub>slope</sub></em> is the x-coordinate of the slope (m)
 </li>
 </ul>
 </td>
@@ -3154,7 +3154,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
 </p>
 </td>
 </tr>
@@ -3174,7 +3174,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -3232,7 +3232,7 @@ Description
 <em>b</em> is the base width of a slice (m)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x ordinate (m)
+<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3256,7 +3256,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -3331,7 +3331,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -3426,7 +3426,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -3719,7 +3719,7 @@ Description
 <em>π</em> is the circumference to diameter ratio (Unitless)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x ordinate (m)
+<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3807,7 +3807,7 @@ Description
 <em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 <li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+<em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
 <em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
@@ -3908,7 +3908,7 @@ Description
 <em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+<em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
 <em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
@@ -4169,13 +4169,13 @@ Description
 <em>h<sup>R</sup></em> is the height of the right side of a slice (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4254,13 +4254,13 @@ Description
 <em>h<sup>L</sup></em> is the height of the left side of a slice (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the slope y-ordinate (m)
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
+<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4788,7 +4788,7 @@ Description
 <em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
+<em>λ</em> is the proportionality constant (Unitless)
 </li>
 </ul>
 </td>
@@ -5143,7 +5143,7 @@ Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice,
 </div></em>
 </div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the proportionality constant <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:crtSlpId">
 <table class="idefn">

@@ -33,7 +33,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmForceSum, nrmFSubWat,
   numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
   shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght, sum1toN, surfAngle, surfHydroForce, surfLoad, totNrmForce, 
-  varblU, varblV, watForceSum, watrForce, waterHght, waterWeight, wiif)
+  varblU, varblV, watForceSum, watrForce, waterDist, waterHght, waterWeight, wiif)
 
 -----------------------
 --  Instance Models  --
@@ -58,7 +58,9 @@ fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
           (idx (sy sym) (sy varblV) * prodOp)) + idx (sy sym) (sy numbSlices)
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent_ []
+fcSfty_desc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S 
+  resShearWOGD `sC` ch mobShrC, S "is defined in", makeRef2S convertFunc2 `sC` 
+  S "and", ch shearFNoIntsl, S "is defined in", makeRef2S mobShearWOGD]
 
 --
 nrmShrFor :: InstanceModel
@@ -313,7 +315,7 @@ fctSftyDerivSentence17 = [S "This can be rearranged by multiplying boths sides",
 
 fctSftyDerivSentence18 :: [Sentence]
 fctSftyDerivSentence18 = [S "The multiplication of the", ch mobShrC,
-  S "terms can be further distributed over the subtractins, resulting in the",
+  S "terms can be further distributed over the subtractions, resulting in the",
   S "equation having terms that each either contain an", ch shearRNoIntsl,
   S "or a" +:+. ch shearFNoIntsl, S "The equation can then be rearranged so",
   S "terms containing an", ch shearRNoIntsl, S "are on one side of the",

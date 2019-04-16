@@ -118,7 +118,7 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, waterDist, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
@@ -128,7 +128,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   sliceHghtRight, sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
-genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
+genericF, genericA, normFunc, shearFunc, waterDist, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
   watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
@@ -158,6 +158,11 @@ slopeHght = uc' "y_slope,i" (cn $ "slope y-ordinate")
 slipHght = uc' "y_slip,i" (cn $ "y ordinate")
   ("height of the slip surface at i, " ++ smsi)
   (sub lY (Atomic "slip")) metre
+
+waterDist = uc' "x_wt,i"
+  (cn $ "x-coordinate")
+  ("x-position of the water table")
+  (sub lX (Atomic "wt")) metre
 
 slopeDist = uc' "x_slope,i" (cn $ "slope x-ordinate")
   ("x-ordinate of a point on the slope")

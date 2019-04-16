@@ -174,8 +174,8 @@ lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 
 lengthLbNotes :: Sentence
-lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", makeRef2S lengthB,
-  S "and", ch baseAngle, S "is defined in", makeRef2S angleA]
+lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
 --DD9
 
@@ -191,8 +191,8 @@ lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 
 lengthLsNotes :: Sentence
-lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", makeRef2S lengthB,
-  S "and", ch surfAngle, S "is defined in", makeRef2S angleB]
+lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
 
 --DD10
 
@@ -245,7 +245,7 @@ ratioVarEqn = case_ [case1, case2]
 
 convertFunc1 :: DataDefinition
 convertFunc1 = mkDD convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
-  "convertFunc1" []
+  "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: QDefinition
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
@@ -256,11 +256,14 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
   (sy normToShear * inxi scalFunc * (sin (inxi baseAngle)) + 
   (cos (inxi baseAngle))) * (sy fs)
 
+convertFunc1Notes :: Sentence
+convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+
 --DD14
 
 convertFunc2 :: DataDefinition
 convertFunc2 = mkDD convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
-  "convertFunc2" []
+  "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: QDefinition
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
@@ -272,6 +275,11 @@ convertFunc2Eqn = ((sy normToShear * inxi scalFunc *
   (cos (inxi baseAngle))) * (sy fs)) / 
   (inxiM1 shrResC)
 
+convertFunc2Notes :: Sentence
+convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in", 
+  makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in", 
+  makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in", 
+  makeRef2S convertFunc1]
 
 {--DD10
 

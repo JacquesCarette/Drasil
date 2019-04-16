@@ -252,7 +252,7 @@ baseHydroForceL = uc' "U^L_b,i" (cn $ "left base hydrostatic force on a slice")
   (sub (sup cU cL) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
-  ("per meter in the z-direction from water pressure acting into the slice" ++
+  ("per meter in the z-direction from water pressure acting into the slice " ++
    "from standing water on the slope surface")
   (sub cU lT) forcePerMeterU
 

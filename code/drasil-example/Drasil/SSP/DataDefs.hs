@@ -1,6 +1,7 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght,
-  lengthLs, lengthLb, stressDD, convertFunc1, convertFunc2,
-  nrmForceSumDD, watForceSumDD) where 
+module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, surfWtrF, 
+  intersliceWtrF, angleA, angleB, lengthB, lengthLs, lengthLb, slcHeight, 
+  stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
+  watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil

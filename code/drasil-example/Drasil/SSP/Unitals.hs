@@ -145,7 +145,7 @@ intNormForce = uc' "G_i" (cn $ "interslice normal force")
   (cG) newton
 
 waterHght = uc' "y_wt,i"
-  (cn $ "y-coordinate of water table")
+  (cn $ "y-coordinate of the water table")
   ("height of the water table")
   (sub lY (Atomic "wt")) metre
 

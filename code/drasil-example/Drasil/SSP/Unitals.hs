@@ -263,7 +263,7 @@ impLoadAngle = uc' "omega_i" (cn $ "angle")
   "relative to the vertical " ++ fsi) lOmega degree
 
 baseWthX = uc' "b_i" (cn $ "base width of a slice")
-  ("in the x-ordinate direction only " ++ fsi)
+  ("in the x-direction")
   (lB) metre
 
 baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi

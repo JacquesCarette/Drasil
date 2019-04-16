@@ -9,16 +9,18 @@ import Language.Drasil
 --import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
  -- ofThe', sAnd)
 
+import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (sAnd)
+import Data.Drasil.SentenceStructures (sAnd, foldlSent)
+import Drasil.SSP.Defs (slice)
 import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   constF, dryWeight, fricAngle, fs, genericF, genericA, 
   intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, 
+  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght,
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
   surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   waterHght, waterWeight, watrForce)
@@ -112,7 +114,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 
 angleA :: DataDefinition
 angleA = mkDD angleAQD [fredlund1977] [{-Derivation-}] "angleA" 
-  [makeRef2S assumpSBSBISL]--Notes
+  [angleANotes]
 --FIXME: fill empty lists in
 
 angleAQD :: QDefinition
@@ -122,11 +124,16 @@ angleAEqn :: Expr
 angleAEqn = (inxi slipHght - inx slipHght (-1)) /
   (inxi slipDist - inx slipDist (-1))
 
+angleANotes :: Sentence
+angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the base of a", phrase slice,
+  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
+
 --DD6
 
 angleB :: DataDefinition
 angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
-  [makeRef2S assumpSBSBISL]--Notes
+  [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
 angleBQD :: QDefinition
@@ -135,6 +142,11 @@ angleBQD = mkQuantDef surfAngle angleBEqn
 angleBEqn :: Expr
 angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
   (inxi slopeDist - inx slopeDist (-1))
+
+angleBNotes :: Sentence
+angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the surface of a", phrase slice,
+  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
 --DD7
 

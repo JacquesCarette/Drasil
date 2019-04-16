@@ -164,7 +164,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 
 lengthLb :: DataDefinition
 lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
-  [makeRef2S assumpSBSBISL]--Notes
+  [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
 lengthLbQD :: QDefinition
@@ -173,11 +173,15 @@ lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 
+lengthLbNotes :: Sentence
+lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", makeRef2S lengthB,
+  S "and", ch baseAngle, S "is defined in", makeRef2S angleA]
+
 --DD9
 
 lengthLs :: DataDefinition
 lengthLs = mkDD lengthLsQD [fredlund1977] [{-Derivation-}] "lengthLs"
-  [makeRef2S assumpSBSBISL]--Notes
+  [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
 lengthLsQD :: QDefinition
@@ -185,6 +189,10 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
+
+lengthLsNotes :: Sentence
+lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", makeRef2S lengthB,
+  S "and", ch surfAngle, S "is defined in", makeRef2S angleB]
 
 --DD10
 
@@ -200,7 +208,7 @@ slcHeightEqn = 0.5 * (sy sliceHghtRight + sy sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
-  S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
+  phrase assumption +:+ S "that the surface" `sAnd` S "base of a slice" +:+ 
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), 
   ch sliceHghtRight `sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
   makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 

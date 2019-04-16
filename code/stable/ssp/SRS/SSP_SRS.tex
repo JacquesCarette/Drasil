@@ -139,7 +139,7 @@ $W$ & Weight: downward force caused by gravity on slice i & N
 \\
 $X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
 \\
-$x$ & X-Ordinate: refers to either slice i midpoint, or slice interface i & m
+$x$ & X-Coordinate: in the Cartesian coordinate system & m
 \\
 ${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
@@ -947,7 +947,7 @@ Label & Angle
                  Units & ${}^{\circ}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    α=\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}
+                                    α=\arctan\left(\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
@@ -979,7 +979,7 @@ Label & Angle
                  Units & ${}^{\circ}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    β=\frac{{y_{slope,i}}-{y_{slope,i-1}}}{{x_{slope,i}}-{x_{slope,i-1}}}
+                                    β=\arctan\left(\frac{{y_{slope,i}}-{y_{slope,i-1}}}{{x_{slope,i}}-{x_{slope,i-1}}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}

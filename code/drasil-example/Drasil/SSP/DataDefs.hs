@@ -10,7 +10,7 @@ import Language.Drasil
  -- ofThe', sAnd)
 
 import Data.Drasil.Concepts.Documentation (assumption)
-import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.SentenceStructures (sAnd, foldlSent)
 import Drasil.SSP.Defs (slice)

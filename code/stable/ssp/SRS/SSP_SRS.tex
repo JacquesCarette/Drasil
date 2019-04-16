@@ -129,13 +129,25 @@ $u$ & Local Index: used as a bound variable index in calculations & --
 \\
 $u$ & Pore Pressure: from water within the soil & Pa
 \\
-${U_{b}}$ & Base Hydrostatic Force: per meter in the z-direction from water pressure within the slice & $\frac{\text{N}}{\text{m}}$
+${U_{b}}$ & Base Hydrostatic Force: per meter in the z-direction from water pressure within a slice & $\frac{\text{N}}{\text{m}}$
 \\
-${U_{t}}$ & Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface for slice index i & $\frac{\text{N}}{\text{m}}$
+${U_{t}}$ & Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface & $\frac{\text{N}}{\text{m}}$
+\\
+${{U^{L}}_{b}}$ & Left Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the left side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
+${{U^{L}}_{t}}$ & Left Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the left side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
+${{U^{R}}_{b}}$ & Right Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the right side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
+${{U^{R}}_{t}}$ & Right Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the right side of the slice & $\frac{\text{N}}{\text{m}}$
 \\
 $v$ & Local Index: used as a bound variable index in calculations & --
 \\
 $W$ & Weight: downward force per meter in the z-direction caused by gravity on slice i & $\frac{\text{N}}{\text{m}}$
+\\
+${W^{L}}$ & Left Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice & $\frac{\text{N}}{\text{m}}$
+\\
+${W^{R}}$ & Right Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice & $\frac{\text{N}}{\text{m}}$
 \\
 $X$ & Interslice Shear Force: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
@@ -157,9 +169,9 @@ $α$ & Base Angle: between the base of a slice and the horizontal & ${}^{\circ}$
 \\
 $β$ & Surface Angle: between the surface of a slice and the horizontal & ${}^{\circ}$
 \\
-$γ$ & Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+$γ$ & Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{Sat}}$ & Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{Sat}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -185,9 +197,9 @@ $Ψ$ & Second Function for Incorporating Interslice Forces Into Shear Force: con
 \\
 $ω$ & Imposed Load Angle: between the external force acting into the surface and the vertical & ${}^{\circ}$
 \\
-${ℓ_{b}}$ & Width of the Base of a Slice: in the x-direction & m
+${ℓ_{b}}$ & Total Base Length of a Slice: in the direction parallel to the slope of the base & m
 \\
-${ℓ_{s}}$ & Length of an Interslice Surface: from slip base to slope surface in a vertical line from an interslice vertex for interslice index i & m
+${ℓ_{s}}$ & Surface Length of a Slice: in the direction parallel to the slope of the surface & m
 \\
 \bottomrule
 \label{Table:ToS}
@@ -359,13 +371,13 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The (${x_{slip}}$, ${y_{slip}}$) coordinates of a slip surface follow a concave up function.
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
-\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
+\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
 \item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -583,7 +595,7 @@ Label & Resistive shear force
                                          \item{$N'$ is the effective normal force ($\frac{\text{N}}{\text{m}}$)}
                                          \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                          \item{$c'$ is the effective cohesion (Pa)}
-                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \item{${ℓ_{b}}$ is the total base length of a slice (m)}
                                          \end{symbDescription}
                                          \\ \midrule \\
                                          Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
@@ -618,7 +630,7 @@ Label & Mobilized shear force
                                          \item{$N'$ is the effective normal force ($\frac{\text{N}}{\text{m}}$)}
                                          \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                          \item{$c'$ is the effective cohesion (Pa)}
-                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \item{${ℓ_{b}}$ is the total base length of a slice (m)}
                                          \end{symbDescription}
                                          \\ \midrule \\
                                          Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
@@ -687,7 +699,7 @@ Label & Resistive shear force, without interslice normal and shear forces
                                          \item{${U_{b}}$ is the base hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
                                          \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                          \item{$c'$ is the effective cohesion (Pa)}
-                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \item{${ℓ_{b}}$ is the total base length of a slice (m)}
                                          \end{symbDescription}
                                          \\ \midrule \\
                                          Notes & $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $β$ is defined in \hyperref[DD:angleB]{DD: angleB}, $α$ is defined in \hyperref[DD:angleA]{DD: angleA}, $H$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${U_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}, and ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
@@ -820,27 +832,21 @@ Label & Weight
                  Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    W=b_{i} \begin{cases}
-\left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
-\left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
-\left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
-\end{cases}
+                                    W=\frac{1}{2} \left({{W^{L}}}_{i}+{{W^{R}}}_{i}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
-                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{${W^{L}}$ is the left weight of a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${W^{R}}$ is the right weight of a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Source & \cite{fredlund1977}
-                                                           \\ \midrule \\
-                                                           RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+                                                  Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight $γ$ and the soil saturated unit weight ${γ_{Sat}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). ${W^{L}}$ is defined in \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} and ${W^{R}}$ is defined in \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -858,22 +864,17 @@ Label & Base hydrostatic force
                  Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    {U_{b}}={ℓ_{b,i}} \begin{cases}
-\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slip,i}}\\
-0, & {y_{wt,i}}\leq{}{y_{slip,i}}
-\end{cases}
+                                    {U_{b}}=\frac{1}{2} \left({{U^{L}}_{b,i}}+{{U^{R}}_{b,i}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${U_{b}}$ is the base hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
-                                                  \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                                  \item{${{U^{L}}_{b}}$ is the left base hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${{U^{R}}_{b}}$ is the right base hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${{U^{L}}_{b}}$ is defined in \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} and ${{U^{R}}_{b}}$ is defined in \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD}.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -895,22 +896,17 @@ Label & Surface hydrostatic force
                  Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
-                                    {U_{t}}={ℓ_{s,i}} \begin{cases}
-\left({y_{wt,i}}-{y_{slope,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slope,i}}\\
-0, & {y_{wt,i}}\leq{}{y_{slope,i}}
-\end{cases}
+                                    {U_{t}}=\frac{1}{2} \left({{U^{L}}_{t,i}}+{{U^{R}}_{t,i}}\right)
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
-                                                  \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
+                                                  \item{${{U^{L}}_{t}}$ is the left surface hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{${y_{wt}}$ is the y ordinate (m)}
-                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
-                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${{U^{R}}_{t}}$ is the right surface hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
-                                                  Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
+                                                  Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${{U^{L}}_{t}}$ is defined in \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} and ${{U^{R}}_{t}}$ is defined in \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD}.
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
@@ -944,7 +940,7 @@ Label & Interslice normal water force
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
-                                                  \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
                                                   \item{${y_{wt}}$ is the y ordinate (m)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -1043,7 +1039,7 @@ Label & Base width of a slice
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql} \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1054,7 +1050,7 @@ Label & Base width of a slice
 \phantomsection 
 \label{DD:lengthLb}
 \\ \midrule \\
-Label & Width of the base of a slice
+Label & Total base length of a slice
         \\ \midrule \\
         Symbol & ${ℓ_{b}}$
                  \\ \midrule \\
@@ -1065,7 +1061,7 @@ Label & Width of the base of a slice
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the base angle (${}^{\circ}$)}
@@ -1075,7 +1071,7 @@ Label & Width of the base of a slice
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr}.
+                                                                   RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1086,7 +1082,7 @@ Label & Width of the base of a slice
 \phantomsection 
 \label{DD:lengthLs}
 \\ \midrule \\
-Label & Length of an interslice surface
+Label & Surface length of a slice
         \\ \midrule \\
         Symbol & ${ℓ_{s}}$
                  \\ \midrule \\
@@ -1097,7 +1093,7 @@ Label & Length of an interslice surface
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
+                                                  \item{${ℓ_{s}}$ is the surface length of a slice (m)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$β$ is the surface angle (${}^{\circ}$)}
@@ -1107,7 +1103,7 @@ Label & Length of an interslice surface
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1385,6 +1381,234 @@ Label & Height of the left side of a slice
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
                                                            RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:slcWghtRDD}
+\phantomsection 
+\label{DD:slcWghtRDD}
+\\ \midrule \\
+Label & Right weight of a slice
+        \\ \midrule \\
+        Symbol & ${W^{R}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {W^{R}}=b_{i} \begin{cases}
+\left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
+\left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${W^{R}}$ is the right weight of a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{$γ$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & $b$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:sliceWght]{DD: sliceWght}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:slcWghtRDD}
+\phantomsection 
+\label{DD:slcWghtRDD}
+\\ \midrule \\
+Label & Left weight of a slice
+        \\ \midrule \\
+        Symbol & ${W^{L}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {W^{L}}=b_{i} \begin{cases}
+\left({y_{slope,i-1}}-{y_{slip,i-1}}\right) {γ_{Sat}}, & {y_{wt,i-1}}\geq{}{y_{slope,i-1}}\\
+\left({y_{slope,i-1}}-{y_{wt,i-1}}\right) γ+\left({y_{wt,i-1}}-{y_{slip,i-1}}\right) {γ_{Sat}}, & {y_{slope,i-1}}>{y_{wt,i-1}}>{y_{slip,i-1}}\\
+\left({y_{slope,i-1}}-{y_{slip,i-1}}\right) γ, & {y_{wt,i-1}}\leq{}{y_{slip,i-1}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${W^{L}}$ is the left weight of a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{$b$ is the base width of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{$γ$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & $b$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:sliceWght]{DD: sliceWght}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:baseWtrFRDD}
+\phantomsection 
+\label{DD:baseWtrFRDD}
+\\ \midrule \\
+Label & Right base hydrostatic force on a slice
+        \\ \midrule \\
+        Symbol & ${{U^{R}}_{b}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {{U^{R}}_{b}}={ℓ_{b,i}} \begin{cases}
+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slip,i}}\\
+0, & {y_{wt,i}}\leq{}{y_{slip,i}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${{U^{R}}_{b}}$ is the right base hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:baseWtrFLDD}
+\phantomsection 
+\label{DD:baseWtrFLDD}
+\\ \midrule \\
+Label & Left base hydrostatic force on a slice
+        \\ \midrule \\
+        Symbol & ${{U^{L}}_{b}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {{U^{L}}_{b}}={ℓ_{b,i}} \begin{cases}
+\left({y_{wt,i-1}}-{y_{slip,i-1}}\right) {γ_{w}}, & {y_{wt,i-1}}>{y_{slip,i-1}}\\
+0, & {y_{wt,i-1}}\leq{}{y_{slip,i-1}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${{U^{L}}_{b}}$ is the left base hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slip}}$ is the y ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:surfWtrFRDD}
+\phantomsection 
+\label{DD:surfWtrFRDD}
+\\ \midrule \\
+Label & Right surface hydrostatic force on a slice
+        \\ \midrule \\
+        Symbol & ${{U^{R}}_{t}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {{U^{R}}_{t}}={ℓ_{s,i}} \begin{cases}
+\left({y_{wt,i}}-{y_{slope,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slope,i}}\\
+0, & {y_{wt,i}}\leq{}{y_{slope,i}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${{U^{R}}_{t}}$ is the right surface hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{${ℓ_{s}}$ is the surface length of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & ${ℓ_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:surfWtrF]{DD: surfWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:surfWtrFLDD}
+\phantomsection 
+\label{DD:surfWtrFLDD}
+\\ \midrule \\
+Label & Left surface hydrostatic force on a slice
+        \\ \midrule \\
+        Symbol & ${{U^{L}}_{t}}$
+                 \\ \midrule \\
+                 Units & $\frac{\text{N}}{\text{m}}$
+                         \\ \midrule \\
+                         Equation & \begin{displaymath}
+                                    {{U^{L}}_{t}}={ℓ_{s,i}} \begin{cases}
+\left({y_{wt,i-1}}-{y_{slope,i-1}}\right) {γ_{w}}, & {y_{wt,i-1}}>{y_{slope,i-1}}\\
+0, & {y_{wt,i-1}}\leq{}{y_{slope,i-1}}
+\end{cases}
+                                    \end{displaymath}
+                                    \\ \midrule \\
+                                    Description & \begin{symbDescription}
+                                                  \item{${{U^{L}}_{t}}$ is the left surface hydrostatic force on a slice ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{${ℓ_{s}}$ is the surface length of a slice (m)}
+                                                  \item{$i$ is the index (Unitless)}
+                                                  \item{${y_{wt}}$ is the y ordinate (m)}
+                                                  \item{${y_{slope}}$ is the slope y-ordinate (m)}
+                                                  \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
+                                                  \end{symbDescription}
+                                                  \\ \midrule \\
+                                                  Notes & ${ℓ_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
+                                                          \\ \midrule \\
+                                                          Source & \cite{fredlund1977}
+                                                                   \\ \midrule \\
+                                                                   RefBy & \hyperref[DD:surfWtrF]{DD: surfWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -1759,9 +1983,9 @@ $c'$ & Pa & effective cohesion
 \\
 $φ'$ & ${}^{\circ}$ & effective angle of friction
 \\
-$γ$ & $\frac{\text{N}}{\text{m}^{3}}$ & dry unit weight
+$γ$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil dry unit weight
 \\
-${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & saturated unit weight
+${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil saturated unit weight
 \\
 ${γ_{w}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 \\

@@ -79,12 +79,12 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   (prime $ vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defultUncrt
 
-dryWeight = uqc "gamma" (cn $ "dry unit weight")
+dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   lGamma specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
-satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
+satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
@@ -119,23 +119,25 @@ coords = cuc' "(x,y)"
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
-  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
-  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, porePressure, 
-  sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
-  sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress]
+  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
+  watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
+  baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
+  totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
+  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
+  sliceHghtRight, sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, 
+  totStress, effectiveStress, effNormStress]
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght, 
-  sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, shrResI,
-  intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
-  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
-  baseLngth, surfLngth, midpntHght,
-  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  porePressure, mobShrC, shrResC, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress :: UnitalChunk
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
+  sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
+  watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
+  baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
+  nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, mobShrC, shrResC, 
+  intNormForce, shrStress, totStress, effectiveStress, 
+  effNormStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -214,7 +216,17 @@ shearRNoIntsl = uc' "R_i"
   (cR) forcePerMeterU
 
 slcWght = uc' "W_i" (cn $ "weight")
-  ("downward force per meter in the z-direction caused by gravity on slice i") (cW) forcePerMeterU
+  ("downward force per meter in the z-direction caused by gravity on slice i")
+  (cW) forcePerMeterU
+  
+slcWghtR = uc' "W^R" (cn $ "right weight of a slice") 
+  ("weight of a slice per meter in the z-direction, assuming the entire " ++ "slice has the height of the right side of the slice") 
+  (sup cW cR) forcePerMeterU
+
+slcWghtL = uc' "W^L" (cn $ "left weight of a slice") 
+  ("weight of a slice per meter in the z-direction, assuming the entire " ++
+  "slice has the height of the left side of the slice") 
+  (sup cW cL) forcePerMeterU
 
 watrForce = uc' "H_i" (cn $ "interslice normal water force ") 
   ("per meter in the z-direction exerted in the x-ordinate direction between" ++
@@ -226,13 +238,34 @@ intShrForce = uc' "X_i" (cn $ "interslice shear force")
   (cX) forcePerMeterU
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
-  ("per meter in the z-direction from water pressure within the slice")
-  (sub cU (Atomic "b")) forcePerMeterU
+  ("per meter in the z-direction from water pressure within a slice")
+  (sub cU lB) forcePerMeterU
+
+baseHydroForceR = uc' "U^R_b,i" (cn $ "right base hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure within a slice, " ++
+  "assuming the entire slice has the height of the right side of the slice")
+  (sub (sup cU cR) lB) forcePerMeterU
+
+baseHydroForceL = uc' "U^L_b,i" (cn $ "left base hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure within a slice, " ++
+  "assuming the entire slice has the height of the left side of the slice")
+  (sub (sup cU cL) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
-  ("per meter in the z-direction from water pressure acting into the slice from standing " ++
-  "water on the slope surface " ++ fsi)
-  (sub cU (Atomic "t")) forcePerMeterU
+  ("per meter in the z-direction from water pressure acting into the slice " ++
+   "from standing water on the slope surface")
+  (sub cU lT) forcePerMeterU
+
+surfHydroForceR = uc' "U^R_t,i" (cn $ "right surface hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure acting into the slice " ++ "from standing water on the slope surface, assuming the entire slice has " ++
+  "the height of the right side of the slice")
+  (sub (sup cU cR) lT) forcePerMeterU
+
+surfHydroForceL = uc' "U^L_t,i" (cn $ "left surface hydrostatic force on a slice")
+  ("per meter in the z-direction from water pressure acting into the slice " ++
+  "from standing water on the slope surface, assuming the entire slice has " ++
+  "the height of the left side of the slice")
+  (sub (sup cU cL) lT) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn $ "normal force")
   ("total reactive force per meter in the z-direction for a soil surface subject to a body resting on it")
@@ -265,13 +298,13 @@ baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
   (lB) metre
 
-baseLngth = uc' "l_b,i" (cn $ "width of the base of a slice") 
-  "in the x-direction" (sub lEll (Atomic "b")) metre
+baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") 
+  "in the direction parallel to the slope of the base"
+  (sub lEll lB) metre
 
-surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
-  ("from slip base to slope surface in a vertical " ++
-  "line from an interslice vertex " ++ fisi)
-  (sub lEll (Atomic "s")) metre
+surfLngth = uc' "l_s,i" (cn $ "surface length of a slice")
+  "in the direction parallel to the slope of the surface"
+  (sub lEll lS) metre
 
 midpntHght = uc' "h_i" (cn $ "y-direction height of a slice")
   ("height in the y-direction from the base of a slice to the slope " ++

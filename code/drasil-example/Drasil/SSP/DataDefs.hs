@@ -100,10 +100,10 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = case_ [case1,case2,case3]
   where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 / 2  *
-          (sy satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
-          (sy satWeight), (inxi waterHght) $>= (inxi slopeHght))
+          (sy waterWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
+          (sy waterWeight), (inxi waterHght) $>= (inxi slopeHght))
 
-        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (sy satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (sy waterWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (0,(inxi waterHght) $<= (inxi slipHght))

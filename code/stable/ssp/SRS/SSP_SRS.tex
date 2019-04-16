@@ -189,11 +189,11 @@ $τ$ & Shear Strength:  & Pa
 \\
 $Υ$ & Function: generic minimization function or algorithm & --
 \\
-$Φ$ & First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces & N
+$Φ$ & First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces & --
 \\
 $φ'$ & Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line & ${}^{\circ}$
 \\
-$Ψ$ & Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces & N
+$Ψ$ & Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces & --
 \\
 $ω$ & Imposed Load Angle: between the external force acting into the surface and the vertical & ${}^{\circ}$
 \\
@@ -1214,14 +1214,14 @@ Label & First function for incorporating interslice forces into shear force
         \\ \midrule \\
         Symbol & $Φ$
                  \\ \midrule \\
-                 Units & N
+                 Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     Φ=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
+                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (Unitless)}
                                                   \item{$λ$ is the proportionality constant (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
@@ -1249,21 +1249,21 @@ Label & Second function for incorporating interslice forces into shear force
         \\ \midrule \\
         Symbol & $Ψ$
                  \\ \midrule \\
-                 Units & N
+                 Units & Unitless
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     Ψ=\frac{\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}}{Φ_{i-1}}
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                  \item{$Ψ$ is the second function for incorporating interslice forces into shear force (Unitless)}
                                                   \item{$λ$ is the proportionality constant (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{$α$ is the base angle (${}^{\circ}$)}
                                                   \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                                   \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
+                                                  \item{$Φ$ is the first function for incorporating interslice forces into shear force (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & $f$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariation}, $α$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $Φ$ is defined in \hyperref[DD:convertFunc1]{DD: convertFunc1}.
@@ -1642,7 +1642,7 @@ Label & Factor of safety
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                                                            \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \item{$v$ is the local index (Unitless)}
-                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (Unitless)}
                                                                                            \item{$u$ is the local index (Unitless)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
@@ -1853,8 +1853,8 @@ Label & Interslice forces
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                                                            \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
-                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
+                                                                                           \item{$Φ$ is the first function for incorporating interslice forces into shear force (Unitless)}
+                                                                                           \item{$Ψ$ is the second function for incorporating interslice forces into shear force (Unitless)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\

@@ -125,7 +125,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, 
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, 
+  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
 genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
@@ -135,7 +135,7 @@ genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght,
   baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, mobShrC, shrResC, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
   intNormForce, shrStress, totStress, effectiveStress, 
   effNormStress :: UnitalChunk
   
@@ -194,16 +194,6 @@ shrResI = uc' "shrRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
-  
-mobShrC = uc' "Psi" (cn $ "second function for incorporating interslice " ++
-  "forces into shear force") ("converts mobile shear " ++ 
-  wiif ++ ", to a calculation considering the interslice forces")
-  cPsi newton
-
-shrResC = uc' "Phi" (cn $ "first function for incorporating interslice " ++
-  "forces into shear force") ("converts resistive shear " ++ 
-  wiif ++ ", to a calculation considering the interslice forces")
-  cPhi newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ ("mobilized shear force " ++ wiif)) 
@@ -372,10 +362,10 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min]
+  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblU, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV :: DefinedQuantityDict
+  minFunction, mobShrC, shrResC, index, varblU, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -402,6 +392,16 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
+
+mobShrC = dqd' (dcc "Psi" (nounPhraseSP $ "second function for incorporating" ++
+  " interslice forces into shear force") ("converts mobile shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces"))
+  (const cPsi) Real Nothing
+
+shrResC = dqd' (dcc "Phi" (nounPhraseSP $ "first function for incorporating " ++
+  "interslice forces into shear force") ("converts resistive shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces"))
+  (const cPhi) Real Nothing
 
 --------------------
 -- Index Function --

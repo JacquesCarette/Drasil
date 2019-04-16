@@ -73,7 +73,7 @@ $c'$ & Effective Cohesion: internal pressure that sticks particles of soil toget
 \\
 $const_f$ & Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false & --
 \\
-$f$ & Interslice Normal to Shear Force Ratio Variation Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & --
+$f$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
 ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force & --
 \\
@@ -89,57 +89,55 @@ ${{F_{x}}^{H}}$ & Sum of the Interslice Normal Water Forces: for two adjacent in
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
-$G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
+$G$ & Interslice Normal Force: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
-$H$ & Interslice Normal Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
+$H$ & Interslice Normal Water Force: per meter in the z-direction exerted in the x-ordinate direction between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 $h$ & Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice & m
-\\
-$ΔH$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
 ${h^{L}}$ & Height of the Left Side of a Slice: assuming slice surface has negative slope & m
 \\
 ${h^{R}}$ & Height of the Right Side of a Slice: assuming slice surface has negative slope & m
 \\
-${h_{z}}$ & Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice & m
+${h_{z}}$ & Height of Center of Slice: the height in the y-direction from the base of a slice to the center of the slice & m
 \\
-$i$ & Index: used to show a quantity applies to only one slice & --
+${h_{z,w}}$ & Height Halfway to Water Table: the height in the y-direction from the base of a slice halfway to the water table & m
 \\
-${K_{c}}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
+$i$ & Index: representing a single slice & --
+\\
+${K_{c}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
 $M$ & Net Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
-$N$ & Normal Force: total reactive force for a soil surface subject to a body resting on it & N
+$N$ & Normal Force: total reactive force per meter in the z-direction for a soil surface subject to a body resting on it & $\frac{\text{N}}{\text{m}}$
 \\
 $n$ & Number of Slices: the slip mass has been divided into & --
 \\
-$N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
+$N'$ & Effective Normal Force: per meter in the z-direction for a soil surface, subtracting pore water reactive force from total reactive force & $\frac{\text{N}}{\text{m}}$
 \\
-$P$ & Resistive Shear Force Per Meter in the Z-Direction: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & $\frac{\text{N}}{\text{m}}$
+$P$ & Resistive Shear Force: Mohr Coulomb frictional force per meter in the z-direction that describes the limit of mobilized shear force a slice can withstand before failure & $\frac{\text{N}}{\text{m}}$
 \\
-$Q$ & Imposed Surface Load: a downward force acting into the surface from midpoint of slice i & N
+$Q$ & External Force: a force per meter in the z-direction acting into the surface from the midpoint of a slice & $\frac{\text{N}}{\text{m}}$
 \\
-$R$ & Resistive Shear Force: without the influence of interslice forces for slice index i & N
+$R$ & Resistive Shear Force Without the Influence of Interslice Forces: per meter in the z-direction & $\frac{\text{N}}{\text{m}}$
 \\
-$S$ & Mobilized Shear Force Per Meter in the Z-Direction: for slice index i & $\frac{\text{N}}{\text{m}}$
+$S$ & Mobilized Shear Force: per meter in the z-direction & $\frac{\text{N}}{\text{m}}$
 \\
-$T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
+$T$ & Mobilized Shear Force Without the Influence of Interslice Forces: per meter in the z-direction & $\frac{\text{N}}{\text{m}}$
 \\
 $u$ & Local Index: used as a bound variable index in calculations & --
 \\
 $u$ & Pore Pressure: from water within the soil & Pa
 \\
-${U_{b}}$ & Base Hydrostatic Force: from water pressure within the slice for slice index i & N
+${U_{b}}$ & Base Hydrostatic Force: per meter in the z-direction from water pressure within the slice & $\frac{\text{N}}{\text{m}}$
 \\
-${U_{t}}$ & Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface for slice index i & N
+${U_{t}}$ & Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface for slice index i & $\frac{\text{N}}{\text{m}}$
 \\
 $v$ & Local Index: used as a bound variable index in calculations & --
 \\
-$W$ & Weight: downward force caused by gravity on slice i & N
+$W$ & Weight: downward force per meter in the z-direction caused by gravity on slice i & $\frac{\text{N}}{\text{m}}$
 \\
-$X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
-\\
-$x$ & X-Ordinate: refers to either slice i midpoint, or slice interface i & m
+$X$ & Interslice Shear Force: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 ${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
@@ -153,9 +151,11 @@ ${y_{slope}}$ & Slope Y-Ordinate: y-ordinate of a point on the slope & m
 \\
 ${y_{wt}}$ & Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i & m
 \\
-$α$ & Angle: base of the mass relative to the horizontal for slice index i & ${}^{\circ}$
+$z$ & Z-Ordinate: in the Cartesian coordinate system & m
 \\
-$β$ & Angle: surface of the mass relative to the horizontal for slice index i & ${}^{\circ}$
+$α$ & Base Angle: between the base of a slice and the horizontal & ${}^{\circ}$
+\\
+$β$ & Surface Angle: between the surface of a slice and the horizontal & ${}^{\circ}$
 \\
 $γ$ & Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -183,9 +183,9 @@ $φ'$ & Effective Angle of Friction: The angle of inclination with respect to th
 \\
 $Ψ$ & Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces & N
 \\
-$ω$ & Angle: of imposed surface load acting into the surface relative to the vertical for slice index i & ${}^{\circ}$
+$ω$ & Imposed Load Angle: between the external force acting into the surface and the vertical & ${}^{\circ}$
 \\
-${ℓ_{b}}$ & Total Base Length of a Slice: for slice index i & m
+${ℓ_{b}}$ & Width of the Base of a Slice: in the x-direction & m
 \\
 ${ℓ_{s}}$ & Length of an Interslice Surface: from slip base to slope surface in a vertical line from an interslice vertex for interslice index i & m
 \\
@@ -359,11 +359,11 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The (${x_{slip}}$, ${y_{slip}}$) coordinates of a slip surface follow a concave up function.
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
-\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
-\item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
-\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:effNormF]{GD: effNormF}.
+\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
+\item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
+\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
+\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
+\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
 \item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -389,8 +389,8 @@ Label & Factor of safety
                    \\ \midrule \\
                    Description & \begin{symbDescription}
                                  \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
-                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
+                                 \item{$P$ is the resistive shear force ($\frac{\text{N}}{\text{m}}$)}
+                                 \item{$S$ is the mobilized shear force ($\frac{\text{N}}{\text{m}}$)}
                                  \end{symbDescription}
                                  \\ \midrule \\
                                  Source & \cite{fredlund1977}
@@ -477,12 +477,12 @@ Label & Effective stress
                                          \\ \midrule \\
                                          Source & \cite{fredlund1977}
                                                   \\ \midrule \\
-                                                  RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
+                                                  RefBy & \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
-This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+This section collects the laws and equations that will be used to build the instance models.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -493,32 +493,35 @@ This section collects the laws and equations that will be used in deriving the d
 \\ \midrule \\
 Label & Normal force equilibrium
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$N$ is the normal force (N)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{$W$ is the weight (N)}
-                                 \item{$X$ is the interslice shear force (N)}
-                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                 \item{$β$ is the angle (${}^{\circ}$)}
-                                 \item{$Q$ is the imposed surface load (N)}
-                                 \item{$ω$ is the angle (${}^{\circ}$)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                 \item{$G$ is the interslice normal force (N)}
-                                 \item{$H$ is the interslice normal water force (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$N$ is the normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$X$ is the interslice shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$β$ is the surface angle (${}^{\circ}$)}
+                                         \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$ω$ is the imposed load angle (${}^{\circ}$)}
+                                         \item{$α$ is the base angle (${}^{\circ}$)}
+                                         \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+                                         \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                         Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the normal direction. $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $β$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $α$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -529,32 +532,35 @@ Label & Normal force equilibrium
 \\ \midrule \\
 Label & Base shear force equilibrium
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{$W$ is the weight (N)}
-                                 \item{$X$ is the interslice shear force (N)}
-                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                 \item{$β$ is the angle (${}^{\circ}$)}
-                                 \item{$Q$ is the imposed surface load (N)}
-                                 \item{$ω$ is the angle (${}^{\circ}$)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                 \item{$G$ is the interslice normal force (N)}
-                                 \item{$H$ is the interslice normal water force (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$S$ is the mobilized shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$X$ is the interslice shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$β$ is the surface angle (${}^{\circ}$)}
+                                         \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$ω$ is the imposed load angle (${}^{\circ}$)}
+                                         \item{$α$ is the base angle (${}^{\circ}$)}
+                                         \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+                                         \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                         Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $β$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $α$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -565,27 +571,29 @@ Label & Base shear force equilibrium
 \\ \midrule \\
 Label & Resistive shear force
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   P_{i}={N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{$N'$ is the effective normal force (N)}
-                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-                                 \item{$c'$ is the effective cohesion (Pa)}
-                                 \item{$b$ is the base width of a slice (m)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} is multiplied by the area $b \sec\left(α\right)$ to obtain the resistive shear force per meter in the z-direction $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[TM:effStress]{TM: effStress} where the effective normal stress is multiplied by the same area to obtain the effective normal force ${σ_{N}}' b \sec\left(α\right)=N'$ \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           P_{i}={N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {ℓ_{b,i}}
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$P$ is the resistive shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$N'$ is the effective normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                         \item{$c'$ is the effective cohesion (Pa)}
+                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+                                         Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ becaused they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -594,31 +602,33 @@ Label & Resistive shear force
 \phantomsection 
 \label{GD:mobShr}
 \\ \midrule \\
-Label & Mobile shear force
+Label & Mobilized shear force
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   S_{i}=\frac{P_{i}}{{F_{S}}}=\frac{{N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{{F_{S}}}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$S$ is the mobilized shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{$P$ is the resistive shear force per meter in the z-direction ($\frac{\text{N}}{\text{m}}$)}
-                                 \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                 \item{$N'$ is the effective normal force (N)}
-                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-                                 \item{$c'$ is the effective cohesion (Pa)}
-                                 \item{$b$ is the base width of a slice (m)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & From the definition of the factor of safety in \hyperref[TM:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety ${F_{S}}$. \hyperref[assumpFOS]{A: Factor-of-Safety} \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} \hyperref[assumpSP]{A: Soil-Properties} \hyperref[assumpSLI]{A: Soil-Layers-Isotropic}
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           S_{i}=\frac{P_{i}}{{F_{S}}}=\frac{{N'}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {ℓ_{b,i}}}{{F_{S}}}
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$S$ is the mobilized shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$P$ is the resistive shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${F_{S}}$ is the factor of safety (Unitless)}
+                                         \item{$N'$ is the effective normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                         \item{$c'$ is the effective cohesion (Pa)}
+                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                         Notes & ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Mobilized shear force is derived by dividing the definition of the $P$ from \hyperref[GD:resShr]{GD: resShr}. by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM: factOfSafety}. The factor of safety ${F_{S}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A: Factor-of-Safety}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -629,24 +639,27 @@ Label & Mobile shear force
 \\ \midrule \\
 Label & Effective normal force
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   {N'}_{i}=N_{i}-{U_{b,i}}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$N'$ is the effective normal force (N)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{$N$ is the normal force (N)}
-                                 \item{${U_{b}}$ is the base hydrostatic force (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-z plane. Since the slope is assumed to extend infinitely in the z-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the z-direction.
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           {N'}_{i}=N_{i}-{U_{b,i}}
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$N'$ is the effective normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$N$ is the normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{b}}$ is the base hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & 
+                                         Notes & ${U_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -655,32 +668,33 @@ Label & Effective normal force
 \phantomsection 
 \label{GD:resShearWO}
 \\ \midrule \\
-Label & Resistive shear force
+Label & Resistive shear force, without interslice normal and shear forces
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   R=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$R$ is the resistive shear force (N)}
-                                 \item{$W$ is the weight (N)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                 \item{$β$ is the angle (${}^{\circ}$)}
-                                 \item{$Q$ is the imposed surface load (N)}
-                                 \item{$ω$ is the angle (${}^{\circ}$)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                 \item{$ΔH$ is the difference between interslice forces (N)}
-                                 \item{${U_{b}}$ is the base hydrostatic force (N)}
-                                 \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-                                 \item{$c'$ is the effective cohesion (Pa)}
-                                 \item{$b$ is the base width of a slice (m)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Source & \cite{chen2005}
-                                          \\ \midrule \\
-                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           R_{i}=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \cos\left(α_{i}\right)+\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} {ℓ_{b,i}}
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$β$ is the surface angle (${}^{\circ}$)}
+                                         \item{$α$ is the base angle (${}^{\circ}$)}
+                                         \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{b}}$ is the base hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+                                         \item{$c'$ is the effective cohesion (Pa)}
+                                         \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
+                                         \end{symbDescription}
+                                         \\ \midrule \\
+                                         Notes & $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $β$ is defined in \hyperref[DD:angleB]{DD: angleB}, $α$ is defined in \hyperref[DD:angleA]{DD: angleA}, $H$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${U_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}, and ${ℓ_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -691,28 +705,29 @@ Label & Resistive shear force
 \phantomsection 
 \label{GD:mobShearWO}
 \\ \midrule \\
-Label & Mobilized shear force
+Label & Mobilized shear force, without interslice normal and shear forces
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   T=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$T$ is the mobilized shear force (N)}
-                                 \item{$W$ is the weight (N)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                 \item{$β$ is the angle (${}^{\circ}$)}
-                                 \item{$Q$ is the imposed surface load (N)}
-                                 \item{$ω$ is the angle (${}^{\circ}$)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                 \item{$ΔH$ is the difference between interslice forces (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Source & \cite{chen2005}
-                                          \\ \midrule \\
-                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           T_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \sin\left(α_{i}\right)-\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \cos\left(α_{i}\right)
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$β$ is the surface angle (${}^{\circ}$)}
+                                         \item{$α$ is the base angle (${}^{\circ}$)}
+                                         \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                         \end{symbDescription}
+                                         \\ \midrule \\
+                                         Notes & $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $β$ is defined in \hyperref[DD:angleB]{DD: angleB}, $α$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $H$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -723,24 +738,26 @@ Label & Mobilized shear force
 \phantomsection 
 \label{GD:normShrR}
 \\ \midrule \\
-Label & Interslice normal/shear relationship
+Label & Interslice normal and shear force proportionality
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   X=λ f G
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$X$ is the interslice shear force (N)}
-                                 \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-                                 \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
-                                 \item{$G$ is the interslice normal force (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & The assumption for the Morgenstern Price method (\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant
+        Units & $\frac{\text{N}}{\text{m}}$
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           X=λ f G
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$X$ is the interslice shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+                                         \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
+                                         \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                         Notes & Mathematical representation of the primary assumption for the Morgenstern-Price method (\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}). $f$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariation}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -753,34 +770,38 @@ Label & Interslice normal/shear relationship
 \\ \midrule \\
 Label & Moment equilibrium
         \\ \midrule \\
-        Equation & \begin{displaymath}
-                   0=-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$G$ is the interslice normal force (N)}
-                                 \item{$i$ is the index (Unitless)}
-                                 \item{${h_{z}}$ is the center of slice height (m)}
-                                 \item{$b$ is the base width of a slice (m)}
-                                 \item{$α$ is the angle (${}^{\circ}$)}
-                                 \item{$H$ is the interslice normal water force (N)}
-                                 \item{$X$ is the interslice shear force (N)}
-                                 \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                 \item{$W$ is the weight (N)}
-                                 \item{$h$ is the y-direction height of a slice (m)}
-                                 \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                 \item{$β$ is the angle (${}^{\circ}$)}
-                                 \item{$Q$ is the imposed surface load (N)}
-                                 \item{$ω$ is the angle (${}^{\circ}$)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[TM:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}
+        Units & N
+                \\ \midrule \\
+                Equation & \begin{displaymath}
+                           0=-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
+                           \end{displaymath}
+                           \\ \midrule \\
+                           Description & \begin{symbDescription}
+                                         \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$i$ is the index (Unitless)}
+                                         \item{${h_{z}}$ is the height of center of slice (m)}
+                                         \item{$b$ is the base width of a slice (m)}
+                                         \item{$α$ is the base angle (${}^{\circ}$)}
+                                         \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${h_{z,w}}$ is the height halfway to water table (m)}
+                                         \item{$X$ is the interslice shear force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+                                         \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$h$ is the y-direction height of a slice (m)}
+                                         \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$β$ is the surface angle (${}^{\circ}$)}
+                                         \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
+                                         \item{$ω$ is the imposed load angle (${}^{\circ}$)}
+                                         \end{symbDescription}
                                          \\ \midrule \\
-                                         Source & \cite{chen2005}
-                                                  \\ \midrule \\
-                                                  RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+                                         Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for the net moment. $b$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $α$ is defined in \hyperref[DD:angleA]{DD: angleA}, $W$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, $h$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${U_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, and $β$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+                                                 \\ \midrule \\
+                                                 Source & \cite{chen2005}
+                                                          \\ \midrule \\
+                                                          RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -796,7 +817,7 @@ Label & Weight
         \\ \midrule \\
         Symbol & $W$
                  \\ \midrule \\
-                 Units & N
+                 Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     W=b_{i} \begin{cases}
@@ -807,7 +828,7 @@ Label & Weight
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$W$ is the weight (N)}
+                                                  \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
@@ -819,7 +840,7 @@ Label & Weight
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+                                                           RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -834,7 +855,7 @@ Label & Base hydrostatic force
         \\ \midrule \\
         Symbol & ${U_{b}}$
                  \\ \midrule \\
-                 Units & N
+                 Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     {U_{b}}={ℓ_{b,i}} \begin{cases}
@@ -844,8 +865,8 @@ Label & Base hydrostatic force
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${U_{b}}$ is the base hydrostatic force (N)}
-                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{${U_{b}}$ is the base hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                                  \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{wt}}$ is the y ordinate (m)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
@@ -856,7 +877,7 @@ Label & Base hydrostatic force
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -871,7 +892,7 @@ Label & Surface hydrostatic force
         \\ \midrule \\
         Symbol & ${U_{t}}$
                  \\ \midrule \\
-                 Units & N
+                 Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     {U_{t}}={ℓ_{s,i}} \begin{cases}
@@ -881,7 +902,7 @@ Label & Surface hydrostatic force
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${U_{t}}$ is the surface hydrostatic force (N)}
+                                                  \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{wt}}$ is the y ordinate (m)}
@@ -893,7 +914,7 @@ Label & Surface hydrostatic force
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -904,11 +925,11 @@ Label & Surface hydrostatic force
 \phantomsection 
 \label{DD:intersliceWtrF}
 \\ \midrule \\
-Label & Interslice normal water force
+Label & Interslice normal water force 
         \\ \midrule \\
         Symbol & $H$
                  \\ \midrule \\
-                 Units & N
+                 Units & $\frac{\text{N}}{\text{m}}$
                          \\ \midrule \\
                          Equation & \begin{displaymath}
                                     H=\begin{cases}
@@ -919,7 +940,7 @@ Label & Interslice normal water force
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$H$ is the interslice normal water force (N)}
+                                                  \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
@@ -929,7 +950,7 @@ Label & Interslice normal water force
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShearWO]{GD: mobShearWO}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -940,7 +961,7 @@ Label & Interslice normal water force
 \phantomsection 
 \label{DD:angleA}
 \\ \midrule \\
-Label & Angle
+Label & Base angle
         \\ \midrule \\
         Symbol & $α$
                  \\ \midrule \\
@@ -951,7 +972,7 @@ Label & Angle
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$α$ is the base angle (${}^{\circ}$)}
                                                   \item{${y_{slip}}$ is the y ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${x_{slip}}$ is the x ordinate (m)}
@@ -961,7 +982,7 @@ Label & Angle
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -972,7 +993,7 @@ Label & Angle
 \phantomsection 
 \label{DD:angleB}
 \\ \midrule \\
-Label & Angle
+Label & Surface angle
         \\ \midrule \\
         Symbol & $β$
                  \\ \midrule \\
@@ -983,7 +1004,7 @@ Label & Angle
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{$β$ is the angle (${}^{\circ}$)}
+                                                  \item{$β$ is the surface angle (${}^{\circ}$)}
                                                   \item{${y_{slope}}$ is the slope y-ordinate (m)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \item{${x_{slope}}$ is the slope x-ordinate (m)}
@@ -993,7 +1014,7 @@ Label & Angle
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1022,7 +1043,7 @@ Label & Base width of a slice
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1033,7 +1054,7 @@ Label & Base width of a slice
 \phantomsection 
 \label{DD:lengthLb}
 \\ \midrule \\
-Label & Total base length of a slice
+Label & Width of the base of a slice
         \\ \midrule \\
         Symbol & ${ℓ_{b}}$
                  \\ \midrule \\
@@ -1044,17 +1065,17 @@ Label & Total base length of a slice
                                     \end{displaymath}
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
-                                                  \item{${ℓ_{b}}$ is the total base length of a slice (m)}
+                                                  \item{${ℓ_{b}}$ is the width of the base of a slice (m)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$α$ is the base angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1079,14 +1100,14 @@ Label & Length of an interslice surface
                                                   \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
                                                   \item{$b$ is the base width of a slice (m)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{$β$ is the angle (${}^{\circ}$)}
+                                                  \item{$β$ is the surface angle (${}^{\circ}$)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Notes & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+                                                                   RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1118,7 +1139,7 @@ Label & Y-direction height of a slice
                                                           \\ \midrule \\
                                                           Source & \cite{fredlund1977}
                                                                    \\ \midrule \\
-                                                                   RefBy & 
+                                                                   RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1147,7 +1168,7 @@ Label & Total stress
                                                   \\ \midrule \\
                                                   Source & \cite{huston2008}
                                                            \\ \midrule \\
-                                                           RefBy & \hyperref[TM:effStress]{TM: effStress} \hyperref[GD:effNormF]{GD: effNormF}.
+                                                           RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[TM:effStress]{TM: effStress} \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1182,7 +1203,7 @@ Label & Interslice normal to shear force ratio variation function
                                                   \\ \midrule \\
                                                   Source & \cite{fredlund1977}
                                                            \\ \midrule \\
-                                                           RefBy & 
+                                                           RefBy & \hyperref[GD:normShrR]{GD: normShrR}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1208,7 +1229,7 @@ Label & First function for incorporating interslice forces into shear force
                                                   \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$α$ is the base angle (${}^{\circ}$)}
                                                   \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                                   \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                   \end{symbDescription}
@@ -1241,7 +1262,7 @@ Label & Second function for incorporating interslice forces into shear force
                                                   \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
                                                   \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                   \item{$i$ is the index (Unitless)}
-                                                  \item{$α$ is the angle (${}^{\circ}$)}
+                                                  \item{$α$ is the base angle (${}^{\circ}$)}
                                                   \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
                                                   \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                   \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
@@ -1272,7 +1293,7 @@ Label & Sum of the interslice normal forces
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
-                                                  \item{$G$ is the interslice normal force (N)}
+                                                  \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -1300,7 +1321,7 @@ Label & Sum of the interslice normal water forces
                                     \\ \midrule \\
                                     Description & \begin{symbDescription}
                                                   \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
-                                                  \item{$H$ is the interslice normal water force (N)}
+                                                  \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
                                                   \item{$i$ is the index (Unitless)}
                                                   \end{symbDescription}
                                                   \\ \midrule \\
@@ -1391,12 +1412,12 @@ Label & Factor of safety
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                                                                           \item{$R$ is the resistive shear force (N)}
+                                                                                           \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \item{$v$ is the local index (Unitless)}
                                                                                            \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
                                                                                            \item{$u$ is the local index (Unitless)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
-                                                                                           \item{$T$ is the mobilized shear force (N)}
+                                                                                           \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
                                                                                            Notes & \\ \midrule \\
@@ -1405,7 +1426,7 @@ Label & Factor of safety
                                                                                                             RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-The mobilized shear force per meter in the z-direction defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force per meter in the z-direction based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
+The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
 \begin{displaymath}
 \left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{{N'}_{i} \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
@@ -1421,7 +1442,7 @@ Since the interslice shear force $X$ and interslice normal force $G$ are unknown
 \begin{displaymath}
 \left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
-Applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
+Applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the seismic coefficient and the external force, respectively, are zero, allows for further simplification as shown below:
 \begin{displaymath}
 \left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \sin\left(α_{i}\right)-\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \cos\left(α_{i}\right)+\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
@@ -1535,19 +1556,19 @@ b_{n} G_{n-1} H_{n-1}, & i=1
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${C1_{i}}$ is the interslice normal force function (Nm)}
                                                                                            \item{$b$ is the base width of a slice (m)}
-                                                                                           \item{$G$ is the interslice normal force (N)}
-                                                                                           \item{$H$ is the interslice normal water force (N)}
-                                                                                           \item{$α$ is the angle (${}^{\circ}$)}
+                                                                                           \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$α$ is the base angle (${}^{\circ}$)}
                                                                                            \item{$i$ is the index (Unitless)}
                                                                                            \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
                                                                                            \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
                                                                                            \item{$h$ is the y-direction height of a slice (m)}
-                                                                                           \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-                                                                                           \item{$W$ is the weight (N)}
-                                                                                           \item{${U_{t}}$ is the surface hydrostatic force (N)}
-                                                                                           \item{$β$ is the angle (${}^{\circ}$)}
-                                                                                           \item{$Q$ is the imposed surface load (N)}
-                                                                                           \item{$ω$ is the angle (${}^{\circ}$)}
+                                                                                           \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+                                                                                           \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$β$ is the surface angle (${}^{\circ}$)}
+                                                                                           \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$ω$ is the imposed load angle (${}^{\circ}$)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \item{${C2_{i}}$ is the interslice shear force function (Nm)}
                                                                                            \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
@@ -1563,11 +1584,11 @@ b_{n} G_{n-1} H_{n-1}, & i=1
 \end{minipage}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
 \begin{displaymath}
-0=-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-λ \frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
+0=-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-λ \frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
 \end{displaymath}
 Rearranging the equation in terms of $λ$ leads to equation (10):
 \begin{displaymath}
-λ=\frac{-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,i-1}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
+λ=\frac{-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
 \end{displaymath}
 Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, and removing the seismic and external forces due to \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, a general equation for the constant $λ$ is developed in equation (11), also found in \hyperref[IM:nrmShrFor]{IM: nrmShrFor}:
 \begin{displaymath}
@@ -1599,11 +1620,11 @@ Label & Interslice forces
                                                                              \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{$G$ is the interslice normal force (N)}
+                                                                                           \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \item{$i$ is the index (Unitless)}
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
-                                                                                           \item{$T$ is the mobilized shear force (N)}
-                                                                                           \item{$R$ is the resistive shear force (N)}
+                                                                                           \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \item{$Φ$ is the first function for incorporating interslice forces into shear force (N)}
                                                                                            \item{$Ψ$ is the second function for incorporating interslice forces into shear force (N)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
@@ -1620,7 +1641,7 @@ Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normFo
 \begin{displaymath}
 {N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{displaymath}
-Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force per meter in the z-direction from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
+Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
 \begin{displaymath}
 \frac{N_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{{F_{S}}}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{displaymath}

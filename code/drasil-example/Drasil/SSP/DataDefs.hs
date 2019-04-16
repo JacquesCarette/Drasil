@@ -121,8 +121,8 @@ angleAQD :: QDefinition
 angleAQD = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
-angleAEqn = (inxi slipHght - inx slipHght (-1)) /
-  (inxi slipDist - inx slipDist (-1))
+angleAEqn = arctan ((inxi slipHght - inx slipHght (-1)) /
+  (inxi slipDist - inx slipDist (-1)))
 
 angleANotes :: Sentence
 angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
@@ -140,8 +140,8 @@ angleBQD :: QDefinition
 angleBQD = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
-angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
-  (inxi slopeDist - inx slopeDist (-1))
+angleBEqn = arctan ((inxi slopeHght - inx slopeHght (-1)) /
+  (inxi slopeDist - inx slopeDist (-1)))
 
 angleBNotes :: Sentence
 angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",

@@ -45,6 +45,18 @@ csc = UnaryOp Csc
 cot :: Expr -> Expr 
 cot = UnaryOp Cot
 
+-- | Smart constructor to apply arcsin to an expression
+arcsin :: Expr -> Expr 
+arcsin = UnaryOp Arcsin
+
+-- | Smart constructor to apply arccos to an expression
+arccos :: Expr -> Expr 
+arccos = UnaryOp Arccos
+
+-- | Smart constructor to apply arctan to an expression
+arctan :: Expr -> Expr 
+arctan = UnaryOp Arctan
+
 -- | Smart constructor for the exponential (base e) function
 exp :: Expr -> Expr
 exp = UnaryOp Exp

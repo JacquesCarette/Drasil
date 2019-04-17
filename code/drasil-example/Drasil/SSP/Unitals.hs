@@ -125,7 +125,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, 
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, mobShrC, shrResC, intNormForce, shrStress, 
+  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
 genericF, genericA, normFunc, shearFunc, waterDist, slopeDist, slipDist, waterHght, 
@@ -135,7 +135,7 @@ genericF, genericA, normFunc, shearFunc, waterDist, slopeDist, slipDist, waterHg
   baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
   nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, mobShrC, shrResC, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
   intNormForce, shrStress, totStress, effectiveStress, 
   effNormStress :: UnitalChunk
   
@@ -147,16 +147,16 @@ intNormForce = uc' "G_i" (cn $ "interslice normal force")
   (cG) forcePerMeterU
 
 waterHght = uc' "y_wt,i"
-  (cn $ "y ordinate")
-  ("height of the water table at i, " ++ smsi)
+  (cn $ "y-coordinate of the water table")
+  ("height of the water table")
   (sub lY (Atomic "wt")) metre
 
-slopeHght = uc' "y_slope,i" (cn $ "slope y-ordinate")
-  ("y-ordinate of a point on the slope")
+slopeHght = uc' "y_slope,i" (cn $ "y-coordinate of the slope")
+  ("y-coordinate of a point on the soil slope")
   (sub lY (Atomic "slope")) metre
 
-slipHght = uc' "y_slip,i" (cn $ "y ordinate")
-  ("height of the slip surface at i, " ++ smsi)
+slipHght = uc' "y_slip,i" (cn $ "y-coordinate of the slip surface")
+  ("height of the slip surface")
   (sub lY (Atomic "slip")) metre
 
 waterDist = uc' "x_wt,i"
@@ -164,19 +164,19 @@ waterDist = uc' "x_wt,i"
   ("x-position of the water table")
   (sub lX (Atomic "wt")) metre
 
-slopeDist = uc' "x_slope,i" (cn $ "slope x-ordinate")
-  ("x-ordinate of a point on the slope")
+slopeDist = uc' "x_slope,i" (cn $ "x-coordinate of the slope")
+  ("x-coordinate of a point on the slope")
   (sub lX (Atomic "slope")) metre
 
-slipDist = uc' "x_slip,i" (cn $ "x ordinate")
-  ("distance of the slip surface at i, " ++ smsi)
+slipDist = uc' "x_slip,i" (cn $ "x-coordinate of the slip surface")
+  ("distance of the slip surface")
   (sub lX (Atomic "slip")) metre
 
-yi = uc' "y_i" (cn $ "y-ordinate") smsi lY metre
+yi = uc' "y_i" (cn $ "y-coordinate") "in the Cartesian coordinate system" lY metre
   
-xi = uc' "x_i" (cn $ "x-ordinate") smsi lX metre
+xi = uc' "x_i" (cn $ "x-coordinate") "in the Cartesian coordinate system" lX metre
 
-zcoord = uc' "z" (cn $ "z-ordinate") "in the Cartesian coordinate system" lZ metre
+zcoord = uc' "z" (cn $ "z-coordinate") "in the Cartesian coordinate system" lZ metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
@@ -199,16 +199,6 @@ shrResI = uc' "shrRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
               -- This is fine for now, as they are the same concept, but when this
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
-  
-mobShrC = uc' "Psi" (cn $ "second function for incorporating interslice " ++
-  "forces into shear force") ("converts mobile shear " ++ 
-  wiif ++ ", to a calculation considering the interslice forces")
-  cPsi newton
-
-shrResC = uc' "Phi" (cn $ "first function for incorporating interslice " ++
-  "forces into shear force") ("converts resistive shear " ++ 
-  wiif ++ ", to a calculation considering the interslice forces")
-  cPhi newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ ("mobilized shear force " ++ wiif)) 
@@ -300,7 +290,7 @@ impLoadAngle = uc' "omega_i" (cn $ "imposed load angle")
   lOmega degree
 
 baseWthX = uc' "b_i" (cn $ "base width of a slice")
-  ("in the x-ordinate direction only " ++ fsi)
+  ("in the x-direction")
   (lB) metre
 
 baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") 
@@ -377,10 +367,10 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, index, pi_, varblU, varblV, fs_min]
+  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblU, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, index, varblU, varblV :: DefinedQuantityDict
+  minFunction, mobShrC, shrResC, index, varblU, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -392,8 +382,8 @@ earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "seismic coefficient")
   (const $ sub cK lC) Real Nothing 
 
 normToShear = dqd' (dcc "lambda"
-  (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (const lLambda) Real Nothing
+  (nounPhraseSP $ "proportionality constant")
+  ("for the interslice normal to shear force ratio")) (const lLambda) Real Nothing
 
 scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
   "force ratio variation function")
@@ -407,6 +397,16 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
+
+mobShrC = dqd' (dcc "Psi" (nounPhraseSP $ "second function for incorporating" ++
+  " interslice forces into shear force") ("converts mobile shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces"))
+  (const cPsi) Real Nothing
+
+shrResC = dqd' (dcc "Phi" (nounPhraseSP $ "first function for incorporating " ++
+  "interslice forces into shear force") ("converts resistive shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces"))
+  (const cPhi) Real Nothing
 
 --------------------
 -- Index Function --

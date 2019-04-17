@@ -40,7 +40,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 -----------------------
 
 sspIMods :: [InstanceModel]
-sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
+sspIMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 
 --
 fctSfty :: InstanceModel
@@ -64,28 +64,34 @@ fcSfty_desc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S
 
 --
 nrmShrFor :: InstanceModel
-nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
- qw watrForce, qw baseAngle, qw midpntHght, 
- qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
+nrmShrFor = im'' nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
+  qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [sy nrmForceSumDD $< sy nrmForceSumDD] (qw shearFunc)
    [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
-nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
+nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal and shear force proportionality constant")
   nrmShrF_desc nrmShrF_rel -- nrmShrForL
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
-  sy shearFunc $= case_ [
-  (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
-  (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
-    inxiM1 scalFunc  * inxiM1 intNormForce),
-    2 $<= sy index $<= (sy numbSlices - 1)),
-  (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
-    idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
-  ]
-  $= --FIXME: move to seperate instance model
-  sy normToShear $= sum1toN (sy normFunc) / sum1toN (sy shearFunc)
+nrmShrF_rel = sy normToShear $= sum1toN (sy normFunc) / sum1toN (sy shearFunc)
+
+nrmShrF_desc :: Sentence
+nrmShrF_desc = foldlSent []
+
+--
+nrmShrForNum :: InstanceModel
+nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
+  qw waterWeight, qw slipDist, qw slipHght, qw constF]
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw normFunc)
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrFDen_desc]
+
+nrmShrForNum_rc :: RelationConcept
+nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
+  nrmShrFNum_desc nrmShrFNum_rel -- nrmShrForL
+
+nrmShrFNum_rel :: Relation
+nrmShrFNum_rel = (sy normFunc) $= case_ [case1,case2,case3]
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
@@ -95,21 +101,36 @@ nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
           2 * inxi surfLoad * cos (inxi impLoadAngle)),
           2 $<= sy index $<= ((sy numbSlices) - 1))
         case3 = ((indxn baseWthX)*(idx (sy intNormForce)
-          (sy numbSlices - 1) + idx (sy watrForce)
+          (sy numbSlices -1) + idx (sy watrForce)
           (sy numbSlices - 1)) * tan (idx (sy baseAngle)
           (sy numbSlices - 1)), sy index $= (sy numbSlices))
 
-nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
-  S "between shear and normal forces at the interslice interfaces as the", 
-  S "assumption of the Morgenstern Price method in", makeRef2S normShrRGD,
-  S "The inclination function", ch scalFunc,
-  S "determines the relative magnitude ratio between the",
-  S "different interslices, while", ch normToShear, S "determines the" +:+.
-  S "magnitude", ch normToShear, S "uses the sum of interslice normal" +:+.
-  S "and shear forces taken from each interslice", ch nrmForceSum `sAnd` 
-  ch watForceSum, S "are defined in", makeRef2S nrmForceSumDD `sAnd` 
-  makeRef2S watForceSumDD `sC` S "respectively"]
+nrmShrFNum_desc :: Sentence
+nrmShrFNum_desc = foldlSent []
+
+--
+nrmShrForDen :: InstanceModel
+nrmShrForDen = im'' nrmShrForDen_rc [qw slopeDist, qw slopeHght, qw waterHght, 
+  qw waterWeight, qw slipDist, qw slipHght, qw constF]
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw shearFunc)
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrFDen_desc]
+
+nrmShrForDen_rc :: RelationConcept
+nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")
+  nrmShrFDen_desc nrmShrFDen_rel -- nrmShrForL
+
+nrmShrFDen_rel :: Relation
+nrmShrFDen_rel = sy shearFunc $= case_ [
+  (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
+  (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
+    inxiM1 scalFunc  * inxiM1 intNormForce),
+    2 $<= sy index $<= (sy numbSlices - 1)),
+  (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
+    idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
+  ]
+
+nrmShrFDen_desc :: Sentence
+nrmShrFDen_desc = foldlSent []
 
 --
 

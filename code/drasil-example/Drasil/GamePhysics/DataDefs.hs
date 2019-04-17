@@ -1,7 +1,11 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+<<<<<<< HEAD
   angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, reVelInCollDD) where
 
+=======
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergy, coeffRestitutionDD) where
+>>>>>>> master
 
 import Language.Drasil
 
@@ -9,7 +13,12 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
+<<<<<<< HEAD
   perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, velA_P, velB_P)
+=======
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel)
+
+>>>>>>> master
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -28,11 +37,15 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+<<<<<<< HEAD
   angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, reVelInCollDD, kEnergyDD]
+=======
+  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD]
+>>>>>>> master
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, kEnergy]
+  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -273,14 +286,32 @@ torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
 torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
---will need a new parameter to define r is a position vector
--- of the point where the force is applied, measured from the axis of rotation.
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", (phrase torque), 
   S "on a body measures the", S "the tendency of a", (phrase QP.force), 
   S "to rotate the body around an axis or pivot"]
 
+----------------------DD14 Coefficient of Restitution--------------------------
+coeffRestitutionDD :: DataDefinition
+coeffRestitutionDD = mkDD coeffRestitution [{-- References --}] [{-- Derivation --}] "coeffRestitution"
+ [coeffRestitutionDesc]
+
+coeffRestitution :: QDefinition
+coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
+
+coeffRestitutionEqn :: Expr
+coeffRestitutionEqn = -(sy finRelVel) $.
+  (sy normalVect)/ (sy initRelVel) $.
+  (sy normalVect)
+
+coeffRestitutionDesc :: Sentence
+coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.restitutionCoef), 
+  S "is a unitless, dimensionless quantity that determines the", 
+  S "elasticity of a collision between two" +:+.(plural CP.rigidBody), 
+  (E $ sy QP.restitutionCoef $= 1), S "results in an elastic collision, while",
+  (E $ sy QP.restitutionCoef $< 1), S "results in an inelastic collision,",
+  S "and", (E $ sy QP.restitutionCoef $= 0), S "results in a totally inelastic collision"]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kEnergy"

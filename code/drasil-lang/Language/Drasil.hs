@@ -8,7 +8,8 @@ module Language.Drasil (
   , Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
-  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean
+  , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , real_interval
@@ -196,7 +197,8 @@ import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), DerivType(..),
           BoolOper(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
-import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
+import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
+          csc, cot, arcsin, arccos, arctan, exp,
           dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
           real_interval,

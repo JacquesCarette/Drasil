@@ -3,7 +3,6 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
-import Language.Drasil.ShortHands (lU, lV) -- local (bound) variables
 
 import Data.Drasil.Utils (eqUnR', weave)
 
@@ -30,10 +29,10 @@ import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
   indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
-  minFunction, mobShrC, mobShrI, normFunc, normToShear, nrmForceSum, nrmFSubWat,
-  numbSlices, satWeight, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
+  minFunction, mobShrC, mobShrI, nrmShearNum, normToShear, nrmForceSum, nrmFSubWat,
+  numbSlices, satWeight, scalFunc, shearFNoIntsl, nrmShearDen, shearRNoIntsl, 
   shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght, sum1toN, surfAngle, surfHydroForce, surfLoad, totNrmForce, 
-  varblU, varblV, watForceSum, watrForce, waterDist, waterHght, waterWeight, wiif)
+  varblV, watForceSum, watrForce, waterDist, waterHght, waterWeight, wiif)
 
 -----------------------
 --  Instance Models  --
@@ -52,10 +51,10 @@ fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel -- fctSft
 
 fcSfty_rel :: Relation
 fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
-  where prodOp = defprod lU (sy index) (sy numbSlices - 1)
-          (idx (sy mobShrC) (sy varblU))
-        sumOp sym = (defsum lV 1 (sy numbSlices - 1)
-          (idx (sy sym) (sy varblV) * prodOp)) + idx (sy sym) (sy numbSlices)
+  where prodOp = defprod (eqSymb varblV) (sy index) (sy numbSlices - 1)
+          (idx (sy mobShrC) (sy varblV))
+        sumOp sym = (defsum (eqSymb index) 1 (sy numbSlices - 1)
+          (idx (sy sym) (sy index) * prodOp)) + idx (sy sym) (sy numbSlices)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S 
@@ -66,7 +65,7 @@ fcSfty_desc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S
 nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw shearFunc)
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw normToShear)
    [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
@@ -74,7 +73,7 @@ nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal and shear force propo
   nrmShrF_desc nrmShrF_rel -- nrmShrForL
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = sy normToShear $= sum1toN (sy normFunc) / sum1toN (sy shearFunc)
+nrmShrF_rel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent []
@@ -83,15 +82,15 @@ nrmShrF_desc = foldlSent []
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw normFunc)
-   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrFDen_desc]
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearNum)
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrForNum" [nrmShrFNum_desc]
 
 nrmShrForNum_rc :: RelationConcept
 nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
   nrmShrFNum_desc nrmShrFNum_rel -- nrmShrForL
 
 nrmShrFNum_rel :: Relation
-nrmShrFNum_rel = (sy normFunc) $= case_ [case1,case2,case3]
+nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
@@ -112,15 +111,15 @@ nrmShrFNum_desc = foldlSent []
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im'' nrmShrForDen_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw shearFunc)
-   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrFDen_desc]
+  [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearDen)
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrForDen" [nrmShrFDen_desc]
 
 nrmShrForDen_rc :: RelationConcept
 nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")
   nrmShrFDen_desc nrmShrFDen_rel -- nrmShrForL
 
 nrmShrFDen_rel :: Relation
-nrmShrFDen_rel = sy shearFunc $= case_ [
+nrmShrFDen_rel = inxi nrmShearDen $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inxiM1 scalFunc  * inxiM1 intNormForce),

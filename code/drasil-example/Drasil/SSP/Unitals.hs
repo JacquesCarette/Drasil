@@ -117,7 +117,7 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
+sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, waterDist, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
@@ -128,7 +128,7 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
-genericF, genericA, normFunc, shearFunc, waterDist, slopeDist, slipDist, waterHght, 
+genericF, genericA, nrmShearNum, nrmShearDen, waterDist, slopeDist, slipDist, waterHght, 
   slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
   sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
   watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
@@ -325,13 +325,15 @@ sliceHghtW = uc' "h_z,w,i" (cn "height halfway to water table")
   "water table")
   (sub lH (Atomic "z,w")) metre
 
-normFunc = uc' "C1_i" (cn "interslice normal force function")
-  "the normal force at the interslice interface for slice i"
-  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
+nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
+  ("expression used to calculate the numerator of the interslice normal to " ++
+  "shear force proportionality constant")
+  (sub cC (Atomic "num")) newton
   
-shearFunc = uc' "C2_i" (cn "interslice shear force function")
-  "the shear force at the interslice interface for slice i"
-  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
+nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
+  ("expression used to calculate the denominator of the interslice normal to" ++
+  " shear force proportionality constant")
+  (sub cC (Atomic "den")) newton
 
 fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton
@@ -367,10 +369,10 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblU, varblV, fs_min]
+  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, mobShrC, shrResC, index, varblU, varblV :: DefinedQuantityDict
+  minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -412,9 +414,6 @@ shrResC = dqd' (dcc "Phi" (nounPhraseSP $ "first function for incorporating " ++
 -- Index Function --
 --------------------
 
-varblU = dqd' (dcc "varblU" (nounPhraseSP "local index")
-  ("used as a bound variable index in calculations"))
-  (const lU) Natural Nothing 
 varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   (const lV) Natural Nothing

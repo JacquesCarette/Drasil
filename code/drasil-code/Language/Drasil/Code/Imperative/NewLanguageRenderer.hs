@@ -15,7 +15,8 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
     sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
     lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', 
-    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', unOpDocD, equalOpDocD, 
+    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
+    acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
@@ -383,6 +384,24 @@ tanOpDocD = text "tan"
 
 tanOpDocD' :: Doc
 tanOpDocD' = text "math.tan"
+
+asinOpDocD :: Doc
+asinOpDocD = text "asin"
+
+asinOpDocD' :: Doc
+asinOpDocD' = text "math.asin"
+
+acosOpDocD :: Doc
+acosOpDocD = text "acos"
+
+acosOpDocD' :: Doc
+acosOpDocD' = text "math.acos"
+
+atanOpDocD :: Doc
+atanOpDocD = text "atan"
+
+atanOpDocD' :: Doc
+atanOpDocD' = text "math.atan"
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v

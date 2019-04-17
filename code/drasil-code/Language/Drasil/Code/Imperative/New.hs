@@ -119,6 +119,9 @@ class UnaryOpSym repr where
     sinOp    :: repr (UnaryOp repr)
     cosOp    :: repr (UnaryOp repr)
     tanOp    :: repr (UnaryOp repr)
+    asinOp   :: repr (UnaryOp repr)
+    acosOp   :: repr (UnaryOp repr)
+    atanOp   :: repr (UnaryOp repr)
     floorOp  :: repr (UnaryOp repr)
     ceilOp   :: repr (UnaryOp repr)
 
@@ -198,17 +201,20 @@ class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => NumericExpression re
     (#^)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     infixl 7 #^
     
-    log   :: repr (Value repr) -> repr (Value repr)
-    ln    :: repr (Value repr) -> repr (Value repr)
-    exp   :: repr (Value repr) -> repr (Value repr)
-    sin   :: repr (Value repr) -> repr (Value repr)
-    cos   :: repr (Value repr) -> repr (Value repr)
-    tan   :: repr (Value repr) -> repr (Value repr)
-    csc   :: repr (Value repr) -> repr (Value repr)
-    sec   :: repr (Value repr) -> repr (Value repr)
-    cot   :: repr (Value repr) -> repr (Value repr)
-    floor :: repr (Value repr) -> repr (Value repr)
-    ceil  :: repr (Value repr) -> repr (Value repr)
+    log    :: repr (Value repr) -> repr (Value repr)
+    ln     :: repr (Value repr) -> repr (Value repr)
+    exp    :: repr (Value repr) -> repr (Value repr)
+    sin    :: repr (Value repr) -> repr (Value repr)
+    cos    :: repr (Value repr) -> repr (Value repr)
+    tan    :: repr (Value repr) -> repr (Value repr)
+    csc    :: repr (Value repr) -> repr (Value repr)
+    sec    :: repr (Value repr) -> repr (Value repr)
+    cot    :: repr (Value repr) -> repr (Value repr)
+    arcsin :: repr (Value repr) -> repr (Value repr)
+    arccos :: repr (Value repr) -> repr (Value repr)
+    arctan :: repr (Value repr) -> repr (Value repr)
+    floor  :: repr (Value repr) -> repr (Value repr)
+    ceil   :: repr (Value repr) -> repr (Value repr)
 
 -- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
 -- but this would require cyclic constraints, since it is feasible to have

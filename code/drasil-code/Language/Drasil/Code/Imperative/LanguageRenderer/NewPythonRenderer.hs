@@ -15,20 +15,19 @@ import Language.Drasil.Code.Imperative.New (Label,
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc', 
-    enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, 
-    typeDocD, voidDocD, constructDocD, paramListDocD, methodListDocD, 
-    ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
-    statementDocD, returnDocD, commentDocD, notOpDocD', negateOpDocD,
-    sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD',
-    unOpDocD, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-    lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-    divideOpDocD, moduloOpDocD, binOpDocD, litCharD, litFloatD, litIntD, 
-    litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-    defaultStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-    funcAppDocD, extFuncAppDocD,
-    funcDocD, listSetDocD, objAccessDocD, 
-    castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
-    classDec, dot, forLabel, observerListName,
+    enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, intTypeDocD, 
+    floatTypeDocD, typeDocD, voidDocD, constructDocD, paramListDocD, 
+    methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
+    plusPlusDocD', statementDocD, returnDocD, commentDocD, notOpDocD', 
+    negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
+    tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unOpDocD, equalOpDocD, 
+    notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+    lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+    moduloOpDocD, binOpDocD, litCharD, litFloatD, litIntD, litStringD, 
+    defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD, 
+    extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD,
+    funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
+    staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,vibcat)
 
@@ -185,6 +184,9 @@ instance UnaryOpSym PythonCode where
     sinOp = return $ sinOpDocD'
     cosOp = return $ cosOpDocD'
     tanOp = return $ tanOpDocD'
+    asinOp = return $ asinOpDocD'
+    acosOp = return $ acosOpDocD'
+    atanOp = return $ atanOpDocD'
     floorOp = return $ text "math.floor"
     ceilOp = return $ text "math.ceil"
 
@@ -259,6 +261,10 @@ instance NumericExpression PythonCode where
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
+    arcsin v = liftA2 unOpDocD asinOp v
+    arccos v = liftA2 unOpDocD acosOp v
+    arctan v = liftA2 unOpDocD atanOp v
+
     floor v = liftA2 unOpDocD floorOp v
     ceil v = liftA2 unOpDocD ceilOp v
 
@@ -494,9 +500,9 @@ initName = "__init__"
 
 pytop :: Doc 
 pytop = vcat [   -- There are also imports from the libraries supplied by module. These will be handled by module.
-    text "from __future__ import print_function",
-    text "import sys",
-    text "import math"] 
+    text incl <+> text "__future__" <+> text imp <+> text "print_function",
+    text imp <+> text "sys",
+    text imp <+> text "math"] 
 
 pyInclude :: Label -> Doc
 pyInclude n = text imp <+> text n

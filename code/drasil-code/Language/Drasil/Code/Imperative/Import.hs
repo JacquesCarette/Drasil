@@ -3,7 +3,7 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int, Label, Block, ($.), log, ln, exp,
-  sin, cos, tan, csc, sec, cot)
+  sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, 
   Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
@@ -591,6 +591,9 @@ unop Tan  = tan
 unop Csc  = csc
 unop Sec  = sec
 unop Cot  = cot
+unop Arcsin = arcsin
+unop Arccos = arccos
+unop Arctan = arctan
 unop Dim  = listSizeAccess
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)

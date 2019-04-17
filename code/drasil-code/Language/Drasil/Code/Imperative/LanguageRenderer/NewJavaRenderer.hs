@@ -211,6 +211,9 @@ instance UnaryOpSym JavaCode where
     sinOp = return $ text "Math.sin"
     cosOp = return $ text "Math.cos"
     tanOp = return $ text "Math.tan"
+    asinOp = return $ text "Math.asin"
+    acosOp = return $ text "Math.acos"
+    atanOp = return $ text "Math.atan"
     floorOp = return $ text "Math.floor"
     ceilOp = return $ text "Math.ceil"
 
@@ -285,6 +288,9 @@ instance NumericExpression JavaCode where
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
+    arcsin v = liftA2 unOpDocD asinOp v
+    arccos v = liftA2 unOpDocD acosOp v
+    arctan v = liftA2 unOpDocD atanOp v
     floor v = liftA2 unOpDocD floorOp v
     ceil v = liftA2 unOpDocD ceilOp v
 

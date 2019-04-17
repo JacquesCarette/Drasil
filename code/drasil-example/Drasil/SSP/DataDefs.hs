@@ -11,7 +11,7 @@ import Language.Drasil
  -- ofThe', sAnd)
 
 import Data.Drasil.Concepts.Documentation (assumption, constant)
-import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, getTandS)
 import Drasil.SSP.Defs (slice, soil, soilPrpty)
@@ -114,10 +114,10 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = case_ [case1,case2,case3]
   where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 / 2  *
-          (sy satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
-          (sy satWeight), (inxi waterHght) $>= (inxi slopeHght))
+          (sy waterWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
+          (sy waterWeight), (inxi waterHght) $>= (inxi slopeHght))
 
-        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (sy satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (sy waterWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (0,(inxi waterHght) $<= (inxi slipHght))
@@ -126,29 +126,39 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 
 angleA :: DataDefinition
 angleA = mkDD angleAQD [fredlund1977] [{-Derivation-}] "angleA" 
-  [makeRef2S assumpSBSBISL]--Notes
+  [angleANotes]
 --FIXME: fill empty lists in
 
 angleAQD :: QDefinition
 angleAQD = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
-angleAEqn = (inxi slipHght - inx slipHght (-1)) /
-  (inxi slipDist - inx slipDist (-1))
+angleAEqn = arctan ((inxi slipHght - inx slipHght (-1)) /
+  (inxi slipDist - inx slipDist (-1)))
+
+angleANotes :: Sentence
+angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the base of a", phrase slice,
+  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
 --DD6
 
 angleB :: DataDefinition
 angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
-  [makeRef2S assumpSBSBISL]--Notes
+  [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
 angleBQD :: QDefinition
 angleBQD = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
-angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
-  (inxi slopeDist - inx slopeDist (-1))
+angleBEqn = arctan ((inxi slopeHght - inx slopeHght (-1)) /
+  (inxi slopeDist - inx slopeDist (-1)))
+
+angleBNotes :: Sentence
+angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the surface of a", phrase slice,
+  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
 --DD7
 
@@ -166,7 +176,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 
 lengthLb :: DataDefinition
 lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
-  [makeRef2S assumpSBSBISL]--Notes
+  [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
 lengthLbQD :: QDefinition
@@ -175,11 +185,15 @@ lengthLbQD = mkQuantDef baseLngth lengthLbEqn
 lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 
+lengthLbNotes :: Sentence
+lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+
 --DD9
 
 lengthLs :: DataDefinition
 lengthLs = mkDD lengthLsQD [fredlund1977] [{-Derivation-}] "lengthLs"
-  [makeRef2S assumpSBSBISL]--Notes
+  [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
 lengthLsQD :: QDefinition
@@ -187,6 +201,10 @@ lengthLsQD = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
+
+lengthLsNotes :: Sentence
+lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
 
 --DD10
 
@@ -202,7 +220,7 @@ slcHeightEqn = 0.5 * (sy sliceHghtRight + sy sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+ 
-  S "assumption that the" +:+ (phrase surface) `sAnd` S "base of a slice" +:+ 
+  phrase assumption +:+ S "that the surface" `sAnd` S "base of a slice" +:+ 
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), 
   ch sliceHghtRight `sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
   makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
@@ -239,7 +257,7 @@ ratioVarEqn = case_ [case1, case2]
 
 convertFunc1 :: DataDefinition
 convertFunc1 = mkDD convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
-  "convertFunc1" []
+  "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: QDefinition
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
@@ -250,11 +268,14 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
   (sy normToShear * inxi scalFunc * (sin (inxi baseAngle)) + 
   (cos (inxi baseAngle))) * (sy fs)
 
+convertFunc1Notes :: Sentence
+convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+
 --DD14
 
 convertFunc2 :: DataDefinition
 convertFunc2 = mkDD convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
-  "convertFunc2" []
+  "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: QDefinition
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
@@ -266,6 +287,11 @@ convertFunc2Eqn = ((sy normToShear * inxi scalFunc *
   (cos (inxi baseAngle))) * (sy fs)) / 
   (inxiM1 shrResC)
 
+convertFunc2Notes :: Sentence
+convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in", 
+  makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in", 
+  makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in", 
+  makeRef2S convertFunc1]
 
 {--DD10
 

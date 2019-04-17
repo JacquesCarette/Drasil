@@ -1,11 +1,6 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, reVelInCollDD) where
-
-=======
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergy, coeffRestitutionDD) where
->>>>>>> master
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD) where
 
 import Language.Drasil
 
@@ -13,12 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-<<<<<<< HEAD
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, velA_P, velB_P)
-=======
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel)
-
->>>>>>> master
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel, velA_P, velB_P)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -37,11 +27,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-<<<<<<< HEAD
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, reVelInCollDD, kEnergyDD]
-=======
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD]
->>>>>>> master
+ angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,

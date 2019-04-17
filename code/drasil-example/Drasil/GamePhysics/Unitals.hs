@@ -59,14 +59,8 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
-<<<<<<< HEAD
-  momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision,
-  contDisp_k, collisionImpulse, velA_P, velB_P, QP.kEnergy]
-=======
-  momtInert_A, momtInert_B, timeT, inittime,  
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy, finRelVel]
->>>>>>> master
-
+  momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision, 
+  contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velA_P, velB_P]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -128,11 +122,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-<<<<<<< HEAD
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P :: UnitalChunk
-=======
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel :: UnitalChunk
->>>>>>> master
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 

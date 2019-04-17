@@ -483,11 +483,21 @@ s
 </tr>
 <tr>
 <td>
-<<<<<<< HEAD
+<em><b>v</b><sub>f</sub><sup>AB</sup></em>
+</td>
+<td>
+Final Relative Velocity Between Rigid Bodies of A and B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
 <em><b>v</b><sub>i</sub><sup>AB</sup></em>
 </td>
 <td>
-Relative Velocity Between Rigid Bodies of A and B
+Initial Relative Velocity Between Rigid Bodies of A and B
 </td>
 <td>
 m/s
@@ -510,12 +520,6 @@ m/s
 </td>
 <td>
 Velocity Of the Point of Collision P in Body B
-=======
-<em><b>v</b><sub>f</sub><sup>AB</sup></em>
-</td>
-<td>
-Final Relative Velocity Between Rigid Bodies of A and B
->>>>>>> master
 </td>
 <td>
 m/s
@@ -578,20 +582,6 @@ m/s
 </tr>
 <tr>
 <td>
-<<<<<<< HEAD
-=======
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
-</td>
-<td>
-Initial Relative Velocity Between Rigid Bodies of A and B
-</td>
-<td>
-m/s
-</td>
-</tr>
-<tr>
-<td>
->>>>>>> master
 <em><b>v</b>(t)</em>
 </td>
 <td>
@@ -1089,7 +1079,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpOT">
-objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -2495,6 +2485,9 @@ Notes
 </th>
 <td>
 <p class="paragraph">
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+</p>
+<p class="paragraph">
 <a href=#assumpOT>A: objectTy</a>
 </p>
 <p class="paragraph">
@@ -2594,98 +2587,6 @@ Notes
 <td>
 <p class="paragraph">
 The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:reVeInColl">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Relative Velocity Between Rigid Bodies of A and B
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m/s
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
-</li>
-<li>
-<em><b>v</b><sup>AP</sup></em> is the velocity of the point of collision P in body A (m/s)
-</li>
-<li>
-<em><b>v</b><sup>BP</sup></em> is the velocity of the point of collision P in body B (m/s)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
 </p>
 </td>
 </tr>
@@ -2896,6 +2797,98 @@ Notes
 <td>
 <p class="paragraph">
 The coefficient of restitution <em>C<sub>R</sub></em> is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1</em> results in an elastic collision, while <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0</em> results in a totally inelastic collision.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:reVeInColl">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Initial Relative Velocity Between Rigid Bodies of A and B
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
+</li>
+<li>
+<em><b>v</b><sup>AP</sup></em> is the velocity of the point of collision P in body A (m/s)
+</li>
+<li>
+<em><b>v</b><sup>BP</sup></em> is the velocity of the point of collision P in body B (m/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
 </p>
 </td>
 </tr>
@@ -5753,7 +5746,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
+IM3 (<a href=#DD:kEnergy>DD: kEnergy</a>)
 </td>
 <td>
 X
@@ -5779,11 +5772,7 @@ X
 </tr>
 <tr>
 <td>
-<<<<<<< HEAD
-LC1 (<a href=#DD:kEnergy>DD: kEnergy</a>)
-=======
 LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
->>>>>>> master
 </td>
 <td>
 
@@ -5809,7 +5798,7 @@ LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#IM:transMot>IM: transMot</a>)
+LC2 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
 </td>
 <td>
 
@@ -5835,7 +5824,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#IM:rotMot>IM: rotMot</a>)
+LC3 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -5861,7 +5850,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#IM:col2D>IM: col2D</a>)
+LC4 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 
@@ -5963,7 +5952,7 @@ IM1 (<a href=#DD:chalses>DD: chalses</a>)
 IM2 (<a href=#DD:torque>DD: torque</a>)
 </th>
 <th>
-IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
+IM3 (<a href=#DD:kEnergy>DD: kEnergy</a>)
 </th>
 </tr>
 <tr>
@@ -7596,7 +7585,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:reVeInColl>DD: reVeInColl</a>)
+IM3 (<a href=#DD:kEnergy>DD: kEnergy</a>)
 </td>
 <td>
 

@@ -52,7 +52,7 @@ getTraceMapFromDD l = concat $ mapMaybe getDD l
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ im _):_)  = im
+getTraceMapFromIM ((IMs _ _ im _):_)  = im
 getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
 getTraceMapFromIM []                = []
 

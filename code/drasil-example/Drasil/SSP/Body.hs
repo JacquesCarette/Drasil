@@ -134,7 +134,7 @@ mkSRS = [RefSec $ RefProg intro
            effStress]
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+          , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            sspIMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]

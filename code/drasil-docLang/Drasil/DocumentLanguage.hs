@@ -187,7 +187,7 @@ data SCSSub where
   TMs            :: Fields  -> [TheoryModel] -> SCSSub
   GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs            :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
+  IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
@@ -443,7 +443,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
+    mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -454,11 +454,12 @@ mkSolChSpec si (SCSProg l) =
       SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF $ map (LlC . gdefn fields si') gs'
-    mkSubSCS si' (IMs fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
       concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
-    mkSubSCS si' (IMs fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' (IMs intro fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .

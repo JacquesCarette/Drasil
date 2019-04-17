@@ -137,24 +137,24 @@ m
 </tr>
 <tr>
 <td>
-<em>C1<sub>i</sub></em>
+<em>C<sub>den</sub></em>
 </td>
 <td>
-Interslice Normal Force Function: the normal force at the interslice interface for slice i
+Proportionality Constant Denominator: expression used to calculate the denominator of the interslice normal to shear force proportionality constant
 </td>
 <td>
-N&sdot;m
+N
 </td>
 </tr>
 <tr>
 <td>
-<em>C2<sub>i</sub></em>
+<em>C<sub>num</sub></em>
 </td>
 <td>
-Interslice Shear Force Function: the shear force at the interslice interface for slice i
+Proportionality Constant Numerator: expression used to calculate the numerator of the interslice normal to shear force proportionality constant
 </td>
 <td>
-N&sdot;m
+N
 </td>
 </tr>
 <tr>
@@ -463,17 +463,6 @@ Mobilized Shear Force Without the Influence of Interslice Forces: per meter in t
 </td>
 <td>
 N/m
-</td>
-</tr>
-<tr>
-<td>
-<em>u</em>
-</td>
-<td>
-Local Index: used as a bound variable index in calculations
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -2321,7 +2310,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -2415,7 +2404,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+<a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -2500,7 +2489,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -4100,7 +4089,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:fctSfty>IM: fctSfty</a>.
+<a href=#IM:fctSfty>IM: fctSfty</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -4182,7 +4171,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
+
 </p>
 </td>
 </tr>
@@ -4264,7 +4253,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a>.
+
 </p>
 </td>
 </tr>
@@ -5216,10 +5205,10 @@ Equation
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup>R<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;R<sub>n</sub>
 </span>
 <span class="fdn">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;T<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup>T<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;T<sub>n</sub>
 </span>
 </div></em>
 </div>
@@ -5238,13 +5227,13 @@ Description
 <em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
-<em>v</em> is the local index (Unitless)
+<em>i</em> is the index (Unitless)
 </li>
 <li>
 <em>Ψ</em> is the second function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
-<em>u</em> is the local index (Unitless)
+<em>v</em> is the local index (Unitless)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -5261,7 +5250,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-
+<em>R</em> is defined in <a href=#GD:resShearWO>GD: resShearWO</a>, <em>Ψ</em> is defined in <a href=#DD:convertFunc2>DD: convertFunc2</a>, and <em>T</em> is defined in <a href=#GD:mobShearWO>GD: mobShearWO</a>
 </p>
 </td>
 </tr>
@@ -5464,7 +5453,7 @@ This can be rearranged by multiplying boths sides by <em>Ψ<sub>n&minus;1</sub><
 <em>&minus;(F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-The multiplication of the <em>Ψ</em> terms can be further distributed over the subtractins, resulting in the equation having terms that each either contain an <em>R</em> or a <em>T</em>. The equation can then be rearranged so terms containing an <em>R</em> are on one side of the equality, and terms containing a <em>T</em> are on the other. The multiplication by the factor of safety is common to all of the <em>T</em> terms, and thus can be factored out, resulting in:
+The multiplication of the <em>Ψ</em> terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an <em>R</em> or a <em>T</em>. The equation can then be rearranged so terms containing an <em>R</em> are on one side of the equality, and terms containing a <em>T</em> are on the other. The multiplication by the factor of safety is common to all of the <em>T</em> terms, and thus can be factored out, resulting in:
 </p>
 <div class="equation">
 <em>F<sub>S</sub>&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
@@ -5475,10 +5464,10 @@ Isolating the factor of safety on the left-hand side and using compact notation 
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup>R<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;R<sub>n</sub>
 </span>
 <span class="fdn">
-&sum;<sub>v = 1</sub><sup>n&minus;1</sup>T<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;T<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup>T<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;T<sub>n</sub>
 </span>
 </div></em>
 </div>
@@ -5493,7 +5482,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Normal/shear force ratio
+Normal and shear force proportionality constant
 </p>
 </td>
 </tr>
@@ -5503,7 +5492,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>b</em>, <em>f</em>, <em>H</em>, <em>α</em>, <em>h</em>, <em>K<sub>c</sub></em>, <em>W</em>, <em>U<sub>t</sub></em>
+<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -5513,7 +5502,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>C2<sub>i</sub></em>
+<em>λ</em>
 </p>
 </td>
 </tr>
@@ -5543,50 +5532,12 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>C1<sub>i</sub> = <span class="casebr">
-{
-</span>
-<div class="cases">
-<span>
-b<sub>1</sub>&#8239;(G<sub>1</sub>&plus;H<sub>1</sub>)&#8239;tan(α<sub>1</sub>) , <span class="case">
-i = 1
-</span>
-</span>
-<span>
-b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
-2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
-</span>
-</span>
-<span>
-b<sub>n</sub>&#8239;(G<sub>n&minus;1</sub>&plus;H<sub>n&minus;1</sub>)&#8239;tan(α<sub>n&minus;1</sub>) , <span class="case">
-i = n
-</span>
-</span>
-</div> = C2<sub>i</sub> = <span class="casebr">
-{
-</span>
-<div class="cases">
-<span>
-b<sub>1</sub>&#8239;f<sub>1</sub>&#8239;G<sub>1</sub> , <span class="case">
-i = 1
-</span>
-</span>
-<span>
-b<sub>i</sub>&#8239;(f<sub>i</sub>&#8239;G<sub>i</sub>&plus;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>) , <span class="case">
-2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
-</span>
-</span>
-<span>
-b<sub>n</sub>&#8239;G<sub>n&minus;1</sub>&#8239;H<sub>n&minus;1</sub> , <span class="case">
-i = 1
-</span>
-</span>
-</div> = λ = <div class="fraction">
+<em>λ = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n</sup>C1<sub>i</sub>
+&sum;<sub>i = 1</sub><sup>n</sup>C<sub>num,i</sub>
 </span>
 <span class="fdn">
-&sum;<sub>i = 1</sub><sup>n</sup>C2<sub>i</sub>
+&sum;<sub>i = 1</sub><sup>n</sup>C<sub>den,i</sub>
 </span>
 </div></em>
 </div>
@@ -5599,61 +5550,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>C1<sub>i</sub></em> is the interslice normal force function (N&sdot;m)
+<em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N/m)
-</li>
-<li>
-<em>H</em> is the interslice normal water force  (N/m)
-</li>
-<li>
-<em>α</em> is the base angle (&deg;)
+<em>C<sub>num</sub></em> is the proportionality constant numerator (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
-</li>
-<li>
-<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
-</li>
-<li>
-<em>h</em> is the y-direction height of a slice (m)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
-</li>
-<li>
-<em>W</em> is the weight (N/m)
-</li>
-<li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
-</li>
-<li>
-<em>β</em> is the surface angle (&deg;)
-</li>
-<li>
-<em>Q</em> is the external force (N/m)
-</li>
-<li>
-<em>ω</em> is the imposed load angle (&deg;)
-</li>
-<li>
-<em>n</em> is the number of slices (Unitless)
-</li>
-<li>
-<em>C2<sub>i</sub></em> is the interslice shear force function (N&sdot;m)
-</li>
-<li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
-</li>
-<li>
-<em>λ</em> is the proportionality constant (Unitless)
+<em>C<sub>den</sub></em> is the proportionality constant denominator (N)
 </li>
 </ul>
 </td>
@@ -5664,7 +5570,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in <a href=#GD:normShrR>GD: normShrR</a> The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice. <em>F<sub>x</sub><sup>G</sup></em> and <em>F<sub>x</sub><sup>H</sup></em> are defined in <a href=#DD:nrmForceSumDD>DD: nrmForceSumDD</a> and <a href=#DD:watForceSumDD>DD: watForceSumDD</a>, respectively.
+
 </p>
 </td>
 </tr>
@@ -5684,7 +5590,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </p>
 </td>
 </tr>
@@ -5808,6 +5714,325 @@ Taking a summation of each slice, and applying the boundary condition that <em>G
 </div>
 <p class="paragraph">
 equation (11) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
+</p>
+<div id="IM:nrmShrForNum">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Normal and shear force proportionality constant numerator
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>C<sub>num</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em>F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>C<sub>num,i</sub> = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+b<sub>1</sub>&#8239;(G<sub>1</sub>&plus;H<sub>1</sub>)&#8239;tan(α<sub>1</sub>) , <span class="case">
+i = 1
+</span>
+</span>
+<span>
+b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;(K<sub>c</sub>&#8239;W<sub>i</sub>&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&minus;2&#8239;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>)) , <span class="case">
+2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
+</span>
+</span>
+<span>
+b<sub>n</sub>&#8239;(G<sub>n&minus;1</sub>&plus;H<sub>n&minus;1</sub>)&#8239;tan(α<sub>n&minus;1</sub>) , <span class="case">
+i = n
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>C<sub>num</sub></em> is the proportionality constant numerator (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>G</em> is the interslice normal force (N/m)
+</li>
+<li>
+<em>H</em> is the interslice normal water force  (N/m)
+</li>
+<li>
+<em>α</em> is the base angle (&deg;)
+</li>
+<li>
+<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
+</li>
+<li>
+<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
+</li>
+<li>
+<em>h</em> is the y-direction height of a slice (m)
+</li>
+<li>
+<em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
+</li>
+<li>
+<em>W</em> is the weight (N/m)
+</li>
+<li>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+</li>
+<li>
+<em>β</em> is the surface angle (&deg;)
+</li>
+<li>
+<em>Q</em> is the external force (N/m)
+</li>
+<li>
+<em>ω</em> is the imposed load angle (&deg;)
+</li>
+<li>
+<em>n</em> is the number of slices (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="paragraph">
+See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em>C<sub>num</sub></em>.
+</p>
+<div id="IM:nrmShrForDen">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Normal and shear force proportionality constant denominator
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>C<sub>den</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em>F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup>&thinsp;&lt;&thinsp;F<sub>x</sub><sup>G</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>C<sub>den,i</sub> = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+b<sub>1</sub>&#8239;f<sub>1</sub>&#8239;G<sub>1</sub> , <span class="case">
+i = 1
+</span>
+</span>
+<span>
+b<sub>i</sub>&#8239;(f<sub>i</sub>&#8239;G<sub>i</sub>&plus;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>) , <span class="case">
+2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
+</span>
+</span>
+<span>
+b<sub>n</sub>&#8239;G<sub>n&minus;1</sub>&#8239;H<sub>n&minus;1</sub> , <span class="case">
+i = 1
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>C<sub>den</sub></em> is the proportionality constant denominator (N)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+</li>
+<li>
+<em>G</em> is the interslice normal force (N/m)
+</li>
+<li>
+<em>n</em> is the number of slices (Unitless)
+</li>
+<li>
+<em>H</em> is the interslice normal water force  (N/m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#chen2005>chen2005</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="paragraph">
+See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em>C<sub>den</sub></em>.
 </p>
 <div id="IM:intsliceFs">
 <table class="idefn">

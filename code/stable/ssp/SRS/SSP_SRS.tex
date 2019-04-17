@@ -65,9 +65,9 @@ $A$ & Area: A part of an object or surface & $\text{m}^{2}$
 \\
 $b$ & Base Width of a Slice: in the x-direction & m
 \\
-${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
+${C_{den}}$ & Proportionality Constant Denominator: expression used to calculate the denominator of the interslice normal to shear force proportionality constant & N
 \\
-${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice interface for slice i & Nm
+${C_{num}}$ & Proportionality Constant Numerator: expression used to calculate the numerator of the interslice normal to shear force proportionality constant & N
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
 \\
@@ -124,8 +124,6 @@ $R$ & Resistive Shear Force Without the Influence of Interslice Forces: per mete
 $S$ & Mobilized Shear Force: per meter in the z-direction & $\frac{\text{N}}{\text{m}}$
 \\
 $T$ & Mobilized Shear Force Without the Influence of Interslice Forces: per meter in the z-direction & $\frac{\text{N}}{\text{m}}$
-\\
-$u$ & Local Index: used as a bound variable index in calculations & --
 \\
 $u$ & Pore Pressure: from water within the soil & Pa
 \\
@@ -706,7 +704,7 @@ Label & Resistive shear force, without interslice normal and shear forces
                                                  \\ \midrule \\
                                                  Source & \cite{chen2005}
                                                           \\ \midrule \\
-                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -739,7 +737,7 @@ Label & Mobilized shear force, without interslice normal and shear forces
                                                  \\ \midrule \\
                                                  Source & \cite{chen2005}
                                                           \\ \midrule \\
-                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                          RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -769,7 +767,7 @@ Label & Interslice normal and shear force proportionality
                                                  \\ \midrule \\
                                                  Source & \cite{chen2005}
                                                           \\ \midrule \\
-                                                          RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                          RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1270,7 +1268,7 @@ Label & Second function for incorporating interslice forces into shear force
                                                           \\ \midrule \\
                                                           Source & \cite{chen2005} and \cite{karchewski2012}
                                                                    \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                   RefBy & \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1298,7 +1296,7 @@ Label & Sum of the interslice normal forces
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1326,7 +1324,7 @@ Label & Sum of the interslice normal water forces
                                                   \end{symbDescription}
                                                   \\ \midrule \\
                                                   Source & \\ \midrule \\
-                                                           RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
+                                                           RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1635,20 +1633,21 @@ Label & Factor of safety
                          Input Constraints & \\ \midrule \\
                                              Output Constraints & \\ \midrule \\
                                                                   Equation & \begin{displaymath}
-                                                                             {F_{S}}=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
+                                                                             {F_{S}}=\frac{\displaystyle\sum_{i=1}^{n-1}{R_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+R_{n}}{\displaystyle\sum_{i=1}^{n-1}{T_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+T_{n}}
                                                                              \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
                                                                                            \item{${F_{S}}$ is the factor of safety (Unitless)}
                                                                                            \item{$R$ is the resistive shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$v$ is the local index (Unitless)}
+                                                                                           \item{$i$ is the index (Unitless)}
                                                                                            \item{$Ψ$ is the second function for incorporating interslice forces into shear force (Unitless)}
-                                                                                           \item{$u$ is the local index (Unitless)}
+                                                                                           \item{$v$ is the local index (Unitless)}
                                                                                            \item{$n$ is the number of slices (Unitless)}
                                                                                            \item{$T$ is the mobilized shear force without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & \\ \midrule \\
+                                                                                           Notes & $R$ is defined in \hyperref[GD:resShearWO]{GD: resShearWO}, $Ψ$ is defined in \hyperref[DD:convertFunc2]{DD: convertFunc2}, and $T$ is defined in \hyperref[GD:mobShearWO]{GD: mobShearWO}
+                                                                                                   \\ \midrule \\
                                                                                                    Source & \cite{chen2005} and \cite{karchewski2012}
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -1738,13 +1737,13 @@ This can be rearranged by multiplying boths sides by $Ψ_{n-1}$ and then distrib
 \begin{displaymath}
 -\left({F_{S}} T_{n}-R_{n}\right)=Ψ_{n-1} Ψ_{n-2} Ψ_{1} \left({F_{S}} T_{1}-R_{1}\right)+Ψ_{n-1} Ψ_{n-2} Ψ_{2} \left({F_{S}} T_{2}-R_{2}\right)+Ψ_{n-1} \left({F_{S}} T_{n-1}-R_{n-1}\right)
 \end{displaymath}
-The multiplication of the $Ψ$ terms can be further distributed over the subtractins, resulting in the equation having terms that each either contain an $R$ or a $T$. The equation can then be rearranged so terms containing an $R$ are on one side of the equality, and terms containing a $T$ are on the other. The multiplication by the factor of safety is common to all of the $T$ terms, and thus can be factored out, resulting in:
+The multiplication of the $Ψ$ terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an $R$ or a $T$. The equation can then be rearranged so terms containing an $R$ are on one side of the equality, and terms containing a $T$ are on the other. The multiplication by the factor of safety is common to all of the $T$ terms, and thus can be factored out, resulting in:
 \begin{displaymath}
 {F_{S}} \left(Ψ_{n-1} Ψ_{n-2} Ψ_{1} T_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} T_{2}+Ψ_{n-1} T_{n-1}+T_{n}\right)=Ψ_{n-1} Ψ_{n-2} Ψ_{1} R_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} R_{2}+Ψ_{n-1} R_{n-1}+R_{n}
 \end{displaymath}
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
 \begin{displaymath}
-{F_{S}}=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
+{F_{S}}=\frac{\displaystyle\sum_{i=1}^{n-1}{R_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+R_{n}}{\displaystyle\sum_{i=1}^{n-1}{T_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+T_{n}}
 \end{displaymath}
 ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 \par~
@@ -1755,11 +1754,11 @@ ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) 
 \phantomsection 
 \label{IM:nrmShrFor}
 \\ \midrule \\
-Label & Normal/shear force ratio
+Label & Normal and shear force proportionality constant
         \\ \midrule \\
-        Input & $b$, $f$, $H$, $α$, $h$, ${K_{c}}$, $W$, ${U_{t}}$
+        Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
                 \\ \midrule \\
-                Output & ${C2_{i}}$
+                Output & $λ$
                          \\ \midrule \\
                          Input Constraints & \begin{displaymath}
                                              {{F_{x}}^{G}}<{{F_{x}}^{G}}
@@ -1770,44 +1769,20 @@ Label & Normal/shear force ratio
                                                                   \end{displaymath}
                                                                   \\ \midrule \\
                                                                   Equation & \begin{displaymath}
-                                                                             {C1_{i}}=\begin{cases}
-b_{1} \left(G_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
-b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
-b_{n} \left(G_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
-\end{cases}={C2_{i}}=\begin{cases}
-b_{1} f_{1} G_{1}, & i=1\\
-b_{i} \left(f_{i} G_{i}+f_{i-1} G_{i-1}\right), & 2\leq{}i\leq{}n-1\\
-b_{n} G_{n-1} H_{n-1}, & i=1
-\end{cases}=λ=\frac{\displaystyle\sum_{i=1}^{n}{{C1_{i}}}}{\displaystyle\sum_{i=1}^{n}{{C2_{i}}}}
+                                                                             λ=\frac{\displaystyle\sum_{i=1}^{n}{{C_{num,i}}}}{\displaystyle\sum_{i=1}^{n}{{C_{den,i}}}}
                                                                              \end{displaymath}
                                                                              \\ \midrule \\
                                                                              Description & \begin{symbDescription}
-                                                                                           \item{${C1_{i}}$ is the interslice normal force function (Nm)}
-                                                                                           \item{$b$ is the base width of a slice (m)}
-                                                                                           \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$α$ is the base angle (${}^{\circ}$)}
-                                                                                           \item{$i$ is the index (Unitless)}
-                                                                                           \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
-                                                                                           \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
-                                                                                           \item{$h$ is the y-direction height of a slice (m)}
-                                                                                           \item{${K_{c}}$ is the seismic coefficient (Unitless)}
-                                                                                           \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$β$ is the surface angle (${}^{\circ}$)}
-                                                                                           \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
-                                                                                           \item{$ω$ is the imposed load angle (${}^{\circ}$)}
-                                                                                           \item{$n$ is the number of slices (Unitless)}
-                                                                                           \item{${C2_{i}}$ is the interslice shear force function (Nm)}
-                                                                                           \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
                                                                                            \item{$λ$ is the proportionality constant (Unitless)}
+                                                                                           \item{${C_{num}}$ is the proportionality constant numerator (N)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{${C_{den}}$ is the proportionality constant denominator (N)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice. ${{F_{x}}^{G}}$ and ${{F_{x}}^{H}}$ are defined in \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} and \hyperref[DD:watForceSumDD]{DD: watForceSumDD}, respectively.
-                                                                                                   \\ \midrule \\
+                                                                                           Notes & \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
@@ -1823,6 +1798,109 @@ Taking a summation of each slice, and applying the boundary condition that $G_{0
 λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \sin\left(ω_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
 \end{displaymath}
 equation (11) for $λ$, is a function of the unknown interslice normal force $G$ \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:nrmShrForNum}
+\phantomsection 
+\label{IM:nrmShrForNum}
+\\ \midrule \\
+Label & Normal and shear force proportionality constant numerator
+        \\ \midrule \\
+        Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
+                \\ \midrule \\
+                Output & ${C_{num}}$
+                         \\ \midrule \\
+                         Input Constraints & \begin{displaymath}
+                                             {{F_{x}}^{G}}<{{F_{x}}^{G}}
+                                             \end{displaymath}
+                                             \\ \midrule \\
+                                             Output Constraints & \begin{displaymath}
+                                                                  0<{{F_{x}}^{G}}<{{F_{x}}^{G}}
+                                                                  \end{displaymath}
+                                                                  \\ \midrule \\
+                                                                  Equation & \begin{displaymath}
+                                                                             {C_{num,i}}=\begin{cases}
+b_{1} \left(G_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
+b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
+b_{n} \left(G_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
+\end{cases}
+                                                                             \end{displaymath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{${C_{num}}$ is the proportionality constant numerator (N)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{$b$ is the base width of a slice (m)}
+                                                                                           \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$α$ is the base angle (${}^{\circ}$)}
+                                                                                           \item{${{F_{x}}^{G}}$ is the sum of the interslice normal forces (N)}
+                                                                                           \item{${{F_{x}}^{H}}$ is the sum of the interslice normal water forces (N)}
+                                                                                           \item{$h$ is the y-direction height of a slice (m)}
+                                                                                           \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+                                                                                           \item{$W$ is the weight ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{${U_{t}}$ is the surface hydrostatic force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$β$ is the surface angle (${}^{\circ}$)}
+                                                                                           \item{$Q$ is the external force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$ω$ is the imposed load angle (${}^{\circ}$)}
+                                                                                           \item{$n$ is the number of slices (Unitless)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & \\ \midrule \\
+                                                                                                   Source & \cite{chen2005}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${C_{num}}$.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:nrmShrForDen}
+\phantomsection 
+\label{IM:nrmShrForDen}
+\\ \midrule \\
+Label & Normal and shear force proportionality constant denominator
+        \\ \midrule \\
+        Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
+                \\ \midrule \\
+                Output & ${C_{den}}$
+                         \\ \midrule \\
+                         Input Constraints & \begin{displaymath}
+                                             {{F_{x}}^{G}}<{{F_{x}}^{G}}
+                                             \end{displaymath}
+                                             \\ \midrule \\
+                                             Output Constraints & \begin{displaymath}
+                                                                  0<{{F_{x}}^{G}}<{{F_{x}}^{G}}
+                                                                  \end{displaymath}
+                                                                  \\ \midrule \\
+                                                                  Equation & \begin{displaymath}
+                                                                             {C_{den,i}}=\begin{cases}
+b_{1} f_{1} G_{1}, & i=1\\
+b_{i} \left(f_{i} G_{i}+f_{i-1} G_{i-1}\right), & 2\leq{}i\leq{}n-1\\
+b_{n} G_{n-1} H_{n-1}, & i=1
+\end{cases}
+                                                                             \end{displaymath}
+                                                                             \\ \midrule \\
+                                                                             Description & \begin{symbDescription}
+                                                                                           \item{${C_{den}}$ is the proportionality constant denominator (N)}
+                                                                                           \item{$i$ is the index (Unitless)}
+                                                                                           \item{$b$ is the base width of a slice (m)}
+                                                                                           \item{$f$ is the interslice normal to shear force ratio variation function (Unitless)}
+                                                                                           \item{$G$ is the interslice normal force ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \item{$n$ is the number of slices (Unitless)}
+                                                                                           \item{$H$ is the interslice normal water force  ($\frac{\text{N}}{\text{m}}$)}
+                                                                                           \end{symbDescription}
+                                                                                           \\ \midrule \\
+                                                                                           Notes & \\ \midrule \\
+                                                                                                   Source & \cite{chen2005}
+                                                                                                            \\ \midrule \\
+                                                                                                            RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${C_{den}}$.
 \par~
 
 \noindent \begin{minipage}{\textwidth}

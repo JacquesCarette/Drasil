@@ -83,7 +83,7 @@ nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearNum)
-   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrForNum" [nrmShrFNum_desc]
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrFNum_deriv "nrmShrForNum" [nrmShrFNum_desc]
 
 nrmShrForNum_rc :: RelationConcept
 nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
@@ -104,6 +104,10 @@ nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
           (sy numbSlices - 1)) * tan (idx (sy baseAngle)
           (sy numbSlices - 1)), sy index $= (sy numbSlices))
 
+nrmShrFNum_deriv :: Derivation
+nrmShrFNum_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
+  S "for the derivation of" +:+. ch nrmShearNum]
+
 nrmShrFNum_desc :: Sentence
 nrmShrFNum_desc = foldlSent []
 
@@ -112,7 +116,7 @@ nrmShrForDen :: InstanceModel
 nrmShrForDen = im'' nrmShrForDen_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearDen)
-   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrDeriv "nrmShrForDen" [nrmShrFDen_desc]
+   [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrFDen_deriv "nrmShrForDen" [nrmShrFDen_desc]
 
 nrmShrForDen_rc :: RelationConcept
 nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")
@@ -127,6 +131,10 @@ nrmShrFDen_rel = inxi nrmShearDen $= case_ [
   (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
     idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
   ]
+
+nrmShrFDen_deriv :: Derivation
+nrmShrFDen_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
+  S "for the derivation of" +:+. ch nrmShearDen]
 
 nrmShrFDen_desc :: Sentence
 nrmShrFDen_desc = foldlSent []

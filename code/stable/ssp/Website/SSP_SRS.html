@@ -5277,7 +5277,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding equation (1) below:
+The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding Equation (1) below:
 </p>
 <div class="equation">
 <em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
@@ -5290,13 +5290,13 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-An expression for the effective normal force, <em>N&prime;</em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in equation (2):
+An expression for the effective normal force, <em>N&prime;</em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
 </p>
 <div class="equation">
 <em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
 </div>
 <p class="paragraph">
-Substituting equation (2) into equation (1) gives:
+Substituting Equation (2) into Equation (1) gives:
 </p>
 <div class="equation">
 <em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
@@ -5367,13 +5367,13 @@ Rearranging yields the following:
 <em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
-The definitions for <em>Φ</em> and <em>Ψ</em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to equation (3):
+The definitions for <em>Φ</em> and <em>Ψ</em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to Equation (3):
 </p>
 <div class="equation">
 <em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
-Versions of equation (3) instantiated for slices 1 to <em>n</em> are shown below:
+Versions of Equation (3) instantiated for slices 1 to <em>n</em> are shown below:
 </p>
 <div class="equation">
 <em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = Ψ<sub>0</sub>&#8239;G<sub>0</sub>&#8239;Φ<sub>0</sub>&plus;F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
@@ -5397,13 +5397,13 @@ Versions of equation (3) instantiated for slices 1 to <em>n</em> are shown below
 <em>G<sub>n</sub>&#8239;Φ<sub>n</sub> = Ψ<sub>n&minus;1</sub>&#8239;G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub></em>
 </div>
 <p class="paragraph">
-Applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, results in the following special cases: equation (8) for the first slice:
+Applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, results in the following special cases: Equation (8) for the first slice:
 </p>
 <div class="equation">
 <em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
 </div>
 <p class="paragraph">
-and equation (9) for the <em>n</em>th slice:
+and Equation (9) for the <em>n</em>th slice:
 </p>
 <div class="equation">
 <em>&minus;(<div class="fraction">
@@ -5416,25 +5416,25 @@ F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
 </div>) = G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
-Substituting equation (8) into equation (4) yields equation (10):
+Substituting Equation (8) into Equation (4) yields Equation (10):
 </p>
 <div class="equation">
 <em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
 </div>
 <p class="paragraph">
-which can be substituted into equation (5) to get equation (11):
+which can be substituted into Equation (5) to get Equation (11):
 </p>
 <div class="equation">
 <em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
 </div>
 <p class="paragraph">
-and so on until equation (12) is obtained from equation (7):
+and so on until Equation (12) is obtained from Equation (7):
 </p>
 <div class="equation">
 <em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
-equation (9) can then be substituted into the left-hand side of equation (12), resulting in:
+Equation (9) can then be substituted into the left-hand side of Equation (12), resulting in:
 </p>
 <div class="equation">
 <em>&minus;(<div class="fraction">
@@ -5459,7 +5459,7 @@ The multiplication of the <em>Ψ</em> terms can be further distributed over the 
 <em>F<sub>S</sub>&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
 </div>
 <p class="paragraph">
-Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
 </p>
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
@@ -5591,7 +5591,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a>, equation (14) can be derived:
+From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a>, Equation (14) can be derived:
 </p>
 <div class="equation">
 <em>0 = &minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
@@ -5639,7 +5639,7 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub></em>
 </div>
 <p class="paragraph">
-Rearranging the equation in terms of <em>λ</em> leads to equation (15):
+Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
 </p>
 <div class="equation">
 <em>λ = <div class="fraction">
@@ -5742,7 +5742,7 @@ b<sub>i</sub>
 </div></em>
 </div>
 <p class="paragraph">
-Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slices</a> to set <em>G<sub>0</sub></em>, <em>G<sub>n</sub></em>, <em>H<sub>0</sub></em>, and <em>H<sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in equation (16), which combines <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>:
+Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slices</a> to set <em>G<sub>0</sub></em>, <em>G<sub>n</sub></em>, <em>H<sub>0</sub></em>, and <em>H<sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>:
 </p>
 <div class="equation">
 <em>λ<sub>i</sub> = <div class="fraction">
@@ -5755,7 +5755,7 @@ Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slice
 </div></em>
 </div>
 <p class="paragraph">
-equation (16) for <em>λ</em> is a function of the unknown interslice normal force <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+Equation (16) for <em>λ</em> is a function of the unknown interslice normal force <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:nrmShrForNum">
 <table class="idefn">
@@ -6204,13 +6204,13 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-This derivation is identical to the derivation for <a href=#IM:fctSfty>IM: fctSfty</a> up until equation (3) shown again below:
+This derivation is identical to the derivation for <a href=#IM:fctSfty>IM: fctSfty</a> up until Equation (3) shown again below:
 </p>
 <div class="equation">
 <em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
-A simple rearrangement of equation (3) leads to equation (17), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
+A simple rearrangement of Equation (3) leads to Equation (17), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
 </p>
 <div class="equation">
 <em>G<sub>i</sub> = <div class="fraction">
@@ -6223,7 +6223,7 @@ A simple rearrangement of equation (3) leads to equation (17), also seen in <a h
 </div></em>
 </div>
 <p class="paragraph">
-The cases shown in <a href=#IM:intsliceFs>IM: intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, to equation (17). <em>G</em> depends on the unknowns <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>) and <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>).
+The cases shown in <a href=#IM:intsliceFs>IM: intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, to Equation (17). <em>G</em> depends on the unknowns <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>) and <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>).
 </p>
 <div id="IM:crtSlpId">
 <table class="idefn">

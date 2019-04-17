@@ -1653,15 +1653,15 @@ Label & Factor of safety
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
+The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding Equation (1) below:
 \begin{displaymath}
 \left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{{N'}_{i} \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
-An expression for the effective normal force, $N'$, can be derived by substituting the normal force equilibrium from \hyperref[GD:normForcEq]{GD: normForcEq} into the definition for effective normal force from \hyperref[GD:resShearWO]{GD: resShearWO}. This results in equation (2):
+An expression for the effective normal force, $N'$, can be derived by substituting the normal force equilibrium from \hyperref[GD:normForcEq]{GD: normForcEq} into the definition for effective normal force from \hyperref[GD:resShearWO]{GD: resShearWO}. This results in Equation (2):
 \begin{displaymath}
 {N'}_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{displaymath}
-Substituting equation (2) into equation (1) gives:
+Substituting Equation (2) into Equation (1) gives:
 \begin{displaymath}
 \left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{\left(\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{{F_{S}}}
 \end{displaymath}
@@ -1685,11 +1685,11 @@ Rearranging yields the following:
 \begin{displaymath}
 G_{i} \left(\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}\right)=G_{i-1} \left(\left(λ f_{i-1} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i-1} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) {F_{S}}\right)+{F_{S}} T_{i}-R_{i}
 \end{displaymath}
-The definitions for $Φ$ and $Ψ$ from \hyperref[DD:convertFunc1]{DD: convertFunc1} and \hyperref[DD:convertFunc2]{DD: convertFunc2} simplify the above to equation (3):
+The definitions for $Φ$ and $Ψ$ from \hyperref[DD:convertFunc1]{DD: convertFunc1} and \hyperref[DD:convertFunc2]{DD: convertFunc2} simplify the above to Equation (3):
 \begin{displaymath}
 G_{i} Φ_{i}=Ψ_{i-1} G_{i-1} Φ_{i-1}+{F_{S}} T_{i}-R_{i}
 \end{displaymath}
-Versions of equation (3) instantiated for slices 1 to $n$ are shown below:
+Versions of Equation (3) instantiated for slices 1 to $n$ are shown below:
 \begin{displaymath}
 G_{1} Φ_{1}=Ψ_{0} G_{0} Φ_{0}+{F_{S}} T_{1}-R_{1}
 \end{displaymath}
@@ -1709,27 +1709,27 @@ G_{n-1} Φ_{n-1}=Ψ_{n-2} G_{n-2} Φ_{n-2}+{F_{S}} T_{n-1}-R_{n-1}
 \begin{displaymath}
 G_{n} Φ_{n}=Ψ_{n-1} G_{n-1} Φ_{n-1}+{F_{S}} T_{n}-R_{n}
 \end{displaymath}
-Applying \hyperref[assumpES]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, results in the following special cases: equation (8) for the first slice:
+Applying \hyperref[assumpES]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, results in the following special cases: Equation (8) for the first slice:
 \begin{displaymath}
 G_{1} Φ_{1}={F_{S}} T_{1}-R_{1}
 \end{displaymath}
-and equation (9) for the $n$th slice:
+and Equation (9) for the $n$th slice:
 \begin{displaymath}
 -\left(\frac{{F_{S}} T_{n}-R_{n}}{Ψ_{n-1}}\right)=G_{n-1} Φ_{n-1}
 \end{displaymath}
-Substituting equation (8) into equation (4) yields equation (10):
+Substituting Equation (8) into Equation (4) yields Equation (10):
 \begin{displaymath}
 G_{2} Φ_{2}=Ψ_{1} \left({F_{S}} T_{1}-R_{1}\right)+{F_{S}} T_{2}-R_{2}
 \end{displaymath}
-which can be substituted into equation (5) to get equation (11):
+which can be substituted into Equation (5) to get Equation (11):
 \begin{displaymath}
 G_{3} Φ_{3}=Ψ_{2} \left(Ψ_{1} \left({F_{S}} T_{1}-R_{1}\right)+{F_{S}} T_{2}-R_{2}\right)+{F_{S}} T_{3}-R_{3}
 \end{displaymath}
-and so on until equation (12) is obtained from equation (7):
+and so on until Equation (12) is obtained from Equation (7):
 \begin{displaymath}
 G_{n-1} Φ_{n-1}=Ψ_{n-2} \left(Ψ_{n-3} \left(Ψ_{1} \left({F_{S}} T_{1}-R_{1}\right)+{F_{S}} T_{2}-R_{2}\right)+{F_{S}} T_{n-2}-R_{n-2}\right)+{F_{S}} T_{n-1}-R_{n-1}
 \end{displaymath}
-equation (9) can then be substituted into the left-hand side of equation (12), resulting in:
+Equation (9) can then be substituted into the left-hand side of Equation (12), resulting in:
 \begin{displaymath}
 -\left(\frac{{F_{S}} T_{n}-R_{n}}{Ψ_{n-1}}\right)=Ψ_{n-2} \left(Ψ_{n-3} \left(Ψ_{1} \left({F_{S}} T_{1}-R_{1}\right)+{F_{S}} T_{2}-R_{2}\right)+{F_{S}} T_{n-2}-R_{n-2}\right)+{F_{S}} T_{n-1}-R_{n-1}
 \end{displaymath}
@@ -1741,7 +1741,7 @@ The multiplication of the $Ψ$ terms can be further distributed over the subtrac
 \begin{displaymath}
 {F_{S}} \left(Ψ_{n-1} Ψ_{n-2} Ψ_{1} T_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} T_{2}+Ψ_{n-1} T_{n-1}+T_{n}\right)=Ψ_{n-1} Ψ_{n-2} Ψ_{1} R_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} R_{2}+Ψ_{n-1} R_{n-1}+R_{n}
 \end{displaymath}
-Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
 \begin{displaymath}
 {F_{S}}=\frac{\displaystyle\sum_{i=1}^{n-1}{R_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+R_{n}}{\displaystyle\sum_{i=1}^{n-1}{T_{i} \displaystyle\prod_{v=i}^{n-1}{Ψ_{v}}}+T_{n}}
 \end{displaymath}
@@ -1780,11 +1780,11 @@ Label & Normal and shear force proportionality constant
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, equation (14) can be derived:
+From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
 \begin{displaymath}
 0=-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-λ \frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}
 \end{displaymath}
-Rearranging the equation in terms of $λ$ leads to equation (15):
+Rearranging the equation in terms of $λ$ leads to Equation (15):
 \begin{displaymath}
 λ=\frac{-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
 \end{displaymath}
@@ -1792,11 +1792,11 @@ This equation can be simplified by applying assumptions \hyperref[assumpSF]{A: S
 \begin{displaymath}
 λ=\frac{-G_{i} \left({h_{z,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left({h_{z,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left({h_{z,w,i}}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left({h_{z,w,i-1}}+\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-{U_{t,i}} \sin\left(β_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
 \end{displaymath}
-Taking the summation of all slices, and applying \hyperref[assumpES]{A: Edge-Slices} to set $G_{0}$, $G_{n}$, $H_{0}$, and $H_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in equation (16), which combines \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}:
+Taking the summation of all slices, and applying \hyperref[assumpES]{A: Edge-Slices} to set $G_{0}$, $G_{n}$, $H_{0}$, and $H_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}:
 \begin{displaymath}
 λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left({{F_{x}}^{G}}+{{F_{x}}^{H}}\right) \tan\left(α_{i}\right)+h_{i} -2 {U_{t,i}} \sin\left(β_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
 \end{displaymath}
-equation (16) for $λ$ is a function of the unknown interslice normal force $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
+Equation (16) for $λ$ is a function of the unknown interslice normal force $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1927,15 +1927,15 @@ Label & Interslice normal forces
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until equation (3) shown again below:
+This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until Equation (3) shown again below:
 \begin{displaymath}
 G_{i} Φ_{i}=Ψ_{i-1} G_{i-1} Φ_{i-1}+{F_{S}} T_{i}-R_{i}
 \end{displaymath}
-A simple rearrangement of equation (3) leads to equation (17), also seen in \hyperref[IM:intsliceFs]{IM: intsliceFs}:
+A simple rearrangement of Equation (3) leads to Equation (17), also seen in \hyperref[IM:intsliceFs]{IM: intsliceFs}:
 \begin{displaymath}
 G_{i}=\frac{Ψ_{i-1} G_{i-1}+{F_{S}} T_{i}-R_{i}}{Φ_{i}}
 \end{displaymath}
-The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, to equation (17). $G$ depends on the unknowns ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}).
+The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, to Equation (17). $G$ depends on the unknowns ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}

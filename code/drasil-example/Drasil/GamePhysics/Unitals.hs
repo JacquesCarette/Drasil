@@ -9,7 +9,11 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, angularDisplacement, angularVelocity, displacement, distance, 
   force, gravitationalAccel, gravitationalConst, impulseS, impulseV, 
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
+<<<<<<< HEAD
   restitutionCoef, time, torque, velocity, chgMomentum, chgInVelocity)
+=======
+  restitutionCoef, time, torque, velocity, kEnergy)
+>>>>>>> master
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
@@ -29,7 +33,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -37,8 +41,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
 
 cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
--- FIXME: pi hack
-cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [QM.pi_]
+cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
 
 cpSymbols = (map qw cpUnits) ++ 
   (map qw cpUnitless) ++ 
@@ -46,7 +49,7 @@ cpSymbols = (map qw cpUnits) ++
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
-  QPP.len, QP.momentOfInertia, QP.torque] ++ [qw QP.restitutionCoef]
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy] ++ [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
@@ -60,9 +63,14 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
+<<<<<<< HEAD
   momtInert_A, momtInert_B, timeT, inittime,  
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.chgMomentum, QP.chgInVelocity]
 
+=======
+  momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision, 
+  contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velA_P, velB_P]
+>>>>>>> master
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -124,7 +132,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -187,9 +195,14 @@ time_c = ucs' (dccWDS "time_c" (cn "denotes the time at collision")
                 (phrase QP.time)) (sub (eqSymb QP.time) lC) Real second
 
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
-                 (compoundPhrase' (cn "relative") (QP.velocity ^. term))
+                 (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) lI) (Concat [cA, cB])) Real velU
+
+finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
+                 (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
+                 (cn "between rigid bodies of A and B")) (phrase QP.velocity))
+                 (sup (sub (eqSymb QP.velocity) lF) (Concat [cA, cB])) Real velU
 
 massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
@@ -218,10 +231,16 @@ collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase'
                 (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
-
 force_i = ucs' (dccWDS "force_i" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the i-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
+
+velA_P = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
+              (cn "of the point of collision P in body A")) 
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cA, cP])) Real velU
+velB_P = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
+              (cn "of the point of collision P in body B")) 
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cB, cP])) Real velU
 
 force_1     = forceParam "1" "first"
 force_2     = forceParam "2" "second"
@@ -247,7 +266,7 @@ mass_B      = rigidParam "B" cB
 --------------------------
 
 cpUnitless :: [QuantityDict]
-cpUnitless = [numParticles]
+cpUnitless = qw QM.pi_ : [numParticles]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer

@@ -10,24 +10,12 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,
   cartesian, rightHand, collision, joint, damping, force, friction)
 import qualified Data.Drasil.Concepts.Math as CM (constraint)
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
-
 assumptions :: [ConceptInstance]
 assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI]
 
-newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
 assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI :: ConceptInstance
-newA1 = assump "assumpOT" (foldlSent assumptions_assum1) "objectTy"
-newA2 = assump "assumpOD" (foldlSent assumptions_assum2) "objectDimension"
-newA3 = assump "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy"
-newA4 = assump "assumpAD" (foldlSent assumptions_assum4) "axesDefined"
-newA5 = assump "assumpCT" (foldlSent assumptions_assum5) "collisionType"
-newA6 = assump "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement"
-newA7 = assump "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement"
-
 assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
 assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
 assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom

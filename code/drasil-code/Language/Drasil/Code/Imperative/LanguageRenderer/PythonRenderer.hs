@@ -46,19 +46,19 @@ pythonConfig _ c =
         dir              = "python",
         fileName         = fileNameD c,
         include          = include',
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = empty,
         inputFunc        = text "raw_input()",    --change to "input()" for Python 3.0+
         iterForEachLabel = forLabel,
         iterInLabel      = text "in",
-        list             = \_ -> empty,
+        list             = const empty,
         listObj          = empty,
         clsDec           = classDec,
-        package          = \_ -> empty,
+        package          = const empty,
         printFunc        = text "print",
         printLnFunc      = empty,
-        printFileFunc    = \_ -> empty,
-        printFileLnFunc  = \_ -> empty,
+        printFileFunc    = const empty,
+        printFileLnFunc  = const empty,
         stateType        = pystateType c,
         
         blockStart = colon, blockEnd = empty,
@@ -66,20 +66,20 @@ pythonConfig _ c =
         
         top    = pytop c,
         body   = pybody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD' c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDoc',
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = \_ -> empty,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = const empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
-        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
+        unOpDoc = unOpDocD'', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
         inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "getEnv for pythong not yet implemented"
+        getEnv = const $ error "getEnv for pythong not yet implemented"
     }
 
 -- convenience
@@ -87,6 +87,11 @@ imp, incl, initName :: Label
 imp = "import*"
 incl = "from"
 initName = "__init__"
+
+unOpDocD'' :: UnaryOp -> Doc
+unOpDocD'' Ln = text "math.log"
+unOpDocD'' Log = text "math.log10"
+unOpDocD'' op = unOpDocD' op
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
@@ -117,7 +122,7 @@ pytop _ _ _ m =
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
 pybody c f p (Mod _ _ vs fs cs) = 
-  (vcat $ map (\x -> statementDoc c NoLoop $ DeclState x) vs)
+  (vcat $ map (statementDoc c NoLoop . DeclState) vs)
   $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
@@ -203,7 +208,7 @@ classDoc' c f _ m = vcat [
     oneTab $ modInnerDoc]
     where modInnerDoc = case m of (Class n _ _ _ fs) -> methodListDoc c f n fs
                                   (Enum _ _ es) -> enumElementsDoc c es
-                                  (MainClass _ _ _) -> error "unreachable"
+                                  MainClass{} -> error "unreachable"
           baseClass = case m of (Class _ p _ _ _) -> case p of Nothing -> empty
                                                                Just pn -> parens (text pn)
                                 _ -> empty
@@ -233,12 +238,12 @@ methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ _ (Construct _) ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab $ bodyDoc c b]
-        where oneParam | length ps > 0 = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
 methodDoc' c _ _ (Method n _ _ _ ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab bodyD]
-        where oneParam | length ps > 0 = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
               bodyD | null b    = text "None"
                     | otherwise = bodyDoc c b
@@ -253,6 +258,8 @@ valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (call
         prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
+valueDoc' c (Condi cond te ee) = parens (valueDoc' c te <+> text "if" <+>
+          parens (valueDoc' c cond) <+> text "else" <+> valueDoc' c ee)
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc

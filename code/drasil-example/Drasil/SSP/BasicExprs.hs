@@ -4,7 +4,9 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
 import Drasil.SSP.Unitals (baseAngle, baseWthX, earthqkLoadFctr, fs,
-  impLoadAngle, intNormForce, inxi, inxiM1, midpntHght, mobShrC, shearFNoIntsl, shearRNoIntsl, shrResC, slcWght, sliceHght, surfAngle, surfHydroForce, surfLoad, watrForce)
+  impLoadAngle, intNormForce, inxi, inxiM1, midpntHght, mobShrC, shearFNoIntsl,
+  shearRNoIntsl, shrResC, slcWght, sliceHght, sliceHghtW, surfAngle, 
+  surfHydroForce, surfLoad, watrForce)
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
@@ -65,9 +67,9 @@ sliceExpr n = idx (sy intNormForce) (int n) * idx (sy shrResC) (int n) $=
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
   inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *
-  (inxiM1 sliceHght - inxi baseWthX / 2 * tan (inxi baseAngle)) -
-  inxi watrForce * (inxi sliceHght - inxi baseWthX / 2 *
-  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHght -
+  (inxiM1 sliceHght + inxi baseWthX / 2 * tan (inxi baseAngle)) -
+  inxi watrForce * (inxi sliceHghtW - inxi baseWthX / 2 *
+  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHghtW +
   inxi baseWthX / 2 * tan (inxi baseAngle))) `_e_`
   (sy earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 -
   inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght -

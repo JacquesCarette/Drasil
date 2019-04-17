@@ -233,6 +233,28 @@ m
 </tr>
 <tr>
 <td>
+<em>interpY</em>
+</td>
+<td>
+InterpY
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>interpZ</em>
+</td>
+<td>
+InterpZ
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>is-safeLR</em>
 </td>
 <td>
@@ -305,7 +327,7 @@ Load duration factor
 Load resistance
 </td>
 <td>
---
+Pa
 </td>
 </tr>
 <tr>
@@ -338,7 +360,7 @@ m<sup>12</sup>/N<sup>7</sup>
 Non-factored load
 </td>
 <td>
---
+Pa
 </td>
 </tr>
 <tr>
@@ -358,6 +380,28 @@ Probability of breakage
 </td>
 <td>
 Tolerable probability of breakage
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>f</sub></em>
+</td>
+<td>
+Probability of failure
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>ftol</sub></em>
+</td>
+<td>
+Tolerable probability of failure
 </td>
 <td>
 --
@@ -656,10 +700,26 @@ Laminated Glass
 </tr>
 <tr>
 <td>
+LR
+</td>
+<td>
+Load Resistance
+</td>
+</tr>
+<tr>
+<td>
 N/A
 </td>
 <td>
 Not Applicable
+</td>
+</tr>
+<tr>
+<td>
+NFL
+</td>
+<td>
+Non-Factored Load
 </td>
 </tr>
 <tr>
@@ -733,7 +793,7 @@ Introduction
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
 </p>
 <p class="paragraph">
-The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 </p>
 <div id="Sec:DocPurpose">
 <div class="subsection">
@@ -764,7 +824,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -777,7 +837,7 @@ Organization of Document
 The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>, with some aspects taken from Volere template 16 <a href=#rbrtsn2012>rbrtsn2012</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
+The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models, and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The data definitions are used to support the definitions of the different models.
 </p>
 </div>
 </div>
@@ -819,7 +879,7 @@ The customers are the end user of GlassBR.
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
 </p>
 <div id="Sec:SysContext">
 <div class="subsection">
@@ -903,64 +963,6 @@ System Constraints
 </h2>
 <p class="paragraph">
 There are no system constraints.
-</p>
-</div>
-</div>
-</div>
-</div>
-<div id="Sec:ProjScope">
-<div class="section">
-<h1>
-Scope of the Project
-</h1>
-<p class="paragraph">
-This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
-</p>
-<div id="Sec:UseCaseTable">
-<div class="subsection">
-<h2>
-Product Use Case Table
-</h2>
-<div id="Table:useCaseTable">
-<table class="table">
-<tr>
-<th>
-Actor
-</th>
-<th>
-Input and Output
-</th>
-</tr>
-<tr>
-<td>
-User
-</td>
-<td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Section: Individual Product Use Cases</a>
-</td>
-</tr>
-<tr>
-<td>
-GlassBR
-</td>
-<td>
-Whether or not the glass slab is safe for the calculated load and supporting calculated values
-</td>
-</tr>
-</table>
-<p class="caption">
-Use Case Table
-</p>
-</div>
-</div>
-</div>
-<div id="Sec:IndividualProdUC">
-<div class="subsection">
-<h2>
-Individual Product Use Cases
-</h2>
-<p class="paragraph">
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true, then it's shown that the glass slab is safe to use, else if both return false, then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </p>
 </div>
 </div>
@@ -1123,62 +1125,48 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
-<ul class="hide-list-style">
-<li>
-<div id="A:glassType">
+<div class="list">
+<p>
+<div id="assumpGT">
 glassType: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:glassCondition">
+</p>
+<p>
+<div id="assumpGC">
 glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. <a href=#accAlteredGlass>UC: Accommodate-Altered-Glass</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:explainScenario">
+</p>
+<p>
+<div id="assumpES">
 explainScenario: This system only considers the external explosion scenario for its calculations. <a href=#calcInternalBlastRisk>LC: Calculate-Internal-Blask-Risk</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:standardValues">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+</p>
+<p>
+<div id="assumpSV">
+standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#assumpLDFC>A: ldfConstant</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:glassLite">
+</p>
+<p>
+<div id="assumpGL">
 glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. <a href=#DD:calofCapacity>DD: calofCapacity</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:boundaryConditions">
+</p>
+<p>
+<div id="assumpBC">
 boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. <a href=#accMoreBoundaryConditions>LC: Accomodate-More-Boundary-Conditions</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:responseType">
+</p>
+<p>
+<div id="assumpRT">
 responseType: The response type considered in GlassBR is flexural. <a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:ldfConstant">
-ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
+</p>
+<p>
+<div id="assumpLDFC">
+ldfConstant: With reference to <a href=#assumpSV>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:TMs">
@@ -1293,7 +1281,7 @@ Description
 <em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
 </li>
 <li>
-<em>LR</em> is the load resistance (Unitless)
+<em>LR</em> is the load resistance (Pa)
 </li>
 <li>
 <em>q</em> is the applied load (demand) (Pa)
@@ -1307,7 +1295,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#TM:isSafePb>TM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>.
+If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#TM:isSafePb>TM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
 </p>
 </td>
 </tr>
@@ -1719,10 +1707,10 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:standardValues>A: standardValues</a>
+<a href=#assumpSV>A: standardValues</a>
 </p>
 <p class="paragraph">
-<a href=#A:ldfConstant>A: ldfConstant</a>
+<a href=#assumpLDFC>A: ldfConstant</a>
 </p>
 </td>
 </tr>
@@ -1786,7 +1774,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>J = J(q&#770;,AR)</em>
+<em>J = interpZ(SDF.txt,AR,q&#770;)</em>
 </div>
 </td>
 </tr>
@@ -1800,13 +1788,13 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 <li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-<li>
-<em>q&#770;</em> is the dimensionless load (Unitless)
+<em>interpZ</em> is the interpZ (Unitless)
 </li>
 <li>
 <em>AR</em> is the aspect ratio (Unitless)
+</li>
+<li>
+<em>q&#770;</em> is the dimensionless load (Unitless)
 </li>
 </ul>
 </td>
@@ -1877,7 +1865,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+Pa
 </p>
 </td>
 </tr>
@@ -1905,7 +1893,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>NFL</em> is the non-factored load (Unitless)
+<em>NFL</em> is the non-factored load (Pa)
 </li>
 <li>
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
@@ -1940,7 +1928,7 @@ Notes
 <em>q&#770;<sub>tol</sub></em> is the tolerable load defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
 </p>
 <p class="paragraph">
-<a href=#A:standardValues>A: standardValues</a>
+<a href=#assumpSV>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2165,7 +2153,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> is the 3 second equivalent pressure, as given in <a href=#DD:calofCapacity>DD: calofCapacity</a>.
+<em>q</em> is the 3 second equivalent pressure, as given in <a href=#DD:calofDemand>DD: calofDemand</a>.
 </p>
 <p class="paragraph">
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
@@ -2177,10 +2165,10 @@ Notes
 <em>GTF</em> is the glass type factor, as given by <a href=#DD:gTF>DD: gTF</a>.
 </p>
 <p class="paragraph">
-<em>q&#770;</em> is calculated with reference to <a href=#A:glassLite>A: glassLite</a>.
+<em>q&#770;</em> is calculated with reference to <a href=#assumpGL>A: glassLite</a>.
 </p>
 <p class="paragraph">
-<a href=#A:standardValues>A: standardValues</a>
+<a href=#assumpSV>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2244,14 +2232,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div>)</em>
+<em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2265,16 +2246,13 @@ Description
 <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
 </li>
 <li>
-<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+<em>interpY</em> is the interpY (Unitless)
+</li>
+<li>
+<em>AR</em> is the aspect ratio (Unitless)
 </li>
 <li>
 <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
 </td>
@@ -2424,7 +2402,7 @@ Notes
 <em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
 </p>
 <p class="paragraph">
-<a href=#A:standardValues>A: standardValues</a>
+<a href=#assumpSV>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2529,7 +2507,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:calofCapacity>DD: calofCapacity</a> <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+<a href=#DD:calofDemand>DD: calofDemand</a> <a href=#IM:calOfDemand>IM: calOfDemand</a>.
 </p>
 </td>
 </tr>
@@ -2629,6 +2607,88 @@ RefBy
 <td>
 <p class="paragraph">
 <a href=#DD:tolLoad>DD: tolLoad</a> <a href=#DD:stressDistFac>DD: stressDistFac</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:eqTNTW">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Explosive mass in equivalent weight of TNT
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>w<sub>TNT</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+kg
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>w<sub>TNT</sub> = w&#8239;TNT</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+</li>
+<li>
+<em>w</em> is the charge weight (kg)
+</li>
+<li>
+<em>TNT</em> is the TNT equivalent factor (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#astm2009>astm2009</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#DD:calofDemand>DD: calofDemand</a> <a href=#IM:calOfDemand>IM: calOfDemand</a>.
 </p>
 </td>
 </tr>
@@ -2751,7 +2811,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Unitless
+Pa
 </p>
 </td>
 </tr>
@@ -2772,10 +2832,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>LR</em> is the load resistance (Unitless)
+<em>LR</em> is the load resistance (Pa)
 </li>
 <li>
-<em>NFL</em> is the non-factored load (Unitless)
+<em>NFL</em> is the non-factored load (Pa)
 </li>
 <li>
 <em>GTF</em> is the glass type factor (Unitless)
@@ -2795,7 +2855,7 @@ Notes
 <em>LR</em> is the load resistance, which is also called capacity <em>NFL</em>. is the non-factored load, as defined in <a href=#DD:nFL>DD: nFL</a>. <em>GTF</em> is the glass type factor, as defined in <a href=#DD:gTF>DD: gTF</a>.
 </p>
 <p class="paragraph">
-<a href=#A:glassLite>A: glassLite</a>
+<a href=#assumpGL>A: glassLite</a>
 </p>
 <p class="paragraph">
 <a href=#DD:gTF>DD: gTF</a>
@@ -2827,7 +2887,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:calofCapacity">
+<div id="DD:calofDemand">
 <table class="ddefn">
 <tr>
 <th>
@@ -2865,7 +2925,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = q(w<sub>TNT</sub>,SD)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2879,13 +2939,13 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>q</em> is the applied load (demand) (Pa)
-</li>
-<li>
-<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
+</li>
+<li>
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
 </li>
 </ul>
 </td>
@@ -2896,7 +2956,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
 </p>
 </td>
 </tr>
@@ -2993,7 +3053,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = q(w<sub>TNT</sub>,SD)</em>
+<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3007,10 +3067,13 @@ Description
 <em>q</em> is the applied load (demand) (Pa)
 </li>
 <li>
-<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+<em>interpY</em> is the interpY (Unitless)
 </li>
 <li>
 <em>SD</em> is the stand off distance (m)
+</li>
+<li>
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
 </li>
 </ul>
 </td>
@@ -3021,7 +3084,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
 </p>
 </td>
 </tr>
@@ -3146,6 +3209,23 @@ Uncert.
 </tr>
 <tr>
 <td>
+<em>P<sub>ftol</sub></em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;P<sub>ftol</sub>&thinsp;&lt;&thinsp;1</em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>8.0&sdot;10<sup>-3</sup></em>
+</td>
+<td>
+0.1<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
 <em>SD</em>
 </td>
 <td>
@@ -3253,13 +3333,13 @@ Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqIn
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows:
                                          <ul class="list">
                                          <li>
-                                         <em>m</em>, <em>k</em>, <em>E</em>, and <em>t<sub>d</sub></em> following <a href=#A:standardValues>A: standardValues</a>
+                                         <em>m</em>, <em>k</em>, <em>E</em>, and <em>t<sub>d</sub></em> following <a href=#assumpSV>A: standardValues</a>
                                          </li>
                                          <li>
                                          <em>LDF</em> from <a href=#DD:loadDurFactor>DD: loadDurFactor</a>
                                          </li>
                                          <li>
-                                         LSF following <a href=#A:glassLite>A: glassLite</a>
+                                         LSF following <a href=#assumpGL>A: glassLite</a>
                                          </li>
                                          <li>
                                          <em>h</em> from <a href=#DD:min.thick>DD: min_thick</a>
@@ -3479,27 +3559,27 @@ Likely Changes
 <div class="list">
 <p>
 <div id="calcInternalBlastRisk">
-Calculate-Internal-Blask-Risk: <a href=#A:explainScenario>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+Calculate-Internal-Blask-Risk: <a href=#assumpES>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
 </div>
 </p>
 <p>
 <div id="varValsOfmkE">
-Variable-Values-of-m,k,E: <a href=#A:standardValues>A: standardValues</a>, <a href=#A:ldfConstant>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+Variable-Values-of-m,k,E: <a href=#assumpSV>A: standardValues</a>, <a href=#assumpLDFC>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
 </div>
 </p>
 <p>
 <div id="accMoreThanSingleLite">
-Accomodate-More-than-Single-Lite: <a href=#A:glassLite>A: glassLite</a> - The software may be changed to accommodate more than a single lite.
+Accomodate-More-than-Single-Lite: <a href=#assumpGL>A: glassLite</a> - The software may be changed to accommodate more than a single lite.
 </div>
 </p>
 <p>
 <div id="accMoreBoundaryConditions">
-Accomodate-More-Boundary-Conditions: <a href=#A:boundaryConditions>A: boundaryConditions</a>- The software may be changed to accommodate more boundary conditions than 4-sided support.
+Accomodate-More-Boundary-Conditions: <a href=#assumpBC>A: boundaryConditions</a>- The software may be changed to accommodate more boundary conditions than 4-sided support.
 </div>
 </p>
 <p>
 <div id="considerMoreThanFlexGlass">
-Consider-More-than-Flexure-Glass: <a href=#A:responseType>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
+Consider-More-than-Flexure-Glass: <a href=#assumpRT>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
 </div>
 </p>
 </div>
@@ -3518,7 +3598,7 @@ Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whe
 </p>
 <p>
 <div id="accAlteredGlass">
-Accommodate-Altered-Glass: <a href=#A:glassCondition>A: glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+Accommodate-Altered-Glass: <a href=#assumpGC>A: glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 </div>
 </p>
 </div>
@@ -3537,6 +3617,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <tr>
 <th>
 
+</th>
+<th>
+<a href=#assumpSV>A: standardValues</a>
 </th>
 <th>
 <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>
@@ -3584,7 +3667,19 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:nFL>DD: nFL</a>
 </th>
 <th>
+<a href=#assumpLDFC>A: ldfConstant</a>
+</th>
+<th>
+<a href=#assumpGC>A: glassCondition</a>
+</th>
+<th>
 <a href=#TM:isSafeLR>TM: isSafeLR</a>
+</th>
+<th>
+<a href=#DD:calofDemand>DD: calofDemand</a>
+</th>
+<th>
+<a href=#IM:calOfDemand>IM: calOfDemand</a>
 </th>
 <th>
 <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
@@ -3601,19 +3696,105 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th>
 <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
 </th>
-<th>
-<a href=#DD:calofCapacity>DD: calofCapacity</a>
-</th>
-<th>
-<a href=#IM:calOfDemand>IM: calOfDemand</a>
-</th>
+</tr>
+<tr>
+<td>
+<a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
 <a href=#Sec:DataConstraints>Section: Data Constraints</a>
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3690,7 +3871,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3767,7 +3957,182 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#assumpBC>A: boundaryConditions</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#assumpES>A: explainScenario</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -3832,7 +4197,16 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:boundaryConditions>A: boundaryConditions</a>
+<a href=#assumpGC>A: glassCondition</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3906,7 +4280,16 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:explainScenario>A: explainScenario</a>
+<a href=#assumpGL>A: glassLite</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3927,10 +4310,10 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
 
@@ -3980,7 +4363,22 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:glassCondition>A: glassCondition</a>
+<a href=#assumpLDFC>A: ldfConstant</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4004,6 +4402,15 @@ X
 X
 </td>
 <td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 
 </td>
 <td>
@@ -4014,6 +4421,74 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#assumpRT>A: responseType</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -4054,7 +4529,13 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:glassLite>A: glassLite</a>
+<a href=#assumpSV>A: standardValues</a>
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4081,6 +4562,9 @@ X
 X
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -4090,13 +4574,13 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
 
@@ -4128,9 +4612,6 @@ X
 </tr>
 <tr>
 <td>
-<a href=#A:ldfConstant>A: ldfConstant</a>
-</td>
-<td>
 
 </td>
 <td>
@@ -4144,65 +4625,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:responseType>A: responseType</a>
 </td>
 <td>
 
@@ -4241,84 +4663,7 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#A:standardValues>A: standardValues</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -4350,7 +4695,10 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:calofCapacity>DD: calofCapacity</a>
+<a href=#DD:calofDemand>DD: calofDemand</a>
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4378,6 +4726,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4436,7 +4790,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4498,6 +4861,89 @@ X
 </tr>
 <tr>
 <td>
+<a href=#DD:eqTNTW>DD: eqTNTW</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 <a href=#DD:gTF>DD: gTF</a>
 </td>
 <td>
@@ -4522,10 +4968,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4623,13 +5078,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4647,6 +5111,15 @@ X
 <tr>
 <td>
 <a href=#DD:calofCapacity>DD: calofCapacity</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4762,15 +5235,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -4781,6 +5245,24 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -4821,6 +5303,27 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
 X
 </td>
 <td>
@@ -4836,12 +5339,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -4849,12 +5346,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4892,7 +5383,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4999,13 +5499,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5076,13 +5585,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5147,7 +5665,16 @@ X
 
 </td>
 <td>
-X
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5159,7 +5686,7 @@ X
 
 </td>
 <td>
-
+X
 </td>
 </tr>
 <tr>
@@ -5212,6 +5739,15 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -5227,13 +5763,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 </tr>
 <tr>
@@ -5247,7 +5783,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5372,16 +5917,25 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+X
+</td>
+<td>
 
 </td>
 <td>
 
 </td>
 <td>
-X
+
 </td>
 <td>
-X
+
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -5440,13 +5994,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5511,13 +6074,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5579,7 +6151,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -6703,28 +7284,28 @@ Traceability Matrix Showing the Connections Between Requirements and Other Items
 
 </th>
 <th>
-A1 (<a href=#A:glassType>A: glassType</a>)
+A1 (<a href=#assumpGT>A: glassType</a>)
 </th>
 <th>
-A2 (<a href=#A:glassCondition>A: glassCondition</a>)
+A2 (<a href=#assumpGC>A: glassCondition</a>)
 </th>
 <th>
-A3 (<a href=#A:explainScenario>A: explainScenario</a>)
+A3 (<a href=#assumpES>A: explainScenario</a>)
 </th>
 <th>
-A4 (<a href=#A:standardValues>A: standardValues</a>)
+A4 (<a href=#assumpSV>A: standardValues</a>)
 </th>
 <th>
-A5 (<a href=#A:glassLite>A: glassLite</a>)
+A5 (<a href=#assumpGL>A: glassLite</a>)
 </th>
 <th>
-A6 (<a href=#A:boundaryConditions>A: boundaryConditions</a>)
+A6 (<a href=#assumpBC>A: boundaryConditions</a>)
 </th>
 <th>
-A7 (<a href=#A:responseType>A: responseType</a>)
+A7 (<a href=#assumpRT>A: responseType</a>)
 </th>
 <th>
-A8 (<a href=#A:ldfConstant>A: ldfConstant</a>)
+A8 (<a href=#assumpLDFC>A: ldfConstant</a>)
 </th>
 </tr>
 <tr>
@@ -7573,7 +8154,7 @@ load share factor
 surface flaw parameter
 </td>
 <td>
-<em>7</em>
+<em>7.0</em>
 </td>
 <td>
 m<sup>12</sup>/N<sup>7</sup>
@@ -7615,7 +8196,7 @@ m
 duration of load
 </td>
 <td>
-<em>3</em>
+<em>3.0</em>
 </td>
 <td>
 s

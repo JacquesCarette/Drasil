@@ -5,9 +5,9 @@ import Language.Drasil hiding (ItemType, ListType, Expr)
 data LinkType = Internal | Cite2 | External
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
-  | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
-  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
-  | Add | Mul | Summ | Inte | Prod | Point | Perc
+  | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin | Arccos | Arctan | Not
+  | Dim | Exp | Neg | Cross | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
+  | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat

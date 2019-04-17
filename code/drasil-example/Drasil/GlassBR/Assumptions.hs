@@ -1,12 +1,12 @@
-module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, standardValues, 
-  glassLite, boundaryConditions, responseType, ldfConstant, assumptionConstants,
+module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
+  assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
   assumptions) where
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
-import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
-  practice, reference, scenario, system, value)
+import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
+  constant, practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
   WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
@@ -15,39 +15,27 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
-  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, load_dur)
+import Drasil.GlassBR.Unitals (constant_K, constant_LoadDur, 
+  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lDurFac,
+  load_dur)
 
-assumptions :: [AssumpChunk] -- For testing
-assumptions = [glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
-  responseType, ldfConstant]
+assumptions :: [ConceptInstance]
+assumptions = [assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC,
+  assumpRT, assumpLDFC]
 
 assumptionConstants :: [QDefinition]
 assumptionConstants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur, constant_LoadSF]
 
-glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
-  responseType, ldfConstant :: AssumpChunk
-
--- FIXME: Remove the AssumpChunks once ConceptInstance and SCSProg's
--- Assumptions has been migrated to using assumpDom
-
-glassType          = assump "assumpGT" glassTypeDesc "glassType"
--- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom
-glassCondition     = assump "assumpGC" glassConditionDesc "glassCondition"
--- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom
-explainScenario    = assump "assumpES" explainScenarioDesc "explainScenario"
--- assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-standardValues     = assump "assumpSV" (standardValuesDesc load_dur) "standardValues"
--- assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
-glassLite          = assump "assumpGL" glassLiteDesc "glassLite"
--- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
-boundaryConditions = assump "assumpBC" boundaryConditionsDesc "boundaryConditions"
--- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
-responseType       = assump "assumpRT" responseTypeDesc "responseType"
--- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-ldfConstant        = assump "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"
--- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
+assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC :: ConceptInstance
+assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom
+assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom
+assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
+assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
+assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
+assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
+assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
+assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
@@ -91,8 +79,8 @@ responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
   short gLassBR, S "is flexural"]
 
-ldfConstantDesc :: QDefinition -> Sentence
+ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef2S standardValues `sC` S "the", phrase value `sOf`
+  makeRef2S assumpSV `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in", short gLassBR]

@@ -2,23 +2,24 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Control.Lens ((^.))
 
-import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
-  centigrade, m_3, specificE)
 import Data.Drasil.Concepts.Documentation (simulation)
-import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
-  heat_cap_spec, thermal_flux, volHtGenU)
-import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  ht_flux, latent_heat, boil_pt, heat_cap_spec)
-import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
-import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Drasil.SWHS.Concepts (water)
-import Data.Drasil.Units.PhysicalProperties (densityU)
-import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
+import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
+import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
+  ht_flux, latent_heat, boil_pt, heat_cap_spec)
+import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
+  centigrade, m_3, specificE)
+import Data.Drasil.Units.PhysicalProperties (densityU)
+import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
+  heat_cap_spec, thermal_flux, volHtGenU)
+
+import Drasil.SWHS.Concepts (water)
+
+import Control.Lens ((^.))
 
 swhsSymbols :: [DefinedQuantityDict]
 swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained

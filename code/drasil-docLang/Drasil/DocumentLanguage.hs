@@ -12,10 +12,9 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
-import Language.Drasil.Development (comp_unitdefn, MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
@@ -27,7 +26,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
-import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
+import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
@@ -38,7 +37,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
 import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
@@ -136,7 +135,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
-  IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
+  IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
@@ -166,7 +165,7 @@ data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
 {--}
 
 -- | Specific System Description section . Contains a list of subsections.
-data SSDSec = SSDProg [SSDSub]
+newtype SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
@@ -196,7 +195,7 @@ data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
 
-data ReqrmntSec = ReqsProg [ReqsSub]
+newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
@@ -204,12 +203,12 @@ data ReqsSub where
 
 {--}
 
-data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
-data LCsSec' = LCsProg' [ConceptInstance]
+newtype LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+newtype LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
-data UCsSec = UCsProg [Contents]
+newtype UCsSec = UCsProg [Contents]
 
 {--}
 
@@ -227,7 +226,7 @@ data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
-data AppndxSec = AppndxProg [Contents]
+newtype AppndxSec = AppndxProg [Contents]
 
 {--}
 
@@ -278,7 +277,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems (db ^. termTable)
+      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -368,7 +367,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
-mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
+mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = ((S . getStringSN $ shortname x), f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
@@ -392,8 +391,8 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
-    mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =
-      Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] [])
+    mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
+      Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
     mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
@@ -446,25 +445,30 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
+      SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds)
+      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
+      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs')
+      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
-    mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
-      (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
-    mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
-    mkSubSCS si' (Assumptions) =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\y -> 
-        let lb = makeRef2 y in
-        LlC $ mkRawLC (Assumption (getRefAdd y) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
+      SSD.genDefnF $ map (LlC . gdefn fields si') gs'
+    mkSubSCS si' (IMs fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+      concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
+    mkSubSCS si' (IMs fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' Assumptions =
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
+      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      asOrderedList $ (_sysinfodb si') ^. conceptinsTable
+      where
+        -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        sDom :: [UID] -> UID
+        sDom [u] = u
+        sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
+          show (length u) ++ " instead."
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -473,8 +477,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
-helperAssump :: AssumpChunk -> ChunkDB -> Sentence
-helperAssump a c = foldlSent_ $ ([assuming a, helperRefs a c])
+helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing

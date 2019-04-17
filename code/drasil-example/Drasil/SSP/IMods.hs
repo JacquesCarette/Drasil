@@ -19,8 +19,9 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSP, assumpINSFL, assumpES,
   assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
-import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, convertFunc2,
-  lengthLs, sliceWght)
+import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, 
+  convertFunc2, lengthLs, sliceWght, surfWtrF, intersliceWtrF, lengthB, angleA, 
+  angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
@@ -76,18 +77,20 @@ nrmShrF_rel :: Relation
 nrmShrF_rel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
 
 nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent []
+nrmShrF_desc = foldlSent [ch nrmShearNum, S "is defined in", 
+  makeRef2S nrmShrForNum `sAnd` ch nrmShearDen, S "is defined in",
+  makeRef2S nrmShrForDen]
 
 --
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
-  qw waterWeight, qw slipDist, qw slipHght, qw constF]
+  qw waterWeight, qw slipDist, qw slipHght]
   [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearNum)
    [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrFNum_deriv "nrmShrForNum" [nrmShrFNum_desc]
 
 nrmShrForNum_rc :: RelationConcept
 nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
-  nrmShrFNum_desc nrmShrFNum_rel -- nrmShrForL
+  nrmShrFNum_desc nrmShrFNum_rel 
 
 nrmShrFNum_rel :: Relation
 nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
@@ -95,9 +98,8 @@ nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
           (sy nrmForceSumDD + sy watForceSumDD)
-           * tan (inxi baseAngle)+ (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
-          2 * inxi surfHydroForce * sin (inxi surfAngle) -
-          2 * inxi surfLoad * cos (inxi impLoadAngle)),
+           * tan (inxi baseAngle) + (sy midpntHght) * (negate
+          2 * inxi surfHydroForce * sin (inxi surfAngle)),
           2 $<= sy index $<= ((sy numbSlices) - 1))
         case3 = ((indxn baseWthX)*(idx (sy intNormForce)
           (sy numbSlices -1) + idx (sy watrForce)
@@ -109,18 +111,23 @@ nrmShrFNum_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+
   S "for the derivation of" +:+. ch nrmShearNum]
 
 nrmShrFNum_desc :: Sentence
-nrmShrFNum_desc = foldlSent []
+nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sC` ch watrForce, S "is defined in", 
+  makeRef2S intersliceWtrF `sC` ch baseAngle, S "is defined in", 
+  makeRef2S angleA `sC` ch midpntHght, S "is defined in", 
+  makeRef2S slcHeight `sC` ch surfHydroForce, S "is defined in",
+  makeRef2S surfWtrF `sC` S "and", ch surfAngle, S "is defined in", 
+  makeRef2S angleB]
 
 --
 nrmShrForDen :: InstanceModel
-nrmShrForDen = im'' nrmShrForDen_rc [qw slopeDist, qw slopeHght, qw waterHght, 
-  qw waterWeight, qw slipDist, qw slipHght, qw constF]
+nrmShrForDen = im'' nrmShrForDen_rc [qw slipDist, qw constF]
   [sy nrmForceSumDD $< sy nrmForceSumDD] (qw nrmShearDen)
    [0 $< sy nrmForceSumDD $< sy nrmForceSumDD] [chen2005] nrmShrFDen_deriv "nrmShrForDen" [nrmShrFDen_desc]
 
 nrmShrForDen_rc :: RelationConcept
 nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")
-  nrmShrFDen_desc nrmShrFDen_rel -- nrmShrForL
+  nrmShrFDen_desc nrmShrFDen_rel 
 
 nrmShrFDen_rel :: Relation
 nrmShrFDen_rel = inxi nrmShearDen $= case_ [
@@ -129,7 +136,7 @@ nrmShrFDen_rel = inxi nrmShearDen $= case_ [
     inxiM1 scalFunc  * inxiM1 intNormForce),
     2 $<= sy index $<= (sy numbSlices - 1)),
   (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
-    idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
+    idx (sy scalFunc) (sy numbSlices - 1), sy index $= 1)
   ]
 
 nrmShrFDen_deriv :: Derivation
@@ -137,7 +144,9 @@ nrmShrFDen_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+
   S "for the derivation of" +:+. ch nrmShearDen]
 
 nrmShrFDen_desc :: Sentence
-nrmShrFDen_desc = foldlSent []
+nrmShrFDen_desc = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch scalFunc, S "is defined in",
+  makeRef2S ratioVariation]
 
 --
 

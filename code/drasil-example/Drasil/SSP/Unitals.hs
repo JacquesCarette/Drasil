@@ -273,7 +273,7 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
   ("for a soil surface, " ++ wiif) (Atomic "N*") newton
 
-surfLoad = uc' "Q_i" (cn $ "external force") 
+surfLoad = uc' "Q_i" (cn' $ "external force") 
   "a force per meter in the z-direction acting into the surface from the midpoint of a slice"
   (cQ) forcePerMeterU
 

@@ -18,7 +18,7 @@ import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_,
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSP, assumpINSFL, assumpES,
   assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
-  eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
+  eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
 import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, 
   convertFunc2, lengthLs, sliceWght, surfWtrF, intersliceWtrF, lengthB, angleA, 
   angleB, slcHeight, ratioVariation)
@@ -412,28 +412,31 @@ nrmShrDerivSentence5 = [eqN 16 +:+ S "for" +:+ ch normToShear +:+
   getTandS fs +:+. sParen (makeRef2S fctSfty)]
 
 nrmShrDerivationSentences :: [Sentence]
-nrmShrDerivationSentences = map foldlSentCol [nrmShrDerivSentence1, nrmShrDerivSentence2,
-  nrmShrDerivSentence3]
+nrmShrDerivationSentences = map foldlSentCol [nrmShrDerivSentence1, 
+  nrmShrDerivSentence2, nrmShrDerivSentence3, nrmShrDerivSentence4]
 
 nrmShrDerivEqns :: [Expr]
-nrmShrDerivEqns = [eq1, eq2, eq3]
+nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, 
+  nrmShrDerivEqn4]
 
-eq1, eq2, eq3:: Expr
-eq1 = 0 $=
+nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, nrmShrDerivEqn4 :: Expr
+nrmShrDerivEqn1 = 0 $=
   momExpr (\ x y -> x - (sy normToShear * (inxi baseWthX / 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) + y)
 
-eq2 = sy normToShear $= momExpr (+)
+nrmShrDerivEqn2 = sy normToShear $= momExpr (+)
   / ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
 
-eq3 = inxi normToShear $= sum1toN
+nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ (-)
+  / ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
+  inxiM1 intNormForce * inxiM1 scalFunc))
+
+nrmShrDerivEqn4 = inxi normToShear $= sum1toN
   (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
-  inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
-  2 * inxi surfHydroForce * sin(inxi surfAngle) -
-  2 * inxi surfLoad * sin(inxi impLoadAngle))) / 
-  sum1toN
+  inxi midpntHght * (negate (2 * inxi surfHydroForce * sin(inxi surfAngle)))) 
+  / sum1toN
   (inxi baseWthX * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
 

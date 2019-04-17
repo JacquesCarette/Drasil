@@ -2,7 +2,7 @@
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
-import Language.Drasil hiding (int, Label, Block, ($.), log, ln, exp,
+import Language.Drasil hiding (int, Block, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, 
   Object, String, Boolean, Integer))
@@ -780,13 +780,15 @@ genDataFunc nameTitle dd = do
           (listAccess l))
         indexData (WithPattern:is) l p v = indexData is l p (objAccess v
           (listAccess p))
+        indexData [] _ _ _ = error "indexData called with empty index list"
         ------------------------------
         getIndex :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr))
         getIndex [(Explicit i)] _ _ = litInt i
         getIndex [WithLine] l _ = l
         getIndex [WithPattern] _ p = p
-        getIndex (x:xs) l p = getIndex xs l p
+        getIndex (_:xs) l p = getIndex xs l p
+        getIndex [] _ _ = error "getIndex called with empty index list"
         ---------------
         checkIndex :: (RenderSym repr) => [Ind] -> Integer-> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr)) -> C.CodeType ->
@@ -858,7 +860,3 @@ getListType _ 0 = error "No index given"
 getListType (C.List t) 1 = t
 getListType (C.List t) n = getListType t (n-1)
 getListType _ _ = error "Not a list type"
-
-listBase :: C.CodeType -> C.CodeType
-listBase (C.List t) = listBase t
-listBase t = t

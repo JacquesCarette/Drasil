@@ -377,28 +377,39 @@ nrmShrF_desc = foldlSent [ch nrmShearNum, S "is defined in",
   makeRef2S nrmShrForDen]
 
 nrmShrDeriv :: Derivation
-nrmShrDeriv = (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns]) ++ nrmShrDerivSentence4
+nrmShrDeriv = (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns]) ++ nrmShrDerivSentence5
 
 nrmShrDerivSentence1 :: [Sentence]
 nrmShrDerivSentence1 = [S "From the", phrase momentEqlGD `sOf`
   makeRef2S momentEqlGD, S "with the primary", phrase assumption, 
   S "for the Morgenstern-Price method of", makeRef2S assumpINSFL `sAnd`
-  S "associated definition", makeRef2S normShrRGD `sC` eqN 14, 
+  S "associated", phrase definition, makeRef2S normShrRGD `sC` eqN 14, 
   S "can be derived"]
 
 nrmShrDerivSentence2 :: [Sentence]
-nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of", ch normToShear,
-  S "leads to", eqN 10]
+nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of",
+  ch normToShear, S "leads to", eqN 15]
 
 nrmShrDerivSentence3 :: [Sentence]
-nrmShrDerivSentence3 = [S "Taking a summation of each slice, and", boundaryCon `sC`
-  S "and removing the seismic and external forces due to", makeRef2S assumpSF `sAnd` makeRef2S assumpSL
-  `sC` S "a general", phrase equation, S "for the constant", ch normToShear,
-  S "is developed in", eqN 11 `sC` S "also found in", makeRef2S nrmShrFor]
+nrmShrDerivSentence3 = [S "This", phrase equation, S "can be simplified by",
+  S "applying", plural assumption, makeRef2S assumpSF `sAnd` 
+  makeRef2S assumpSL `sC` S "which state that the seismic" `sAnd` 
+  plural surfLoad `sC` S "respectively" `sC` S "are zero"]
 
 nrmShrDerivSentence4 :: [Sentence]
-nrmShrDerivSentence4 = [eqN 11 +:+ S "for" +:+ ch normToShear `sC`
-  S "is a function of the unknown" +:+ getTandS intNormForce +:+. makeRef2S intsliceFs]
+nrmShrDerivSentence4 = [S "Taking the summation of all", plural slice `sC`
+  S "and applying", makeRef2S assumpES, S "to set", 
+  E (idx (sy intNormForce) 0) `sC` E (indxn intNormForce) `sC`
+  E (idx (sy watrForce) 0) `sC` S "and", E (indxn watrForce), 
+  S "equal to zero" `sC` S "a general", phrase equation, S "for the", 
+  getTandS normToShear, S "is developed in", eqN 16 `sC` S "which combines", makeRef2S nrmShrFor `sC` makeRef2S nrmShrForNum `sC` S "and",
+  makeRef2S nrmShrForDen]
+
+nrmShrDerivSentence5 :: [Sentence]
+nrmShrDerivSentence5 = [eqN 16 +:+ S "for" +:+ ch normToShear +:+
+  S "is a function of the unknown" +:+ getTandS intNormForce +:+
+  sParen (makeRef2S intsliceFs) +:+ S "which itself depends on the unknown" +:+ 
+  getTandS fs +:+. sParen (makeRef2S fctSfty)]
 
 nrmShrDerivationSentences :: [Sentence]
 nrmShrDerivationSentences = map foldlSentCol [nrmShrDerivSentence1, nrmShrDerivSentence2,
@@ -425,13 +436,6 @@ eq3 = inxi normToShear $= sum1toN
   sum1toN
   (inxi baseWthX * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
-
-
-boundaryCon :: Sentence
-boundaryCon = foldlSent_ [S "applying the boundary condition that",
-  --FIXME: Index
-  E (idx (sy intNormForce) 0) `sAnd`
-  E (indxn intNormForce), S "are equal to", E 0]
 
 ---------------------------------------------------------------------
 nrmShrForNum :: InstanceModel

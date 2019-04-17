@@ -25,7 +25,8 @@ import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
-  Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
+  Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
+  Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point, Perc), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
@@ -181,6 +182,9 @@ p_ops Tan      = "tan"
 p_ops Sec      = "sec"
 p_ops Csc      = "csc"
 p_ops Cot      = "cot"
+p_ops Arcsin   = "arcsin"
+p_ops Arccos   = "arccos"
+p_ops Arctan   = "arctan"
 p_ops Not      = "&not;"
 p_ops Dim      = "dim"
 p_ops Exp      = "e"

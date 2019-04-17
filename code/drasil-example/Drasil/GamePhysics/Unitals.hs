@@ -60,7 +60,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime,  
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy]
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, QP.kEnergy, finRelVel]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -123,7 +123,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
+  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -186,9 +186,14 @@ time_c = ucs' (dccWDS "time_c" (cn "denotes the time at collision")
                 (phrase QP.time)) (sub (eqSymb QP.time) lC) Real second
 
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
-                 (compoundPhrase' (cn "relative") (QP.velocity ^. term))
+                 (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) lI) (Concat [cA, cB])) Real velU
+
+finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
+                 (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
+                 (cn "between rigid bodies of A and B")) (phrase QP.velocity))
+                 (sup (sub (eqSymb QP.velocity) lF) (Concat [cA, cB])) Real velU
 
 massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 

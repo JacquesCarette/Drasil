@@ -7,7 +7,7 @@ import Language.Drasil
 import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint, definition, 
   method_, physicalProperty, problem, solution, value)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -15,10 +15,11 @@ import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
   foldlSentCol, foldlSP, getTandS, isThe, ofThe, ofThe', sAnd, sOf)
 
-import Drasil.SSP.Assumptions (assumpFOSL, assumpSP, assumpINSFL, assumpES,
-  assumpSF, assumpSL)
+import Drasil.SSP.Assumptions (assumpSSC, assumpFOSL, assumpSP, assumpINSFL, 
+  assumpES, assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
+import Drasil.SSP.DataCons (data_constraint_Table3)
 import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, 
   convertFunc2, lengthLs, sliceWght, surfWtrF, intersliceWtrF, lengthB, angleA, 
   angleB, slcHeight, ratioVariation)
@@ -569,24 +570,27 @@ intrSlcDerivEqn = (inxi intNormForce) $=
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel
-crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [li2010] "crtSlpId" [crtSlpId_desc]
+crtSlpId = im' crtSlpId_rc [qw slopeDist, qw slopeHght, qw waterDist, 
+  qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight,
+  qw waterWeight, qw constF] [] (qw fs_min) [] [li2010] "crtSlpId" 
+  [crtSlpId_desc]
 
 crtSlpId_rc :: RelationConcept
-crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip identification")
+crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip surface identification")
   crtSlpId_desc crtSlpId_rel -- crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
+-- FIXME: critCoords should also be an output
+-- FIXME: coordinates should be sets
 crtSlpId_rel :: Relation
-crtSlpId_rel = (sy fs_min) $= (apply1 minFunction critCoords) -- sy inputHack])
-  --FIXME: add subscript to fs
+crtSlpId_rel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist, 
+  sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 
+  sy dryWeight, sy satWeight, sy waterWeight, sy constF])
 
 crtSlpId_desc :: Sentence
-crtSlpId_desc = foldlSent_ [S "Given the necessary", phrase slope,
-  S "inputs, a minimization", S "algorithm or function", ch minFunction,
-  S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
-  S "with the critical", phrase slip, S "coordinates", ch critCoords, 
-  S "and the", phrase fs_min, E (sy fs_min) +:+. S "that results",
-  makeRef2S assumpSP]
+crtSlpId_desc = foldlSent [S "The", phrase minFunction, S "must enforce the",
+  plural constraint, S "on the", phrase crtSlpSrf, S "expressed in", 
+  makeRef2S assumpSSC `sAnd` makeRef2S data_constraint_Table3]
 
 -----------
 -- Intro --

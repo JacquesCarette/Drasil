@@ -55,6 +55,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
+import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
@@ -507,10 +508,6 @@ waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
-{-input and output tables-}
-data_constraint_Table2, data_constraint_Table3 :: LabelledContent
-data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
-data_constraint_Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
 

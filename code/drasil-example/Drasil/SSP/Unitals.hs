@@ -101,8 +101,8 @@ fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety")) (const $ sub (eqSymb fs) (Atomic "min")) Real
-  Nothing 
+  ("The minimum factor of safety associated with the critical slip surface")) 
+  (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -396,7 +396,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   (const lN) Natural Nothing
 
-minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
 

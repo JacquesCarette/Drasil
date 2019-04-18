@@ -4,7 +4,7 @@ import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
 
-import Data.Drasil.Utils (eqUnR', weave)
+import Data.Drasil.Utils (weave)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint, definition, 
@@ -13,28 +13,29 @@ import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
-  foldlSentCol, foldlSP, getTandS, isThe, ofThe, ofThe', sAnd, sOf)
+  foldlSentCol, foldlSP, getTandS, ofThe', sAnd, sOf)
 
-import Drasil.SSP.Assumptions (assumpSSC, assumpFOSL, assumpSP, assumpINSFL, 
+import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL, 
   assumpES, assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
 import Drasil.SSP.DataCons (data_constraint_Table3)
-import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, 
-  convertFunc2, lengthLs, sliceWght, surfWtrF, intersliceWtrF, lengthB, angleA, 
-  angleB, slcHeight, ratioVariation)
-import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
-  bsShrFEqGD, mobShrGD)
-import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
+import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, lengthLs, sliceWght, 
+  surfWtrF, intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
+import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
+  resShearWOGD, bsShrFEqGD, mobShrGD)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
+  ssa)
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
-import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
+import Drasil.SSP.TMods (equilibrium, mcShrStrgth)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  effCohesion, constF, critCoords, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, impLoadAngle, index, 
-  indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, inxiP1, midpntHght,
-  minFunction, mobShrC, mobShrI, nrmShearNum, normToShear, nrmForceSum, nrmFSubWat,
-  numbSlices, satWeight, scalFunc, shearFNoIntsl, nrmShearDen, shearRNoIntsl, 
-  shrResC, slcWght, slipDist, slipHght, slopeDist, slopeHght, sum1toN, surfAngle, surfHydroForce, surfLoad, totNrmForce, 
-  varblV, watForceSum, watrForce, waterDist, waterHght, waterWeight, wiif)
+  effCohesion, constF, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, 
+  index, indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, midpntHght,
+  minFunction, mobShrC, mobShrI, nrmForceSum, nrmShearNum, normToShear, 
+  nrmFSubWat, numbSlices, satWeight, scalFunc, shearFNoIntsl, nrmShearDen, 
+  shearRNoIntsl, shrResC, slipDist, slipHght, slopeDist, slopeHght, sum1toN, 
+  surfAngle, surfHydroForce, surfLoad, totNrmForce, varblV, watrForce, 
+  waterDist, waterHght, waterWeight, watForceSum)
 
 -----------------------
 --  Instance Models  --
@@ -44,6 +45,8 @@ sspIMods :: [InstanceModel]
 sspIMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 
 --
+
+-- FIXME: coordinates should be sequences? (see issue #1083)
 fctSfty :: InstanceModel
 fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] [chen2005, karchewski2012] fctSftyDeriv "fctSfty" [fcSfty_desc]
@@ -359,6 +362,8 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
   idx (sy shearRNoIntsl) (sy numbSlices - int 1) + indxn shearRNoIntsl
 
 ------------------------------------------------------------------------
+
+-- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
@@ -434,13 +439,15 @@ nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ (-)
   inxiM1 intNormForce * inxiM1 scalFunc))
 
 nrmShrDerivEqn4 = inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy nrmForceSumDD + sy watForceSumDD) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy nrmForceSum + sy watForceSum) * tan(inxi baseAngle) +
   inxi midpntHght * (negate (2 * inxi surfHydroForce * sin(inxi surfAngle)))) 
   / sum1toN
   (inxi baseWthX * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
 
 ---------------------------------------------------------------------
+
+-- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
@@ -456,7 +463,7 @@ nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
-          (sy nrmForceSumDD + sy watForceSumDD)
+          (sy nrmForceSum + sy watForceSum)
            * tan (inxi baseAngle) + (sy midpntHght) * (negate
           2 * inxi surfHydroForce * sin (inxi surfAngle)),
           2 $<= sy index $<= ((sy numbSlices) - 1))
@@ -479,6 +486,8 @@ nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in",
   makeRef2S angleB]
 
 ---------------------------------------------------------------------------
+
+-- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im'' nrmShrForDen_rc [qw slipDist, qw constF]
   [] (qw nrmShearDen) [] [chen2005] nrmShrFDen_deriv "nrmShrForDen" 
@@ -509,6 +518,8 @@ nrmShrFDen_desc = foldlSent [ch baseWthX, S "is defined in",
 
 --------------------------------------------------------------------------
 
+
+-- FIXME: coordinates should be sequences? (see issue #1083)
 intsliceFs :: InstanceModel
 intsliceFs = im'' intsliceFs_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw intNormForce) [] [chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
@@ -581,7 +592,7 @@ crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip surface identifi
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
--- FIXME: coordinates should be sets
+-- FIXME: coordinates should be sequences? (see issue #1083)
 crtSlpId_rel :: Relation
 crtSlpId_rel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist, 
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 

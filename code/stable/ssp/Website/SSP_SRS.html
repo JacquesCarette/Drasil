@@ -225,10 +225,10 @@ N
 </tr>
 <tr>
 <td>
-<em>F<sub>S</sub><sub>min</sub></em>
+<em>F<sub>S</sub><sup>min</sup></em>
 </td>
 <td>
-Minimum Factor of Safety: The minimum factor of safety
+Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface
 </td>
 <td>
 --
@@ -599,17 +599,6 @@ N/m
 </tr>
 <tr>
 <td>
-<em>x<sub>cs</sub>,y<sub>cs</sub></em>
-</td>
-<td>
-The Set of X and Y Coordinates: describe the vertices of the critical slip surface
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
 <em>x<sub>slip</sub></em>
 </td>
 <td>
@@ -625,6 +614,17 @@ m
 </td>
 <td>
 X-Coordinate of the Slope: x-coordinate of a point on the slope
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>wt</sub></em>
+</td>
+<td>
+X-Coordinate: x-position of the water table
 </td>
 <td>
 m
@@ -800,7 +800,7 @@ Pa
 <em>Υ</em>
 </td>
 <td>
-Function: generic minimization function or algorithm
+Minimization Function: generic minimization function or algorithm
 </td>
 <td>
 --
@@ -1323,7 +1323,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpSSC">
-Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>) coordinates of a slip surface follow a concave up function.
+Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. <a href=#IM:crtSlpId>IM: crtSlpId</a>.
 </div>
 </p>
 <p>
@@ -1338,7 +1338,7 @@ Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil prope
 </p>
 <p>
 <div id="assumpSP">
-Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. <a href=#GD:resShr>GD: resShr</a> <a href=#IM:crtSlpId>IM: crtSlpId</a>.
+Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. <a href=#GD:resShr>GD: resShr</a>.
 </div>
 </p>
 <p>
@@ -6233,7 +6233,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Critical slip identification
+Critical slip surface identification
 </p>
 </td>
 </tr>
@@ -6243,7 +6243,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-
+<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>x<sub>wt</sub></em>, <em>y<sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -6253,7 +6253,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>F<sub>S</sub><sub>min</sub></em>
+<em>F<sub>S</sub><sup>min</sup></em>
 </p>
 </td>
 </tr>
@@ -6277,7 +6277,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>F<sub>S</sub><sub>min</sub> = Υ(x<sub>cs</sub>,y<sub>cs</sub>)</em>
+<em>F<sub>S</sub><sup>min</sup> = Υ(x<sub>slope</sub>,y<sub>slope</sub>,x<sub>wt</sub>,y<sub>wt</sub>,c&prime;,φ&prime;,γ,γ<sub>Sat</sub>,γ<sub>w</sub>,const_f)</em>
 </div>
 </td>
 </tr>
@@ -6288,13 +6288,40 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F<sub>S</sub><sub>min</sub></em> is the minimum factor of safety (Unitless)
+<em>F<sub>S</sub><sup>min</sup></em> is the minimum factor of safety (Unitless)
 </li>
 <li>
-<em>Υ</em> is the function (Unitless)
+<em>Υ</em> is the minimization function (Unitless)
 </li>
 <li>
-<em>x<sub>cs</sub>,y<sub>cs</sub></em> is the the set of x and y coordinates (m)
+<em>x<sub>slope</sub></em> is the x-coordinate of the slope (m)
+</li>
+<li>
+<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+</li>
+<li>
+<em>x<sub>wt</sub></em> is the x-coordinate (m)
+</li>
+<li>
+<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+</li>
+<li>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</li>
+<li>
+<em>φ&prime;</em> is the effective angle of friction (&deg;)
+</li>
+<li>
+<em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
+</li>
+<li>
+<em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+<li>
+<em>const_f</em> is the decision on f (Unitless)
 </li>
 </ul>
 </td>
@@ -6305,7 +6332,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>x<sub>cs</sub>,y<sub>cs</sub></em> and the minimum factor of safety <em>F<sub>S</sub><sub>min</sub></em> that results. <a href=#assumpSP>A: Soil-Properties</a>
+The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>.
 </p>
 </td>
 </tr>

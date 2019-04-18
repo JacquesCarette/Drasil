@@ -1,16 +1,14 @@
-module Language.Drasil.Make.Print where
+module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), hsep, vcat) 
 
-import Language.Drasil.Output.Formats (DocSpec(..))
-import Language.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
-import Language.Drasil.Make.Import (toMake)
-import Language.Drasil.Make.Helpers (addCommonFeatures)
-import Language.Drasil.Printing.Helpers (tab)
+import Build.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
+import Build.Drasil.Make.Import (RuleTransformer, toMake)
+import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 
 -- | Generates the makefile by calling 'build' after 'toMake'
-genMake :: [DocSpec] -> Doc
+genMake :: RuleTransformer c => [c] -> Doc
 genMake = build . toMake
 
 -- | Renders the makefile rules

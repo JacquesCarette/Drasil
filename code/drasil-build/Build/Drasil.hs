@@ -1,7 +1,10 @@
 module Build.Drasil (
   -- Make
     -- AST
-    Type(Phony, TeX)
+    Command(C)
+  , CommandOpts(IgnoreReturnCode)
+  , Rule(R)
+  , Type(Abstract, File)
     -- Import
   , RuleTransformer(makeRule)
     -- Print
@@ -9,6 +12,6 @@ module Build.Drasil (
   )
   where
 
-import Build.Drasil.Make.AST (Type(Phony, TeX))
+import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode), Rule(R), Type(Abstract, File))
 import Build.Drasil.Make.Import (RuleTransformer(makeRule))
 import Build.Drasil.Make.Print (genMake)

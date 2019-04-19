@@ -1,9 +1,10 @@
 module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))
+import Data.List (elem)
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), hsep, vcat) 
 
-import Build.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
+import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 
@@ -17,24 +18,14 @@ build (M rules) = addCommonFeatures $ vcat $ map (\x -> printRule x $+$ text "")
 
 -- | Renders specific makefile rules. Called by 'build'
 printRule :: Rule -> Doc
-printRule (Phony, nameLb, deps) = text (".PHONY: " ++ nameLb) $+$
-                                  printTarget nameLb deps
-printRule (TeX, nameLb, _)      = printTarget (nameLb ++ ".pdf") [(nameLb ++ ".tex")] $+$
-                                  printLatexCmd nameLb
-printRule _                     = error "Unimplemented makefile rule"
-
+printRule (R t d ty c) = printTarget t d $+$ (printCmds c)
 
 -- | Renders targets with their dependencies
 printTarget :: Target -> [Dependencies] -> Doc
-printTarget nameLb deps = text (nameLb ++ ": ") <+> hsep (map text deps)
+printTarget nameLb deps = text (nameLb ++ ":") <+> hsep (map text deps)
 
-lualatex :: Target -> Doc
-lualatex = text . (++) "lualatex $(TEXFLAGS) "
+printCmd :: Command -> Doc
+printCmd (C c opts) = tab <> (text $ (if IgnoreReturnCode `elem` opts then "-" else "") ++ c)
 
-bibtex :: Target -> Doc
-bibtex = text . (++) "-bibtex $(BIBTEXFLAGS) "
-
--- | Renders LaTeX commands in the makefile
-printLatexCmd :: Target -> Doc
-printLatexCmd t = foldr (\x -> (tab <> x t $+$)) empty
-  [lualatex, bibtex, lualatex, lualatex]
+printCmds :: [Command] -> Doc
+printCmds = foldr (($+$) . printCmd) empty

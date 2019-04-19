@@ -3,11 +3,15 @@ module Build.Drasil.Make.AST where
 
 newtype Makefile = M [Rule]
 
-type Rule = (Type, Target, [Dependencies])
+data Rule = R Target [Dependencies] Type [Command]
 
-data Type = Phony
-          | TeX
-          | Code
+data Command = C String [CommandOpts]
+
+data CommandOpts =
+  IgnoreReturnCode deriving Eq
+
+data Type = Abstract
+          | File
 
 type Target = String
 type Dependencies = Target

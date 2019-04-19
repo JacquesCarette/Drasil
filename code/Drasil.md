@@ -3,6 +3,7 @@ Drasil-in-Drasil, then this information would be there, somewhere.
 
 Drasil is divided into package:
 - **drasil-lang**: the language of used to describe basic knowledge
+- **drasil-build**: representation of build system languages and renderers
 - **drasil-code**: representation of output programming languages
 - **drasil-printers**: representation of output rendering languages, and renderers
 - **drasil data**: actual knowledge, represented in the Drasil language

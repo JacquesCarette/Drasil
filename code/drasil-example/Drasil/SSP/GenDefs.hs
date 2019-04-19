@@ -79,9 +79,9 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 nmFEq_deriv :: Sentence
-nmFEq_deriv = foldlSent [at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
+  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 bsShrFEq :: RelationConcept
@@ -101,9 +101,9 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 bShFEq_deriv :: Sentence
-bShFEq_deriv = foldlSent [at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+bShFEq_deriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
+  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 shrResEqn :: Expr
@@ -253,6 +253,6 @@ momEql_desc = foldlSent [S "This", phrase equation, S "satisfies",
   S "is defined in", makeRef2S angleB]
 
 momEql_deriv :: Sentence
-momEql_deriv = foldlSent_ [S "Moment equilibrium is derived from the free",
+momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]

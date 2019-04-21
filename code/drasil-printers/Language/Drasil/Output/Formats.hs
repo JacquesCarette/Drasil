@@ -2,7 +2,7 @@
 module Language.Drasil.Output.Formats where
 
 import Data.Char (toLower)
-import Build.Drasil (Command(C), CommandOpts(IgnoreReturnCode), Rule(R), RuleTransformer(makeRule), Type(Abstract, File))
+import Build.Drasil (Command, mkCheckedCommand, mkCommand, mkFile, mkRule, RuleTransformer(makeRule))
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension)
@@ -12,15 +12,15 @@ data DocType = SRS | MG | MIS | Website
 
 data DocSpec = DocSpec DocType Filename
 
-lualatex, bibtex :: String -> Command
-lualatex = (flip C) [] . (++) "lualatex $(TEXFLAGS) "
-bibtex = (flip C) [IgnoreReturnCode] . (++) "bibtex $(BIBTEXFLAGS) "
-
 instance RuleTransformer DocSpec where
   makeRule (DocSpec Website _) = []
   makeRule (DocSpec dt fn) = [
-    R (map toLower $ show dt) [fn ++ ".pdf"] Abstract [],
-    R (fn ++ ".pdf") [fn ++ ".tex"] File $ map ($ fn) [lualatex, bibtex, lualatex, lualatex]]
+    mkRule (map toLower $ show dt) [fn ++ ".pdf"] [],
+    mkFile (fn ++ ".pdf") [fn ++ ".tex"] $
+      map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
+        lualatex, bibtex :: String -> Command
+        lualatex = mkCheckedCommand . (++) "lualatex $(TEXFLAGS) "
+        bibtex = mkCommand . (++) "bibtex $(BIBTEXFLAGS) "
 
 instance Show DocType where
   show SRS      = "SRS"

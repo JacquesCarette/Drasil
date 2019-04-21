@@ -1,7 +1,8 @@
 -- | Defines output formats for the different documents we can generate
 module Language.Drasil.Output.Formats where
 
-import Build.Drasil (Command(C), CommandOpts(IgnoreReturnCode), Rule(R), RuleTransformer(makeRule), Type(File))
+import Data.Char (toLower)
+import Build.Drasil (Command(C), CommandOpts(IgnoreReturnCode), Rule(R), RuleTransformer(makeRule), Type(Abstract, File))
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension)
@@ -17,7 +18,9 @@ bibtex = (flip C) [IgnoreReturnCode] . (++) "bibtex $(BIBTEXFLAGS) "
 
 instance RuleTransformer DocSpec where
   makeRule (DocSpec Website _) = []
-  makeRule (DocSpec _ fn) = [R (fn ++ ".pdf") [fn ++ ".tex"] File $ map ($ fn) [lualatex, bibtex, lualatex, lualatex]]
+  makeRule (DocSpec dt fn) = [
+    R (map toLower $ show dt) [fn ++ ".pdf"] Abstract [],
+    R (fn ++ ".pdf") [fn ++ ".tex"] File $ map ($ fn) [lualatex, bibtex, lualatex, lualatex]]
 
 instance Show DocType where
   show SRS      = "SRS"

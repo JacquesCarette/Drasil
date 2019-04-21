@@ -11,7 +11,7 @@ data CommandOpts =
   IgnoreReturnCode deriving Eq
 
 data Type = Abstract
-          | File
+          | File deriving Eq
 
 type Target = String
 type Dependencies = Target

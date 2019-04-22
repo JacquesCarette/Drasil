@@ -71,7 +71,7 @@ fs, coords :: ConstrConcept
 
 effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10000) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
@@ -82,18 +82,18 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   lGamma specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt
+  (dbl 20000) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt
+  (dbl 20000) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
-  (dbl 9.8) defultUncrt
+  (dbl 9800) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)

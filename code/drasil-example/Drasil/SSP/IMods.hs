@@ -7,9 +7,11 @@ import Language.Drasil.ShortHands (lU, lV) -- local (bound) variables
 
 import Data.Drasil.Utils (eqUnR', weave)
 
+import Drasil.DocLang (goalStmt_label)
+
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
-  method_, physicalProperty, problem, solution, value)
+  goal, method_, physical, physicalProperty, problem, solution, value)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
@@ -24,7 +26,7 @@ import Drasil.SSP.DataDefs (nrmForceSumDD, watForceSumDD, convertFunc1, convertF
   lengthLs, sliceWght)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
   bsShrFEqGD, mobShrGD)
-import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, slpSrf, ssa)
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -163,35 +165,30 @@ crtSlpId_desc = foldlSent_ [S "Given the necessary", phrase slope,
 -- Intro --
 -----------
 
-instModIntro1, instModIntro2 :: Contents
+instModIntro1, instModIntro2 :: Sentence
 
-instModIntro1 = foldlSP [S "The", titleize morPrice,
+instModIntro1 = foldlSent [S "The", plural goal,
+  S "are met by the simultaneous", phrase solution, S "of", 
+  makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC`
+  S "and" +:+. makeRef2S intsliceFs, S "The", phrase goal, S "is also", 
+  S "contributed to by" +:+ makeRef2S crtSlpId]
+
+instModIntro2 = foldlSent [S "The", titleize morPrice,
   phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
   phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
-  S "breaking the assumed failure", phrase surface,
+  S "breaking the assumed", phrase slpSrf,
   S "into a series of vertical", plural slice, S "of" +:+. phrase mass,
-  S "Static equilibrium analysis using two", phrase force,
-  S "equilibrium, and one moment", phrase equation, S "as in" +:+. makeRef2S equilibrium,
+  S "Static equilibrium analysis is performed, using two", phrase force,
+  plural equation `sAnd` S "one moment", phrase equation, S "as in" +:+. makeRef2S equilibrium,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
-  makeRef2S mcShrStrgth, S "so the", phrase assumption, S "of", makeRef2S normShrRGD,
-  S "is used. Solving for", phrase force, S "equilibrium allows",
-  plural definition, S "of all", plural force, S "in terms of the",
-  plural physicalProperty, S "of", makeRef2S sliceWght, S "to",
-  makeRef2S lengthLs `sC` S "as done in", makeRef2S resShearWOGD `sC` makeRef2S mobShearWOGD]
-
-instModIntro2 = foldlSP [
-  plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
-  ch intNormForce, S "the", getTandS normToShear `sC`
-  S "and the", titleize fs, (sParen $ ch fs) `sC` S "are unknown.",
-  at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", makeRef2S sliceWght, S "to", makeRef2S lengthLs `sC` S "the", plural value,
-  S "of", ch shearRNoIntsl `sC` S "and", ch shearFNoIntsl, S "in",
-  makeRef2S resShearWOGD, S "and", makeRef2S mobShearWOGD `sC` S "and each",
-  S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit", plural equation, S "cannot be derived and an",
-  S "iterative", plural solution, S "method is required"]
+  makeRef2S mcShrStrgth, S "so the", phrase assumption, 
+  makeRef2S normShrRGD `sAnd` S "corresponding equation", 
+  makeRef2S normShrRGD +:+. S "are used",
+  S "The", phrase force, S "equilibrium", plural equation, S "can be modified",
+  S "to be expressed only in terms of known", phrase physical, plural value `sC`
+  S "as done in", makeRef2S resShearWOGD `sC` makeRef2S mobShearWOGD]
 
 -----------------
 -- Derivations --

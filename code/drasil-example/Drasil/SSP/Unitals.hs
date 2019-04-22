@@ -47,7 +47,8 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight]
+sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight, 
+  xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -61,8 +62,8 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-effCohesion, fricAngle, dryWeight, satWeight,
-  waterWeight :: UncertQ
+effCohesion, fricAngle, dryWeight, satWeight, waterWeight, xMaxExtSlip,
+  xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip :: UncertQ
   
 fs, coords :: ConstrConcept
 
@@ -94,6 +95,31 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9800) defultUncrt
+
+xMaxExtSlip = uqc "x_slip^maxExt" (cn $ "maximum exit x-coordinate")
+  "maximum potential x-coordinate for the exit point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "maxExt")) metre Real [] (dbl 100) defultUncrt
+
+
+xMaxEtrSlip = uqc "x_slip^maxEtr" (cn $ "maximum entry x-coordinate")
+  "maximum potential x-coordinate for the entry point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "maxEtr")) metre Real [] (dbl 20) defultUncrt
+  
+xMinExtSlip = uqc "x_slip^minExt" (cn $ "minimum exit x-coordinate")
+  "minimum potential x-coordinate for the exit point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "minExt")) metre Real [] (dbl 50) defultUncrt
+
+xMinEtrSlip = uqc "x_slip^minEtr" (cn $ "minimum exit x-coordinate")
+  "minimum potential x-coordinate for the entry point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "minEtr")) metre Real [] (dbl 0) defultUncrt
+
+yMaxSlip = uqc "y_slip^max" (cn $ "maximum y-coordinate") 
+  "maximum potential y-coordinate of a point on a slip surface"
+  (sup (eqSymb slipHght) (Atomic "max")) metre Real [] (dbl 30) defultUncrt
+
+yMinSlip = uqc "y_slip^min" (cn $ "minimum y-coordinate") 
+  "minimum potential y-coordinate of a point on a slip surface"
+  (sup (eqSymb slipHght) (Atomic "min")) metre Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)

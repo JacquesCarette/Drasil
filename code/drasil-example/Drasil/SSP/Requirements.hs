@@ -3,33 +3,39 @@ module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_,
-  method_, value)
+import Data.Drasil.Concepts.Documentation (constraint, datum, funcReqDom, 
+  input_, method_, physical, value)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, ofThe, sOf)
 import Data.Drasil.Utils (mkInputDatTb)
 
+import Drasil.SSP.DataCons (data_constraint_Table2)
 import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
+import Drasil.SSP.IMods (crtSlpId)
 import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs)
 
 sspRequirements :: [ConceptInstance]
-sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS, 
+sspRequirements = [readAndStore, verifyInput, generateCSS, testSlipSrf, prepareSlipS, 
     calculateFS, rankSlope, generateCSS', repeatFindFS, prepareCSS, 
     calculateFS', displayGraph]
 
-readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope, 
+readAndStore, verifyInput, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope, 
     generateCSS', repeatFindFS, prepareCSS, calculateFS', 
     displayGraph :: ConceptInstance
 
 readAndStore = cic "readAndStore" ( foldlSent [
-  S "Read the", phrase input_, S "file and store the" +:+. 
-  plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef2S sspInputDataTable]) "Read-and-Store" funcReqDom
+  S "Read the", plural input_ `sC` S "shown in", 
+  makeRef2S sspInputDataTable `sC` S "and store the", plural datum]) "Read-and-Store" funcReqDom
+
+verifyInput = cic "verifyInput" ( foldlSent [
+  S "Verify that the", phrase input_, plural datum, S "lie within the",
+  phrase physical, plural constraint, S "shown in", 
+  makeRef2S data_constraint_Table2]) "Verify-Input" funcReqDom
 
 generateCSS = cic "generateCSS" ( foldlSent [
-  S "Generate potential", plural crtSlpSrf,S "for the", 
-  phrase input_, phrase slope]) "Generate-Critical-Slip-Surfaces" funcReqDom
+  S "Generate potential", plural crtSlpSrf, S "for the", 
+  phrase input_, phrase slope, sParen (S "using" +:+ makeRef2S crtSlpId)]) "Generate-Critical-Slip-Surfaces" funcReqDom
 
 testSlipSrf = cic "testSlipSrf" ( foldlSent [
   S "Test the", plural slpSrf, S "to determine if they are physically",

@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics (force)
 
 
 sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++
+sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++ 
   (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
 
 ---------------------------
@@ -44,12 +44,18 @@ smsi  = "refers to either slice i midpoint, or slice interface i"
 --------------------------------
 
 sspConstrained :: [ConstrainedChunk]
-sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
+sspConstrained = map cnstrw sspInputsWUncrtn ++ map cnstrw sspOutputs
 
-sspInputs :: [UncertQ]
-sspInputs = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
+sspInputsWUncrtn :: [UncertQ]
+sspInputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, 
   fricAngle, dryWeight, satWeight, waterWeight]
+
+sspInputsNoUncrtn :: [DefinedQuantityDict]
+sspInputsNoUncrtn = [constF]
+
+sspInputs :: [DefinedQuantityDict]
+sspInputs = map dqdWr sspInputsWUncrtn ++ map dqdWr sspInputsNoUncrtn
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -66,6 +72,8 @@ defultUncrt = 0.1
 slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip, 
   xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
   dryWeight, satWeight, waterWeight :: UncertQ
+
+constF :: DefinedQuantityDict
   
 fs, coords :: ConstrConcept
 
@@ -137,6 +145,10 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9800) defultUncrt
+
+constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
+  ("boolean decision on which form of f the user desires: constant if true," ++
+  " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
@@ -393,15 +405,11 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 ----------------------
 
 sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
+sspUnitless = [earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblV, fs_min]
 
-constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
+earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
-
-constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
-  ("boolean decision on which form of f the user desires: constant if true," ++
-  " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "seismic coefficient")
   ("proportionality factor of force that " ++

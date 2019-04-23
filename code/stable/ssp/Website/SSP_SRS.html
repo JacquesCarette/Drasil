@@ -624,7 +624,51 @@ m
 <em>x<sub>wt</sub></em>
 </td>
 <td>
-X-Coordinate: x-position of the water table
+X-Coordinate of the Water Table: x-position of the water table
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+Maximum Entry X-Coordinate: maximum potential x-coordinate for the entry point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+Maximum Exit X-Coordinate: maximum potential x-coordinate for the exit point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface
 </td>
 <td>
 m
@@ -658,6 +702,28 @@ m
 </td>
 <td>
 Y-Coordinate of the Water Table: height of the water table
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+Maximum Y-Coordinate: maximum potential y-coordinate of a point on a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+Minimum Y-Coordinate: minimum potential y-coordinate of a point on a slip surface
 </td>
 <td>
 m
@@ -6300,7 +6366,7 @@ Description
 <em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>x<sub>wt</sub></em> is the x-coordinate (m)
+<em>x<sub>wt</sub></em> is the x-coordinate of the water table (m)
 </li>
 <li>
 <em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
@@ -6392,7 +6458,147 @@ Uncert.
 <em>c&prime;&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>10.0</em> Pa
+<em>10.0&sdot;10<sup>3</sup></em> Pa
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slope</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>wt</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>20.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>100.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>50.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slope</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>wt</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>30.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
 </td>
 <td>
 10.0<em>%</em>
@@ -6406,7 +6612,7 @@ Uncert.
 <em>γ&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/m<sup>3</sup>
+<em>20.0&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6420,7 +6626,7 @@ Uncert.
 <em>γ<sub>Sat</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/m<sup>3</sup>
+<em>20.0&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6434,7 +6640,7 @@ Uncert.
 <em>γ<sub>w</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>9.8</em> N/m<sup>3</sup>
+<em>9.8&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6592,6 +6798,116 @@ cartesian position coordinates
 </tr>
 <tr>
 <td>
+<em>x<sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinate of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinate of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinate of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinate of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum entry x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
 <em>c&prime;</em>
 </td>
 <td>
@@ -6643,6 +6959,17 @@ N/m<sup>3</sup>
 </td>
 <td>
 unit weight of water
+</td>
+</tr>
+<tr>
+<td>
+<em>const_f</em>
+</td>
+<td>
+
+</td>
+<td>
+decision on f
 </td>
 </tr>
 </table>

@@ -47,9 +47,9 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [slopeDist, slopeHght, waterHght, xMaxExtSlip, xMaxEtrSlip, 
-  xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
-  dryWeight, satWeight, waterWeight]
+sspInputs = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
+  xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, 
+  fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -63,9 +63,9 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-slopeDist, slopeHght, waterHght, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
-  xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, dryWeight, satWeight,
-  waterWeight :: UncertQ
+slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip, 
+  xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
+  dryWeight, satWeight, waterWeight :: UncertQ
   
 fs, coords :: ConstrConcept
 
@@ -79,6 +79,10 @@ slopeDist = uqc "x_slope,i" (cn $ "x-coordinate of the slope")
 slopeHght = uqc "y_slope,i" (cn $ "y-coordinate of the slope")
   ("y-coordinate of a point on the soil slope")
   (sub lY (Atomic "slope")) metre Real [] (dbl 0) defultUncrt
+
+waterDist = uqc "x_wt,i" (cn $ "x-coordinate of the water table")
+  ("x-position of the water table")
+  (sub lX (Atomic "wt")) metre Real [] (dbl 0) defultUncrt
 
 waterHght = uqc "y_wt,i" (cn $ "y-coordinate of the water table")
   ("height of the water table")
@@ -140,8 +144,8 @@ fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety")) (const $ sub (eqSymb fs) (Atomic "min")) Real
-  Nothing 
+  ("The minimum factor of safety associated with the critical slip surface")) 
+  (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -156,8 +160,8 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, slipHght, xi, yi,
-  zcoord, critCoords, slipDist,
+sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, slipHght, xi,
+  yi, zcoord, critCoords, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
@@ -167,8 +171,8 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, slipHght, xi, yi,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
-genericF, genericA, normFunc, shearFunc, slipDist, slipHght, xi, yi, zcoord, 
-  critCoords, mobShrI, sliceHght,
+genericF, genericA, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, 
+  zcoord, critCoords, mobShrI, sliceHght,
   sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
   watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
@@ -294,7 +298,7 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force")
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force")
   ("for a soil surface, " ++ wiif) (Atomic "N*") newton
 
-surfLoad = uc' "Q_i" (cn $ "external force") 
+surfLoad = uc' "Q_i" (cn' $ "external force") 
   "a force per meter in the z-direction acting into the surface from the midpoint of a slice"
   (cQ) forcePerMeterU
 
@@ -346,13 +350,15 @@ sliceHghtW = uc' "h_z,w,i" (cn "height halfway to water table")
   "water table")
   (sub lH (Atomic "z,w")) metre
 
-normFunc = uc' "C1_i" (cn "interslice normal force function")
-  "the normal force at the interslice interface for slice i"
-  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
+nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
+  ("expression used to calculate the numerator of the interslice normal to " ++
+  "shear force proportionality constant")
+  (sub cC (Atomic "num")) newton
   
-shearFunc = uc' "C2_i" (cn "interslice shear force function")
-  "the shear force at the interslice interface for slice i"
-  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
+nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
+  ("expression used to calculate the denominator of the interslice normal to" ++
+  " shear force proportionality constant")
+  (sub cC (Atomic "den")) newton
 
 fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton
@@ -388,10 +394,10 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblU, varblV, fs_min]
+  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblV, fs_min]
 
 constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, mobShrC, shrResC, index, varblU, varblV :: DefinedQuantityDict
+  minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
@@ -415,7 +421,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   (const lN) Natural Nothing
 
-minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
 
@@ -433,9 +439,6 @@ shrResC = dqd' (dcc "Phi" (nounPhraseSP $ "first function for incorporating " ++
 -- Index Function --
 --------------------
 
-varblU = dqd' (dcc "varblU" (nounPhraseSP "local index")
-  ("used as a bound variable index in calculations"))
-  (const lU) Natural Nothing 
 varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   (const lV) Natural Nothing

@@ -14,8 +14,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), 
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
-  mkEnumSimpleD, outDataConstTbl, probDescF, termDefnF,
+  dataConstraintUncertainty, goalStmtF, intro, mkDoc,
+  mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmt_label, physSystDescription_label, generateTraceMap')
@@ -55,6 +55,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
+import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
@@ -189,7 +190,7 @@ ssppriorityNFReqs = [correctness, understandability, reusability,
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
 sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw sspIMods
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw sspIMods
   ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
@@ -507,10 +508,6 @@ waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
-{-input and output tables-}
-data_constraint_Table2, data_constraint_Table3 :: LabelledContent
-data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
-data_constraint_Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
 

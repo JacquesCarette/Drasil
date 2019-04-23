@@ -47,8 +47,9 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [effCohesion, fricAngle, dryWeight, satWeight, waterWeight, 
-  xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip]
+sspInputs = [slopeDist, slopeHght, waterHght, xMaxExtSlip, xMaxEtrSlip, 
+  xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
+  dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]
@@ -62,13 +63,50 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-effCohesion, fricAngle, dryWeight, satWeight, waterWeight, xMaxExtSlip,
-  xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip :: UncertQ
+slopeDist, slopeHght, waterHght, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
+  xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, dryWeight, satWeight,
+  waterWeight :: UncertQ
   
 fs, coords :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
+
+slopeDist = uqc "x_slope,i" (cn $ "x-coordinate of the slope")
+  ("x-coordinate of a point on the slope")
+  (sub lX (Atomic "slope")) metre Real [] (dbl 0) defultUncrt
+
+slopeHght = uqc "y_slope,i" (cn $ "y-coordinate of the slope")
+  ("y-coordinate of a point on the soil slope")
+  (sub lY (Atomic "slope")) metre Real [] (dbl 0) defultUncrt
+
+waterHght = uqc "y_wt,i" (cn $ "y-coordinate of the water table")
+  ("height of the water table")
+  (sub lY (Atomic "wt")) metre Real [] (dbl 0) defultUncrt
+
+xMaxExtSlip = uqc "x_slip^maxExt" (cn $ "maximum exit x-coordinate")
+  "maximum potential x-coordinate for the exit point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "maxExt")) metre Real [] (dbl 100) defultUncrt
+
+xMaxEtrSlip = uqc "x_slip^maxEtr" (cn $ "maximum entry x-coordinate")
+  "maximum potential x-coordinate for the entry point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "maxEtr")) metre Real [] (dbl 20) defultUncrt
+  
+xMinExtSlip = uqc "x_slip^minExt" (cn $ "minimum exit x-coordinate")
+  "minimum potential x-coordinate for the exit point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "minExt")) metre Real [] (dbl 50) defultUncrt
+
+xMinEtrSlip = uqc "x_slip^minEtr" (cn $ "minimum exit x-coordinate")
+  "minimum potential x-coordinate for the entry point of a slip surface"
+  (sup (eqSymb slipDist) (Atomic "minEtr")) metre Real [] (dbl 0) defultUncrt
+
+yMaxSlip = uqc "y_slip^max" (cn $ "maximum y-coordinate") 
+  "maximum potential y-coordinate of a point on a slip surface"
+  (sup (eqSymb slipHght) (Atomic "max")) metre Real [] (dbl 30) defultUncrt
+
+yMinSlip = uqc "y_slip^min" (cn $ "minimum y-coordinate") 
+  "minimum potential y-coordinate of a point on a slip surface"
+  (sup (eqSymb slipHght) (Atomic "min")) metre Real [] (dbl 0) defultUncrt
 
 effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
@@ -96,31 +134,6 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9800) defultUncrt
 
-xMaxExtSlip = uqc "x_slip^maxExt" (cn $ "maximum exit x-coordinate")
-  "maximum potential x-coordinate for the exit point of a slip surface"
-  (sup (eqSymb slipDist) (Atomic "maxExt")) metre Real [] (dbl 100) defultUncrt
-
-
-xMaxEtrSlip = uqc "x_slip^maxEtr" (cn $ "maximum entry x-coordinate")
-  "maximum potential x-coordinate for the entry point of a slip surface"
-  (sup (eqSymb slipDist) (Atomic "maxEtr")) metre Real [] (dbl 20) defultUncrt
-  
-xMinExtSlip = uqc "x_slip^minExt" (cn $ "minimum exit x-coordinate")
-  "minimum potential x-coordinate for the exit point of a slip surface"
-  (sup (eqSymb slipDist) (Atomic "minExt")) metre Real [] (dbl 50) defultUncrt
-
-xMinEtrSlip = uqc "x_slip^minEtr" (cn $ "minimum exit x-coordinate")
-  "minimum potential x-coordinate for the entry point of a slip surface"
-  (sup (eqSymb slipDist) (Atomic "minEtr")) metre Real [] (dbl 0) defultUncrt
-
-yMaxSlip = uqc "y_slip^max" (cn $ "maximum y-coordinate") 
-  "maximum potential y-coordinate of a point on a slip surface"
-  (sup (eqSymb slipHght) (Atomic "max")) metre Real [] (dbl 30) defultUncrt
-
-yMinSlip = uqc "y_slip^min" (cn $ "minimum y-coordinate") 
-  "minimum potential y-coordinate of a point on a slip surface"
-  (sup (eqSymb slipHght) (Atomic "min")) metre Real [] (dbl 0) defultUncrt
-
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
@@ -143,8 +156,8 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, slopeDist, slipDist,
+sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, slipHght, xi, yi,
+  zcoord, critCoords, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
@@ -154,8 +167,8 @@ sspUnits = map ucw [genericF, genericA, normFunc, shearFunc, waterHght,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
-genericF, genericA, normFunc, shearFunc, slopeDist, slipDist, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
+genericF, genericA, normFunc, shearFunc, slipDist, slipHght, xi, yi, zcoord, 
+  critCoords, mobShrI, sliceHght,
   sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
   watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
@@ -172,22 +185,9 @@ intNormForce = uc' "G_i" (cn $ "interslice normal force")
   ("per meter in the z-direction exerted between adjacent slices")
   (cG) forcePerMeterU
 
-waterHght = uc' "y_wt,i"
-  (cn $ "y-coordinate of the water table")
-  ("height of the water table")
-  (sub lY (Atomic "wt")) metre
-
-slopeHght = uc' "y_slope,i" (cn $ "y-coordinate of the slope")
-  ("y-coordinate of a point on the soil slope")
-  (sub lY (Atomic "slope")) metre
-
 slipHght = uc' "y_slip,i" (cn $ "y-coordinate of the slip surface")
   ("height of the slip surface")
   (sub lY (Atomic "slip")) metre
-
-slopeDist = uc' "x_slope,i" (cn $ "x-coordinate of the slope")
-  ("x-coordinate of a point on the slope")
-  (sub lX (Atomic "slope")) metre
 
 slipDist = uc' "x_slip,i" (cn $ "x-coordinate of the slip surface")
   ("distance of the slip surface")

@@ -46,7 +46,6 @@ sspIMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId
 
 --
 
--- FIXME: coordinates should be sequences? (see issue #1083)
 fctSfty :: InstanceModel
 fctSfty = im'' fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] [chen2005, karchewski2012] fctSftyDeriv "fctSfty" [fcSfty_desc]
@@ -363,7 +362,6 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
 
 ------------------------------------------------------------------------
 
--- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
@@ -447,7 +445,6 @@ nrmShrDerivEqn4 = inxi normToShear $= sum1toN
 
 ---------------------------------------------------------------------
 
--- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
@@ -487,7 +484,6 @@ nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in",
 
 ---------------------------------------------------------------------------
 
--- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im'' nrmShrForDen_rc [qw slipDist, qw constF]
   [] (qw nrmShearDen) [] [chen2005] nrmShrFDen_deriv "nrmShrForDen" 
@@ -518,8 +514,6 @@ nrmShrFDen_desc = foldlSent [ch baseWthX, S "is defined in",
 
 --------------------------------------------------------------------------
 
-
--- FIXME: coordinates should be sequences? (see issue #1083)
 intsliceFs :: InstanceModel
 intsliceFs = im'' intsliceFs_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw intNormForce) [] [chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
@@ -592,7 +586,6 @@ crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip surface identifi
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
--- FIXME: coordinates should be sequences? (see issue #1083)
 crtSlpId_rel :: Relation
 crtSlpId_rel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist, 
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 

@@ -126,7 +126,7 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>b</em>
+<em><b>b</b></em>
 </td>
 <td>
 Base Width of a Slice: in the x-direction
@@ -137,7 +137,7 @@ m
 </tr>
 <tr>
 <td>
-<em>C<sub>den</sub></em>
+<em><b>C</b><sub>den</sub></em>
 </td>
 <td>
 Proportionality Constant Denominator: expression used to calculate the denominator of the interslice normal to shear force proportionality constant
@@ -148,7 +148,7 @@ N
 </tr>
 <tr>
 <td>
-<em>C<sub>num</sub></em>
+<em><b>C</b><sub>num</sub></em>
 </td>
 <td>
 Proportionality Constant Numerator: expression used to calculate the numerator of the interslice normal to shear force proportionality constant
@@ -174,17 +174,6 @@ Pa
 </td>
 <td>
 Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>f</em>
-</td>
-<td>
-Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction
 </td>
 <td>
 --
@@ -236,7 +225,7 @@ Minimum Factor of Safety: The minimum factor of safety associated with the criti
 </tr>
 <tr>
 <td>
-<em>F<sub>x</sub><sup>G</sup></em>
+<em><b>F</b><sub>x</sub><sup>G</sup></em>
 </td>
 <td>
 Sum of the Interslice Normal Forces: for two adjacent interslice boundaries
@@ -247,7 +236,7 @@ N
 </tr>
 <tr>
 <td>
-<em>F<sub>x</sub><sup>H</sup></em>
+<em><b>F</b><sub>x</sub><sup>H</sup></em>
 </td>
 <td>
 Sum of the Interslice Normal Water Forces: for two adjacent interslice boundaries
@@ -269,7 +258,18 @@ N
 </tr>
 <tr>
 <td>
-<em>G</em>
+<em><b>f</b></em>
+</td>
+<td>
+Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em><b>G</b></em>
 </td>
 <td>
 Interslice Normal Force: per meter in the z-direction exerted between adjacent slices
@@ -280,7 +280,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>H</em>
+<em><b>H</b></em>
 </td>
 <td>
 Interslice Normal Water Force: per meter in the z-direction exerted in the x-ordinate direction between adjacent slices
@@ -291,7 +291,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>h</em>
+<em><b>h</b></em>
 </td>
 <td>
 Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice
@@ -302,7 +302,7 @@ m
 </tr>
 <tr>
 <td>
-<em>h<sup>L</sup></em>
+<em><b>h</b><sup>L</sup></em>
 </td>
 <td>
 Height of the Left Side of a Slice: assuming slice surface has negative slope
@@ -313,7 +313,7 @@ m
 </tr>
 <tr>
 <td>
-<em>h<sup>R</sup></em>
+<em><b>h</b><sup>R</sup></em>
 </td>
 <td>
 Height of the Right Side of a Slice: assuming slice surface has negative slope
@@ -324,7 +324,7 @@ m
 </tr>
 <tr>
 <td>
-<em>h<sub>z</sub></em>
+<em><b>h</b><sub>z</sub></em>
 </td>
 <td>
 Height of Center of Slice: the height in the y-direction from the base of a slice to the center of the slice
@@ -335,7 +335,7 @@ m
 </tr>
 <tr>
 <td>
-<em>h<sub>z,w</sub></em>
+<em><b>h</b><sub>z,w</sub></em>
 </td>
 <td>
 Height Halfway to Water Table: the height in the y-direction from the base of a slice halfway to the water table
@@ -379,17 +379,6 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>N</em>
-</td>
-<td>
-Normal Force: total reactive force per meter in the z-direction for a soil surface subject to a body resting on it
-</td>
-<td>
-N/m
-</td>
-</tr>
-<tr>
-<td>
 <em>n</em>
 </td>
 <td>
@@ -401,7 +390,18 @@ Number of Slices: the slip mass has been divided into
 </tr>
 <tr>
 <td>
-<em>N&prime;</em>
+<em><b>N</b></em>
+</td>
+<td>
+Normal Force: total reactive force per meter in the z-direction for a soil surface subject to a body resting on it
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>N&prime;</b></em>
 </td>
 <td>
 Effective Normal Force: per meter in the z-direction for a soil surface, subtracting pore water reactive force from total reactive force
@@ -412,7 +412,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>P</em>
+<em><b>P</b></em>
 </td>
 <td>
 Resistive Shear Force: Mohr Coulomb frictional force per meter in the z-direction that describes the limit of mobilized shear force a slice can withstand before failure
@@ -423,7 +423,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>Q</em>
+<em><b>Q</b></em>
 </td>
 <td>
 External Force: a force per meter in the z-direction acting into the surface from the midpoint of a slice
@@ -434,7 +434,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>R</em>
+<em><b>R</b></em>
 </td>
 <td>
 Resistive Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
@@ -445,7 +445,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>S</em>
+<em><b>S</b></em>
 </td>
 <td>
 Mobilized Shear Force: per meter in the z-direction
@@ -456,7 +456,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>T</em>
+<em><b>T</b></em>
 </td>
 <td>
 Mobilized Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
@@ -478,7 +478,7 @@ Pa
 </tr>
 <tr>
 <td>
-<em>U<sub>b</sub></em>
+<em><b>U</b><sub>b</sub></em>
 </td>
 <td>
 Base Hydrostatic Force: per meter in the z-direction from water pressure within a slice
@@ -489,18 +489,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>U<sub>t</sub></em>
-</td>
-<td>
-Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface
-</td>
-<td>
-N/m
-</td>
-</tr>
-<tr>
-<td>
-<em>U<sup>L</sup><sub>b</sub></em>
+<em><b>U</b><sup>L</sup><sub>b</sub></em>
 </td>
 <td>
 Left Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the left side of the slice
@@ -511,7 +500,18 @@ N/m
 </tr>
 <tr>
 <td>
-<em>U<sup>L</sup><sub>t</sub></em>
+<em><b>U</b><sub>t</sub></em>
+</td>
+<td>
+Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>U</b><sup>L</sup><sub>t</sub></em>
 </td>
 <td>
 Left Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the left side of the slice
@@ -522,7 +522,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>U<sup>R</sup><sub>b</sub></em>
+<em><b>U</b><sup>R</sup><sub>b</sub></em>
 </td>
 <td>
 Right Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the right side of the slice
@@ -533,7 +533,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>U<sup>R</sup><sub>t</sub></em>
+<em><b>U</b><sup>R</sup><sub>t</sub></em>
 </td>
 <td>
 Right Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the right side of the slice
@@ -555,7 +555,7 @@ Local Index: used as a bound variable index in calculations
 </tr>
 <tr>
 <td>
-<em>W</em>
+<em><b>W</b></em>
 </td>
 <td>
 Weight: downward force per meter in the z-direction caused by gravity on slice i
@@ -566,7 +566,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>W<sup>L</sup></em>
+<em><b>W</b><sup>L</sup></em>
 </td>
 <td>
 Left Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice
@@ -577,7 +577,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>W<sup>R</sup></em>
+<em><b>W</b><sup>R</sup></em>
 </td>
 <td>
 Right Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice
@@ -588,7 +588,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>X</em>
+<em><b>X</b></em>
 </td>
 <td>
 Interslice Shear Force: per meter in the z-direction exerted between adjacent slices
@@ -599,7 +599,7 @@ N/m
 </tr>
 <tr>
 <td>
-<em>x<sub>slip</sub></em>
+<em><b>x</b><sub>slip</sub></em>
 </td>
 <td>
 X-Coordinate of the Slip Surface: distance of the slip surface
@@ -610,7 +610,7 @@ m
 </tr>
 <tr>
 <td>
-<em>x<sub>slope</sub></em>
+<em><b>x</b><sub>slope</sub></em>
 </td>
 <td>
 X-Coordinate of the Slope: x-coordinate of a point on the slope
@@ -621,7 +621,7 @@ m
 </tr>
 <tr>
 <td>
-<em>x<sub>wt</sub></em>
+<em><b>x</b><sub>wt</sub></em>
 </td>
 <td>
 X-Coordinate: x-position of the water table
@@ -632,7 +632,7 @@ m
 </tr>
 <tr>
 <td>
-<em>y<sub>slip</sub></em>
+<em><b>y</b><sub>slip</sub></em>
 </td>
 <td>
 Y-Coordinate of the Slip Surface: height of the slip surface
@@ -643,7 +643,7 @@ m
 </tr>
 <tr>
 <td>
-<em>y<sub>slope</sub></em>
+<em><b>y</b><sub>slope</sub></em>
 </td>
 <td>
 Y-Coordinate of the Slope: y-coordinate of a point on the soil slope
@@ -654,7 +654,7 @@ m
 </tr>
 <tr>
 <td>
-<em>y<sub>wt</sub></em>
+<em><b>y</b><sub>wt</sub></em>
 </td>
 <td>
 Y-Coordinate of the Water Table: height of the water table
@@ -676,7 +676,7 @@ m
 </tr>
 <tr>
 <td>
-<em>α</em>
+<em><b>α</b></em>
 </td>
 <td>
 Base Angle: between the base of a slice and the horizontal
@@ -687,7 +687,7 @@ Base Angle: between the base of a slice and the horizontal
 </tr>
 <tr>
 <td>
-<em>β</em>
+<em><b>β</b></em>
 </td>
 <td>
 Surface Angle: between the surface of a slice and the horizontal
@@ -808,7 +808,7 @@ Minimization Function: generic minimization function or algorithm
 </tr>
 <tr>
 <td>
-<em>Φ</em>
+<em><b>Φ</b></em>
 </td>
 <td>
 First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces
@@ -830,7 +830,7 @@ Effective Angle of Friction: The angle of inclination with respect to the horizo
 </tr>
 <tr>
 <td>
-<em>Ψ</em>
+<em><b>Ψ</b></em>
 </td>
 <td>
 Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces
@@ -841,7 +841,7 @@ Second Function for Incorporating Interslice Forces Into Shear Force: converts m
 </tr>
 <tr>
 <td>
-<em>ω</em>
+<em><b>ω</b></em>
 </td>
 <td>
 Imposed Load Angle: between the external force acting into the surface and the vertical
@@ -852,7 +852,7 @@ Imposed Load Angle: between the external force acting into the surface and the v
 </tr>
 <tr>
 <td>
-<em>ℓ<sub>b</sub></em>
+<em><b>ℓ</b><sub>b</sub></em>
 </td>
 <td>
 Total Base Length of a Slice: in the direction parallel to the slope of the base
@@ -863,7 +863,7 @@ m
 </tr>
 <tr>
 <td>
-<em>ℓ<sub>s</sub></em>
+<em><b>ℓ</b><sub>s</sub></em>
 </td>
 <td>
 Surface Length of a Slice: in the direction parallel to the slope of the surface
@@ -1323,7 +1323,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpSSC">
-Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. <a href=#IM:crtSlpId>IM: crtSlpId</a>.
+Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. <a href=#IM:crtSlpId>IM: crtSlpId</a>.
 </div>
 </p>
 <p>
@@ -1348,7 +1348,7 @@ Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and
 </p>
 <p>
 <div id="assumpINSFL">
-Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em>f</em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
@@ -1412,10 +1412,10 @@ Equation
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-P
+<b>P</b>
 </span>
 <span class="fdn">
-S
+<b>S</b>
 </span>
 </div></em>
 </div>
@@ -1431,10 +1431,10 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>P</em> is the resistive shear force (N/m)
+<em><b>P</b></em> is the resistive shear force (N/m)
 </li>
 <li>
-<em>S</em> is the mobilized shear force (N/m)
+<em><b>S</b></em> is the mobilized shear force (N/m)
 </li>
 </ul>
 </td>
@@ -1718,7 +1718,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)</em>
+<em><b>N</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1729,40 +1729,40 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>N</em> is the normal force (N/m)
+<em><b>N</b></em> is the normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear force (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the external force (N/m)
+<em><b>Q</b></em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angle (&deg;)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 </ul>
 </td>
@@ -1773,7 +1773,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -1830,7 +1830,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+<em><b>S</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -1841,40 +1841,40 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>S</em> is the mobilized shear force (N/m)
+<em><b>S</b></em> is the mobilized shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear force (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the external force (N/m)
+<em><b>Q</b></em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angle (&deg;)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 </ul>
 </td>
@@ -1885,7 +1885,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -1942,7 +1942,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>P<sub>i</sub> = N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub></em>
+<em><b>P</b><sub>i</sub> = <b>N&prime;</b><sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;<b>ℓ</b><sub>b,i</sub></em>
 </div>
 </td>
 </tr>
@@ -1953,13 +1953,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>P</em> is the resistive shear force (N/m)
+<em><b>P</b></em> is the resistive shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>N&prime;</em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -1968,7 +1968,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 </ul>
 </td>
@@ -1979,7 +1979,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2036,16 +2036,16 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>S<sub>i</sub> = <div class="fraction">
+<em><b>S</b><sub>i</sub> = <div class="fraction">
 <span class="fup">
-P<sub>i</sub>
+<b>P</b><sub>i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
 </span>
 </div> = <div class="fraction">
 <span class="fup">
-N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub>
+<b>N&prime;</b><sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;<b>ℓ</b><sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -2061,19 +2061,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>S</em> is the mobilized shear force (N/m)
+<em><b>S</b></em> is the mobilized shear force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>P</em> is the resistive shear force (N/m)
+<em><b>P</b></em> is the resistive shear force (N/m)
 </li>
 <li>
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>N&prime;</em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -2082,7 +2082,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 </ul>
 </td>
@@ -2093,7 +2093,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2120,7 +2120,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-Mobilized shear force is derived by dividing the definition of the <em>P</em> from <a href=#GD:resShr>GD: resShr</a>. by the definition of the factor of safety from <a href=#TM:factOfSafety>TM: factOfSafety</a>. The factor of safety <em>F<sub>S</sub></em> is not indexed by <em>i</em> because it is assumed to be constant for the entire slip surface (<a href=#assumpFOS>A: Factor-of-Safety</a>).
+Mobilized shear force is derived by dividing the definition of the <em><b>P</b></em> from <a href=#GD:resShr>GD: resShr</a>. by the definition of the factor of safety from <a href=#TM:factOfSafety>TM: factOfSafety</a>. The factor of safety <em>F<sub>S</sub></em> is not indexed by <em>i</em> because it is assumed to be constant for the entire slip surface (<a href=#assumpFOS>A: Factor-of-Safety</a>).
 </p>
 <div id="GD:effNormF">
 <table class="gdefn">
@@ -2150,7 +2150,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>N&prime;<sub>i</sub> = N<sub>i</sub>&minus;U<sub>b,i</sub></em>
+<em><b>N&prime;</b><sub>i</sub> = <b>N</b><sub>i</sub>&minus;<b>U</b><sub>b,i</sub></em>
 </div>
 </td>
 </tr>
@@ -2161,16 +2161,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>N&prime;</em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>N</em> is the normal force (N/m)
+<em><b>N</b></em> is the normal force (N/m)
 </li>
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 </ul>
 </td>
@@ -2181,7 +2181,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>U<sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+<em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </p>
 </td>
 </tr>
@@ -2238,7 +2238,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>R<sub>i</sub> = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;ℓ<sub>b,i</sub></em>
+<em><b>R</b><sub>i</sub> = ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;<b>ℓ</b><sub>b,i</sub></em>
 </div>
 </td>
 </tr>
@@ -2249,28 +2249,28 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -2279,7 +2279,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 </ul>
 </td>
@@ -2290,7 +2290,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em>H</em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em>U<sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2344,7 +2344,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+<em><b>T</b><sub>i</sub> = (<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2355,25 +2355,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 </ul>
 </td>
@@ -2384,7 +2384,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em>H</em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
+<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
 </p>
 </td>
 </tr>
@@ -2438,7 +2438,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>X = λ&#8239;f&#8239;G</em>
+<em><b>X</b> = λ&#8239;<b>f</b>&#8239;<b>G</b></em>
 </div>
 </td>
 </tr>
@@ -2449,16 +2449,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>X</em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear force (N/m)
 </li>
 <li>
 <em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+<em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 </ul>
 </td>
@@ -2469,7 +2469,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Mathematical representation of the primary assumption for the Morgenstern-Price method (<a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>). <em>f</em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>.
+Mathematical representation of the primary assumption for the Morgenstern-Price method (<a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>). <em><b>f</b></em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>.
 </p>
 </td>
 </tr>
@@ -2523,49 +2523,49 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>0 = &minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(X<sub>i</sub>&plus;X<sub>i&minus;1</sub>)&plus;<div class="fraction">
+</div>&#8239;(<b>X</b><sub>i</sub>&plus;<b>X</b><sub>i&minus;1</sub>)&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
+K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub></em>
+</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
 </div>
 </td>
 </tr>
@@ -2576,49 +2576,49 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>h<sub>z</sub></em> is the height of center of slice (m)
+<em><b>h</b><sub>z</sub></em> is the height of center of slice (m)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>h<sub>z,w</sub></em> is the height halfway to water table (m)
+<em><b>h</b><sub>z,w</sub></em> is the height halfway to water table (m)
 </li>
 <li>
-<em>X</em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear force (N/m)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>h</em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>Q</em> is the external force (N/m)
+<em><b>Q</b></em> is the external force (N/m)
 </li>
 <li>
-<em>ω</em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angle (&deg;)
 </li>
 </ul>
 </td>
@@ -2629,7 +2629,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em>W</em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em>h</em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -2686,7 +2686,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>W</em>
+<em><b>W</b></em>
 </p>
 </td>
 </tr>
@@ -2706,14 +2706,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>W = <div class="fraction">
+<em><b>W</b> = <div class="fraction">
 <span class="fup">
 1
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(W<sup>L</sup><sub>i</sub>&plus;W<sup>R</sup><sub>i</sub>)</em>
+</div>&#8239;(<b>W</b><sup>L</sup><sub>i</sub>&plus;<b>W</b><sup>R</sup><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2724,16 +2724,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>W</em> is the weight (N/m)
+<em><b>W</b></em> is the weight (N/m)
 </li>
 <li>
-<em>W<sup>L</sup></em> is the left weight of a slice (N/m)
+<em><b>W</b><sup>L</sup></em> is the left weight of a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>W<sup>R</sup></em> is the right weight of a slice (N/m)
+<em><b>W</b><sup>R</sup></em> is the right weight of a slice (N/m)
 </li>
 </ul>
 </td>
@@ -2744,7 +2744,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ</em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em>W<sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em>W<sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
+This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ</em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>W</b><sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em><b>W</b><sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
 </p>
 </td>
 </tr>
@@ -2788,7 +2788,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sub>b</sub></em>
+<em><b>U</b><sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -2808,14 +2808,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sub>b</sub> = <div class="fraction">
+<em><b>U</b><sub>b</sub> = <div class="fraction">
 <span class="fup">
 1
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(U<sup>L</sup><sub>b,i</sub>&plus;U<sup>R</sup><sub>b,i</sub>)</em>
+</div>&#8239;(<b>U</b><sup>L</sup><sub>b,i</sub>&plus;<b>U</b><sup>R</sup><sub>b,i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2826,16 +2826,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
 </li>
 <li>
-<em>U<sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>U<sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
 </li>
 </ul>
 </td>
@@ -2846,7 +2846,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em>U<sup>L</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a> and <em>U<sup>R</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>.
+This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>U</b><sup>L</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a> and <em><b>U</b><sup>R</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>.
 </p>
 </td>
 </tr>
@@ -2890,7 +2890,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sub>t</sub></em>
+<em><b>U</b><sub>t</sub></em>
 </p>
 </td>
 </tr>
@@ -2910,14 +2910,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sub>t</sub> = <div class="fraction">
+<em><b>U</b><sub>t</sub> = <div class="fraction">
 <span class="fup">
 1
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(U<sup>L</sup><sub>t,i</sub>&plus;U<sup>R</sup><sub>t,i</sub>)</em>
+</div>&#8239;(<b>U</b><sup>L</sup><sub>t,i</sub>&plus;<b>U</b><sup>R</sup><sub>t,i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -2928,16 +2928,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>U<sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>U<sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
 </li>
 </ul>
 </td>
@@ -2948,7 +2948,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em>U<sup>L</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> and <em>U<sup>R</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>.
+This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>U</b><sup>L</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> and <em><b>U</b><sup>R</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>.
 </p>
 </td>
 </tr>
@@ -2992,7 +2992,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>H</em>
+<em><b>H</b></em>
 </p>
 </td>
 </tr>
@@ -3012,37 +3012,37 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>H = <span class="casebr">
+<em><b>H</b> = <span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
 <div class="fraction">
 <span class="fup">
-(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)<sup>2</sup>
+(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>)<sup>2</sup>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;γ<sub>w</sub>&plus;(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)<sup>2</sup>&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
+</div>&#8239;γ<sub>w</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>)<sup>2</sup>&#8239;γ<sub>w</sub> , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i</sub>
 </span>
 </span>
 <span>
 <div class="fraction">
 <span class="fup">
-(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)<sup>2</sup>
+(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>)<sup>2</sup>
 </span>
 <span class="fdn">
 2
 </span>
 </div>&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+<b>y</b><sub>slope,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
+<b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 </div></em>
@@ -3056,22 +3056,22 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 </ul>
 </td>
@@ -3116,7 +3116,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>α</em>
+<em><b>α</b></em>
 </p>
 </td>
 </tr>
@@ -3136,12 +3136,12 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>α = arctan(<div class="fraction">
+<em><b>α</b> = arctan(<div class="fraction">
 <span class="fup">
-y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
+<b>y</b><sub>slip,i</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>
 </span>
 <span class="fdn">
-x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
+<b>x</b><sub>slip,i</sub>&minus;<b>x</b><sub>slip,i&minus;1</sub>
 </span>
 </div>)</em>
 </div>
@@ -3154,16 +3154,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -3218,7 +3218,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>β</em>
+<em><b>β</b></em>
 </p>
 </td>
 </tr>
@@ -3238,12 +3238,12 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>β = arctan(<div class="fraction">
+<em><b>β</b> = arctan(<div class="fraction">
 <span class="fup">
-y<sub>slope,i</sub>&minus;y<sub>slope,i&minus;1</sub>
+<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 <span class="fdn">
-x<sub>slope,i</sub>&minus;x<sub>slope,i&minus;1</sub>
+<b>x</b><sub>slope,i</sub>&minus;<b>x</b><sub>slope,i&minus;1</sub>
 </span>
 </div>)</em>
 </div>
@@ -3256,16 +3256,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>x<sub>slope</sub></em> is the x-coordinate of the slope (m)
+<em><b>x</b><sub>slope</sub></em> is the x-coordinate of the slope (m)
 </li>
 </ul>
 </td>
@@ -3320,7 +3320,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>b</em>
+<em><b>b</b></em>
 </p>
 </td>
 </tr>
@@ -3340,7 +3340,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
+<em><b>b</b> = <b>x</b><sub>slip,i</sub>&minus;<b>x</b><sub>slip,i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -3351,10 +3351,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3402,7 +3402,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>b</sub></em>
+<em><b>ℓ</b><sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -3422,7 +3422,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>ℓ<sub>b</sub> = b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+<em><b>ℓ</b><sub>b</sub> = <b>b</b><sub>i</sub>&#8239;sec(<b>α</b><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3433,16 +3433,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 </ul>
 </td>
@@ -3453,7 +3453,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -3497,7 +3497,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>s</sub></em>
+<em><b>ℓ</b><sub>s</sub></em>
 </p>
 </td>
 </tr>
@@ -3517,7 +3517,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>ℓ<sub>s</sub> = b<sub>i</sub>&#8239;sec(β<sub>i</sub>)</em>
+<em><b>ℓ</b><sub>s</sub> = <b>b</b><sub>i</sub>&#8239;sec(<b>β</b><sub>i</sub>)</em>
 </div>
 </td>
 </tr>
@@ -3528,16 +3528,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 </ul>
 </td>
@@ -3548,7 +3548,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -3592,7 +3592,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>h</em>
+<em><b>h</b></em>
 </p>
 </td>
 </tr>
@@ -3612,14 +3612,14 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>h = <div class="fraction">
+<em><b>h</b> = <div class="fraction">
 <span class="fup">
 1
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(h<sup>R</sup>&plus;h<sup>L</sup>)</em>
+</div>&#8239;(<b>h</b><sup>R</sup>&plus;<b>h</b><sup>L</sup>)</em>
 </div>
 </td>
 </tr>
@@ -3630,13 +3630,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>h</em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
+<em><b>h</b><sup>R</sup></em> is the height of the right side of a slice (m)
 </li>
 <li>
-<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
+<em><b>h</b><sup>L</sup></em> is the height of the left side of a slice (m)
 </li>
 </ul>
 </td>
@@ -3650,7 +3650,7 @@ Notes
 This equation is based on the assumption that the surface and base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>).
 </p>
 <p class="paragraph">
-<em>h<sup>R</sup></em> and <em>h<sup>L</sup></em> are defined in <a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a> and <a href=#DD:sliceHghtLeftDD>DD: sliceHghtLeftDD</a>, respectively.
+<em><b>h</b><sup>R</sup></em> and <em><b>h</b><sup>L</sup></em> are defined in <a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a> and <a href=#DD:sliceHghtLeftDD>DD: sliceHghtLeftDD</a>, respectively.
 </p>
 </td>
 </tr>
@@ -3783,7 +3783,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>f</em>
+<em><b>f</b></em>
 </p>
 </td>
 </tr>
@@ -3803,7 +3803,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>f = <span class="casebr">
+<em><b>f</b> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -3815,10 +3815,10 @@ const_f
 <span>
 sin(π&#8239;<div class="fraction">
 <span class="fup">
-x<sub>slip,i</sub>&minus;x<sub>slip,0</sub>
+<b>x</b><sub>slip,i</sub>&minus;<b>x</b><sub>slip,0</sub>
 </span>
 <span class="fdn">
-x<sub>slip,n</sub>&minus;x<sub>slip,0</sub>
+<b>x</b><sub>slip,n</sub>&minus;<b>x</b><sub>slip,0</sub>
 </span>
 </div>) , <span class="case">
 &not;const_f
@@ -3835,13 +3835,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+<em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>π</em> is the circumference to diameter ratio (Unitless)
 </li>
 <li>
-<em>x<sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3895,7 +3895,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>Φ</em>
+<em><b>Φ</b></em>
 </p>
 </td>
 </tr>
@@ -3915,7 +3915,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>Φ = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub></em>
+<em><b>Φ</b> = (λ&#8239;<b>f</b><sub>i</sub>&#8239;cos(<b>α</b><sub>i</sub>)&minus;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;<b>f</b><sub>i</sub>&#8239;sin(<b>α</b><sub>i</sub>)&plus;cos(<b>α</b><sub>i</sub>))&#8239;F<sub>S</sub></em>
 </div>
 </td>
 </tr>
@@ -3926,19 +3926,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Φ</em> is the first function for incorporating interslice forces into shear force (Unitless)
+<em><b>Φ</b></em> is the first function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
 <em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+<em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -3955,7 +3955,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>f</em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a> and <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+<em><b>f</b></em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a> and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -3999,7 +3999,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>Ψ</em>
+<em><b>Ψ</b></em>
 </p>
 </td>
 </tr>
@@ -4019,12 +4019,12 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>Ψ = <div class="fraction">
+<em><b>Ψ</b> = <div class="fraction">
 <span class="fup">
-(λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>
+(λ&#8239;<b>f</b><sub>i</sub>&#8239;cos(<b>α</b><sub>i</sub>)&minus;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;<b>f</b><sub>i</sub>&#8239;sin(<b>α</b><sub>i</sub>)&plus;cos(<b>α</b><sub>i</sub>))&#8239;F<sub>S</sub>
 </span>
 <span class="fdn">
-Φ<sub>i&minus;1</sub>
+<b>Φ</b><sub>i&minus;1</sub>
 </span>
 </div></em>
 </div>
@@ -4037,19 +4037,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Ψ</em> is the second function for incorporating interslice forces into shear force (Unitless)
+<em><b>Ψ</b></em> is the second function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
 <em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+<em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -4058,7 +4058,7 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>Φ</em> is the first function for incorporating interslice forces into shear force (Unitless)
+<em><b>Φ</b></em> is the first function for incorporating interslice forces into shear force (Unitless)
 </li>
 </ul>
 </td>
@@ -4069,7 +4069,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>f</em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em>Φ</em> is defined in <a href=#DD:convertFunc1>DD: convertFunc1</a>.
+<em><b>f</b></em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>Φ</b></em> is defined in <a href=#DD:convertFunc1>DD: convertFunc1</a>.
 </p>
 </td>
 </tr>
@@ -4113,7 +4113,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>F<sub>x</sub><sup>G</sup></em>
+<em><b>F</b><sub>x</sub><sup>G</sup></em>
 </p>
 </td>
 </tr>
@@ -4133,7 +4133,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>F<sub>x</sub><sup>G</sup> = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
+<em><b>F</b><sub>x</sub><sup>G</sup> = <b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -4144,10 +4144,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
+<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4195,7 +4195,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>F<sub>x</sub><sup>H</sup></em>
+<em><b>F</b><sub>x</sub><sup>H</sup></em>
 </p>
 </td>
 </tr>
@@ -4215,7 +4215,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>F<sub>x</sub><sup>H</sup> = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
+<em><b>F</b><sub>x</sub><sup>H</sup> = <b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -4226,10 +4226,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
+<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4277,7 +4277,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>h<sup>R</sup></em>
+<em><b>h</b><sup>R</sup></em>
 </p>
 </td>
 </tr>
@@ -4297,7 +4297,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>h<sup>R</sup> = y<sub>slope,i</sub>&minus;y<sub>slip,i</sub></em>
+<em><b>h</b><sup>R</sup> = <b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub></em>
 </div>
 </td>
 </tr>
@@ -4308,16 +4308,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>h<sup>R</sup></em> is the height of the right side of a slice (m)
+<em><b>h</b><sup>R</sup></em> is the height of the right side of a slice (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4362,7 +4362,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>h<sup>L</sup></em>
+<em><b>h</b><sup>L</sup></em>
 </p>
 </td>
 </tr>
@@ -4382,7 +4382,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>h<sup>L</sup> = y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub></em>
+<em><b>h</b><sup>L</sup> = <b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub></em>
 </div>
 </td>
 </tr>
@@ -4393,16 +4393,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>h<sup>L</sup></em> is the height of the left side of a slice (m)
+<em><b>h</b><sup>L</sup></em> is the height of the left side of a slice (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4447,7 +4447,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>W<sup>R</sup></em>
+<em><b>W</b><sup>R</sup></em>
 </p>
 </td>
 </tr>
@@ -4467,23 +4467,23 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>W<sup>R</sup> = b<sub>i</sub>&#8239;<span class="casebr">
+<em><b>W</b><sup>R</sup> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&ge;&thinsp;y<sub>slope,i</sub>
+(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i</sub>
 </span>
 </span>
 <span>
-(y<sub>slope,i</sub>&minus;y<sub>wt,i</sub>)&#8239;γ&plus;(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>slope,i</sub>&thinsp;&gt;&thinsp;y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>)&#8239;γ&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+<b>y</b><sub>slope,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 <span>
-(y<sub>slope,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
+(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>)&#8239;γ , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 </div></em>
@@ -4497,25 +4497,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>W<sup>R</sup></em> is the right weight of a slice (N/m)
+<em><b>W</b><sup>R</sup></em> is the right weight of a slice (N/m)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
 <em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
@@ -4529,7 +4529,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -4573,7 +4573,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>W<sup>L</sup></em>
+<em><b>W</b><sup>L</sup></em>
 </p>
 </td>
 </tr>
@@ -4593,23 +4593,23 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>W<sup>L</sup> = b<sub>i</sub>&#8239;<span class="casebr">
+<em><b>W</b><sup>L</sup> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;y<sub>slope,i&minus;1</sub>
+(<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 </span>
 <span>
-(y<sub>slope,i&minus;1</sub>&minus;y<sub>wt,i&minus;1</sub>)&#8239;γ&plus;(y<sub>wt,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
-y<sub>slope,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slip,i&minus;1</sub>
+(<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ&plus;(<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+<b>y</b><sub>slope,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
 </span>
 </span>
 <span>
-(y<sub>slope,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slip,i&minus;1</sub>
+(<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ , <span class="case">
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
 </span>
 </span>
 </div></em>
@@ -4623,25 +4623,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>W<sup>L</sup></em> is the left weight of a slice (N/m)
+<em><b>W</b><sup>L</sup></em> is the left weight of a slice (N/m)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
 <em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
@@ -4655,7 +4655,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -4699,7 +4699,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sup>R</sup><sub>b</sub></em>
+<em><b>U</b><sup>R</sup><sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -4719,18 +4719,18 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sup>R</sup><sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>R</sup><sub>b</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>wt,i</sub>&minus;y<sub>slip,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slip,i</sub>
+(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
+<b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub>
 </span>
 </span>
 </div></em>
@@ -4744,19 +4744,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -4770,7 +4770,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -4814,7 +4814,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sup>L</sup><sub>b</sub></em>
+<em><b>U</b><sup>L</sup><sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -4834,18 +4834,18 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sup>L</sup><sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>L</sup><sub>b</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>wt,i&minus;1</sub>&minus;y<sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slip,i&minus;1</sub>
+(<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slip,i&minus;1</sub>
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
 </span>
 </span>
 </div></em>
@@ -4859,19 +4859,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
-<em>y<sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -4885,7 +4885,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -4929,7 +4929,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sup>R</sup><sub>t</sub></em>
+<em><b>U</b><sup>R</sup><sub>t</sub></em>
 </p>
 </td>
 </tr>
@@ -4949,18 +4949,18 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sup>R</sup><sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>R</sup><sub>t</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>wt,i</sub>&minus;y<sub>slope,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i</sub>&thinsp;&gt;&thinsp;y<sub>slope,i</sub>
+(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slope,i</sub>
+<b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i</sub>
 </span>
 </span>
 </div></em>
@@ -4974,19 +4974,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
 </li>
 <li>
-<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -5000,7 +5000,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+<em><b>ℓ</b><sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -5044,7 +5044,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>U<sup>L</sup><sub>t</sub></em>
+<em><b>U</b><sup>L</sup><sub>t</sub></em>
 </p>
 </td>
 </tr>
@@ -5064,18 +5064,18 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>U<sup>L</sup><sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>L</sup><sub>t</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-(y<sub>wt,i&minus;1</sub>&minus;y<sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;y<sub>slope,i&minus;1</sub>
+(<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-y<sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;y<sub>slope,i&minus;1</sub>
+<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 </span>
 </div></em>
@@ -5089,19 +5089,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>U<sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
 </li>
 <li>
-<em>ℓ<sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -5115,7 +5115,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>ℓ<sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+<em><b>ℓ</b><sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -5169,7 +5169,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
+<em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -5205,10 +5205,10 @@ Equation
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n&minus;1</sup>R<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;R<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup><b>R</b><sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup><b>Ψ</b><sub>v</sub>&plus;<b>R</b><sub>n</sub>
 </span>
 <span class="fdn">
-&sum;<sub>i = 1</sub><sup>n&minus;1</sup>T<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;T<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup><b>T</b><sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup><b>Ψ</b><sub>v</sub>&plus;<b>T</b><sub>n</sub>
 </span>
 </div></em>
 </div>
@@ -5224,13 +5224,13 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>Ψ</em> is the second function for incorporating interslice forces into shear force (Unitless)
+<em><b>Ψ</b></em> is the second function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
 <em>v</em> is the local index (Unitless)
@@ -5239,7 +5239,7 @@ Description
 <em>n</em> is the number of slices (Unitless)
 </li>
 <li>
-<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 </ul>
 </td>
@@ -5250,7 +5250,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>R</em> is defined in <a href=#GD:resShearWO>GD: resShearWO</a>, <em>Ψ</em> is defined in <a href=#DD:convertFunc2>DD: convertFunc2</a>, and <em>T</em> is defined in <a href=#GD:mobShearWO>GD: mobShearWO</a>
+<em><b>R</b></em> is defined in <a href=#GD:resShearWO>GD: resShearWO</a>, <em><b>Ψ</b></em> is defined in <a href=#DD:convertFunc2>DD: convertFunc2</a>, and <em><b>T</b></em> is defined in <a href=#GD:mobShearWO>GD: mobShearWO</a>
 </p>
 </td>
 </tr>
@@ -5280,9 +5280,9 @@ RefBy
 The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding Equation (1) below:
 </p>
 <div class="equation">
-<em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-N&prime;<sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+<b>N&prime;</b><sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5290,18 +5290,18 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-An expression for the effective normal force, <em>N&prime;</em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
+An expression for the effective normal force, <em><b>N&prime;</b></em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
 </p>
 <div class="equation">
-<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
+<em><b>N&prime;</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub></em>
 </div>
 <p class="paragraph">
 Substituting Equation (2) into Equation (1) gives:
 </p>
 <div class="equation">
-<em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-((W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+((<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5309,12 +5309,12 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-Since the interslice shear force <em>X</em> and interslice normal force <em>G</em> are unknown, they are separated from the other terms as follows:
+Since the interslice shear force <em><b>X</b></em> and interslice normal force <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
 </p>
 <div class="equation">
-<em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>) = <div class="fraction">
+<em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5325,9 +5325,9 @@ F<sub>S</sub>
 Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are zero, allows for further simplification as shown below:
 </p>
 <div class="equation">
-<em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>) = <div class="fraction">
+<em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5335,12 +5335,12 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-The definitions of <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> are present in this equation, and thus can be replaced by <em>R<sub>i</sub></em> and <em>T<sub>i</sub></em>, respectively:
+The definitions of <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> are present in this equation, and thus can be replaced by <em><b>R</b><sub>i</sub></em> and <em><b>T</b><sub>i</sub></em>, respectively:
 </p>
 <div class="equation">
-<em>T<sub>i</sub>&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;sin(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<em><b>T</b><sub>i</sub>&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-R<sub>i</sub>&plus;((&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
+<b>R</b><sub>i</sub>&plus;((&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5348,12 +5348,12 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-The interslice shear force <em>X</em> can be expressed in terms of the interslice normal force <em>G</em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
+The interslice shear force <em><b>X</b></em> can be expressed in terms of the interslice normal force <em><b>G</b></em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
 </p>
 <div class="equation">
-<em>T<sub>i</sub>&plus;(&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>)&#8239;sin(α<sub>i</sub>)&minus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;cos(α<sub>i</sub>) = <div class="fraction">
+<em><b>T</b><sub>i</sub>&plus;(&minus;λ&#8239;<b>f</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&plus;λ&#8239;<b>f</b><sub>i</sub>&#8239;<b>G</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
 <span class="fup">
-R<sub>i</sub>&plus;((&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
+<b>R</b><sub>i</sub>&plus;((&minus;λ&#8239;<b>f</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&plus;λ&#8239;<b>f</b><sub>i</sub>&#8239;<b>G</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)
 </span>
 <span class="fdn">
 F<sub>S</sub>
@@ -5364,43 +5364,43 @@ F<sub>S</sub>
 Rearranging yields the following:
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em><b>G</b><sub>i</sub>&#8239;((λ&#8239;<b>f</b><sub>i</sub>&#8239;cos(<b>α</b><sub>i</sub>)&minus;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;<b>f</b><sub>i</sub>&#8239;sin(<b>α</b><sub>i</sub>)&plus;cos(<b>α</b><sub>i</sub>))&#8239;F<sub>S</sub>) = <b>G</b><sub>i&minus;1</sub>&#8239;((λ&#8239;<b>f</b><sub>i&minus;1</sub>&#8239;cos(<b>α</b><sub>i</sub>)&minus;sin(<b>α</b><sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;<b>f</b><sub>i&minus;1</sub>&#8239;sin(<b>α</b><sub>i</sub>)&plus;cos(<b>α</b><sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>i</sub>&minus;<b>R</b><sub>i</sub></em>
 </div>
 <p class="paragraph">
-The definitions for <em>Φ</em> and <em>Ψ</em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to Equation (3):
+The definitions for <em><b>Φ</b></em> and <em><b>Ψ</b></em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to Equation (3):
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em><b>G</b><sub>i</sub>&#8239;<b>Φ</b><sub>i</sub> = <b>Ψ</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&#8239;<b>Φ</b><sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>i</sub>&minus;<b>R</b><sub>i</sub></em>
 </div>
 <p class="paragraph">
 Versions of Equation (3) instantiated for slices 1 to <em>n</em> are shown below:
 </p>
 <div class="equation">
-<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = Ψ<sub>0</sub>&#8239;G<sub>0</sub>&#8239;Φ<sub>0</sub>&plus;F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+<em><b>G</b><sub>1</sub>&#8239;<b>Φ</b><sub>1</sub> = <b>Ψ</b><sub>0</sub>&#8239;<b>G</b><sub>0</sub>&#8239;<b>Φ</b><sub>0</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;G<sub>1</sub>&#8239;Φ<sub>1</sub>&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+<em><b>G</b><sub>2</sub>&#8239;<b>Φ</b><sub>2</sub> = <b>Ψ</b><sub>1</sub>&#8239;<b>G</b><sub>1</sub>&#8239;<b>Φ</b><sub>1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;G<sub>2</sub>&#8239;Φ<sub>2</sub>&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+<em><b>G</b><sub>3</sub>&#8239;<b>Φ</b><sub>3</sub> = <b>Ψ</b><sub>2</sub>&#8239;<b>G</b><sub>2</sub>&#8239;<b>Φ</b><sub>2</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>3</sub>&minus;<b>R</b><sub>3</sub></em>
 </div>
 <p class="paragraph">
 ...
 </p>
 <div class="equation">
-<em>G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub> = Ψ<sub>n&minus;3</sub>&#8239;G<sub>n&minus;3</sub>&#8239;Φ<sub>n&minus;3</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub></em>
+<em><b>G</b><sub>n&minus;2</sub>&#8239;<b>Φ</b><sub>n&minus;2</sub> = <b>Ψ</b><sub>n&minus;3</sub>&#8239;<b>G</b><sub>n&minus;3</sub>&#8239;<b>Φ</b><sub>n&minus;3</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;2</sub>&minus;<b>R</b><sub>n&minus;2</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+<em><b>G</b><sub>n&minus;1</sub>&#8239;<b>Φ</b><sub>n&minus;1</sub> = <b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>G</b><sub>n&minus;2</sub>&#8239;<b>Φ</b><sub>n&minus;2</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;1</sub>&minus;<b>R</b><sub>n&minus;1</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>n</sub>&#8239;Φ<sub>n</sub> = Ψ<sub>n&minus;1</sub>&#8239;G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub></em>
+<em><b>G</b><sub>n</sub>&#8239;<b>Φ</b><sub>n</sub> = <b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>G</b><sub>n&minus;1</sub>&#8239;<b>Φ</b><sub>n&minus;1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n</sub>&minus;<b>R</b><sub>n</sub></em>
 </div>
 <p class="paragraph">
-Applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, results in the following special cases: Equation (8) for the first slice:
+Applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, results in the following special cases: Equation (8) for the first slice:
 </p>
 <div class="equation">
-<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+<em><b>G</b><sub>1</sub>&#8239;<b>Φ</b><sub>1</sub> = F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub></em>
 </div>
 <p class="paragraph">
 and Equation (9) for the <em>n</em>th slice:
@@ -5408,30 +5408,30 @@ and Equation (9) for the <em>n</em>th slice:
 <div class="equation">
 <em>&minus;(<div class="fraction">
 <span class="fup">
-F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+F<sub>S</sub>&#8239;<b>T</b><sub>n</sub>&minus;<b>R</b><sub>n</sub>
 </span>
 <span class="fdn">
-Ψ<sub>n&minus;1</sub>
+<b>Ψ</b><sub>n&minus;1</sub>
 </span>
-</div>) = G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub></em>
+</div>) = <b>G</b><sub>n&minus;1</sub>&#8239;<b>Φ</b><sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
 Substituting Equation (8) into Equation (4) yields Equation (10):
 </p>
 <div class="equation">
-<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+<em><b>G</b><sub>2</sub>&#8239;<b>Φ</b><sub>2</sub> = <b>Ψ</b><sub>1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub></em>
 </div>
 <p class="paragraph">
 which can be substituted into Equation (5) to get Equation (11):
 </p>
 <div class="equation">
-<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+<em><b>G</b><sub>3</sub>&#8239;<b>Φ</b><sub>3</sub> = <b>Ψ</b><sub>2</sub>&#8239;(<b>Ψ</b><sub>1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>3</sub>&minus;<b>R</b><sub>3</sub></em>
 </div>
 <p class="paragraph">
 and so on until Equation (12) is obtained from Equation (7):
 </p>
 <div class="equation">
-<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+<em><b>G</b><sub>n&minus;1</sub>&#8239;<b>Φ</b><sub>n&minus;1</sub> = <b>Ψ</b><sub>n&minus;2</sub>&#8239;(<b>Ψ</b><sub>n&minus;3</sub>&#8239;(<b>Ψ</b><sub>1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;2</sub>&minus;<b>R</b><sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;1</sub>&minus;<b>R</b><sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
 Equation (9) can then be substituted into the left-hand side of Equation (12), resulting in:
@@ -5439,24 +5439,24 @@ Equation (9) can then be substituted into the left-hand side of Equation (12), r
 <div class="equation">
 <em>&minus;(<div class="fraction">
 <span class="fup">
-F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+F<sub>S</sub>&#8239;<b>T</b><sub>n</sub>&minus;<b>R</b><sub>n</sub>
 </span>
 <span class="fdn">
-Ψ<sub>n&minus;1</sub>
+<b>Ψ</b><sub>n&minus;1</sub>
 </span>
-</div>) = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+</div>) = <b>Ψ</b><sub>n&minus;2</sub>&#8239;(<b>Ψ</b><sub>n&minus;3</sub>&#8239;(<b>Ψ</b><sub>1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;2</sub>&minus;<b>R</b><sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;1</sub>&minus;<b>R</b><sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
-This can be rearranged by multiplying boths sides by <em>Ψ<sub>n&minus;1</sub></em> and then distributing the multiplication of each <em>Ψ</em> over addition to obtain:
+This can be rearranged by multiplying boths sides by <em><b>Ψ</b><sub>n&minus;1</sub></em> and then distributing the multiplication of each <em><b>Ψ</b></em> over addition to obtain:
 </p>
 <div class="equation">
-<em>&minus;(F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub>)</em>
+<em>&minus;(F<sub>S</sub>&#8239;<b>T</b><sub>n</sub>&minus;<b>R</b><sub>n</sub>) = <b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>)&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>2</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>2</sub>&minus;<b>R</b><sub>2</sub>)&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;(F<sub>S</sub>&#8239;<b>T</b><sub>n&minus;1</sub>&minus;<b>R</b><sub>n&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-The multiplication of the <em>Ψ</em> terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an <em>R</em> or a <em>T</em>. The equation can then be rearranged so terms containing an <em>R</em> are on one side of the equality, and terms containing a <em>T</em> are on the other. The multiplication by the factor of safety is common to all of the <em>T</em> terms, and thus can be factored out, resulting in:
+The multiplication of the <em><b>Ψ</b></em> terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an <em><b>R</b></em> or a <em><b>T</b></em>. The equation can then be rearranged so terms containing an <em><b>R</b></em> are on one side of the equality, and terms containing a <em><b>T</b></em> are on the other. The multiplication by the factor of safety is common to all of the <em><b>T</b></em> terms, and thus can be factored out, resulting in:
 </p>
 <div class="equation">
-<em>F<sub>S</sub>&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
+<em>F<sub>S</sub>&#8239;(<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>1</sub>&#8239;<b>T</b><sub>1</sub>&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>2</sub>&#8239;<b>T</b><sub>2</sub>&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>T</b><sub>n&minus;1</sub>&plus;<b>T</b><sub>n</sub>) = <b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>1</sub>&#8239;<b>R</b><sub>1</sub>&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>Ψ</b><sub>n&minus;2</sub>&#8239;<b>Ψ</b><sub>2</sub>&#8239;<b>R</b><sub>2</sub>&plus;<b>Ψ</b><sub>n&minus;1</sub>&#8239;<b>R</b><sub>n&minus;1</sub>&plus;<b>R</b><sub>n</sub></em>
 </div>
 <p class="paragraph">
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
@@ -5464,15 +5464,15 @@ Isolating the factor of safety on the left-hand side and using compact notation 
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n&minus;1</sup>R<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;R<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup><b>R</b><sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup><b>Ψ</b><sub>v</sub>&plus;<b>R</b><sub>n</sub>
 </span>
 <span class="fdn">
-&sum;<sub>i = 1</sub><sup>n&minus;1</sup>T<sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup>Ψ<sub>v</sub>&plus;T<sub>n</sub>
+&sum;<sub>i = 1</sub><sup>n&minus;1</sup><b>T</b><sub>i</sub>&#8239;&prod;<sub>v = i</sub><sup>n&minus;1</sup><b>Ψ</b><sub>v</sub>&plus;<b>T</b><sub>n</sub>
 </span>
 </div></em>
 </div>
 <p class="paragraph">
-<em>F<sub>S</sub></em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>).
+<em>F<sub>S</sub></em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and <em><b>G</b></em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>).
 </p>
 <div id="IM:nrmShrFor">
 <table class="idefn">
@@ -5492,7 +5492,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
+<em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -5528,10 +5528,10 @@ Equation
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n</sup>C<sub>num,i</sub>
+&sum;<sub>i = 1</sub><sup>n</sup><b>C</b><sub>num,i</sub>
 </span>
 <span class="fdn">
-&sum;<sub>i = 1</sub><sup>n</sup>C<sub>den,i</sub>
+&sum;<sub>i = 1</sub><sup>n</sup><b>C</b><sub>den,i</sub>
 </span>
 </div></em>
 </div>
@@ -5547,13 +5547,13 @@ Description
 <em>λ</em> is the proportionality constant (Unitless)
 </li>
 <li>
-<em>C<sub>num</sub></em> is the proportionality constant numerator (N)
+<em><b>C</b><sub>num</sub></em> is the proportionality constant numerator (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>C<sub>den</sub></em> is the proportionality constant denominator (N)
+<em><b>C</b><sub>den</sub></em> is the proportionality constant denominator (N)
 </li>
 </ul>
 </td>
@@ -5564,7 +5564,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>C<sub>num</sub></em> is defined in <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> and <em>C<sub>den</sub></em> is defined in <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>.
+<em><b>C</b><sub>num</sub></em> is defined in <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> and <em><b>C</b><sub>den</sub></em> is defined in <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>.
 </p>
 </td>
 </tr>
@@ -5594,49 +5594,49 @@ RefBy
 From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a>, Equation (14) can be derived:
 </p>
 <div class="equation">
-<em>0 = &minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;λ&#8239;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;λ&#8239;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)&plus;<div class="fraction">
+</div>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
+K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub></em>
+</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
 </div>
 <p class="paragraph">
 Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
@@ -5644,52 +5644,52 @@ Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
-&minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+&minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
+K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>)&#8239;h<sub>i</sub>
+</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 <div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)
+</div>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)
 </span>
 </div></em>
 </div>
@@ -5699,63 +5699,63 @@ This equation can be simplified by applying assumptions <a href=#assumpSF>A: Sei
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
-&minus;G<sub>i</sub>&#8239;(h<sub>z,i</sub>&minus;<div class="fraction">
+&minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;G<sub>i&minus;1</sub>&#8239;(h<sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;H<sub>i</sub>&#8239;(h<sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&plus;H<sub>i&minus;1</sub>&#8239;(h<sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(α<sub>i</sub>))&minus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&#8239;h<sub>i</sub>
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 <div class="fraction">
 <span class="fup">
-b<sub>i</sub>
+<b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)
+</div>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)
 </span>
 </div></em>
 </div>
 <p class="paragraph">
-Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slices</a> to set <em>G<sub>0</sub></em>, <em>G<sub>n</sub></em>, <em>H<sub>0</sub></em>, and <em>H<sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>:
+Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slices</a> to set <em><b>G</b><sub>0</sub></em>, <em><b>G</b><sub>n</sub></em>, <em><b>H</b><sub>0</sub></em>, and <em><b>H</b><sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>:
 </p>
 <div class="equation">
 <em>λ<sub>i</sub> = <div class="fraction">
 <span class="fup">
-&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h<sub>i</sub>&#8239;&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)
+&sum;<sub>i = 1</sub><sup>n</sup><b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b><sub>i</sub>&#8239;&minus;2&#8239;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)
 </span>
 <span class="fdn">
-&sum;<sub>i = 1</sub><sup>n</sup>b<sub>i</sub>&#8239;(G<sub>i</sub>&#8239;f<sub>i</sub>&plus;G<sub>i&minus;1</sub>&#8239;f<sub>i&minus;1</sub>)
+&sum;<sub>i = 1</sub><sup>n</sup><b>b</b><sub>i</sub>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)
 </span>
 </div></em>
 </div>
 <p class="paragraph">
-Equation (16) for <em>λ</em> is a function of the unknown interslice normal force <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+Equation (16) for <em>λ</em> is a function of the unknown interslice normal force <em><b>G</b></em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:nrmShrForNum">
 <table class="idefn">
@@ -5775,7 +5775,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>
+<em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>
 </p>
 </td>
 </tr>
@@ -5785,7 +5785,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>C<sub>num</sub></em>
+<em><b>C</b><sub>num</sub></em>
 </p>
 </td>
 </tr>
@@ -5809,22 +5809,22 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>C<sub>num,i</sub> = <span class="casebr">
+<em><b>C</b><sub>num,i</sub> = <span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-b<sub>1</sub>&#8239;(G<sub>1</sub>&plus;H<sub>1</sub>)&#8239;tan(α<sub>1</sub>) , <span class="case">
+<b>b</b><sub>1</sub>&#8239;(<b>G</b><sub>1</sub>&plus;<b>H</b><sub>1</sub>)&#8239;tan(<b>α</b><sub>1</sub>) , <span class="case">
 i = 1
 </span>
 </span>
 <span>
-b<sub>i</sub>&#8239;(F<sub>x</sub><sup>G</sup>&plus;F<sub>x</sub><sup>H</sup>)&#8239;tan(α<sub>i</sub>)&plus;h&#8239;&minus;2&#8239;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>) , <span class="case">
+<b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b>&#8239;&minus;2&#8239;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>) , <span class="case">
 2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
 </span>
 </span>
 <span>
-b<sub>n</sub>&#8239;(G<sub>n&minus;1</sub>&plus;H<sub>n&minus;1</sub>)&#8239;tan(α<sub>n&minus;1</sub>) , <span class="case">
+<b>b</b><sub>n</sub>&#8239;(<b>G</b><sub>n&minus;1</sub>&plus;<b>H</b><sub>n&minus;1</sub>)&#8239;tan(<b>α</b><sub>n&minus;1</sub>) , <span class="case">
 i = n
 </span>
 </span>
@@ -5839,37 +5839,37 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>C<sub>num</sub></em> is the proportionality constant numerator (N)
+<em><b>C</b><sub>num</sub></em> is the proportionality constant numerator (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
-<em>H</em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water force  (N/m)
 </li>
 <li>
-<em>α</em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angle (&deg;)
 </li>
 <li>
-<em>F<sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
+<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
 </li>
 <li>
-<em>F<sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
+<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
 </li>
 <li>
-<em>h</em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction height of a slice (m)
 </li>
 <li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
 </li>
 <li>
-<em>β</em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angle (&deg;)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -5883,7 +5883,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em>H</em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em>α</em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em>h</em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em>U<sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em>β</em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -5910,7 +5910,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em>C<sub>num</sub></em>.
+See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em><b>C</b><sub>num</sub></em>.
 </p>
 <div id="IM:nrmShrForDen">
 <table class="idefn">
@@ -5930,7 +5930,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slip</sub></em>, <em>const_f</em>
+<em><b>x</b><sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -5940,7 +5940,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>C<sub>den</sub></em>
+<em><b>C</b><sub>den</sub></em>
 </p>
 </td>
 </tr>
@@ -5964,22 +5964,22 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>C<sub>den,i</sub> = <span class="casebr">
+<em><b>C</b><sub>den,i</sub> = <span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
-b<sub>1</sub>&#8239;f<sub>1</sub>&#8239;G<sub>1</sub> , <span class="case">
+<b>b</b><sub>1</sub>&#8239;<b>f</b><sub>1</sub>&#8239;<b>G</b><sub>1</sub> , <span class="case">
 i = 1
 </span>
 </span>
 <span>
-b<sub>i</sub>&#8239;(f<sub>i</sub>&#8239;G<sub>i</sub>&plus;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>) , <span class="case">
+<b>b</b><sub>i</sub>&#8239;(<b>f</b><sub>i</sub>&#8239;<b>G</b><sub>i</sub>&plus;<b>f</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>) , <span class="case">
 2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
 </span>
 </span>
 <span>
-b<sub>n</sub>&#8239;G<sub>n&minus;1</sub>&#8239;f<sub>n&minus;1</sub> , <span class="case">
+<b>b</b><sub>n</sub>&#8239;<b>G</b><sub>n&minus;1</sub>&#8239;<b>f</b><sub>n&minus;1</sub> , <span class="case">
 i = 1
 </span>
 </span>
@@ -5994,19 +5994,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>C<sub>den</sub></em> is the proportionality constant denominator (N)
+<em><b>C</b><sub>den</sub></em> is the proportionality constant denominator (N)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>b</em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of a slice (m)
 </li>
 <li>
-<em>f</em> is the interslice normal to shear force ratio variation function (Unitless)
+<em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -6020,7 +6020,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>b</em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em>f</em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em><b>f</b></em> is defined in <a href=#DD:ratioVariation>DD: ratioVariation</a>.
 </p>
 </td>
 </tr>
@@ -6047,7 +6047,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em>C<sub>den</sub></em>.
+See <a href=#IM:nrmShrFor>IM: nrmShrFor</a> for the derivation of <em><b>C</b><sub>den</sub></em>.
 </p>
 <div id="IM:intsliceFs">
 <table class="idefn">
@@ -6067,7 +6067,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>y<sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>x<sub>slip</sub></em>, <em>y<sub>slip</sub></em>, <em>const_f</em>
+<em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -6077,7 +6077,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>G</em>
+<em><b>G</b></em>
 </p>
 </td>
 </tr>
@@ -6101,17 +6101,17 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>G<sub>i</sub> = <span class="casebr">
+<em><b>G</b><sub>i</sub> = <span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
 <div class="fraction">
 <span class="fup">
-F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>
+F<sub>S</sub>&#8239;<b>T</b><sub>1</sub>&minus;<b>R</b><sub>1</sub>
 </span>
 <span class="fdn">
-Φ<sub>1</sub>
+<b>Φ</b><sub>1</sub>
 </span>
 </div> , <span class="case">
 i = 1
@@ -6120,10 +6120,10 @@ i = 1
 <span>
 <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+<b>Ψ</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>i</sub>&minus;<b>R</b><sub>i</sub>
 </span>
 <span class="fdn">
-Φ<sub>i</sub>
+<b>Φ</b><sub>i</sub>
 </span>
 </div> , <span class="case">
 2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
@@ -6145,7 +6145,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>G</em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal force (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -6154,16 +6154,16 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>T</em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
 </li>
 <li>
-<em>R</em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
 </li>
 <li>
-<em>Φ</em> is the first function for incorporating interslice forces into shear force (Unitless)
+<em><b>Φ</b></em> is the first function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
-<em>Ψ</em> is the second function for incorporating interslice forces into shear force (Unitless)
+<em><b>Ψ</b></em> is the second function for incorporating interslice forces into shear force (Unitless)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -6177,7 +6177,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>T</em> is defined in <a href=#GD:mobShearWO>GD: mobShearWO</a>, <em>R</em> is defined in <a href=#GD:resShearWO>GD: resShearWO</a>, <em>Φ</em> is defined in <a href=#DD:convertFunc1>DD: convertFunc1</a>, and <em>Ψ</em> is defined in <a href=#DD:convertFunc2>DD: convertFunc2</a>.
+<em><b>T</b></em> is defined in <a href=#GD:mobShearWO>GD: mobShearWO</a>, <em><b>R</b></em> is defined in <a href=#GD:resShearWO>GD: resShearWO</a>, <em><b>Φ</b></em> is defined in <a href=#DD:convertFunc1>DD: convertFunc1</a>, and <em><b>Ψ</b></em> is defined in <a href=#DD:convertFunc2>DD: convertFunc2</a>.
 </p>
 </td>
 </tr>
@@ -6207,23 +6207,23 @@ RefBy
 This derivation is identical to the derivation for <a href=#IM:fctSfty>IM: fctSfty</a> up until Equation (3) shown again below:
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em><b>G</b><sub>i</sub>&#8239;<b>Φ</b><sub>i</sub> = <b>Ψ</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&#8239;<b>Φ</b><sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>i</sub>&minus;<b>R</b><sub>i</sub></em>
 </div>
 <p class="paragraph">
 A simple rearrangement of Equation (3) leads to Equation (17), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
 </p>
 <div class="equation">
-<em>G<sub>i</sub> = <div class="fraction">
+<em><b>G</b><sub>i</sub> = <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+<b>Ψ</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;<b>T</b><sub>i</sub>&minus;<b>R</b><sub>i</sub>
 </span>
 <span class="fdn">
-Φ<sub>i</sub>
+<b>Φ</b><sub>i</sub>
 </span>
 </div></em>
 </div>
 <p class="paragraph">
-The cases shown in <a href=#IM:intsliceFs>IM: intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, to Equation (17). <em>G</em> depends on the unknowns <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>) and <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>).
+The cases shown in <a href=#IM:intsliceFs>IM: intsliceFs</a> for when <em>i = 0</em>, <em>i = 1</em>, or <em>i = n</em> are derived by applying <a href=#assumpES>A: Edge-Slices</a>, which says that <em><b>G</b><sub>0</sub></em> and <em><b>G</b><sub>n</sub></em> are zero, to Equation (17). <em><b>G</b></em> depends on the unknowns <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>) and <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>).
 </p>
 <div id="IM:crtSlpId">
 <table class="idefn">
@@ -6243,7 +6243,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>x<sub>slope</sub></em>, <em>y<sub>slope</sub></em>, <em>x<sub>wt</sub></em>, <em>y<sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>const_f</em>
+<em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>x</b><sub>wt</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ</em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>const_f</em>
 </p>
 </td>
 </tr>
@@ -6277,7 +6277,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>F<sub>S</sub><sup>min</sup> = Υ(x<sub>slope</sub>,y<sub>slope</sub>,x<sub>wt</sub>,y<sub>wt</sub>,c&prime;,φ&prime;,γ,γ<sub>Sat</sub>,γ<sub>w</sub>,const_f)</em>
+<em>F<sub>S</sub><sup>min</sup> = Υ(<b>x</b><sub>slope</sub>,<b>y</b><sub>slope</sub>,<b>x</b><sub>wt</sub>,<b>y</b><sub>wt</sub>,c&prime;,φ&prime;,γ,γ<sub>Sat</sub>,γ<sub>w</sub>,const_f)</em>
 </div>
 </td>
 </tr>
@@ -6294,16 +6294,16 @@ Description
 <em>Υ</em> is the minimization function (Unitless)
 </li>
 <li>
-<em>x<sub>slope</sub></em> is the x-coordinate of the slope (m)
+<em><b>x</b><sub>slope</sub></em> is the x-coordinate of the slope (m)
 </li>
 <li>
-<em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>x<sub>wt</sub></em> is the x-coordinate (m)
+<em><b>x</b><sub>wt</sub></em> is the x-coordinate (m)
 </li>
 <li>
-<em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
 </li>
 <li>
 <em>c&prime;</em> is the effective cohesion (Pa)

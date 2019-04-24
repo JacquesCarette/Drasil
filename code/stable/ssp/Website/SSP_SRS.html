@@ -599,6 +599,28 @@ N/m
 </tr>
 <tr>
 <td>
+<em>x</em>
+</td>
+<td>
+X-Coordinate: in the Cartesian coordinate system
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>cs</sub>,y<sub>cs</sub></em>
+</td>
+<td>
+The Set of X and Y Coordinates: describe the vertices of the critical slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>x<sub>slip</sub></em>
 </td>
 <td>
@@ -669,6 +691,17 @@ m
 </td>
 <td>
 Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y</em>
+</td>
+<td>
+Y-Coordinate: in the Cartesian coordinate system
 </td>
 <td>
 m
@@ -6398,7 +6431,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>.
+The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>. The sizes of <em>x<sub>wt</sub></em> and <em>y<sub>wt</sub></em> must be equal and not 1. The sizes of <em>x<sub>slope</sub></em> and <em>y<sub>slope</sub></em> must be equal and at least 2. The first and last <em>x<sub>wt</sub></em> values must be equal to the first and last <em>x<sub>slope</sub></em> values. <em>x<sub>wt</sub></em> and <em>x<sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em>x<sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em>y<sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em>y<sub>slope</sub></em> value. All <em>x</em> values of <em>x<sub>cs</sub>,y<sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em>x<sub>cs</sub>,y<sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em>x<sub>cs</sub>,y<sub>cs</sub></em> the <em>y</em> value must not exceed the <em>y<sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em>x<sub>cs</sub>,y<sub>cs</sub></em> must each be equal to one of the vertices formed by <em>x<sub>slope</sub></em> and <em>y<sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em>x<sub>cs</sub>,y<sub>cs</sub></em> must not be below 110 degrees.
 </p>
 </td>
 </tr>

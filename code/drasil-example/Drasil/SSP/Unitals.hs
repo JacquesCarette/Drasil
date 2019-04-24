@@ -79,6 +79,7 @@ fs, coords :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
+--FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
 slopeDist = uqc "x_slope,i" (cn $ "x-coordinate of the slope")
   ("x-coordinate of a point on the slope")

@@ -149,6 +149,10 @@ ${W^{R}}$ & Right Weight of a Slice: weight of a slice per meter in the z-direct
 \\
 $X$ & Interslice Shear Force: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
+$x$ & X-Coordinate: in the Cartesian coordinate system & m
+\\
+${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
+\\
 ${x_{slip}}$ & X-Coordinate of the Slip Surface: distance of the slip surface & m
 \\
 ${x_{slope}}$ & X-Coordinate of the Slope: x-coordinate of a point on the slope & m
@@ -162,6 +166,8 @@ ${{x_{slip}}^{maxExt}}$ & Maximum Exit X-Coordinate: maximum potential x-coordin
 ${{x_{slip}}^{minEtr}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface & m
 \\
 ${{x_{slip}}^{minExt}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface & m
+\\
+$y$ & Y-Coordinate: in the Cartesian coordinate system & m
 \\
 ${y_{slip}}$ & Y-Coordinate of the Slip Surface: height of the slip surface & m
 \\
@@ -1983,7 +1989,7 @@ Label & Critical slip surface identification
                                                                                            \item{$const_f$ is the decision on f (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}.
+                                                                                           Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}. The sizes of ${x_{wt}}$ and ${y_{wt}}$ must be equal and not 1. The sizes of ${x_{slope}}$ and ${y_{slope}}$ must be equal and at least 2. The first and last ${x_{wt}}$ values must be equal to the first and last ${x_{slope}}$ values. ${x_{wt}}$ and ${x_{slope}}$ values must be monotonically increasing. ${{x_{slip}}^{maxExt}}$, ${{x_{slip}}^{maxEtr}}$, ${{x_{slip}}^{minExt}}$, and ${{x_{slip}}^{minEtr}}$ must be between or equal to the minimum and maximum ${x_{slope}}$ values. ${{y_{slip}}^{max}}$ cannot be below the minimum ${y_{slope}}$ value. ${{y_{slip}}^{min}}$ cannot be above the maximum ${y_{slope}}$ value. All $x$ values of ${x_{cs}},{y_{cs}}$ must be between ${{x_{slip}}^{minEtr}}$ and ${{x_{slip}}^{maxExt}}$. All $y$ values of ${x_{cs}},{y_{cs}}$ must not be below ${{y_{slip}}^{min}}$. For any given vertex in ${x_{cs}},{y_{cs}}$ the $y$ value must not exceed the ${y_{slope}}$ value corresponding to the same $x$ value. The first and last vertices in ${x_{cs}},{y_{cs}}$ must each be equal to one of the vertices formed by ${x_{slope}}$ and ${y_{slope}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${x_{cs}},{y_{cs}}$ must not be below 110 degrees.
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{li2010}
                                                                                                             \\ \midrule \\

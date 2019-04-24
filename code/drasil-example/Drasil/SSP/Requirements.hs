@@ -13,15 +13,17 @@ import Data.Drasil.Utils (mkInputDatTb)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
-import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs, xMaxExtSlip, 
+import Drasil.SSP.Unitals (constF, coords, fs, fs_min, sspInputs, xMaxExtSlip, 
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip)
 
 sspRequirements :: [ConceptInstance]
 sspRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
-  determineCritSlip, verifyOutput, displayGraph]
+  determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS,
+  displayNormal, displayShear]
 
 readAndStore, verifyInput, generateCSS, calculateFS, determineCritSlip, 
-  verifyOutput, displayGraph :: ConceptInstance
+  verifyOutput, displayInput, displayGraph, displayFS,
+  displayNormal, displayShear :: ConceptInstance
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
@@ -64,6 +66,21 @@ displayGraph = cic "displayGraph" ( foldlSent [
   S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
   "Display-Graph" funcReqDom
 
+displayFS = cic "displayFS" ( foldlSent [
+  S "Display", phrase value `ofThe` phrase fs, S "for the", 
+  phrase crtSlpSrf `sC` S "as determined from", makeRef2S fctSfty `sC`
+  makeRef2S nrmShrFor `sC` S "and", makeRef2S intsliceFs])
+
+displayNormal = cic "displayNormal" ( foldlSent [
+  S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
+  makeRef2S intsliceFs `sC` S "calculate and graphically display the",
+  plural intNormForce])
+
+displayShear = cic "displayShear" ( foldlSent [
+  S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
+  makeRef2S intsliceFs `sC` S "calculate and graphically display the",
+  plural intShrForce])
+
 ------------------
 sspInputDataTable :: LabelledContent
 sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
@@ -71,7 +88,7 @@ sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
 
 inputsToOutput :: [UncertQ]
 inputsToOutput = [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, 
-  yMinSlip]
+  yMinSlip, constF]
 
 sspInputsToOutputTable :: LabelledContent
 sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $

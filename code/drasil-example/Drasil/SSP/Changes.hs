@@ -8,24 +8,45 @@ import Drasil.DocLang (mkEnumSimpleD)
 
 import Data.Drasil.Concepts.Documentation (likeChgDom, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation)
+import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, sAnd)
 
-import Drasil.SSP.Assumptions (assumpSLH, assumpSLI, assumpINSFL, assumpENSL)
+import Drasil.SSP.Assumptions (assumpSLH, assumpSLI, assumpINSFL, assumpENSL, 
+  assumpSF, assumpSL)
+import Drasil.SSP.Defs (slope, soil, soilPrpty)
+import Drasil.SSP.Unitals (surfLoad)
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = mkEnumSimpleD likelyChgs
 
 likelyChgs :: [ConceptInstance]
-likelyChgs = [likelyChgCISL]
+likelyChgs = [likelyChgCISL, likelyChgCSF, likelyChgCEF]
 
 likelyChgCISL :: ConceptInstance
 likelyChgCISL = cic "LC_inhomogeneous" lcCISLDesc "Calculate-Inhomogeneous-Soil-Layers" likeChgDom
 
+likelyChgCSF :: ConceptInstance
+likelyChgCSF = cic "LC_seismic" lcCSFDesc "Calculate-Seismic-Force" likeChgDom
+
+likelyChgCEF :: ConceptInstance
+likelyChgCEF = cic "LC_external" lcCEFDesc "Calculate-External-Force" likeChgDom
+
 lcCISLDesc :: Sentence
-lcCISLDesc = foldlSent [(makeRef2S assumpSLH) +:+ S "- The",
-  phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
-  S "In the future,", plural calculation,
-  S "can be added for inconsistent soil properties throughout"]
+lcCISLDesc = foldlSent [S "The", phrase system, S "currently assumes the", 
+  phrase soil, S "mass is homogeneous" +:+. sParen (makeRef2S assumpSLH),
+  S "In the future" `sC` plural calculation,
+  S "can be added for inconsistent", plural soilPrpty, S "throughout"]
+
+lcCSFDesc :: Sentence
+lcCSFDesc = foldlSent [S "The", phrase system, S "currently assumes no seismic",
+  phrase force +:+. sParen (makeRef2S assumpSF), S "In the future" `sC`
+  plural calculation, S "can be added for the presence of seismic", phrase force]
+
+lcCEFDesc :: Sentence
+lcCEFDesc = foldlSent [S "The", phrase system, S "currently assumes no",
+  phrase surfLoad +:+. sParen (makeRef2S assumpSL), S "In the future" `sC`
+  plural calculation, S "can be added for an imposed surface load on the", 
+  phrase slope]
 
 unlikelyChanges_SRS :: [Contents]
 unlikelyChanges_SRS = ucIntro : mkEnumSimpleD unlikelyChgs

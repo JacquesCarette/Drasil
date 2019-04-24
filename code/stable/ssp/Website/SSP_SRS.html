@@ -129,7 +129,7 @@ m<sup>2</sup>
 <em><b>b</b></em>
 </td>
 <td>
-Base Width of a Slice: in the x-direction
+Base Width of Slices: in the x-direction
 </td>
 <td>
 m
@@ -140,7 +140,7 @@ m
 <em><b>C</b><sub>den</sub></em>
 </td>
 <td>
-Proportionality Constant Denominator: expression used to calculate the denominator of the interslice normal to shear force proportionality constant
+Proportionality Constant Denominator: values for each slice that sum together to form the denominator of the interslice normal to shear force proportionality constant
 </td>
 <td>
 N
@@ -151,7 +151,7 @@ N
 <em><b>C</b><sub>num</sub></em>
 </td>
 <td>
-Proportionality Constant Numerator: expression used to calculate the numerator of the interslice normal to shear force proportionality constant
+Proportionality Constant Numerator: values for each slice that sum together to form the numerator of the interslice normal to shear force proportionality constant
 </td>
 <td>
 N
@@ -228,7 +228,7 @@ Minimum Factor of Safety: The minimum factor of safety associated with the criti
 <em><b>F</b><sub>x</sub><sup>G</sup></em>
 </td>
 <td>
-Sum of the Interslice Normal Forces: for two adjacent interslice boundaries
+Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries
 </td>
 <td>
 N
@@ -239,7 +239,7 @@ N
 <em><b>F</b><sub>x</sub><sup>H</sup></em>
 </td>
 <td>
-Sum of the Interslice Normal Water Forces: for two adjacent interslice boundaries
+Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries
 </td>
 <td>
 N
@@ -272,7 +272,7 @@ Interslice Normal to Shear Force Ratio Variation Function: function of distance 
 <em><b>G</b></em>
 </td>
 <td>
-Interslice Normal Force: per meter in the z-direction exerted between adjacent slices
+Interslice Normal Forces: per meter in the z-direction exerted between each pair of adjacent slices
 </td>
 <td>
 N/m
@@ -283,7 +283,7 @@ N/m
 <em><b>H</b></em>
 </td>
 <td>
-Interslice Normal Water Force: per meter in the z-direction exerted in the x-ordinate direction between adjacent slices
+Interslice Normal Water Forces: per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices
 </td>
 <td>
 N/m
@@ -294,7 +294,7 @@ N/m
 <em><b>h</b></em>
 </td>
 <td>
-Y-Direction Height of a Slice: height in the y-direction from the base of a slice to the slope surface, at the x-direction midpoint of the slice
+Y-Direction Heights of Slices: heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice
 </td>
 <td>
 m
@@ -305,7 +305,7 @@ m
 <em><b>h</b><sup>L</sup></em>
 </td>
 <td>
-Height of the Left Side of a Slice: assuming slice surface has negative slope
+Heights of the Left Side of Slices: assuming slice surfaces have negative slope
 </td>
 <td>
 m
@@ -316,7 +316,7 @@ m
 <em><b>h</b><sup>R</sup></em>
 </td>
 <td>
-Height of the Right Side of a Slice: assuming slice surface has negative slope
+Heights of the Right Side of Slices: assuming slice surfaces have negative slope
 </td>
 <td>
 m
@@ -327,7 +327,7 @@ m
 <em><b>h</b><sub>z</sub></em>
 </td>
 <td>
-Height of Center of Slice: the height in the y-direction from the base of a slice to the center of the slice
+Heights of Centers of Slices: the heights in the y-direction from the base of each slice to the center of the slice
 </td>
 <td>
 m
@@ -338,7 +338,7 @@ m
 <em><b>h</b><sub>z,w</sub></em>
 </td>
 <td>
-Height Halfway to Water Table: the height in the y-direction from the base of a slice halfway to the water table
+Heights Halfway to Water Table: the heights in the y-direction from the base of each slice halfway to the water table
 </td>
 <td>
 m
@@ -393,7 +393,7 @@ Number of Slices: the slip mass has been divided into
 <em><b>N</b></em>
 </td>
 <td>
-Normal Force: total reactive force per meter in the z-direction for a soil surface subject to a body resting on it
+Normal Forces: total reactive forces per meter in the z-direction for each slice of a soil surface subject to a body resting on it
 </td>
 <td>
 N/m
@@ -404,7 +404,7 @@ N/m
 <em><b>N&prime;</b></em>
 </td>
 <td>
-Effective Normal Force: per meter in the z-direction for a soil surface, subtracting pore water reactive force from total reactive force
+Effective Normal Forces: per meter in the z-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force
 </td>
 <td>
 N/m
@@ -412,10 +412,21 @@ N/m
 </tr>
 <tr>
 <td>
+<em>P</em>
+</td>
+<td>
+Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em><b>P</b></em>
 </td>
 <td>
-Resistive Shear Force: Mohr Coulomb frictional force per meter in the z-direction that describes the limit of mobilized shear force a slice can withstand before failure
+Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure
 </td>
 <td>
 N/m
@@ -426,7 +437,7 @@ N/m
 <em><b>Q</b></em>
 </td>
 <td>
-External Force: a force per meter in the z-direction acting into the surface from the midpoint of a slice
+External Forces: forces per meter in the z-direction acting into the surface from the midpoint of each slice
 </td>
 <td>
 N/m
@@ -437,7 +448,7 @@ N/m
 <em><b>R</b></em>
 </td>
 <td>
-Resistive Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
+Resistive Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice
 </td>
 <td>
 N/m
@@ -445,10 +456,21 @@ N/m
 </tr>
 <tr>
 <td>
+<em>S</em>
+</td>
+<td>
+Mobilized Shear Force: shear force in the direction of potential motion
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em><b>S</b></em>
 </td>
 <td>
-Mobilized Shear Force: per meter in the z-direction
+Mobilized Shear Forces: per meter in the z-direction for each slice
 </td>
 <td>
 N/m
@@ -459,7 +481,7 @@ N/m
 <em><b>T</b></em>
 </td>
 <td>
-Mobilized Shear Force Without the Influence of Interslice Forces: per meter in the z-direction
+Mobilized Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice
 </td>
 <td>
 N/m
@@ -481,7 +503,7 @@ Pa
 <em><b>U</b><sub>b</sub></em>
 </td>
 <td>
-Base Hydrostatic Force: per meter in the z-direction from water pressure within a slice
+Base Hydrostatic Forces: per meter in the z-direction from water pressure within each slice
 </td>
 <td>
 N/m
@@ -492,7 +514,7 @@ N/m
 <em><b>U</b><sup>L</sup><sub>b</sub></em>
 </td>
 <td>
-Left Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the left side of the slice
+Left Base Hydrostatic Forces on Slices: per meter in the z-direction from water pressure within each slice, assuming the entire slice has the height of the left side of the slice
 </td>
 <td>
 N/m
@@ -503,7 +525,7 @@ N/m
 <em><b>U</b><sub>t</sub></em>
 </td>
 <td>
-Surface Hydrostatic Force: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface
+Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface
 </td>
 <td>
 N/m
@@ -514,7 +536,7 @@ N/m
 <em><b>U</b><sup>L</sup><sub>t</sub></em>
 </td>
 <td>
-Left Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the left side of the slice
+Left Surface Hydrostatic Forces on Slices: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface, assuming the entire slice has the height of the left side of the slice
 </td>
 <td>
 N/m
@@ -525,7 +547,7 @@ N/m
 <em><b>U</b><sup>R</sup><sub>b</sub></em>
 </td>
 <td>
-Right Base Hydrostatic Force on a Slice: per meter in the z-direction from water pressure within a slice, assuming the entire slice has the height of the right side of the slice
+Right Base Hydrostatic Forces on Slices: per meter in the z-direction from water pressure within each slice, assuming the entire slice has the height of the right side of the slice
 </td>
 <td>
 N/m
@@ -536,7 +558,7 @@ N/m
 <em><b>U</b><sup>R</sup><sub>t</sub></em>
 </td>
 <td>
-Right Surface Hydrostatic Force on a Slice: per meter in the z-direction from water pressure acting into the slice from standing water on the slope surface, assuming the entire slice has the height of the right side of the slice
+Right Surface Hydrostatic Forces on Slices: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface, assuming the entire slice has the height of the right side of the slice
 </td>
 <td>
 N/m
@@ -558,7 +580,7 @@ Local Index: used as a bound variable index in calculations
 <em><b>W</b></em>
 </td>
 <td>
-Weight: downward force per meter in the z-direction caused by gravity on slice i
+Weights: downward force per meter in the z-direction on each slice caused by gravity
 </td>
 <td>
 N/m
@@ -569,7 +591,7 @@ N/m
 <em><b>W</b><sup>L</sup></em>
 </td>
 <td>
-Left Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice
+Left Weights of Slices: weight of each slice per meter in the z-direction, assuming the entire slice has the height of the left side of the slice
 </td>
 <td>
 N/m
@@ -580,7 +602,7 @@ N/m
 <em><b>W</b><sup>R</sup></em>
 </td>
 <td>
-Right Weight of a Slice: weight of a slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice
+Right Weights of Slices: weight of each slice per meter in the z-direction, assuming the entire slice has the height of the right side of the slice
 </td>
 <td>
 N/m
@@ -591,7 +613,7 @@ N/m
 <em><b>X</b></em>
 </td>
 <td>
-Interslice Shear Force: per meter in the z-direction exerted between adjacent slices
+Interslice Shear Forces: per meter in the z-direction exerted between adjacent slices
 </td>
 <td>
 N/m
@@ -602,7 +624,7 @@ N/m
 <em><b>x</b><sub>slip</sub></em>
 </td>
 <td>
-X-Coordinate of the Slip Surface: distance of the slip surface
+X-Coordinates of the Slip Surface: distances of the slip surface
 </td>
 <td>
 m
@@ -613,7 +635,7 @@ m
 <em><b>x</b><sub>slope</sub></em>
 </td>
 <td>
-X-Coordinate of the Slope: x-coordinate of a point on the slope
+X-Coordinates of the Slope: x-coordinates of points on the slope
 </td>
 <td>
 m
@@ -624,7 +646,7 @@ m
 <em><b>x</b><sub>wt</sub></em>
 </td>
 <td>
-X-Coordinate: x-position of the water table
+X-Coordinates: x-positions of the water table
 </td>
 <td>
 m
@@ -635,7 +657,7 @@ m
 <em><b>y</b><sub>slip</sub></em>
 </td>
 <td>
-Y-Coordinate of the Slip Surface: height of the slip surface
+Y-Coordinates of the Slip Surface: heights of the slip surface
 </td>
 <td>
 m
@@ -646,7 +668,7 @@ m
 <em><b>y</b><sub>slope</sub></em>
 </td>
 <td>
-Y-Coordinate of the Slope: y-coordinate of a point on the soil slope
+Y-Coordinates of the Slope: y-coordinates of points on the soil slope
 </td>
 <td>
 m
@@ -657,7 +679,7 @@ m
 <em><b>y</b><sub>wt</sub></em>
 </td>
 <td>
-Y-Coordinate of the Water Table: height of the water table
+Y-Coordinates of the Water Table: heights of the water table
 </td>
 <td>
 m
@@ -679,7 +701,7 @@ m
 <em><b>α</b></em>
 </td>
 <td>
-Base Angle: between the base of a slice and the horizontal
+Base Angles: between the base of each slice and the horizontal
 </td>
 <td>
 &deg;
@@ -690,7 +712,7 @@ Base Angle: between the base of a slice and the horizontal
 <em><b>β</b></em>
 </td>
 <td>
-Surface Angle: between the surface of a slice and the horizontal
+Surface Angles: between the surface of each slice and the horizontal
 </td>
 <td>
 &deg;
@@ -844,7 +866,7 @@ Second Function for Incorporating Interslice Forces Into Shear Force: converts m
 <em><b>ω</b></em>
 </td>
 <td>
-Imposed Load Angle: between the external force acting into the surface and the vertical
+Imposed Load Angles: between the external force acting into the surface of each slice and the vertical
 </td>
 <td>
 &deg;
@@ -855,7 +877,7 @@ Imposed Load Angle: between the external force acting into the surface and the v
 <em><b>ℓ</b><sub>b</sub></em>
 </td>
 <td>
-Total Base Length of a Slice: in the direction parallel to the slope of the base
+Total Base Lengths of Slices: in the direction parallel to the slope of the base of each slice
 </td>
 <td>
 m
@@ -866,7 +888,7 @@ m
 <em><b>ℓ</b><sub>s</sub></em>
 </td>
 <td>
-Surface Length of a Slice: in the direction parallel to the slope of the surface
+Surface Lengths of Slices: in the direction parallel to the slope of the surface of each slice
 </td>
 <td>
 m
@@ -1294,10 +1316,10 @@ Given the shape of the soil mass, the location of the water table, and the mater
 GS1: Identify the critical slip surface and the corresponding factor of safety.
 </p>
 <p>
-GS2: Determine the interslice normal force between each pair of vertical slices of the slope.
+GS2: Determine the interslice normal forces between each pair of vertical slices of the slope.
 </p>
 <p>
-GS3: Determine the interslice shear force between each pair of vertical slices of the slope.
+GS3: Determine the interslice shear forces between each pair of vertical slices of the slope.
 </p>
 </div>
 </div>
@@ -1348,7 +1370,7 @@ Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and
 </p>
 <p>
 <div id="assumpINSFL">
-Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#GD:normShrR>GD: normShrR</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
 </div>
 </p>
 <p>
@@ -1378,7 +1400,7 @@ Seismic-Force: There is no seismic force acting on the slope. <a href=#IM:nrmShr
 </p>
 <p>
 <div id="assumpSL">
-Surface-Load: There is no imposed surface load, and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
 </div>
 </p>
 </div>
@@ -1412,10 +1434,10 @@ Equation
 <div class="equation">
 <em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
-<b>P</b>
+P
 </span>
 <span class="fdn">
-<b>S</b>
+S
 </span>
 </div></em>
 </div>
@@ -1431,10 +1453,10 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em><b>P</b></em> is the resistive shear force (N/m)
+<em>P</em> is the resistive shear force (N)
 </li>
 <li>
-<em><b>S</b></em> is the mobilized shear force (N/m)
+<em>S</em> is the mobilized shear force (N)
 </li>
 </ul>
 </td>
@@ -1582,7 +1604,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-In this model the shear strength <em>τ</em> is proportional to the product of the effective normal stress <em>σ<sub>N</sub>&prime;</em> on the plane with its static friction in the angular form <em>tan(φ&prime;)</em>. The <em>τ</em> versus <em>σ<sub>N</sub>&prime;</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the effective cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
+In this model the shear strength <em>τ</em> is proportional to the product of the effective normal stress <em>σ<sub>N</sub>&prime;</em> on the plane with its static friction in the angular form <em>tan(φ&prime;)</em>. The <em>τ</em> versus <em>σ<sub>N</sub>&prime;</em> relationship is not truly linear, but assuming the effective normal forces is strong enough, it can be approximated with a linear fit (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the effective cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
 </p>
 </td>
 </tr>
@@ -1729,40 +1751,40 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>N</b></em> is the normal force (N/m)
+<em><b>N</b></em> is the normal forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>X</b></em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear forces (N/m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>Q</b></em> is the external force (N/m)
+<em><b>Q</b></em> is the external forces (N/m)
 </li>
 <li>
-<em><b>ω</b></em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angles (&deg;)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 </ul>
 </td>
@@ -1847,34 +1869,34 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>X</b></em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear forces (N/m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>Q</b></em> is the external force (N/m)
+<em><b>Q</b></em> is the external forces (N/m)
 </li>
 <li>
-<em><b>ω</b></em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angles (&deg;)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 </ul>
 </td>
@@ -1953,13 +1975,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>P</b></em> is the resistive shear force (N/m)
+<em><b>P</b></em> is the resistive shear forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>N&prime;</b></em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal forces (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -1968,7 +1990,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 </ul>
 </td>
@@ -2067,13 +2089,13 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>P</b></em> is the resistive shear force (N/m)
+<em><b>P</b></em> is the resistive shear forces (N/m)
 </li>
 <li>
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em><b>N&prime;</b></em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal forces (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -2082,7 +2104,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 </ul>
 </td>
@@ -2120,7 +2142,7 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-Mobilized shear force is derived by dividing the definition of the <em><b>P</b></em> from <a href=#GD:resShr>GD: resShr</a>. by the definition of the factor of safety from <a href=#TM:factOfSafety>TM: factOfSafety</a>. The factor of safety <em>F<sub>S</sub></em> is not indexed by <em>i</em> because it is assumed to be constant for the entire slip surface (<a href=#assumpFOS>A: Factor-of-Safety</a>).
+Mobilized shear forces is derived by dividing the definition of the <em><b>P</b></em> from <a href=#GD:resShr>GD: resShr</a>. by the definition of the factor of safety from <a href=#TM:factOfSafety>TM: factOfSafety</a>. The factor of safety <em>F<sub>S</sub></em> is not indexed by <em>i</em> because it is assumed to be constant for the entire slip surface (<a href=#assumpFOS>A: Factor-of-Safety</a>).
 </p>
 <div id="GD:effNormF">
 <table class="gdefn">
@@ -2161,16 +2183,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>N&prime;</b></em> is the effective normal force (N/m)
+<em><b>N&prime;</b></em> is the effective normal forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>N</b></em> is the normal force (N/m)
+<em><b>N</b></em> is the normal forces (N/m)
 </li>
 <li>
-<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
 </li>
 </ul>
 </td>
@@ -2249,28 +2271,28 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear forces without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
-<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -2279,7 +2301,7 @@ Description
 <em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 </ul>
 </td>
@@ -2355,25 +2377,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear forces without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 </ul>
 </td>
@@ -2449,7 +2471,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>X</b></em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear forces (N/m)
 </li>
 <li>
 <em>λ</em> is the proportionality constant (Unitless)
@@ -2458,7 +2480,7 @@ Description
 <em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 </ul>
 </td>
@@ -2576,49 +2598,49 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>h</b><sub>z</sub></em> is the height of center of slice (m)
+<em><b>h</b><sub>z</sub></em> is the heights of centers of slices (m)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
-<em><b>h</b><sub>z,w</sub></em> is the height halfway to water table (m)
+<em><b>h</b><sub>z,w</sub></em> is the heights halfway to water table (m)
 </li>
 <li>
-<em><b>X</b></em> is the interslice shear force (N/m)
+<em><b>X</b></em> is the interslice shear forces (N/m)
 </li>
 <li>
 <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
 </li>
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>h</b></em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction heights of slices (m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>Q</b></em> is the external force (N/m)
+<em><b>Q</b></em> is the external forces (N/m)
 </li>
 <li>
-<em><b>ω</b></em> is the imposed load angle (&deg;)
+<em><b>ω</b></em> is the imposed load angles (&deg;)
 </li>
 </ul>
 </td>
@@ -2676,7 +2698,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Weight
+Weights
 </p>
 </td>
 </tr>
@@ -2724,16 +2746,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>W</b></em> is the weight (N/m)
+<em><b>W</b></em> is the weights (N/m)
 </li>
 <li>
-<em><b>W</b><sup>L</sup></em> is the left weight of a slice (N/m)
+<em><b>W</b><sup>L</sup></em> is the left weights of slices (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>W</b><sup>R</sup></em> is the right weight of a slice (N/m)
+<em><b>W</b><sup>R</sup></em> is the right weights of slices (N/m)
 </li>
 </ul>
 </td>
@@ -2778,7 +2800,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base hydrostatic force
+Base hydrostatic forces
 </p>
 </td>
 </tr>
@@ -2826,16 +2848,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sub>b</sub></em> is the base hydrostatic force (N/m)
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic forces on slices (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic forces on slices (N/m)
 </li>
 </ul>
 </td>
@@ -2880,7 +2902,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Surface hydrostatic force
+Surface hydrostatic forces
 </p>
 </td>
 </tr>
@@ -2928,16 +2950,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic forces on slices (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic forces on slices (N/m)
 </li>
 </ul>
 </td>
@@ -2982,7 +3004,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice normal water force 
+Interslice normal water forces
 </p>
 </td>
 </tr>
@@ -3056,22 +3078,22 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 </ul>
 </td>
@@ -3106,7 +3128,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base angle
+Base angles
 </p>
 </td>
 </tr>
@@ -3154,16 +3176,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinates of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -3208,7 +3230,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Surface angle
+Surface angles
 </p>
 </td>
 </tr>
@@ -3256,16 +3278,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>x</b><sub>slope</sub></em> is the x-coordinate of the slope (m)
+<em><b>x</b><sub>slope</sub></em> is the x-coordinates of the slope (m)
 </li>
 </ul>
 </td>
@@ -3310,7 +3332,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base width of a slice
+Base width of slices
 </p>
 </td>
 </tr>
@@ -3351,10 +3373,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
-<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinates of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3392,7 +3414,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Total base length of a slice
+Total base lengths of slices
 </p>
 </td>
 </tr>
@@ -3433,16 +3455,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 </ul>
 </td>
@@ -3487,7 +3509,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Surface length of a slice
+Surface lengths of slices
 </p>
 </td>
 </tr>
@@ -3528,16 +3550,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 </ul>
 </td>
@@ -3582,7 +3604,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Y-direction height of a slice
+Y-direction heights of slices
 </p>
 </td>
 </tr>
@@ -3630,13 +3652,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>h</b></em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction heights of slices (m)
 </li>
 <li>
-<em><b>h</b><sup>R</sup></em> is the height of the right side of a slice (m)
+<em><b>h</b><sup>R</sup></em> is the heights of the right side of slices (m)
 </li>
 <li>
-<em><b>h</b><sup>L</sup></em> is the height of the left side of a slice (m)
+<em><b>h</b><sup>L</sup></em> is the heights of the left side of slices (m)
 </li>
 </ul>
 </td>
@@ -3841,7 +3863,7 @@ Description
 <em>π</em> is the circumference to diameter ratio (Unitless)
 </li>
 <li>
-<em><b>x</b><sub>slip</sub></em> is the x-coordinate of the slip surface (m)
+<em><b>x</b><sub>slip</sub></em> is the x-coordinates of the slip surface (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -3938,7 +3960,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -4049,7 +4071,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
@@ -4103,7 +4125,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Sum of the interslice normal forces
+Sums of the interslice normal forces
 </p>
 </td>
 </tr>
@@ -4144,10 +4166,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
+<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sums of the interslice normal forces (N)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4185,7 +4207,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Sum of the interslice normal water forces
+Sums of the interslice normal water forces
 </p>
 </td>
 </tr>
@@ -4226,10 +4248,10 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
+<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sums of the interslice normal water forces (N)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4267,7 +4289,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Height of the right side of a slice
+Heights of the right side of slices
 </p>
 </td>
 </tr>
@@ -4308,16 +4330,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>h</b><sup>R</sup></em> is the height of the right side of a slice (m)
+<em><b>h</b><sup>R</sup></em> is the heights of the right side of slices (m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4352,7 +4374,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Height of the left side of a slice
+Heights of the left side of slices
 </p>
 </td>
 </tr>
@@ -4393,16 +4415,16 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>h</b><sup>L</sup></em> is the height of the left side of a slice (m)
+<em><b>h</b><sup>L</sup></em> is the heights of the left side of slices (m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 </ul>
 </td>
@@ -4437,7 +4459,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Right weight of a slice
+Right weights of slices
 </p>
 </td>
 </tr>
@@ -4497,25 +4519,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>W</b><sup>R</sup></em> is the right weight of a slice (N/m)
+<em><b>W</b><sup>R</sup></em> is the right weights of slices (N/m)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
 <em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
@@ -4563,7 +4585,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Left weight of a slice
+Left weights of slices
 </p>
 </td>
 </tr>
@@ -4623,25 +4645,25 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>W</b><sup>L</sup></em> is the left weight of a slice (N/m)
+<em><b>W</b><sup>L</sup></em> is the left weights of slices (N/m)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
 <em>γ</em> is the soil dry unit weight (N/m<sup>3</sup>)
@@ -4689,7 +4711,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Right base hydrostatic force on a slice
+Right base hydrostatic forces on slices
 </p>
 </td>
 </tr>
@@ -4744,19 +4766,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -4804,7 +4826,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Left base hydrostatic force on a slice
+Left base hydrostatic forces on slices
 </p>
 </td>
 </tr>
@@ -4859,19 +4881,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base length of a slice (m)
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinate of the slip surface (m)
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -4919,7 +4941,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Right surface hydrostatic force on a slice
+Right surface hydrostatic forces on slices
 </p>
 </td>
 </tr>
@@ -4974,19 +4996,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -5034,7 +5056,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Left surface hydrostatic force on a slice
+Left surface hydrostatic forces on slices
 </p>
 </td>
 </tr>
@@ -5089,19 +5111,19 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic force on a slice (N/m)
+<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface length of a slice (m)
+<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -5224,7 +5246,7 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear forces without the influence of interslice forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -5239,7 +5261,7 @@ Description
 <em>n</em> is the number of slices (Unitless)
 </li>
 <li>
-<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear forces without the influence of interslice forces (N/m)
 </li>
 </ul>
 </td>
@@ -5290,7 +5312,7 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-An expression for the effective normal force, <em><b>N&prime;</b></em>, can be derived by substituting the normal force equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal force from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
+An expression for the effective normal forces, <em><b>N&prime;</b></em>, can be derived by substituting the normal forces equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal forces from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
 </p>
 <div class="equation">
 <em><b>N&prime;</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub></em>
@@ -5309,7 +5331,7 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-Since the interslice shear force <em><b>X</b></em> and interslice normal force <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
+Since the interslice shear forces <em><b>X</b></em> and interslice normal forces <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
 </p>
 <div class="equation">
 <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
@@ -5322,7 +5344,7 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are zero, allows for further simplification as shown below:
+Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic coefficient and the external forces, respectively, are zero, allows for further simplification as shown below:
 </p>
 <div class="equation">
 <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
@@ -5348,7 +5370,7 @@ F<sub>S</sub>
 </div></em>
 </div>
 <p class="paragraph">
-The interslice shear force <em><b>X</b></em> can be expressed in terms of the interslice normal force <em><b>G</b></em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
+The interslice shear forces <em><b>X</b></em> can be expressed in terms of the interslice normal forces <em><b>G</b></em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
 </p>
 <div class="equation">
 <em><b>T</b><sub>i</sub>&plus;(&minus;λ&#8239;<b>f</b><sub>i&minus;1</sub>&#8239;<b>G</b><sub>i&minus;1</sub>&plus;λ&#8239;<b>f</b><sub>i</sub>&#8239;<b>G</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
@@ -5694,7 +5716,7 @@ K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </div></em>
 </div>
 <p class="paragraph">
-This equation can be simplified by applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic and external forces, respectively, are zero:
+This equation can be simplified by applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic and external forcess, respectively, are zero:
 </p>
 <div class="equation">
 <em>λ = <div class="fraction">
@@ -5755,7 +5777,7 @@ Taking the summation of all slices, and applying <a href=#assumpES>A: Edge-Slice
 </div></em>
 </div>
 <p class="paragraph">
-Equation (16) for <em>λ</em> is a function of the unknown interslice normal force <em><b>G</b></em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+Equation (16) for <em>λ</em> is a function of the unknown interslice normal forces <em><b>G</b></em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:nrmShrForNum">
 <table class="idefn">
@@ -5845,31 +5867,31 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
-<em><b>H</b></em> is the interslice normal water force  (N/m)
+<em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
-<em><b>α</b></em> is the base angle (&deg;)
+<em><b>α</b></em> is the base angles (&deg;)
 </li>
 <li>
-<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sum of the interslice normal forces (N)
+<em><b>F</b><sub>x</sub><sup>G</sup></em> is the sums of the interslice normal forces (N)
 </li>
 <li>
-<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sum of the interslice normal water forces (N)
+<em><b>F</b><sub>x</sub><sup>H</sup></em> is the sums of the interslice normal water forces (N)
 </li>
 <li>
-<em><b>h</b></em> is the y-direction height of a slice (m)
+<em><b>h</b></em> is the y-direction heights of slices (m)
 </li>
 <li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic force (N/m)
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li>
-<em><b>β</b></em> is the surface angle (&deg;)
+<em><b>β</b></em> is the surface angles (&deg;)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -6000,13 +6022,13 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>b</b></em> is the base width of a slice (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em><b>f</b></em> is the interslice normal to shear force ratio variation function (Unitless)
 </li>
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -6145,7 +6167,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>G</b></em> is the interslice normal force (N/m)
+<em><b>G</b></em> is the interslice normal forces (N/m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -6154,10 +6176,10 @@ Description
 <em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em><b>T</b></em> is the mobilized shear force without the influence of interslice forces (N/m)
+<em><b>T</b></em> is the mobilized shear forces without the influence of interslice forces (N/m)
 </li>
 <li>
-<em><b>R</b></em> is the resistive shear force without the influence of interslice forces (N/m)
+<em><b>R</b></em> is the resistive shear forces without the influence of interslice forces (N/m)
 </li>
 <li>
 <em><b>Φ</b></em> is the first function for incorporating interslice forces into shear force (Unitless)
@@ -6294,16 +6316,16 @@ Description
 <em>Υ</em> is the minimization function (Unitless)
 </li>
 <li>
-<em><b>x</b><sub>slope</sub></em> is the x-coordinate of the slope (m)
+<em><b>x</b><sub>slope</sub></em> is the x-coordinates of the slope (m)
 </li>
 <li>
-<em><b>y</b><sub>slope</sub></em> is the y-coordinate of the slope (m)
+<em><b>y</b><sub>slope</sub></em> is the y-coordinates of the slope (m)
 </li>
 <li>
-<em><b>x</b><sub>wt</sub></em> is the x-coordinate (m)
+<em><b>x</b><sub>wt</sub></em> is the x-coordinates (m)
 </li>
 <li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinate of the water table (m)
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
 </li>
 <li>
 <em>c&prime;</em> is the effective cohesion (Pa)

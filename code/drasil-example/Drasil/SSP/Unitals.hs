@@ -118,7 +118,8 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, waterDist, slopeDist, slipDist,
+  slopeHght, slipHght, xi, yi, zcoord, critCoords, waterDist, slopeDist, 
+  slipDist, mobilizedShear, resistiveShear,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
@@ -128,16 +129,16 @@ sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, waterHght,
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
 
-genericF, genericA, nrmShearNum, nrmShearDen, waterDist, slopeDist, slipDist, waterHght, 
-  slopeHght, slipHght, xi, yi, zcoord, critCoords, mobShrI, sliceHght,
-  sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, 
-  watrForce, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
-  nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
-  intNormForce, shrStress, totStress, effectiveStress, 
-  effNormStress :: UnitalChunk
+genericF, genericA, nrmShearNum, nrmShearDen, waterDist, slopeDist, slipDist, 
+  waterHght, slopeHght, slipHght, xi, yi, zcoord, critCoords, mobilizedShear, 
+  mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, 
+  slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI, intShrForce, 
+  baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
+  surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
+  baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
+  midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight,
+  sliceHghtLeft, porePressure, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -184,6 +185,13 @@ critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
   (Concat [sub (vec lX) (Atomic "cs"), Atomic ",",
   sub (vec lY) (Atomic "cs")]) metre
+
+mobilizedShear = uc' "mobilizedShear" (cn $ "mobilized shear force")
+  "shear force in the direction of potential motion" cS newton
+
+resistiveShear = uc' "resistiveShear" (cn $ "resistive shear force")
+  ("Mohr Coulomb frictional force that describes the limit of mobilized " ++
+  "shear force that can be withstood before failure") cP newton
 
 mobShrI = uc' "mobShr" (cn $ "mobilized shear forces")
   "per meter in the z-direction for each slice"

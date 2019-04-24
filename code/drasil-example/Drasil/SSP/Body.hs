@@ -66,7 +66,8 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
+  sspInputsToOutputTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
@@ -514,7 +515,7 @@ slopeVert = verticesConst $ phrase slope
 -- SECTION 5.1 --
 funcReqList :: [Contents]
 funcReqList = (mkEnumSimpleD sspRequirements) ++
-  [LlC sspInputDataTable]
+  [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --
 

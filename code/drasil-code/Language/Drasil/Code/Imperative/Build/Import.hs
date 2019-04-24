@@ -1,22 +1,8 @@
-module Language.Drasil.Code.Imperative.Build.Import (
-  makeBuild
-) where
+module Language.Drasil.Code.Imperative.Build.Import where
 
-import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST (Label, Module(Mod), notMainModule, Package(Pack))
-import Language.Drasil.Code.Imperative.Build.AST (Ext(..), includeExt, NameOpts, packSep, Runnable(Runnable), RunName(..), RunType(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config, ext, runnable)
-
-import Build.Drasil (RuleTransformer(makeRule), genMake, mkRule, mkCheckedCommand)
-
-data CodeHarness = Ch Config Package
-
-instance RuleTransformer CodeHarness where
-  makeRule (Ch c m) = [
-    mkRule "run" [] [
-      mkCheckedCommand $ (buildRunTarget (renderRunName c m no nm) ty) ++ " $(RUNARGS)"
-      ]
-    ] where (Runnable nm no ty) = runnable c
+import Language.Drasil.Code.Imperative.Build.AST (Ext(..), includeExt, NameOpts, packSep, RunName(..), RunType(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config, ext)
 
 renderRunName :: Config -> Package -> NameOpts -> RunName -> String
 renderRunName c p o (RConcat a b) = (renderRunName c p o a) ++ (renderRunName c p o b)
@@ -38,6 +24,3 @@ getMainModule c = mainName $ filter (not . notMainModule) c
 buildRunTarget :: String -> RunType -> String
 buildRunTarget fn Standalone = "./" ++ fn
 buildRunTarget fn (Interpreter i) = unwords [i, fn]
-
-makeBuild :: Package -> Config -> Code -> Code
-makeBuild m p (Code c) = Code $ ("Makefile", genMake [Ch p m]) : c

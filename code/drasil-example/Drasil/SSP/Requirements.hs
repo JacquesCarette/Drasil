@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (constraint, datum, funcReqDom, 
-  input_, method_, physicalConstraint, value)
+  input_, method_, name_, output_, physicalConstraint, symbol_, value)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, ofThe, sAnd, sOf)
@@ -13,7 +13,8 @@ import Data.Drasil.Utils (mkInputDatTb)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
-import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs)
+import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs, xMaxExtSlip, 
+  xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip)
 
 sspRequirements :: [ConceptInstance]
 sspRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
@@ -53,12 +54,26 @@ verifyOutput = cic "verifyOutput" ( foldlSent [
   plural physicalConstraint, S "shown in", makeRef2S data_constraint_Table3])
   "Verify-Output" funcReqDom
 
+displayInput = cic "displayInput" ( foldlSent [
+  S "Display as", phrase output_, S "the", phrase user :+: S "-supplied",
+  plural input_, S "listed in", makeRef2S sspInputsToOutputTable])
+  "Display-Input" funcReqDom
+
 displayGraph = cic "displayGraph" ( foldlSent [
-  S "Display the", phrase crtSlpSrf, S "graphically. Display the", phrase value 
-  `ofThe` phrase fs]) 
- "Display-Graph" funcReqDom
+  S "Display", phrase crtSlpSrf `ofThe` short twoD, phrase slope `sC` 
+  S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
+  "Display-Graph" funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent
 sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
   --FIXME: this has to be seperate since coords is a different type
+
+inputsToOutput :: [UncertQ]
+inputsToOutput = [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, 
+  yMinSlip]
+
+sspInputsToOutputTable :: LabelledContent
+sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
+  Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
+  (at_start' input_ +:+ S "to" +:+ phrase output_) False

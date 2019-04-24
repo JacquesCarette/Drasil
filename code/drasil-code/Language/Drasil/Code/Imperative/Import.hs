@@ -7,6 +7,7 @@ import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
   Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode, makeLangConfig)
@@ -94,7 +95,7 @@ generateCode chs g =
           when (x == Java) $ createDirectoryIfMissing False prog
           let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
                        Just "Code"
-          createCodeFiles $ C.Code $
+          createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
             map (if x == Java then \(c,d) -> (prog </> c, d) else id) $
             C.unCode $ makeCode config absCode
           setCurrentDirectory workingDir) $ lang chs

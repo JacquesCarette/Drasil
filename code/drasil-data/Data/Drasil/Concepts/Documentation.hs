@@ -297,6 +297,10 @@ reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") EmptyS [srsDom]
 funcReqDom :: ConceptChunk
 funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
 
+nonFuncReqDom :: ConceptChunk
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $
+  Just "NFR") EmptyS [reqDom]
+
 chgProbDom :: ConceptChunk
 chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
 

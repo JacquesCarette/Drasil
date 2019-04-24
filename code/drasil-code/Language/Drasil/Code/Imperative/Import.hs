@@ -95,7 +95,7 @@ generateCode chs g =
           when (x == Java) $ createDirectoryIfMissing False prog
           let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
                        Just "Code"
-          createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
+          createCodeFiles $ C.Code $
             map (if x == Java then \(c,d) -> (prog </> c, d) else id) $
             C.unCode $ makeCode config absCode
           setCurrentDirectory workingDir) $ lang chs

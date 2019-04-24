@@ -6,15 +6,15 @@ module Drasil.SSP.Changes (likelyChanges_SRS, likelyChgs, unlikelyChanges_SRS,
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimpleD)
 
-import Data.Drasil.Concepts.Documentation (likeChgDom, system, unlikeChgDom)
+import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation)
-import Data.Drasil.Concepts.Physics (force)
+import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, sAnd)
 
-import Drasil.SSP.Assumptions (assumpSLH, assumpSLI, assumpINSFL, assumpENSL, 
+import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
   assumpSF, assumpSL)
 import Drasil.SSP.Defs (slope, soil, soilPrpty)
-import Drasil.SSP.Unitals (surfLoad)
+import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad, zcoord)
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = mkEnumSimpleD likelyChgs
@@ -61,15 +61,17 @@ unlikelyChg2AO =   cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 
 ucNASLODesc, uc2AODesc :: Sentence
 
-ucNASLODesc = foldlSent [S "Changes related to", (makeRef2S assumpSLI) `sAnd`
+ucNASLODesc = foldlSent [S "Changes related to",
   (makeRef2S assumpINSFL), S "are not possible due to the dependency",
   S "of the", plural calculation, S "on the linear relationship between",
-  S "interslice normal and shear forces"]
+  phrase intNormForce `sAnd` phrase intShrForce]
 
-uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for 2D analysis" +:+.
-  S "with these models only because stress along z-direction is zero", 
-  S "These models do not take into account stress in the z-direction, and",
-  S "therefore cannot be without manipulation to attempt 3d analysis"]
+uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD, 
+  phrase analysis, S "with these", plural model, S "only because", 
+  phrase stress, S "along the" +:+. (ch zcoord :+: S "-direction is zero"), 
+  S "These", plural model, S "do not take into account", phrase stress, 
+  S "in the", ch zcoord :+: S "-direction, and therefore cannot be used",
+  S "without manipulation to attempt", phrase threeD, phrase analysis]
 
 ucIntro :: Contents
 ucIntro = foldlSP [S "If changes were to be made with regard to the following" `sC`

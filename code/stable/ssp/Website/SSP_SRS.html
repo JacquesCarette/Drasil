@@ -1343,7 +1343,7 @@ Soil-Properties: The soil properties are independent of dry or saturated conditi
 </p>
 <p>
 <div id="assumpSLI">
-Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. <a href=#GD:resShr>GD: resShr</a> <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.
+Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. <a href=#GD:resShr>GD: resShr</a>.
 </div>
 </p>
 <p>
@@ -1373,12 +1373,12 @@ Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interf
 </p>
 <p>
 <div id="assumpSF">
-Seismic-Force: There is no seismic force acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+Seismic-Force: There is no seismic force acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#LC_seismic>LC: Calculate-Seismic-Force</a>.
 </div>
 </p>
 <p>
 <div id="assumpSL">
-Surface-Load: There is no imposed surface load, and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a>.
+Surface-Load: There is no imposed surface load, and therefore no external force, acting on the slope. <a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#LC_external>LC: Calculate-External-Force</a>.
 </div>
 </p>
 </div>
@@ -6672,7 +6672,17 @@ Likely Changes
 <div class="list">
 <p>
 <div id="LC_inhomogeneous">
-Calculate-Inhomogeneous-Soil-Layers: <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+Calculate-Inhomogeneous-Soil-Layers: The system currently assumes the soil mass is homogeneous (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). In the future, calculations can be added for inconsistent soil properties throughout.
+</div>
+</p>
+<p>
+<div id="LC_seismic">
+Calculate-Seismic-Force: The system currently assumes no seismic force (<a href=#assumpSF>A: Seismic-Force</a>). In the future, calculations can be added for the presence of seismic force.
+</div>
+</p>
+<p>
+<div id="LC_external">
+Calculate-External-Force: The system currently assumes no external force (<a href=#assumpSL>A: Surface-Load</a>). In the future, calculations can be added for an imposed surface load on the slope.
 </div>
 </p>
 </div>
@@ -6689,12 +6699,12 @@ If changes were to be made with regard to the following, a different algorithm w
 <div class="list">
 <p>
 <div id="UC_normshearlinear">
-Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpSLI>A: Soil-Layers-Isotropic</a> and <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal force and interslice shear force.
 </div>
 </p>
 <p>
 <div id="UC_2donly">
-2D-Analysis-Only: <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+2D-Analysis-Only: <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
 </div>
 </p>
 </div>

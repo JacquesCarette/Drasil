@@ -22,7 +22,7 @@
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability analysis Program}
-\author{Henry Frankis}
+\author{Henry Frankis and Brooks MacLachlan}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -153,7 +153,7 @@ $x$ & X-Coordinate: in the Cartesian coordinate system & m
 \\
 ${x_{cs}},{y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
-${x_{slip}}$ & X-Coordinate of the Slip Surface: distance of the slip surface & m
+${x_{slip}}$ & X-Coordinate of the Slip Surface: x-coordinate of a point on the slip surface & m
 \\
 ${x_{slope}}$ & X-Coordinate of the Slope: x-coordinate of a point on the slope & m
 \\
@@ -250,7 +250,7 @@ R & Requirement
 \\
 SRS & Software Requirements Specification
 \\
-SSA & Slope Stability Analysis
+SSP & Slope Stability analysis Program
 \\
 T & Theoretical Model
 \\
@@ -2117,7 +2117,7 @@ $const_f$ &  & decision on f
 \end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-SSA is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+SSP is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}

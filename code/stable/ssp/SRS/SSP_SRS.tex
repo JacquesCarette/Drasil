@@ -1668,7 +1668,7 @@ Label & Factor of safety
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005} and \cite{karchewski2012}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding Equation (1) below:
@@ -1795,7 +1795,7 @@ Label & Normal and shear force proportionality constant
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
@@ -1942,7 +1942,7 @@ Label & Interslice normal forces
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{chen2005}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+                                                                                                            RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until Equation (3) shown again below:
@@ -1993,7 +1993,7 @@ Label & Critical slip surface identification
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{li2010}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & 
+                                                                                                            RefBy & \hyperref[generateCSS]{FR: Generate-Critical-Slip-Surfaces} \hyperref[displayGraph]{FR: Display-Graph} \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
@@ -2059,17 +2059,17 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{itemize}
-\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the input file and store the data. Necessary input data summarized in \hyperref[Table:inDataTable]{Table:inDataTable}.
-\item[Generate-Critical-Slip-Surfaces:\phantomsection\label{generateCSS}]Generate potential critical slip surfaces for the input slope.
-\item[Test-Slip-Surfaces:\phantomsection\label{testSlipSrf}]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
-\item[Prepare-Slip-Surfaces:\phantomsection\label{prepareSlipS}]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
-\item[Calculate-Factors-of-Safety:\phantomsection\label{calculateFS}]Calculate the factors of safety of the slip surfaces.
-\item[Rank-and-Weight-Slopes:\phantomsection\label{rankSlope}]Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
-\item[Generate-New-Critical-Slip-Surfaces:\phantomsection\label{generateCSS'}]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
-\item[Repeat-Find-Factor-of-Safety:\phantomsection\label{repeatFindFS}]Repeat \hyperref[testSlipSrf]{FR: Test-Slip-Surfaces}, \hyperref[prepareSlipS]{FR: Prepare-Slip-Surfaces}, \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}, \hyperref[rankSlope]{FR: Rank-and-Weight-Slopes}, and \hyperref[generateCSS']{FR: Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
-\item[Prepare-Critical-Slip-Surface:\phantomsection\label{prepareCSS}]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern-Price method.
-\item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface graphically. Display the the value of the factor of safety.
+\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the inputs, shown in \hyperref[Table:inDataTable]{Table:inDataTable}, and store the data.
+\item[Verify-Input:\phantomsection\label{verifyInput}]Verify that the input data lie within the physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
+\item[Generate-Critical-Slip-Surfaces:\phantomsection\label{generateCSS}]Generate potential critical slip surfaces for the input slope (using \hyperref[IM:crtSlpId]{IM: crtSlpId}).
+\item[Calculate-Factors-of-Safety:\phantomsection\label{calculateFS}]Calculate the factors of safety for each of the potential critical slip surfaces (using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}).
+\item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]Compare the factor of safety for each potential critical slip surface to determine the minimum factor of safety, corresponding to the critical slip surface (using \hyperref[IM:crtSlpId]{IM: crtSlpId}).
+\item[Verify-Output:\phantomsection\label{verifyOutput}]Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}.
+\item[Display-Input:\phantomsection\label{displayInput}]Display as output the user-supplied inputs listed in \hyperref[Table:inputsToOutputTable]{Table:inputsToOutputTable}.
+\item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface of the 2D slope, as determined from \hyperref[IM:crtSlpId]{IM: crtSlpId}, graphically.
+\item[Display-Factor-of-Safety:\phantomsection\label{displayFS}]Display the value of the factor of safety for the critical slip surface, as determined from \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+\item[Display-Interslice-Normal-Forces:\phantomsection\label{displayNormal}]Using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}, calculate and graphically display the interslice normal force.
+\item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]Using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}, calculate and graphically display the interslice shear force.
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -2115,6 +2115,30 @@ $const_f$ &  & decision on f
 \caption{Required Inputs}
 \label{Table:inDataTable}
 \end{longtable}
+\begin{longtable}{l l}
+\toprule
+Symbol & Name
+\\
+\midrule
+\endhead
+$const_f$ & decision on f
+\\
+${{x_{slip}}^{maxExt}}$ & maximum exit x-coordinate
+\\
+${{x_{slip}}^{maxEtr}}$ & maximum entry x-coordinate
+\\
+${{x_{slip}}^{minExt}}$ & minimum exit x-coordinate
+\\
+${{x_{slip}}^{minEtr}}$ & minimum exit x-coordinate
+\\
+${{y_{slip}}^{max}}$ & maximum y-coordinate
+\\
+${{y_{slip}}^{min}}$ & minimum y-coordinate
+\\
+\bottomrule
+\caption{Inputs to be returned as output}
+\label{Table:inputsToOutputTable}
+\end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 SSA is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
@@ -2134,134 +2158,130 @@ If changes were to be made with regard to the following, a different algorithm w
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of items of different sections on each other.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of items of different sections on each other.
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[DD:baseWtrF]{DD: baseWtrF} & \hyperref[DD:surfWtrF]{DD: surfWtrF} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[DD:sliceWght]{DD: sliceWght} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[repeatFindFS]{FR: Repeat-Find-Factor-of-Safety} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} & \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} & \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} & \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[TM:effStress]{TM: effStress}
+ & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[DD:baseWtrF]{DD: baseWtrF} & \hyperref[DD:surfWtrF]{DD: surfWtrF} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[DD:sliceWght]{DD: sliceWght} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_seismic]{LC: Calculate-Seismic-Force} & \hyperref[LC_external]{LC: Calculate-External-Force} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[generateCSS]{FR: Generate-Critical-Slip-Surfaces} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} & \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} & \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} & \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[TM:effStress]{TM: effStress}
 \\
 \midrule
 \endhead
-\hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:convertFunc1]{DD: convertFunc1} &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Sec:PhysSyst]{Section: Physical System Description} & X & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:convertFunc1]{DD: convertFunc1} &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:convertFunc2]{DD: convertFunc2} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:PhysSyst]{Section: Physical System Description} & X & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:convertFunc2]{DD: convertFunc2} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:baseWtrF]{DD: baseWtrF} &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:surfWtrF]{DD: surfWtrF} & X & X & X & X & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:baseWtrF]{DD: baseWtrF} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:surfWtrF]{DD: surfWtrF} & X & X & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sliceWght]{DD: sliceWght} & X & X & X &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angleA]{DD: angleA} & X & X & X & X & X &  &  &  & X & X &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:sliceWght]{DD: sliceWght} & X & X & X &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angleA]{DD: angleA} & X & X & X & X & X &  &  &  &  &  & X & X &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:lengthB]{DD: lengthB} &  &  &  & X &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  & 
+\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angleB]{DD: angleB} & X & X & X & X & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:lengthB]{DD: lengthB} &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:bsShrFEq]{GD: bsShrFEq} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angleB]{DD: angleB} & X & X & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calculateFS]{FR: Calculate-Factors-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[GD:bsShrFEq]{GD: bsShrFEq} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:effStress]{TM: effStress} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:crtSlpId]{IM: crtSlpId} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:equilibrium]{TM: equilibrium} & X & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:effStress]{TM: effStress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ratioVariation]{DD: ratioVariation} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:equilibrium]{TM: equilibrium} & X & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:factOfSafety]{TM: factOfSafety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ratioVariation]{DD: ratioVariation} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:fctSfty]{IM: fctSfty} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:factOfSafety]{TM: factOfSafety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[generateCSS']{FR: Generate-New-Critical-Slip-Surfaces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[IM:fctSfty]{IM: fctSfty} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:slcHeight]{DD: slcHeight} &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:slcHeight]{DD: slcHeight} &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:inDataTable]{Table:inDataTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[Table:inDataTable]{Table:inDataTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[IM:intsliceFs]{IM: intsliceFs} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:inputsToOutputTable]{Table:inputsToOutputTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[DD:lengthLb]{DD: lengthLb} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\hyperref[IM:intsliceFs]{IM: intsliceFs} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:lengthLs]{DD: lengthLs} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  & 
+\hyperref[DD:lengthLb]{DD: lengthLb} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:lengthLs]{DD: lengthLs} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  & 
 \\
-\hyperref[GD:mobShearWO]{GD: mobShearWO} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:mobShr]{GD: mobShr} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:mobShearWO]{GD: mobShearWO} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:momentEql]{GD: momentEql} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:mobShr]{GD: mobShr} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
+\hyperref[GD:momentEql]{GD: momentEql} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:normForcEq]{GD: normForcEq} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
 \\
-\hyperref[GD:normShrR]{GD: normShrR} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:normForcEq]{GD: normForcEq} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:normShrR]{GD: normShrR} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:nrmShrFor]{IM: nrmShrFor} &  &  &  & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[prepareSlipS]{FR: Prepare-Slip-Surfaces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[IM:nrmShrFor]{IM: nrmShrFor} &  &  &  & X &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[rankSlope]{FR: Rank-and-Weight-Slopes} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[GD:resShearWO]{GD: resShearWO} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:resShearWO]{GD: resShearWO} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:resShr]{GD: resShr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:resShr]{GD: resShr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
-\\
-\hyperref[testSlipSrf]{FR: Test-Slip-Surfaces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

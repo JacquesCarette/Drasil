@@ -128,7 +128,7 @@ egetSol (SCSProg s) = concatMap egetSCSSub s
 
 egetSCSSub :: SCSSub -> [Expr]
 egetSCSSub Assumptions  = []
-egetSCSSub (TMs _ x)    = concatMap egetTM x
+egetSCSSub (TMs _ _ x)    = concatMap egetTM x
 egetSCSSub (GDs _ _ x _)  = concatMap egetGD x
 egetSCSSub (DDs _ _ x _)  = concatMap egetDD x
 egetSCSSub (IMs _ _ x _)  = concatMap egetIM x
@@ -319,7 +319,7 @@ getSol (SCSProg x) = concatMap getSCSSub x
 
 getSCSSub :: SCSSub -> [Sentence]
 getSCSSub Assumptions  = []
-getSCSSub (TMs _ x)    = concatMap getTM x
+getSCSSub (TMs s _ x)    = s ++ concatMap getTM x
 getSCSSub (GDs s _ x _)  = s ++ concatMap getGD x
 getSCSSub (DDs s _ x _)  = s ++ concatMap getDD x
 getSCSSub (IMs s _ x _)  = s ++ concatMap getIM x

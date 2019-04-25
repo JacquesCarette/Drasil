@@ -130,7 +130,7 @@ mkSRS = [RefSec $ RefProg intro
       SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          ,TMs (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+          , TMs [] (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
            effStress]
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation

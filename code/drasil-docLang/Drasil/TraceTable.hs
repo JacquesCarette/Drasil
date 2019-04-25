@@ -37,7 +37,7 @@ getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ t):_)     = t
+getTraceMapFromTM ((TMs _ _ t):_)     = t
 getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
 getTraceMapFromTM []                = error "No TM found."
 

@@ -43,7 +43,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
-import Data.Drasil.People (henryFrankis)
+import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
@@ -92,7 +92,7 @@ ssp_si :: SystemInformation
 ssp_si = SI {
   _sys = ssp, 
   _kind = srs, 
-  _authors = [henryFrankis],
+  _authors = [henryFrankis, brooks],
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),

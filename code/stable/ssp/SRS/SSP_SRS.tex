@@ -371,14 +371,14 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. \hyperref[GD:mobShr]{GD: mobShr}.
 \item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
 \item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr}.
-\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
+\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr}.
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal force and interslice shear force have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($f$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
 \item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
-\item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty}.
-\item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty}.
+\item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_seismic]{LC: Calculate-Seismic-Force}.
+\item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_external]{LC: Calculate-External-Force}.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -2061,14 +2061,16 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]The system currently assumes the soil mass is homogeneous (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). In the future, calculations can be added for inconsistent soil properties throughout.
+\item[Calculate-Seismic-Force:\phantomsection\label{LC_seismic}]The system currently assumes no seismic force (\hyperref[assumpSF]{A: Seismic-Force}). In the future, calculations can be added for the presence of seismic force.
+\item[Calculate-External-Force:\phantomsection\label{LC_external}]The system currently assumes no external force (\hyperref[assumpSL]{A: Surface-Load}). In the future, calculations can be added for an imposed surface load on the slope.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 If changes were to be made with regard to the following, a different algorithm would be needed.
 \begin{itemize}
-\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[assumpSLI]{A: Soil-Layers-Isotropic} and \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
-\item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal force and interslice shear force.
+\item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along the $z$-direction is zero. These models do not take into account stress in the $z$-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

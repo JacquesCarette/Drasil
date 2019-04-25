@@ -288,6 +288,10 @@ vavPlan                      = compoundNC vav plan
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
 
+goalStmtDom :: ConceptChunk
+goalStmtDom = ccs (mkIdea "goalStmtDom" (goalStmt ^. term) $ Just "GS") EmptyS
+  [srsDom]
+
 assumpDom :: ConceptChunk
 assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $ Just "A") EmptyS [srsDom]
 

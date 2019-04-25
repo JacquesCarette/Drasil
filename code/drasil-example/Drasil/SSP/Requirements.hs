@@ -96,4 +96,4 @@ inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip,
 sspInputsToOutputTable :: LabelledContent
 sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
-  (at_start' input_ +:+ S "to" +:+ phrase output_) False
+  (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True

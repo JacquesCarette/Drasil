@@ -48,7 +48,7 @@ getTraceMapFromGD []                = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
 getTraceMapFromDD l = concat $ mapMaybe getDD l
-  where getDD (DDs _ d _) = Just d
+  where getDD (DDs _ _ d _) = Just d
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]

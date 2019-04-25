@@ -130,7 +130,7 @@ egetSCSSub :: SCSSub -> [Expr]
 egetSCSSub Assumptions  = []
 egetSCSSub (TMs _ x)    = concatMap egetTM x
 egetSCSSub (GDs _ x _)  = concatMap egetGD x
-egetSCSSub (DDs _ x _)  = concatMap egetDD x
+egetSCSSub (DDs _ _ x _)  = concatMap egetDD x
 egetSCSSub (IMs _ _ x _)  = concatMap egetIM x
 egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
 egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
@@ -321,7 +321,7 @@ getSCSSub :: SCSSub -> [Sentence]
 getSCSSub Assumptions  = []
 getSCSSub (TMs _ x)    = concatMap getTM x
 getSCSSub (GDs _ x _)  = concatMap getGD x
-getSCSSub (DDs _ x _)  = concatMap getDD x
+getSCSSub (DDs s _ x _)  = s ++ concatMap getDD x
 getSCSSub (IMs s _ x _)  = s ++ concatMap getIM x
 getSCSSub (Constraints s1 s2 s3 lb) = [s1, s2, s3] ++ concatMap (getCon . (^. accessContents)) lb
 getSCSSub (CorrSolnPpties c) = concatMap getCon' c

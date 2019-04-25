@@ -152,7 +152,7 @@ mkSRS = [RefSec $ RefProg intro
       [ Assumptions
       , TMs (Label : stdFields) theoretical_models
       , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-      , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         [eBalanceOnWtr, heatEInWtr] ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid

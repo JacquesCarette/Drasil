@@ -186,7 +186,7 @@ data SCSSub where
   Assumptions    :: SCSSub
   TMs            :: Fields  -> [TheoryModel] -> SCSSub
   GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
@@ -442,14 +442,14 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS :: SystemInformation -> SCSSub -> Section
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
-    mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
+    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
+    mkSubSCS si' (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
       SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs fields gs' _) =

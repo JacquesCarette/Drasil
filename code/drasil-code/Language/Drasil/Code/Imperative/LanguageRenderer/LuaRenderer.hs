@@ -7,6 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,forBody,tryBody,catchBody)
+import Language.Drasil.Code.Imperative.Build.AST (interpMM)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -25,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   fileNameD, forLabel, declarationDocD,
   typeOfLit, conditionalDocD', fixCtorNames, complexDocD, functionDocD, printDocD, exprDocD,
-  assignDocD', unOpDocD')
+  assignDocD', unOpDocD', runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 
 import Prelude hiding (break,print,return,(<>))
@@ -45,6 +46,7 @@ luaConfig _ c =
         enumsEqualInts   = True,
         ext              = ".lua",
         dir              = "lua",
+        runnable         = interpMM "lua",
         fileName         = fileNameD c,
         include          = include',
         includeScope     = const empty,

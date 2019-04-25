@@ -144,7 +144,7 @@ mkSRS = [RefSec $ RefProg intro
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
     NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
-    (S "SSA is intended to be an educational tool")
+    (short ssp +:+ S "is intended to be an educational tool")
     (S "")]
   , LCsSec $ LCsProg likelyChanges_SRS
   , UCsSec $ UCsProg unlikelyChanges_SRS

@@ -263,7 +263,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
 
 kSent = keySent ssa ssp
 
-keySent :: (Idea a) => a -> a -> Sentence
+keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname]

@@ -25,15 +25,14 @@ ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
-sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
+sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
 
 sspdef' :: [ConceptChunk]
 sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
 
 ----Other Common Phrases----
-soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
-  soilMechanics :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, morPrice :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
@@ -45,9 +44,8 @@ slope    = nc "slope"      (cn' "slope")
 soil     = nc "soil"       (cn  "soil")
 
 morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
-rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
-soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
+soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics :: NamedChunk
 --slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property

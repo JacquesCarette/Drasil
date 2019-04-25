@@ -324,7 +324,7 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal forces")
   "subtracting pore water reactive force from total reactive force") 
   (vec (prime $ Atomic "N")) forcePerMeterU
 
-surfLoad = uc' "Q_i" (cn' $ "external forces") 
+surfLoad = uc' "Q_i" (cn $ "external forces") 
   "forces per meter in the z-direction acting into the surface from the midpoint of each slice"
   (vec cQ) forcePerMeterU
 

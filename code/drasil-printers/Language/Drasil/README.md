@@ -6,9 +6,6 @@ Last updated: July 20, 2018
 **HTML**
   - HTML Renderer - necessary files for HTML output generation
 
-**Make**
-  - AST for makefile creation for each of the output formats
-
 **Output**
   - List of output formats
 

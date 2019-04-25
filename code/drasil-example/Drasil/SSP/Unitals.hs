@@ -207,7 +207,7 @@ slipHght = uc' "y_slip,i" (cn $ "y-coordinate of the slip surface")
   (sub lY (Atomic "slip")) metre
 
 slipDist = uc' "x_slip,i" (cn $ "x-coordinate of the slip surface")
-  ("distance of the slip surface")
+  ("x-coordinate of a point on the slip surface")
   (sub lX (Atomic "slip")) metre
 
 yi = uc' "y_i" (cn $ "y-coordinate") "in the Cartesian coordinate system" lY metre

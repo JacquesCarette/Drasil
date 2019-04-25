@@ -376,54 +376,80 @@ sliceHghtLeftQD :: QDefinition
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght - inxiM1 slipHght)
 
 slcWghtRQD :: QDefinition
-slcWghtRQD = mkQuantDef slcWghtR $ slcWgtEqn inxi
+slcWghtRQD = mkQuantDef slcWghtR slcWghtREqn
+
+slcWghtREqn :: Expr
+slcWghtREqn = (inxi baseWthX) * (case_ [case1,case2,case3])
+  where case1 = (((inxi slopeHght)-(inxi slipHght ))*(sy satWeight),
+          (inxi waterHght) $>= (inxi slopeHght))
+
+        case2 = (((inxi slopeHght)-(inxi waterHght))*(sy dryWeight) +
+          ((inxi waterHght)-(inxi slipHght))*(sy satWeight),
+          (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
+
+        case3 = (((inxi slopeHght)-(inxi slipHght ))*(sy dryWeight),
+          (inxi waterHght) $<= (inxi slipHght))
 
 slcWghtLQD :: QDefinition
-slcWghtLQD = mkQuantDef slcWghtL $ slcWgtEqn inxiM1
+slcWghtLQD = mkQuantDef slcWghtL slcWghtLEqn
   
-slcWgtEqn :: (UnitalChunk -> Expr) -> Expr
-slcWgtEqn idxf = (inxi baseWthX) * (case_ [case1,case2,case3])
-  where case1 = (((idxf slopeHght)-(idxf slipHght ))*(sy satWeight),
-          (idxf waterHght) $>= (idxf slopeHght))
+slcWghtLEqn :: Expr
+slcWghtLEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
+  where case1 = (((inxiM1 slopeHght)-(inxiM1 slipHght ))*(sy satWeight),
+          (inxiM1 waterHght) $>= (inxiM1 slopeHght))
 
-        case2 = (((idxf slopeHght)-(idxf waterHght))*(sy dryWeight) +
-          ((idxf waterHght)-(idxf slipHght))*(sy satWeight),
-          (idxf slopeHght) $> (idxf waterHght) $> (idxf slipHght))
+        case2 = (((inxiM1 slopeHght)-(inxiM1 waterHght))*(sy dryWeight) +
+          ((inxiM1 waterHght)-(inxiM1 slipHght))*(sy satWeight),
+          (inxiM1 slopeHght) $> (inxiM1 waterHght) $> (inxiM1 slipHght))
 
-        case3 = (((idxf slopeHght)-(idxf slipHght ))*(sy dryWeight),
-          (idxf waterHght) $<= (idxf slipHght))
+        case3 = (((inxiM1 slopeHght)-(inxiM1 slipHght ))*(sy dryWeight),
+          (inxiM1 waterHght) $<= (inxiM1 slipHght))
 
 slcWghtNotes :: Sentence
 slcWghtNotes = ch baseWthX +:+ S "is defined in" +:+. makeRef2S lengthB
 
 baseWtrFRQD :: QDefinition
-baseWtrFRQD = mkQuantDef baseHydroForceR $ baseWtrFEqn inxi
+baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn
+
+baseWtrFREqn :: Expr
+baseWtrFREqn = (inxi baseLngth)*(case_ [case1,case2])
+  where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
+          (inxi waterHght) $> (inxi slipHght))
+
+        case2 = (0, (inxi waterHght) $<= (inxi slipHght))
 
 baseWtrFLQD :: QDefinition
-baseWtrFLQD = mkQuantDef baseHydroForceL $ baseWtrFEqn inxiM1
+baseWtrFLQD = mkQuantDef baseHydroForceL baseWtrFLEqn
 
-baseWtrFEqn :: (UnitalChunk -> Expr) -> Expr
-baseWtrFEqn idxf = (inxi baseLngth)*(case_ [case1,case2])
-  where case1 = (((idxf waterHght)-(idxf slipHght))*(sy waterWeight),
-          (idxf waterHght) $> (idxf slipHght))
+baseWtrFLEqn :: Expr
+baseWtrFLEqn = (inxi baseLngth)*(case_ [case1,case2])
+  where case1 = (((inxiM1 waterHght)-(inxiM1 slipHght))*(sy waterWeight),
+          (inxiM1 waterHght) $> (inxiM1 slipHght))
 
-        case2 = (0, (idxf waterHght) $<= (idxf slipHght))
+        case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slipHght))
 
 baseWtrFNotes :: Sentence
 baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
 
 surfWtrFRQD :: QDefinition
-surfWtrFRQD = mkQuantDef surfHydroForceR $ surfWtrFEqn inxi
+surfWtrFRQD = mkQuantDef surfHydroForceR surfWtrFREqn
+
+surfWtrFREqn :: Expr
+surfWtrFREqn = (inxi surfLngth)*(case_ [case1,case2])
+  where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
+          (inxi waterHght) $> (inxi slopeHght))
+
+        case2 = (0, (inxi waterHght) $<= (inxi slopeHght))
 
 surfWtrFLQD :: QDefinition
-surfWtrFLQD = mkQuantDef surfHydroForceL $ surfWtrFEqn inxiM1
+surfWtrFLQD = mkQuantDef surfHydroForceL surfWtrFLEqn
 
-surfWtrFEqn :: (UnitalChunk -> Expr) -> Expr
-surfWtrFEqn idxf = (inxi surfLngth)*(case_ [case1,case2])
-  where case1 = (((idxf waterHght)-(idxf slopeHght))*(sy waterWeight),
-          (idxf waterHght) $> (idxf slopeHght))
+surfWtrFLEqn :: Expr
+surfWtrFLEqn = (inxi surfLngth)*(case_ [case1,case2])
+  where case1 = (((inxiM1 waterHght)-(inxiM1 slopeHght))*(sy waterWeight),
+          (inxiM1 waterHght) $> (inxiM1 slopeHght))
 
-        case2 = (0, (idxf waterHght) $<= (idxf slopeHght))
+        case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slopeHght))
 
 surfWtrFNotes :: Sentence
 surfWtrFNotes = ch surfLngth +:+ S "is defined in" +:+. makeRef2S lengthLs

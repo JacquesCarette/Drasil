@@ -7,9 +7,9 @@ import Language.Drasil
 import Data.Drasil.Utils (weave)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint, definition, 
+import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint, definition, first,
   method_, physicalProperty, problem, solution, value)
-import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Math (angle, equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
@@ -29,13 +29,15 @@ import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice,
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  critCoords,
   effCohesion, constF, dryWeight, earthqkLoadFctr, fricAngle, fs, fs_min, 
   index, indx1, indxn, intNormForce, intShrForce, inxi, inxiM1, midpntHght,
   minFunction, mobShrC, mobShrI, nrmForceSum, nrmShearNum, normToShear, 
   nrmFSubWat, numbSlices, satWeight, scalFunc, shearFNoIntsl, nrmShearDen, 
   shearRNoIntsl, shrResC, slipDist, slipHght, slopeDist, slopeHght, sum1toN, 
   surfAngle, surfHydroForce, surfLoad, totNrmForce, varblV, watrForce, 
-  waterDist, waterHght, waterWeight, watForceSum)
+  waterDist, waterHght, waterWeight, watForceSum, xi, xMaxExtSlip, xMaxEtrSlip,
+  xMinExtSlip, xMinEtrSlip, yi, yMaxSlip, yMinSlip)
 
 -----------------------
 --  Instance Models  --
@@ -591,10 +593,33 @@ crtSlpId_rel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist,
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 
   sy dryWeight, sy satWeight, sy waterWeight, sy constF])
 
+-- FIXME: The constraints described here should be replaced with formal constraints on the input variables once that is possible
 crtSlpId_desc :: Sentence
 crtSlpId_desc = foldlSent [S "The", phrase minFunction, S "must enforce the",
-  plural constraint, S "on the", phrase crtSlpSrf, S "expressed in", 
-  makeRef2S assumpSSC `sAnd` makeRef2S data_constraint_Table3]
+  plural constraint, S "on the", phrase crtSlpSrf, S "expressed in" +:+.
+  (makeRef2S assumpSSC `sAnd` makeRef2S data_constraint_Table3), 
+  S "The sizes of", ch waterDist `sAnd` ch waterHght +:+. 
+  S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `sAnd` 
+  ch slopeHght +:+. (S "must be equal" `sAnd` S "at least 2"),
+  S "The", phrase first `sAnd` S "last", ch waterDist, 
+  plural value, S "must be equal to the", phrase first `sAnd` S "last",
+  ch slopeDist +:+. plural value, ch waterDist `sAnd` ch slopeDist, 
+  plural value +:+. S "must be monotonically increasing", ch xMaxExtSlip `sC`
+  ch xMaxEtrSlip `sC` ch xMinExtSlip `sC` S "and", ch xMinEtrSlip, S "must be",
+  S "between or equal to the minimum and maximum", ch slopeDist +:+. 
+  plural value, ch yMaxSlip, S "cannot be below the minimum", ch slopeHght +:+.
+  phrase value, ch yMinSlip, S "cannot be above the maximum", ch slopeHght +:+.
+  phrase value, S "All", ch xi, plural value `sOf` ch critCoords, S "must be",
+  S "between" +:+. (ch xMinEtrSlip `sAnd` ch xMaxExtSlip), S "All", ch yi, 
+  plural value `sOf` ch critCoords, S "must not be below" +:+. ch yMinSlip, 
+  S "For any given vertex in", ch critCoords, S "the", ch yi, phrase value, 
+  S "must not exceed the", ch slopeHght, phrase value, S "corresponding to the",
+  S "same", ch xi +:+. phrase value, S "The", phrase first `sAnd` S "last",
+  S "vertices in", ch critCoords, S "must each be equal to one of the vertices",
+  S "formed by" +:+. (ch slopeDist `sAnd` ch slopeHght), S "The slope between",
+  S "consecutive vertices must be always increasing as", ch xi +:+.
+  S "increases", S "The internal", phrase angle, S "between consecutive",
+  S "vertices in", ch critCoords +:+ S "must not be below 110 degrees"]
 
 -----------
 -- Intro --

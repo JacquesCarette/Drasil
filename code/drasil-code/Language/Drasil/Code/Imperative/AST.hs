@@ -218,7 +218,7 @@ type FunctionDecl = Method
 type VarDecl = Declaration
 data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
-newtype AbstractCode = AbsCode Package
+newtype AbstractCode = AbsCode {unAbs :: Package}
 
 ---------------------------
 -- Convenience Functions --

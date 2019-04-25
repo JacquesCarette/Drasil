@@ -12,13 +12,13 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..), GSDSec(..), GSDSub(..), 
+  SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmt_label, physSystDescription_label, generateTraceMap')
+  goalStmt_label, physSystDescription_label, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -27,9 +27,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
   environment, goal, goalStmt, information, inModel, input_, interest, 
   issue, loss, method_, model, organization, physical, physics, problem,
-  purpose, requirement, software, softwareSys, srs, srsDomains, symbol_,
-  sysCont, system, systemConstraint, template, thModel, type_, user, value,
-  variable, physSyst, doccon, doccon')
+  purpose, requirement, section_, software, softwareSys, srs, srsDomains, 
+  symbol_, sysCont, system, systemConstraint, template, thModel, type_, user, 
+  value, variable, physSyst, doccon, doccon')
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
@@ -147,7 +147,10 @@ mkSRS = [RefSec $ RefProg intro
     (S "SSA is intended to be an educational tool")
     (S "")]
   , LCsSec $ LCsProg likelyChanges_SRS
-  , UCsSec $ UCsProg unlikelyChanges_SRS, Verbatim aux_cons, Bibliography]
+  , UCsSec $ UCsProg unlikelyChanges_SRS
+  , TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
+    [LlC traceyMatrix] []
+  , Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
 ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
@@ -176,6 +179,10 @@ ssp_section = ssp_sec
 ssp_sec :: [Section]
 ssp_sec = extractSection ssp_srs
 
+ssp_labcon :: [LabelledContent]
+ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
+  data_constraint_Table2, data_constraint_Table3, sspInputDataTable]
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
@@ -185,6 +192,12 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 ssppriorityNFReqs :: [ConceptChunk]
 ssppriorityNFReqs = [correctness, understandability, reusability,
   maintainability]
+
+traceyMatrix :: LabelledContent
+traceyMatrix = generateTraceTable ssp_si
+
+traceTrailing :: [Sentence]
+traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other"]
 
 
 -- SYMBOL MAP HELPERS --
@@ -197,12 +210,13 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si ssp_label
   ssp_refby ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
-  ssp_section []
+  ssp_section ssp_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  map nw check_si) ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section []
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section 
+ ssp_labcon
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb sspCitations ssp_concins

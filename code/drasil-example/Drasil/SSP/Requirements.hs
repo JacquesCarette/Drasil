@@ -8,7 +8,8 @@ import Data.Drasil.Concepts.Documentation (datum, funcReqDom,
   input_, name_, output_, physicalConstraint, symbol_, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
 
-import Data.Drasil.SentenceStructures (foldlSent, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
+  foldlList, foldlSent, ofThe, sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
@@ -21,11 +22,11 @@ import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce,
 sspRequirements :: [ConceptInstance]
 sspRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
   determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS,
-  displayNormal, displayShear]
+  displayNormal, displayShear, writeToFile]
 
 readAndStore, verifyInput, generateCSS, calculateFS, determineCritSlip, 
   verifyOutput, displayInput, displayGraph, displayFS,
-  displayNormal, displayShear :: ConceptInstance
+  displayNormal, displayShear, writeToFile :: ConceptInstance
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
@@ -83,6 +84,12 @@ displayShear = cic "displayShear" ( foldlSent [
   S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
   makeRef2S intsliceFs `sC` S "calculate and graphically display the",
   plural intShrForce]) "Display-Interslice-Shear-Forces" funcReqDom
+
+writeToFile = cic "writeToFile" ( foldlSent [
+  S "Provide the option of writing the output result data, as given in", 
+  foldlList Comma List (map makeRef2S [displayInput, displayGraph, displayFS, 
+  displayNormal, displayShear]) `sC` S "to a file"]) "Write-Results-To-File" 
+  funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent

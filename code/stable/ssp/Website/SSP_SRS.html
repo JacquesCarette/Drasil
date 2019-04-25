@@ -599,6 +599,28 @@ N/m
 </tr>
 <tr>
 <td>
+<em>x</em>
+</td>
+<td>
+X-Coordinate: in the Cartesian coordinate system
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>cs</sub>,y<sub>cs</sub></em>
+</td>
+<td>
+The Set of X and Y Coordinates: describe the vertices of the critical slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>x<sub>slip</sub></em>
 </td>
 <td>
@@ -624,7 +646,62 @@ m
 <em>x<sub>wt</sub></em>
 </td>
 <td>
-X-Coordinate: x-position of the water table
+X-Coordinate of the Water Table: x-position of the water table
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+Maximum Entry X-Coordinate: maximum potential x-coordinate for the entry point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+Maximum Exit X-Coordinate: maximum potential x-coordinate for the exit point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y</em>
+</td>
+<td>
+Y-Coordinate: in the Cartesian coordinate system
 </td>
 <td>
 m
@@ -658,6 +735,28 @@ m
 </td>
 <td>
 Y-Coordinate of the Water Table: height of the water table
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+Maximum Y-Coordinate: maximum potential y-coordinate of a point on a slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+Minimum Y-Coordinate: minimum potential y-coordinate of a point on a slip surface
 </td>
 <td>
 m
@@ -6300,7 +6399,7 @@ Description
 <em>y<sub>slope</sub></em> is the y-coordinate of the slope (m)
 </li>
 <li>
-<em>x<sub>wt</sub></em> is the x-coordinate (m)
+<em>x<sub>wt</sub></em> is the x-coordinate of the water table (m)
 </li>
 <li>
 <em>y<sub>wt</sub></em> is the y-coordinate of the water table (m)
@@ -6332,7 +6431,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>.
+The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>. The sizes of <em>x<sub>wt</sub></em> and <em>y<sub>wt</sub></em> must be equal and not 1. The sizes of <em>x<sub>slope</sub></em> and <em>y<sub>slope</sub></em> must be equal and at least 2. The first and last <em>x<sub>wt</sub></em> values must be equal to the first and last <em>x<sub>slope</sub></em> values. <em>x<sub>wt</sub></em> and <em>x<sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em>x<sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em>y<sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em>y<sub>slope</sub></em> value. All <em>x</em> values of <em>x<sub>cs</sub>,y<sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em>x<sub>cs</sub>,y<sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em>x<sub>cs</sub>,y<sub>cs</sub></em> the <em>y</em> value must not exceed the <em>y<sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em>x<sub>cs</sub>,y<sub>cs</sub></em> must each be equal to one of the vertices formed by <em>x<sub>slope</sub></em> and <em>y<sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em>x<sub>cs</sub>,y<sub>cs</sub></em> must not be below 110 degrees.
 </p>
 </td>
 </tr>
@@ -6392,7 +6491,147 @@ Uncert.
 <em>c&prime;&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>10.0</em> Pa
+<em>10.0&sdot;10<sup>3</sup></em> Pa
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slope</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>wt</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>20.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>100.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>50.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slope</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>wt</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>30.0</em> m
+</td>
+<td>
+10.0<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
 </td>
 <td>
 10.0<em>%</em>
@@ -6406,7 +6645,7 @@ Uncert.
 <em>γ&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/m<sup>3</sup>
+<em>20.0&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6420,7 +6659,7 @@ Uncert.
 <em>γ<sub>Sat</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/m<sup>3</sup>
+<em>20.0&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6434,7 +6673,7 @@ Uncert.
 <em>γ<sub>w</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>9.8</em> N/m<sup>3</sup>
+<em>9.8&sdot;10<sup>3</sup></em> N/m<sup>3</sup>
 </td>
 <td>
 10.0<em>%</em>
@@ -6592,6 +6831,116 @@ cartesian position coordinates
 </tr>
 <tr>
 <td>
+<em>x<sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinate of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinate of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinate of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinate of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum entry x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
 <em>c&prime;</em>
 </td>
 <td>
@@ -6643,6 +6992,17 @@ N/m<sup>3</sup>
 </td>
 <td>
 unit weight of water
+</td>
+</tr>
+<tr>
+<td>
+<em>const_f</em>
+</td>
+<td>
+
+</td>
+<td>
+decision on f
 </td>
 </tr>
 </table>

@@ -77,8 +77,9 @@ aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
-goals_list, termi_defi_list, phys_sys_intro, phys_sys_convention, 
+termi_defi_list, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
+goals_list :: [Contents]
 
 
 --Document Setup--
@@ -171,7 +172,7 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = sspGoals ++ assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -479,9 +480,9 @@ goal_stmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)
-  ]) [goals_list]
+  ]) goals_list
 
-goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals
+goals_list = mkEnumSimpleD sspGoals
 
 -- SECTION 4.2 --
 

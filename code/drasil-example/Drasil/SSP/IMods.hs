@@ -369,7 +369,8 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
 nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw normToShear) [] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
+  [] (qw normToShear) [] [chen2005, karchewski2012] nrmShrDeriv "nrmShrFor" 
+  [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal and shear force proportionality constant")
@@ -453,8 +454,8 @@ nrmShrDerivEqn4 = inxi normToShear $= sum1toN
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im'' nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
-  [] (qw nrmShearNum) [] [chen2005] nrmShrFNum_deriv "nrmShrForNum" 
-  [nrmShrFNum_desc]
+  [] (qw nrmShearNum) [] [chen2005, karchewski2012] nrmShrFNum_deriv 
+  "nrmShrForNum" [nrmShrFNum_desc]
 
 nrmShrForNum_rc :: RelationConcept
 nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
@@ -492,8 +493,8 @@ nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in",
 -- FIXME: coordinates should be sequences? (see issue #1083)
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im'' nrmShrForDen_rc [qw slipDist, qw constF]
-  [] (qw nrmShearDen) [] [chen2005] nrmShrFDen_deriv "nrmShrForDen" 
-  [nrmShrFDen_desc]
+  [] (qw nrmShearDen) [] [chen2005, karchewski2012] nrmShrFDen_deriv 
+  "nrmShrForDen" [nrmShrFDen_desc]
 
 nrmShrForDen_rc :: RelationConcept
 nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")

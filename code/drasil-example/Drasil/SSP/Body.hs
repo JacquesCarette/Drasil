@@ -17,15 +17,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmt_label, physSystDescription_label, generateTraceMap', generateTraceTable)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescription_label, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, goalStmt, information, inModel, input_, interest, 
+  environment, goal, information, inModel, input_, interest, 
   issue, loss, method_, model, organization, physical, physics, problem,
   purpose, requirement, section_, software, softwareSys, srs, srsDomains, 
   symbol_, sysCont, system, systemConstraint, template, thModel, type_, user, 

@@ -176,7 +176,7 @@ mkSRS = [RefSec $ RefProg intro [
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs (Label : stdFields) [consThermE, sensHtE, latentHtE]
-        , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+        , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation

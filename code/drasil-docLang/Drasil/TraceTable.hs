@@ -42,7 +42,7 @@ getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
 getTraceMapFromTM []                = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ gd _):_)  = gd
+getTraceMapFromGD ((GDs _ _ gd _):_)  = gd
 getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
 getTraceMapFromGD []                = []
 

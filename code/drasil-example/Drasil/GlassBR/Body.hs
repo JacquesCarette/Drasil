@@ -160,7 +160,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs (Label : stdFields) gbrTMods
-        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
         , Constraints EmptyS dataConstraintUncertainty

@@ -132,7 +132,7 @@ mkSRS = [RefSec $ RefProg intro
           [Assumptions
           ,TMs (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
            effStress]
-          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            sspIMods ShowDerivation

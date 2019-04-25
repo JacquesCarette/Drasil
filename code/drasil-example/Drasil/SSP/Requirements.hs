@@ -1,20 +1,22 @@
-module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
+module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable, 
+  sspInputsToOutputTable) where
 
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (constraint, datum, funcReqDom, 
-  input_, method_, name_, output_, physicalConstraint, symbol_, value)
+import Data.Drasil.Concepts.Documentation (datum, funcReqDom, 
+  input_, name_, output_, physicalConstraint, symbol_, user, value)
+import Data.Drasil.Concepts.Physics (twoD)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlSent, ofThe, sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, ofThe, sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
-import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
+import Drasil.SSP.Defs (crtSlpSrf, slope)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
-import Drasil.SSP.Unitals (constF, coords, fs, fs_min, sspInputs, xMaxExtSlip, 
-  xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip)
+import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce, 
+  intShrForce, sspInputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
+  yMaxSlip, yMinSlip)
 
 sspRequirements :: [ConceptInstance]
 sspRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
@@ -69,26 +71,27 @@ displayGraph = cic "displayGraph" ( foldlSent [
 displayFS = cic "displayFS" ( foldlSent [
   S "Display", phrase value `ofThe` phrase fs, S "for the", 
   phrase crtSlpSrf `sC` S "as determined from", makeRef2S fctSfty `sC`
-  makeRef2S nrmShrFor `sC` S "and", makeRef2S intsliceFs])
+  makeRef2S nrmShrFor `sC` S "and", makeRef2S intsliceFs]) 
+  "Display-Factor-of-Safety" funcReqDom
 
 displayNormal = cic "displayNormal" ( foldlSent [
   S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
   makeRef2S intsliceFs `sC` S "calculate and graphically display the",
-  plural intNormForce])
+  plural intNormForce]) "Display-Interslice-Normal-Forces" funcReqDom
 
 displayShear = cic "displayShear" ( foldlSent [
   S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
   makeRef2S intsliceFs `sC` S "calculate and graphically display the",
-  plural intShrForce])
+  plural intShrForce]) "Display-Interslice-Shear-Forces" funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent
 sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
   --FIXME: this has to be seperate since coords is a different type
 
-inputsToOutput :: [UncertQ]
-inputsToOutput = [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, 
-  yMinSlip, constF]
+inputsToOutput :: [DefinedQuantityDict]
+inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
+  xMinEtrSlip, yMaxSlip, yMinSlip])
 
 sspInputsToOutputTable :: LabelledContent
 sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $

@@ -182,7 +182,8 @@ ssp_sec = extractSection ssp_srs
 
 ssp_labcon :: [LabelledContent]
 ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
-  data_constraint_Table2, data_constraint_Table3, sspInputDataTable]
+  data_constraint_Table2, data_constraint_Table3, sspInputDataTable, 
+  sspInputsToOutputTable]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

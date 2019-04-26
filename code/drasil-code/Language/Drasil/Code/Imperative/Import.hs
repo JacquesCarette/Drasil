@@ -13,7 +13,11 @@ import Language.Drasil.Code.Imperative.New (Label,
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.Build.AST (inCodePackage, interp, 
+  interpMM, mainModule, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+  (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
@@ -111,7 +115,7 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
+     createCodeFiles $ makeBuild (unAbs absCode) (getRunnable l) (getExt l) $ C.Code $
             map (if l == Java then \(c,d) -> (prog </> c, d) else id) $
             C.unCode $ makeCode (map unRepr files) (getExt l)
      setCurrentDirectory workingDir
@@ -146,8 +150,9 @@ getExt Python = [".py"]
 getExt _ = error "Language not yet implemented"
 
 getRunnable :: Lang -> Runnable
-getRunnable Java = 
-getRunnable Python = 
+getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
+getRunnable Python = interpMM "python"
+getRunnable _ = error "Language not yet implemented"
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

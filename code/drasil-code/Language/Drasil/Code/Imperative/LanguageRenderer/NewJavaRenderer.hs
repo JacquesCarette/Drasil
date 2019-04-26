@@ -13,6 +13,8 @@ import Language.Drasil.Code.Imperative.New (Label,
     NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
     ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
+    NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     moduleDocD, classDocD, enumDocD, enumElementsDocD,
     multiStateDocD, blockDocD, bodyDocD, outDocD, 
@@ -39,6 +41,12 @@ import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
     semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
+
+jNameOpts :: NameOpts
+jNameOpts = NameOpts {
+    packSep = ".",
+    includeExt = False
+}
 
 newtype JavaCode a = JC {unJC :: a}
 

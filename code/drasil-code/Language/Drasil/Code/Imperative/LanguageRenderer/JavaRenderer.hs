@@ -6,6 +6,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (includeExt, inCodePackage, interp, mainModule,
+  NameOpts(NameOpts), packSep, withExt)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -23,7 +25,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, new, exprDocD'', declarationDocD,
-  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
+  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist,
+  runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>))
@@ -48,6 +51,7 @@ javaConfig options c =
         enumsEqualInts   = False,
         ext              = ".java",
         dir              = "java",
+        runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = (scopeDoc c),
@@ -86,6 +90,13 @@ javaConfig options c =
     }
 
 -- short names, packaged up above (and used below)
+
+jNameOpts :: NameOpts
+jNameOpts = NameOpts {
+  packSep = ".",
+  includeExt = False
+}
+
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 

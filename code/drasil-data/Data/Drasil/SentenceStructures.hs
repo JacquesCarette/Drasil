@@ -200,7 +200,7 @@ getTDS a = phrase a +:+ (a ^. defn) +:+ ch a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
-eqN n = phrase equation +:+ sParen (S $ show n)
+eqN n = at_start equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence

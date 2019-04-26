@@ -7,14 +7,14 @@ import Language.Drasil hiding (int, Block, ($.), log, ln, exp,
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, Float, 
   Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
-  RenderSym(..), PermanenceSym(..),
+  PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (inCodePackage, interp, 
-  interpMM, mainModule, withExt)
+  interpMM, mainModule, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
@@ -108,8 +108,8 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (RenderSym repr) => Lang -> ((repr (RenderFile repr)) -> 
-  (Doc, Label)) -> (State repr) -> IO ()
+generateCode :: (PackageSym repr) => Lang -> ((repr (Package repr)) -> 
+  ([(Doc, Label)], Label)) -> (State repr) -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
@@ -122,7 +122,7 @@ generateCode l unRepr g =
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g
 
-genPackage :: (PackageSym repr) => String -> Reader (State repr) (repr (PackageSym repr))
+genPackage :: (PackageSym repr) => String -> Reader (State repr) (repr (Package repr))
 genPackage n = do
   fs <- genFiles
   return $ packMods n fs

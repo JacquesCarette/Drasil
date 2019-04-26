@@ -131,11 +131,11 @@ mkSRS = [RefSec $ RefProg intro
       SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          ,TMs (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+          , TMs [] (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
            effStress]
-          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+          , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            sspIMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]

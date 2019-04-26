@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int, Block, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, 
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, Float, 
   Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
   RenderSym(..), PermanenceSym(..),
@@ -13,6 +13,7 @@ import Language.Drasil.Code.Imperative.New (Label,
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
@@ -25,8 +26,8 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
-  getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.FilePath ((</>))
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -110,8 +111,9 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     when (l == Java) $ setCurrentDirectory prog
-     createCodeFiles $ makeCode (map unRepr files) (getExt l)
+     createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
+            map (if l == Java then \(c,d) -> (prog </> c, d) else id) $
+            C.unCode $ makeCode (map unRepr files) (getExt l)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         files = runReader genFiles g
@@ -129,7 +131,7 @@ genModules = do
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ (mn : inp ++ out ++ moddef)
+  return $ mn : inp ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String
@@ -142,6 +144,10 @@ getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
 getExt _ = error "Language not yet implemented"
+
+getRunnable :: Lang -> Runnable
+getRunnable Java = 
+getRunnable Python = 
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

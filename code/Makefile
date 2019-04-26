@@ -12,7 +12,7 @@ SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
 
-PACKAGES = lang code printers gen data docLang example
+PACKAGES = lang build code printers gen data docLang example
 DPACKAGES = $(addprefix drasil-, $(PACKAGES))
 BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
 DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))

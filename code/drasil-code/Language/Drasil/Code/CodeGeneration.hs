@@ -2,6 +2,7 @@
 module Language.Drasil.Code.CodeGeneration (
     -- * Preparing the code files
     makeCode,
+    makeLangConfig,
     
     -- * Creating the code files
     createCodeFiles
@@ -30,6 +31,7 @@ repeatListElems n (x:xs) = (take n (repeat x)) ++ repeatListElems n xs
 -- | Creates the requested 'Code' by producing files
 createCodeFiles :: Code -> IO () -- [(FilePath, Doc)] -> IO ()
 createCodeFiles (Code cs) = mapM_ createCodeFile cs
+
 
 createCodeFile :: (FilePath, Doc) -> IO ()
 createCodeFile (path, code) = do

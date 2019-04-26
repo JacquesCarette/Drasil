@@ -6,9 +6,10 @@ import Prelude hiding (id)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
 
+import Build.Drasil (genMake)
 import Language.Drasil
 import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
-  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
+  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec)
 import Language.Drasil.Code (Lang(..), unJC, unPC)

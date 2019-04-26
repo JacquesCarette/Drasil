@@ -63,7 +63,7 @@ thisSRS = [RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
-        DDs [Label, Symbol, Units, DefiningEquation,
+        DDs [] [Label, Symbol, Units, DefiningEquation,
           Description Verbose IncludeUnits] hghcVarsDD HideDerivation
       ]]]
   

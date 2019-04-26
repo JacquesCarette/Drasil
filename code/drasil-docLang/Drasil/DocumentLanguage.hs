@@ -28,7 +28,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
+import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, nonFuncReqF', reqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -184,10 +184,10 @@ data SolChSpec where
 -- | Solution Characteristics Specification subsections
 data SCSSub where
   Assumptions    :: SCSSub
-  TMs            :: Fields  -> [TheoryModel] -> SCSSub
-  GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
+  TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
+  GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
+  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
@@ -199,7 +199,8 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub --FIXME: Remove this in favour of NonFReqsSub' when all examples have migrated over to using NonFReqsSub'
+  NonFReqsSub' :: [ConceptChunk] -> [ConceptInstance] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 
@@ -440,25 +441,26 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
-    mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
-    mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
-    mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
-    mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF $ map (LlC . gdefn fields si') gs'
-    mkSubSCS si' (IMs fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+    mkSubSCS _ (TMs _ _ [])   = error "There are no Theoretical Models"
+    mkSubSCS _ (GDs _ _ [] _) = SSD.genDefnF []
+    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
+    mkSubSCS si' (TMs intro fields ts) =
+      SSD.thModF (siSys si') $ (map mkParagraph intro) ++ map (LlC . tmodel fields si') ts
+    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
+    mkSubSCS si' (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ map (LlC . ddefn fields si') dds
+    mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
+      SSD.genDefnF $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
+    mkSubSCS si' (GDs intro fields gs' _) =
+      SSD.genDefnF $ (map mkParagraph intro) ++ map (LlC . gdefn fields si') gs'
+    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
       concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
-    mkSubSCS si' (IMs fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' (IMs intro fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
@@ -498,6 +500,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
+    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nonFuncReqF' noPrrty (mkEnumSimpleD nfrs) rsn explain
 
 {--}
 

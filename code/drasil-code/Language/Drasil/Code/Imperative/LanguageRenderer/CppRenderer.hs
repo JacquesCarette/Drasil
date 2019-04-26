@@ -80,7 +80,7 @@ cppConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
+        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
@@ -299,6 +299,11 @@ functionDoc' c ft m f = methodDoc c ft m f
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
+
+unOpDoc' :: UnaryOp -> Doc
+unOpDoc' Ln = text "log"
+unOpDoc' Log = text "log10"
+unOpDoc' op = unOpDocD op
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e

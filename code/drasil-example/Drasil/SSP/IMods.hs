@@ -628,6 +628,9 @@ crtSlpId_desc = foldlSent [S "The", phrase minFunction, S "must enforce the",
 -- Intro --
 -----------
 
+instModIntro :: [Sentence]
+instModIntro = [instModIntro1, instModIntro2]
+
 instModIntro1, instModIntro2 :: Sentence
 
 instModIntro1 = foldlSent [S "The", plural goal,
@@ -651,4 +654,4 @@ instModIntro2 = foldlSent [S "The", titleize morPrice,
   makeRef2S normShrRGD +:+. S "are used",
   S "The", phrase force, S "equilibrium", plural equation, S "can be modified",
   S "to be expressed only in terms of known", phrase physical, plural value `sC`
-  S "as done in", makeRef2S resShearWOGD `sC` makeRef2S mobShearWOGD]
+  S "as done in", makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD]

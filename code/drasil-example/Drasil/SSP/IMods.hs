@@ -6,29 +6,27 @@ import Language.Drasil
 
 import Data.Drasil.Utils (weave)
 
-import Drasil.DocLang (goalStmt_label)
-
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
-  definition, first, goal, method_, physical, physicalProperty, problem, 
+  definition, first, goal, method_, physical, problem, 
   solution, value)
-import Data.Drasil.Concepts.Math (angle, equation, surface)
+import Data.Drasil.Concepts.Math (angle, equation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
-  foldlSentCol, foldlSP, getTandS, ofThe', sAnd, sOf)
+  foldlSentCol, getTandS, sAnd, sOf)
 
 import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL, 
   assumpES, assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
 import Drasil.SSP.DataCons (data_constraint_Table3)
-import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, lengthLs, sliceWght, 
+import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, 
   surfWtrF, intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
   resShearWOGD, bsShrFEqGD, mobShrGD)
-import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
-  slip, slope, slpSrf, ssa)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, morPrice, slice, 
+  slpSrf, ssa)
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 

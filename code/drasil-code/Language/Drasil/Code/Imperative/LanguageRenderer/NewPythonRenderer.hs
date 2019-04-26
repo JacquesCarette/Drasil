@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer (
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label,
-    RenderSym(..), KeywordSym(..), PermanenceSym(..),
+    PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
     StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
     NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
@@ -68,8 +68,12 @@ unPCPair (a1, a2) = (unPC a1, unPC a2)
 lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> [(PythonCode Doc, PythonCode Doc)] -> PythonCode Doc
 lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map unPCPair as)
 
-liftPairFst :: (PythonCode Doc, a) -> PythonCode (Doc, a)
+liftPairFst :: (PythonCode a, b) -> PythonCode (a, b)
 liftPairFst (c, n) = PC $ (unPC c, n)
+
+instance PackageSym PythonCode where
+    type Package PythonCode = ([(Doc, Label)], Label)
+    packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym PythonCode where
     type RenderFile PythonCode = (Doc, Label)

@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.New (
     -- Types
     Label, Library, 
     -- Typeclasses
-    RenderSym(..), KeywordSym(..), PermanenceSym(..),
+    PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
     StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
     NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
@@ -14,6 +14,10 @@ module Language.Drasil.Code.Imperative.New (
 
 type Label = String
 type Library = String
+
+class (RenderSym repr) => PackageSym repr where
+    type Package repr 
+    packMods :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
 
 class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr

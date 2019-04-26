@@ -2,8 +2,6 @@
 module Language.Drasil.Code.CodeGeneration (
     -- * Preparing the code files
     makeCode,
-    makeLangConfig,
-    
     -- * Creating the code files
     createCodeFiles
 ) where

@@ -3,11 +3,11 @@
 -- | The logic to render Java code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (
     -- * Java Code Configuration -- defines syntax of all Java code
-    JavaCode(..)
+    JavaCode(..), jNameOpts
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label,
-    RenderSym(..), KeywordSym(..), PermanenceSym(..),
+    PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
     StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
     NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
@@ -39,6 +39,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles,oneTab)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
+import Control.Monad (sequence)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
     semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
 
@@ -88,8 +89,12 @@ lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map
 lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
 lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 
-liftPairFst :: (JavaCode Doc, a) -> JavaCode (Doc, a)
+liftPairFst :: (JavaCode a, b) -> JavaCode (a, b)
 liftPairFst (c, n) = JC $ (unJC c, n)
+
+instance PackageSym JavaCode where
+    type Package JavaCode = ([(Doc, Label)], Label)
+    packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym JavaCode where
     type RenderFile JavaCode = (Doc, Label)

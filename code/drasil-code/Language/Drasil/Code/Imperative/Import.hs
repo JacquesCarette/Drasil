@@ -115,12 +115,17 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (unAbs absCode) (getRunnable l) (getExt l) $ C.Code $
+     createCodeFiles $ makeBuild (unRepr pckg) (getRunnable l) (getExt l) $ C.Code $
             map (if l == Java then \(c,d) -> (prog </> c, d) else id) $
-            C.unCode $ makeCode (map unRepr files) (getExt l)
+            C.unCode $ makeCode (fst $ unRepr pckg) (getExt l)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
-        files = runReader genFiles g
+        pckg = runReader (genPackage prog) g
+
+genPackage :: (PackageSym repr) => String -> Reader (State repr) (repr (PackageSym repr))
+genPackage n = do
+  fs <- genFiles
+  return $ packMods n fs
 
 genFiles :: (RenderSym repr) => Reader (State repr) [(repr (RenderFile repr))]
 genFiles = do

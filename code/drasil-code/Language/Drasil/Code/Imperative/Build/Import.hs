@@ -3,12 +3,15 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST (Label, Module(Mod), notMainModule, Package(Pack))
+import Language.Drasil.Code.Imperative.AST (Module(Mod), notMainModule)
+import Language.Drasil.Code.Imperative.New (Label)
 import Language.Drasil.Code.Imperative.Build.AST (Ext(..), includeExt, NameOpts, packSep, Runnable(Runnable), RunName(..), RunType(..))
 
 import Build.Drasil (RuleTransformer(makeRule), genMake, mkRule, mkCheckedCommand)
 
-data CodeHarness = Ch Runnable [String] Package
+import Text.PrettyPrint.HughesPJ (Doc)
+
+data CodeHarness = Ch Runnable [String] ([(Doc, Label)], Label)
 
 instance RuleTransformer CodeHarness where
   makeRule (Ch r e m) = [
@@ -17,13 +20,13 @@ instance RuleTransformer CodeHarness where
       ]
     ] where (Runnable nm no ty) = r
 
-renderRunName :: [String] -> Package -> NameOpts -> RunName -> String
-renderRunName exts p o (RConcat a b) = (renderRunName c p o a) ++ (renderRunName c p o b)
+renderRunName :: [String] -> ([(Doc, Label)], Label) -> NameOpts -> RunName -> String
+renderRunName exts p o (RConcat a b) = (renderRunName exts p o a) ++ (renderRunName exts p o b)
 renderRunName _ _ _ (RLit s) = s
-renderRunName _ (Pack _ m) _ RMain = getMainModule m
-renderRunName _ (Pack l _) _ RPackName = l
-renderRunName exts p o (RPack a) = (renderRunName c p o RPackName) ++ (packSep o) ++ renderRunName c p o a
-renderRunName exts p o (RWithExt a e) = renderRunName c p o a ++ if includeExt o then renderExt exts e else ""
+renderRunName _ (m, _) _ RMain = getMainModule m
+renderRunName _ (_, l) _ RPackName = l
+renderRunName exts p o (RPack a) = (renderRunName exts p o RPackName) ++ (packSep o) ++ renderRunName exts p o a
+renderRunName exts p o (RWithExt a e) = renderRunName exts p o a ++ if includeExt o then renderExt exts e else ""
 
 renderExt :: [String] -> Ext -> String
 renderExt e CodeExt = head e
@@ -38,5 +41,5 @@ buildRunTarget :: String -> RunType -> String
 buildRunTarget fn Standalone = "./" ++ fn
 buildRunTarget fn (Interpreter i) = unwords [i, fn]
 
-makeBuild :: Package -> Runnable -> [String] -> Code -> Code
+makeBuild :: ([(Doc, Label)], Label) -> Runnable -> [String] -> Code -> Code
 makeBuild m r e (Code c) = Code $ ("Makefile", genMake [Ch r e m]) : c

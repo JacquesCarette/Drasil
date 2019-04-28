@@ -16,14 +16,17 @@ import Data.Maybe (maybe, maybeToList)
 data CodeHarness = Ch Config Package Code
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch c m co@(Code code)) = (maybe [] (\(BuildConfig comp bt) -> [
-    mkRule "build" [(renderBuildName c m nameOpts nm)] [],
+  makeRule (Ch c m co@(Code code)) = [
+    mkRule "build" (map (const $ renderBuildName c m nameOpts nm) $ maybeToList $
+      buildConfig c) []
+    ] ++
+    (maybe [] (\(BuildConfig comp bt) -> [
     mkFile (renderBuildName c m nameOpts nm) (map fst code) [
       mkCheckedCommand $ unwords $ comp (getCompilerInput bt c m co) $
         renderBuildName c m nameOpts nm
       ]
     ]) $ buildConfig c) ++ [
-    mkRule "run" (map (const "build") $ maybeToList $ buildConfig c) [
+    mkRule "run" ["build"] [
       mkCheckedCommand $ (buildRunTarget (renderBuildName c m no nm) ty) ++ " $(RUNARGS)"
       ]
     ] where (Runnable nm no ty) = runnable c

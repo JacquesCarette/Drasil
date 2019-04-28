@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   fileNameD, forLabel, declarationDocD,
   typeOfLit, conditionalDocD', fixCtorNames, complexDocD, functionDocD, printDocD, exprDocD,
-  assignDocD', unOpDocD', runnable)
+  assignDocD', unOpDocD', buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 
 import Prelude hiding (break,print,return,(<>))
@@ -46,6 +46,7 @@ luaConfig _ c =
         enumsEqualInts   = True,
         ext              = ".lua",
         dir              = "lua",
+        buildConfig      = Nothing,
         runnable         = interpMM "lua",
         fileName         = fileNameD c,
         include          = include',

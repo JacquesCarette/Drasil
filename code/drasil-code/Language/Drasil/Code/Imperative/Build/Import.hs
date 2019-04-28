@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.AST (Label, Module(Mod), notMainModule, P
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
   Runnable(Runnable), BuildName(..), RunType(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config, ext, runnable)
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config, buildConfig, ext, runnable)
 
 import Build.Drasil (RuleTransformer(makeRule), genMake, mkFile, mkRule, mkCheckedCommand)
 
@@ -16,8 +16,14 @@ import Data.Maybe (maybe, maybeToList)
 data CodeHarness = Ch Config Package Code
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch c m co@(Code code)) = [
-    mkRule "run" [] [
+  makeRule (Ch c m co@(Code code)) = (maybe [] (\(BuildConfig comp bt) -> [
+    mkRule "build" [(renderBuildName c m nameOpts nm)] [],
+    mkFile (renderBuildName c m nameOpts nm) (map fst code) [
+      mkCheckedCommand $ unwords $ comp (getCompilerInput bt c m co) $
+        renderBuildName c m nameOpts nm
+      ]
+    ]) $ buildConfig c) ++ [
+    mkRule "run" (map (const "build") $ maybeToList $ buildConfig c) [
       mkCheckedCommand $ (buildRunTarget (renderBuildName c m no nm) ty) ++ " $(RUNARGS)"
       ]
     ] where (Runnable nm no ty) = runnable c

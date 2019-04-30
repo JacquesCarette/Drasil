@@ -15,7 +15,7 @@ import New (Label,
   ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD, 
-  printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
+  printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
   voidDocD, constructDocD, stateParamDocD,
   paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
@@ -52,34 +52,31 @@ instance Monad JavaCode where
     return = JC
     JC x >>= f = f x
 
-liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA4 :: (a -> b -> c -> d -> e) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e
 liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
 
 liftA5 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA5 f a1 a2 a3 a4 a5 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5)
 
-liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f -> JavaCode g
 liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
 
 liftA7 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA7 f a1 a2 a3 a4 a5 a6 a7 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6) (unJC a7)
 
-liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
+liftList :: ([a] -> b) -> [JavaCode a] -> JavaCode b
 liftList f as = JC $ f (map unJC as)
 
-lift1List :: (Doc -> [Doc] -> Doc) -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
+lift1List :: (a -> [b] -> c) -> JavaCode a -> [JavaCode b] -> JavaCode c
 lift1List f a as = JC $ f (unJC a) (map unJC as)
 
-lift1PairList :: (Doc -> [(Doc, a)] -> (Doc, a)) -> JavaCode Doc -> [JavaCode (Doc, a)] -> JavaCode (Doc, a)
-lift1PairList f a as = JC $ f (unJC a) (map unJC as)
-
-unJCPair :: (JavaCode Doc, JavaCode Doc) -> (Doc, Doc)
+unJCPair :: (JavaCode a, JavaCode b) -> (a, b)
 unJCPair (a1, a2) = (unJC a1, unJC a2) 
 
 lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
 lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
 
-lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
+lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> JavaCode a -> JavaCode b -> JavaCode c -> [(JavaCode d, JavaCode e)] -> JavaCode f
 lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 
 liftPairFst :: (JavaCode Doc, a) -> JavaCode (Doc, a)
@@ -134,7 +131,7 @@ instance BodySym JavaCode where
 
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
-    block sts = (lift1List blockDocD endStatement (liftA fst (map state sts)))
+    block sts = (lift1List blockDocD endStatement (map (liftA fst) (map state sts)))
 
 instance StateTypeSym JavaCode where
     type StateType JavaCode = Doc
@@ -153,21 +150,13 @@ instance StateTypeSym JavaCode where
     enumType t = return $ typeDocD t
 
 instance ControlBlockSym JavaCode where
-    checkState l cs c = switch (var l) cs c
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
                                                    Just b  -> liftA2 stratDocD b (state resultState)
-        where resultState = case av of Nothing    -> return empty
+        where resultState = case av of Nothing    -> return (empty, False)
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
-        where obsList = observerListName `listOf` t
-              index = "observerIndex"
-              initv = varDecDef index int $ litInt 0
-              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while (f $. (func "hasNextLine" []))
-        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
     listSlice t vnew vold b e s = 
         let l_temp = "temp"
             v_temp = var l_temp
@@ -175,10 +164,10 @@ instance ControlBlockSym JavaCode where
             v_i = var l_i
         in
         (body [
-            block [(listDec l_temp 0 t)],
+            block [(listDec l_temp 0 t),
             for (varDecDef l_i (int) (getB b)) (v_i ?< getE e) (getS s v_i)
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            block [(vnew &= v_temp)]])
+            (vnew &= v_temp)]])
         where getB Nothing = litInt 0
               getB (Just n) = n
               getE Nothing = vold $. listSize
@@ -360,7 +349,7 @@ instance StatementSym JavaCode where
     -- Bool determines whether the statement needs to end in a separator
     type Statement JavaCode = (Doc, Bool)
     assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, True)
-    assignToListIndex lst index v = liftPairFst (lst $. listSet index v, True)
+    assignToListIndex lst index v = valState $ lst $. listSet index v
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
@@ -430,7 +419,7 @@ instance StatementSym JavaCode where
 
     valState v = liftPairFst (v, True)
 
-    comment cmt = liftPairFst (liftA (commentDocD cmt) commentStart, True)
+    comment cmt = liftPairFst (liftA (commentDocD cmt) commentStart, False)
 
     free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
 
@@ -440,13 +429,13 @@ instance StatementSym JavaCode where
     changeState fsmName toState = fsmName &.= (litString toState)
 
     initObserverList t os = listDecDef observerListName t os
-    addObserver t o = obsList $. listAdd lastelem o
+    addObserver t o = valState $ obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
               lastelem = obsList $. listSize
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
-    multi s = lift1PairList multiStateDocD endStatement s
+    multi s = lift1List multiStateDocD endStatement s
 
 instance ControlStatementSym JavaCode where
     ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, False)
@@ -463,6 +452,16 @@ instance ControlStatementSym JavaCode where
     while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
 
     tryCatch tb cb = liftPairFst (liftA2 jTryCatch tb cb, False)
+    
+    checkState l cs c = switch (var l) cs c
+    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+        where obsList = observerListName `listOf` t
+              index = "observerIndex"
+              initv = varDecDef index int $ litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+
+    getFileInputAll f v = while (f $. (func "hasNextLine" []))
+        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
 
 instance ScopeSym JavaCode where
     type Scope JavaCode = Doc
@@ -513,10 +512,10 @@ instance ClassSym JavaCode where
 instance ModuleSym JavaCode where
     type Module JavaCode = (Doc, Label)
     buildModule n _ vs ms cs = 
-        case vs ++ ms of [] -> liftPairFst (liftList moduleDocD cs, n) 
-                         _  -> liftPairFst (liftList moduleDocD ((pubClass n 
-                                   Nothing (map (liftA4 jStatementsToStateVars
-                                   public static endStatement) vs) ms):cs), n)
+        case null vs && null ms of True -> liftPairFst (liftList moduleDocD cs, n) 
+                                   _  -> liftPairFst (liftList moduleDocD (         (pubClass n 
+                                       Nothing (map (liftA4 jStatementsToStateVars
+                                       public static endStatement) vs) ms):cs), n)
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

@@ -2,7 +2,7 @@ module Example.FileTests (fileTests) where
 
 import New (RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), Selector(..),
+  StatementSym(..), ControlStatementSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -11,7 +11,7 @@ fileTests = fileDoc (buildModule "FileTests" [] [] [] [fileTestClass])
 
 fileTestClass :: (RenderSym repr) => repr (Class repr)
 fileTestClass = pubClass "FileTests" Nothing [privMVar 1 "dummy" int] 
-  [mainMethod (body [writeStory, readStory, goodBye])]
+  [mainMethod (body [writeStory, block [readStory], goodBye])]
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
@@ -31,7 +31,7 @@ writeStory = block [
   (discardFileLine (var "fileToRead")),
   (listDec "fileContents" 1 (listType dynamic string))]
 
-readStory :: (RenderSym repr) => repr (Block repr)
+readStory :: (RenderSym repr) => repr (Statement repr)
 readStory = (getFileInputAll (var "fileToRead") (var "fileContents"))
 
 goodBye :: (RenderSym repr) => repr (Block repr)

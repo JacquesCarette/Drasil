@@ -86,11 +86,8 @@ class (PermanenceSym repr) => StateTypeSym repr where
     enumType      :: Label -> repr (StateType repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
-    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
     runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
-    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Block repr)
 
-    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Block repr)
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
 class UnaryOpSym repr where
@@ -414,6 +411,11 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
     while    :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
 
     tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
+
+    checkState :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+
+    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
 
 class ScopeSym repr where
     type Scope repr

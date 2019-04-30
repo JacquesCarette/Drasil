@@ -254,18 +254,18 @@ ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) =
         vmap elseIfSect cs,
         elseSect]
 
-switchDocD :: Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+switchDocD :: (Doc, Bool) -> Doc -> Doc -> [(Doc, Doc)] -> Doc
 switchDocD breakState v defBody cs = 
     let caseDoc (l, result) = vcat [
             text "case" <+> l <> colon,
             oneTabbed [
                 result,
-                breakState]]
+                fst breakState]]
         defaultSection = vcat [
             text "default" <> colon,
             oneTabbed [
                 defBody,
-                breakState]]
+                fst breakState]]
     in vcat [
         text "switch" <> parens v <+> lbrace,
         oneTabbed [
@@ -275,9 +275,9 @@ switchDocD breakState v defBody cs =
 
 -- These signatures wont be quite so horrendous if/when we pass language options
 -- (blockStart, etc.) in as shared environment
-forDocD :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+forDocD :: Doc -> Doc -> (Doc, Bool) -> Doc -> (Doc, Bool) -> Doc -> Doc
 forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
-    forLabel <+> parens (sInit <> semi <+> vGuard <> semi <+> sUpdate) <+> blockStart,
+    forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) <+> blockStart,
     oneTab b,
     blockEnd]
 
@@ -301,10 +301,10 @@ tryCatchDocD tb cb = vcat [
     oneTab $ cb,
     rbrace]
 
-stratDocD :: Doc -> Doc -> Doc
+stratDocD :: Doc -> (Doc, Bool) -> Doc
 stratDocD b resultState = vcat [
     b,
-    resultState]
+    fst resultState]
 
 -- Statements --
 

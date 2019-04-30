@@ -3,7 +3,8 @@ module Example.HelloWorld (helloWorld) where
 import New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -15,9 +16,9 @@ helloWorld = fileDoc (buildModule "HelloWorld" [] [] [] [helloWorldClass])
 helloWorldClass :: (RenderSym repr) => repr (Class repr)
 helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [doubleAndAdd,
   mainMethod (body [ helloInitVariables, helloListSlice,
-    ifCond [((var "b") ?>= (litInt 6), bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
+    block [ifCond [((var "b") ?>= (litInt 6), bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
       ((var "b") ?== (litInt 5), helloIfBody)] helloElseBody, helloIfExists,
-    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])]
+    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])]
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [ (comment "Initializing variables"),
@@ -126,25 +127,25 @@ helloElseBody = bodyStatements [
   -- printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
   -- printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]
 
-helloIfExists :: (RenderSym repr) => repr (Block repr)
+helloIfExists :: (RenderSym repr) => repr (Statement repr)
 helloIfExists = ifExists (var "boringList") (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
-helloSwitch :: (RenderSym repr) => repr (Block repr)
+helloSwitch :: (RenderSym repr) => repr (Statement repr)
 helloSwitch = switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
   ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
   (oneLiner ("b" &.= (litInt 0)))
 
-helloForLoop :: (RenderSym repr) => repr (Block repr)
+helloForLoop :: (RenderSym repr) => repr (Statement repr)
 helloForLoop = forRange "i" (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn (int) (var "i")))
 
-helloWhileLoop :: (RenderSym repr) => repr (Block repr)
+helloWhileLoop :: (RenderSym repr) => repr (Statement repr)
 helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hello", ((&.++) "a")]) 
 
-helloForEachLoop :: (RenderSym repr) => repr (Block repr)
+helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
 helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) 
   (oneLiner (printLn (float) (funcApp "doubleAndAdd" [(var "num"), (litFloat 1.0)])))
 
-helloTryCatch :: (RenderSym repr) => repr (Block repr)
+helloTryCatch :: (RenderSym repr) => repr (Statement repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
 

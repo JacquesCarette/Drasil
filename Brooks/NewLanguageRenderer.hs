@@ -1,6 +1,6 @@
 -- | The structure for a class of renderers is defined here.
 module NewLanguageRenderer (
-    -- * Code Generation Funcitons
+    -- * Code Generation Functions
     makeCode, createCodeFiles,
     
     -- * Common Syntax
@@ -37,7 +37,7 @@ import New (Label, Library)
 import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,
                             oneTabbed,hicat,vibcat,vmap)
 
-import Data.List (intersperse)
+import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
@@ -138,13 +138,16 @@ enumElementsDocD' es = vcat $
 
 -- Groupings --
 
-multiStateDocD :: Doc -> [Doc] -> Doc
-multiStateDocD end sts = vcat (applyEnd statements)
+multiStateDocD :: Doc -> [(Doc, Bool)] -> (Doc, Bool)
+multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
-        applyEnd [s] = [s]
-        applyEnd (s:ss) = (s <> end):(applyEnd ss)
+        applyEnd [(s, _)] = [s]
+        applyEnd ((s, True):ss) = (s <> end):(applyEnd ss)
+        applyEnd ((s, False):ss) = s:(applyEnd ss)
+        needsEnd [] = False
+        needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
-        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+        notNullStatement s = (not $ isEmpty (fst s)) && (render (fst s) /= render end)
 
 blockDocD :: Doc -> [Doc] -> Doc
 blockDocD end sts = vcat statements
@@ -351,8 +354,9 @@ throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
     parens errMsg
 
-statementDocD :: Doc -> Doc -> Doc
-statementDocD s end = s <> end
+statementDocD :: (Doc, Bool) -> Doc -> (Doc, Bool)
+statementDocD (s, True) end = (s <> end, False)
+statementDocD (s, False) _ = (s, False)
 
 -- Unary Operators --
 

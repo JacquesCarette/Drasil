@@ -8,10 +8,11 @@ module LanguageRenderer.NewJavaRenderer (
 import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD, 
   printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
@@ -68,6 +69,9 @@ liftList f as = JC $ f (map unJC as)
 
 lift1List :: (Doc -> [Doc] -> Doc) -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
 lift1List f a as = JC $ f (unJC a) (map unJC as)
+
+lift1PairList :: (Doc -> [(Doc, a)] -> (Doc, a)) -> JavaCode Doc -> [JavaCode (Doc, a)] -> JavaCode (Doc, a)
+lift1PairList f a as = JC $ f (unJC a) (map unJC as)
 
 unJCPair :: (JavaCode Doc, JavaCode Doc) -> (Doc, Doc)
 unJCPair (a1, a2) = (unJC a1, unJC a2) 
@@ -130,7 +134,7 @@ instance BodySym JavaCode where
 
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
-    block sts = lift1List blockDocD endStatement (map state sts)
+    block sts = (lift1List blockDocD endStatement (liftA fst (map state sts)))
 
 instance StateTypeSym JavaCode where
     type StateType JavaCode = Doc
@@ -149,21 +153,6 @@ instance StateTypeSym JavaCode where
     enumType t = return $ typeDocD t
 
 instance ControlBlockSym JavaCode where
-    ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    ifNoElse bs = ifCond bs $ body []
-    switch v cs c = lift3Pair switchDocD (state break) v c cs
-    switchAsIf v cs c = ifCond cases c
-        where cases = map (\(l, b) -> (v ?== l, b)) cs
-
-    ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
-
-    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
-    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv) b
-    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
-    while v b = liftA4 whileDocD blockStart blockEnd v b
-
-    tryCatch tb cb = liftA2 jTryCatch tb cb
-
     checkState l cs c = switch (var l) cs c
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
@@ -368,83 +357,84 @@ instance SelectorFunction JavaCode where
     at l = listAccess (var l)
 
 instance StatementSym JavaCode where
-    type Statement JavaCode = Doc
-    assign v1 v2 = liftA2 assignDocD v1 v2
-    assignToListIndex lst index v = lst $. listSet index v
+    -- Bool determines whether the statement needs to end in a separator
+    type Statement JavaCode = (Doc, Bool)
+    assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, True)
+    assignToListIndex lst index v = liftPairFst (lst $. listSet index v, True)
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = liftA2 plusEqualsDocD v1 v2
+    (&+=) v1 v2 = liftPairFst (liftA2 plusEqualsDocD v1 v2, True)
     (&.+=) l v = (var l) &+= v
-    (&++) v = liftA plusPlusDocD v
+    (&++) v = liftPairFst (liftA plusPlusDocD v, True)
     (&.++) l = (&++) (var l)
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
 
-    varDec l t = liftA (varDecDocD l) t
-    varDecDef l t v = liftA2 (varDecDefDocD l) t v
-    listDec l n t = liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = liftA2 (jListDecDef l) t (liftList callFuncParamList vs)
-    objDecDef l t v = liftA2 (objDecDefDocD l) t v
-    objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
+    varDec l t = liftPairFst (liftA (varDecDocD l) t, True)
+    varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, True)
+    listDec l n t = liftPairFst (liftA2 (listDecDocD l) (litInt n) t, True) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    listDecDef l t vs = liftPairFst (liftA2 (jListDecDef l) t (liftList callFuncParamList vs), True)
+    objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, True)
+    objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), True)
     extObjDecNew l _ t vs = objDecNew l t vs
-    objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
+    objDecNewVoid l t = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t []), True)
     extObjDecNewVoid l _ t = objDecNewVoid l t
-    constDecDef l t v = liftA2 (jConstDecDef l) t v
+    constDecDef l t v = liftPairFst (liftA2 (jConstDecDef l) t v, True)
 
-    print _ v = liftA2 outDocD printFunc v
-    printLn _ v = liftA2 outDocD printLnFunc v
-    printStr s = liftA2 outDocD printFunc (litString s)
-    printStrLn s = liftA2 outDocD printLnFunc (litString s)
+    print _ v = liftPairFst (liftA2 outDocD printFunc v, True)
+    printLn _ v = liftPairFst (liftA2 outDocD printLnFunc v, True)
+    printStr s = liftPairFst (liftA2 outDocD printFunc (litString s), True)
+    printStrLn s = liftPairFst (liftA2 outDocD printLnFunc (litString s), True)
 
-    printFile f _ v = liftA2 outDocD (printFileFunc f) v
-    printFileLn f _ v = liftA2 outDocD (printFileLnFunc f) v
-    printFileStr f s = liftA2 outDocD (printFileFunc f) (litString s)
-    printFileStrLn f s = liftA2 outDocD (printFileLnFunc f) (litString s)
+    printFile f _ v = liftPairFst (liftA2 outDocD (printFileFunc f) v, True)
+    printFileLn f _ v = liftPairFst (liftA2 outDocD (printFileLnFunc f) v, True)
+    printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), True)
+    printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), True)
 
-    printList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStr "]")
-    printLnList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStrLn "]")
-    printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
-    printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
+    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printStr "]")]
+    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printStrLn "]")]
+    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printFileStr f "]")]
+    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printFileStrLn f "]")]
 
-    getIntInput v = liftA3 jInput (return $ text "nextInt()") v inputFunc
-    getFloatInput v = liftA3 jInput (return $ text "nextDouble()") v inputFunc
-    getBoolInput v = liftA3 jInput (return $ text "nextBoolean()") v inputFunc
-    getStringInput v = liftA3 jInput (return $ text "nextLine()") v inputFunc
-    getCharInput _ = return empty
-    discardInput = liftA jDiscardInput inputFunc
-    getIntFileInput f v = liftA3 jInput (return $ text "nextInt()") v f
-    getFloatFileInput f v = liftA3 jInput (return $ text "nextDouble()") v f
-    getBoolFileInput f v = liftA3 jInput (return $ text "nextBoolean()") v f
-    getStringFileInput f v = liftA3 jInput (return $ text "nextLine()") v f
-    getCharFileInput _ _ = return empty
-    discardFileInput f = liftA jDiscardInput f
+    getIntInput v = liftPairFst (liftA3 jInput (return $ text "nextInt()") v inputFunc, True)
+    getFloatInput v = liftPairFst (liftA3 jInput (return $ text "nextDouble()") v inputFunc, True)
+    getBoolInput v = liftPairFst (liftA3 jInput (return $ text "nextBoolean()") v inputFunc, True)
+    getStringInput v = liftPairFst (liftA3 jInput (return $ text "nextLine()") v inputFunc, True)
+    getCharInput _ = return (empty, False)
+    discardInput = liftPairFst (liftA jDiscardInput inputFunc, True)
+    getIntFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextInt()") v f, True)
+    getFloatFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextDouble()") v f, True)
+    getBoolFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextBoolean()") v f, True)
+    getStringFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextLine()") v f, True)
+    getCharFileInput _ _ = return (empty, False)
+    discardFileInput f = liftPairFst (liftA jDiscardInput f, True)
 
-    openFileR f n = liftA2 jOpenFileR f n
-    openFileW f n = liftA3 jOpenFileWorA f n litFalse
-    openFileA f n = liftA3 jOpenFileWorA f n litTrue
+    openFileR f n = liftPairFst (liftA2 jOpenFileR f n, True)
+    openFileW f n = liftPairFst (liftA3 jOpenFileWorA f n litFalse, True)
+    openFileA f n = liftPairFst (liftA3 jOpenFileWorA f n litTrue, True)
     closeFile f = valState $ objMethodCall f "close" []
 
     getFileInputLine f v = v &= (f $. (func "nextLine" []))
     discardFileLine f = valState $ f $. (func "nextLine" [])
-    stringSplit d vnew s = liftA3 jStringSplit vnew (listType dynamic string) 
-        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])])
+    stringSplit d vnew s = liftPairFst (liftA3 jStringSplit vnew (listType dynamic string) 
+        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])]), True)
 
-    break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-    continue = return continueDocD
+    break = return (breakDocD, True)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+    continue = return (continueDocD, True)
 
-    returnState v = liftA returnDocD v
-    returnVar l = liftA returnDocD (var l)
+    returnState v = liftPairFst (liftA returnDocD v, True)
+    returnVar l = liftPairFst (liftA returnDocD (var l), True)
 
-    valState v = v
+    valState v = liftPairFst (v, True)
 
-    comment cmt = liftA (commentDocD cmt) commentStart
+    comment cmt = liftPairFst (liftA (commentDocD cmt) commentStart, True)
 
     free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
 
-    throw errMsg = liftA jThrowDoc (litString errMsg)
+    throw errMsg = liftPairFst (liftA jThrowDoc (litString errMsg), True)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
@@ -456,7 +446,23 @@ instance StatementSym JavaCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
-    multi s = lift1List multiStateDocD endStatement s
+    multi s = lift1PairList multiStateDocD endStatement s
+
+instance ControlStatementSym JavaCode where
+    ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, False)
+    ifNoElse bs = ifCond bs $ body []
+    switch v cs c = liftPairFst (lift3Pair switchDocD (state break) v c cs, False)
+    switchAsIf v cs c = ifCond cases c
+        where cases = map (\(l, b) -> (v ?== l, b)) cs
+
+    ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
+
+    for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
+    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv) b
+    forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b, False)
+    while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
+
+    tryCatch tb cb = liftPairFst (liftA2 jTryCatch tb cb, False)
 
 instance ScopeSym JavaCode where
     type Scope JavaCode = Doc
@@ -595,5 +601,5 @@ jMethod n s p t ps b = vcat [
 jListIndexExists :: Doc -> Doc -> Doc -> Doc
 jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <+> index)
 
-jStatementsToStateVars :: Doc -> Doc -> Doc -> Doc -> Doc
-jStatementsToStateVars s p end v = s <+> p <+> v <> end
+jStatementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Bool) -> Doc
+jStatementsToStateVars s p end (v, _) = s <+> p <+> v <> end

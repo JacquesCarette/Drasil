@@ -89,7 +89,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
     obj           :: Label -> repr (StateType repr)
     enumType      :: Label -> repr (StateType repr)
 
-class (BodySym repr) => ControlBlockSym repr where
+class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
     runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)

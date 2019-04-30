@@ -7,12 +7,11 @@ import Language.Drasil hiding (int, Block, ($.), log, ln, exp,
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, Float, 
   Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
-  PackageSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (inCodePackage, interp, 
   interpMM, mainModule, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
@@ -215,7 +214,7 @@ genInputConstraints = do
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
     physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms ptypes pnames
-      (return $ sf ++ hw)
+      (return $ [block sf, block hw])
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genInputDerived = do
@@ -287,7 +286,7 @@ genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
 genCaseBlock t v cs = do
   ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
     genCalcBlock t v e)) cs
-  return $ ifNoElse ifs
+  return $ block [ifNoElse ifs]
 
 ----- OUTPUT -------
 
@@ -643,57 +642,55 @@ genFunc (FDef (FuncDef n i o s)) = do
   parms <- getParams i
   ptypes <- getParamTypes i
   pnames <- getParamNames i
-  blocks <- mapM convBlock s
+  stmts <- mapM convStmt s
   publicMethod (mState $ convType o) n parms ptypes pnames
-    (return $ [block
+    (return $ [block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
-          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i))]
-        ++ blocks
-    )
+          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i))
+        ++ stmts
+    ])
 genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
-convBlock :: (RenderSym repr) => FuncStmt -> Reader (State repr) (repr (Block 
-  repr))
-convBlock (FAsg v e) = do
-  e' <- convExpr e
-  fmap block $ liftS $ assign' (var $ codeName v) e'
-convBlock (FFor v e st) = do
-  blcks <- mapM convBlock st
+convStmt :: (RenderSym repr) => FuncStmt -> Reader (State repr) 
+  (repr (Statement repr))
+convStmt (FAsg v e) = convExpr e >>= assign' (var $ codeName v)
+convStmt (FFor v e st) = do
+  stmts <- mapM convStmt st
   e' <- convExpr $ getUpperBound e
-  return $ forRange (codeName v) (litInt 0) e' (litInt 1) (body blcks)
-convBlock (FWhile e st) = do
-  blcks <- mapM convBlock st
+  return $ forRange (codeName v) (litInt 0) e' (litInt 1) (bodyStatements stmts)
+convStmt (FWhile e st) = do
+  stmts <- mapM convStmt st
   e' <- convExpr e
-  return $ while e' (body blcks)
-convBlock (FCond e tSt []) = do
-  blcks <- mapM convBlock tSt
+  return $ while e' (bodyStatements stmts)
+convStmt (FCond e tSt []) = do
+  stmts <- mapM convStmt tSt
   e' <- convExpr e
-  return $ ifNoElse [(e', (body blcks))]
-convBlock (FCond e tSt eSt) = do
-  blck1 <- mapM convBlock tSt
-  blck2 <- mapM convBlock eSt
+  return $ ifNoElse [(e', (bodyStatements stmts))]
+convStmt (FCond e tSt eSt) = do
+  stmt1 <- mapM convStmt tSt
+  stmt2 <- mapM convStmt eSt
   e' <- convExpr e
-  return $ ifCond [(e', (body blck1))] (body blck2)
-convBlock (FRet e) = do
+  return $ ifCond [(e', (bodyStatements stmt1))] (bodyStatements stmt2)
+convStmt (FRet e) = do
   e' <- convExpr e
-  return $ block $ [returnState e']
-convBlock (FThrow s) = return $ block [throw s]
-convBlock (FTry t c) = do
-  blck1 <- mapM convBlock t
-  blck2 <- mapM convBlock c
-  return $ tryCatch (body blck1) (body blck2)
-convBlock (FContinue) = return $ block [continue]
-convBlock (FDec v (C.List t)) = return $ block [listDec (codeName v) 0 
-  (getListTypeFunc t dynamic)]
-convBlock (FDec v t) = return $ block [varDec (codeName v) (convType t)]
-convBlock (FProcCall n l) = do
+  return $ returnState e'
+convStmt (FThrow s) = return $ throw s
+convStmt (FTry t c) = do
+  stmt1 <- mapM convStmt t
+  stmt2 <- mapM convStmt c
+  return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
+convStmt (FContinue) = return continue
+convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
+  (getListTypeFunc t dynamic)
+convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
+convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
-  return $ block [valState e']
-convBlock (FAppend a b) = do
+  return $ valState e'
+convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ block [valState $ a' $.(listAppend b')]
+  return $ valState $ a' $.(listAppend b')
 
 getListTypeFunc :: (RenderSym repr) => C.CodeType -> (repr (Permanence repr)) ->
   (repr (StateType repr))
@@ -713,57 +710,54 @@ genDataFunc nameTitle dd = do
     inD <- mapM inData dd
     publicMethod void nameTitle (p_filename : parms) (string : ptypes)
       (l_filename : pnames) $
-      return $ [ (block [
+      return $ [ (block $ [
       varDec l_infile infile,
       varDec l_line string,
       listDec l_lines 0 (listType dynamic string),
       listDec l_linetokens 0 (listType dynamic string),
-      openFileR v_infile v_filename ])] ++
-      (concat inD) ++ [(block [
+      openFileR v_infile v_filename ] ++
+      (concat inD) ++ [
       closeFile v_infile ])]
-  where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Block
-          repr)]
+  where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable $ codeName v
-            return $ [block [(getFileInput (codeType v)) v_infile vv]]
-        inData JunkData = return $ [block [discardFileLine v_infile]]
+            return $ [(getFileInput (codeType v)) v_infile vv]
+        inData JunkData = return $ [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData lp (litInt 0)
-          return $ [block [ getFileInputLine v_infile v_line, 
-            stringSplit d v_linetokens v_line ]] ++ lnI
+          return $ [getFileInputLine v_infile v_line, 
+            stringSplit d v_linetokens v_line] ++ lnI
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
             forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
-              ( body $ (block [ stringSplit d v_linetokens (v_lines $.
-                (listAccess v_i)) ]) : lnV)
+              ( bodyStatements $ (stringSplit d v_linetokens (v_lines $.
+                (listAccess v_i))) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
           return $ [ forRange l_i (litInt 0) (litInt numLines) (litInt 1)
-            ( body $
-              [ (block [ getFileInputLine v_infile v_line,
+            ( bodyStatements $
+              [ getFileInputLine v_infile v_line,
                   stringSplit d v_linetokens v_line
-                ])
-              ] ++ lnV
-            )
+                ] ++ lnV)
             ]
         ---------------
         lineData :: (RenderSym repr) => LinePattern -> (repr (Value repr))
-          -> Reader (State repr) [(repr (Block repr))]
+          -> Reader (State repr) [(repr (Statement repr))]
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
           return $ [forRange l_j (litInt 0) (castObj (cast int float)
             (listSizeAccess v_linetokens #/ (litInt $ toInteger $ length p))) (litInt 1)
-            ( body pat )]
+            ( bodyStatements pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
           return $ [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
-            ( body pat )]
+            ( bodyStatements pat )]
         ---------------
         patternData :: (RenderSym repr) => [Entry] -> (repr (Value repr))
-          -> (repr (Value repr)) -> Reader (State repr) [(repr (Block repr))]
+          -> (repr (Value repr)) -> Reader (State repr) [(repr (Statement repr))]
         patternData d lineNo patNo = do
           let l = toInteger $ length d
           ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ 
@@ -772,19 +766,19 @@ genDataFunc nameTitle dd = do
         ---------------
         entryData :: (RenderSym repr) => (repr (Value repr)) -> (repr 
           (Value repr)) -> (repr (Value repr)) -> Entry -> Reader (State repr)
-          [(repr (Block repr))]
+          [(repr (Statement repr))]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
           a <- assign' vv $ getCastFunc (codeType v)
             (v_linetokens $.(listAccess tokIndex))
-          return [block [a]]
+          return [a]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [block [
+          return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [
             valState $ (indexData indx lineNo patNo vv) $. 
             (listSet (getIndex indx lineNo patNo) $ 
             getCastFunc (getListType (codeType v) (toInteger $ length indx))
-            (v_linetokens $.(listAccess tokIndex)))]]
+            (v_linetokens $.(listAccess tokIndex)))]
         entryData _ _ _ JunkEntry = return []
         ---------------
         indexData :: (RenderSym repr) => [Ind] -> (repr (Value repr)) ->
@@ -808,7 +802,7 @@ genDataFunc nameTitle dd = do
         ---------------
         checkIndex :: (RenderSym repr) => [Ind] -> Integer-> (repr (Value repr)) ->
           (repr (Value repr)) -> (repr (Value repr)) -> C.CodeType ->
-          [repr (Block repr)]
+          [repr (Statement repr)]
         checkIndex [] _ _ _ _ _ = []
         checkIndex ((Explicit i):is) n l p v s =
           ( while (listSizeAccess v ?<= (litInt i)) $ bodyStatements [ 

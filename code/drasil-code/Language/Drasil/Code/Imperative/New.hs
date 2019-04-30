@@ -6,10 +6,11 @@ module Language.Drasil.Code.Imperative.New (
     -- Typeclasses
     PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
-    StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
-    NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
-    FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-    ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..)
+    UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+    BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+    SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
+    ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+    StateVarSym(..), ClassSym(..), ModuleSym(..)
 ) where
 
 type Label = String
@@ -89,26 +90,8 @@ class (PermanenceSym repr) => StateTypeSym repr where
     enumType      :: Label -> repr (StateType repr)
 
 class (BodySym repr) => ControlBlockSym repr where
-    ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
-    ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Block repr)
-    switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
-    switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
-
-    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Block repr)
-
-    for      :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Block repr)
-    forRange :: Label -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
-    -- Had to add StateType to forEach because I can't extract the StateType from the value.
-    forEach  :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
-    while    :: repr (Value repr) -> repr (Body repr) -> repr (Block repr) 
-
-    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Block repr)
-
-    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
     runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
-    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Block repr)
 
-    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Block repr)
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
 class UnaryOpSym repr where
@@ -422,6 +405,27 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
     state     :: repr (Statement repr) -> repr (Statement repr)
     loopState :: repr (Statement repr) -> repr (Statement repr)
     multi     :: [repr (Statement repr)] -> repr (Statement repr)
+
+class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
+    ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+    ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Statement repr)
+    switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
+    switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+
+    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
+
+    for      :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Statement repr)
+    forRange :: Label -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
+    -- Had to add StateType to forEach because I can't extract the StateType from the value.
+    forEach  :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
+    while    :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
+
+    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
+
+    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+
+    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
 
 class ScopeSym repr where
     type Scope repr

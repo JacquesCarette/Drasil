@@ -17,15 +17,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmt_label, physSystDescription_label, generateTraceMap', generateTraceTable)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescription_label, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, goalStmt, information, inModel, input_, interest, 
+  environment, goal, information, inModel, input_, interest, 
   issue, loss, method_, model, organization, physical, physics, problem,
   purpose, requirement, section_, software, softwareSys, srs, srsDomains, 
   symbol_, sysCont, system, systemConstraint, template, thModel, type_, user, 
@@ -77,8 +76,9 @@ aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
-goals_list, termi_defi_list, phys_sys_intro, phys_sys_convention, 
+termi_defi_list, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
+goals_list :: [Contents]
 
 
 --Document Setup--
@@ -171,7 +171,7 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = sspGoals ++ assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -479,9 +479,9 @@ goal_stmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)
-  ]) [goals_list]
+  ]) goals_list
 
-goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals
+goals_list = mkEnumSimpleD sspGoals
 
 -- SECTION 4.2 --
 

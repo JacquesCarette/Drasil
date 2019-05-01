@@ -19,7 +19,7 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, addPercent)
+import Data.Drasil.Utils (addPercent, addPercentRound, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
@@ -220,10 +220,12 @@ none :: Sentence
 none = S "--"
 
 found :: Double -> Sentence
-found x = (addPercent . realToFrac) (x*100)
-
+found x
+    | (1e-6 > abs(x - 0.1)) = (addPercentRound . realToFrac) (x*100)
+    | otherwise             = (addPercent      . realToFrac) (x*100)
+    
 typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)
+typUncr x = maybe none found (x ^. uncert)  -- rounds to int if the uncertainty is 10
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

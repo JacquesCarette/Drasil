@@ -18,7 +18,7 @@ module Data.Drasil.Utils
   , enumBulletU
   , mkInputDatTb
   , getRVal
-  , addPercent
+  , addPercent, addPercentRound
   , weave
   , fmtU
   , unwrap
@@ -83,8 +83,11 @@ getRVal c = uns (c ^. reasVal)
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
-addPercent :: Float ->  Sentence
+addPercent :: Float -> Sentence
 addPercent num = (S (show num) :+: Percent)
+
+addPercentRound :: Float -> Sentence
+addPercentRound num = (S (show $ round num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

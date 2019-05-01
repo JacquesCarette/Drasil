@@ -74,8 +74,8 @@ fileDoc' t m b = vibcat [
 
 -- Module --
 
-moduleDocD :: [Doc] -> Doc
-moduleDocD cs = vibcat cs
+moduleDocD :: [(Doc, Bool)] -> Doc
+moduleDocD cs = vibcat (map fst cs)
 
 -- Class --
 
@@ -192,9 +192,9 @@ methodDocD n s p t ps b = vcat [
     oneTab $ b,
     rbrace]
 
-methodListDocD :: [Doc] -> Doc
+methodListDocD :: [(Doc, Bool)] -> Doc
 methodListDocD ms = vibcat methods
-    where methods = filter (\m -> not $ isEmpty m) ms
+    where methods = filter (\m -> not $ isEmpty m) (map fst ms)
 
 -- StateVar --
 

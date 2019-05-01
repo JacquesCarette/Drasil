@@ -93,13 +93,25 @@ lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 liftPairFst :: (JavaCode a, b) -> JavaCode (a, b)
 liftPairFst (c, n) = JC $ (unJC c, n)
 
+liftTripFst :: (JavaCode a, b, c) -> JavaCode (a, b, c)
+liftTripFst (c, n, b) = JC $ (unJC c, n, b)
+
+tripFst :: (a, b, c) -> a
+tripFst (c, _, _) = c
+
+tripSnd :: (a, b, c) -> b
+tripSnd (_, n, _) = n
+
+tripThird :: (a, b, c) -> c
+tripThird (_, _, b) = b
+
 instance PackageSym JavaCode where
-    type Package JavaCode = ([(Doc, Label)], Label)
+    type Package JavaCode = ([(Doc, Label, Bool)], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym JavaCode where
-    type RenderFile JavaCode = (Doc, Label)
-    fileDoc code = liftPairFst (liftA3 fileDoc' top (return $ fst $ unJC code) bottom, snd $ unJC code)
+    type RenderFile JavaCode = (Doc, Label, Bool)
+    fileDoc code = liftTripFst (liftA3 fileDoc' top (liftA tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
     top = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
@@ -502,13 +514,14 @@ instance ParameterSym JavaCode where
     stateParam n t = liftA (stateParamDocD n) t
 
 instance MethodSym JavaCode where
-    type Method JavaCode = Doc
-    method n s p t ps b = liftA5 (jMethod n) s p t (liftList (paramListDocD) ps) b
+    -- Bool is True if the method is a main method, False otherwise
+    type Method JavaCode = (Doc, Bool)
+    method n s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList (paramListDocD) ps) b, False)
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = method "main" public static void [return $ text "String[] args"] b
+    mainMethod b = liftA setMain $ method "main" public static void [return $ text "String[] args"] b
     privMethod n t ps b = method n private dynamic t ps b
     pubMethod n t ps b = method n public dynamic t ps b
     constructor n ps b = method n public dynamic (construct n) ps b
@@ -523,20 +536,23 @@ instance StateVarSym JavaCode where
     pubGVar del l t = stateVar del l public static t
 
 instance ClassSym JavaCode where
-    type Class JavaCode = Doc
-    buildClass n p s vs fs = liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs)
-    enum n es s = liftA2 (enumDocD n) (return $ enumElementsDocD es False) s
-    mainClass n vs fs = buildClass n Nothing public vs fs
+    -- Bool is True if the method is a main method, False otherwise
+    type Class JavaCode = (Doc, Bool)
+    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), or $ map (snd . unJC) fs)
+    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
+    mainClass n vs fs = liftA setMain $ buildClass n Nothing public vs fs
     privClass n p vs fs = buildClass n p private vs fs
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym JavaCode where
-    type Module JavaCode = (Doc, Label)
+    -- Label is module name
+    -- Bool is True if the method is a main method, False otherwise
+    type Module JavaCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftPairFst (liftList moduleDocD cs, n) 
-                                   _  -> liftPairFst (liftList moduleDocD ((pubClass n 
+        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, or $ map (snd . unJC) cs) 
+                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 jStatementsToStateVars
-                                        public static endStatement) vs) ms):cs), n)
+                                        public static endStatement) vs) ms):cs), n, or [or $ map (snd . unJC) ms, or $ map (snd . unJC) cs])
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -623,3 +639,8 @@ jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <
 
 jStatementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Bool) -> Doc
 jStatementsToStateVars s p end (v, _) = s <+> p <+> v <> end
+
+-- Helper
+
+setMain :: (Doc, Bool) -> (Doc, Bool)
+setMain (d, _) = (d, True)

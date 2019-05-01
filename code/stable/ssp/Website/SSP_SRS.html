@@ -5278,6 +5278,12 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
+<p class="paragraph">
+The goals <a href=#identifyCritAndFS>GS: Identify-Crit-and-FS</a>, <a href=#determineNormalF>GS: Determine-Normal-Forces</a>, and <a href=#determineShearF>GS: Determine-Shear-Forces</a> are met by the simultaneous solution of <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>. The goal <a href=#identifyCritAndFS>GS: Identify-Crit-and-FS</a> is also contributed to by <a href=#IM:crtSlpId>IM: crtSlpId</a>.
+</p>
+<p class="paragraph">
+The Morgenstern-Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed slip surface into a series of vertical slices of mass. Static equilibrium analysis is performed, using two force equations and one moment equation as in <a href=#TM:equilibrium>TM: equilibrium</a>. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>) so the assumption <a href=#GD:normShrR>GD: normShrR</a> and corresponding equation <a href=#GD:normShrR>GD: normShrR</a> are used. The force equilibrium equations can be modified to be expressed only in terms of known physical values, as done in <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a>.
+</p>
 <div id="IM:fctSfty">
 <table class="idefn">
 <tr>

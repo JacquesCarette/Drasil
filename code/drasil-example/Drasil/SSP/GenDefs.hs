@@ -26,7 +26,7 @@ import Drasil.SSP.DataDefs (sliceWght, baseWtrF, surfWtrF, intersliceWtrF,
   ratioVariation)
 import Drasil.SSP.Defs (slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
-import Drasil.SSP.References (chen2005)
+import Drasil.SSP.References (chen2005, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
@@ -43,23 +43,23 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
 normForcEqGD = gd' normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
-  [chen2005]   "normForcEq"  [nmFEq_desc]
+  [chen2005]                   "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
-  [chen2005]   "bsShrFEq"    [bShFEq_desc]
+  [chen2005]                   "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd' resShr     (getUnit shrResI)       [resShr_deriv]   
-  [chen2005]   "resShr"      [resShr_desc]
+  [chen2005]                   "resShr"      [resShr_desc]
 mobShrGD     = gd' mobShr     (getUnit mobShrI)       [mobShr_deriv]   
-  [chen2005]   "mobShr"      [mobShr_desc]
+  [chen2005]                   "mobShr"      [mobShr_desc]
 effNormFGD   = gd' effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
-  [chen2005]   "effNormF"    [effNormF_desc]
+  [chen2005]                   "effNormF"    [effNormF_desc]
 resShearWOGD = gd' resShearWO (getUnit shearRNoIntsl) []         
-  [chen2005]   "resShearWO"  [resShearWO_desc]
+  [chen2005, karchewski2012]   "resShearWO"  [resShearWO_desc]
 mobShearWOGD = gd' mobShearWO (getUnit shearFNoIntsl) []
-  [chen2005]   "mobShearWO"  [mobShearWO_desc]
+  [chen2005, karchewski2012]   "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd' normShrR   (getUnit intShrForce)   [] 
-  [chen2005]   "normShrR"    [nmShrR_desc]
+  [chen2005]                   "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd' momentEql  (Just newton)           [momEql_deriv]  
-  [chen2005]   "momentEql"   [momEql_desc]
+  [chen2005]                   "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept

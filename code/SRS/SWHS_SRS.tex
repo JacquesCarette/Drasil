@@ -618,43 +618,12 @@ Label & Heat flux into the PCM from water
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:BalanceSolidPCM}
-\phantomsection 
-\label{DD:BalanceSolidPCM}
-\\ \midrule \\
-Label & ODE parameter for solid PCM
-		\\ \midrule \\
-		Symbol & ${{τ_{P}}^{S}}$
-				\\ \midrule \\
-				Units & s
-						\\ \midrule \\
-						Equation & \begin{displaymath}
-								   {{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}
-								   \end{displaymath}
-								   \\ \midrule \\
-								   Description & \begin{symbDescription}
-								   			     \item{${{τ_{P}}^{S}}$ is the ODE parameter for solid PCM (s)}
-                                                 \item{${m_{P}}$ is the mass of phase change material (kg)}
-                                                 \item{${{C_{P}}^{S}}$ is the specific heat capacity of PCM as a solid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
-                                                 \item{${h_{P}}$ is the convective heat transfer coefficient between PCM and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
-                                                 \item{${A_{P}}$ is the phase change material surface area ($\text{m}^{2}$)}
-                                                 \end{symbDescription}
-								   			     \\ \midrule \\
-								   			     Source & \cite{lightstone2012}
-								   			             \\ \midrule \\
-								   			             RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
-\end{minipage}
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFusion}
 \phantomsection 
 \label{DD:htFusion}
 \\ \midrule \\
 Label & Specific latent heat of fusion
-    \\ \midrule \\
+        \\ \midrule \\
         Symbol & ${H_{f}}$
                  \\ \midrule \\
                  Units & $\frac{\text{J}}{\text{kg}}$
@@ -748,7 +717,7 @@ Label & Energy balance on water to find the temperature of the water
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{koothoor2013}
                                                                                                             \\ \midrule \\
-                                                                                                            RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
+                                                                                                            RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
@@ -821,7 +790,7 @@ Label & Energy Balance on PCM to Find T\_p
                                                                                            \item{$ϕ$ is the melt fraction (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
+                                                                                           Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{koothoor2013}
                                                                                                             \\ \midrule \\

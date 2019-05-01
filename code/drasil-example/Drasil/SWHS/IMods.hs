@@ -13,7 +13,8 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
+  ddBalanceSolidPCM)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
@@ -223,8 +224,9 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+.
-  sParen (unwrap $ getUnit tau_S_P), (E $ (sy tau_L_P) $=
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+
+  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (makeRef2S ddBalanceSolidPCM), (E $ (sy tau_L_P) $=
   ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
@@ -239,7 +241,7 @@ balPCMDesc_note = foldlSent [
   (S "with initial conditions")
   `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC`
   makeRef2S assumpSITWP `sC` (S "and"), (E $ (sy temp_W)),
-  S "from IM1, such that the following governing ODE is satisfied.",
+  S "from", (makeRef2S eBalanceOnWtr) `sC` S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
   (E $ (sy temp_melt_P)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),

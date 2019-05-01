@@ -66,7 +66,8 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
+  sspInputsToOutputTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
@@ -181,7 +182,8 @@ ssp_sec = extractSection ssp_srs
 
 ssp_labcon :: [LabelledContent]
 ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
-  data_constraint_Table2, data_constraint_Table3, sspInputDataTable]
+  data_constraint_Table2, data_constraint_Table3, sspInputDataTable, 
+  sspInputsToOutputTable]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -528,7 +530,7 @@ slopeVert = verticesConst $ phrase slope
 -- SECTION 5.1 --
 funcReqList :: [Contents]
 funcReqList = (mkEnumSimpleD sspRequirements) ++
-  [LlC sspInputDataTable]
+  [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --
 

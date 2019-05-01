@@ -22,7 +22,7 @@
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability analysis Program}
-\author{Henry Frankis}
+\author{Henry Frankis and Brooks MacLachlan}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -165,7 +165,7 @@ $\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted bet
 \\
 ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
-${\mathbf{x}_{slip}}$ & X-Coordinates of the Slip Surface: distances of the slip surface & m
+${\mathbf{x}_{slip}}$ & X-Coordinates of the Slip Surface: x-coordinates of points on the slip surface & m
 \\
 ${\mathbf{x}_{slope}}$ & X-Coordinates of the Slope: x-coordinates of points on the soil slope & m
 \\
@@ -254,7 +254,7 @@ R & Requirement
 \\
 SRS & Software Requirements Specification
 \\
-SSA & Slope Stability Analysis
+SSP & Slope Stability analysis Program
 \\
 T & Theoretical Model
 \\
@@ -724,7 +724,7 @@ Label & Resistive shear force, without interslice normal and shear forces
                                          \\ \midrule \\
                                          Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${\mathbf{U}_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}, and ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
                                                  \\ \midrule \\
-                                                 Source & \cite{chen2005}
+                                                 Source & \cite{chen2005} and \cite{karchewski2012}
                                                           \\ \midrule \\
                                                           RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
@@ -757,7 +757,7 @@ Label & Mobilized shear force, without interslice normal and shear forces
                                          \\ \midrule \\
                                          Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
                                                  \\ \midrule \\
-                                                 Source & \cite{chen2005}
+                                                 Source & \cite{chen2005} and \cite{karchewski2012}
                                                           \\ \midrule \\
                                                           RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
@@ -1797,7 +1797,7 @@ Label & Normal and shear force proportionality constant
                                                                                            \\ \midrule \\
                                                                                            Notes & ${\mathbf{C}_{num}}$ is defined in \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and ${\mathbf{C}_{den}}$ is defined in \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}.
                                                                                                    \\ \midrule \\
-                                                                                                   Source & \cite{chen2005}
+                                                                                                   Source & \cite{chen2005} and \cite{karchewski2012}
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}.
 \\ \bottomrule \end{tabular}
@@ -1860,7 +1860,7 @@ Label & Normal and shear force proportionality constant numerator
                                                                                            \\ \midrule \\
                                                                                            Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
                                                                                                    \\ \midrule \\
-                                                                                                   Source & \cite{chen2005}
+                                                                                                   Source & \cite{chen2005} and \cite{karchewski2012}
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
@@ -1901,7 +1901,7 @@ Label & Normal and shear force proportionality constant denominator
                                                                                            \\ \midrule \\
                                                                                            Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariation}.
                                                                                                    \\ \midrule \\
-                                                                                                   Source & \cite{chen2005}
+                                                                                                   Source & \cite{chen2005} and \cite{karchewski2012}
                                                                                                             \\ \midrule \\
                                                                                                             RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
@@ -2147,7 +2147,7 @@ ${{y_{slip}}^{min}}$ & minimum y-coordinate
 \end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-SSA is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+SSP is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}

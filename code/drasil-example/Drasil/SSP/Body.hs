@@ -42,7 +42,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
-import Data.Drasil.People (henryFrankis)
+import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
@@ -93,7 +93,7 @@ ssp_si :: SystemInformation
 ssp_si = SI {
   _sys = ssp, 
   _kind = srs, 
-  _authors = [henryFrankis],
+  _authors = [henryFrankis, brooks],
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
@@ -145,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
     NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
-    (S "SSA is intended to be an educational tool")
+    (short ssp +:+ S "is intended to be an educational tool")
     (S "")]
   , LCsSec $ LCsProg likelyChanges_SRS
   , UCsSec $ UCsProg unlikelyChanges_SRS
@@ -265,7 +265,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
 
 kSent = keySent ssa ssp
 
-keySent :: (Idea a) => a -> a -> Sentence
+keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname]

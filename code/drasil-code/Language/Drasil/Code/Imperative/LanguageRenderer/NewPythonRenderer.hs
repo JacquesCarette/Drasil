@@ -50,10 +50,10 @@ instance Monad PythonCode where
     return = PC
     PC x >>= f = f x
 
-liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc
+liftA4 :: (a -> b -> c -> d -> e) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> PythonCode e
 liftA4 f a1 a2 a3 a4 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4)
 
-liftA5 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc
+liftA5 :: (a -> b -> c -> d -> e -> f) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> PythonCode e -> PythonCode f
 liftA5 f a1 a2 a3 a4 a5 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (unPC a5)
 
 liftList :: ([a] -> b) -> [PythonCode a] -> PythonCode b
@@ -62,10 +62,10 @@ liftList f as = PC $ f (map unPC as)
 lift1List :: (a -> [b] -> c) -> PythonCode a -> [PythonCode b] -> PythonCode c
 lift1List f a as = PC $ f (unPC a) (map unPC as)
 
-unPCPair :: (PythonCode Doc, PythonCode Doc) -> (Doc, Doc)
+unPCPair :: (PythonCode a, PythonCode b) -> (a, b)
 unPCPair (a1, a2) = (unPC a1, unPC a2) 
 
-lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> [(PythonCode Doc, PythonCode Doc)] -> PythonCode Doc
+lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> [(PythonCode e, PythonCode f)] -> PythonCode g
 lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map unPCPair as)
 
 liftPairFst :: (PythonCode a, b) -> PythonCode (a, b)

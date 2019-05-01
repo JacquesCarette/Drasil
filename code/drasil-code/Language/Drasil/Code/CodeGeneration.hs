@@ -8,14 +8,15 @@ module Language.Drasil.Code.CodeGeneration (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.New
+import Language.Drasil.Code.Imperative.Helpers (tripFst, tripSnd)
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code and extensions
-makeCode :: [(Doc, Label)] -> [Label] -> Code
+makeCode :: [(Doc, Label, Bool)] -> [Label] -> Code
 makeCode files exts = Code
-    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) (map snd files)) (zip (map fst files) (cycle exts))]
+    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) (map tripSnd files)) (zip (map tripFst files) (cycle exts))]
 
 repeatListElems :: Int -> [a] -> [a]
 repeatListElems _ [] = []

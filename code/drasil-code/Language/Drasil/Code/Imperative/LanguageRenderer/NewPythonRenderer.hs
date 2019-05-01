@@ -28,9 +28,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD,
     funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
-    addCommentsDocD, callFuncParamList, getterName, setterName, tripFst,
-    tripSnd, tripThird)
-import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,vibcat)
+    addCommentsDocD, callFuncParamList, getterName, setterName)
+import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,vibcat,tripFst,
+    tripSnd,tripThird)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

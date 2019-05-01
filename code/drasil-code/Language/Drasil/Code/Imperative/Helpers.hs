@@ -2,7 +2,8 @@ module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
+    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs,
+    tripFst, tripSnd, tripThird
 ) where
 
 import Prelude hiding ((<>))
@@ -95,6 +96,15 @@ vibmap = vimap blank
 
 reduceLibs :: [String] -> [String] -> [String]
 reduceLibs libs modules = nub $ filter (`notElem` modules) libs 
+
+tripFst :: (a, b, c) -> a
+tripFst (c, _, _) = c
+
+tripSnd :: (a, b, c) -> b
+tripSnd (_, n, _) = n
+
+tripThird :: (a, b, c) -> c
+tripThird (_, _, b) = b
 
 --private
 myLiteralNameReplace :: String -> String -> String

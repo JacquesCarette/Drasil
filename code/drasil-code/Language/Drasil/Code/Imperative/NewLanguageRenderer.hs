@@ -28,7 +28,7 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     castDocD, sizeDocD, listAccessDocD, listSetDocD, 
     objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
-    getterName, setterName, tripFst, tripSnd, tripThird
+    getterName, setterName
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label, Library)
@@ -621,12 +621,3 @@ getterName s = "Get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "Set" ++ capitalize s
-
-tripFst :: (a, b, c) -> a
-tripFst (c, _, _) = c
-
-tripSnd :: (a, b, c) -> b
-tripSnd (_, n, _) = n
-
-tripThird :: (a, b, c) -> c
-tripThird (_, _, b) = b

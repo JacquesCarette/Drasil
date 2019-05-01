@@ -108,7 +108,7 @@ publicMethod mt l pl st v u = do
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
 generateCode :: (PackageSym repr) => Lang -> ((repr (Package repr)) -> 
-  ([(Doc, Label)], Label)) -> (State repr) -> IO ()
+  ([(Doc, Label, Bool)], Label)) -> (State repr) -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)

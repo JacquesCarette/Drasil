@@ -15,12 +15,12 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap, generateTraceMap',
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt,
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
+  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, reqF, termDefnF, 
+  traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
+import qualified Drasil.DocLang.SRS as SRS (funcReq,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
@@ -65,6 +65,7 @@ import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phs
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
+import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
@@ -383,11 +384,10 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
 -----------------------------
 
 goalStates :: Section
-goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList] []
+goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
 
-goalStateList :: Contents
-goalStateList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) $
-  map goalState outputConstraints
+goalStateList :: [Contents]
+goalStateList = mkEnumSimpleD swhsGoals
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -988,18 +988,14 @@ fig_tank = llcc (makeFigRef "Tank") $ fig (
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> Contents
-goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
-  S "initial", plural condition, S "for the", phrase temw
-  `sAnd` S "the", phrase tempcm `sC` S "and material",
-  plural property `sC` S "the", plural goalStmt, S "are"]
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
+goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
+  S "the" +:+ phrase tempcm,
+  S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalState :: NamedIdea varTerm => varTerm -> Sentence
-goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
-  S "over", phrase time]
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in

@@ -12,8 +12,8 @@ import Language.Drasil.Code.Imperative.New (Label,
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (inCodePackage, interp, 
-  interpMM, mainModule, Runnable, withExt)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, buildSingle, inCodePackage,
+  interp, interpMM, mainModule, mainModuleFile, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
@@ -114,7 +114,7 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (unRepr pckg) (getRunnable l) (getExt l) $ C.Code $
+     createCodeFiles $ makeBuild (unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
             map (if l == Java then \(c,d) -> (prog </> c, d) else id) $
             C.unCode $ makeCode (fst $ unRepr pckg) (getExt l)
      setCurrentDirectory workingDir
@@ -157,6 +157,12 @@ getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
 getRunnable Python = interpMM "python"
 getRunnable _ = error "Language not yet implemented"
+
+getBuildConfig :: Lang -> Maybe BuildConfig
+getBuildConfig Java = buildSingle (\i _ -> ["javac", unwords i]) $
+  inCodePackage $ mainModuleFile
+getBuildConfig Python = Nothing
+getBuildConfig _ = error "Language not yet implemented"
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

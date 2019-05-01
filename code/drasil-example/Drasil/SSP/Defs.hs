@@ -1,9 +1,9 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
-  goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
-  thModel, typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, dataDefn, 
+  genDefn, goalStmt, inModel, likelyChg, physSyst, property, requirement, 
+  safety, srs, thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
@@ -18,22 +18,22 @@ import Data.Drasil.IdeaDicts hiding (dataDefn)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, srs, ssp, thModel, typUnc, unlikelyChg]
 
-ssa, ssp :: CI
-ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
+ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
 sspdef :: [NamedChunk]
-sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice, rgFnElm,
-  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics]
+sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
+  slopeStability, ssa]
 
 sspdef' :: [ConceptChunk]
 sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
 
 ----Other Common Phrases----
-soil, layer, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
-  soilMechanics :: NamedChunk
+soil, layer, material, intrslce, slip, slope, slice, stability,
+  morPrice :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
@@ -43,11 +43,12 @@ slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from 
                                         --       (related to issue #129)
 slope    = nc "slope"      (cn' "slope")
 soil     = nc "soil"       (cn  "soil")
+stability = nc "stability" (cn "stability")
 
 morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
-rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
-soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
+soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
+  slopeStability, ssa :: NamedChunk
 --slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
@@ -55,6 +56,8 @@ itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
+slopeStability = compoundNC slope stability
+ssa = compoundNC slopeStability analysis
 
 effFandS, slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 

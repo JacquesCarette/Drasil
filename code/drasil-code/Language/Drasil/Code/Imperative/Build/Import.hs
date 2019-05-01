@@ -3,31 +3,40 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST (Module(Mod), notMainModule)
 import Language.Drasil.Code.Imperative.New (Label)
 import Language.Drasil.Code.Imperative.Helpers (tripThird)
-import Language.Drasil.Code.Imperative.Build.AST (Ext(..), includeExt, NameOpts, packSep, Runnable(Runnable), RunName(..), RunType(..))
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
+  BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
+  Runnable(Runnable), BuildName(..), RunType(..))
 
-import Build.Drasil (RuleTransformer(makeRule), genMake, mkRule, mkCheckedCommand)
+import Build.Drasil (RuleTransformer(makeRule), genMake, mkFile, mkRule, mkCheckedCommand)
 
 import Text.PrettyPrint.HughesPJ (Doc)
+import Data.Maybe (maybe, maybeToList)
 
-data CodeHarness = Ch Runnable [String] ([(Doc, Label, Bool)], Label)
+data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] ([(Doc, Label, Bool)], Label) Code
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch r e m) = [
-    mkRule "run" [] [
-      mkCheckedCommand $ (buildRunTarget (renderRunName e m no nm) ty) ++ " $(RUNARGS)"
+  makeRule (Ch b r e m co@(Code code)) = [
+    mkRule "build" (map (const $ renderBuildName e m nameOpts nm) $ maybeToList $
+      b) []
+    ] ++
+    (maybe [] (\(BuildConfig comp bt) -> [
+    mkFile (renderBuildName e m nameOpts nm) (map fst code) [
+      mkCheckedCommand $ unwords $ comp (getCompilerInput bt e m co) $
+        renderBuildName e m nameOpts nm
+      ]
+    ]) $ b) ++ [
+    mkRule "run" ["build"] [
+      mkCheckedCommand $ (buildRunTarget (renderBuildName e m no nm) ty) ++ " $(RUNARGS)"
       ]
     ] where (Runnable nm no ty) = r
 
-renderRunName :: [String] -> ([(Doc, Label, Bool)], Label) -> NameOpts -> RunName -> String
-renderRunName exts p o (RConcat a b) = (renderRunName exts p o a) ++ (renderRunName exts p o b)
-renderRunName _ _ _ (RLit s) = s
-renderRunName _ (m, _) _ RMain = getMainModule m
-renderRunName _ (_, l) _ RPackName = l
-renderRunName exts p o (RPack a) = (renderRunName exts p o RPackName) ++ (packSep o) ++ renderRunName exts p o a
-renderRunName exts p o (RWithExt a e) = renderRunName exts p o a ++ if includeExt o then renderExt exts e else ""
+renderBuildName :: [String] -> ([(Doc, Label, Bool)], Label) -> NameOpts -> BuildName -> String
+renderBuildName _ (m, _) _ BMain = getMainModule m
+renderBuildName _ (_, l) _ BPackName = l
+renderBuildName exts p o (BPack a) = renderBuildName exts p o BPackName ++ packSep o ++ renderBuildName exts p o a
+renderBuildName exts p o (BWithExt a e) = renderBuildName exts p o a ++ if includeExt o then renderExt exts e else ""
 
 renderExt :: [String] -> Ext -> String
 renderExt e CodeExt = head e
@@ -38,9 +47,13 @@ getMainModule c = mainName $ filter (tripThird) c
   where mainName [(_, a, _)] = a
         mainName _ = error $ "Expected a single main module."
 
+getCompilerInput :: BuildDependencies -> [String] -> ([(Doc, Label, Bool)], Label) -> Code -> [String]
+getCompilerInput BcAll _ _ a = map fst $ unCode a
+getCompilerInput (BcSingle n) e p _ = [renderBuildName e p nameOpts n]
+
 buildRunTarget :: String -> RunType -> String
 buildRunTarget fn Standalone = "./" ++ fn
 buildRunTarget fn (Interpreter i) = unwords [i, fn]
 
-makeBuild :: ([(Doc, Label, Bool)], Label) -> Runnable -> [String] -> Code -> Code
-makeBuild m r e (Code c) = Code $ ("Makefile", genMake [Ch r e m]) : c
+makeBuild :: ([(Doc, Label, Bool)], Label) -> Maybe BuildConfig -> Runnable -> [String] -> Code -> Code
+makeBuild m b r e code@(Code c) = Code $ ("Makefile", genMake [Ch b r e m code]) : c

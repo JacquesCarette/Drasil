@@ -36,14 +36,19 @@ addons:
   apt:
     packages:
       - libgmp-dev
+      - python3
+      - graphviz
+# TeX Building
       - fonts-lmodern
       - texlive-bibtex-extra
       - texlive-latex-extra
       - texlive-math-extra
       - texlive-xetex
       - texlive-luatex
-      - python3
-      - graphviz
+# Code Building
+      - g++
+      - default-jdk
+      - mono-devel
 
 before_install:
 # Download and unpack the stack executable
@@ -67,6 +72,8 @@ script:
      ci_fstep "CI: Stable" make stackArgs="--no-terminal" NOISY=yes
  - >-
      ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
+ - >-
+     ci_fstep "CI: Code" make code
  - >-
      ci_fstep "CI: Docs" make docs haddockArgs=\"--no-haddock-deps --no-haddock-hyperlink-source\"
  - python3 scripts/pr_label_update.py

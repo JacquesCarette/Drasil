@@ -28,7 +28,8 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD,
     funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
-    addCommentsDocD, callFuncParamList, getterName, setterName)
+    addCommentsDocD, callFuncParamList, getterName, setterName, tripFst,
+    tripSnd, tripThird)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,vibcat)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -71,13 +72,16 @@ lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map
 liftPairFst :: (PythonCode a, b) -> PythonCode (a, b)
 liftPairFst (c, n) = PC $ (unPC c, n)
 
+liftTripFst :: (PythonCode a, b, c) -> PythonCode (a, b, c)
+liftTripFst (c, n, b) = PC $ (unPC c, n, b)
+
 instance PackageSym PythonCode where
-    type Package PythonCode = ([(Doc, Label)], Label)
+    type Package PythonCode = ([(Doc, Label, Bool)], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym PythonCode where
-    type RenderFile PythonCode = (Doc, Label)
-    fileDoc code = liftPairFst (liftA3 fileDoc' top (return $ fst $ unPC code) bottom, snd $ unPC code)
+    type RenderFile PythonCode = (Doc, Label, Bool)
+    fileDoc code = liftTripFst (liftA3 fileDoc' top (liftA tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
     top = return pytop
     bottom = return empty
 
@@ -466,18 +470,18 @@ instance ParameterSym PythonCode where
     stateParam n _ = return $ text n
 
 instance MethodSym PythonCode where
-    type Method PythonCode = Doc
-    method n _ _ _ ps b = liftA3 (pyMethod n) self (liftList (paramListDocD) ps) b
+    type Method PythonCode = (Doc, Bool)
+    method n _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList (paramListDocD) ps) b, False)
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = b
+    mainMethod b = liftPairFst (b, True)
     privMethod n t ps b = method n private dynamic t ps b
     pubMethod n t ps b = method n public dynamic t ps b
     constructor n ps b = method initName public dynamic (construct n) ps b
 
-    function n _ _ _ ps b = liftA2 (pyFunction n) (liftList (paramListDocD) ps) b
+    function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList (paramListDocD) ps) b, False)
 
 instance StateVarSym PythonCode where
     type StateVar PythonCode = Doc
@@ -487,18 +491,18 @@ instance StateVarSym PythonCode where
     pubGVar del l t = stateVar del l public static t
 
 instance ClassSym PythonCode where
-    type Class PythonCode = Doc
-    buildClass n p _ _ fs = liftA2 (pyClass n) pname (liftList methodListDocD fs)
+    type Class PythonCode = (Doc, Bool)
+    buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList methodListDocD fs), or $ map (snd . unPC) fs)
         where pname = case p of Nothing -> return empty
                                 Just pn -> return $ parens (text pn)
-    enum n es _ = liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es)
-    mainClass _ _ fs = liftList methodListDocD fs
+    enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es), False)
+    mainClass _ _ fs = liftPairFst (liftList methodListDocD fs, True)
     privClass n p vs fs = buildClass n p private vs fs
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym PythonCode where
-    type Module PythonCode = (Doc, Label)
-    buildModule n ls vs fs cs = liftPairFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n)
+    type Module PythonCode = (Doc, Label, Bool)
+    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, or [or $ map (snd . unPC) fs, or $ map (snd . unPC) cs])
 
 -- convenience
 imp, incl, initName :: Label
@@ -624,8 +628,8 @@ pyModuleImportList ls = vcat ls
 pyModuleVarList :: [(Doc, Bool)] -> Doc
 pyModuleVarList vs = vcat (map fst vs)
 
-pyModuleClassList :: [Doc] -> Doc
-pyModuleClassList cs = vibcat cs
+pyModuleClassList :: [(Doc, Bool)] -> Doc
+pyModuleClassList cs = vibcat $ map fst cs 
 
 pyModule :: Doc -> Doc -> Doc -> Doc -> Doc
 pyModule ls vs fs cs =

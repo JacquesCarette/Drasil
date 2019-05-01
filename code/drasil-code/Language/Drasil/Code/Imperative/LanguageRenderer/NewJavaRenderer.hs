@@ -34,7 +34,8 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, 
     castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
-    doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName)
+    doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
+    tripFst, tripSnd, tripThird)
 import Language.Drasil.Code.Imperative.Helpers (angles,oneTab)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -95,15 +96,6 @@ liftPairFst (c, n) = JC $ (unJC c, n)
 
 liftTripFst :: (JavaCode a, b, c) -> JavaCode (a, b, c)
 liftTripFst (c, n, b) = JC $ (unJC c, n, b)
-
-tripFst :: (a, b, c) -> a
-tripFst (c, _, _) = c
-
-tripSnd :: (a, b, c) -> b
-tripSnd (_, n, _) = n
-
-tripThird :: (a, b, c) -> c
-tripThird (_, _, b) = b
 
 instance PackageSym JavaCode where
     type Package JavaCode = ([(Doc, Label, Bool)], Label)

@@ -67,7 +67,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
-  heatEInWtr, heatEInPCM, swhsIMods)
+  heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
 import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
@@ -179,7 +179,7 @@ mkSRS = [RefSec $ RefProg intro [
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
         , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
         , Constraints  EmptyS dataConstraintUncertainty dataConTail
          [dataConTable1, dataConTable3]

@@ -990,6 +990,7 @@ Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' 
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
+The following section provides the functional requirements, the business tasks that the software is expected to complete.
 \begin{itemize}
 \item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions. \hyperref[assumpVCN]{A: Volume-Coil-Negligible}.
 \item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {ρ_{W}}$ and ${m_{P}}={V_{P}} {ρ_{P}}$, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.

@@ -15,7 +15,7 @@ reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
 fReqF :: [Contents] -> Section
-fReqF listOfReqs = SRS.funcReq listOfReqs []
+fReqF listOfReqs = SRS.funcReq ([fReqIntro] ++ listOfReqs) []
 
 --generalized requirements introduction
 reqIntroS :: Sentence
@@ -28,6 +28,16 @@ reqIntroS = foldlSent
 
 reqIntro :: Contents
 reqIntro = mkParagraph reqIntroS
+
+--generalized functional requirements introduction
+fReqIntroS :: Sentence
+fReqIntroS = foldlSent
+        [S "The following", (phrase section_), S "provides the",
+        (plural functionalRequirement) `sC` S "the business tasks that the",
+        (phrase software), S "is expected to complete"]
+
+fReqIntro :: Contents
+fReqIntro = mkParagraph fReqIntroS
 
 -- wrapper for nonfuncReq
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section

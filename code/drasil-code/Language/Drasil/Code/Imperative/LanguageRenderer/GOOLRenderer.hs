@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), inputDocD,
   valueDocD, iterationDocD, fileCode, functionListDocD, statementDocD, 
   retDocD, patternDocD, includeD, fileNameD, complexDocD, 
-  conditionalDocD, functionDocD, hsModule, runnable)
+  conditionalDocD, functionDocD, hsModule, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
@@ -46,6 +46,7 @@ goolConfig options c =
         enumsEqualInts   = False,
         ext              = ".hs",
         dir              = "gool",
+        buildConfig      = error "Generating buildConfig for GOOLRenderer not implemented",
         runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "import",

@@ -1,19 +1,23 @@
 module Language.Drasil.Code.Imperative.Build.AST where
 
-data RunType = Standalone
-             | Interpreter String
-
-data RunName = RMain
-              | RPackName
-              | RPack RunName
-              | RWithExt RunName Ext
-              | RLit String
-              | RConcat RunName RunName
+data BuildName = BMain
+               | BPackName
+               | BPack BuildName
+               | BWithExt BuildName Ext
 
 data Ext = CodeExt
          | OtherExt String
 
-data Runnable = Runnable RunName NameOpts RunType
+
+data BuildDependencies = BcAll
+                       | BcSingle BuildName
+
+data BuildConfig = BuildConfig ([String] -> String -> BuildCommand) BuildDependencies
+
+data RunType = Standalone
+             | Interpreter String
+
+data Runnable = Runnable BuildName NameOpts RunType
 
 data NameOpts = NameOpts {
   packSep :: String,
@@ -26,22 +30,38 @@ nameOpts = NameOpts {
   includeExt = True
 }
 
+type BuildCommand = [String]
 type InterpreterCommand = String
 
-nativeBinary :: Runnable
-nativeBinary = Runnable (RConcat RPackName $ RLit "$(TARGET_EXTENSION)") nameOpts Standalone
+buildAll :: ([String] -> String -> BuildCommand) -> Maybe BuildConfig
+buildAll = Just . flip BuildConfig BcAll
 
-interp :: RunName -> NameOpts -> InterpreterCommand -> Runnable
-interp r n i = Runnable r n $ Interpreter i
+buildSingle :: ([String] -> String -> BuildCommand) -> BuildName -> Maybe BuildConfig
+buildSingle f = Just . BuildConfig f . BcSingle
+
+nativeBinary :: Runnable
+nativeBinary = Runnable (BWithExt BPackName $ OtherExt "$(TARGET_EXTENSION)") nameOpts Standalone
+
+interp :: BuildName -> NameOpts -> InterpreterCommand -> Runnable
+interp b n i = Runnable b n $ Interpreter i
 
 interpMM :: InterpreterCommand -> Runnable
-interpMM = Runnable (RWithExt RMain CodeExt) nameOpts . Interpreter
+interpMM = Runnable mainModuleFile nameOpts . Interpreter
 
-mainModule :: RunName
-mainModule = RMain
+mainModule :: BuildName
+mainModule = BMain
 
-inCodePackage :: RunName -> RunName
-inCodePackage = RPack
+mainModuleFile :: BuildName
+mainModuleFile = BWithExt BMain CodeExt
 
-withExt :: RunName -> String -> RunName
-withExt r = RWithExt r . OtherExt
+inCodePackage :: BuildName -> BuildName
+inCodePackage = BPack
+
+withExt :: BuildName -> String -> BuildName
+withExt b = BWithExt b . OtherExt
+
+cCompiler :: String
+cCompiler = "$(CC)"
+
+cppCompiler :: String
+cppCompiler = "$(CXX)"

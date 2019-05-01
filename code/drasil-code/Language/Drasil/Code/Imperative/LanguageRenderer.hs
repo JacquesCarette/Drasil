@@ -28,7 +28,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (body,comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
           update,strats)
-import Language.Drasil.Code.Imperative.Build.AST (Runnable)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
 import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,oneTab,
                             oneTabbed,himap,vibcat,vmap,vibmap)
 
@@ -64,6 +64,7 @@ data Config = Config {
     enumsEqualInts :: Bool,     --whether Enum elements should explictly be set equal to their ordinal integers (in the default enumElementsDoc implementation)
     ext :: Label,
     dir :: Label,
+    buildConfig :: Maybe BuildConfig,
     runnable :: Runnable,
     fileName :: Module -> String,
     include :: Label -> Doc,

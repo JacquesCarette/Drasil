@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, 
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, fileNameD, forLabel, exprDocD, declarationDocD,
-  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD', runnable)
+  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD', buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
@@ -45,6 +45,7 @@ pythonConfig _ c =
         enumsEqualInts   = True,
         ext              = ".py",
         dir              = "python",
+        buildConfig      = Nothing,
         runnable         = interpMM "python",
         fileName         = fileNameD c,
         include          = include',

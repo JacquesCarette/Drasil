@@ -582,7 +582,7 @@ traceTheoriesRef = map makeRef2S swhsTMods
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
 
-traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
+traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5"]
 traceDataDefRef = map makeRef2S swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
@@ -599,10 +599,11 @@ traceMRowHeader1 = zipWith itemRefToSent traceMRow1
 
 traceMColumns1 :: [[String]]
 traceMColumns1 = [trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1,
-  trace1DD2, trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
+  trace1DD2, trace1DD3, trace1DD4, trace1DD5, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
 
 trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1, trace1DD2,
-  trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4 :: [String]
+  trace1DD3, trace1DD4, trace1DD5, trace1IM1, trace1IM2, trace1IM3,
+  trace1IM4 :: [String]
 
 --list of each item that "X" item requires for traceability matrix
 trace1T1 = []
@@ -613,11 +614,12 @@ trace1GD2 = ["T1"]
 trace1DD1 = ["GD1"]
 trace1DD2 = ["GD1"]
 trace1DD3 = []
-trace1DD4 = ["DD3"]
+trace1DD4 = []
+trace1DD5 = ["DD3"]
 trace1IM1 = ["GD2", "DD1", "DD2", "IM2"]
-trace1IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+trace1IM2 = ["GD2", "DD2", "DD5", "IM1", "IM4"]
 trace1IM3 = ["T2"]
-trace1IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+trace1IM4 = ["T2", "T3", "DD2", "DD4", "DD5", "IM2"]
 
 {-Traceability Matrix 2-}
 
@@ -682,11 +684,11 @@ traceMColHeader3 = zipWith itemRefToSent
 
 traceMColumns3 :: [[String]]
 traceMColumns3 = [trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1,
-  trace3DD2, trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
+  trace3DD2, trace3DD3, trace3DD4, trace3DD5, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
   trace3LC1, trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6]
 
 trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1, trace3DD2, 
-  trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
+  trace3DD3, trace3DD4, trace3DD5, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
   trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6 :: [String]
 
 trace3T1  = ["A1"]
@@ -698,6 +700,7 @@ trace3DD1 = ["A7", "A8", "A9"]
 trace3DD2 = ["A3", "A4", "A10"]
 trace3DD3 = []
 trace3DD4 = []
+trace3DD5 = []
 trace3IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
 trace3IM2 = ["A12", "A13", "A16", "A17", "A18"]
 trace3IM3 = ["A14", "A19"]

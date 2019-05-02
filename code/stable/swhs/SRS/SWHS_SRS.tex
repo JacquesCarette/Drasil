@@ -642,7 +642,7 @@ Label & ODE parameter for solid PCM
 								   			     \\ \midrule \\
 								   			     Source & \cite{lightstone2012}
 								   			             \\ \midrule \\
-								   			             RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
+								   			             RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -821,7 +821,7 @@ Label & Energy Balance on PCM to Find T\_p
                                                                                            \item{$ϕ$ is the melt fraction (Unitless)}
                                                                                            \end{symbDescription}
                                                                                            \\ \midrule \\
-                                                                                           Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
+                                                                                           Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:BalanceSolidPCM]{DD: BalanceSolidPCM}).
                                                                                                    \\ \midrule \\
                                                                                                    Source & \cite{koothoor2013}
                                                                                                             \\ \midrule \\
@@ -1177,41 +1177,45 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:sensHtE]{TM: sensHtE} &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[DD:BalanceSolidPCM]{DD: BalanceSolidPCM} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
 \label{Table:Tracey}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) & DD3 (\hyperref[DD:htFusion]{DD: htFusion}) & DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
+ & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) & DD3 (\hyperref[DD:BalanceSolidPCM]{DD: BalanceSolidPCM}) & DD4 (\hyperref[DD:htFusion]{DD: htFusion}) & DD5 (\hyperref[DD:melt.frac]{DD: melt\_frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
 \\
 \midrule
 \endhead
-T1 (\hyperref[TM:consThermE]{TM: consThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[TM:consThermE]{TM: consThermE}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:BalanceSolidPCM]{DD: BalanceSolidPCM}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  & X &  &  &  &  & 
+DD4 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
+DD5 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  &  & X &  & 
 \\
-IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  & X &  & X &  &  & X & X &  &  & X
 \\
-IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
+IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X & X &  &  &  & X &  & X & X &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1277,9 +1281,11 @@ DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  &  &  &  & X & X & X &  
 \\
 DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:BalanceSolidPCM]{DD: BalanceSolidPCM}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD4 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD5 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\

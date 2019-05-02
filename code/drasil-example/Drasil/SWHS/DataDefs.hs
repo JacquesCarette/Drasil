@@ -9,7 +9,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C, htCap_S_P,
-  pcm_HTC, pcm_SA, tau_S_P)
+  htCap_L_P, pcm_HTC, pcm_SA, tau_S_P, tau_L_P)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -19,12 +19,12 @@ swhsRefMDB :: ModelDB
 swhsRefMDB = mdb [] [] swhsDDefs []
 
 swhsQDefs :: [QDefinition]
-swhsQDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD, dd3HtFusionQD,
-  dd4MeltFracQD]
+swhsQDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
+  ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 swhsDDefs :: [DataDefinition] 
-swhsDDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM, dd3HtFusion,
-  dd4MeltFrac]
+swhsDDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
+  ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -64,7 +64,20 @@ balanceSolidPCMEqn = ((sy pcm_mass) * (sy htCap_S_P)) /
 
 ddBalanceSolidPCM :: DataDefinition
 ddBalanceSolidPCM = mkDD ddBalanceSolidPCMQD [lightstone2012] []
-  "BalanceSolidPCM" []
+  "balanceSolidPCM" []
+
+----
+
+ddBalanceLiquidPCMQD :: QDefinition
+ddBalanceLiquidPCMQD = mkQuantDef tau_L_P balanceLiquidPCMEqn
+
+balanceLiquidPCMEqn :: Expr
+balanceLiquidPCMEqn = ((sy pcm_mass) * (sy htCap_L_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))
+
+ddBalanceLiquidPCM :: DataDefinition
+ddBalanceLiquidPCM = mkDD ddBalanceLiquidPCMQD [lightstone2012] []
+  "balanceLiquidPCM" []
 
 ----
 

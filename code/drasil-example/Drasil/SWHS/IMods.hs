@@ -14,7 +14,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
-  ddBalanceSolidPCM)
+  ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
@@ -203,8 +203,7 @@ eBalanceOnPCM = im'' eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_in
 
 eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
-  "Energy Balance on PCM to Find T_p")
-  --FIXME: T_p should be called from symbol
+  "Energy Balance on PCM to find temperature of PCM")
   balPCMDesc balPCM_Rel -- eBalanceOnPCML
 
 balPCM_Rel :: Relation
@@ -224,11 +223,13 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
   sParen (unwrap $ getUnit tau_S_P) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM), (E $ (sy tau_L_P) $=
-  ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
-  S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
+  sParen (makeRef2S ddBalanceSolidPCM),
+  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_S_P),
+  sParen (makeRef2S ddBalanceLiquidPCM)]
 
 balPCMDesc_note :: Sentence
 balPCMDesc_note = foldlSent [
@@ -252,9 +253,14 @@ balPCMDesc_note = foldlSent [
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+
-  sParen (unwrap $ getUnit tau_S_P),
-  sParen (makeRef2S ddBalanceSolidPCM)]
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (makeRef2S ddBalanceSolidPCM),
+  
+  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_L_P),
+  sParen (makeRef2S ddBalanceLiquidPCM)]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

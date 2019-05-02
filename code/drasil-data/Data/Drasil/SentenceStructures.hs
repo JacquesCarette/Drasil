@@ -19,13 +19,14 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (addPercent, addPercentRound, foldle, foldle1)
+import Data.Drasil.Utils (addPercent, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
+import Data.Decimal (realFracToDecimal)
+import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
-import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -221,8 +222,8 @@ none = S "--"
 
 found :: Double -> Sentence
 found x
-    | (1e-6 > abs(x - 0.1)) = (addPercentRound . realToFrac) (x*100)
-    | otherwise             = (addPercent      . realToFrac) (x*100)
+    | (1e-6 > abs(x - 0.1)) = addPercent $ realFracToDecimal 0 (x*100)
+    | otherwise             = addPercent $ realFracToDecimal 1 (x*100)
     
 typUncr :: (UncertainQuantity c) => c -> Sentence
 typUncr x = maybe none found (x ^. uncert)  -- rounds to int if the uncertainty is 10

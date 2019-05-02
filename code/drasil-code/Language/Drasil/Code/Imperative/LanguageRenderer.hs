@@ -14,27 +14,28 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileNameD,assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
-    enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
-    clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
-    paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
-    inputDocD,complexDocD,
+    assignDocD, assignDocD', binOpDocD, blockDocD, bodyDocD, callFuncParamListD, classDocD,
+    clsDecDocD, clsDecListDocD, complexDocD, conditionalDocD, conditionalDocD', conditionalDocD'',
+    declarationDocD, enumElementsDocD, exceptionDocD, exprDocD, exprDocD', exprDocD'', fileNameD,
+    funcAppDocD, funcDocD, functionDocD, functionListDocD, includeD, inputDocD, ioDocD, iterationDocD,
+    litDocD, methodDocD, methodDocD', methodListDocD, methodTypeDocD, namespaceD, objAccessDocD, 
+    objVarDocD, paramDocD, paramListDocD, patternDocD, printDocD, retDocD, scopeDocD, stateDocD,
+    stateListDocD, stateTypeD, statementDocD, unOpDocD, unOpDocD', valueDocD, valueDocD',
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST
-  hiding (body,comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
-          update,strats)
+import Language.Drasil.Code.Imperative.AST hiding (body, comment, bool, int, float, char, string, cases, 
+                            tryBody, catchBody, guard, update, strats)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
-import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,oneTab,
-                            oneTabbed,himap,vibcat,vmap,vibmap)
+import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText, oneTab,
+                            oneTabbed, himap, vibcat, vmap, vibmap)
 
-import qualified Data.Map as Map (fromList,lookup)
 import Data.List (find)
+import qualified Data.Map as Map (fromList, lookup)
 import Prelude hiding (break,print,return,last,mod,(<>))
+
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
   isEmpty, rbrace, lbrace, vcat, space, char, double, quotes, integer, semi, equals, braces,
   int, comma, colon)
@@ -155,7 +156,7 @@ fileNameD _ = moduleName
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec,dot,doubleSlash,forLabel,new :: Doc
+classDec, dot, doubleSlash, forLabel, new :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
@@ -205,12 +206,12 @@ bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
 
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
-    where docOf s = statementDoc c NoLoop s
+    where docOf = statementDoc c NoLoop
           notNullStatement s = (not $ isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
           statements = filter notNullStatement ss
     
 callFuncParamListD :: Config -> [Value] -> Doc
-callFuncParamListD c vs = himap (text ", ") (valueDoc c) vs
+callFuncParamListD c = himap (text ", ") (valueDoc c)
 
 conditionalDocD :: Config -> Conditional -> Doc
 conditionalDocD _ (If [] _) = error "If with no body encountered"
@@ -269,9 +270,6 @@ declarationDocD c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> te
 declarationDocD c (VarDecDef n t v) = stateType c t Dec <+> text n <+> equals <+> valueDoc c v
 declarationDocD c (ObjDecDef n t v) = declarationDoc c $ VarDecDef n t v
 declarationDocD c (ConstDecDef n l) = text "const" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
-
-declarationDocD' :: Config -> Declaration -> Doc
-declarationDocD' c d = declarationDocD c d
 
 enumElementsDocD :: Config -> [Label] -> Doc
 enumElementsDocD c es = vcat $
@@ -409,7 +407,7 @@ paramDocD c (StateParam n t) = stateType c t Dec <+> text n
 paramDocD _ FuncParam{} = error "FuncParam not yet rendered"
 
 paramListDocD :: Config -> [Parameter] -> Doc
-paramListDocD c ps = himap (text ", ") (paramDoc c) ps
+paramListDocD c = himap (text ", ") (paramDoc c)
 
 patternDocD :: Config -> Pattern -> Doc
 patternDocD c (State (InitState n s)) = declarationDoc c $ VarDecDef n (Base String) (litString s)

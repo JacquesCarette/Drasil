@@ -22,7 +22,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
   renderCode, argsList, Options, ioDocD, inputDocD,
   valueDocD, methodDocD, methodDocD', methodListDocD, paramDocD, 
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
+  objAccessDocD, iterationDocD, funcDocD, declarationDocD, assignDocD, stateTypeD, fileCode,
   functionListDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', bodyDocD, blockDocD, binOpDocD,
@@ -154,16 +154,16 @@ assignDoc' :: Config -> Assignment -> Doc
 --    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
 --    valueDoc c v <+> equals <+> nsFromCString c temp]
 --    where temp = text "temp"
-assignDoc' c a = assignDocD c a
+assignDoc' = assignDocD
 
 callFuncParamList' :: Config -> [Value] -> Doc
-callFuncParamList' c vs = colonMapListDoc (text " : ") (valueDoc c) vs
+callFuncParamList' c = colonMapListDoc (text " : ") (valueDoc c)
 
 declarationDoc' :: Config -> Declaration -> Doc
 declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj Nothing (List lt t) [Lit $ LitInt $ toInteger s])
 declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> brackets (alloc c (List lt t) <+> initList)
     where initList = if null vs then text defaultInit else text "initWithObjects" <> listInitObjectsDoc c vs
-declarationDoc' c d = declarationDocD' c d
+declarationDoc' c d = declarationDocD c d
 
 exceptionDoc' :: Config -> Exception -> Doc
 exceptionDoc' c (Throw s) = text "@throw" <> parens (litDoc c $ LitStr s)
@@ -273,7 +273,7 @@ paramDoc' c (StateParam n t) = parens (stateType c t Dec) <+> text n
 paramDoc' c p@FuncParam{} = paramDocD c p
 
 paramListDoc' :: Config -> [Parameter] -> Doc
-paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps
+paramListDoc' c = colonMapListDoc (text " : ") (paramDoc c)
 
 printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
 printDoc' c Console newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)

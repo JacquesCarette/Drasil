@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
   renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop, Loop), dot, inputDocD,
   valueDocD, valueDocD', methodDocD, methodDocD', methodListDocD, paramDocD, paramListDocD, 
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
+  objAccessDocD, iterationDocD, funcDocD, declarationDocD, assignDocD, stateTypeD, fileCode,
   functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
@@ -171,7 +171,7 @@ cppbottom Source = empty
 assignDoc' :: Config -> Assignment -> Doc
 --assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
 --assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
-assignDoc' c a = assignDocD c a
+assignDoc' = assignDocD
 
 declarationDoc' :: Config -> Declaration -> Doc
 declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <> parens (int s)
@@ -179,7 +179,7 @@ declarationDoc' c (ListDecValues lt n t vs) = vcat [
     stateType c t Dec <+> text temp <> text "[]" <+> equals <+> braces (callFuncParamList c vs) <> endStatement c,
     stateType c (List lt t) Dec <+> text n <> parens(text temp <> comma <+> text temp <+> text "+" <+> text "sizeof" <> parens (text temp) <+> text "/" <+> text "sizeof" <> parens (text temp <> text "[0]"))]
     where temp = n ++ "_temp"
-declarationDoc' c d = declarationDocD' c d
+declarationDoc' c d = declarationDocD c d
 
 exceptionDoc' :: Config -> Exception -> Doc
 exceptionDoc' c (Throw s) = text "throw" <> parens (litDoc c $ LitStr s)

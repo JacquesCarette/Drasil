@@ -160,7 +160,7 @@ convertRel _ _ = error "Conversion failed"
 data Mod = Mod Name [Func]
 
 packmod :: Name -> [Func] -> Mod
-packmod n fs = Mod (toCodeName n) fs
+packmod n = Mod (toCodeName n)
 
 data DMod = DMod [Name] Mod
      
@@ -201,7 +201,7 @@ data FuncStmt where
 v $:= e = FAsg (codevar v) e
 
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
-ffor v e fs  = FFor (codevar  v) e fs
+ffor v = FFor (codevar  v)
 
 fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)

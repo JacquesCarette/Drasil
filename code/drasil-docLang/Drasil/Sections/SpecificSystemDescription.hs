@@ -35,7 +35,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: [Section] -> Section
-specSysDescr subs = SRS.specSysDes [intro_] subs
+specSysDescr = SRS.specSysDes [intro_]
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
@@ -47,7 +47,7 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
 
 -- give starting sentence(s), the program name, and finish the last sentence
 probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
-probDescF start progName ending subSec = SRS.probDesc [mkParagraph intro] subSec
+probDescF start progName ending = SRS.probDesc [mkParagraph intro]
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
                   

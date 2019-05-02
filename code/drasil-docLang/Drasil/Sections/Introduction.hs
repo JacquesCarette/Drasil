@@ -53,8 +53,8 @@ introductionSubsections = foldlList Comma List (map (uncurry ofThe)
 -- programDefinition  - Sentence definition of the specific example
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection problemIntroduction programDefinition subSections = SRS.intro 
-  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
+introductionSection problemIntroduction programDefinition = SRS.intro 
+  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)]
 
 
 -- | Constructor for the overview paragraph for the introduction

@@ -22,7 +22,7 @@ import qualified Data.Map as Map
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
+traceMGF refs trailing otherContents = SRS.traceyMandG ((traceMIntro refs trailing):otherContents)
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)

@@ -53,41 +53,41 @@ data SubSec where
   SectionModel :: NamedIdea c => c -> [SecItem] -> SubSec
 
 sSubSec :: (NamedIdea c) => c -> [SecItem] -> SubSec
-sSubSec sectionName xs = SectionModel sectionName xs
+sSubSec = SectionModel
 
 --------------------------
 -- SECITEM CONSTRUCTORS --
 --------------------------
 
 siCon :: [Contents] -> SecItem
-siCon xs = Cont xs
+siCon = Cont
 
 siSect :: [Section] -> SecItem
-siSect xs = Sect xs
+siSect = Sect
 
 siTMod :: [RelationConcept] -> SecItem
-siTMod xs = TMods xs
+siTMod = TMods
 
 siIMod :: [RelationConcept] -> SecItem
-siIMod xs = IMods xs
+siIMod = IMods
 
 siDDef :: [DataDefinition] -> SecItem
-siDDef xs = DataDef xs
+siDDef = DataDef
 
 siSent :: [Sentence] -> SecItem
-siSent xs = Sent xs
+siSent = Sent
 
 siSTitl :: SecItem
 siSTitl = SingularTitle
 
 siCC :: [ConceptChunk] -> SecItem
-siCC xs = ConChunk xs
+siCC = ConChunk
 
 siUQI :: [UncertQ] -> SecItem
-siUQI xs = UnQuantI xs
+siUQI = UnQuantI
 
 siUQO :: [UncertQ] -> SecItem
-siUQO xs = UnQuantO xs
+siUQO = UnQuantO
 ----------------------
 --  HELPER FUNCTION --
 ----------------------
@@ -132,7 +132,7 @@ hasUQO _            = False
 -----------------
 
 getItem :: (a->Bool) -> [a] -> Maybe a
-getItem func ls = find (func) ls
+getItem func = find (func)
 
 getTitleize :: (Maybe SecItem) -> Bool
 getTitleize (Just (SingularTitle)) = True

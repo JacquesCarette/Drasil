@@ -202,14 +202,14 @@ makeTable lls r bool t =
   %% pure (text "\\endhead")
   %% makeRows (tail lls)
   %% (pure (text "\\bottomrule"))
-  %% (if bool then caption t else empty)
+  %% (if bool then caption t else caption empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
   where ltab = tabType $ anyLong lls
         tabType True  = ltabu
         tabType False = ltable
         ltabu  = "longtabu" --Only needed if "X[l]" is used
-        ltable = "longtable" ++ (if not bool then "*" else "")
+        ltable = "longtable"
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields

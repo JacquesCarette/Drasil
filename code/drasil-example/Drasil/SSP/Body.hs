@@ -17,15 +17,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmt_label, physSystDescription_label, generateTraceMap', generateTraceTable)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescription_label, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, goalStmt, information, inModel, input_, interest, 
+  environment, goal, information, inModel, input_, interest, 
   issue, loss, method_, model, organization, physical, physics, problem,
   purpose, requirement, section_, software, softwareSys, srs, srsDomains, 
   symbol_, sysCont, system, systemConstraint, template, thModel, type_, user, 
@@ -43,7 +42,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
-import Data.Drasil.People (henryFrankis)
+import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
@@ -66,7 +65,8 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
+  sspInputsToOutputTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
@@ -77,8 +77,9 @@ aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
-goals_list, termi_defi_list, phys_sys_intro, phys_sys_convention, 
+termi_defi_list, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
+goals_list :: [Contents]
 
 
 --Document Setup--
@@ -92,7 +93,7 @@ ssp_si :: SystemInformation
 ssp_si = SI {
   _sys = ssp, 
   _kind = srs, 
-  _authors = [henryFrankis],
+  _authors = [henryFrankis, brooks],
   _quants = sspSymbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
@@ -144,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
     NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
-    (S "SSA is intended to be an educational tool")
+    (short ssp +:+ S "is intended to be an educational tool")
     (S "")]
   , LCsSec $ LCsProg likelyChanges_SRS
   , UCsSec $ UCsProg unlikelyChanges_SRS
@@ -171,7 +172,7 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = sspGoals ++ assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -181,7 +182,8 @@ ssp_sec = extractSection ssp_srs
 
 ssp_labcon :: [LabelledContent]
 ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
-  data_constraint_Table2, data_constraint_Table3, sspInputDataTable]
+  data_constraint_Table2, data_constraint_Table3, sspInputDataTable, 
+  sspInputsToOutputTable]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -263,7 +265,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
 
 kSent = keySent ssa ssp
 
-keySent :: (Idea a) => a -> a -> Sentence
+keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname]
@@ -479,9 +481,9 @@ goal_stmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)
-  ]) [goals_list]
+  ]) goals_list
 
-goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals
+goals_list = mkEnumSimpleD sspGoals
 
 -- SECTION 4.2 --
 
@@ -528,7 +530,7 @@ slopeVert = verticesConst $ phrase slope
 -- SECTION 5.1 --
 funcReqList :: [Contents]
 funcReqList = (mkEnumSimpleD sspRequirements) ++
-  [LlC sspInputDataTable]
+  [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --
 

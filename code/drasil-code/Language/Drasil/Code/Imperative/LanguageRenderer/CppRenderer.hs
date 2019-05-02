@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (body, comment, bool, int, float, char, tryBody, catchBody, initState, guard, update)
-import Language.Drasil.Code.Imperative.Build.AST (nativeBinary)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc, 
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -25,10 +25,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist, runnable)
+  classDec, namespaceD, includeD, fileNameD, cpplist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, oneTabbed, vmap, vibmap)
 
 import Prelude hiding (break, print, return,(<>))
+import Data.List.Utils (endswith)
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
 validListTypes :: [Label]
@@ -49,6 +50,8 @@ cppConfig options c =
         enumsEqualInts   = False,
         ext              = ".cpp",
         dir              = "cpp",
+        buildConfig      = buildAll $ \i o -> [cppCompiler, unwords $
+          filter (not . endswith ".hpp") i, "--std=c++11", "-o", o],
         runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#include",

@@ -1,10 +1,12 @@
-module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM) where
+module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
 
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe,
+  ofThe, sAnd, sOf)
 import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
@@ -14,6 +16,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
+import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
@@ -443,3 +446,22 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
   phrase solid, S "or", phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
   sParen (makeRef2S assumpPIS)]
+
+---------
+-- IM4 --
+---------
+
+instModIntro :: Sentence
+instModIntro = S "The" +:+ plural goal +:+ makeRef2S waterTempGS `sC` 
+  makeRef2S pcmTempGS `sC` makeRef2S waterEnergyGS `sC` S "and" +:+ 
+  makeRef2S pcmEnergyGS +:+ S "are solved by" +:+ makeRef2S eBalanceOnWtr `sC`
+  makeRef2S eBalanceOnPCM `sC` makeRef2S heatEInWtr `sC` S "and" +:+.
+  makeRef2S heatEInPCM +:+ S "The" +:+ plural solution +:+ S "for" +:+
+  makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM +:+ 
+  S "are coupled since the" +:+ plural solution +:+ S "for" +:+ ch temp_W `sAnd`
+  ch temp_PCM +:+. S "depend on one another" +:+ makeRef2S heatEInWtr +:+
+  S "can be solved once" +:+ makeRef2S eBalanceOnWtr +:+. 
+  S "has been solved" +:+ S "The" +:+ plural solution `sOf` 
+  makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM +:+ 
+  S "are also coupled" `sC` S "since the" +:+ phrase temp_PCM `andThe` 
+  phrase pcm_E +:+ S "depend on the" +:+. phrase phase_change

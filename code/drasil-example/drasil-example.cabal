@@ -82,6 +82,7 @@ executable nopcm
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Goals
     , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
@@ -118,6 +119,7 @@ executable swhs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
+    , Drasil.SWHS.Goals
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Labels
     , Drasil.SWHS.References

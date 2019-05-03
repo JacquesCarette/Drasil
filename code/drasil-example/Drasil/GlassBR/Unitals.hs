@@ -37,7 +37,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
-aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk
+aspect_ratio, pb_tol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -55,7 +55,7 @@ gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pb_tol, pb_fail, tNT]
+gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]

@@ -1190,20 +1190,28 @@ Solar water heating tank, with heat flux into the water from the coil of <em>q<s
 Goal Statements
 </h3>
 <p class="paragraph">
-Given the temperature of the heating coil, initial conditions for the temperature of the water and the temperature of the phase change material, and material properties, the goal statements are:
+Given the temperature of the heating coil, the initial conditions for the temperature of the water, the temperature of the phase change material, and the material properties, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Predict the temperature of the water over time.
+<div id="waterTempGS">
+Predict-Water-Temperature: Predict the temperature of the water over time.
+</div>
 </p>
 <p>
-GS2: Predict the temperature of the phase change material over time.
+<div id="pcmTempGS">
+Predict-PCM-Temperature: Predict the temperature of the phase change material over time.
+</div>
 </p>
 <p>
-GS3: Predict the change in heat energy in the water over time.
+<div id="waterEnergyGS">
+Predict-Water-Energy: Predict the change in heat energy in the water over time.
+</div>
 </p>
 <p>
-GS4: Predict the change in heat energy in the PCM over time.
+<div id="pcmEnergyGS">
+Predict-PCM-Energy: Predict the change in heat energy in the PCM over time.
+</div>
 </p>
 </div>
 </div>
@@ -2305,6 +2313,9 @@ Instance Models
 </h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+</p>
+<p class="paragraph">
+The goals <a href=#waterTempGS>GS: Predict-Water-Temperature</a>, <a href=#pcmTempGS>GS: Predict-PCM-Temperature</a>, <a href=#waterEnergyGS>GS: Predict-Water-Energy</a>, and <a href=#pcmEnergyGS>GS: Predict-PCM-Energy</a> are solved by <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The solutions for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a> are coupled since the solutions for <em>T<sub>W</sub></em> and <em>T<sub>P</sub></em> depend on one another. <a href=#IM:heatEInWtr>IM: heatEInWtr</a> can be solved once <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> has been solved. The solutions of <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a> and <a href=#IM:heatEInPCM>IM: heatEInPCM</a> are also coupled, since the temperature of the phase change material and the change in heat energy in the PCM depend on the phase change.
 </p>
 <div id="IM:eBalanceOnWtr">
 <table class="idefn">

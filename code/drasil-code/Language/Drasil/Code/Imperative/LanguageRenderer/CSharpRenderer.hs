@@ -126,7 +126,8 @@ unOpDoc' :: UnaryOp -> Doc
 unOpDoc' SquareRoot = text "Math.Sqrt"
 unOpDoc' Abs = text "Math.Abs"
 unOpDoc' Exp = text "Math.Exp"
-unOpDoc' Log = text "Math.Log"
+unOpDoc' Ln  = text "Math.Log"
+unOpDoc' Log = text "Math.Log10"
 unOpDoc' op = unOpDocD op
 
 objAccessDoc' :: Config -> Value -> Function -> Doc

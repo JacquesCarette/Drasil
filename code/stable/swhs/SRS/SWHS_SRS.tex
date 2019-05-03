@@ -324,12 +324,12 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the temperature of the heating coil, initial conditions for the temperature of the water and the temperature of the phase change material, and material properties, the goal statements are:
+Given the temperature of the heating coil, the initial conditions for the temperature of the water, the temperature of the phase change material, and the material properties, the goal statements are:
 \begin{itemize}
-\item[GS1:]Predict the temperature of the water over time.
-\item[GS2:]Predict the temperature of the phase change material over time.
-\item[GS3:]Predict the change in heat energy in the water over time.
-\item[GS4:]Predict the change in heat energy in the PCM over time.
+\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]Predict the temperature of the water over time.
+\item[Predict-PCM-Temperature:\phantomsection\label{pcmTempGS}]Predict the temperature of the phase change material over time.
+\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]Predict the change in heat energy in the water over time.
+\item[Predict-PCM-Energy:\phantomsection\label{pcmEnergyGS}]Predict the change in heat energy in the PCM over time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -681,6 +681,7 @@ Label & Melt fraction
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goals \hyperref[waterTempGS]{GS: Predict-Water-Temperature}, \hyperref[pcmTempGS]{GS: Predict-PCM-Temperature}, \hyperref[waterEnergyGS]{GS: Predict-Water-Energy}, and \hyperref[pcmEnergyGS]{GS: Predict-PCM-Energy} are solved by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}. The solutions for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} are coupled since the solutions for ${T_{W}}$ and ${T_{P}}$ depend on one another. \hyperref[IM:heatEInWtr]{IM: heatEInWtr} can be solved once \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} has been solved. The solutions of \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} and \hyperref[IM:heatEInPCM]{IM: heatEInPCM} are also coupled, since the temperature of the phase change material and the change in heat energy in the PCM depend on the phase change.
 \par~
 
 \noindent \begin{minipage}{\textwidth}

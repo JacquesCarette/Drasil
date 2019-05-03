@@ -100,7 +100,7 @@ compareID c1 c2 = (c1 ^. uid) == c2
 -----------------------
 
 hasTitle :: SecItem -> Bool
-hasTitle (SingularTitle) = True
+hasTitle SingularTitle = True
 hasTitle _               = False
 
 hasCont :: SecItem -> Bool
@@ -132,10 +132,10 @@ hasUQO _            = False
 -----------------
 
 getItem :: (a->Bool) -> [a] -> Maybe a
-getItem func = find (func)
+getItem = find
 
 getTitleize :: (Maybe SecItem) -> Bool
-getTitleize (Just (SingularTitle)) = True
+getTitleize (Just SingularTitle) = True
 getTitleize (Just _)               = False
 getTitleize Nothing                = False
 
@@ -367,7 +367,7 @@ problemDescriptionSent progName start end = foldlSP [start, (short progName),
 --------------------------
 
 termDefinitionIntro :: [Sentence] -> Contents
-termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) (EmptyS)
+termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) EmptyS
   [S "This subsection provides a list of terms",
   S "that are used in the subsequent", plural Doc.section_, S "and their",
   S "meaning, with the", phrase Doc.purpose, S "of reducing ambiguity",
@@ -410,7 +410,7 @@ assumpIntro = mkParagraph $ foldlSent
   S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 
   (phrase Doc.physicalSystem), S "The numbers given in the square brackets refer to the", 
   foldr1 sC (map refs itemsAndRefs) `sC` S "or", 
-  refs (Doc.likelyChg) `sC` S "in which the respective", 
+  refs Doc.likelyChg `sC` S "in which the respective", 
   (phrase Doc.assumption), S "is used"] --FIXME: use some clever "zipWith"
   where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
         itemsAndRefs = [Doc.thModel, Doc.genDefn, Doc.dataDefn, Doc.inModel] --FIXME ADD REFS BACK

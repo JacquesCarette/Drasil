@@ -368,7 +368,7 @@ variable s' = do
       mm = constMap cs
       doit :: String -> Reader State Value
       doit s | member s mm =
-        maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
              | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
@@ -437,7 +437,7 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
-convType (C.File) = error "convType: File ?"
+convType C.File = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
@@ -575,7 +575,7 @@ convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
-convStmt (FContinue) = return continue
+convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
@@ -665,10 +665,10 @@ genDataFunc nameTitle dd = do
         checkIndex' ((Explicit i):is) n l p v s =
           ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
-        checkIndex' ((WithLine):is) n l p v s =
+        checkIndex' (WithLine:is) n l p v s =
           ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
-        checkIndex' ((WithPattern):is) n l p v s =
+        checkIndex' (WithPattern:is) n l p v s =
           ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------

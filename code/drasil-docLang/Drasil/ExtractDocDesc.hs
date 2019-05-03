@@ -22,7 +22,7 @@ egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
-egetDocSec (Bibliography)       = []
+egetDocSec  Bibliography        = []
 egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 

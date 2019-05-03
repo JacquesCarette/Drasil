@@ -327,8 +327,8 @@ funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Int
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
 funcDocD _ (ListExtend _) = empty
-funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
-funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
+funcDocD c IterBegin = dot <> funcAppDoc c "begin" []
+funcDocD c IterEnd = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $
   "funcDocD undefined for _ Floor pattern. See " ++
   "Language.Drasil.Code.Imperative.LanguageRenderer"
@@ -391,15 +391,15 @@ namespaceD :: Label -> Doc
 namespaceD n = text "namespace" <+> text n
 
 objAccessDocD :: Config -> Value -> Function -> Doc
-objAccessDocD c (Self) (Func n vs) = funcAppDoc c n vs
+objAccessDocD c Self (Func n vs) = funcAppDoc c n vs
 objAccessDocD _ _ (ListPopulate _ _) = empty
 objAccessDocD c v f@(Cast _ _) = funcDoc c f <> parens (valueDoc c v)
-objAccessDocD c v   (Floor) = funcAppDoc c "Math.Floor" [v]
-objAccessDocD c v   (Ceiling) = funcAppDoc c "Math.Ceiling" [v]
+objAccessDocD c v Floor = funcAppDoc c "Math.Floor" [v]
+objAccessDocD c v Ceiling = funcAppDoc c "Math.Ceiling" [v]
 objAccessDocD c v f = valueDoc c v <> funcDoc c f
 
 objVarDocD :: Config -> Value -> Value -> Doc
-objVarDocD c (Self) v = valueDoc c v
+objVarDocD c Self v = valueDoc c v
 objVarDocD c v1 v2 = valueDoc c v1 <> dot <> valueDoc c v2
 
 paramDocD :: Config -> Parameter -> Doc

@@ -236,11 +236,11 @@ body :: [Statement] -> Body
 body s = [ block s ]
 
 defaultValue :: BaseType -> Value
-defaultValue (Boolean) = false
-defaultValue (Integer) = litInt 0
-defaultValue (Float) = litFloat 0.0
-defaultValue (Character) = litChar ' '
-defaultValue (String) = litString ""
+defaultValue Boolean = false
+defaultValue Integer = litInt 0
+defaultValue Float = litFloat 0.0
+defaultValue Character = litChar ' '
+defaultValue String = litString ""
 defaultValue (FileType _) = error $
   "defaultValue undefined for (File _) pattern. See " ++
   "Language.Drasil.Code.Imperative.AST"

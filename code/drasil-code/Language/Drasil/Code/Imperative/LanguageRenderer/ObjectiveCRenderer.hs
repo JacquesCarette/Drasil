@@ -371,7 +371,7 @@ destructor _ vs =
                                                   | otherwise = [s]
         releaseVars = concatMap checkDelPriority vs
         releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (var lbl $. Func release [])]) releaseVars
-        releaseBlock = if null releaseVars then [] else [BlockreleaseStatements]
+        releaseBlock = if null releaseVars then [] else [Block releaseStatements]
         deallocBody = releaseBlock ++ (oneLiner $ ValState (super $. Func dealloc []))
     in Method dealloc Public Dynamic Void [] deallocBody
 

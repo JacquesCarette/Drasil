@@ -83,8 +83,8 @@ codeSpec SI {_sys = sys
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
-      rels = (map qtoc (defs' ++ (map qdFromDD ddefs))) \\ derived
-      mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
+      rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
+      mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
@@ -269,11 +269,11 @@ fstdep sm (FRet e)  = codevars  e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
 fstdep _  FContinue = []
-fstdep sm (FProcCall f l)  = (codefunc (asVC f)) : (concatMap (`codevars` sm) l)
+fstdep sm (FProcCall f l)  = codefunc (asVC f) : concatMap (`codevars` sm) l
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
-fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
+fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
     fstvars _  (FDec cch _) = [cch]
@@ -331,9 +331,10 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 
-              then error ("Cannot find path from inputs to outputs: " ++ (show $ map (^. uid) n)
-                        ++ " given Defs as " ++ (show $ map (^. uid) defs')
-                        ++ " and Knowns as " ++ (show $ map (^. uid) k) )
+              then error ("Cannot find path from inputs to outputs: " ++
+                        show (map (^. uid) n)
+                        ++ " given Defs as " ++ show (map (^. uid) defs')
+                        ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool

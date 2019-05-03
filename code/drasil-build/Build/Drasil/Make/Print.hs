@@ -20,7 +20,7 @@ build (M rules) = addCommonFeatures $
 
 -- | Renders specific makefile rules. Called by 'build'
 printRule :: Rule -> Doc
-printRule (R t d _ c) = printTarget t d $+$ (printCmds c)
+printRule (R t d _ c) = printTarget t d $+$ printCmds c
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc

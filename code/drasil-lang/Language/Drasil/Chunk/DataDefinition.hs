@@ -44,7 +44,7 @@ instance HasUID             DataDefinition where uid = qd . uid
 instance NamedIdea          DataDefinition where term = qd . term
 instance Idea               DataDefinition where getA c = getA $ c ^. qd
 instance HasSpace           DataDefinition where typ = qd . typ
-instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
+instance HasSymbol          DataDefinition where symbol e = symbol (e^.qd)
 instance Quantity           DataDefinition where 
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 instance HasCitation        DataDefinition where getCitations = cit
@@ -57,12 +57,12 @@ instance HasRefAddress      DataDefinition where getRefAdd = ra
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 instance Referable DataDefinition where
-  refAdd    d = getRefAdd d
+  refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d e = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d) e
+mkDD a b c d = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d)
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD dd = dd ^. qd

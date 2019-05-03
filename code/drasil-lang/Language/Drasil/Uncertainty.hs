@@ -1,4 +1,4 @@
-module Language.Drasil.Chunk.UncertainQuantity 
+module Language.Drasil.Uncertainty
   (Uncertainty, uncty, unctyPrec) where
  
 data Uncertainty = Uncert { _uncert :: Double, _prec :: Maybe Integer }
@@ -12,4 +12,4 @@ uncty :: Double -> Uncertainty
 uncty u = Uncert (isDecimal u) Nothing
 
 unctyPrec :: Double -> Integer -> Uncertainty
-unctyPrec u p = Uncert (isDecimal u) (Maybe b)
+unctyPrec u p = Uncert (isDecimal u) (Just p)

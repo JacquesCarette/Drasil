@@ -343,8 +343,8 @@ makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm [(f,d)]    = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (`lo` sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (`lo` sm) d)
+makeDRows sm ((f,d):ps) = dBoilerplate %% ((pure $ text (f ++ " & ")) <>
+  (vcat $ map (`lo` sm) d))
                        %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs

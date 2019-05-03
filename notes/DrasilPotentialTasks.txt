@@ -83,7 +83,6 @@ POTENTIAL TASKS (Proto-issues)
     - AssumpChunk: Hack. re-implement.
     - Change: Hack. re-implement.
     - Citation: should investigate 3rd party implementations
-  - Spec: a lot of the Sentence constructors should be deleted...
   - Remove multiple occurrences of definition of DD as Data Definition
 
 - Structural:

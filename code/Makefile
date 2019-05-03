@@ -12,7 +12,7 @@ SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
 
-PACKAGES = lang code printers gen data docLang example
+PACKAGES = lang build code printers gen data docLang example
 DPACKAGES = $(addprefix drasil-, $(PACKAGES))
 BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
 DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
@@ -27,6 +27,7 @@ GAMEPHYS_EXE  = chipmunkdocs
 EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
 BUILD_EXAMPLES = $(addsuffix _build, $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
+CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
 DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
 DIFF = diff --strip-trailing-cr --ignore-all-space
@@ -36,6 +37,10 @@ PROGS =  $(addsuffix _prog, $(EXAMPLES))
 
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
+
+GHCTHREADS += 2
+override GHCFLAGS += -Wall -j$(GHCTHREADS)
+override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 NOISY=no
 SUMMARIZE_TEX=no
@@ -57,7 +62,7 @@ debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
 $(filter build_%, $(BUILD_PACKAGES)): build_%: FORCE
-	stack install -j3 --ghc-options -j2 $(stackArgs) drasil-$* --dump-logs --interleaved-output
+	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
 %_build: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_build: EDIR=$($(EXAMPLE)_DIR)
@@ -95,6 +100,13 @@ $(filter %_tex, $(TEX_EXAMPLES)): %_tex: %_build
 	EDIR=$(EDIR) EPREF=$(EPREF) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
 
 tex: $(TEX_EXAMPLES)
+
+%_code: EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%_code: EDIR=$($(EXAMPLE)_DIR)
+$(filter %_code, $(CODE_EXAMPLES)): %_code: %_build
+	EDIR=$(EDIR) MAKE=$(MAKE) sh ./code_build.sh
+
+code: $(CODE_EXAMPLES)
 
 clean: clean_build
 	- stack clean

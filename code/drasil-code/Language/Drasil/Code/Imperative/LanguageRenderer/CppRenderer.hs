@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (body, comment, bool, int, float, char, tryBody, catchBody, initState, guard, update)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc, 
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -24,10 +25,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist)
+  classDec, namespaceD, includeD, fileNameD, cpplist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, oneTabbed, vmap, vibmap)
 
 import Prelude hiding (break, print, return,(<>))
+import Data.List.Utils (endswith)
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
 validListTypes :: [Label]
@@ -48,6 +50,9 @@ cppConfig options c =
         enumsEqualInts   = False,
         ext              = ".cpp",
         dir              = "cpp",
+        buildConfig      = buildAll $ \i o -> [cppCompiler, unwords $
+          filter (not . endswith ".hpp") i, "--std=c++11", "-o", o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#include",
         includeScope     = const empty,
@@ -78,7 +83,7 @@ cppConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
+        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
@@ -297,6 +302,11 @@ functionDoc' c ft m f = methodDoc c ft m f
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
+
+unOpDoc' :: UnaryOp -> Doc
+unOpDoc' Ln = text "log"
+unOpDoc' Log = text "log10"
+unOpDoc' op = unOpDocD op
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e

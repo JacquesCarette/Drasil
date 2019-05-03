@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Education (calculus, educon, engineering)
+import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
@@ -150,10 +150,10 @@ mkSRS = [RefSec $ RefProg intro
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
       [ Assumptions
-      , TMs (Label : stdFields) theoretical_models
-      , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-      , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-      , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+      , TMs [] (Label : stdFields) theoretical_models
+      , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         [eBalanceOnWtr, heatEInWtr] ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]

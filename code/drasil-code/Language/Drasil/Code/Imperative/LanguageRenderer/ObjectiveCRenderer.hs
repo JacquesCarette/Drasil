@@ -9,6 +9,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,
           update,forBody)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -26,7 +27,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, addDefaultCtor, fixCtorNames, complexDocD,
-  functionDocD, objVarDocD, objcstaticlist)
+  functionDocD, objVarDocD, objcstaticlist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                                             doubleQuotedText,himap,vmap,vibmap)
 
@@ -51,6 +52,8 @@ objcConfig options c =
         enumsEqualInts   = False,
         ext              = ".m",
         dir              = "obj-c",
+        buildConfig      = buildAll $ \i o -> [cCompiler, unwords i, "-o", o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#import",
         includeScope     = const $ empty,

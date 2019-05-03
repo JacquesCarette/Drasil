@@ -2,14 +2,15 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
-import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
-  String, Boolean, Integer))
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
+  Float, Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
   Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode, makeLangConfig)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
   codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
@@ -21,6 +22,7 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.FilePath ((</>))
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -91,14 +93,15 @@ generateCode chs g =
           createDirectoryIfMissing False (getDir x)
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
-          when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode
-            (getLabel x)
-            (Options Nothing Nothing Nothing (Just "Code"))
-            (toAbsCode prog modules)
-          setCurrentDirectory workingDir) (lang $ chs)
+          let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
+                       Just "Code"
+          createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
+            map (if x == Java then \(c,d) -> (prog </> c, d) else id) $
+            C.unCode $ makeCode config absCode
+          setCurrentDirectory workingDir) $ lang chs
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         modules = runReader genModules g
+        absCode = toAbsCode prog modules
 
 genModules :: Reader State [Module]
 genModules = do
@@ -108,7 +111,7 @@ genModules = do
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ (mn : inp ++ out ++ moddef)
+  return $ mn : inp ++ out ++ moddef
 
 -- private utilities used in generateCode
 getLabel, getDir :: Lang -> String
@@ -227,7 +230,7 @@ genCalcBlock t' v' e' = doit t' v' e'
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (genCalcBlock t v e)) cs
   return $ oneLiner $ ifCond ifs noElse
 
 ----- OUTPUT -------
@@ -507,6 +510,9 @@ unop Tan  = I.tan
 unop Csc  = I.csc
 unop Sec  = I.sec
 unop Cot  = I.cot
+unop Arcsin = error "unop: Arcsin not implemented"
+unop Arccos = error "unop: Arccos not implemented"
+unop Arctan = error "unop: Arctan not implemented"
 unop Dim  = (I.$.listSize)
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)

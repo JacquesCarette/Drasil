@@ -31,8 +31,8 @@ data ArithOper = Add | Mul deriving (Eq)
 data BoolOper = And | Or deriving (Eq)
 
 -- | Unary functions
-data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Exp
-  | Sqrt | Not | Neg | Dim
+data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
+  | Arccos | Arctan | Exp | Sqrt | Not | Neg | Dim
 
 -- | Drasil Expressions
 data Expr where

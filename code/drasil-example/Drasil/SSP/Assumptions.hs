@@ -2,16 +2,19 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
-  soil, soilLyr, soilPrpty, intrslce, slice)
-import Drasil.SSP.Unitals (coords, normToShear, numbSlices, scalFunc)
+import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
+  soil, soilPrpty, intrslce, slice)
+import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
+  normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
+  xi, zcoord)
+import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.SentenceStructures (ofThe', foldlSent, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, condition)
-import Data.Drasil.Concepts.Physics (force, stress, strain)
+import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
+  condition, constant, interface)
+import Data.Drasil.Concepts.Physics (force, position, stress, twoD)
 import Data.Drasil.Concepts.Math (surface, unit_)
-import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
 
 assumptions :: [ConceptInstance]
@@ -40,48 +43,47 @@ monotonicF, slopeS, homogeneousL, isotropicP, linearS,
   planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave with respect to", S "the" +:+. phrase slopeSrf,
-  ((ch coords +:+ S "coordinates") `ofThe'` S "failure"),
-  phrase surface, S "follow a monotonic function"]
+  S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
+  sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
+  phrase slpSrf, S "follow a concave up function"]
 
-slopeS = foldlSent [S "The factor of safety is assumed to be constant across a whole",
-  phrase slpSrf]
+slopeS = foldlSent [S "The factor of safety is assumed to be", phrase constant,
+  S "across the entire", phrase slpSrf]
+
+homogeneousL = foldlSent [S "The", phrase soil, S "mass is homogeneous" `sC`
+  S "with consistent", plural soilPrpty +:+ S "throughout"]
 
 propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or saturated",
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
-homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
-  S "are homogeneous" `sC` S "with consistent", plural soilPrpty +:+
-  S "throughout"]
+isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
+  phrase effCohesion `sAnd` phrase fricAngle, S "are isotropic properties"]
 
-isotropicP = foldlSent [at_start' soilLyr, S "are treated as if they have",
-  S "isotropic properties"]
+linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
+  S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
+  phrase intNormForce `sAnd` phrase intShrForce,
+  S "have a proportional relationship, depending on a proportionality",
+  phrase constant, sParen (ch normToShear), S "and a function", 
+  sParen (ch scalFunc), S "describing variation depending on", ch xi, 
+  phrase position]
 
-linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
-  S "have a linear relationship, proportional to a constant",
-  sParen (ch normToShear), S "and an", phrase intrslce, phrase force,
-  S "function", sParen (ch scalFunc), S "depending on x position"]
-
-planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.
-  S "extends far into and out of the geometry (z coordinate)",
-  S "This implies plane", phrase strain, plural condition `sC`
-  S "making 2D analysis appropriate"]
+planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+
+  S "extends far into and out of the geometry" +:+. sParen (ch zcoord +:+ 
+  S "coordinate"), S "This implies", phrase plnStrn, plural condition `sC`
+  S "making", short twoD, phrase analysis, S "appropriate"]
 
 largeN = foldlSent [S "The effective normal", phrase stress,
-  S "is large enough that the resistive shear to effective normal",
-  phrase stress, S "relationship can be approximated as a",
-  S "linear relationship"]
+  S "is large enough that the", phrase shrStress, S "to effective normal",
+  phrase stress, S "relationship can be approximated as a linear relationship"]
 
 straightS = foldlSent [S "The", phrase surface, S "and base of a",
-  phrase slice, S "between", phrase intrslce,
-  S "nodes are approximated as straight lines"]
+  phrase slice, S "are approximated as straight lines"]
 
 edgeS = foldlSent [S "The", phrase intrslce, plural force, 
   S "at the 0th" `sAnd` ch numbSlices :+: S "th", phrase intrslce,
-  S "interfaces are zero"]
+  plural interface, S "are zero"]
 
-seismicF = foldlSent [S "There is no seismic force acting on the slope"]
+seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
 
-surfaceL = foldlSent [S "There is no imposed", phrase surface `sC` 
-  S "load and therefore no external", phrase force `sC` S "acting on the",
-  phrase slope]
+surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
+  S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]

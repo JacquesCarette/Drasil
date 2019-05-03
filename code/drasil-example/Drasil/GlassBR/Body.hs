@@ -29,9 +29,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
   goal, goalStmt, implementation, information, inModel, input_, interface, item, 
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
-  product_, purpose, reference, requirement, reviewer, section_, software, 
-  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
-  theory, thModel, traceyMatrix, user, userInput, value, doccon, doccon')
+  product_, purpose, reference, requirement, section_, software, softwareSys,
+  srs, srsDomains, standard, sysCont, system, template, term_, thModel,
+  traceyMatrix, user, userInput, value, doccon, doccon')
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
@@ -159,10 +159,10 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
        SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs (Label : stdFields) gbrTMods
-        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
+        , TMs [] (Label : stdFields) gbrTMods
+        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
                       S "gives", (plural value `ofThe` S "specification"),

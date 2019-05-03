@@ -19,8 +19,8 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
-  NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
-  Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
+  NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
+  Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
   Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
@@ -137,6 +137,9 @@ p_ops Tan      = "\\tan"
 p_ops Sec      = "\\sec"
 p_ops Csc      = "\\csc"
 p_ops Cot      = "\\cot"
+p_ops Arcsin   = "\\arcsin"
+p_ops Arccos   = "\\arccos"
+p_ops Arctan   = "\\arctan"
 p_ops Not      = "\\neg{}"
 p_ops Dim      = "\\mathsf{dim}"
 p_ops Exp      = "e"

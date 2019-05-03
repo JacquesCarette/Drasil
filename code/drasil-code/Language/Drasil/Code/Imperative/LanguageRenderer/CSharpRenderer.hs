@@ -6,6 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -23,7 +24,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, namespaceD, includeD, fileNameD, functionDocD, new, printDocD, objVarDocD,
-  classDocD, exceptionDocD, exprDocD'', declarationDocD, conditionalDocD)
+  classDocD, exceptionDocD, exprDocD'', declarationDocD, conditionalDocD,
+  buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
 import Prelude hiding (print,(<>))
@@ -42,6 +44,8 @@ csharpConfig _ c =
         enumsEqualInts   = False,
         ext              = ".cs",
         dir              = "csharp",
+        buildConfig      = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "using",
         includeScope     = scopeDoc c,
@@ -122,7 +126,8 @@ unOpDoc' :: UnaryOp -> Doc
 unOpDoc' SquareRoot = text "Math.Sqrt"
 unOpDoc' Abs = text "Math.Abs"
 unOpDoc' Exp = text "Math.Exp"
-unOpDoc' Log = text "Math.Log"
+unOpDoc' Ln  = text "Math.Log"
+unOpDoc' Log = text "Math.Log10"
 unOpDoc' op = unOpDocD op
 
 objAccessDoc' :: Config -> Value -> Function -> Doc

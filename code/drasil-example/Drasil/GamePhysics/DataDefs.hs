@@ -1,35 +1,37 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD) where
 
 import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
+
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB)
-
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel, velA_P, velB_P)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
+
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
+
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, torque)
+  force, torque, kEnergy, energy)
+
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Data.Drasil.SentenceStructures (foldlSent)
-
-
 
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD]
+ angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque]
+  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -169,7 +171,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
 -}
 -- DD7 : Angular acceleration --
-
+-----------------------------------DD8 Angular Acceleration-------------------
 angAccelDD :: DataDefinition
 angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
@@ -218,7 +220,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "chalses"
-  [chaslesThmDesc]
+  [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition
 chasles = mkQuantDef vel_B chaslesEqn
@@ -241,8 +243,25 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (phrase r_OB) `sC` (ch r_OB), 
   (sParen $ Sy $ unit_symb r_OB)]
 
- 
------------------DD13 Torque---------------------------------------
+-----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
+reVelInCollDD :: DataDefinition
+reVelInCollDD = mkDD reVelInColl [{-- References --}] [{-- Derivation --}] "reVeInColl"
+  [reVelInCollDesc]
+
+reVelInColl :: QDefinition
+reVelInColl = mkQuantDef initRelVel reVelInCollEqn
+
+reVelInCollEqn :: Expr
+reVelInCollEqn = (sy velA_P) - (sy velB_P)
+
+reVelInCollDesc :: Sentence
+reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
+  S "of a", (phrase $ CP.rigidBody),makeRef2S assumpOT, 
+  S "A colliding with another", (phrase CP.rigidBody),
+  S "B relative to that body", (ch initRelVel),
+  S "is the difference between the", (plural QP.velocity),
+  S "of A and B at point P"]
+-----------------DD13 Torque-------------------------------------------------------------------------------
 
 torqueDD :: DataDefinition
 torqueDD = mkDD torque [{-- References --}] [{-- Derivation --}] "torque"
@@ -253,10 +272,45 @@ torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
 torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
---will need a new parameter to define r is a position vector
--- of the point where the force is applied, measured from the axis of rotation.
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", (phrase torque), 
   S "on a body measures the", S "the tendency of a", (phrase QP.force), 
   S "to rotate the body around an axis or pivot"]
+
+----------------------DD14 Coefficient of Restitution--------------------------
+coeffRestitutionDD :: DataDefinition
+coeffRestitutionDD = mkDD coeffRestitution [{-- References --}] [{-- Derivation --}] "coeffRestitution"
+ [coeffRestitutionDesc]
+
+coeffRestitution :: QDefinition
+coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
+
+coeffRestitutionEqn :: Expr
+coeffRestitutionEqn = -(sy finRelVel) $.
+  (sy normalVect)/ (sy initRelVel) $.
+  (sy normalVect)
+
+coeffRestitutionDesc :: Sentence
+coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.restitutionCoef), 
+  S "is a unitless, dimensionless quantity that determines the", 
+  S "elasticity of a collision between two" +:+.(plural CP.rigidBody), 
+  (E $ sy QP.restitutionCoef $= 1), S "results in an elastic collision, while",
+  (E $ sy QP.restitutionCoef $< 1), S "results in an inelastic collision,",
+  S "and", (E $ sy QP.restitutionCoef $= 0), S "results in a totally inelastic collision"]
+-----------------------DD15 Kinetic Energy--------------------------------  
+kEnergyDD :: DataDefinition
+kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kEnergy"
+ [kEnergyDesc,makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI] 
+
+kEnergy :: QDefinition
+kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
+
+kEnergyEqn :: Expr
+kEnergyEqn = ((sy QPP.mass)*(sy  QP.velocity) $^ 2)/2
+
+kEnergyDesc :: Sentence
+kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
+ S "of an object is the", (phrase QP.energy),
+ S "it possess due to its motion"]
+  

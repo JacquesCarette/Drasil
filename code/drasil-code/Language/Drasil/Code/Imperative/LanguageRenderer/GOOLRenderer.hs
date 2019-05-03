@@ -7,6 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -20,7 +21,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), inputDocD,
   valueDocD, iterationDocD, fileCode, functionListDocD, statementDocD, 
   retDocD, patternDocD, includeD, fileNameD, complexDocD, 
-  conditionalDocD, functionDocD, hsModule)
+  conditionalDocD, functionDocD, hsModule, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
@@ -45,6 +46,8 @@ goolConfig options c =
         enumsEqualInts   = False,
         ext              = ".hs",
         dir              = "gool",
+        buildConfig      = error "Generating buildConfig for GOOLRenderer not implemented",
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = const empty,

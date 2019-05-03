@@ -4,6 +4,7 @@ import New (Label, RenderSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import LanguageRenderer.NewPythonRenderer (PythonCode(..))
+import LanguageRenderer.NewCSharpRenderer (CSharpCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -22,6 +23,10 @@ main = do
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
   genCode (classes unPC) [".py"]
+  setCurrentDirectory workingDir 
+  createDirectoryIfMissing False "csharp"
+  setCurrentDirectory "csharp"
+  genCode (classes unCSC) [".cs"]
   setCurrentDirectory workingDir
     
 genCode :: [(Doc, Label)] -> [Label] -> IO()

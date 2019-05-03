@@ -8,16 +8,17 @@ module LanguageRenderer.NewCSharpRenderer (
 import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
+  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD, printListDocD,
   printFileDocD, boolTypeDocD, 
-  intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
-  stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD,
-  ifCondDocD, switchDocD, forDocD, 
+  intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
+  constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
+  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD,
@@ -28,7 +29,8 @@ import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, objAccessDocD, 
+  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
+  listAccessDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, dot, new, forLabel, observerListName, doubleSlash, 
   addCommentsDocD, callFuncParamList, getterName, setterName)
@@ -53,34 +55,34 @@ instance Monad CSharpCode where
     return = CSC
     CSC x >>= f = f x
 
-liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc
+liftA4 :: (a -> b -> c -> d -> e) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e
 liftA4 f a1 a2 a3 a4 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4)
 
-liftA5 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc
+liftA5 :: (a -> b -> c -> d -> e -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f
 liftA5 f a1 a2 a3 a4 a5 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5)
 
-liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc
+liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g
 liftA6 f a1 a2 a3 a4 a5 a6 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6)
 
-liftA7 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc
+liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g -> CSharpCode h
 liftA7 f a1 a2 a3 a4 a5 a6 a7 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6) (unCSC a7)
 
-liftList :: ([Doc] -> Doc) -> [CSharpCode Doc] -> CSharpCode Doc
+liftList :: ([a] -> b) -> [CSharpCode a] -> CSharpCode b
 liftList f as = CSC $ f (map unCSC as)
 
-lift1List :: (Doc -> [Doc] -> Doc) -> CSharpCode Doc -> [CSharpCode Doc] -> CSharpCode Doc
+lift1List :: (a -> [b] -> c) -> CSharpCode a -> [CSharpCode b] -> CSharpCode c
 lift1List f a as = CSC $ f (unCSC a) (map unCSC as)
 
-unCSCPair :: (CSharpCode Doc, CSharpCode Doc) -> (Doc, Doc)
+unCSCPair :: (CSharpCode a, CSharpCode b) -> (a, b)
 unCSCPair (a1, a2) = (unCSC a1, unCSC a2) 
 
-lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> [(CSharpCode Doc, CSharpCode Doc)] -> CSharpCode Doc
+lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> [(CSharpCode e, CSharpCode f)] -> CSharpCode g
 lift4Pair f a1 a2 a3 a4 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (map unCSCPair as)
 
-lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> CSharpCode Doc -> CSharpCode Doc -> CSharpCode Doc -> [(CSharpCode Doc, CSharpCode Doc)] -> CSharpCode Doc
+lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> [(CSharpCode d, CSharpCode e)] -> CSharpCode f
 lift3Pair f a1 a2 a3 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (map unCSCPair as)
 
-liftPairFst :: (CSharpCode Doc, a) -> CSharpCode (Doc, a)
+liftPairFst :: (CSharpCode a, b) -> CSharpCode (a, b)
 liftPairFst (c, n) = CSC $ (unCSC c, n)
 
 instance RenderSym CSharpCode where
@@ -138,7 +140,7 @@ instance StateTypeSym CSharpCode where
     type StateType CSharpCode = Doc
     bool = return $ boolTypeDocD
     int = return $ intTypeDocD
-    float = return $ jFloatTypeDocD
+    float = return $ csFloatTypeDocD
     char = return $ charTypeDocD
     string = return $ stringTypeDocD
     infile = return $ csInfileTypeDoc
@@ -152,36 +154,13 @@ instance StateTypeSym CSharpCode where
 
 -- Translation outstanding for this instance
 instance ControlBlockSym CSharpCode where
-    ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    ifNoElse bs = ifCond bs $ body []
-    switch v cs c = lift3Pair switchDocD (state break) v c cs
-    switchAsIf v cs c = ifCond cases c
-        where cases = map (\(l, b) -> (v ?== l, b)) cs
-
-    ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
-
-    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
-    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
-    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
-    while v b = liftA4 whileDocD blockStart blockEnd v b
-
-    tryCatch tb cb = liftA2 jTryCatch tb cb
-
-    checkState l cs c = switch (var l) cs c
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
                                                    Just b  -> liftA2 stratDocD b (state resultState)
         where resultState = case av of Nothing    -> return empty
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
-        where obsList = observerListName `listOf` t
-              index = "observerIndex"
-              initv = varDecDef index int $ litInt 0
-              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while (f $. (func "hasNextLine" []))
-        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
     listSlice t vnew vold b e s = 
         let l_temp = "temp"
             v_temp = var l_temp
@@ -356,7 +335,7 @@ instance FunctionSym CSharpCode where
     listExtendChar = liftA csListExtend defaultChar 
     listExtendBool = liftA csListExtend defaultBool
     listExtendString = liftA csListExtend defaultString
-    listExtendList t = liftA csListExtendList t
+    listExtendList _ t = liftA csListExtendList t
 
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])
@@ -389,7 +368,7 @@ instance StatementSym CSharpCode where
     varDec l t = liftA (varDecDocD l) t
     varDecDef l t v = liftA2 (varDecDefDocD l) t v
     listDec l n t = liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = liftA2 (listDecDefDocD l) t (liftList callFuncParamList vs)
+    listDecDef l t vs = lift1List (listDecDefDocD l) t vs
     objDecDef l t v = liftA2 (objDecDefDocD l) t v
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
     extObjDecNew l _ t vs = objDecNew l t vs
@@ -424,17 +403,15 @@ instance StatementSym CSharpCode where
     getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
     getStringFileInput f v = liftA2 (csInput "") v (liftA csFileInput f)
     getCharFileInput _ _ = error "Char input not yet implemented for C#"
-    discardFileInput f = liftA jDiscardInput f
+    discardFileInput f = liftA csFileInput f
 
     openFileR f n = liftA3 csOpenFile f n infile
     openFileW f n = liftA3 csOpenFile f n outfile
     closeFile f = valState $ objMethodCall f "Close" []
 
-    -- Translation outstanding for all below
-    getFileInputLine f v = v &= (f $. (func "nextLine" []))
-    discardFileLine f = valState $ f $. (func "nextLine" [])
-    stringSplit d vnew s = liftA3 jStringSplit vnew (listType dynamic string) 
-        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])])
+    getFileInputLine f v = getStringFileInput f v
+    discardFileLine f = liftA csFileInput f
+    stringSplit d vnew s = liftA2 csStringSplit vnew (s $. (func "Split" [litChar d]))
 
     break = return breakDocD
     continue = return continueDocD
@@ -446,21 +423,48 @@ instance StatementSym CSharpCode where
 
     comment cmt = liftA (commentDocD cmt) commentStart
 
-    free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
+    free _ = error "Cannot free variables in C#" -- could set variable to null? Might be misleading.
 
-    throw errMsg = liftA jThrowDoc (litString errMsg)
+    throw errMsg = liftA csThrowDoc (litString errMsg)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
 
     initObserverList t os = listDecDef observerListName t os
-    addObserver t o = obsList $. listAdd lastelem o
+    addObserver t o = valState $ obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
               lastelem = obsList $. listSize
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
     multi s = lift1List multiStateDocD endStatement s
+
+instance ControlStatementSym CSharpCode where
+    ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
+    ifNoElse bs = ifCond bs $ body []
+    switch v cs c = lift3Pair switchDocD (state break) v c cs
+    switchAsIf v cs c = ifCond cases c
+        where cases = map (\(l, b) -> (v ?== l, b)) cs
+
+    ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
+
+    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
+    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
+    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
+    while v b = liftA4 whileDocD blockStart blockEnd v b
+
+    tryCatch tb cb = liftA2 csTryCatch tb cb
+
+    checkState l cs c = switch (var l) cs c
+
+    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+        where obsList = observerListName `listOf` t
+              index = "observerIndex"
+              initv = varDecDef index int $ litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+
+    getFileInputAll f v = while ((?!) f $. (func "EndOfStream" []))
+        (oneLiner $ valState $ v $. (listAppend $ liftA csFileInput f))
 
 instance ScopeSym CSharpCode where
     type Scope CSharpCode = Doc
@@ -481,12 +485,12 @@ instance ParameterSym CSharpCode where
 
 instance MethodSym CSharpCode where
     type Method CSharpCode = Doc
-    method n s p t ps b = liftA5 (jMethod n) s p t (liftList (paramListDocD) ps) b
+    method n s p t ps b = liftA5 (methodDocD n) s p t (liftList (paramListDocD) ps) b
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = method "main" public static void [return $ text "String[] args"] b
+    mainMethod b = method "Main" public static void [return $ text "string[] args"] b
     privMethod n t ps b = method n private dynamic t ps b
     pubMethod n t ps b = method n public dynamic t ps b
     constructor n ps b = method n public dynamic (construct n) ps b
@@ -531,11 +535,11 @@ csOutfileTypeDoc = text "StreamWriter"
 csBoolListTypeDocD :: Doc
 csBoolListTypeDocD = text "BitArray"
 
-jThrowDoc :: Doc -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
+csThrowDoc :: Doc -> Doc
+csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
 
-jTryCatch :: Doc -> Doc -> Doc
-jTryCatch tb cb= vcat [
+csTryCatch :: Doc -> Doc -> Doc
+csTryCatch tb cb= vcat [
     text "try" <+> lbrace,
     oneTab $ tb,
     rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
@@ -560,12 +564,5 @@ csListExtend v = dot <> text "Add" <> parens v
 csListExtendList :: Doc -> Doc
 csListExtendList t = dot <> text "Add" <> parens (new <+> t <> parens (empty))
 
-jStringSplit :: Doc -> Doc -> Doc -> Doc
-jStringSplit vnew t s = vnew <+> equals <+> new <+> t
-    <> parens s
-
-jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-jMethod n s p t ps b = vcat [
-    s <+> p <+> t <+> text n <> parens ps <+> text "throws Exception" <+> lbrace,
-    oneTab $ b,
-    rbrace]
+csStringSplit :: Doc -> Doc -> Doc
+csStringSplit vnew s = vnew <+> equals <+> s

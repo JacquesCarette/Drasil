@@ -164,6 +164,8 @@ module Language.Drasil (
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , titleize, titleize'
+  -- Uncertainty
+  , Uncertainty, uncty
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -289,6 +291,7 @@ import Language.Drasil.RefProg(Reference(Reference))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 
 import Language.Drasil.UnitLang (USymb(US))
+import Language.Drasil.Uncertainty
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)

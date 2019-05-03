@@ -339,7 +339,7 @@ objDecDefDocD :: Label -> Doc -> Doc -> Doc
 objDecDefDocD l st v = varDecDefDocD l st v
 
 constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st v = text "const" <+> st <+> text l <+> v
+constDecDefDocD l st v = text "const" <+> st <+> text l <+> equals <+> v
 
 returnDocD :: Doc -> Doc
 returnDocD v = text "return" <+> v

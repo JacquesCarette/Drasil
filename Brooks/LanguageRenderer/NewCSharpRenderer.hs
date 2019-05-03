@@ -14,7 +14,7 @@ import New (Label,
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
-  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD, printListDocD,
+  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
   printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
   constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
@@ -32,15 +32,15 @@ import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, dot, new, forLabel, observerListName, doubleSlash, 
+  publicDocD, dot, new, observerListName, doubleSlash, 
   addCommentsDocD, callFuncParamList, getterName, setterName)
-import Helpers (angles,oneTab)
+import Helpers (oneTab)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, render, colon, isEmpty, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
+  equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
 newtype CSharpCode a = CSC {unCSC :: a}
 
@@ -134,7 +134,7 @@ instance BodySym CSharpCode where
 
 instance BlockSym CSharpCode where
     type Block CSharpCode = Doc
-    block sts = lift1List blockDocD endStatement (map state sts)
+    block sts = (lift1List blockDocD endStatement (map (liftA fst) (map state sts)))
 
 instance StateTypeSym CSharpCode where
     type StateType CSharpCode = Doc
@@ -152,12 +152,11 @@ instance StateTypeSym CSharpCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
--- Translation outstanding for this instance
 instance ControlBlockSym CSharpCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
                                                    Just b  -> liftA2 stratDocD b (state resultState)
-        where resultState = case av of Nothing    -> return empty
+        where resultState = case av of Nothing    -> return (empty, False)
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
 
@@ -167,11 +166,11 @@ instance ControlBlockSym CSharpCode where
             l_i = "i_temp"
             v_i = var l_i
         in
-        (body [
-            block [(listDec l_temp 0 t)],
+        (bodyStatements [
+            (listDec l_temp 0 t),
             for (varDecDef l_i (int) (getB b)) (v_i ?< getE e) (getS s v_i)
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            block [(vnew &= v_temp)]])
+            (vnew &= v_temp)])
         where getB Nothing = litInt 0
               getB (Just n) = n
               getE Nothing = vold $. listSize
@@ -350,82 +349,83 @@ instance SelectorFunction CSharpCode where
     at l = listAccess (var l)
 
 instance StatementSym CSharpCode where
-    type Statement CSharpCode = Doc
-    assign v1 v2 = liftA2 assignDocD v1 v2
-    assignToListIndex lst index v = lst $. listSet index v
+    type Statement CSharpCode = (Doc, Bool)
+    assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, True)
+    assignToListIndex lst index v = valState $ lst $. listSet index v
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = liftA2 plusEqualsDocD v1 v2
+    (&+=) v1 v2 = liftPairFst (liftA2 plusEqualsDocD v1 v2, True)
     (&.+=) l v = (var l) &+= v
-    (&++) v = liftA plusPlusDocD v
+    (&++) v = liftPairFst (liftA plusPlusDocD v, True)
     (&.++) l = (&++) (var l)
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
 
-    varDec l t = liftA (varDecDocD l) t
-    varDecDef l t v = liftA2 (varDecDefDocD l) t v
-    listDec l n t = liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = lift1List (listDecDefDocD l) t vs
-    objDecDef l t v = liftA2 (objDecDefDocD l) t v
-    objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
+    varDec l t = liftPairFst (liftA (varDecDocD l) t, True)
+    varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, True)
+    listDec l n t = liftPairFst (liftA2 (listDecDocD l) (litInt n) t, True) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    listDecDef l t vs = liftPairFst (lift1List (listDecDefDocD l) t vs, True)
+    objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, True)
+    objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), True)
     extObjDecNew l _ t vs = objDecNew l t vs
-    objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
+    objDecNewVoid l t = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t []), True)
     extObjDecNewVoid l _ t = objDecNewVoid l t
-    constDecDef l t v = liftA2 (constDecDefDocD l) t v
+    constDecDef l t v = liftPairFst (liftA2 (constDecDefDocD l) t v, True)
 
-    print _ v = liftA2 outDocD printFunc v
-    printLn _ v = liftA2 outDocD printLnFunc v
-    printStr s = liftA2 outDocD printFunc (litString s)
-    printStrLn s = liftA2 outDocD printLnFunc (litString s)
+    print _ v = liftPairFst (liftA2 outDocD printFunc v, True)
+    printLn _ v = liftPairFst (liftA2 outDocD printLnFunc v, True)
+    printStr s = liftPairFst (liftA2 outDocD printFunc (litString s), True)
+    printStrLn s = liftPairFst (liftA2 outDocD printLnFunc (litString s), True)
 
-    printFile f _ v = liftA2 outDocD (printFileFunc f) v
-    printFileLn f _ v = liftA2 outDocD (printFileLnFunc f) v
-    printFileStr f s = liftA2 outDocD (printFileFunc f) (litString s)
-    printFileStrLn f s = liftA2 outDocD (printFileLnFunc f) (litString s)
+    printFile f _ v = liftPairFst (liftA2 outDocD (printFileFunc f) v, True)
+    printFileLn f _ v = liftPairFst (liftA2 outDocD (printFileLnFunc f) v, True)
+    printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), True)
+    printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), True)
 
-    printList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStr "]")
-    printLnList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStrLn "]")
-    printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
-    printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
+    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printStr "]")]
+    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printStrLn "]")]
+    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printFileStr f "]")]
+    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))), (printFileStrLn f "]")]
 
-    getIntInput v = liftA2 (csInput "Int32.Parse") v inputFunc
-    getFloatInput v = liftA2 (csInput "Double.Parse") v inputFunc
+    getIntInput v = liftPairFst (liftA2 (csInput "Int32.Parse") v inputFunc, True)
+    getFloatInput v = liftPairFst (liftA2 (csInput "Double.Parse") v inputFunc, True)
     getBoolInput _ = error "Boolean input not yet implemented for C#"
-    getStringInput v = liftA2 (csInput "") v inputFunc
+    getStringInput v = liftPairFst (liftA2 (csInput "") v inputFunc, True)
     getCharInput _ = error "Char input not yet implemented for C#"
-    discardInput = liftA csDiscardInput inputFunc
+    discardInput = liftPairFst (liftA csDiscardInput inputFunc, True)
 
-    getIntFileInput f v = liftA2 (csInput "Int32.Parse") v (liftA csFileInput f)
-    getFloatFileInput f v = liftA2 (csInput "Double.Parse") v (liftA   csFileInput f)
+    getIntFileInput f v = liftPairFst (liftA2 (csInput "Int32.Parse") v (liftA csFileInput f), True)
+    getFloatFileInput f v = liftPairFst (liftA2 (csInput "Double.Parse") v (liftA   csFileInput f), True)
     getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
-    getStringFileInput f v = liftA2 (csInput "") v (liftA csFileInput f)
+    getStringFileInput f v = liftPairFst (liftA2 (csInput "") v (liftA csFileInput f), True)
     getCharFileInput _ _ = error "Char input not yet implemented for C#"
-    discardFileInput f = liftA csFileInput f
+    discardFileInput f = liftPairFst (liftA csFileInput f, True)
 
-    openFileR f n = liftA3 csOpenFile f n infile
-    openFileW f n = liftA3 csOpenFile f n outfile
+    openFileR f n = liftPairFst (liftA3 csOpenFileR f n infile, True)
+    openFileW f n = liftPairFst (liftA4 csOpenFileWorA f n outfile litFalse, True)
+    openFileA f n = liftPairFst (liftA4 csOpenFileWorA f n outfile litTrue, True)
     closeFile f = valState $ objMethodCall f "Close" []
 
     getFileInputLine f v = getStringFileInput f v
-    discardFileLine f = liftA csFileInput f
-    stringSplit d vnew s = liftA2 csStringSplit vnew (s $. (func "Split" [litChar d]))
+    discardFileLine f = liftPairFst (liftA csFileInput f, True)
+    stringSplit d vnew s = liftPairFst (liftA2 csStringSplit vnew (s $. (func "Split" [litChar d])), True)
 
-    break = return breakDocD
-    continue = return continueDocD
+    break = return (breakDocD, True)
+    continue = return (continueDocD, True)
 
-    returnState v = liftA returnDocD v
-    returnVar l = liftA returnDocD (var l)
+    returnState v = liftPairFst (liftA returnDocD v, True)
+    returnVar l = liftPairFst (liftA returnDocD (var l), True)
 
-    valState v = v
+    valState v = liftPairFst (v, True)
 
-    comment cmt = liftA (commentDocD cmt) commentStart
+    comment cmt = liftPairFst (liftA (commentDocD cmt) commentStart, False)
 
     free _ = error "Cannot free variables in C#" -- could set variable to null? Might be misleading.
 
-    throw errMsg = liftA csThrowDoc (litString errMsg)
+    throw errMsg = liftPairFst (liftA csThrowDoc (litString errMsg), True)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
@@ -440,20 +440,20 @@ instance StatementSym CSharpCode where
     multi s = lift1List multiStateDocD endStatement s
 
 instance ControlStatementSym CSharpCode where
-    ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
+    ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, False)
     ifNoElse bs = ifCond bs $ body []
-    switch v cs c = lift3Pair switchDocD (state break) v c cs
+    switch v cs c = liftPairFst (lift3Pair switchDocD (state break) v c cs, False)
     switchAsIf v cs c = ifCond cases c
         where cases = map (\(l, b) -> (v ?== l, b)) cs
 
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
-    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
+    for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
     forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
-    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
-    while v b = liftA4 whileDocD blockStart blockEnd v b
+    forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b, False)
+    while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
 
-    tryCatch tb cb = liftA2 csTryCatch tb cb
+    tryCatch tb cb = liftPairFst (liftA2 csTryCatch tb cb, False)
 
     checkState l cs c = switch (var l) cs c
 
@@ -555,8 +555,11 @@ csInput it v inFn = v <+> equals <+> text it <> parens (inFn)
 csFileInput :: Doc -> Doc
 csFileInput f = f <> dot <> text "ReadLine()"
 
-csOpenFile :: Doc -> Doc -> Doc -> Doc
-csOpenFile f n rw = f <+> equals <+> new <+> rw <> parens n
+csOpenFileR :: Doc -> Doc -> Doc -> Doc
+csOpenFileR f n r = f <+> equals <+> new <+> r <> parens n
+
+csOpenFileWorA :: Doc -> Doc -> Doc -> Doc -> Doc
+csOpenFileWorA f n w a = f <+> equals <+> new <+> w <> parens (n <> comma <+> a)
 
 csListExtend :: Doc -> Doc
 csListExtend v = dot <> text "Add" <> parens v

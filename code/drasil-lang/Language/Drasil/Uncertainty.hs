@@ -1,5 +1,5 @@
 module Language.Drasil.Uncertainty
-  (Uncertainty, uncty, unctyPrec) where
+  (Uncertainty, uncty) where
  
 data Uncertainty = Uncert { _uncert :: Double, _prec :: Maybe Integer }
 
@@ -8,8 +8,5 @@ isDecimal :: (Num a, Ord a) => a -> a
 isDecimal u  =  if (0 < u) && (u < 1) then u
                 else error "Uncertainty must be between 0 and 1."
 
-uncty :: Double -> Uncertainty
-uncty u = Uncert (isDecimal u) Nothing
-
-unctyPrec :: Double -> Integer -> Uncertainty
-unctyPrec u p = Uncert (isDecimal u) (Just p)
+uncty :: Double -> Maybe Integer -> Uncertainty
+uncty u = Uncert (isDecimal u)

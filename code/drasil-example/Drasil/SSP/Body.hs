@@ -63,7 +63,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept,
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (sspIMods)
+import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
   sspInputsToOutputTable)
@@ -136,8 +136,8 @@ mkSRS = [RefSec $ RefProg intro
            effStress]
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           sspIMods ShowDerivation
+          , IMs instModIntro ([Label, Input, Output, InConstraints, 
+            OutConstraints] ++ stdFields) sspIMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]
           ]

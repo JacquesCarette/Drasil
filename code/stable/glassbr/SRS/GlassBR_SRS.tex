@@ -33,7 +33,7 @@ This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable*}{l l}
+\begin{longtable}{l l}
 \toprule
 Symbol & Description
 \\
@@ -50,8 +50,9 @@ Pa & pressure (pascal)
 s & time (second)
 \\
 \bottomrule
+\caption{}
 \label{Table:ToU}
-\end{longtable*}
+\end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
@@ -148,11 +149,12 @@ ${w_{min}}$ & Minimum permissible input charge weight & kg
 ${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
+\caption{}
 \label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable*}{l l}
+\begin{longtable}{l l}
 \toprule
 Abbreviation & Full Form
 \\
@@ -203,8 +205,9 @@ UC & Unlikely Change
 Uncert. & Typical Uncertainty
 \\
 \bottomrule
+\caption{}
 \label{Table:TAbbAcc}
-\end{longtable*}
+\end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
@@ -1022,8 +1025,9 @@ ${P_{b}}$ & $0<{P_{b}}<1$
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
+The following section provides the functional requirements, the business tasks that the software is expected to complete.
 \begin{itemize}
-\item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from \hyperref[Table:InputGlassPropsReqInputs]{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from \hyperref[Table:InputGlassPropsReqInputs]{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as follows:
                                                                                                 \begin{itemize}
                                                                                                 \item{$m$, $k$, $E$, and ${t_{d}}$ following \hyperref[assumpSV]{A: standardValues}}

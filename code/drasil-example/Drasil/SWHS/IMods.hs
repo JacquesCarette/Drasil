@@ -15,7 +15,8 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
+  ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
@@ -205,8 +206,7 @@ eBalanceOnPCM = im'' eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_in
 
 eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
-  "Energy Balance on PCM to Find T_p")
-  --FIXME: T_p should be called from symbol
+  "Energy Balance on PCM to find temperature of PCM")
   balPCMDesc balPCM_Rel -- eBalanceOnPCML
 
 balPCM_Rel :: Relation
@@ -226,10 +226,13 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+.
-  sParen (unwrap $ getUnit tau_S_P), (E $ (sy tau_L_P) $=
-  ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
-  S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (makeRef2S ddBalanceSolidPCM),
+  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_S_P),
+  sParen (makeRef2S ddBalanceLiquidPCM)]
 
 balPCMDesc_note :: Sentence
 balPCMDesc_note = foldlSent [
@@ -240,15 +243,27 @@ balPCMDesc_note = foldlSent [
   sParen (makeRef2S assumpPIS),
   (E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC`
   (S "with initial conditions")
-  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC`
+  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC`
+  (S "FIXME t_w(0) = t_p(0)") `sC`
   makeRef2S assumpSITWP `sC` (S "and"), (E $ (sy temp_W)),
-  S "from IM1, such that the following governing ODE is satisfied.",
+  S "from", (makeRef2S eBalanceOnWtr) `sC`
+  S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
   (E $ (sy temp_melt_P)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
   (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
-  S ") is determined as part of the heat energy in the PCM, as given in",
-   sParen (makeRef2S heatEInPCM)]
+  S ") is determined as part of the heat energy in the PCM, as given in" +:+.
+  sParen (makeRef2S heatEInPCM),
+  -- Addition based on smiths manual version.
+  (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (makeRef2S ddBalanceSolidPCM),
+  
+  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
+  sParen (unwrap $ getUnit tau_L_P),
+  sParen (makeRef2S ddBalanceLiquidPCM)]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

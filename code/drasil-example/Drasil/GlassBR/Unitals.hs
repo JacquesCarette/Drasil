@@ -37,7 +37,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
-aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk
+aspect_ratio, pb_tol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -55,7 +55,7 @@ gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pb_tol, pb_fail, tNT]
+gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -85,9 +85,6 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Atomic "btol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
-pb_fail = uvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
-  (sub cP (Atomic "ftol")) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
@@ -134,13 +131,17 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 
 gbProbs :: [QuantityDict]
-gbProbs = map qw [prob_fail]
+gbProbs = map qw [prob_fail,pb_fail] 
 
 prob_fail :: ConstrainedChunk
 prob_fail = cvc "prob_fail" (nounPhraseSP "probability of failure")
   (sub cP lF) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
+pb_fail :: ConstrainedChunk
+pb_fail = cvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
+  (sub cP (Atomic "ftol")) Real
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
 
   --FIXME: no typical value!
 

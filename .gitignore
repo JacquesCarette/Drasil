@@ -30,3 +30,4 @@ Main
 *.pyc
 __pycache__
 *.class
+.drasil-min-stack-ver

@@ -126,8 +126,8 @@ vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
-        (Cos rad]),
-        (Sin rad)
+        Cos rad,
+        Sin rad
       ]
     )
   ]
@@ -136,8 +136,8 @@ vectToAngle = funcDef "vectToAngle" [v_v] Radians
   [
     FRet (FCall (asExpr atan2) 
       [
-        (FCall (asExpr getY) [v_v]),
-        (FCall (asExpr getX) [v_v]
+        FCall (asExpr getY) [v_v],
+        FCall (asExpr getX) [v_v]
       ]
     )
   ]
@@ -179,10 +179,10 @@ vectLength = funcDef "vectLength" [v_v] Rational
 vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
   [
     (FCond (FCall (asExpr vectLength) [v_v]) :< length) 
-      [FRet v_v] 
+      [FRet v_v]
       [FRet (FCall (asExpr vectMult) 
-        [FCall (asExpr vectNormalize) [v_v], length]
-      ] 
+        [FCall (asExpr vectNormalize) [v_v], length])
+      ]
   ]
 
 vectLerp = funcDef "vectLerp" [v_v1, v_v2, t] (Vect Rational)
@@ -191,7 +191,7 @@ vectLerp = funcDef "vectLerp" [v_v1, v_v2, t] (Vect Rational)
       [
         (FCall (asExpr vectMult) [(v_v1), (1.0 - t)]),
         (FCall (asExpr vectMult) [(v_v2), t])
-      ]
+      ])
   ]
 
 vectNormalize = funcDef "vectNormalize" [v_v] (Vect Rational)
@@ -203,7 +203,7 @@ vectNormalize = funcDef "vectNormalize" [v_v] (Vect Rational)
 
 vectDistSq = funcDef "vectDistSq" [v_v1, v_v2] Rational
   [
-    FRet (FCall (asExpr vectLengthSq) [(FCall (asExpr vectSub) [v_v1, v_v2]]))
+    FRet (FCall (asExpr vectLengthSq) [FCall (asExpr vectSub) [v_v1, v_v2]])
   ]
 
 vectDist = funcDef "vectDist" [v_v1, v_v2] Rational

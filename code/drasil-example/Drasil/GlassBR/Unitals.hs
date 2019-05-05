@@ -34,7 +34,7 @@ mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br]
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 aspect_ratio, pb_tol, tNT :: UncertainChunk
@@ -47,7 +47,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QuantityDict]
 gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
-  (map qw gbInputsNoUncrtn) ++ (map qw sdVector) ++ (map qw [is_safeLR, is_safePb]) ++ [qw prob_br]
+  (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -85,6 +85,7 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Atomic "btol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
+
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
@@ -121,12 +122,27 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br]
+gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] 
 
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
+
+gbProbs :: [QuantityDict]
+gbProbs = map qw [prob_fail,pb_fail] 
+
+prob_fail :: ConstrainedChunk
+prob_fail = cvc "prob_fail" (nounPhraseSP "probability of failure")
+  (sub cP lF) Rational
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
+pb_fail :: ConstrainedChunk
+pb_fail = cvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
+  (sub cP (Atomic "ftol")) Real
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
+
   --FIXME: no typical value!
 
 {--}
@@ -170,14 +186,21 @@ sd_min     = mkQuantDef (unitary "sd_min"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, load_dur,
+glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, lRe, nonFactorL, load_dur,
   eqTNTWeight]
 
-min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
+min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, load_dur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
+  
+lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
+  (Atomic "LR") pascal Rational --correct Space used?
+
+nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
+  (Atomic "NFL") pascal Rational --correct Space used?
+
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
@@ -208,10 +231,11 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [QuantityDict]
 glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
+  dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
 risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: QuantityDict
+  dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
+
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -230,9 +254,6 @@ lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 
 loadSF        = vc'' (lShareFac) (Atomic "LSF") Natural
 
-lRe           = vc'' (lResistance) (Atomic "LR") Real
-
-nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL") Real
 
 risk_fun      = vc "risk_fun"    (nounPhraseSP "risk of failure") cB Real
 
@@ -367,45 +388,22 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 --Constants--
 
 gbConstants :: [QDefinition]
-gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
+gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadSF]
                 ++ gBRSpecParamVals 
 
-constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
+constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadSF :: QDefinition
 constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
-constant_M       = mkQuantDef sflawParamM  $ 7
+constant_M       = mkQuantDef sflawParamM  $ dbl 7
 constant_ModElas = mkQuantDef mod_elas     $ dbl 7.17e10
-constant_LoadDur = mkQuantDef load_dur     $ 3
-constant_LoadDF  = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
+constant_LoadDur = mkQuantDef load_dur     $ dbl 3
 constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
-
-sdWithEqn :: QDefinition
-sdWithEqn = mkQuantDef standOffDist sdCalculation
-
-sdCalculation :: Relation
-sdCalculation = euclidean (map sy sdVector)
 
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map (ch) sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]
-
---
-
-wtntWithEqn :: QDefinition
-wtntWithEqn = mkQuantDef eqTNTWeight wtntCalculation
-
-wtntCalculation :: Relation
---wtntCalculation = (sy eqTNTWeight) := (sy char_weight) * (sy tNT)
-wtntCalculation = (sy char_weight) * (sy tNT)
---
-
-aspectRWithEqn :: QDefinition
-aspectRWithEqn = mkQuantDef aspect_ratio aspectRCalculation
-
-aspectRCalculation :: Relation
-aspectRCalculation = (sy aspect_ratio) $= (sy plate_len)/(sy plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

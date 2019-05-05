@@ -27,13 +27,13 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- Curr is when the current context is fine
 data MathContext = Text | Math | Curr deriving Eq
 
-data PrintLaTeX a = PL { runPrint :: MathContext -> a }
+newtype PrintLaTeX a = PL { runPrint :: MathContext -> a }
 
 instance Functor PrintLaTeX where
   fmap f (PL ca) = PL $ \ctx -> f (ca ctx)
 
 instance Applicative PrintLaTeX where
-  pure x = PL $ \_ -> x
+  pure = PL . const
   PL f <*> PL v = PL $ \ctx -> (f ctx) (v ctx)
 
 instance Monad PrintLaTeX where
@@ -52,7 +52,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
     dollar = H.dlr
     bstext = TP.text "\\text"
-    br     = \doc -> TP.text "{" TP.<> doc TP.<> TP.text "}"
+    br doc = TP.text "{" TP.<> doc TP.<> TP.text "}"
     adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
     adjust Math Math gen = gen Math
     adjust Text Text gen = gen Text
@@ -89,12 +89,12 @@ instance Monoid (PrintLaTeX TP.Doc) where
 ($+$) = liftA2 (TP.$+$)
 
 vcat :: [D] -> D
-vcat l = PL $ \ctx -> TP.vcat $ map (\x -> runPrint x ctx) l
+vcat l = PL $ \ctx -> TP.vcat $ map (`runPrint` ctx) l
 
 -- hcat . punctuate
 hpunctuate :: TP.Doc -> [D] -> D
 hpunctuate x l = PL $ \ctx -> 
-  TP.hcat $ TP.punctuate x $ map (\z -> runPrint z ctx) l
+  TP.hcat $ TP.punctuate x $ map (`runPrint` ctx) l
  
 --------
 -- MathContext operations
@@ -108,7 +108,7 @@ lub _    _    = Text -- Text is top-most
 
 -----------------
 -- Hacked up version, will get deleted
-data Latex = L { unPL :: String }
+newtype Latex = L { unPL :: String }
 
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"

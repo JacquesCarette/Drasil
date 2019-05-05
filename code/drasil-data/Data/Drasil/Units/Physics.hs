@@ -2,14 +2,14 @@ module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
-import Language.Drasil (cn, dcc)
-import Language.Drasil.Development (new_unit, UnitDefn, (/:), (/$), (*:), makeDerU)
+import Language.Drasil (cn, dcc,new_unit, UnitDefn, (/:), (/$), (*:), makeDerU)
 
-accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: UnitDefn
+accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: UnitDefn
 
 accelU          = new_unit "acceleration"         $ metre /: s_2
 angVelU         = new_unit "angular velocity"     $ radian /: second
 angAccelU       = new_unit "angular acceleration" $ radian /: s_2
+forcePerMeterU  = new_unit "force per meter"      $ newton /: metre
 impulseU        = new_unit "impulse"              $ newton *: second
 momtInertU      = new_unit "moment of inertia"    $ kilogram *: m_2
 momentOfForceU  = new_unit "moment of force"      $ newton *: metre

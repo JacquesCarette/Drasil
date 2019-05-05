@@ -18,11 +18,10 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
-  foldlList, foldlSent, foldlSent_, followA, ofThe, sAnd, sOf)
-import Data.Drasil.SI_Units (metre, millimetre)
+  foldlList, foldlSent, foldlSent_, follows, ofThe, sAnd, sOf)
 import Data.Drasil.Utils (bulletFlat)
 
-import Drasil.GlassBR.Assumptions (standardValues, glassLite, assumptionConstants)
+import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass, lShareFac)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
@@ -39,7 +38,7 @@ funcReqsList = (mkEnumSimple (uncurry $ flip mkReqCI) $ zip funcReqs
   funcReqsDetails) ++ [LlC inputGlassPropsTable]
 
 mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
-mkReqCI e = mkListTuple $ if length e == 0 then \x -> Flat $ x ^. defn else
+mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
   \x -> Nested (x ^. defn) $ bulletFlat e
 
 funcReqs :: [ConceptInstance]
@@ -64,12 +63,10 @@ inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc ::
 checkGlassSafetyDesc :: NamedChunk -> Sentence
 
 inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef2S inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
+  makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
   [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
   phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
-  phrase blast)] +: S "Note", ch plate_len `sAnd` ch plate_width,
-  S "will be input in terms of", plural millimetre `sAnd`
-  S "will be converted to the equivalent value in", plural metre]
+  phrase blast)]]
 
 inputGlassPropsTable :: LabelledContent
 inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $ 
@@ -90,9 +87,9 @@ sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall se
     plural value +: S "as follows"]
 
 sysSetValsFollowingAssumpsList :: [Sentence]
-sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
+sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `follows` assumpSV,
   ch loadDF +:+ S "from" +:+ makeRef2S loadDF, 
-  short lShareFac `followA` glassLite,
+  short lShareFac `follows` assumpGL,
   ch hFromt +:+ S "from" +:+ makeRef2S hFromt,
   ch glaTyFac +:+ S "from" +:+ makeRef2S glaTyFac,
   ch standOffDis +:+ S "from" +:+ makeRef2S standOffDis,

@@ -6,6 +6,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (buildSingle, includeExt, inCodePackage, interp, mainModule,
+  mainModuleFile, NameOpts(NameOpts), packSep, withExt)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -23,7 +25,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, new, exprDocD'', declarationDocD,
-  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
+  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist,
+  buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>))
@@ -48,6 +51,9 @@ javaConfig options c =
         enumsEqualInts   = False,
         ext              = ".java",
         dir              = "java",
+        buildConfig      = buildSingle (\i _ -> ["javac", unwords i]) $
+          inCodePackage $ mainModuleFile,
+        runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = (scopeDoc c),
@@ -55,7 +61,7 @@ javaConfig options c =
         inputFunc        = parens(text "new Scanner(System.in)"),
         iterForEachLabel = forLabel,
         iterInLabel      = colon,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = new,
         clsDec           = classDec,
         package          = package',
@@ -70,7 +76,7 @@ javaConfig options c =
         
         top    = jtop c,
         body   = jbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
@@ -82,10 +88,17 @@ javaConfig options c =
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "no environment has been set"
+        getEnv = const $ error "no environment has been set"
     }
 
 -- short names, packaged up above (and used below)
+
+jNameOpts :: NameOpts
+jNameOpts = NameOpts {
+  packSep = ".",
+  includeExt = False
+}
+
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
@@ -195,7 +208,8 @@ methodDoc' c f m t = methodDocD c f m t
 unOpDoc' :: UnaryOp -> Doc
 unOpDoc' SquareRoot = text "Math.sqrt"
 unOpDoc' Abs = text "Math.abs"
-unOpDoc' Log = text "Math.log"
+unOpDoc' Ln = text "Math.log"
+unOpDoc' Log = text "Math.log10"
 unOpDoc' Exp = text "Math.exp"
 unOpDoc' op = unOpDocD op
 

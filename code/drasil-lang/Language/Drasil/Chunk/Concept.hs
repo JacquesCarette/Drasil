@@ -54,4 +54,4 @@ cw :: Concept c => c -> ConceptChunk
 cw c = ConDict (nw c) (c ^. defn) (cdom c)
 
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn
+cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' sn

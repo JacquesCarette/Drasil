@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
+{-# LANGUAGE GADTs #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -9,6 +9,7 @@ module Drasil.TraceTable where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
+import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
@@ -36,22 +37,22 @@ getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ t):_)     = t
+getTraceMapFromTM ((TMs _ _ t):_)     = t
 getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
 getTraceMapFromTM []                = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ gd _):_)  = gd
+getTraceMapFromGD ((GDs _ _ gd _):_)  = gd
 getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
 getTraceMapFromGD []                = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
-getTraceMapFromDD ((DDs _ dd _):_)  = dd
-getTraceMapFromDD  (_:tl)           = getTraceMapFromDD tl
-getTraceMapFromDD []                = []
+getTraceMapFromDD l = concat $ mapMaybe getDD l
+  where getDD (DDs _ _ d _) = Just d
+        getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ im _):_)  = im
+getTraceMapFromIM ((IMs _ _ im _):_)  = im
 getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
 getTraceMapFromIM []                = []
 
@@ -77,7 +78,7 @@ generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
     gd = getTraceMapFromGD $ getSCSSub a
     im = getTraceMapFromIM $ getSCSSub a
     dd = getTraceMapFromDD $ getSCSSub a
-    ordering a b = if a == b then a else error "Expected ordering between smaller TraceMaps to be the same"
+    ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.
 generateTraceMap' :: [ConceptInstance] -> TraceMap

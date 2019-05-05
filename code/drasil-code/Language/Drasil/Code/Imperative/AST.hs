@@ -58,7 +58,7 @@ type Label = String
 type Library = Label
 
 type Body = [Block]
-data Block = Block [Statement] deriving Show
+newtype Block = Block [Statement] deriving Show
 data Statement = AssignState Assignment | DeclState Declaration
                | CondState Conditional | IterState Iteration | JumpState Jump
                | RetState Return
@@ -126,7 +126,7 @@ data Exception = Throw {excMsg :: String}
                  deriving Show
 --This is only guaranteed to catch Exceptions explicitly thrown in the AbstractCode (i.e. with a Throw String), but in some languages might also catch errors thrown at different levels (e.g. index out of bounds).
 data Jump = Break | Continue deriving Show
-data Return = Ret Value deriving Show
+newtype Return = Ret Value deriving Show
 data Value = EnumElement Label Label    --EnumElement enumName elementName
            | Expr Expression
            | FuncApp (Maybe Library) Label [Value]
@@ -218,7 +218,7 @@ type FunctionDecl = Method
 type VarDecl = Declaration
 data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
-data AbstractCode = AbsCode Package
+newtype AbstractCode = AbsCode {unAbs :: Package}
 
 ---------------------------
 -- Convenience Functions --
@@ -593,7 +593,7 @@ param :: Label -> StateType -> Parameter
 param = StateParam
 
 params :: [(Label, StateType)] -> [Parameter]
-params = map (\(l,st) -> StateParam l st)
+params = map (uncurry StateParam)
 
 paramToVar :: Parameter -> Value
 paramToVar (StateParam l _) = var l
@@ -734,7 +734,7 @@ endCommentLabel :: Label
 endCommentLabel = "End"
 
 addComments :: Label -> [Block] -> [Block]
-addComments c ((Block ss):[]) =
+addComments c [Block ss] =
     let cStart = commentDelimit c
         cEnd = endCommentDelimit c
     in [Block $ cStart : ss ++ [cEnd]]
@@ -769,7 +769,7 @@ setterName s = "Set" ++ capitalize s
 
 convertToClass :: Class -> Class
 convertToClass (MainClass n vs fs) = Class n Nothing Public vs fs
-convertToClass (Enum _ _ _) = error "convertToClass: Cannot convert Enum-type Class to Class-type Class"
+convertToClass Enum{} = error "convertToClass: Cannot convert Enum-type Class to Class-type Class"
 convertToClass c = c
 
 convertToMethod :: Method -> Method
@@ -809,11 +809,11 @@ declReplace _ _ d = d
 
 condReplace :: Value -> Value -> Conditional -> Conditional
 condReplace old new (If vbs b) = If (zip fixedVals fixedBs) (bodyReplace old new b)
-    where fixedVals = map (valueReplace old new) $ fst $ unzip vbs
-          fixedBs   = map (bodyReplace old new) $ snd $ unzip vbs
+    where fixedVals = map (valueReplace old new . fst) vbs
+          fixedBs   = map (bodyReplace old new . snd) vbs
 condReplace old new (Switch val lbs defB) = Switch (valueReplace old new val) (zip lits fixedBs) (bodyReplace old new defB)
-    where lits    = fst $ unzip lbs
-          fixedBs = map (bodyReplace old new) $ snd $ unzip lbs
+    where lits    = map fst lbs
+          fixedBs = map (bodyReplace old new . snd) lbs
 
 iterReplace :: Value -> Value -> Iteration -> Iteration
 iterReplace old new (For s val s2 b) = For (statementReplace old new s) (valueReplace old new val) (statementReplace old new s2) (bodyReplace old new b)
@@ -879,7 +879,7 @@ notMain (MainMethod _) = False
 notMain _              = True
 
 notMainModule :: Module -> Bool
-notMainModule m = foldl (&&) True (map notMain $ functions m)
+notMainModule = all notMain . functions
 
 multi :: [Statement] -> Statement
 multi = MultiState
@@ -902,7 +902,7 @@ replaceClass n cs vs fs =
                                                        
 
 addToClass :: Class -> [Declaration] -> [Method] -> Class
-addToClass (Class n p s v m) ds fs = let containsMain = foldl (||) False (map isMain fs)
+addToClass (Class n p s v m) ds fs = let containsMain = any isMain fs
   in    
     if containsMain 
       then Class n p s (addToSV ds v) (addToMethod fs m)
@@ -913,7 +913,7 @@ addToClass (MainClass n v m) ds fs = MainClass n (addToSV ds v) (addToMethod fs 
 addToClass _ _ _ = error "Unsupported class for Java imperative to OO conversion"
 
 addToMethod :: [Method] -> [Method] -> [Method]
-addToMethod f m = m ++ (map fToM f)
+addToMethod f = (++ (map fToM f))
 
 fToM :: Method -> Method
 fToM (Method l _ _ t ps b) = Method l Public Static t ps b

@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase, PostfixOperators #-}
 -- | The logic to render Objective-C code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (
     -- * Objective-C Code Configuration -- defines syntax of all Objective-C code
@@ -8,6 +9,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,
           update,forBody)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -25,7 +27,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, addDefaultCtor, fixCtorNames, complexDocD,
-  functionDocD, objVarDocD, objcstaticlist)
+  functionDocD, objVarDocD, objcstaticlist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                                             doubleQuotedText,himap,vmap,vibmap)
 
@@ -50,22 +52,24 @@ objcConfig options c =
         enumsEqualInts   = False,
         ext              = ".m",
         dir              = "obj-c",
+        buildConfig      = buildAll $ \i o -> [cCompiler, unwords i, "-o", o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#import",
-        includeScope     = \_ -> empty,
+        includeScope     = const $ empty,
         inherit          = colon,
         inputFunc        = text "scanf",
         iterForEachLabel = empty,
         iterInLabel      = text "in",
-        list             = \lt -> case lt of Static  -> text staticListType
-                                             Dynamic -> text "NSMutableArray",
+        list             = \case Static  -> text staticListType
+                                 Dynamic -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
-        package          = \_ -> empty,
+        package          = const $ empty,
         printFunc        = text "printf",
         printLnFunc      = text "printf",
-        printFileFunc    = \_ -> empty,
-        printFileLnFunc  = \_ -> empty,
+        printFileFunc    = const $ empty,
+        printFileLnFunc  = const $ empty,
         stateType        = objcstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -73,7 +77,7 @@ objcConfig options c =
         
         top    = objctop c,
         body   = objcbody c,
-        bottom = \_ -> empty,
+        bottom = const $ empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDocD, bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -85,7 +89,7 @@ objcConfig options c =
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
+        getEnv = const $ error "getEnv not implemented (yet) in ObjC"
     }
 
 -- for convenience
@@ -215,10 +219,10 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     text "typedef" <+> text "enum" <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <+> text n <> endStatement c]
-classDoc' _ (Source) _ (Enum _ _ _) = empty
+classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
-    let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
+    let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
+        privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubScope = if null pubVars then empty else text "@" <> scopeDoc c Public
         privScope = if null privVars then empty else text "@" <> scopeDoc c Private
         pubBlank = if null pubVars then empty else blank
@@ -246,7 +250,7 @@ classDoc' c ft@(Source) _ (Class n _ _ vs fs) =
         methodListDoc c ft n $ addDefaultCtor c n sagaInit funcs,
         text "@end"
     ]
-classDoc' _ (Header) _ (MainClass _ _ _) = empty
+classDoc' _ (Header) _ MainClass{} = empty
 classDoc' c ft _ (MainClass n vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
@@ -255,7 +259,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _ _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (var i ?< size) ((&.++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (var i ?< size) (i &.++) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
@@ -266,7 +270,7 @@ objAccessDoc' c v f = brackets (valueDoc c v <> funcDoc c f)
 
 paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t) = parens (stateType c t Dec) <+> text n
-paramDoc' c p@(FuncParam _ _ _) = paramDocD c p
+paramDoc' c p@FuncParam{} = paramDocD c p
 
 paramListDoc' :: Config -> [Parameter] -> Doc
 paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps
@@ -432,4 +436,4 @@ transDecLine c f = transDecLine c $ convertToMethod f
 listInitObjectsDoc :: Config -> [Value] -> Doc
 listInitObjectsDoc _ [] = empty
 listInitObjectsDoc c vs = colonMapListDoc (text ", ") (valueDoc c) vals <> text ", nil"
-    where vals    = map (\e -> makeNumber c e) vs
+    where vals    = map (makeNumber c) vs

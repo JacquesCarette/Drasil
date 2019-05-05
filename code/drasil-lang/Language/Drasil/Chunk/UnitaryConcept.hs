@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary(unit))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
   Definition(defn), ConceptDomain(cdom), HasSpace(typ))
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 

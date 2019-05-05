@@ -45,6 +45,18 @@ csc = UnaryOp Csc
 cot :: Expr -> Expr 
 cot = UnaryOp Cot
 
+-- | Smart constructor to apply arcsin to an expression
+arcsin :: Expr -> Expr 
+arcsin = UnaryOp Arcsin
+
+-- | Smart constructor to apply arccos to an expression
+arccos :: Expr -> Expr 
+arccos = UnaryOp Arccos
+
+-- | Smart constructor to apply arctan to an expression
+arctan :: Expr -> Expr 
+arctan = UnaryOp Arctan
+
 -- | Smart constructor for the exponential (base e) function
 exp :: Expr -> Expr
 exp = UnaryOp Exp
@@ -94,9 +106,10 @@ real_interval c = RealI (c ^. uid)
 euclidean :: [Expr] -> Expr
 euclidean = sqrt . sum' . map square
 
+{-# ANN sum' "HLint: ignore Use sum" #-}
 -- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
 sum' :: (Num a, Foldable t) => t a -> a
-sum' x = foldr1 (+) x
+sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr

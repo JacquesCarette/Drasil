@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The logic to render C++ code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     -- * C++ Code Configuration -- defines syntax of all C++ code
@@ -7,6 +8,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (body, comment, bool, int, float, char, tryBody, catchBody, initState, guard, update)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc, 
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -23,10 +25,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist)
+  classDec, namespaceD, includeD, fileNameD, cpplist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, oneTabbed, vmap, vibmap)
 
 import Prelude hiding (break, print, return,(<>))
+import Data.List.Utils (endswith)
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
 validListTypes :: [Label]
@@ -47,21 +50,24 @@ cppConfig options c =
         enumsEqualInts   = False,
         ext              = ".cpp",
         dir              = "cpp",
+        buildConfig      = buildAll $ \i o -> [cppCompiler, unwords $
+          filter (not . endswith ".hpp") i, "--std=c++11", "-o", o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#include",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = colon,
         inputFunc        = text "std::cin",
         iterForEachLabel = empty,
         iterInLabel      = empty,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = empty,
         clsDec           = classDec,
         package          = namespaceD,
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
-        printFileFunc    = \f -> valueDoc c f,
-        printFileLnFunc  = \f -> valueDoc c f,
+        printFileFunc    = valueDoc c,
+        printFileLnFunc  = valueDoc c,
         stateType        = cppstateType c,
 
         blockStart = lbrace, blockEnd = rbrace,
@@ -77,11 +83,11 @@ cppConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
+        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
+        getEnv = const $ error "Cpp does not implement getEnv (yet)"
     }
 
 -- for convenience
@@ -208,14 +214,14 @@ classDoc' c (Header) _ (Enum n _ es) = vcat [
     text "enum" <+> text n <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <> endStatement c]
-classDoc' _ (Source) _ (Enum _ _ _) = empty
+classDoc' _ (Source) _ Enum{} = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let makeTransforms = map convertToMethod
         funcs = fs ++ [destructor c n vs]
-        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Public then [f] else []) $ makeTransforms funcs
-        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Private then [f] else []) $ makeTransforms funcs
-        privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
+        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Public]) $ makeTransforms funcs
+        pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
+        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> [f | s == Private]) $ makeTransforms funcs
+        privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubBlank = if null pubVars then empty else blank
         privBlank = if null privFuncs then empty else blank
         baseClass = case p of Nothing -> empty
@@ -236,7 +242,7 @@ classDoc' c ft@(Header) _ (Class n p _ vs fs) =
                 methodListDoc c ft n privFuncs]],
         rbrace <> endStatement c]
 classDoc' c ft@(Source) _ (Class n _ _ vs fs) = methodListDoc c ft n $ fs ++ [destructor c n vs]
-classDoc' _ (Header) _ (MainClass _ _ _) = empty
+classDoc' _ (Header) _ MainClass{} = empty
 classDoc' c ft _ (MainClass _ vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
@@ -296,6 +302,11 @@ functionDoc' c ft m f = methodDoc c ft m f
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
+
+unOpDoc' :: UnaryOp -> Doc
+unOpDoc' Ln = text "log"
+unOpDoc' Log = text "log10"
+unOpDoc' op = unOpDocD op
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e
@@ -396,7 +407,7 @@ destructor _ n vs =
         guard l = var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) (i &.++) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ var lbl
         deleteStatements = map deleteVar deleteVars

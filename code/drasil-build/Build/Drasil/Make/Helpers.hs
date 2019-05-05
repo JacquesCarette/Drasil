@@ -1,4 +1,4 @@
-module Language.Drasil.Make.Helpers where
+module Build.Drasil.Make.Helpers where
 
 import Text.PrettyPrint (Doc, text, ($+$))
 
@@ -23,3 +23,6 @@ osDefinitions = text "ifeq \"$(OS)\" \"Windows_NT\"" $+$
 -- | Helper for prepending common features to a Makefile
 addCommonFeatures :: Doc -> Doc
 addCommonFeatures m = osDefinitions $+$ m
+
+tab :: Doc
+tab = text "\t"

@@ -17,7 +17,6 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
@@ -126,9 +125,7 @@ generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
-  S "that will be used in", S "deriving the", 
-  plural dataDefn `sC` S "which in turn are used to", S "build the", 
-  plural inModel]
+  S "that will be used to build the", plural inModel]
 
                        
 -- uses EmptyS if ending sentence is not needed
@@ -201,29 +198,23 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
 
+mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
+mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
+  (mkTableFromColumns col) lab True
+
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
-inDataConstTbl qlst = llcc (makeTabRef "InDataConstraints") $ Table 
-  titl cts (S "Input Data Constraints") True
-  where
-   columns = [(S "Var", map ch $ sortBySymbol qlst),
+inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)] 
-   tbl = mkTableFromColumns columns
-   titl = fst tbl
-   cts = snd tbl
+            (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
+            S "Input Data Constraints"
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc (makeTabRef "OutDataConstraints") $ Table
-  titl cts (S "Output Data Constraints") True
-  where
-   columns = [(S "Var", map ch qlst),
+outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst)]
-   tbl = mkTableFromColumns columns
-   titl = fst tbl
-   cts = snd tbl
+            (titleize' softwareConstraint, map fmtSfwr qlst)] "OutDataConstraints" $
+            S "Output Data Constraints"

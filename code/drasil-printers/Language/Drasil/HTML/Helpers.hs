@@ -93,15 +93,15 @@ image f c wp =
 
 em :: Doc -> Doc
 -- | Emphasis (italics) tag
-em  = \x -> text "<em>"  <> x <> text "</em>"
+em x = text "<em>"  <> x <> text "</em>"
 
 sub,sup,bold :: String -> String  
 -- | Subscript tag
-sub = \x -> "<sub>" ++ x ++ "</sub>"
+sub x = "<sub>" ++ x ++ "</sub>"
 -- | Superscript tag
-sup = \x -> "<sup>" ++ x ++ "</sup>"
+sup x = "<sup>" ++ x ++ "</sup>"
 -- | Bold tag
-bold  = \x -> "<b>"  ++ x ++ "</b>"
+bold x  = "<b>"  ++ x ++ "</b>"
 
 article_title, author :: Doc -> Doc
 -- | Title header
@@ -115,7 +115,7 @@ div_tag = wrap "div"
   
 -- | Span tag wrapper
 span_tag :: [String] -> String -> Doc
-span_tag = \t -> wrap "span" t . text
+span_tag t = wrap "span" t . text
 
 
 -- | Create and markup fractions

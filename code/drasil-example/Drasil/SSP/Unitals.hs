@@ -31,13 +31,8 @@ genericA = area
 -------------
 -- HELPERS --
 -------------
-fixme, fsi, fisi, wiif, wla, smsi :: String
-fixme = "FIXME: missing description"
-fsi   = "for slice index i"
-fisi  = "for interslice index i"
+wiif :: String
 wiif  = "without the influence of interslice forces"
-wla   = "without length adjustment"
-smsi  = "refers to either slice i midpoint, or slice interface i"
 
 --------------------------------
 -- START OF CONSTRAINEDCHUNKS --

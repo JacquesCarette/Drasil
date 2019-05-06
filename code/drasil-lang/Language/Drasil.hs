@@ -50,7 +50,7 @@ module Language.Drasil (
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
-  , commonIdea, CI, getAcc, commonIdeaWithDict
+  , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -120,7 +120,7 @@ module Language.Drasil (
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
-  , section, fig, figWithWidth, section''
+  , section, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -208,7 +208,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Document (section, fig, figWithWidth
-  , section'', Section(..), SecCons(..) , llcc, ulcc, Document(..)
+  , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)

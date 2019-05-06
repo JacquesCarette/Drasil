@@ -19,7 +19,6 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
   foldlList, foldlSent, foldlSent_, follows, ofThe, sAnd, sOf)
-import Data.Drasil.SI_Units (metre, millimetre)
 import Data.Drasil.Utils (bulletFlat)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
@@ -64,12 +63,10 @@ inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc ::
 checkGlassSafetyDesc :: NamedChunk -> Sentence
 
 inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef2S inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
+  makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
   [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
   phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
-  phrase blast)] +: S "Note", ch plate_len `sAnd` ch plate_width,
-  S "will be input in terms of", plural millimetre `sAnd`
-  S "will be converted to the equivalent value in", plural metre]
+  phrase blast)]]
 
 inputGlassPropsTable :: LabelledContent
 inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $ 

@@ -23,6 +23,8 @@ Main
 *.iml
 *.vrb
 .DS_Store
+Thumbs.db
+desktop.ini
 .stack-work
 /code/Docs
 /code/build
@@ -30,3 +32,4 @@ Main
 *.pyc
 __pycache__
 *.class
+.drasil-min-stack-ver

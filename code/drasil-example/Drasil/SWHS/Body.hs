@@ -15,12 +15,12 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap, generateTraceMap',
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt,
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
+  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, reqF, termDefnF, 
+  traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
+import qualified Drasil.DocLang.SRS as SRS (funcReq,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
@@ -65,8 +65,9 @@ import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phs
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
+import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
-  heatEInWtr, heatEInPCM, swhsIMods)
+  heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
 import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
@@ -178,7 +179,7 @@ mkSRS = [RefSec $ RefProg intro [
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
         , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
         , Constraints  EmptyS dataConstraintUncertainty dataConTail
          [dataConTable1, dataConTable3]
@@ -383,11 +384,10 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
 -----------------------------
 
 goalStates :: Section
-goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList] []
+goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
 
-goalStateList :: Contents
-goalStateList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) $
-  map goalState outputConstraints
+goalStateList :: [Contents]
+goalStateList = mkEnumSimpleD swhsGoals
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -582,7 +582,7 @@ traceTheoriesRef = map makeRef2S swhsTMods
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
 
-traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
+traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6"]
 traceDataDefRef = map makeRef2S swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
@@ -599,10 +599,11 @@ traceMRowHeader1 = zipWith itemRefToSent traceMRow1
 
 traceMColumns1 :: [[String]]
 traceMColumns1 = [trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1,
-  trace1DD2, trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
+  trace1DD2, trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
 
 trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1, trace1DD2,
-  trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4 :: [String]
+  trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3,
+  trace1IM4 :: [String]
 
 --list of each item that "X" item requires for traceability matrix
 trace1T1 = []
@@ -613,11 +614,13 @@ trace1GD2 = ["T1"]
 trace1DD1 = ["GD1"]
 trace1DD2 = ["GD1"]
 trace1DD3 = []
-trace1DD4 = ["DD3"]
+trace1DD4 = []
+trace1DD5 = []
+trace1DD6 = ["DD3"]
 trace1IM1 = ["GD2", "DD1", "DD2", "IM2"]
-trace1IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+trace1IM2 = ["GD2", "DD2", "DD3", "DD4", "DD6", "IM1", "IM4"]
 trace1IM3 = ["T2"]
-trace1IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+trace1IM4 = ["T2", "T3", "DD2", "DD4", "DD5", "IM2"]
 
 {-Traceability Matrix 2-}
 
@@ -682,11 +685,11 @@ traceMColHeader3 = zipWith itemRefToSent
 
 traceMColumns3 :: [[String]]
 traceMColumns3 = [trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1,
-  trace3DD2, trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
+  trace3DD2, trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
   trace3LC1, trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6]
 
 trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1, trace3DD2, 
-  trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
+  trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
   trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6 :: [String]
 
 trace3T1  = ["A1"]
@@ -698,6 +701,8 @@ trace3DD1 = ["A7", "A8", "A9"]
 trace3DD2 = ["A3", "A4", "A10"]
 trace3DD3 = []
 trace3DD4 = []
+trace3DD5 = []
+trace3DD6 = []
 trace3IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
 trace3IM2 = ["A12", "A13", "A16", "A17", "A18"]
 trace3IM3 = ["A14", "A19"]
@@ -988,18 +993,14 @@ fig_tank = llcc (makeFigRef "Tank") $ fig (
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> Contents
-goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
-  S "initial", plural condition, S "for the", phrase temw
-  `sAnd` S "the", phrase tempcm `sC` S "and material",
-  plural property `sC` S "the", plural goalStmt, S "are"]
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
+goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
+  S "the" +:+ phrase tempcm,
+  S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalState :: NamedIdea varTerm => varTerm -> Sentence
-goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
-  S "over", phrase time]
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in

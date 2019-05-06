@@ -37,7 +37,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
-aspect_ratio, pb_tol, pb_fail, tNT :: UncertainChunk
+aspect_ratio, pb_tol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -55,7 +55,7 @@ gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pb_tol, pb_fail, tNT]
+gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -85,9 +85,6 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Atomic "btol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
-pb_fail = uvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
-  (sub cP (Atomic "ftol")) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
@@ -112,15 +109,14 @@ nom_thick = cuc "nom_thick"
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
   [enumc nominalThicknesses] 8
 
--- FIXME glassTypeAbbrsStr should really not exist...
 -- the S "glass type" is supposed to be using "phrase glassTy"
 -- but the problem is still the Capitalization issue with new 
--- constructor `Ch` of generateing the sentence. So for the sentence
+-- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
 glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glass_type glassTypeAbbrsStr)
-  lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr] Nothing
+    displayConstrntsAsSet glass_type (map (getAccStr . snd) glassType))
+  lG ({-DiscreteS (map (getAccStr . snd) glassType)-} String)
+  [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 
 {--}
 
@@ -134,13 +130,17 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 
 gbProbs :: [QuantityDict]
-gbProbs = map qw [prob_fail]
+gbProbs = map qw [prob_fail,pb_fail] 
 
 prob_fail :: ConstrainedChunk
 prob_fail = cvc "prob_fail" (nounPhraseSP "probability of failure")
   (sub cP lF) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
+pb_fail :: ConstrainedChunk
+pb_fail = cvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
+  (sub cP (Atomic "ftol")) Real
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
 
   --FIXME: no typical value!
 
@@ -425,23 +425,14 @@ nominalThicknesses = map fst glassThickness
 glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
-glassTypeAbbrsStr :: [String]
-glassTypeAbbrsStr = map snd glassType
-
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map S glassTypeAbbrsStr
+glassTypeAbbrs = map (getAcc . snd) glassType
 
-glassConcepts :: [CI]
-glassConcepts = [annealed, fullyT, heatS]
-
--- FIXME: this String is really an awful cheat...
-type GlassType = [(Integer, String)] -- [(Factor, Abbreviation)]
+type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
--- What it should really be:
---glassType = [(1, annealed), (4, fullyT), (2, heatS)]
-glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
+glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 
 glassThickness :: GlassThickness
 glassThickness =   

@@ -208,7 +208,8 @@ methodDoc' c f m t = methodDocD c f m t
 unOpDoc' :: UnaryOp -> Doc
 unOpDoc' SquareRoot = text "Math.sqrt"
 unOpDoc' Abs = text "Math.abs"
-unOpDoc' Log = text "Math.log"
+unOpDoc' Ln = text "Math.log"
+unOpDoc' Log = text "Math.log10"
 unOpDoc' Exp = text "Math.exp"
 unOpDoc' op = unOpDocD op
 

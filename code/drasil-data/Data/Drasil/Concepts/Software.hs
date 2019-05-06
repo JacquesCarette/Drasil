@@ -131,8 +131,8 @@ modSeqServ = dccWDS "modSeqServ" (cn' "sequence data structure")
   (S "Provides array manipulation operations, such as building an array" `sC`
   S "accessing a specific entry, slicing an array, etc.")
 
-mod_linked_serv :: ConceptChunk
-mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
+modLinkedServ :: ConceptChunk
+modLinkedServ = dccWDS "modLinkedServ" (cn' "linked data structure")
   (S "Provides tree manipulation operations, such as building a tree" `sC`
   S "accessing a specific entry, etc.")
 

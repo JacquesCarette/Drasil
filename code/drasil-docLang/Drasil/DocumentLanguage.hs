@@ -199,7 +199,6 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub'' :: [Contents] -> ReqsSub
   NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub --FIXME: Remove this in favour of NonFReqsSub' when all examples have migrated over to using NonFReqsSub'
   NonFReqsSub' :: [ConceptChunk] -> [ConceptInstance] -> Sentence -> Sentence -> ReqsSub
 
@@ -500,7 +499,6 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
-    mkSubs (NonFReqsSub'' reqs) = R.nfReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
     mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nonFuncReqF' noPrrty (mkEnumSimpleD nfrs) rsn explain
 

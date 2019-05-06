@@ -13,7 +13,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub''),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
@@ -144,9 +144,9 @@ mkSRS = [RefSec $ RefProg intro
         ],
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub'' nonfuncReqList {-[accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+    NonFReqsSub' [accuracy, performance] sspNFRequirements -- The way to render the NonFReqsSub is right for here, fixme.
     (short ssp +:+ S "is intended to be an educational tool")
-    (S "")-}]
+    EmptyS]
   , LCsSec $ LCsProg likelyChanges_SRS
   , UCsSec $ UCsProg unlikelyChanges_SRS
   , TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 

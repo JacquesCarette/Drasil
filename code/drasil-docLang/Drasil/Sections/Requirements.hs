@@ -80,9 +80,9 @@ listO explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are no
 
 listO' :: Sentence -> [Sentence] -> [Contents] -> Sentence
 listO' explanation_ [] [] = S "so there are no" +:+ (plural priority) +:+ explanation_
-listO' explanation_ []  priority_ = S "so all" +:+ (plural nonfunctionalRequirement) +:+ S "are given equal" +:+ phrase priority +:+ explanation_ +:+ S "The" +:+. listT' priority_
-listO' explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT' priority_
-listO' explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+. listT' priority_
+listO' explanation_ []  priority_ = S "so all" +:+ (plural nonfunctionalRequirement) +:+ S "are given equal" +:+ phrase priority +:+ explanation_ +:+ S "The" +:+ listT' priority_
+listO' explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+ listT' priority_
+listO' explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+ listT' priority_
 
 listT :: [Sentence] -> Sentence
 listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase nonfunctionalRequirement)
@@ -90,6 +90,6 @@ listT [s] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is" +
 listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList Comma List s
 
 listT' :: [Contents] -> Sentence
-listT' [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase nonfunctionalRequirement)
-listT' [_] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is:"
-listT' _ = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are:"
+listT' [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+. (phrase nonfunctionalRequirement)
+listT' [_] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +: S "is"
+listT' _ = (phrase nonfunctionalRequirement) +:+ (plural priority) +: S "are"

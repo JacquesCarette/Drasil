@@ -45,7 +45,13 @@ override stackArgs += --ghc-options="$(GHCFLAGS)"
 NOISY=no
 SUMMARIZE_TEX=no
 
+MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
+CACHED_MSV_FILE = .drasil-min-stack-ver
+
 all: test
+
+check_stack: FORCE
+	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
 
 test: $(PROGS) $(TESTS)
 	@echo ----------------------------
@@ -61,7 +67,7 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-$(filter build_%, $(BUILD_PACKAGES)): build_%: FORCE
+$(filter build_%, $(BUILD_PACKAGES)): build_%: check_stack
 	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
 %_build: EXAMPLE=$(shell echo $* | tr a-z A-Z)
@@ -90,7 +96,7 @@ glassbr_prog: glassbr_build
 
 docs: $(DOCS_PACKAGES)
 
-$(filter %-docs, $(DOCS_PACKAGES)): %-docs: FORCE
+$(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
 	stack haddock drasil-$* $(haddockArgs)
 
 %_tex: EXAMPLE=$(shell echo $* | tr a-z A-Z)
@@ -110,6 +116,7 @@ code: $(CODE_EXAMPLES)
 
 clean: clean_build
 	- stack clean
+	- rm $(CACHED_MSV_FILE)
 
 clean_build: clean_logs
 	- rm -r ./build

@@ -264,10 +264,10 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the temperature of the heating coil, initial temperature of the water, and material properties, the goal statement are:
+Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:
 \begin{itemize}
-\item[GS1:]predict the temperature of the water over time
-\item[GS2:]predict the change in heat energy in the water over time
+\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]Predict the temperature of the water over time.
+\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]Predict the change in heat energy in the water over time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -481,6 +481,7 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and the goal \hyperref[waterEnergyGS]{GS: Predict-Water-Energy} is met by \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}

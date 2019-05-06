@@ -428,9 +428,6 @@ glassTypeFactors = map fst glassType
 glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map (getAcc . snd) glassType
 
-glassConcepts :: [CI]
-glassConcepts = [annealed, fullyT, heatS]
-
 type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 

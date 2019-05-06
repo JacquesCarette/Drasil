@@ -73,8 +73,8 @@ mkRawLC x lb = llcc lb x
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
 
-section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section title intro secs lbe = section title intro secs lbe
+section'' :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+section'' title intro secs lbe = section'' title intro secs lbe
 
 extractSection :: Document -> [Section]
 extractSection (Document _ _ sec) = concatMap getSec sec

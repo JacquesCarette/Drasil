@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
+import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heat_cap_spec, 
   heat_trans)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
@@ -53,7 +53,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively"
+  plural boilPt, S "of", phrase water `sC` S "respectively"
   +:+ sParen (makeRef2S assumpWAL)]
 
 ----------------------------------------------

@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  ht_flux, latent_heat, boil_pt, heat_cap_spec)
+  ht_flux, latent_heat, boilPt, heat_cap_spec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
@@ -36,7 +36,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp,boil_pt, temp_env, melt_pt, t_init_melt,
+  temp, boilPt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]

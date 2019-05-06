@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation (system, simulation, model,
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, melt_pt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   law_conv_cooling, heat_trans, thermal_energy)
@@ -116,7 +116,7 @@ assumpS14 mat = foldlSent [
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt]
+  phrase boilPt]
 assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
@@ -133,7 +133,7 @@ assumpS18 = foldlSent [
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn]
 assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
-  phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
+  phrase melt_pt `sAnd` phrase boilPt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [

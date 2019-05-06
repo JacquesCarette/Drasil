@@ -9,7 +9,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
-import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
+import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heat_cap_spec, 
   heat_trans, ht_flux, latent_heat, melting, phase_change, sens_heat, temp, thermal_energy)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
@@ -67,7 +67,7 @@ balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
+  plural boilPt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef2S assumpWAL `sC` makeRef2S assumpAPT)]
 
 ----------------------------------------------

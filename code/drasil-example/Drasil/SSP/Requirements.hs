@@ -4,8 +4,8 @@ module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, mg, mis,
-  name_, nonFuncReqDom, output_, physicalConstraint, symbol_, user, value)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, datum, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
+  name_, nonFuncReqDom, output_, physicalConstraint, requirement, srs, symbol_, thModel, traceyMatrix, unlikelyChg, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
@@ -109,9 +109,20 @@ sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
 
 {-Nonfunctional Requirements-}
 sspNFRequirements :: [ConceptInstance]
-sspNFRequirements = [understandable]
+sspNFRequirements = [understandable, reusable, maintainable]
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The code should be modularized with complete",
+  S "The code is modularized with complete",
   phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+
+reusable :: ConceptInstance
+reusable = cic "reusable" (foldlSent [
+  S "The code is modularized"]) "Reusable" nonFuncReqDom
+
+maintainable :: ConceptInstance
+maintainable = cic "maintainable" (foldlSent [
+  S "The traceability between", foldlList Comma List [plural requirement,
+  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
+  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
+  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom

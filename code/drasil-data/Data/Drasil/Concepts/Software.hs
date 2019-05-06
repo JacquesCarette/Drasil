@@ -126,8 +126,8 @@ modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum") (foldlSent
 
 {-- Concept Chunks for Modules  --}
 
-mod_seq_serv :: ConceptChunk
-mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
+modSeqServ :: ConceptChunk
+modSeqServ = dccWDS "modSeqServ" (cn' "sequence data structure")
   (S "Provides array manipulation operations, such as building an array" `sC`
   S "accessing a specific entry, slicing an array, etc.")
 

@@ -84,7 +84,7 @@ getRVal c = uns (c ^. reasVal)
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
-addPercent :: Decimal -> Sentence -- commented out to suppress type default warning
+addPercent :: (Num a, Show a) => a -> Sentence -- commented out to suppress type default warning
 addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences

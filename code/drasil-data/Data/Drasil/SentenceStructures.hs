@@ -220,13 +220,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "--"
 
-found :: Double -> Sentence
-found x
-    | (1e-6 > abs(x - 0.1)) = addPercent $ realFracToDecimal 0 (x*100)
-    | otherwise             = addPercent $ realFracToDecimal 1 (x*100)
+found :: Double -> Maybe Int -> Sentence
+found x Nothing  = addPercent $ x * 100
+found x (Just p) = addPercent $ realFracToDecimal (fromIntegral p) (x*100)
     
-typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)  -- rounds to int if the uncertainty is 10
+typUncr :: (HasUncertainty c) => c -> Sentence
+typUncr x = found (x ^. valUnc) (x ^. prcUnc)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

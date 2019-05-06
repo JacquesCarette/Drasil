@@ -10,7 +10,7 @@ observer :: (RenderSym repr) => repr (RenderFile repr)
 observer = fileDoc (buildModule "Observer" [] [] [] [helperClass])
 
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public static int] [observerConstructor, printNumMethod]
+helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic int] [observerConstructor, printNumMethod]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (self $-> var "x") (litInt 5)))

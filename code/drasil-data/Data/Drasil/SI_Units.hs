@@ -137,8 +137,8 @@ specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") (joule /: kilogram)
 
-specific_weight :: UnitDefn
-specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
+specificWeight :: UnitDefn
+specificWeight = makeDerU (dcc "specificWeight" (cn' "specific weight")
   "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 

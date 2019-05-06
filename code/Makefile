@@ -30,7 +30,7 @@ TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
 DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
-DIFF = diff --strip-trailing-cr --ignore-all-space
+DIFF = diff --strip-trailing-cr --ignore-all-space -r -X ../.gitignore -x '*.txt'
 
 TESTS =  $(addsuffix _diff, $(EXAMPLES))
 PROGS =  $(addsuffix _prog, $(EXAMPLES))
@@ -75,9 +75,7 @@ $(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
 %_diff: EDIR=$($(EXAMPLE)_DIR)
 %_diff: EPREF=$($(EXAMPLE)_PREF)
 $(filter %_diff, $(TESTS)): %_diff: %_build
-	- $(DIFF) ./stable/$*/SRS/$(EPREF)SRS.tex ./build/$(EDIR)/SRS/$(EPREF)SRS.tex > $(EPREF)log.log 2>&1
-	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.css ./build/$(EDIR)/Website/$(EPREF)SRS.css >> $(EPREF)log.log 2>&1
-	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.html ./build/$(EDIR)/Website/$(EPREF)SRS.html >> $(EPREF)log.log 2>&1
+	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EPREF)log.log 2>&1
 
 %_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
 $(filter %_prog, $(PROGS)): %_prog: %_build

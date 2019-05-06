@@ -21,7 +21,7 @@ fReqF listOfReqs = SRS.funcReq (fReqIntro : listOfReqs) []
 reqIntroS :: Sentence
 reqIntroS = foldlSent
         [S "This", (phrase section_), S "provides the",
-        (plural functionalRequirement) `sC` S "the business tasks that the",
+        (plural functionalRequirement) `sC` S "the tasks and behaviours that the",
         (phrase software), S "is expected to complete" `sC` S "and the", 
         (plural nonfunctionalRequirement) `sC` S "the qualities that the",
         (phrase software), S "is expected to exhibit"]
@@ -33,7 +33,7 @@ reqIntro = mkParagraph reqIntroS
 fReqIntroS :: Sentence
 fReqIntroS = foldlSent
         [S "The following", (phrase section_), S "provides the",
-        (plural functionalRequirement) `sC` S "the business tasks that the",
+        (plural functionalRequirement) `sC` S "the tasks and behaviours that the",
         (phrase software), S "is expected to complete"]
 
 fReqIntro :: Contents

@@ -4,8 +4,10 @@ module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn, datum, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
-  name_, nonFuncReqDom, output_, physicalConstraint, requirement, srs, symbol_, thModel, traceyMatrix, unlikelyChg, user, value)
+import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
+  datum, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
+  name_, nonFuncReqDom, output_, physicalConstraint, property, requirement,
+  srs, symbol_, thModel, traceyMatrix, unlikelyChg, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
@@ -109,16 +111,23 @@ sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
 
 {-Nonfunctional Requirements-}
 sspNFRequirements :: [ConceptInstance]
-sspNFRequirements = [understandable, reusable, maintainable]
+sspNFRequirements = [correct, understandable, reusable, maintainable]
+
+correct :: ConceptInstance
+correct = cic "correct" (foldlSent [
+  S "The", plural output_ `ofThe` phrase code, S "have the",
+  plural property, S "described in (Properties of a Correct Solution)"
+  -- FIXME: (Properties of a Correct Solution) Section doesn't exist
+  ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The code is modularized with complete",
+  S "The", phrase code, S "is modularized with complete",
   phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  S "The code is modularized"]) "Reusable" nonFuncReqDom
+  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [

@@ -143,7 +143,7 @@ mkSRS = [RefSec $ RefProg intro
         ],
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub' [accuracy, performance] sspNFRequirements -- The way to render the NonFReqsSub is right for here, fixme.
+    NonFReqsSub' [accuracy, performance] sspNFRequirements
     (short ssp +:+ S "is intended to be an educational tool")
     EmptyS]
   , LCsSec $ LCsProg likelyChanges_SRS

@@ -134,7 +134,7 @@ bodyDocD bs = vibcat blocks
 -- IO --
 
 outDocD :: Doc -> Doc -> Doc
-outDocD printFn v = printFn <> parens (v)
+outDocD printFn v = printFn <> parens v
 
 printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
 printListDocD open b lastElem close = vcat [open, b, lastElem, close]
@@ -163,7 +163,7 @@ fileTypeDocD :: Doc
 fileTypeDocD = text "File"
 
 typeDocD :: Label -> Doc
-typeDocD t = text t
+typeDocD = text
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
@@ -182,13 +182,13 @@ stateParamDocD :: Label -> Doc -> Doc
 stateParamDocD n t = t <+> text n
 
 paramListDocD :: [Doc] -> Doc
-paramListDocD ps = hicat (text ", ") ps
+paramListDocD = hicat (text ", ")
 
 -- Method --
 
 methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
-    s <+> p <+> t <+> text n <> parens (ps) <+> lbrace,
+    s <+> p <+> t <+> text n <> parens ps <+> lbrace,
     oneTab $ b,
     rbrace]
 
@@ -202,7 +202,7 @@ stateVarDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
-stateVarListDocD svs = vcat svs
+stateVarListDocD = vcat
 
 -- Controls --
 
@@ -308,7 +308,7 @@ listDecDefDocD :: Label -> Doc -> [Doc] -> Doc
 listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> braces (callFuncParamList vs)
 
 objDecDefDocD :: Label -> Doc -> Doc -> Doc
-objDecDefDocD l st v = varDecDefDocD l st v
+objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
 constDecDefDocD l st v = text "const" <+> st <+> text l <+> equals <+> v
@@ -472,13 +472,13 @@ litCharD :: Char -> Doc
 litCharD c = quotes $ char c
 
 litFloatD :: Double -> Doc
-litFloatD v = double v
+litFloatD = double
 
 litIntD :: Integer -> Doc
-litIntD v = integer v
+litIntD = integer
 
 litStringD :: String -> Doc
-litStringD s = doubleQuotedText s
+litStringD = doubleQuotedText
 
 defaultCharD :: Doc
 defaultCharD = char ' '
@@ -495,7 +495,7 @@ defaultStringD = doubleQuotedText ""
 -- Value Printers --
 
 varDocD :: Label -> Doc
-varDocD l = text l
+varDocD = text
 
 extVarDocD :: Library -> Label -> Doc
 extVarDocD l n = text l <> dot <> text n
@@ -519,7 +519,7 @@ funcAppDocD :: Label -> [Doc] -> Doc
 funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 
 extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
-extFuncAppDocD l n vs = funcAppDocD (l ++ "." ++ n) vs
+extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
 stateObjDocD :: Doc -> Doc -> Doc
 stateObjDocD st vs = new <+> st <> parens vs
@@ -528,7 +528,7 @@ listStateObjDocD :: Doc -> Doc -> Doc -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 
 notNullDocD :: Doc -> Doc -> Doc -> Doc
-notNullDocD v op nullvar = binOpDocD v op nullvar
+notNullDocD = binOpDocD
 
 listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
 listIndexExistsDocD greater lst index = parens (lst <> text ".Length" <+>      
@@ -540,13 +540,13 @@ funcDocD :: Doc -> Doc
 funcDocD fnApp = dot <> fnApp
 
 castDocD :: Doc -> Doc
-castDocD targT = parens targT
+castDocD = parens
 
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
 listAccessDocD :: Doc -> Doc
-listAccessDocD i = brackets i
+listAccessDocD = brackets
 
 listSetDocD :: Doc -> Doc -> Doc
 listSetDocD i v = brackets i <+> equals <+> v
@@ -606,10 +606,10 @@ commentDelimit c cStart =
     in com <> text (dashes (render com) commentLength)
 
 endCommentDelimit :: Label -> Doc -> Doc
-endCommentDelimit c cStart = commentDelimit (endCommentLabel ++ " " ++ c) cStart
+endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 
 dashes :: String -> Int -> String
-dashes s l = take (l - length s) (repeat '-')
+dashes s l = replicate (l - length s) '-'
 
 -- Helper Functions --
 

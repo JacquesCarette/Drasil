@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
--- | The logic to render Java code from an 'AbstractCode' is contained in this module
+-- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer (
     -- * Python Code Configuration -- defines syntax of all Python code
     PythonCode(..)
@@ -398,8 +398,8 @@ instance StatementSym PythonCode where
 
     getFileInputLine f v = v &= (objMethodCall f "readline" [])
     discardFileLine f = valState $ objMethodCall f "readline" []
-    stringSplit d vnew s = liftPairFst (liftA3 pyStringSplit vnew s
-        (funcApp "split" [litString [d]]), True)
+    stringSplit d vnew s = assign vnew (objAccess s 
+        (func "split" [litString [d]]))
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)
@@ -492,7 +492,7 @@ instance StateVarSym PythonCode where
 
 instance ClassSym PythonCode where
     type Class PythonCode = (Doc, Bool)
-    buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList methodListDocD fs), or $ map (snd . unPC) fs)
+    buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList methodListDocD fs), any (snd . unPC) fs)
         where pname = case p of Nothing -> return empty
                                 Just pn -> return $ parens (text pn)
     enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es), False)
@@ -502,7 +502,7 @@ instance ClassSym PythonCode where
 
 instance ModuleSym PythonCode where
     type Module PythonCode = (Doc, Label, Bool)
-    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, or [or $ map (snd . unPC) fs, or $ map (snd . unPC) cs])
+    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, or [any (snd . unPC) fs, any (snd . unPC) cs])
 
 -- convenience
 imp, incl, initName :: Label
@@ -565,9 +565,6 @@ pyListDecDef l vs = text l <+> equals <+> brackets vs
 
 pyOut :: Doc -> Doc -> Doc -> Doc -> Doc
 pyOut prf v txt f = prf <> parens (v <> txt <> f)
-
-pyStringSplit :: Doc -> Doc -> Doc -> Doc
-pyStringSplit vnew s dsplit = vnew <+> equals <+> s <> dot <> dsplit
 
 pyThrow :: Doc -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens errMsg

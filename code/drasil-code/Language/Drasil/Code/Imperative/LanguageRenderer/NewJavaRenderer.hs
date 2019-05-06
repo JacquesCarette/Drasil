@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
--- | The logic to render Java code from an 'AbstractCode' is contained in this module
+-- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (
     -- * Java Code Configuration -- defines syntax of all Java code
     JavaCode(..), jNameOpts
@@ -34,7 +34,8 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, 
     castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
-    doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName)
+    doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
+    setMain, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (angles,oneTab,tripFst,tripSnd,
     tripThird)
 
@@ -530,7 +531,7 @@ instance StateVarSym JavaCode where
 instance ClassSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Class JavaCode = (Doc, Bool)
-    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), or $ map (snd . unJC) fs)
+    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unJC) fs)
     enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
     mainClass n vs fs = liftA setMain $ buildClass n Nothing public vs fs
     privClass n p vs fs = buildClass n p private vs fs
@@ -541,9 +542,9 @@ instance ModuleSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Module JavaCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, or $ map (snd . unJC) cs) 
+        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unJC) cs) 
                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
-                                        Nothing (map (liftA4 jStatementsToStateVars
+                                        Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [or $ map (snd . unJC) ms, or $ map (snd . unJC) cs])
 
 jtop :: Doc -> Doc -> Doc -> Doc
@@ -628,11 +629,3 @@ jMethod n s p t ps b = vcat [
 
 jListIndexExists :: Doc -> Doc -> Doc -> Doc
 jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <+> index)
-
-jStatementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Bool) -> Doc
-jStatementsToStateVars s p end (v, _) = s <+> p <+> v <> end
-
--- Helper
-
-setMain :: (Doc, Bool) -> (Doc, Bool)
-setMain (d, _) = (d, True)

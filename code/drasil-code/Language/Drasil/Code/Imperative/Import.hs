@@ -12,8 +12,9 @@ import Language.Drasil.Code.Imperative.New (Label,
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, buildSingle, inCodePackage,
-  interp, interpMM, mainModule, mainModuleFile, Runnable, withExt)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, BuildConfig, 
+  buildSingle, inCodePackage, interp, interpMM, mainModule, mainModuleFile, 
+  nativeBinary, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
@@ -151,17 +152,20 @@ getDir Python = "python"
 getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
+getExt CSharp = [".cs"]
 getExt _ = error "Language not yet implemented"
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
 getRunnable Python = interpMM "python"
+getRunnable CSharp = nativeBinary
 getRunnable _ = error "Language not yet implemented"
 
 getBuildConfig :: Lang -> Maybe BuildConfig
 getBuildConfig Java = buildSingle (\i _ -> ["javac", unwords i]) $
   inCodePackage $ mainModuleFile
 getBuildConfig Python = Nothing
+getBuildConfig CSharp = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o]
 getBuildConfig _ = error "Language not yet implemented"
 
 liftS :: Reader a b -> Reader a [b]

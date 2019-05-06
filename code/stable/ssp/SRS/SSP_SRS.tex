@@ -2080,10 +2080,10 @@ $(x,y)$ & --
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requirements}
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-The following section provides the functional requirements, the business tasks that the software is expected to complete.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Read-and-Store:\phantomsection\label{readAndStore}]Read the inputs, shown in \hyperref[Table:inDataTable]{Table:inDataTable}, and store the data.
 \item[Verify-Input:\phantomsection\label{verifyInput}]Verify that the input data lie within the physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
@@ -2168,7 +2168,14 @@ ${{y_{slip}}^{min}}$ & minimum y-coordinate
 \end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-SSP is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+SSP is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are:
+\begin{itemize}
+\item[Correct:\phantomsection\label{correct}]The the outputs of the code have the properties described in (Properties of a Correct Solution).
+\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
+\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
+\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+\end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}

@@ -1,5 +1,5 @@
 module Drasil.Sections.Requirements
-  (fReqF, reqF, nfReqF, nonFuncReqF, nonFuncReqF') where
+  (fReqF, reqF, nfReqF, nonFuncReqF) where
 
 import Language.Drasil
 
@@ -17,8 +17,9 @@ reqF = SRS.require [reqIntro]
 fReqF :: [Contents] -> Section
 fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
 
-nfReqF :: [Contents] -> Section
-nfReqF listOfNFReqs = SRS.nonfuncReq (nfReqIntro : listOfNFReqs) []
+nfReqF :: (Concept c) => [c] -> [Contents] -> Sentence -> Sentence -> Section
+nfReqF no nfrs r e = SRS.nonfuncReq
+  (nfReqIntro : ((nonFuncReq' (map phrase no) nfrs r e) : nfrs)) []
 
 --helpers for requirements intros
 reqIntroStart :: Sentence
@@ -59,10 +60,6 @@ fReqIntro = mkParagraph fReqIntroS
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section
 nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
   [nonFuncReq (map phrase noPriority) (map phrase priority_) reason_ explanation_] []
-
-nonFuncReqF' :: (Concept c) => [c] -> [Contents] -> Sentence -> Sentence -> Section
-nonFuncReqF' noPriority nfrs reason_ explanation_ = SRS.nonfuncReq
-  ((nonFuncReq' (map phrase noPriority) nfrs reason_ explanation_) : nfrs) []
         
 -- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
 -- reason for initial priority choice, explanation for how priority choice can be achieved.

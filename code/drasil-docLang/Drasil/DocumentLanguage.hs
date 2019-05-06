@@ -28,7 +28,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF, nonFuncReqF')
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -500,7 +500,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
-    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nonFuncReqF' noPrrty (mkEnumSimpleD nfrs) rsn explain
+    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (mkEnumSimpleD nfrs) rsn explain
 
 {--}
 

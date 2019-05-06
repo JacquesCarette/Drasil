@@ -35,8 +35,7 @@ import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
-import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  program, reusability, understandability, softwarecon, performance)
+import Data.Drasil.Concepts.Software (accuracy, program, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
@@ -190,10 +189,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
-
-ssppriorityNFReqs :: [ConceptChunk]
-ssppriorityNFReqs = [correctness, understandability, reusability,
-  maintainability]
 
 traceyMatrix :: LabelledContent
 traceyMatrix = generateTraceTable ssp_si
@@ -533,8 +528,6 @@ funcReqList = (mkEnumSimpleD sspFRequirements) ++
   [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --
-nonfuncReqList :: [Contents]
-nonfuncReqList = mkEnumSimpleD sspNFRequirements
 
 -- SECTION 6 --
 --Likely Changes is automatically generated

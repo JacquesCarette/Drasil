@@ -500,7 +500,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
-    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (mkEnumSimpleD nfrs) rsn explain
+    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (length nfrs) rsn explain (mkEnumSimpleD nfrs)
 
 {--}
 

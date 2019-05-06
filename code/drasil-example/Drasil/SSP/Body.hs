@@ -534,8 +534,7 @@ funcReqList = (mkEnumSimpleD sspFRequirements) ++
 
 -- SECTION 5.2 --
 nonfuncReqList :: [Contents]
-nonfuncReqList = (mkEnumSimpleD sspNFRequirements) ++
-  [LlC sspInputDataTable, LlC sspInputsToOutputTable]
+nonfuncReqList = mkEnumSimpleD sspNFRequirements
 
 -- SECTION 6 --
 --Likely Changes is automatically generated

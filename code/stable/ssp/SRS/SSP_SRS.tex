@@ -2080,7 +2080,7 @@ $(x,y)$ & --
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requirements}
-This section provides the functional requirements, the tasks and behaviours that the software is expected to complete , and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
@@ -2168,7 +2168,78 @@ ${{y_{slip}}^{min}}$ & minimum y-coordinate
 \end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-SSP is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+\begin{itemize}
+\item[Understandable:\phantomsection\label{understandable}]The code should be modularized with complete module guide and module interface specification.
+\end{itemize}
+\begin{longtable}{l l l}
+\toprule
+Symbol & Unit & Name
+\\
+\midrule
+\endhead
+$(x,y)$ & m & cartesian position coordinates
+\\
+${\mathbf{x}_{slope}}$ & m & x-coordinates of the slope
+\\
+${\mathbf{y}_{slope}}$ & m & y-coordinates of the slope
+\\
+${\mathbf{x}_{wt}}$ & m & x-coordinates of the water table
+\\
+${\mathbf{y}_{wt}}$ & m & y-coordinates of the water table
+\\
+${{x_{slip}}^{maxExt}}$ & m & maximum exit x-coordinate
+\\
+${{x_{slip}}^{maxEtr}}$ & m & maximum entry x-coordinate
+\\
+${{x_{slip}}^{minExt}}$ & m & minimum exit x-coordinate
+\\
+${{x_{slip}}^{minEtr}}$ & m & minimum exit x-coordinate
+\\
+${{y_{slip}}^{max}}$ & m & maximum y-coordinate
+\\
+${{y_{slip}}^{min}}$ & m & minimum y-coordinate
+\\
+$c'$ & Pa & effective cohesion
+\\
+$φ'$ & ${}^{\circ}$ & effective angle of friction
+\\
+$γ$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil dry unit weight
+\\
+${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil saturated unit weight
+\\
+${γ_{w}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
+\\
+$const_f$ &  & decision on f
+\\
+\bottomrule
+\caption{Required Inputs}
+\label{Table:inDataTable}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Symbol & Name
+\\
+\midrule
+\endhead
+$const_f$ & decision on f
+\\
+${{x_{slip}}^{maxExt}}$ & maximum exit x-coordinate
+\\
+${{x_{slip}}^{maxEtr}}$ & maximum entry x-coordinate
+\\
+${{x_{slip}}^{minExt}}$ & minimum exit x-coordinate
+\\
+${{x_{slip}}^{minEtr}}$ & minimum exit x-coordinate
+\\
+${{y_{slip}}^{max}}$ & maximum y-coordinate
+\\
+${{y_{slip}}^{min}}$ & minimum y-coordinate
+\\
+\bottomrule
+\caption{Inputs to be returned as output}
+\label{Table:inputsToOutputTable}
+\end{longtable}
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}

@@ -113,6 +113,7 @@ egetReqSub :: ReqsSub -> [Expr]
 egetReqSub (FReqsSub c) = concatMap egetCon' c
 egetReqSub NonFReqsSub{} = []
 egetReqSub NonFReqsSub'{} = []
+egetReqSub NonFReqsSub''{} = []
 
 egetFunc :: LFunc -> [Expr]
 egetFunc Term         = []
@@ -347,6 +348,7 @@ getReq (ReqsProg rs) = concatMap getReqSub rs
 
 getReqSub :: ReqsSub -> [Sentence]
 getReqSub (FReqsSub c) = concatMap getCon' c
+getReqSub (NonFReqsSub'' c) = concatMap getCon' c
 getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)
   ++ [s1, s2]
 getReqSub (NonFReqsSub' cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)

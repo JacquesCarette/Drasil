@@ -6775,7 +6775,7 @@ Output Data Constraints
 Requirements
 </h1>
 <p class="paragraph">
-This section provides the functional requirements, the tasks and behaviours that the software is expected to complete , and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <div id="Sec:FRs">
 <div class="subsection">
@@ -7131,8 +7131,291 @@ Inputs to be returned as output
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-SSP is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
+<div class="list">
+<p>
+<div id="understandable">
+Understandable: The code should be modularized with complete module guide and module interface specification.
+</div>
+</p>
+</div>
+<div id="Table:inDataTable">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Unit
+</th>
+<th>
+Name
+</th>
+</tr>
+<tr>
+<td>
+<em>(x,y)</em>
+</td>
+<td>
+m
+</td>
+<td>
+cartesian position coordinates
+</td>
+</tr>
+<tr>
+<td>
+<em><b>x</b><sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinates of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em><b>y</b><sub>slope</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinates of the slope
+</td>
+</tr>
+<tr>
+<td>
+<em><b>x</b><sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+x-coordinates of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em><b>y</b><sub>wt</sub></em>
+</td>
+<td>
+m
+</td>
+<td>
+y-coordinates of the water table
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum entry x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+maximum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+m
+</td>
+<td>
+minimum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>c&prime;</em>
+</td>
+<td>
+Pa
+</td>
+<td>
+effective cohesion
+</td>
+</tr>
+<tr>
+<td>
+<em>φ&prime;</em>
+</td>
+<td>
+&deg;
+</td>
+<td>
+effective angle of friction
+</td>
+</tr>
+<tr>
+<td>
+<em>γ</em>
+</td>
+<td>
+N/m<sup>3</sup>
+</td>
+<td>
+soil dry unit weight
+</td>
+</tr>
+<tr>
+<td>
+<em>γ<sub>Sat</sub></em>
+</td>
+<td>
+N/m<sup>3</sup>
+</td>
+<td>
+soil saturated unit weight
+</td>
+</tr>
+<tr>
+<td>
+<em>γ<sub>w</sub></em>
+</td>
+<td>
+N/m<sup>3</sup>
+</td>
+<td>
+unit weight of water
+</td>
+</tr>
+<tr>
+<td>
+<em>const_f</em>
+</td>
+<td>
+
+</td>
+<td>
+decision on f
+</td>
+</tr>
+</table>
+<p class="caption">
+Required Inputs
+</p>
+</div>
+<div id="Table:inputsToOutputTable">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Name
+</th>
+</tr>
+<tr>
+<td>
+<em>const_f</em>
+</td>
+<td>
+decision on f
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxExt</sup></em>
+</td>
+<td>
+maximum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>maxEtr</sup></em>
+</td>
+<td>
+maximum entry x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minExt</sup></em>
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>x<sub>slip</sub><sup>minEtr</sup></em>
+</td>
+<td>
+minimum exit x-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>max</sup></em>
+</td>
+<td>
+maximum y-coordinate
+</td>
+</tr>
+<tr>
+<td>
+<em>y<sub>slip</sub><sup>min</sup></em>
+</td>
+<td>
+minimum y-coordinate
+</td>
+</tr>
+</table>
+<p class="caption">
+Inputs to be returned as output
+</p>
+</div>
 </div>
 </div>
 </div>

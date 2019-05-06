@@ -65,7 +65,7 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
+import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
@@ -172,7 +172,7 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = sspGoals ++ assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -529,10 +529,13 @@ slopeVert = verticesConst $ phrase slope
 
 -- SECTION 5.1 --
 funcReqList :: [Contents]
-funcReqList = (mkEnumSimpleD sspRequirements) ++
+funcReqList = (mkEnumSimpleD sspFRequirements) ++
   [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --
+nonfuncReqList :: [Contents]
+nonfuncReqList = (mkEnumSimpleD sspNFRequirements) ++
+  [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 6 --
 --Likely Changes is automatically generated

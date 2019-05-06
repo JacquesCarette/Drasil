@@ -36,7 +36,7 @@ nfrReqIntroBody = foldlSent_
 
 --generalized requirements introduction
 reqIntroS :: Sentence
-reqIntroS = reqIntroStart +:+. ((frReqIntroBody +:+ S ",") `sAnd` nfrReqIntroBody) -- FIXME: comma hack?
+reqIntroS = reqIntroStart +:+. ((frReqIntroBody :+: S ",") `sAnd` nfrReqIntroBody) -- FIXME: comma hack?
 
 reqIntro :: Contents
 reqIntro = mkParagraph reqIntroS

@@ -1,11 +1,11 @@
-module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable, 
-  sspInputsToOutputTable) where
+module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
+  sspInputDataTable, sspInputsToOutputTable) where
 
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, funcReqDom, 
-  input_, name_, output_, physicalConstraint, symbol_, user, value)
+import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, mg, mis,
+  name_, nonFuncReqDom, output_, physicalConstraint, symbol_, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
@@ -19,8 +19,10 @@ import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce,
   intShrForce, sspInputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
   yMaxSlip, yMinSlip)
 
-sspRequirements :: [ConceptInstance]
-sspRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
+{-Functional Requirements-}
+
+sspFRequirements :: [ConceptInstance]
+sspFRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
   determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS,
   displayNormal, displayShear, writeToFile]
 
@@ -104,3 +106,12 @@ sspInputsToOutputTable :: LabelledContent
 sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
   (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True
+
+{-Nonfunctional Requirements-}
+sspNFRequirements :: [ConceptInstance]
+sspNFRequirements = [understandable]
+
+understandable :: ConceptInstance
+understandable = cic "understandable" (foldlSent [
+  S "The code should be modularized with complete",
+  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom

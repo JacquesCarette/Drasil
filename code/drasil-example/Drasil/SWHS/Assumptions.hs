@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   law_conv_cooling, heat_trans, thermal_energy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
-import Data.Drasil.Concepts.Physics (mech_energy)
+import Data.Drasil.Concepts.Physics (mechEnergy)
 
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
@@ -68,7 +68,7 @@ assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mech_energy `sC` S "are assumed to be negligible"]
+  S "such as", phrase mechEnergy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]
 assumpS3 = foldlSent [

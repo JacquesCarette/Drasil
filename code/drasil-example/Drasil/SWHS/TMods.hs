@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
-import Data.Drasil.Concepts.Physics (mech_energy)
+import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
   heat_trans, law_cons_energy)
 
@@ -61,7 +61,7 @@ consThermEdesc = foldlSent [
   ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
-  S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
+  S "other forms of", phrase energy `sC` S "such as", phrase mechEnergy `sC`
   S "are assumed to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]
 
 -------------------------

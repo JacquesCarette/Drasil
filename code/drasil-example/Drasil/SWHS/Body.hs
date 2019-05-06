@@ -43,7 +43,7 @@ import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
-import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
+import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latent_heat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
@@ -55,7 +55,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
-  heatTrans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
+  heatTrans, thermal_conduction, ht_flux, heatCapSpec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
@@ -350,7 +350,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
+  [CT.ht_flux, phase_change_material, CT.heatCapSpec,
   CT.thermal_conduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
@@ -430,7 +430,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_5,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,
-  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heatCapSpec
     temp vol assumption assump3 assump4 assump5 assump6,
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
@@ -1040,7 +1040,7 @@ genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
 genDefDeriv3 = eqUnR' $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> Contents
@@ -1053,7 +1053,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
 genDefDeriv5 = eqUnR' $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1063,14 +1063,14 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 genDefDeriv7 = eqUnR' $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
 genDefDeriv11 = eqUnR' $ 
-  ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
+  ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 

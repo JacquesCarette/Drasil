@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heat_cap_spec, 
+import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec, 
   heatTrans)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
@@ -66,7 +66,7 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heatCapSpec
     htCap_W heatTrans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,

@@ -23,6 +23,8 @@ Main
 *.iml
 *.vrb
 .DS_Store
+Thumbs.db
+desktop.ini
 .stack-work
 /code/Docs
 /code/build

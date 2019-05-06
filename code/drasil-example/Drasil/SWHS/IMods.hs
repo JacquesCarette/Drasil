@@ -462,9 +462,9 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   phrase solid, S "or", phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
   sParen (makeRef2S assumpPIS)]
 
----------
--- IM4 --
----------
+-----------
+-- Intro --
+-----------
 
 instModIntro :: Sentence
 instModIntro = S "The" +:+ plural goal +:+ makeRef2S waterTempGS `sC` 

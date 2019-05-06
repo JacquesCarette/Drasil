@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Goals (nopcmGoals) where
+module Drasil.NoPCM.Goals (nopcmGoals, waterTempGS, waterEnergyGS) where
 
 import Language.Drasil
 

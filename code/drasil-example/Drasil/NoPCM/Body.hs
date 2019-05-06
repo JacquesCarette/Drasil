@@ -82,7 +82,7 @@ import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.Goals (nopcmGoals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -154,8 +154,8 @@ mkSRS = [RefSec $ RefProg intro
       , TMs [] (Label : stdFields) theoretical_models
       , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-      , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        [eBalanceOnWtr, heatEInWtr] ShowDerivation
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       ]

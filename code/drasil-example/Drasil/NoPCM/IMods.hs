@@ -1,7 +1,8 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
 
+import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
@@ -10,17 +11,23 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec,
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, 
-  sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe, 
+  ofThe, sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
+import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
+import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
+
+iMods :: [InstanceModel]
+iMods = [eBalanceOnWtr, heatEInWtr]
+
 ---------
 -- IM1 --
 ---------
@@ -123,3 +130,12 @@ eBalanceOnWtrDerivEqn4 =
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]
+
+-----------
+-- Intro --
+-----------
+
+instModIntro :: Sentence
+instModIntro = foldlSent [S "The", phrase goal, makeRef2S waterTempGS,
+  S "is met by", makeRef2S eBalanceOnWtr `andThe` phrase goal,
+  makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]

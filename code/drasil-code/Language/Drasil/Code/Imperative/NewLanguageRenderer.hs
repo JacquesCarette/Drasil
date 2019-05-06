@@ -455,10 +455,10 @@ orOpDocD :: Doc
 orOpDocD = text "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD v1 op v2 = parens (v1 <+> op <+> v2)
+binOpDocD op v1 v2 = parens (v1 <+> op <+> v2)
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
-binOpDocD' v1 op v2 = op <> parens (v1 <> comma <+> v2)
+binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
 
 -- Literals --
 
@@ -531,7 +531,7 @@ notNullDocD :: Doc -> Doc -> Doc -> Doc
 notNullDocD v op nullvar = binOpDocD v op nullvar
 
 listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
-listIndexExistsDocD lst greater index = parens (lst <> text ".Length" <+>      
+listIndexExistsDocD greater lst index = parens (lst <> text ".Length" <+>      
     greater <+> index) 
 
 -- Functions --

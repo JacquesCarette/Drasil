@@ -13,7 +13,7 @@ import Data.Drasil.Utils (enumSimple,
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
-  information, goalStmt, physSyst, problem, definition, srs, content, reference,
+  information, physSyst, problem, definition, srs, content, reference,
   document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
@@ -36,7 +36,7 @@ import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, funcReq, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
@@ -47,10 +47,10 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
+  generateTraceTable, goalStmtF, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
+  isThe, sOf, ofThe, foldlSent, foldlSP)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -81,6 +81,7 @@ import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
+import Drasil.NoPCM.Goals (nopcmGoals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 
@@ -381,18 +382,15 @@ physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
-goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
-  []
+goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
 
-goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> Contents
-goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
-  phrase co `sC` S "initial", phrase temw  `sC` S "and material",
-  plural property `sC` S "the", phrase goalStmt, S "are"]
+goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
+goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
+  S "the initial" +:+ phrase temw,
+  S "the material" +:+ plural property]
 
-goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
-  (S "predict the" +:+ phrase temw +:+ S "over time"),
-  (S "predict the" +:+ phrase we +:+ S "over time")]
+goalStatesList :: [Contents]
+goalStatesList = mkEnumSimpleD nopcmGoals
 
 
 ------------------------------------------------------

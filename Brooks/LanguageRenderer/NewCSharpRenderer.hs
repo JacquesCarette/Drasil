@@ -463,7 +463,7 @@ instance ControlStatementSym CSharpCode where
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while ((?!) f $. (func "EndOfStream" []))
+    getFileInputAll f v = while ((?!) (objVar f (var "EndOfStream")))
         (oneLiner $ valState $ v $. (listAppend $ liftA csFileInput f))
 
 instance ScopeSym CSharpCode where
@@ -566,6 +566,3 @@ csListExtend v = dot <> text "Add" <> parens v
 
 csListExtendList :: Doc -> Doc
 csListExtendList t = dot <> text "Add" <> parens (new <+> t <> parens (empty))
-
-csStringSplit :: Doc -> Doc -> Doc
-csStringSplit vnew s = vnew <+> equals <+> s

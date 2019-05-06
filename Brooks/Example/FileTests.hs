@@ -35,4 +35,4 @@ readStory :: (RenderSym repr) => repr (Statement repr)
 readStory = (getFileInputAll (var "fileToRead") (var "fileContents"))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
-goodBye = block [(printLn string (var "fileContents")), (closeFile (var "fileToWrite")), (closeFile (var "fileToRead"))]
+goodBye = block [(printLnList string (var "fileContents")), (closeFile (var "fileToWrite")), (closeFile (var "fileToRead"))]

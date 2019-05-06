@@ -10,11 +10,11 @@ import Control.Lens((^.))
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boilPt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src]
+  thermal_conductor, heat, heat_cap_spec, ht_flux, heatTrans, ht_trans_theo, ener_src]
 
 boiling, boilPt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
+  thermal_conductor, heat, heat_cap_spec, ht_flux, heatTrans, ht_trans_theo, ener_src :: ConceptChunk
 
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
@@ -29,7 +29,7 @@ degree_'            = dcc "degree"          (cn' "degree")
 heat                = dcc "heat"            (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
                       "Verb: To transfer thermal energy to a body")
-heat_trans          = dcc "heat_trans"      (cn' "heat transfer")
+heatTrans          = dcc "heatTrans"      (cn' "heat transfer")
                       ("The generation, use, conversion, and exchange of thermal " ++
                       "energy and heat between physical systems")
 heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity")
@@ -74,7 +74,7 @@ thermal_energy      = dcc "thermal_energy"
 ener_src            = dcc "enerSrc" (compoundPhrase' (energy ^. term)
                       (source ^. term))
                       "A source from which useful energy can be extracted"
-ht_trans_theo       = dcc "ht_trans_theo" (compoundPhrase' (heat_trans ^. term)
+ht_trans_theo       = dcc "ht_trans_theo" (compoundPhrase' (heatTrans ^. term)
                       (theory ^. term))
                       ("Theory predicting the energy transfer that may take " ++
                       "place between material bodies as a result of temperature difference")

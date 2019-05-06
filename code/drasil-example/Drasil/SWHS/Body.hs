@@ -55,7 +55,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
-  heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
+  heatTrans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
@@ -205,7 +205,7 @@ swhsCode = codeSpec swhs_si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
+  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
 
 --- The document starts here
 swhs_srs' :: Document
@@ -484,7 +484,7 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 propsDeriv :: [Contents]
 propsDeriv =
   [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
-    dd2HtFluxP surface CT.heat_trans,
+    dd2HtFluxP surface CT.heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcm_E energy phsChgMtrl water,
   propCorSolDeriv4,

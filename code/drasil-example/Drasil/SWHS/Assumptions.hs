@@ -11,7 +11,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (boilPt, melt_pt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
-  law_conv_cooling, heat_trans, thermal_energy)
+  law_conv_cooling, heatTrans, thermal_energy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mechEnergy)
@@ -70,7 +70,7 @@ assumpS1 = foldlSent [
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mechEnergy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]
+  S "All", phrase CT.heatTrans, S "coefficients are constant over", phrase time]
 assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 

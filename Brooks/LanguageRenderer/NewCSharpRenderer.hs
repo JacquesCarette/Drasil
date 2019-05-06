@@ -321,7 +321,7 @@ instance FunctionSym CSharpCode where
 
     indexOf v = liftA funcDocD (funcApp "IndexOf" [v])
 
-    listSize = liftA funcDocD (funcApp "Count" [])
+    listSize = liftA funcDocD (var "Count")
     listAdd i v = liftA funcDocD (funcApp "Insert" [i, v])
     listPopulateInt _ = return empty
     listPopulateFloat _ = return empty
@@ -398,7 +398,7 @@ instance StatementSym CSharpCode where
     discardInput = liftPairFst (liftA csDiscardInput inputFunc, True)
 
     getIntFileInput f v = liftPairFst (liftA2 (csInput "Int32.Parse") v (liftA csFileInput f), True)
-    getFloatFileInput f v = liftPairFst (liftA2 (csInput "Double.Parse") v (liftA   csFileInput f), True)
+    getFloatFileInput f v = liftPairFst (liftA2 (csInput "Double.Parse") v (liftA csFileInput f), True)
     getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
     getStringFileInput f v = liftPairFst (liftA2 (csInput "") v (liftA csFileInput f), True)
     getCharFileInput _ _ = error "Char input not yet implemented for C#"
@@ -411,7 +411,7 @@ instance StatementSym CSharpCode where
 
     getFileInputLine f v = getStringFileInput f v
     discardFileLine f = liftPairFst (liftA csFileInput f, True)
-    stringSplit d vnew s = liftPairFst (liftA2 csStringSplit vnew (s $. (func "Split" [litChar d])), True)
+    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)
@@ -449,7 +449,7 @@ instance ControlStatementSym CSharpCode where
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
-    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
+    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv) b
     forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b, False)
     while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
 

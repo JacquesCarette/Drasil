@@ -384,8 +384,8 @@ instance StatementSym PythonCode where
 
     getFileInputLine f v = v &= (objMethodCall f "readline" [])
     discardFileLine f = valState $ objMethodCall f "readline" []
-    stringSplit d vnew s = liftPairFst (liftA3 pyStringSplit vnew s
-        (funcApp "split" [litString [d]]), True)
+    stringSplit d vnew s = assign vnew (objAccess s
+        (func "split" [litString [d]]))
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)

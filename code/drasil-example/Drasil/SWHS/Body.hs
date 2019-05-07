@@ -62,14 +62,14 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
+import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, verifyEnergyOutput, swhsNFRequirements)
+import Drasil.SWHS.Requirements (funcReqs, verifyEnergyOutput, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
@@ -482,17 +482,6 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-propsDeriv :: [Contents]
-propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
-    dd2HtFluxP surface CT.heatTrans,
-  propCorSolDeriv2,
-  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
-  propCorSolDeriv4,
-  propCorSolDeriv5 equation progName rightSide]
-
--- Remember to insert references in above derivation when available
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -1259,54 +1248,6 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
-  S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
-  S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef2S d1hfc) `sAnd` (makeRef2S d2hfp) `sC`
-  S "multiplying each by their respective", phrase su,
-  S "area of", phrase ht `sC` S "and integrating each",
-  S "over the", phrase sim_time `sC` S "as follows"]
-
-propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' $ 
-  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
-  - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
-propCorSolDeriv3 epcm en pcmat wa =
-  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
-  phrase en, phrase input_, S "to the", short pcmat,
-  S "from the" +:+. phrase wa, S "This can be expressed as"]
-
-propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' $ 
-  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
-  S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
-  S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef2S verifyEnergyOutput]
-
--- Above section only occurs in this example (although maybe it SHOULD be in
--- the others).
-
--- Remember to insert references in above derivation when available
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --

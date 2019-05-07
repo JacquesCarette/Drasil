@@ -69,7 +69,7 @@ import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput, swhsNFRequirements)
+import Drasil.SWHS.Requirements (funcReqs, verifyEnergyOutput, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
@@ -497,16 +497,9 @@ propsDeriv =
 ------------------------------
 -- Section 5 : REQUIREMENTS --
 ------------------------------
-
-reqS :: Section
-reqS = reqF [funcReqsSect, nonFuncReqs]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsSect :: Section
-funcReqsSect = SRS.funcReq funcReqsList []
 
 funcReqsList :: [Contents]
 funcReqsList = reqs ++ [inputInitQuantsTbl]

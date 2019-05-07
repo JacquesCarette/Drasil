@@ -137,13 +137,6 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
 
-nonFuncReqs :: Section
-nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
-  understandability, reusability, maintainability]
-  (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very" +:+
-  S "quick and use minimal storage.")
-
 swhsNFRequirements :: [ConceptInstance]
 swhsNFRequirements = [correct, verifiable, understandable, reusable, maintainable]
 

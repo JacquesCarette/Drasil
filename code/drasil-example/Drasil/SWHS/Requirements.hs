@@ -2,8 +2,10 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
-  input_, physical, constraint, condition, property, funcReqDom)
+import Data.Drasil.Concepts.Documentation (assumption, code, condition, dataDefn,
+  funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
+  nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
+  simulation, srs, thModel, traceyMatrix, unlikelyChg)
 import Drasil.DocLang (nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -15,7 +17,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, isThe, sAnd)
+  foldlSent, isThe, ofThe, sAnd)
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
@@ -66,7 +68,7 @@ findMassEqn = (sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hac
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  phrase physical, plural constraint {-, S "shown in"
+  plural physicalConstraint {-, S "shown in"
   --FIXME , makeRefS s7_table1-}] )
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
@@ -141,6 +143,37 @@ nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very" +:+
   S "quick and use minimal storage.")
+
+swhsNFRequirements :: [ConceptInstance]
+swhsNFRequirements = [correct, understandable, reusable, maintainable]
+
+correct :: ConceptInstance
+correct = cic "correct" (foldlSent [
+  S "The", plural output_ `ofThe` phrase code, S "have the",
+  plural property, S "described in (Properties of a Correct Solution)"
+  -- FIXME: (Properties of a Correct Solution) Section doesn't exist
+  ]) "Correct" nonFuncReqDom
+ 
+verifiable :: ConceptInstance
+verifiable = cic "verifiable" (foldlSent [
+  S "The", phrase code, S "is modularized with complete",
+  phrase mg `sAnd` phrase mis]) "Verifiable" nonFuncReqDom
+
+understandable :: ConceptInstance
+understandable = cic "understandable" (foldlSent [
+  S "The", phrase code, S "is modularized with complete",
+  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+
+reusable :: ConceptInstance
+reusable = cic "reusable" (foldlSent [
+  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+
+maintainable :: ConceptInstance
+maintainable = cic "maintainable" (foldlSent [
+  S "The traceability between", foldlList Comma List [plural requirement,
+  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
+  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
+  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

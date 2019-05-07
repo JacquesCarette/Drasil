@@ -59,7 +59,6 @@ script:
      ./ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
  - >
      ./ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
- - sh pr_label_update.sh
 
 notifications:
   email:

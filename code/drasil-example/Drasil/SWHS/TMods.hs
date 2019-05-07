@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
-  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
+  latentHeat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
@@ -127,7 +127,7 @@ sensHtEdesc = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef2S latentHtE) `sC` at_start latent_heat,
+  (makeRef2S latentHtE) `sC` at_start latentHeat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -142,7 +142,7 @@ sensHtEdesc = foldlSent [
 -------------------------
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
-  [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+  [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
@@ -150,8 +150,8 @@ latentHtE_rc = makeRC "latentHtE_rc"
   (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
 
 latHtEEqn :: Relation
-latHtEEqn = apply1 latent_heat time $= 
-  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
+latHtEEqn = apply1 latentHeat time $= 
+  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
 
@@ -161,11 +161,11 @@ latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
 
 latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [
-  ch latent_heat `isThe` S "change in",
+  ch latentHeat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (usymb joule)) `sC`
-  phrase latent_heat +:+. phrase energy, 
+  phrase latentHeat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latent_heat, S "with respect to", phrase time,
+  ch latentHeat, S "with respect to", phrase time,
   ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
@@ -176,5 +176,5 @@ latentHtEdesc = foldlSent [
   ch melt_pt `sAnd` ch boil_pt, S "are the",
   phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start latent_heat :+: S "ing stops when all material has",
+  at_start latentHeat :+: S "ing stops when all material has",
   S "changed to the new phase"]

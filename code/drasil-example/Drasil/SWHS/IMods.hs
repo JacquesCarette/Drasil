@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
-  heat_trans, htFlux, latent_heat, melting, phase_change, sens_heat, temp, thermal_energy)
+  heat_trans, htFlux, latentHeat, melting, phase_change, sens_heat, temp, thermal_energy)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
@@ -454,7 +454,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   sParen (unwrap $ getUnit temp_melt_P), ch pcm_E, S "during", phrase melting, S "of the",
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcm_initMltE, S "plus the",
-  phrase latent_heat, phrase energy, S "added to the", short phsChgMtrl `sC`
+  phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`
   ch latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the", phrase time, S "when",
   phrase melting, S "began", ch t_init_melt +:+. sParen (unwrap $ getUnit t_init_melt),
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,

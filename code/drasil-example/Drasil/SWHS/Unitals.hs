@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  htFlux, latent_heat, boil_pt, heat_cap_spec)
+  htFlux, latentHeat, boil_pt, heat_cap_spec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
@@ -34,7 +34,7 @@ swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
 swhsUnits :: [UnitaryConceptDict]
 swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE,
-  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latent_heat,
+  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
@@ -139,7 +139,7 @@ ht_flux_P = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
 latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
-  "change material") (sub (eqSymb latent_heat) cP) joule
+  "change material") (sub (eqSymb latentHeat) cP) joule
 
 temp_env = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment"

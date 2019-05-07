@@ -43,7 +43,7 @@ import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
-import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
+import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
@@ -163,7 +163,7 @@ mkSRS = [RefSec $ RefProg intro [
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl
-    progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
+    progName CT.thermal_energy latentHeat unit_) (introP2 swhs_pcm program
     progName)
     [IPurpose $ purpDoc swhs_pcm progName,
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) $

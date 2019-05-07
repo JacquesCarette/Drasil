@@ -380,8 +380,8 @@ instance StatementSym CppSrcCode where
 
     varDec l t = liftPairFst (fmap (varDecDocD l) t, True)
     varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, True)
-    listDec l n t = liftPairFst (liftA2 (listDecDocD l) (litInt n) t, True) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = liftPairFst (lift1List (listDecDefDocD l) t vs, True)
+    listDec l n t = liftPairFst (liftA2 (cppListDecDoc l) (litInt n) t, True) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    listDecDef l t vs = liftPairFst (liftA2 (cppListDecDefDoc l) t (callFuncParamList vs), True)
     objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, True)
     objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), True)
     extObjDecNew l _ = objDecNew l
@@ -389,11 +389,12 @@ instance StatementSym CppSrcCode where
     extObjDecNewVoid l _ = objDecNewVoid l
     constDecDef l t v = liftPairFst (liftA2 (constDecDefDocD l) t v, True)
 
-    print _ v = liftPairFst (liftA2 outDocD printFunc v, True)
-    printLn _ v = liftPairFst (liftA2 outDocD printLnFunc v, True)
-    printStr s = liftPairFst (liftA2 outDocD printFunc (litString s), True)
-    printStrLn s = liftPairFst (liftA2 outDocD printLnFunc (litString s), True)
+    print _ v = liftPairFst (liftA2 (cppPrintDocD False) printFunc v, True)
+    printLn _ v = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc v, True)
+    printStr s = liftPairFst (liftA2 (cppPrintDocD False) printFunc (litString s), True)
+    printStrLn s = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc (litString s), True)
 
+    -- All below still needs to be translated
     printFile f _ v = liftPairFst (liftA2 outDocD (printFileFunc f) v, True)
     printFileLn f _ v = liftPairFst (liftA2 outDocD (printFileLnFunc f) v, True)
     printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), True)
@@ -583,6 +584,16 @@ cppStateObjDoc t ps = t <> parens ps
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> at <> parens i <+> equals <+> v
+
+cppListDecDoc :: Label -> Doc -> Doc -> Doc
+cppListDecDoc l n t = t <+> text l <> parens n
+
+cppListDecDefDoc :: Label -> Doc -> Doc -> Doc
+cppListDecDefDoc l t vs = t <+> l <> braces vs
+
+cppPrintDocD :: Bool -> Doc -> Doc -> Doc
+cppPrintDocD newLn printFn v = printFn <+> text "<<" <+> v <+> end
+    where end = if newLn then text "<<" <+> text "std::endl" else empty
 
 csThrowDoc :: Doc -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg

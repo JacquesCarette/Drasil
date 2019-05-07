@@ -1,0 +1,29 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+	echo "Missing label"
+	exit 1
+fi
+
+if [ -z "$LABEL_FILE" ]; then
+	echo "Missing temp file location."
+	exit 1
+fi
+
+if [ -z "$TRAVIS_CMD" ]; then
+	echo "Expected script to be running under CI. Stopping."
+	exit 1
+fi
+
+LABEL="$1"
+
+shift 1
+
+# Launch subshell; don't leak any variables to passed command.
+$SHELL -c "$*"
+RET=$?
+
+if [ $RET -ne "0" ]; then
+	echo "$LABEL" >> "$LABEL_FILE"
+fi
+
+exit $RET

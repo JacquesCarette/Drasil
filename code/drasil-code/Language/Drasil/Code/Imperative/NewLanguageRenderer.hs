@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
+    packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
     printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
@@ -58,6 +58,9 @@ observerListName = "observerList"
 ----------------------------------
 -- Functions for rendering code --
 ----------------------------------
+
+packageDocD :: Label -> Doc -> (Doc, Label, Bool) -> (Doc, Label, Bool)
+packageDocD n end (m, l, b) = (vibcat [text "package" <+> text n <> end, m], l, b)
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [

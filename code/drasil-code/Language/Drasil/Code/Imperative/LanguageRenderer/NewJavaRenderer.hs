@@ -16,10 +16,10 @@ import Language.Drasil.Code.Imperative.New (Label,
     MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
     NameOpts(NameOpts), packSep)
-import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
-    moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD, 
-    blockDocD, bodyDocD, outDocD, printFileDocD, boolTypeDocD, intTypeDocD, 
-    charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (packageDocD, 
+    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
+    multiStateDocD, blockDocD, bodyDocD, outDocD, printFileDocD, boolTypeDocD,
+    intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
     stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
     stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
     stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
@@ -100,7 +100,7 @@ liftTripFst (c, n, b) = JC $ (unJC c, n, b)
 
 instance PackageSym JavaCode where
     type Package JavaCode = ([(Doc, Label, Bool)], Label)
-    packMods n ms = liftPairFst (sequence ms, n)
+    packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) ms, n)
 
 instance RenderSym JavaCode where
     type RenderFile JavaCode = (Doc, Label, Bool)

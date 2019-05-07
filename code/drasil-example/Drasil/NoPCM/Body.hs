@@ -21,13 +21,13 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
+  thermal_energy, ht_trans_theo, ht_flux, heatCapSpec, thermal_conduction,
   thermocon, phase_change)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux, sens_heat)
+  heatCapSpec, ht_flux, sens_heat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -112,7 +112,7 @@ nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
-  htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
+  htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W, QT.sens_heat]
 
@@ -367,7 +367,7 @@ termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heat_cap_spec, thermal_conduction, transient]
+  [ht_flux, heatCapSpec, thermal_conduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
@@ -431,22 +431,22 @@ genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefnEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+genDefnEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+genDefnEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 

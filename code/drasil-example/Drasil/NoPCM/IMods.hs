@@ -4,8 +4,8 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
-  heat_trans)
+import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec, 
+  heatTrans)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
@@ -53,7 +53,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively"
+  plural boilPt, S "of", phrase water `sC` S "respectively"
   +:+ sParen (makeRef2S assumpWAL)]
 
 ----------------------------------------------
@@ -66,8 +66,8 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heatCapSpec
+    htCap_W heatTrans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]

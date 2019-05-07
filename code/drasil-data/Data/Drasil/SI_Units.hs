@@ -11,8 +11,8 @@ derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, j
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
 
-si_units :: [UnitDefn]
-si_units = map unitWrapper fundamentals ++ map unitWrapper derived
+siUnits :: [UnitDefn]
+siUnits = map unitWrapper fundamentals ++ map unitWrapper derived
 
 ------------- Fundamental SI Units ---------------------------------------------
 
@@ -137,8 +137,8 @@ specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") (joule /: kilogram)
 
-specific_weight :: UnitDefn
-specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
+specificWeight :: UnitDefn
+specificWeight = makeDerU (dcc "specificWeight" (cn' "specific weight")
   "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 

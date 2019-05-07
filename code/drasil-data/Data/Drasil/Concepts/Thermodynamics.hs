@@ -8,20 +8,20 @@ import Data.Drasil.Concepts.Physics (energy)
 import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
-thermocon = [boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
+thermocon = [boiling, boilPt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src]
+  thermal_conductor, heat, heatCapSpec, ht_flux, heatTrans, ht_trans_theo, ener_src]
 
-boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
+boiling, boilPt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
+  thermal_conductor, heat, heatCapSpec, ht_flux, heatTrans, ht_trans_theo, ener_src :: ConceptChunk
 
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
 --    Same for "Melting"
 boiling             = dcc "boiling"         (cn "boiling")
                       "Phase change from liquid to vapour"
-boil_pt             = dcc "boil_pt"         (cn' "boiling point temperature")
+boilPt             = dcc "boilPt"         (cn' "boiling point temperature")
                       ("Temperature at which a substance changes from liquid to " ++
                       "vapour")
 degree_'            = dcc "degree"          (cn' "degree")
@@ -29,10 +29,10 @@ degree_'            = dcc "degree"          (cn' "degree")
 heat                = dcc "heat"            (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
                       "Verb: To transfer thermal energy to a body")
-heat_trans          = dcc "heat_trans"      (cn' "heat transfer")
+heatTrans          = dcc "heatTrans"      (cn' "heat transfer")
                       ("The generation, use, conversion, and exchange of thermal " ++
                       "energy and heat between physical systems")
-heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity")
+heatCapSpec       = dcc "heatCapSpec"   (cnIES "specific heat capacity")
                       ("The amount of energy required to raise the temperature " ++
                       "of the unit mass of a given substance by a given amount")
 ht_flux             = dcc "ht_flux"         (cn'' "heat flux") 
@@ -74,7 +74,7 @@ thermal_energy      = dcc "thermal_energy"
 ener_src            = dcc "enerSrc" (compoundPhrase' (energy ^. term)
                       (source ^. term))
                       "A source from which useful energy can be extracted"
-ht_trans_theo       = dcc "ht_trans_theo" (compoundPhrase' (heat_trans ^. term)
+ht_trans_theo       = dcc "ht_trans_theo" (compoundPhrase' (heatTrans ^. term)
                       (theory ^. term))
                       ("Theory predicting the energy transfer that may take " ++
                       "place between material bodies as a result of temperature difference")

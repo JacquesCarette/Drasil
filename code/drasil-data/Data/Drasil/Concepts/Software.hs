@@ -126,35 +126,35 @@ modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum") (foldlSent
 
 {-- Concept Chunks for Modules  --}
 
-mod_seq_serv :: ConceptChunk
-mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
+modSeqServ :: ConceptChunk
+modSeqServ = dccWDS "modSeqServ" (cn' "sequence data structure")
   (S "Provides array manipulation operations, such as building an array" `sC`
   S "accessing a specific entry, slicing an array, etc.")
 
-mod_linked_serv :: ConceptChunk
-mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
+modLinkedServ :: ConceptChunk
+modLinkedServ = dccWDS "modLinkedServ" (cn' "linked data structure")
   (S "Provides tree manipulation operations, such as building a tree" `sC`
   S "accessing a specific entry, etc.")
 
-mod_assoc_serv :: ConceptChunk
-mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
+modAssocServ :: ConceptChunk
+modAssocServ = dccWDS "modAssocServ" (cn' "associative data structure")
   (S "Provides operations on hash tables, such as building a hash table" `sC`
   S "accessing a specific entry, etc.")
 
-mod_vector_serv :: ConceptChunk
-mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
+modVectorServ :: ConceptChunk
+modVectorServ = dccWDS "modVectorServ" (cn' "vector")
   (S "Provides vector operations such as addition, scalar and vector" +:+
   S "multiplication, dot and cross products, rotations, etc.")
   
-mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
+modPlotDesc :: ConceptChunk
+modPlotDesc = dcc "modPlotDesc" (cn' "plotting") "Provides a plot function."
 
-mod_outputf_desc_fun :: Sentence -> ConceptChunk
-mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
+modOutputfDescFun :: Sentence -> ConceptChunk
+modOutputfDescFun desc = dccWDS "modOutputfDescFun" (cn' "output format")
   (S "Outputs the results of the calculations, including the" +:+ desc)
 
 -- ODE Solver Module
-mod_ode_desc :: ConceptChunk
-mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
+modOdeDesc :: ConceptChunk
+modOdeDesc = dccWDS "modOdeDesc" (nounPhraseSP "ODE solver") (
   S "Provides solvers that take the governing equation, initial conditions," +:+ 
   S "and numerical parameters, and solve them.")

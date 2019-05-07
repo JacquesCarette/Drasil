@@ -9,8 +9,8 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
-import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
-  heat_trans, ht_flux, latent_heat, melting, phase_change, sens_heat, temp, thermal_energy)
+import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
+  heatTrans, ht_flux, latent_heat, melting, phase_change, sens_heat, temp, thermal_energy)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
@@ -67,7 +67,7 @@ balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
+  plural boilPt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef2S assumpWAL `sC` makeRef2S assumpAPT)]
 
 ----------------------------------------------
@@ -81,8 +81,8 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans coil ht_flux_C coil_SA pcm_SA tank ht_flux_P surface vol_ht_gen,
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heatCapSpec
+    htCap_W heatTrans coil ht_flux_C coil_SA pcm_SA tank ht_flux_P surface vol_ht_gen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
   eBalanceOnWtrDerivDesc3 w_mass htCap_W,
   eBalanceOnWtrDerivDesc4 eq2,
@@ -279,7 +279,7 @@ eBalanceOnPCMDeriv =
 
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
-  eBalanceOnPCMDerivDesc1 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heat_cap_spec
+  eBalanceOnPCMDerivDesc1 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heatCapSpec
     htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat assumpNIHGBWP vol_ht_gen,
   eBalanceOnPCMDerivDesc2 dd2HtFluxP ht_flux_P,
   eBalanceOnPCMDerivDesc3 eq6,
@@ -391,7 +391,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   phrase thermal_energy, S "of the", phrase liquid, phrase water, 
   S "relative to the", phrase energy, S "at the initial", phrase temp, 
   sParen (ch temp_init) +:+. sParen (unwrap $ getUnit pcm_initMltE), 
-  (ch htCap_W) `isThe` phrase heat_cap_spec, S "of", phrase liquid, phrase water,
+  (ch htCap_W) `isThe` phrase heatCapSpec, S "of", phrase liquid, phrase water,
   sParen (unwrap $ getUnit htCap_S_P) `sAnd` (ch w_mass) `isThe` phrase mass, 
   S "of the", phrase water +:+. sParen (unwrap $ getUnit w_mass), S "The", 
   phrase change, S "in", phrase temp, S "is the difference between the", 
@@ -437,7 +437,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   phrase energy, S "at the", phrase temp_init, sParen (ch temp_init) +:+.
   (unwrap $ getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
   short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sens_heat,
-  S "ing, with", phrase heat_cap_spec `ofThe` phrase solid, short phsChgMtrl `sC`
+  S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
   ch htCap_S_P, sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase temp_init +:+.
   sParen (unwrap $ getUnit temp_init), ch pcm_E, S "for the melted", short phsChgMtrl,
@@ -448,7 +448,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   phrase melting, S "starts is", ch pcm_initMltE +:+. sParen (unwrap $ getUnit pcm_initMltE),
   S "The", phrase energy, S "required to melt all of the", short phsChgMtrl, S "is",
   E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
-  sParen (makeRef2S dd3HtFusion), phrase heat_cap_spec `ofThe` phrase liquid, short phsChgMtrl,
+  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe` phrase liquid, short phsChgMtrl,
   S "is", ch htCap_L_P, sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change,
   S "in", phrase temp, S "is", E (sy temp_PCM - sy temp_melt_P) +:+.
   sParen (unwrap $ getUnit temp_melt_P), ch pcm_E, S "during", phrase melting, S "of the",

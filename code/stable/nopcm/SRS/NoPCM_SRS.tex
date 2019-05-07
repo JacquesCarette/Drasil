@@ -264,10 +264,10 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the temperature of the heating coil, initial temperature of the water, and material properties, the goal statement are:
+Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:
 \begin{itemize}
-\item[GS1:]predict the temperature of the water over time
-\item[GS2:]predict the change in heat energy in the water over time
+\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]Predict the temperature of the water over time.
+\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]Predict the change in heat energy in the water over time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -481,6 +481,7 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and the goal \hyperref[waterEnergyGS]{GS: Predict-Water-Energy} is met by \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -625,10 +626,10 @@ ${E_{W}}$ & ${E_{W}}\geq{}0$
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requirements}
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-The following section provides the functional requirements, the business tasks that the software is expected to complete.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Input-Inital-Values:\phantomsection\label{reqIIV}]Input the quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
 \item[Find-Mass:\phantomsection\label{reqFM}]Use the inputs in \hyperref[reqIIV]{FR: Input-Inital-Values} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank: ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$

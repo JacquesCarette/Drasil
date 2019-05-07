@@ -11,8 +11,8 @@ algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")
   "A series of steps to be followed in calculations and problem-solving operations"
 
-mod_calc_desc :: Sentence -> ConceptChunk
-mod_calc_desc = dccWDS "mod_calc_desc" (cn' "calculation")
+modCalcDesc :: Sentence -> ConceptChunk
+modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 

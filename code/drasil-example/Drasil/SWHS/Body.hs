@@ -54,7 +54,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, 
   heat_trans, thermal_conduction, htFlux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
@@ -483,7 +483,7 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.lawConsEnergy w_E energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heat_trans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcm_E energy phsChgMtrl water,

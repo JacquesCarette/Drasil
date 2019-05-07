@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
-  heat_trans, law_cons_energy)
+  heat_trans, lawConsEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
@@ -52,7 +52,7 @@ consThemESrc = makeURI "consThemESrc"
 
 consThermEdesc :: Sentence
 consThermEdesc = foldlSent [
-  S "The above", phrase equation, S "gives the", phrase law_cons_energy, S "for",
+  S "The above", phrase equation, S "gives the", phrase lawConsEnergy, S "for",
   phrase transient, phrase heat_trans, S "in a material of", phrase heat_cap_spec,
   ch heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)) `sAnd` phrase density `sC`
   ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 

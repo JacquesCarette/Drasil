@@ -9,7 +9,7 @@ import Drasil.DocLang (nonFuncReqF)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)
 
-import Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
+import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy,
   melting)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
@@ -108,7 +108,7 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
 verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
-  sParen (ch time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
+  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
   S "as outlined in"
   --FIXME , makeRefS s4_2_7 `sC` -}
   S "with relative error no greater than 0.001%"] )

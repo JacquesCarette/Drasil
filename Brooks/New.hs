@@ -23,7 +23,7 @@ class (RenderSym repr) => PackageSym repr where
 class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
     fileDoc :: repr (Module repr) -> repr (RenderFile repr)
-    top :: repr (Block repr)
+    top :: repr(Module repr) -> repr (Block repr)
     bottom :: repr (Block repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where

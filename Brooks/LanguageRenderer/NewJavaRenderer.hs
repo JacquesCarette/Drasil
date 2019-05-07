@@ -93,8 +93,8 @@ instance PackageSym JavaCode where
 
 instance RenderSym JavaCode where
     type RenderFile JavaCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' top (fmap tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
-    top = liftA3 jtop endStatement (include "") (list static)
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
+    top _ = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
 instance KeywordSym JavaCode where

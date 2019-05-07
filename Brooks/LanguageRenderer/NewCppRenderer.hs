@@ -1,8 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module LanguageRenderer.NewCSharpRenderer (
-    -- * C# Code Configuration -- defines syntax of all C# code
-    CSharpCode(..)
+module LanguageRenderer.NewCppRenderer (
+    -- * C++ Code Configuration -- defines syntax of all C++ code
+    CppSrcCode(..)
 ) where
 
 import New (Label,
@@ -13,29 +13,28 @@ import New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', 
-    moduleDocD, classDocD, enumDocD,
+import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
     enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
-    printFileDocD, boolTypeDocD, 
-    intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
-    constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
-    stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
-    forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
-    varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
-    constDecDefDocD, statementDocD, returnDocD,
-    commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+    printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD,
+    typeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD, 
+    paramListDocD, methodDocD, methodListDocD, stateVarDocD, stateVarListDocD,
+    ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
+    assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
+    listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD,
+    returnDocD, commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-    moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD,
-    litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-    defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-    inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-    notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
-    listAccessDocD, objAccessDocD, 
+    moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, 
+    litFalseD, litCharD, litFloatD, litIntD, litStringD, defaultCharD, 
+    defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD,
+    argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
+    extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
+    listIndexExistsDocD, funcDocD, castDocD, listSetDocD, listAccessDocD, 
+    objAccessDocD, 
     castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
     publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
     callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
-import Helpers (oneTab, tripFst, tripSnd, tripThird)
+import Helpers (angles, oneTab, tripFst, tripSnd, tripThird)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -43,73 +42,73 @@ import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
-newtype CSharpCode a = CSC {unCSC :: a}
+newtype CppSrcCode a = CPPSC {unCPPSC :: a}
 
-instance Functor CSharpCode where
-    fmap f (CSC x) = CSC (f x)
+instance Functor CppSrcCode where
+    fmap f (CPPSC x) = CPPSC (f x)
 
-instance Applicative CSharpCode where
-    pure = CSC
-    (CSC f) <*> (CSC x) = CSC (f x)
+instance Applicative CppSrcCode where
+    pure = CPPSC
+    (CPPSC f) <*> (CPPSC x) = CPPSC (f x)
 
-instance Monad CSharpCode where
-    return = CSC
-    CSC x >>= f = f x
+instance Monad CppSrcCode where
+    return = CPPSC
+    CPPSC x >>= f = f x
 
-liftA4 :: (a -> b -> c -> d -> e) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e
-liftA4 f a1 a2 a3 a4 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4)
+liftA4 :: (a -> b -> c -> d -> e) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e
+liftA4 f a1 a2 a3 a4 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4)
 
-liftA5 :: (a -> b -> c -> d -> e -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f
-liftA5 f a1 a2 a3 a4 a5 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5)
+liftA5 :: (a -> b -> c -> d -> e -> f) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e -> CppSrcCode f
+liftA5 f a1 a2 a3 a4 a5 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (unCPPSC a5)
 
-liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g
-liftA6 f a1 a2 a3 a4 a5 a6 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6)
+liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e -> CppSrcCode f -> CppSrcCode g
+liftA6 f a1 a2 a3 a4 a5 a6 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (unCPPSC a5) (unCPPSC a6)
 
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g -> CSharpCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6) (unCSC a7)
+liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e -> CppSrcCode f -> CppSrcCode g -> CppSrcCode h
+liftA7 f a1 a2 a3 a4 a5 a6 a7 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (unCPPSC a5) (unCPPSC a6) (unCPPSC a7)
 
-liftList :: ([a] -> b) -> [CSharpCode a] -> CSharpCode b
-liftList f as = CSC $ f (map unCSC as)
+liftList :: ([a] -> b) -> [CppSrcCode a] -> CppSrcCode b
+liftList f as = CPPSC $ f (map unCPPSC as)
 
-lift1List :: (a -> [b] -> c) -> CSharpCode a -> [CSharpCode b] -> CSharpCode c
-lift1List f a as = CSC $ f (unCSC a) (map unCSC as)
+lift1List :: (a -> [b] -> c) -> CppSrcCode a -> [CppSrcCode b] -> CppSrcCode c
+lift1List f a as = CPPSC $ f (unCPPSC a) (map unCPPSC as)
 
-unCSCPair :: (CSharpCode a, CSharpCode b) -> (a, b)
-unCSCPair (a1, a2) = (unCSC a1, unCSC a2) 
+unCPPSCPair :: (CppSrcCode a, CppSrcCode b) -> (a, b)
+unCPPSCPair (a1, a2) = (unCPPSC a1, unCPPSC a2) 
 
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> [(CSharpCode e, CSharpCode f)] -> CSharpCode g
-lift4Pair f a1 a2 a3 a4 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (map unCSCPair as)
+lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> [(CppSrcCode e, CppSrcCode f)] -> CppSrcCode g
+lift4Pair f a1 a2 a3 a4 as = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (map unCPPSCPair as)
 
-lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> [(CSharpCode d, CSharpCode e)] -> CSharpCode f
-lift3Pair f a1 a2 a3 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (map unCSCPair as)
+lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> [(CppSrcCode d, CppSrcCode e)] -> CppSrcCode f
+lift3Pair f a1 a2 a3 as = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (map unCPPSCPair as)
 
-liftPairFst :: (CSharpCode a, b) -> CSharpCode (a, b)
-liftPairFst (c, n) = CSC $ (unCSC c, n)
+liftPairFst :: (CppSrcCode a, b) -> CppSrcCode (a, b)
+liftPairFst (c, n) = CPPSC $ (unCPPSC c, n)
 
-liftTripFst :: (CSharpCode a, b, c) -> CSharpCode (a, b, c)
-liftTripFst (c, n, b) = CSC $ (unCSC c, n, b)
+liftTripFst :: (CppSrcCode a, b, c) -> CppSrcCode (a, b, c)
+liftTripFst (c, n, b) = CPPSC $ (unCPPSC c, n, b)
 
-instance PackageSym CSharpCode where
-    type Package CSharpCode = ([(Doc, Label, Bool)], Label)
+instance PackageSym CppSrcCode where
+    type Package CppSrcCode = ([(Doc, Label, Bool)], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
-instance RenderSym CSharpCode where
-    type RenderFile CSharpCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCSC code, tripThird $ unCSC code)
-    top _ = liftA2 cstop endStatement (include "")
+instance RenderSym CppSrcCode where
+    type RenderFile CppSrcCode = (Doc, Label, Bool)
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPSC code, tripThird $ unCPPSC code)
+    top m = liftA3 cppstop m (include "") (list dynamic) endStatement
     bottom = return empty
 
-instance KeywordSym CSharpCode where
-    type Keyword CSharpCode = Doc
+instance KeywordSym CppSrcCode where
+    type Keyword CppSrcCode = Doc
     endStatement = return semi
     endStatementLoop = return empty
 
-    include _ = return $ text "using"
+    include _ = return $ text "#include"
     inherit = return colon
 
-    list _ = return $ text "List"
-    argsList = return $ text "args"
-    listObj = return new
+    list _ = return $ text "vector"
+    argsList = return $ text "argv"
+    listObj = return empty
 
     blockStart = return lbrace
     blockEnd = return rbrace
@@ -117,35 +116,35 @@ instance KeywordSym CSharpCode where
     ifBodyStart = blockStart
     elseIf = return $ text "else if"
     
-    iterForEachLabel = return $ text "foreach"
-    iterInLabel = return $ text "in"
+    iterForEachLabel = return empty
+    iterInLabel = return empty
 
     commentStart = return doubleSlash
     
-    printFunc = return $ text "Console.Write"
-    printLnFunc = return $ text "Console.WriteLine"
-    printFileFunc = fmap (printFileDocD "Write")
-    printFileLnFunc = fmap (printFileDocD "WriteLine")
+    printFunc = return $ text "std::cout"
+    printLnFunc = return $ text "std::cout"
+    printFileFunc v = v -- is this right?
+    printFileLnFunc v = v
 
-instance PermanenceSym CSharpCode where
-    type Permanence CSharpCode = Doc
+instance PermanenceSym CppSrcCode where
+    type Permanence CppSrcCode = Doc
     static = return staticDocD
     dynamic = return dynamicDocD
 
-instance BodySym CSharpCode where
-    type Body CSharpCode = Doc
+instance BodySym CppSrcCode where
+    type Body CppSrcCode = Doc
     body = liftList bodyDocD
     bodyStatements = block
     oneLiner s = bodyStatements [s]
 
     addComments s = liftA2 (addCommentsDocD s) commentStart
 
-instance BlockSym CSharpCode where
-    type Block CSharpCode = Doc
+instance BlockSym CppSrcCode where
+    type Block CppSrcCode = Doc
     block sts = (lift1List blockDocD endStatement (map (fmap fst) (map state sts)))
 
-instance StateTypeSym CSharpCode where
-    type StateType CSharpCode = Doc
+instance StateTypeSym CppSrcCode where
+    type StateType CppSrcCode = Doc
     bool = return $ boolTypeDocD
     int = return $ intTypeDocD
     float = return $ csFloatTypeDocD
@@ -160,7 +159,7 @@ instance StateTypeSym CSharpCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
-instance ControlBlockSym CSharpCode where
+instance ControlBlockSym CppSrcCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
                                                    Just b  -> liftA2 stratDocD b (state resultState)
@@ -186,8 +185,8 @@ instance ControlBlockSym CSharpCode where
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
 
-instance UnaryOpSym CSharpCode where
-    type UnaryOp CSharpCode = Doc
+instance UnaryOpSym CppSrcCode where
+    type UnaryOp CppSrcCode = Doc
     notOp = return $ notOpDocD
     negateOp = return $ negateOpDocD
     sqrtOp = return $ text "Math.Sqrt"
@@ -204,8 +203,8 @@ instance UnaryOpSym CSharpCode where
     floorOp = return $ text "Math.Floor"
     ceilOp = return $ text "Math.Ceiling"
 
-instance BinaryOpSym CSharpCode where
-    type BinaryOp CSharpCode = Doc
+instance BinaryOpSym CppSrcCode where
+    type BinaryOp CppSrcCode = Doc
     equalOp = return $ equalOpDocD
     notEqualOp = return $ notEqualOpDocD
     greaterOp = return $ greaterOpDocD
@@ -221,8 +220,8 @@ instance BinaryOpSym CSharpCode where
     andOp = return $ andOpDocD
     orOp = return $ orOpDocD
 
-instance ValueSym CSharpCode where
-    type Value CSharpCode = Doc
+instance ValueSym CppSrcCode where
+    type Value CppSrcCode = Doc
     litTrue = return $ litTrueD
     litFalse = return $ litFalseD
     litChar c = return $ litCharD c
@@ -253,9 +252,9 @@ instance ValueSym CSharpCode where
     
     inputFunc = return $ text "Console.ReadLine()"
 
-    valName v = unCSC $ fmap render v
+    valName v = unCPPSC $ fmap render v
 
-instance NumericExpression CSharpCode where
+instance NumericExpression CppSrcCode where
     (#~) = liftA2 unOpDocD negateOp
     (#/^) = liftA2 unOpDocD sqrtOp
     (#|) = liftA2 unOpDocD absOp
@@ -281,7 +280,7 @@ instance NumericExpression CSharpCode where
     floor = liftA2 unOpDocD floorOp
     ceil = liftA2 unOpDocD ceilOp
 
-instance BooleanExpression CSharpCode where
+instance BooleanExpression CppSrcCode where
     (?!) = liftA2 unOpDocD notOp
     (?&&) = liftA3 binOpDocD andOp
     (?||)= liftA3 binOpDocD orOp
@@ -293,7 +292,7 @@ instance BooleanExpression CSharpCode where
     (?==) = liftA3 binOpDocD equalOp
     (?!=) = liftA3 binOpDocD notEqualOp
    
-instance ValueExpression CSharpCode where
+instance ValueExpression CppSrcCode where
     inlineIf = liftA3 inlineIfDocD
     funcApp n = liftList (funcAppDocD n)
     selfFuncApp = funcApp
@@ -303,9 +302,9 @@ instance ValueExpression CSharpCode where
     listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
 
     exists = notNull
-    notNull v = liftA3 notNullDocD notEqualOp v (var "null")
+    notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
-instance Selector CSharpCode where
+instance Selector CppSrcCode where
     objAccess = liftA2 objAccessDocD
     ($.) = objAccess
 
@@ -325,8 +324,8 @@ instance Selector CSharpCode where
     castObj = liftA2 castObjDocD
     castStrToFloat v = funcApp "Double.Parse" [v]
 
-instance FunctionSym CSharpCode where
-    type Function CSharpCode = Doc
+instance FunctionSym CppSrcCode where
+    type Function CppSrcCode = Doc
     func l vs = fmap funcDocD (funcApp l vs)
     cast targT _ = fmap castDocD targT
     castListToInt = cast (listType static int) int
@@ -353,7 +352,7 @@ instance FunctionSym CSharpCode where
     iterBegin = fmap funcDocD (funcApp "begin" [])
     iterEnd = fmap funcDocD (funcApp "end" [])
 
-instance SelectorFunction CSharpCode where
+instance SelectorFunction CppSrcCode where
     listAccess = fmap listAccessDocD
     listSet = liftA2 listSetDocD
 
@@ -362,8 +361,8 @@ instance SelectorFunction CSharpCode where
 
     at l = listAccess (var l)
 
-instance StatementSym CSharpCode where
-    type Statement CSharpCode = (Doc, Bool)
+instance StatementSym CppSrcCode where
+    type Statement CppSrcCode = (Doc, Bool)
     assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, True)
     assignToListIndex lst index v = valState $ lst $. listSet index v
     (&=) = assign
@@ -453,7 +452,7 @@ instance StatementSym CSharpCode where
     loopState s = liftA2 statementDocD s endStatementLoop
     multi = lift1List multiStateDocD endStatement
 
-instance ControlStatementSym CSharpCode where
+instance ControlStatementSym CppSrcCode where
     ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, False)
     ifNoElse bs = ifCond bs $ body []
     switch v cs c = liftPairFst (lift3Pair switchDocD (state break) v c cs, False)
@@ -480,26 +479,26 @@ instance ControlStatementSym CSharpCode where
     getFileInputAll f v = while ((?!) (objVar f (var "EndOfStream")))
         (oneLiner $ valState $ v $. (listAppend $ fmap csFileInput f))
 
-instance ScopeSym CSharpCode where
-    type Scope CSharpCode = Doc
+instance ScopeSym CppSrcCode where
+    type Scope CppSrcCode = Doc
     private = return privateDocD
     public = return publicDocD
 
     includeScope s = s
 
-instance MethodTypeSym CSharpCode where
-    type MethodType CSharpCode = Doc
+instance MethodTypeSym CppSrcCode where
+    type MethodType CppSrcCode = Doc
     mState t = t
     void = return voidDocD
     construct n = return $ constructDocD n
 
-instance ParameterSym CSharpCode where
-    type Parameter CSharpCode = Doc
+instance ParameterSym CppSrcCode where
+    type Parameter CppSrcCode = Doc
     stateParam n = fmap (stateParamDocD n)
 
-instance MethodSym CSharpCode where
+instance MethodSym CppSrcCode where
     -- Bool is True if the method is a main method, False otherwise
-    type Method CSharpCode = (Doc, Bool)
+    type Method CppSrcCode = (Doc, Bool)
     method n s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
@@ -512,38 +511,59 @@ instance MethodSym CSharpCode where
 
     function = method
 
-instance StateVarSym CSharpCode where
-    type StateVar CSharpCode = Doc
+instance StateVarSym CppSrcCode where
+    type StateVar CppSrcCode = Doc
     stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
 
-instance ClassSym CSharpCode where
+instance ClassSym CppSrcCode where
     -- Bool is True if the method is a main method, False otherwise
-    type Class CSharpCode = (Doc, Bool)
-    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unCSC) fs)
+    type Class CppSrcCode = (Doc, Bool)
+    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unCPPSC) fs)
     enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
     mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
-instance ModuleSym CSharpCode where
+instance ModuleSym CppSrcCode where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
-    type Module CSharpCode = (Doc, Label, Bool)
+    type Module CppSrcCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unCSC) cs) 
+        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unCPPSC) cs) 
                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 statementsToStateVars
-                                        public static endStatement) vs) ms):cs), n, or [any (snd . unCSC) ms, any (snd . unCSC) cs])
+                                        public static endStatement) vs) ms):cs), n, or [any (snd . unCPPSC) ms, any (snd . unCPPSC) cs])
+    -- Note: need to print libraries here instead of in cppstop
 
-cstop :: Doc -> Doc -> Doc
-cstop end inc = vcat [
-    inc <+> text "System" <> end,
-    inc <+> text "System.IO" <> end,
-    inc <+> text "System.Collections" <> end,
-    inc <+> text "System.Collections.Generic" <> end]
+-- convenience
+cppHeaderExt :: Label
+cppHeaderExt = ".hpp"
+
+cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc -> Doc
+cppstop (m, n, b) inc lst end = vcat [
+    if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
+    blank,
+    inc <+> angles (text "algorithm"),
+    inc <+> angles (text "iostream"),
+    inc <+> angles (text "fstream"),
+    inc <+> angles (text "iterator"),
+    inc <+> angles (text "string"),
+    inc <+> angles (text "math.h"),
+    inc <+> angles (text "sstream"),
+    inc <+> angles (text "limits"),
+    inc <+> angles lst,
+    blank,
+    usingNameSpace "std" (Just "string") end,
+    usingNameSpace "std" (Just $ render lst) end,
+    usingNameSpace "std" (Just "ifstream") end,
+    usingNameSpace "std" (Just "ofstream") end]
+
+usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
+usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <> text m <> end
+usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
 csFloatTypeDocD :: Doc
 csFloatTypeDocD = text "double" -- Same as Java, maybe make a common function

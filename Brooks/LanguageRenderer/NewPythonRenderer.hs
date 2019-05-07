@@ -79,8 +79,8 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
     type RenderFile PythonCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' top (fmap tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
-    top = return pytop
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
+    top _ = return pytop
     bottom = return empty
 
 instance KeywordSym PythonCode where

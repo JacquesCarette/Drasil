@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
-import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
+import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
   heat_cap_spec, thermalFlux, volHtGenU)
 
 import Drasil.SWHS.Concepts (water)
@@ -105,7 +105,7 @@ htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
   ("The proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
-  lH UT.heat_transfer_coef
+  lH UT.heatTransferCoef
 
 pcm_mass = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
@@ -353,7 +353,7 @@ coil_HTC = uqc "coil_HTC" (nounPhraseSP
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the coil to the surrounding water")
   (sub (eqSymb htTransCoeff) cC)
-  UT.heat_transfer_coef Rational
+  UT.heatTransferCoef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy coil_HTC_min) (Inc, sy coil_HTC_max)] (dbl 1000) 0.1
 
@@ -362,7 +362,7 @@ pcm_HTC = uqc "pcm_HTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the phase change material to the surrounding water")
-  (sub lH cP) UT.heat_transfer_coef Rational
+  (sub lH cP) UT.heatTransferCoef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy pcm_HTC_min) (Inc, sy pcm_HTC_max)] (dbl 1000) 0.1
   
@@ -528,23 +528,23 @@ htCap_W_max = mkQuantDef (unitary "htCap_W_max"
 coil_HTC_min = mkQuantDef (unitary "coil_HTC_min"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "min")) UT.heat_transfer_coef Rational) 10
+  (sup (eqSymb coil_HTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
 coil_HTC_max = mkQuantDef (unitary "coil_HTC_max"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "max")) UT.heat_transfer_coef Rational) 10000
+  (sup (eqSymb coil_HTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 15
 pcm_HTC_min = mkQuantDef (unitary "pcm_HTC_min"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between PCM and water")
-  (sup (eqSymb pcm_HTC) (Atomic "min")) UT.heat_transfer_coef Rational) 10
+  (sup (eqSymb pcm_HTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
 pcm_HTC_max = mkQuantDef (unitary "pcm_HTC_max"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
-  (sup (eqSymb pcm_HTC) (Atomic "max")) UT.heat_transfer_coef Rational) 10000
+  (sup (eqSymb pcm_HTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 17
 time_final_max = mkQuantDef (unitary "time_final_max"

@@ -17,8 +17,8 @@ thermalFlux :: UnitDefn
 thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
-heat_transfer_coef :: UnitDefn
-heat_transfer_coef = new_unit "heat transfer coefficient" $ (watt /$ (m_2 *: centigrade))
+heatTransferCoef :: UnitDefn
+heatTransferCoef = new_unit "heat transfer coefficient" $ (watt /$ (m_2 *: centigrade))
 
 volHtGenU :: UnitDefn
 volHtGenU = makeDerU (dcc "volHtGenU" (cn "volumetric heat generation")

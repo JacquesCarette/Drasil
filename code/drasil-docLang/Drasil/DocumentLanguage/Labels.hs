@@ -8,8 +8,8 @@ import Language.Drasil
 goalStmtLabel :: Reference
 goalStmtLabel = makeLstRef "goalStmt" "goalStmt"
 
-solution_label :: Reference
-solution_label = makeLstRef "solution" "solution"
+solutionLabel :: Reference
+solutionLabel = makeLstRef "solution" "solution"
 
 characteristics_label :: Reference
 characteristics_label = makeLstRef "characteristics" "characteristics"

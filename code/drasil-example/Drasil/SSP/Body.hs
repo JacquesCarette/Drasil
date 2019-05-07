@@ -17,7 +17,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescription_label, generateTraceMap', generateTraceTable)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -435,7 +435,7 @@ physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
   phrase value, S "between", phrase ixd, ch ix `sAnd` S "adjacent", phrase ixd,
   E $ sy ix + 1]
 
-phys_sys_desc_bullets = LlC $ enumSimple physSystDescription_label 1 (short Doc.physSyst) physSystDescriptionListPhysys
+phys_sys_desc_bullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
 
 physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence

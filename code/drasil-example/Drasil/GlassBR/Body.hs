@@ -17,7 +17,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtLabel, characteristicsLabel, physSystDescription_label,
+  generateTraceTable, goalStmtLabel, characteristicsLabel, physSystDescriptionLabel,
   generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
@@ -423,7 +423,7 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
 fig_glassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
-physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
+physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
 
 --"Dead" knowledge?
 physSystDescriptionListPhysys :: [Sentence]

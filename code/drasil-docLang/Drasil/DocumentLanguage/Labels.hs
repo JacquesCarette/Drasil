@@ -14,5 +14,5 @@ solutionLabel = makeLstRef "solution" "solution"
 characteristicsLabel :: Reference
 characteristicsLabel = makeLstRef "characteristics" "characteristics"
 
-physSystDescription_label :: Reference
-physSystDescription_label = makeLstRef "physSystDescription" "physSystDescription"
+physSystDescriptionLabel :: Reference
+physSystDescriptionLabel = makeLstRef "physSystDescription" "physSystDescription"

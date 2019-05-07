@@ -47,7 +47,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtLabel, physSystDescription_label, generateTraceMap')
+  generateTraceTable, goalStmtLabel, physSystDescriptionLabel, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -378,7 +378,7 @@ fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phras
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
 goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]

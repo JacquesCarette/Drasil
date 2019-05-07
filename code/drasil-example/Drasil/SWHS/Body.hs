@@ -19,7 +19,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, reqF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
-  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
 import qualified Drasil.DocLang.SRS as SRS (funcReq,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
@@ -373,7 +373,7 @@ physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, 
 -- this paragraph can not be abstracted out as is.
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,

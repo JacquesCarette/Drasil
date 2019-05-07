@@ -9,7 +9,7 @@ import Data.Drasil.Phrase (of_)
 import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
+import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, meltPt,
   htFlux, latentHeat, boil_pt, heat_cap_spec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
@@ -36,7 +36,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp,boil_pt, temp_env, melt_pt, t_init_melt,
+  temp,boil_pt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
@@ -370,7 +370,7 @@ pcm_HTC = uqc "pcm_HTC"
 temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
   (sub (eqSymb temp)(Atomic "init")) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc, sy melt_pt)] (dbl 40) 0.1
+  [physc $ Bounded (Exc,0) (Exc, sy meltPt)] (dbl 40) 0.1
   
 -- Constraint 17
 time_final = uqc "time_final" (nounPhraseSP "final time")

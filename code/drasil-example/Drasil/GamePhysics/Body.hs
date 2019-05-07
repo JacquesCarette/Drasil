@@ -16,7 +16,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, solution_label)
+  generateTraceTable, goalStmtLabel, solution_label)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -499,7 +499,7 @@ goal_statements_list' = map (foldlSent) [goal_statements_G_linear, goal_statemen
   {-, goal_statements_G_detectCollision, 
   goal_statements_G_collision-}
 
-goal_statements_list = LlC $ enumSimple goalStmt_label 1 (getAcc goalStmt) goal_statements_list'
+goal_statements_list = LlC $ enumSimple goalStmtLabel 1 (getAcc goalStmt) goal_statements_list'
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --

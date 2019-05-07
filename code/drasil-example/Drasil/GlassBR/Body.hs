@@ -17,7 +17,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
+  generateTraceTable, goalStmtLabel, characteristics_label, physSystDescription_label,
   generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
@@ -248,7 +248,7 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
 --Used in "Goal Statements" Section--
 
 goalStmtsList :: Contents
-goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsListGS1
+goalStmtsList = LlC $ enumSimple goalStmtLabel 1 (short goalStmt) goalStmtsListGS1
 
 --Used in "Traceability Matrices and Graphs" Section--
 

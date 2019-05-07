@@ -47,7 +47,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
+  generateTraceTable, goalStmtLabel, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -390,7 +390,7 @@ goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
   plural property `sC` S "the", phrase goalStmt, S "are"]
 
 goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
+goalStatesList temw we = LlC $ enumSimple goalStmtLabel 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
 

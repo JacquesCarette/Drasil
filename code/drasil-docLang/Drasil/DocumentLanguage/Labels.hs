@@ -5,8 +5,8 @@ module Drasil.DocumentLanguage.Labels
 import Language.Drasil
 
 
-goalStmt_label :: Reference
-goalStmt_label = makeLstRef "goalStmt" "goalStmt"
+goalStmtLabel :: Reference
+goalStmtLabel = makeLstRef "goalStmt" "goalStmt"
 
 solution_label :: Reference
 solution_label = makeLstRef "solution" "solution"

@@ -157,7 +157,7 @@ instance StateTypeSym CSharpCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
-    boolListType = return csBoolListTypeDocD
+    boolListType = return csBoolListTypeDoc
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
@@ -555,8 +555,8 @@ csInfileTypeDoc = text "StreamReader"
 csOutfileTypeDoc :: Doc
 csOutfileTypeDoc = text "StreamWriter"
 
-csBoolListTypeDocD :: Doc
-csBoolListTypeDocD = text "BitArray"
+csBoolListTypeDoc :: Doc
+csBoolListTypeDoc = text "BitArray"
 
 csThrowDoc :: Doc -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg

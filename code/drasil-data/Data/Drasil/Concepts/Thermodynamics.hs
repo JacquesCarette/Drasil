@@ -8,11 +8,11 @@ import Data.Drasil.Concepts.Physics (energy)
 import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
-thermocon = [boiling, boil_pt, degree_', lawConsEnergy, law_conv_cooling, latentHeat, melting, melt_pt, phase_change,
+thermocon = [boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
 
-boiling, boil_pt, degree_', lawConsEnergy, law_conv_cooling, latentHeat, melting, melt_pt, phase_change,
+boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
 
@@ -44,7 +44,7 @@ latentHeat         = dcc "latentHeat"     (cn' "latent heat")
 lawConsEnergy     = dcc "lawConsEnergy" 
                       (nounPhraseSP "law of conservation of energy" )
                       "Energy is conserved"
-law_conv_cooling    = dcc "law_conv_cooling" 
+lawConvCooling    = dcc "lawConvCooling" 
                       (nounPhraseSP "Newton's law of cooling")
                       "Newton's law of convective cooling"
 melting             = dcc "melting"         (cn "melting")

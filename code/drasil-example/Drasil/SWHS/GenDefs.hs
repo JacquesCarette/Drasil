@@ -6,7 +6,7 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
-import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
+import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
@@ -56,7 +56,7 @@ nwtnCooling_rel = apply1 htFlux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence
-nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
+nwtnCooling_desc = foldlSent [at_start lawConvCooling +:+.
   S "describes convective cooling from a surface" +:
   S "The law is stated as", S "the", phrase rate,
   S "of heat loss from a body is proportional to the",

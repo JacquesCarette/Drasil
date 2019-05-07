@@ -11,7 +11,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
-  law_conv_cooling, heat_trans, thermal_energy)
+  lawConvCooling, heat_trans, thermal_energy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
@@ -88,14 +88,14 @@ assumpS6 = foldlSent [
   S "is" `sC` S "they are each constant over their entire",
   phrase vol]
 assumpS7 = foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
+  CT.lawConvCooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length"]
 assumpS10 = foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
+  CT.lawConvCooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`

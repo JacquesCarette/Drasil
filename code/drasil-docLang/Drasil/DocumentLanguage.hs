@@ -17,7 +17,7 @@ import Language.Drasil.Utils (sortBySymbol)
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
@@ -278,7 +278,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
+      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

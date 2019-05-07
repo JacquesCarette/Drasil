@@ -85,8 +85,8 @@ goals_list :: [Contents]
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
-check_si :: [UnitDefn]
-check_si = collectUnits sspSymMap symbTT
+checkSi :: [UnitDefn]
+checkSi = collectUnits sspSymMap symbTT
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -211,7 +211,7 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
- map nw check_si) ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
+ map nw checkSi) ([] :: [ConceptChunk]) checkSi ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section 
  ssp_labcon
 

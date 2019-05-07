@@ -76,8 +76,8 @@ auths = S $ manyNames authors
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
-check_si :: [UnitDefn] -- FIXME
-check_si = collectUnits everything symbTT 
+checkSi :: [UnitDefn] -- FIXME
+checkSi = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
@@ -191,7 +191,7 @@ everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll) (map nw cpSymbolsAl
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
- ++ map nw check_si) ([] :: [ConceptChunk]) check_si game_label game_refby
+ ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi game_label game_refby
  game_datadefn game_insmodel game_gendef game_theory game_concins game_section
  []
 

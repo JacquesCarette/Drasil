@@ -118,8 +118,8 @@ glassBR_sec :: [Section]
 glassBR_sec = extractSection glassBR_srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi glassBR_label glassBR_refby
   glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
   glassBR_section glassBR_labelledcon
 
@@ -129,8 +129,8 @@ gbRefDB = rdb gbCitations glassBR_concins
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
 
-check_si :: [UnitDefn]
-check_si = collectUnits gbSymbMap this_symbols 
+checkSi :: [UnitDefn]
+checkSi = collectUnits gbSymbMap this_symbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

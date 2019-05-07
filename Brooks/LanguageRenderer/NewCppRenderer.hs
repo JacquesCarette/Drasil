@@ -145,20 +145,21 @@ instance BlockSym CppSrcCode where
 
 instance StateTypeSym CppSrcCode where
     type StateType CppSrcCode = Doc
-    bool = return $ boolTypeDocD
+    bool = return $ cppBoolTypeDoc
     int = return $ intTypeDocD
-    float = return $ csFloatTypeDocD
+    float = return $ cppFloatTypeDoc
     char = return $ charTypeDocD
     string = return $ stringTypeDocD
-    infile = return $ csInfileTypeDoc
-    outfile = return $ csOutfileTypeDoc
+    infile = return $ cppInfileTypeDoc
+    outfile = return $ cppOutfileTypeDoc
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
-    boolListType = return csBoolListTypeDocD
+    boolListType = listType p bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
+-- ControlBlockSym Not translated yet
 instance ControlBlockSym CppSrcCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
@@ -189,19 +190,19 @@ instance UnaryOpSym CppSrcCode where
     type UnaryOp CppSrcCode = Doc
     notOp = return $ notOpDocD
     negateOp = return $ negateOpDocD
-    sqrtOp = return $ text "Math.Sqrt"
-    absOp = return $ text "Math.Abs"
-    logOp = return $ text "Math.Log10"
-    lnOp = return $ text "Math.Log"
-    expOp = return $ text "Math.Exp"
-    sinOp = return $ text "Math.Sin"
-    cosOp = return $ text "Math.Cos"
-    tanOp = return $ text "Math.Tan"
-    asinOp = return $ text "Math.Asin"
-    acosOp = return $ text "Math.Acos"
-    atanOp = return $ text "Math.Atan"
-    floorOp = return $ text "Math.Floor"
-    ceilOp = return $ text "Math.Ceiling"
+    sqrtOp = return $ sqrtOpDocD
+    absOp = return $ absOpDocD
+    logOp = return $ text "log10"
+    lnOp = return $ text "log"
+    expOp = return $ expOpDocD
+    sinOp = return $ sinOpDocD
+    cosOp = return $ cosOpDocD
+    tanOp = return $ tanOpDocD
+    asinOp = return $ asinOpDocD
+    acosOp = return $ acosOpDocD
+    atanOp = return $ atanOpDocD
+    floorOp = return $ text "floor"
+    ceilOp = return $ text "ceil"
 
 instance BinaryOpSym CppSrcCode where
     type BinaryOp CppSrcCode = Doc
@@ -215,7 +216,7 @@ instance BinaryOpSym CppSrcCode where
     minusOp = return $ minusOpDocD
     multOp = return $ multOpDocD
     divideOp = return $ divideOpDocD
-    powerOp = return $ text "Math.Pow"
+    powerOp = return $ powerOpDocD
     moduloOp = return $ moduloOpDocD
     andOp = return $ andOpDocD
     orOp = return $ orOpDocD
@@ -240,17 +241,17 @@ instance ValueSym CppSrcCode where
 
     const = var
     var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
+    extVar _ = var
     self = return $ selfDocD
-    arg n = liftA2 argDocD (litInt n) argsList
-    enumElement en e = return $ enumElemDocD en e
+    arg n = liftA2 argDocD (litInt (n+1)) argsList
+    enumElement _ e = return $ text e
     enumVar = var
     objVar = liftA2 objVarDocD
-    objVarSelf n = liftA2 objVarDocD self (var n)
+    objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
     
-    inputFunc = return $ text "Console.ReadLine()"
+    inputFunc = return $ text "std::cin"
 
     valName v = unCPPSC $ fmap render v
 
@@ -296,13 +297,13 @@ instance ValueExpression CppSrcCode where
     inlineIf = liftA3 inlineIfDocD
     funcApp n = liftList (funcAppDocD n)
     selfFuncApp = funcApp
-    extFuncApp l n = liftList (extFuncAppDocD l n)
-    stateObj t vs = liftA2 stateObjDocD t (liftList callFuncParamList vs)
+    extFuncApp _ = funcApp
+    stateObj t vs = liftA2 cppStateObjDoc t (liftList callFuncParamList vs)
     extStateObj _ = stateObj
-    listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
+    listStateObj = stateObj
 
     exists = notNull
-    notNull v = liftA3 notNullDocD v notEqualOp (var "null")
+    notNull v = v
 
 instance Selector CppSrcCode where
     objAccess = liftA2 objAccessDocD
@@ -316,13 +317,13 @@ instance Selector CppSrcCode where
     listPopulateAccess _ _ = return empty
     listSizeAccess v = objAccess v listSize
 
-    listIndexExists = liftA3 listIndexExistsDocD greaterOp
+    listIndexExists v i = listSizeAccess v ?> i
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
     stringEqual v1 v2 = v1 ?== v2
 
     castObj = liftA2 castObjDocD
-    castStrToFloat v = funcApp "Double.Parse" [v]
+    castStrToFloat v = funcApp "stof" [v]
 
 instance FunctionSym CppSrcCode where
     type Function CppSrcCode = Doc
@@ -332,34 +333,34 @@ instance FunctionSym CppSrcCode where
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
 
-    indexOf v = fmap funcDocD (funcApp "IndexOf" [v])
+    indexOf v = error "No indexOf function in C++"
 
-    listSize = fmap funcDocD (var "Count")
-    listAdd i v = fmap funcDocD (funcApp "Insert" [i, v])
+    listSize = fmap funcDocD (var "size")
+    listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
     listPopulateInt _ = return empty
     listPopulateFloat _ = return empty
     listPopulateChar _ = return empty
     listPopulateBool _ = return empty
     listPopulateString _ = return empty
-    listAppend v = fmap funcDocD (funcApp "Add" [v])
-    listExtendInt = fmap csListExtend defaultInt 
-    listExtendFloat = fmap csListExtend defaultFloat 
-    listExtendChar = fmap csListExtend defaultChar 
-    listExtendBool = fmap csListExtend defaultBool
-    listExtendString = fmap csListExtend defaultString
-    listExtendList _ = fmap csListExtendList
+    listAppend v = fmap funcDocD (funcApp "push_back" [v])
+    listExtendInt = listAppend defaultInt 
+    listExtendFloat = listAppend defaultFloat 
+    listExtendChar = listAppend defaultChar 
+    listExtendBool = listAppend defaultBool
+    listExtendString = listAppend defaultString
+    listExtendList _ = fmap cppListExtendList
 
     iterBegin = fmap funcDocD (funcApp "begin" [])
     iterEnd = fmap funcDocD (funcApp "end" [])
 
 instance SelectorFunction CppSrcCode where
-    listAccess = fmap listAccessDocD
-    listSet = liftA2 listSetDocD
+    listAccess v = fmap funcDocD (funcApp "at" [v])
+    listSet = liftA2 cppListSetDoc
 
     listAccessEnum t v = listAccess (castObj (cast int t) v)
     listSetEnum t i = listSet (castObj (cast int t) i)
 
-    at l = listAccess (var l)
+    at l = listAccess (var l) -- parameter should be an Integer?
 
 instance StatementSym CppSrcCode where
     type Statement CppSrcCode = (Doc, Bool)
@@ -565,17 +566,23 @@ usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <> text m <> end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
-csFloatTypeDocD :: Doc
-csFloatTypeDocD = text "double" -- Same as Java, maybe make a common function
+cppBoolTypeDoc :: Doc
+cppBoolTypeDoc = text "bool"
 
-csInfileTypeDoc :: Doc
-csInfileTypeDoc = text "StreamReader"
+cppFloatTypeDoc :: Doc
+cppFloatTypeDoc = text "double"
 
-csOutfileTypeDoc :: Doc
-csOutfileTypeDoc = text "StreamWriter"
+cppInfileTypeDoc :: Doc
+cppInfileTypeDoc = text "ifstream"
 
-csBoolListTypeDocD :: Doc
-csBoolListTypeDocD = text "BitArray"
+cppOutfileTypeDoc :: Doc
+cppOutfileTypeDoc = text "ofstream"
+
+cppStateObjDoc :: Doc -> Doc -> Doc
+cppStateObjDoc t ps = t <> parens ps
+
+cppListSetDoc :: Doc -> Doc -> Doc
+cppListSetDoc i v = dot <> at <> parens i <+> equals <+> v
 
 csThrowDoc :: Doc -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
@@ -606,5 +613,5 @@ csOpenFileWorA f n w a = f <+> equals <+> new <+> w <> parens (n <> comma <+> a)
 csListExtend :: Doc -> Doc
 csListExtend v = dot <> text "Add" <> parens v
 
-csListExtendList :: Doc -> Doc
-csListExtendList t = dot <> text "Add" <> parens (new <+> t <> parens empty)
+cppListExtendList :: Doc -> Doc
+cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0))

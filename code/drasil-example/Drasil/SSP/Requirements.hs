@@ -1,7 +1,9 @@
 module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
-  sspInputDataTable, sspInputsToOutputTable) where
+  sspInputDataTable, sspInputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
+
+import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
@@ -11,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
-  foldlList, foldlSent, ofThe, sAnd)
+  foldlList, foldlSent, foldlSP, ofThe, sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
@@ -113,11 +115,13 @@ sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
 sspNFRequirements :: [ConceptInstance]
 sspNFRequirements = [correct, understandable, reusable, maintainable]
 
+propsDeriv :: [Contents]
+propsDeriv = [foldlSP [S "FIXME"]]
+
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   S "The", plural output_ `ofThe` phrase code, S "have the",
-  plural property, S "described in (Properties of a Correct Solution)"
-  -- FIXME: (Properties of a Correct Solution) Section doesn't exist
+  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance

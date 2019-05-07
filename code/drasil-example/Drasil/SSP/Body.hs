@@ -65,7 +65,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
-  sspInputsToOutputTable)
+  sspInputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
@@ -522,9 +522,6 @@ slopeVert = verticesConst $ phrase slope
 -}
 
 -- SECTION 4.2.7 --
-
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
 
 -- SECTION 5 --
 

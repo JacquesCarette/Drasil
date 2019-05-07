@@ -66,7 +66,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (swhsNFRequirements)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -156,6 +156,7 @@ mkSRS = [RefSec $ RefProg intro
         [eBalanceOnWtr, heatEInWtr] ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
+      , CorrSolnPpties propsDerivNoPCM
       ]
     ],
   ReqrmntSec $ ReqsProg [

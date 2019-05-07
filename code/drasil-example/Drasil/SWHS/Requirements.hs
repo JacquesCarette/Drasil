@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, isThe, ofThe', sAnd)
+  foldlSent, foldlSP, isThe, ofThe', sAnd)
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
@@ -139,6 +139,10 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [
 
 swhsNFRequirements :: [ConceptInstance]
 swhsNFRequirements = [correct, verifiable, understandable, reusable, maintainable]
+
+propsDerivNoPCM :: [Contents]
+propsDerivNoPCM = [foldlSP [S "FIXME"]]
+-- Defined in this file since there isn't a NoPCM Requirements.file
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

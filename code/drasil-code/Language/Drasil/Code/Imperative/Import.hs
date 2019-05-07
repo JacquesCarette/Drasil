@@ -22,7 +22,6 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import System.FilePath ((</>))
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -96,7 +95,7 @@ generateCode chs g =
           let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
                        Just "Code"
           createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
-            map (if x == Java then \(c,d) -> (prog </> c, d) else id) $
+            map (if x == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
             C.unCode $ makeCode config absCode
           setCurrentDirectory workingDir) $ lang chs
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }

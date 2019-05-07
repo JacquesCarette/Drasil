@@ -2,34 +2,31 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 
-import Drasil.DocLang (nonFuncReqF)
 import Drasil.DocLang.SRS (propCorSol) 
 
-import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol, dataDefn,
-  funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
+import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
+  dataDefn, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
   nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
   simulation, solution, srs, thModel, traceyMatrix, unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
-import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, law_cons_energy, melting)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
+import Data.Drasil.Utils (eqUnR')
 
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
-  heatEInPCM, swhsIMods)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (t_final_melt, t_init_melt, pcm_E, pcm_HTC, pcm_SA, w_E, temp_PCM,
-  temp_C, temp_W, tau_S_P, tau_L_P, eta, tau_W, w_density, pcm_mass, pcm_vol,
-  pcm_density, diam, tank_length, tank_vol, w_vol, w_mass, coil_HTC, coil_SA, sim_time)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, pcm_E, pcm_HTC, pcm_SA,
+  pcm_density, pcm_mass, pcm_vol, sim_time, t_final_melt, t_init_melt, tank_length,
+  tank_vol, tau_L_P, tau_S_P, tau_W, temp_C, temp_PCM, temp_W, w_E, w_density,
+  w_mass, w_vol)
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --

@@ -16,27 +16,26 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
-  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, reqF, termDefnF, 
+  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
   getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (funcReq,
-  likeChg, probDesc, sysCont, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, corSol, dataConst, dataDefn, datum, definition, description, document, 
+  content, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
-import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
-  understandability, reusability, maintainability)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness,
+  understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
@@ -48,37 +47,36 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latent_heat, temp)
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
+  foldlSent, foldlSent_, foldlSP, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
-  heatTrans, thermal_conduction, ht_flux, heatCapSpec, thermal_energy,
-  ht_trans_theo, thermal_analysis, ener_src)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, thermal_conduction,
+  ht_flux, heatCapSpec, thermal_energy, ht_trans_theo, thermal_analysis, ener_src)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
+import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
 import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
-  heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
+  swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, verifyEnergyOutput, propsDeriv, swhsNFRequirements)
+import Drasil.SWHS.Requirements (funcReqs, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
-  temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
-  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
-  out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
-  specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
-  swhsInputs, swhsSymbols, swhsSymbolsAll, swhsUC)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
+  htCap_W, htFusion, ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA,
+  out_SA, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
+  specParamValList, swhsConstrained, swhsInputs, swhsOutputs, swhsSymbols,
+  swhsSymbolsAll, swhsUC, tank_length, tau_S_P, tau_W, temp_C, temp_PCM, temp_W,
+  temp_init, temp_melt_P, thFluxVect, thickness, time_final, vol_ht_gen, w_E,
+  w_density, w_mass)
 import Drasil.SWHS.Labels (inputInitQuantsLbl)
 
 -------------------------------------------------------------------------------

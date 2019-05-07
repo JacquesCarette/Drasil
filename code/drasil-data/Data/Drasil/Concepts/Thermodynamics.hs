@@ -10,11 +10,11 @@ import Control.Lens((^.))
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
   sensHeat, temp, thermalAnalysis, thermalConduction, thermalEnergy,
-  thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
+  thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, enerSrc]
 
 boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
   sensHeat, temp, thermalAnalysis, thermalConduction, thermalEnergy,
-  thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
+  thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, enerSrc :: ConceptChunk
 
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
@@ -71,7 +71,7 @@ thermalConductor   = dcc "thermalConductor"
 thermalEnergy      = dcc "thermalEnergy" 
                       (cnIES "thermal energy") "The energy that comes from heat"
 
-ener_src            = dcc "enerSrc" (compoundPhrase' (energy ^. term)
+enerSrc            = dcc "enerSrc" (compoundPhrase' (energy ^. term)
                       (source ^. term))
                       "A source from which useful energy can be extracted"
 ht_trans_theo       = dcc "ht_trans_theo" (compoundPhrase' (heat_trans ^. term)

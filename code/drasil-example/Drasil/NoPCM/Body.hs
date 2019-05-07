@@ -20,7 +20,7 @@ import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Thermodynamics (ener_src, thermalAnalysis, temp,
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
   thermalEnergy, ht_trans_theo, htFlux, heat_cap_spec, thermalConduction,
   thermocon, phaseChange)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
@@ -138,7 +138,7 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
   TAandA],
-  IntroSec $ IntroProg (introStart ener_src energy progName)
+  IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
   IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy

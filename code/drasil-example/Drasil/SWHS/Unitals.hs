@@ -9,7 +9,7 @@ import Data.Drasil.Phrase (of_)
 import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, meltPt,
+import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
   htFlux, latentHeat, boil_pt, heat_cap_spec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
@@ -33,7 +33,7 @@ swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
 
 swhsUnits :: [UnitaryConceptDict]
 swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
-  htCap_S, htCap_V, sens_heat, pcm_initMltE,
+  htCap_S, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, meltPt, t_init_melt,
@@ -94,7 +94,7 @@ htCap_V = uc' "htCap_V"
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
-  (sup (sub (sub (eqSymb sens_heat)
+  (sup (sub (sub (eqSymb sensHeat)
   (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
 
 vol_ht_gen = uc' "vol_ht_gen"
@@ -404,13 +404,13 @@ temp_PCM = cuc' "temp_PCM"
 -- Constraint 20
 w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" 
-  (sub (eqSymb sens_heat) cW) joule Rational
+  (sub (eqSymb sensHeat) cW) joule Rational
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
 pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
-  (sub (eqSymb sens_heat) cP) joule Rational
+  (sub (eqSymb sensHeat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)
 
 ---------------------------------

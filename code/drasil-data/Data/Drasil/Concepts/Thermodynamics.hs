@@ -9,11 +9,11 @@ import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
+  sensHeat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
 
 boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
+  sensHeat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
 
   
@@ -53,7 +53,7 @@ meltPt             = dcc "meltPt"         (cn' "melting point temperature")
                       "Temperature at which a substance changes from liquid to vapour"
 phaseChange        = dcc "phaseChange"    (cn' "phase change")
                       "Change of state"
-sens_heat           = dcc "sens_heat"       (cn' "sensible heat")
+sensHeat           = dcc "sensHeat"       (cn' "sensible heat")
                       ("Heat exchanged by a body in which the exchange of heat " ++
                       "changes the temperature and some macroscopic variables of " ++
                       "the body or system, but leaves others unchanged")

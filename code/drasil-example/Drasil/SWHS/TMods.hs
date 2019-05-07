@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
-  latentHeat, meltPt, boil_pt, sens_heat, heat_cap_spec)
+  latentHeat, meltPt, boil_pt, sensHeat, heat_cap_spec)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
@@ -76,7 +76,7 @@ data PhaseChange = AllPhases
 
 sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
 sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
-  [qw sens_heat, qw htCap_S, qw mass, 
+  [qw sensHeat, qw htCap_S, qw mass, 
     qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
@@ -93,7 +93,7 @@ sensHtESrc = makeURI "sensHtESrc"
   shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Relation
-sensHtEEqn pChange = (sy sens_heat) $= case pChange of
+sensHtEEqn pChange = (sy sensHeat) $= case pChange of
   Liquid -> liquidFormula
   AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
       ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<
@@ -108,8 +108,8 @@ sensHtEEqn pChange = (sy sens_heat) $= case pChange of
 -- were implemented incorrectly.
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
-  ch sens_heat `isThe` S "change in",
-  phrase sens_heat, phrase energy +:+. sParen (Sy (usymb joule)),
+  ch sensHeat `isThe` S "change in",
+  phrase sensHeat, phrase energy +:+. sParen (Sy (usymb joule)),
   ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
@@ -120,7 +120,7 @@ sensHtEdesc = foldlSent [
   ch meltPt `sAnd` ch boil_pt,
   S "are the", phrase meltPt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start sens_heat :+: S "ing occurs as long as the material does",
+  at_start sensHeat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
   phrase phaseChange, S "occurs. A",
   phrase phaseChange, S "occurs if",

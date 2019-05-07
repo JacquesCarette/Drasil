@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, htFlux, heat_cap_spec, thermal_conduction,
-  thermocon, phase_change)
+  thermocon, phaseChange)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -407,7 +407,7 @@ sensHtE = sensHtE_template Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
+  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

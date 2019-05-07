@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
+import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermal_energy,
   heat_trans, lawConsEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
@@ -122,8 +122,8 @@ sensHtEdesc = foldlSent [
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start sens_heat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
-  phrase phase_change, S "occurs. A",
-  phrase phase_change, S "occurs if",
+  phrase phaseChange, S "occurs. A",
+  phrase phaseChange, S "occurs if",
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +:+. ch meltPt,
   S "If this" `isThe` S "case, refer to",
@@ -169,8 +169,8 @@ latentHtEdesc = foldlSent [
   ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
-  phrase phase_change, S "is not complete. The status of",
-  S "the", phrase phase_change,
+  phrase phaseChange, S "is not complete. The status of",
+  S "the", phrase phaseChange,
   S "depends on the", phrase melt_frac `sC`
   (makeRef2S dd3HtFusion) :+: S ".",
   ch meltPt `sAnd` ch boil_pt, S "are the",

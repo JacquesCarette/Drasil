@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
-  heat_trans, htFlux, latentHeat, melting, phase_change, sens_heat, temp, thermal_energy)
+  heat_trans, htFlux, latentHeat, melting, phaseChange, sens_heat, temp, thermal_energy)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
@@ -103,7 +103,7 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp
     (E $ sy hfc), S "represents the", phrase ht, S "into the", phrase wt,
     S "from the", (phrase cl `sAnd` (E $ sy hfp)), S "represents the", phrase ht,
     S "into the PCM from", phrase wt `sC` S "over", phrase cl, phrase su,
-    S "area and", phrase phase_change, S "material", phrase su, S "area of",
+    S "area and", phrase phaseChange, S "material", phrase su, S "area of",
     (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC`
     S "since it has been assumed to be perfectly insulated",
@@ -280,7 +280,7 @@ eBalanceOnPCMDeriv =
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
   eBalanceOnPCMDerivDesc1 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heat_cap_spec
-    htCap_S_P htFlux ht_flux_P phase_change pcm_SA heat assumpNIHGBWP vol_ht_gen,
+    htCap_S_P htFlux ht_flux_P phaseChange pcm_SA heat assumpNIHGBWP vol_ht_gen,
   eBalanceOnPCMDerivDesc2 dd2HtFluxP ht_flux_P,
   eBalanceOnPCMDerivDesc3 eq6,
   eBalanceOnPCMDerivDesc4 eq7
@@ -479,4 +479,4 @@ instModIntro = S "The" +:+ plural goal +:+ makeRef2S waterTempGS `sC`
   S "has been solved" +:+ S "The" +:+ plural solution `sOf` 
   makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM +:+ 
   S "are also coupled" `sC` S "since the" +:+ phrase temp_PCM `andThe` 
-  phrase pcm_E +:+ S "depend on the" +:+. phrase phase_change
+  phrase pcm_E +:+ S "depend on the" +:+. phrase phaseChange

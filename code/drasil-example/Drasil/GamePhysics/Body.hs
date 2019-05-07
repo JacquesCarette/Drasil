@@ -85,11 +85,11 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   [IPurpose para1_purpose_of_document_intro,
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec organization_of_documents_intro inModel (SRS.inModel [] []) EmptyS],
+   IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg2 [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [user_characteristics_intro], SystCons [] []],
-   SSDSec $ SSDProg [SSDSubVerb problem_description
+    UsrChars [userCharacteristicsIntro], SystCons [] []],
+   SSDSec $ SSDProg [SSDSubVerb problemDescription
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -117,32 +117,32 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 gameLabel :: TraceMap
-gameLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' game_concins
+gameLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
 
-game_refby :: RefbyMap
-game_refby = generateRefbyMap gameLabel
+gameRefby :: RefbyMap
+gameRefby = generateRefbyMap gameLabel
 
-game_datadefn :: [DataDefinition]
-game_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+gameDatadefn :: [DataDefinition]
+gameDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-game_insmodel :: [InstanceModel]
-game_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+gameInsmodel :: [InstanceModel]
+gameInsmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
-game_gendef :: [GenDefn]
-game_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+gameGendef :: [GenDefn]
+gameGendef = getTraceMapFromGD $ getSCSSub mkSRS
 
-game_theory :: [TheoryModel]
-game_theory = getTraceMapFromTM $ getSCSSub mkSRS
+gameTheory :: [TheoryModel]
+gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
 
-game_concins :: [ConceptInstance]
-game_concins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
+gameConcins :: [ConceptInstance]
+gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   functional_requirements_list'
 
-game_section :: [Section]
-game_section = game_sec
+gameSection :: [Section]
+gameSection = gameSec
 
-game_sec :: [Section]
-game_sec = extractSection chipmunkSRS'
+gameSec :: [Section]
+gameSec = extractSection chipmunkSRS'
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -172,7 +172,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb cpCitations game_concins
+cpRefDB = rdb cpCitations gameConcins
 
 --FIXME: All named ideas, not just acronyms.
 
@@ -186,13 +186,13 @@ everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll) (map nw cpSymbolsAl
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new) chipUnits
-  gameLabel game_refby game_datadefn game_insmodel game_gendef game_theory
-  game_concins game_section []
+  gameLabel gameRefby gameDatadefn gameInsmodel gameGendef gameTheory
+  gameConcins gameSection []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi gameLabel game_refby
- game_datadefn game_insmodel game_gendef game_theory game_concins game_section
+ ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi gameLabel gameRefby
+ gameDatadefn gameInsmodel gameGendef gameTheory gameConcins gameSection
  []
 
 printSetting :: PrintingInformation
@@ -277,9 +277,9 @@ scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these",
 -- 2.3 : Organization of Documents --
 -------------------------------------
 
-organization_of_documents_intro :: Sentence
+organizationOfDocumentsIntro :: Sentence
 
-organization_of_documents_intro = foldlSent 
+organizationOfDocumentsIntro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
   S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
   (phrase sciCompS), S "proposed by", makeCiteS parnas1972 `sAnd` 
@@ -346,10 +346,10 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 --------------------------------
 
 userCharacteristicSect :: SubSec
-userCharacteristicSect = sSubSec userCharacteristic [(siCon [user_characteristics_intro])]
+userCharacteristicSect = sSubSec userCharacteristic [(siCon [userCharacteristicsIntro])]
 
-user_characteristics_intro :: Contents
-user_characteristics_intro = foldlSP
+userCharacteristicsIntro :: Contents
+userCharacteristicsIntro = foldlSP
   [S "The", phrase endUser `sOf` short chipmunk,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
@@ -372,19 +372,19 @@ systemConstraintSect = sSubSec systemConstraint []
 -- 4.1 : Problem Description --
 -------------------------------
 
-problem_description :: Section
-problem_description_intro :: Sentence
+problemDescription :: Section
+problemDescriptionIntro :: Sentence
 
-problem_description = assembler chipmunk everything problemDescriptionSect [termAndDefSect, 
+problemDescription = assembler chipmunk everything problemDescriptionSect [termAndDefSect, 
   goalStatementSect]
 
 problemDescriptionSect :: SubSec
-problemDescriptionSect = sSubSec problemDescription [(siSent [problem_description_intro])]
+problemDescriptionSect = sSubSec problemDescription [(siSent [problemDescriptionIntro])]
 
-problem_description_intro = problem_description_intro_param physLib game
+problemDescriptionIntro = problemDescriptionIntroParam physLib game
 
-problem_description_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-problem_description_intro_param lib app = foldlSent 
+problemDescriptionIntroParam :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+problemDescriptionIntroParam lib app = foldlSent 
   [S "Creating a gaming", (phrase lib), S "is a difficult" +:+. phrase task,
   (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
   S "acting under various", (phrase physical), plural condition `sC` S "while", 
@@ -679,7 +679,7 @@ off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist,
 off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, 
   off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
 
-off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
+off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problemDescription physLib
 
 off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents
 off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentCol 
@@ -752,7 +752,7 @@ traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
-traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
+traceMatGoalStmtRef = makeListRef goal_statements_list' problemDescription
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])) -- FIXME: hack?
@@ -804,7 +804,7 @@ traceMatTabReqGoalOther = llcc (makeTabRef "TraceyReqGoalsOther") $ Table
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef2S requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef2S problem_description) `sAnd` S "Other" +:+
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef2S problemDescription) `sAnd` S "Other" +:+
   titleize' item)) True
 
 traceMatTabAssumpCol' :: [[String]]
@@ -875,7 +875,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc (makeTabRef "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S problem_description)
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S problemDescription)
   `sAnd` S "Other" +:+ titleize' item)) True
 
 traceMatTabDefnModelCol :: [[String]]

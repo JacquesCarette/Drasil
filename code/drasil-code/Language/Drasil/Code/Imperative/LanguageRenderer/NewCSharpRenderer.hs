@@ -304,7 +304,7 @@ instance ValueExpression CSharpCode where
     listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
 
     exists = notNull
-    notNull v = liftA3 notNullDocD v notEqualOp (var "null")
+    notNull v = liftA3 notNullDocD notEqualOp v (var "null")
 
 instance Selector CSharpCode where
     objAccess = liftA2 objAccessDocD

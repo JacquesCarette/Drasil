@@ -42,7 +42,6 @@ import Language.Drasil.Code.Imperative.Helpers (angles,oneTab,tripFst,tripSnd,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad (sequence)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
     semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
 
@@ -312,7 +311,7 @@ instance ValueExpression JavaCode where
     listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
 
     exists = notNull
-    notNull v = liftA3 notNullDocD v notEqualOp (var "null")
+    notNull v = liftA3 notNullDocD notEqualOp v (var "null")
 
 instance Selector JavaCode where
     objAccess = liftA2 objAccessDocD
@@ -414,13 +413,13 @@ instance StatementSym JavaCode where
     printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
     printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
 
-    getIntInput v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInteger") v inputFunc, True)
+    getIntInput v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInt") v inputFunc, True)
     getFloatInput v = liftPairFst (liftA3 jInput' (return $ text "Double.parseDouble") v inputFunc, True)
     getBoolInput v = liftPairFst (liftA3 jInput (return $ text "nextBoolean()") v inputFunc, True)
     getStringInput v = liftPairFst (liftA3 jInput (return $ text "nextLine()") v inputFunc, True)
     getCharInput _ = return (empty, False)
     discardInput = liftPairFst (fmap jDiscardInput inputFunc, True)
-    getIntFileInput f v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInteger") v f, True)
+    getIntFileInput f v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInt") v f, True)
     getFloatFileInput f v = liftPairFst (liftA3 jInput' (return $ text "Double.parseDouble") v f, True)
     getBoolFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextBoolean()") v f, True)
     getStringFileInput f v = liftPairFst (liftA3 jInput (return $ text "nextLine()") v f, True)

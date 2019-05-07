@@ -17,7 +17,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtLabel, characteristics_label, physSystDescription_label,
+  generateTraceTable, goalStmtLabel, characteristicsLabel, physSystDescription_label,
   generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
@@ -384,7 +384,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 {--User Characteristics--}
 
 user_characteristics_intro :: Contents
-user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlSent
+user_characteristics_intro = LlC $ enumBullet characteristicsLabel $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",

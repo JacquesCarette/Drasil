@@ -11,8 +11,8 @@ goalStmtLabel = makeLstRef "goalStmt" "goalStmt"
 solutionLabel :: Reference
 solutionLabel = makeLstRef "solution" "solution"
 
-characteristics_label :: Reference
-characteristics_label = makeLstRef "characteristics" "characteristics"
+characteristicsLabel :: Reference
+characteristicsLabel = makeLstRef "characteristics" "characteristics"
 
 physSystDescription_label :: Reference
 physSystDescription_label = makeLstRef "physSystDescription" "physSystDescription"

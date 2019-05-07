@@ -9,8 +9,8 @@ heatCapacity :: UnitDefn
 heatCapacity = makeDerU (dccWDS "heatCapacity" (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
-heat_cap_spec :: UnitDefn --Specific heat capacity
-heat_cap_spec = makeDerU (dccWDS "heat_cap_spec" (cn' "specific heat")
+heatCapSpec :: UnitDefn --Specific heat capacity
+heatCapSpec = makeDerU (dccWDS "heatCapSpec" (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
 thermalFlux :: UnitDefn

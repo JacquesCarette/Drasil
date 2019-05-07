@@ -35,9 +35,9 @@ forTT' = for'' titleize' titleize'
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (Doc.srs `forTT` sys) authors secs
+doc  sys = Document (Doc.srs `forTT` sys)
 -- | Uses plural of system for title.
-doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
+doc' sys = Document (Doc.srs `forTT'` sys)
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 

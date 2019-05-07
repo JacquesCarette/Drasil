@@ -9,7 +9,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec)
+  heatCapSpec)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSentCol, ofThe, sAnd)
@@ -41,7 +41,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   genDefDesc1 consThermE vol,
   genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
-  genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
+  genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],
   genDefDesc5 density mass vol]
 
@@ -80,22 +80,22 @@ genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
 genDefEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+genDefEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-genDefEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+genDefEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 

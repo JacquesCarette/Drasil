@@ -587,8 +587,8 @@ requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b,
 
   -- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-requirementS a b d = requirementTemplate (plural a) (plural b) ((getAcc twoD)
-  +:+ (plural CP.rigidBody)) d
+requirementS a b = requirementTemplate (plural a) (plural b) ((getAcc twoD)
+  +:+ (plural CP.rigidBody))
 
   -- | without added constraint
 requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence

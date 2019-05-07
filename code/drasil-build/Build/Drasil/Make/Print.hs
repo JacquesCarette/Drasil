@@ -16,11 +16,11 @@ genMake = build . toMake
 -- | Renders the makefile rules
 build :: Makefile -> Doc
 build (M rules) = addCommonFeatures $
-  (vcat $ map (\x -> printRule x $+$ text "") rules) $$ printPhony rules
+  vcat (map (\x -> printRule x $+$ text "") rules) $$ printPhony rules
 
 -- | Renders specific makefile rules. Called by 'build'
 printRule :: Rule -> Doc
-printRule (R t d _ c) = printTarget t d $+$ (printCmds c)
+printRule (R t d _ c) = printTarget t d $+$ printCmds c
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc

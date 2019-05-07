@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Thermodynamics (boil_pt, meltPt)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
@@ -71,9 +71,9 @@ assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+ (sParen $
 
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase meltPt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
-  :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb QT.temp) `sC` S "respectively")
+  phrase meltPt `sAnd` phrase boilPt +:+ S "of water are" +:+
+  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `sAnd`
+  S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) `sC` S "respectively")
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom

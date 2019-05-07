@@ -12,7 +12,7 @@ algorithm    = dcc "algorithm" (cn' "algorithm")
   "A series of steps to be followed in calculations and problem-solving operations"
 
 modCalcDesc :: Sentence -> ConceptChunk
-modCalcDesc defnFromEx = dccWDS "modCalcDesc" (cn' "calculation") defnFromEx
+modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 

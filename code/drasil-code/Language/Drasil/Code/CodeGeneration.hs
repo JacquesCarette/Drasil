@@ -50,7 +50,7 @@ makeLangConfig l options =
         Just c  -> fix $ c options
         Nothing -> error errStr
           where errStr = "GOOL.CodeGeneration.makeLangConfig: must supply "
-                         ++ (listLabels $ Map.keys langs)
+                         ++ listLabels (Map.keys langs)
                          ++ " for the \"Generation Language\" option in the configuration file"
 
 listLabels :: [String] -> String

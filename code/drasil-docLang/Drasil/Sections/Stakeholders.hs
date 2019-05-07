@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (section_, stakeholder, interest, prod
 import Data.Drasil.Phrase (the)
 
 stakehldrGeneral :: (Idea a) => a -> Sentence -> Section
-stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
+stakehldrGeneral kWord clientDetails = SRS.stakeholder [stakeholderIntro] subs
   where subs = [(tClientF kWord clientDetails), (tCustomerF kWord)]
 
 -- general stakeholders introduction

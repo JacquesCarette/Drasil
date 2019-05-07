@@ -34,7 +34,7 @@ instance NamedIdea IdeaDict where term = nc' . term
 instance Idea      IdeaDict where getA = mabbr
   
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
-mkIdea s np' ms = IdeaDict (nc s np') ms
+mkIdea s np' = IdeaDict (nc s np')
 
 -- Historical name: nw comes from 'named wrapped' from when
 -- |NamedIdea| exported |getA| (now in |Idea|). But there are

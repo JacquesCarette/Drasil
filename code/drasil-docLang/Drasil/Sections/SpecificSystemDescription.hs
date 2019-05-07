@@ -35,7 +35,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: [Section] -> Section
-specSysDescr subs = SRS.specSysDes [intro_] subs
+specSysDescr = SRS.specSysDes [intro_]
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
@@ -47,13 +47,13 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
 
 -- give starting sentence(s), the program name, and finish the last sentence
 probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
-probDescF start progName ending subSec = SRS.probDesc [mkParagraph intro] subSec
+probDescF start progName ending = SRS.probDesc [mkParagraph intro]
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
                   
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
+termDefnF end otherContents = SRS.termAndDefn (intro:otherContents) []
       where lastF Nothing  = EmptyS
             lastF (Just s) = S "." +:+ s
             intro = foldlSP [S "This subsection provides a list of terms", 
@@ -64,8 +64,8 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
-physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
-  where intro = mkParagraph $ foldle (+:+) (+:) (EmptyS)
+physSystDesc progName fg otherContents = SRS.physSyst (intro:otherContents) []
+  where intro = mkParagraph $ foldle (+:+) (+:) EmptyS
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
                 S "as shown in", (makeRef2S fg) `sC` S "includes the following", 
                 plural element]
@@ -80,7 +80,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRef2S (instModelSection), S "The", phrase information, S "to understand", 
+  makeRef2S instModelSection, S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -99,7 +99,7 @@ assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
+          foldr1 sC (map refs itemsAndRefs) `sC` (refs (likelyChg, r5)) `sC` S "or", 
           refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ (Ref $ makeRef2 ref) 
@@ -142,7 +142,7 @@ dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase sec
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
-  ((inModelIntro probDes datDef theMod genDef):(otherContents)) []
+  ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
@@ -174,7 +174,7 @@ listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef2S x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef2S x) +:+ S "and" +:+ (makeRef2S y) +:+ S "show" -- for proper grammar with multiple tables
                                                                                   -- no Oxford comma in case there is only two tables to be referenced
-listofTablesToRefs  (x:xs) = (makeRef2S x) `sC` listofTablesToRefs (xs)
+listofTablesToRefs  (x:xs) = (makeRef2S x) `sC` listofTablesToRefs xs
  
 dataConstraintIntroSent :: Sentence -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 

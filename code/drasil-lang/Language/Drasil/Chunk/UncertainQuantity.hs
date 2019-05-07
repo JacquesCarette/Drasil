@@ -48,7 +48,7 @@ uncrtnChunk q = UCh (cnstrw q)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
-uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs (Just val)) uncrt
+uvc nam trm sym space cs val = uncrtnChunk (cvc nam trm sym space cs (Just val))
 
 -- | projection
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
@@ -85,9 +85,9 @@ uq q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. c
 --FIXME: this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space
                 -> [Constraint] -> Expr -> Uncertainty -> UncertQ
-uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs val) uncrt
+uqc nam trm desc sym un space cs val = uq (cuc' nam trm desc sym un space cs val)
 
 --uncertainty quantity constraint no description
 uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Uncertainty -> UncertQ
-uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs val) uncrt
+uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)

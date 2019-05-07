@@ -101,7 +101,7 @@ include' :: Label -> Doc
 include' n = incl <+> quotes (text n)
 
 luastateType :: Config -> StateType -> DecDef -> Doc
-luastateType _ (List _ _) _  = braces (empty)
+luastateType _ (List _ _) _  = braces empty
 luastateType _ (Base _) _    = empty
 luastateType _ (Type name) _ = text name <> colon <> text initName
 luastateType c s d           = stateTypeD c s d
@@ -206,7 +206,7 @@ funcDoc' c (Func n vs) = colon <> funcAppDoc c n vs
 funcDoc' c (Get n) = colon <> funcAppDoc c (getterName n) []
 funcDoc' c (Set n v) = colon <> funcAppDoc c (setterName n) [v]
 funcDoc' _ (IndexOf _) = text indexOf
-funcDoc' _ (ListSize) = text "#"
+funcDoc' _ ListSize = text "#"
 funcDoc' c (ListAccess i) = brackets $ valueDoc c $ listIndex i
 funcDoc' _ (ListAdd _ _) = text "table" <> dot <> text "insert"
 funcDoc' c (ListSet i v) = brackets (valueDoc c $ listIndex i) <+> equals <+> valueDoc c v
@@ -240,13 +240,13 @@ classDoc' c f _ (Class n p _ _ fs) = vcat [
 classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
-objAccessDoc' c v@(Self) f = valueDoc c v <> funcDoc c f
+objAccessDoc' c v@Self f = valueDoc c v <> funcDoc c f
 objAccessDoc' c v (Cast _ _) = valueDoc c v
-objAccessDoc' c v f@(ListSize) = funcDoc c f <> parens (valueDoc c v)
+objAccessDoc' c v f@ListSize = funcDoc c f <> parens (valueDoc c v)
 objAccessDoc' c v f@(ListAdd i e) = funcDoc c f <> parens (callFuncParamList c [v, listIndex i, e])       --add 1 to account for Lua's 1-indexed lists
 objAccessDoc' c v f@(IndexOf vari) = funcDoc c f <> parens (callFuncParamList c [v, vari])
-objAccessDoc' c v   (Floor) = funcAppDoc c "math.floor" [v]
-objAccessDoc' c v   (Ceiling) = funcAppDoc c "math.ceil" [v]
+objAccessDoc' c v Floor = funcAppDoc c "math.floor" [v]
+objAccessDoc' c v Ceiling = funcAppDoc c "math.ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
           
 objVarDoc' :: Config -> Value -> Value -> Doc
@@ -282,7 +282,7 @@ unOpDoc' Abs = text "math.abs"
 unOpDoc' op = unOpDocD' op
 
 valueDoc' :: Config -> Value -> Doc
-valueDoc' _ (Self) = text "self"
+valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List _ _) _) = listObj c <> stateType c t Def
 valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v@(Arg _) = valueDocD' c v

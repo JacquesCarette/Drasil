@@ -6,7 +6,7 @@ import Language.Drasil hiding (Manual, Vector, Verb)
 import Data.List(transpose)
 
 egetDocDesc :: DocDesc -> [Expr]
-egetDocDesc d = concatMap egetDocSec d
+egetDocDesc = concatMap egetDocSec
 
 egetDocSec :: DocSection -> [Expr]
 egetDocSec (Verbatim a)         = egetSec a
@@ -22,7 +22,7 @@ egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
-egetDocSec (Bibliography)       = []
+egetDocSec  Bibliography        = []
 egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
@@ -151,7 +151,7 @@ egetDD :: DataDefinition -> [Expr]
 egetDD dd = [dd ^. defnExpr, sy dd]
 
 getDocDesc :: DocDesc -> [Sentence]
-getDocDesc d = concatMap getDocSec d
+getDocDesc = concatMap getDocSec
 
 getDocSec :: DocSection -> [Sentence]
 getDocSec (Verbatim a)         = getSec a
@@ -376,7 +376,7 @@ getExist (ExistSolnVerb s) = getSec s
 getExist (ExistSolnProg c) = concatMap getCon' c
 
 ciGetDocDesc :: DocDesc -> [CI]
-ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
+ciGetDocDesc = concatMap ciGetDocSec
 
 ciGetDocSec :: DocSection -> [CI]
 ciGetDocSec Verbatim{}              = []

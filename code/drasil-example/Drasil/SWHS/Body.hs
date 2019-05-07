@@ -56,7 +56,7 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, 
   heat_trans, thermalConduction, htFlux, heat_cap_spec, thermalEnergy,
-  ht_trans_theo, thermalAnalysis, enerSrc)
+  htTransTheo, thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -168,7 +168,7 @@ mkSRS = [RefSec $ RefProg intro [
     [IPurpose $ purpDoc swhs_pcm progName,
      IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
-     IChar [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
+     IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhs_pcm progName],
   Verbatim genSystDesc,

@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
-import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
+import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heat_cap_spec,
   temp)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
@@ -52,7 +52,7 @@ nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel -- nwtnCoolingL
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
+nwtnCooling_rel = apply1 htFlux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence
@@ -90,7 +90,7 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
   ch temp `isThe` phrase temp, sParen (Sy $ unit_symb temp) `sAnd`
   ch QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
   ch ht_flux_in `sAnd` ch ht_flux_out, S "are the in and out heat",
-  S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.ht_flux),
+  S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.htFlux),
   ch in_SA `sAnd` ch out_SA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
   sParen (unwrap $ getUnit pcm_SA), ch vol_ht_gen `isThe`

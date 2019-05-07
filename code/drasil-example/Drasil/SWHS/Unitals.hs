@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  ht_flux, latent_heat, boil_pt, heat_cap_spec)
+  htFlux, latent_heat, boil_pt, heat_cap_spec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
@@ -34,7 +34,7 @@ swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
 swhsUnits :: [UnitaryConceptDict]
 swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE,
-  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
+  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
@@ -121,20 +121,20 @@ thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
 ht_flux_C = uc' "ht_flux_C"
   (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
-  (sub (eqSymb ht_flux) cC) UT.thermal_flux
+  (sub (eqSymb htFlux) cC) UT.thermal_flux
 
 ht_flux_in = uc' "ht_flux_in" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb ht_flux) (Atomic "in")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "in")) UT.thermal_flux
 
 ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb ht_flux) (Atomic "out")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "out")) UT.thermal_flux
 
 ht_flux_P = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
   ("The rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
-  (sub (eqSymb ht_flux) cP) UT.thermal_flux
+  (sub (eqSymb htFlux) cP) UT.thermal_flux
 
 latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++

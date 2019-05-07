@@ -10,11 +10,11 @@ import Control.Lens((^.))
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src]
+  thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
 
 boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
+  thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
 
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
@@ -35,7 +35,7 @@ heat_trans          = dcc "heat_trans"      (cn' "heat transfer")
 heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity")
                       ("The amount of energy required to raise the temperature " ++
                       "of the unit mass of a given substance by a given amount")
-ht_flux             = dcc "ht_flux"         (cn'' "heat flux") 
+htFlux             = dcc "htFlux"         (cn'' "heat flux") 
                       ("The rate of thermal energy transfer through a given " ++
                       "surface per unit time")
 latent_heat         = dcc "latent_heat"     (cn' "latent heat")

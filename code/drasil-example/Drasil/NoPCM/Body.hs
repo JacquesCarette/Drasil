@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermalAnalysis, temp,
-  thermal_energy, ht_trans_theo, htFlux, heat_cap_spec, thermalConduction,
+  thermalEnergy, ht_trans_theo, htFlux, heat_cap_spec, thermalConduction,
   thermocon, phaseChange)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
@@ -141,7 +141,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermal_energy
+  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
     water),
   IChar [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],

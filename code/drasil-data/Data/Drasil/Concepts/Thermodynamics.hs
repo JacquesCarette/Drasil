@@ -9,11 +9,11 @@ import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sensHeat, temp, thermalAnalysis, thermalConduction, thermal_energy,
+  sensHeat, temp, thermalAnalysis, thermalConduction, thermalEnergy,
   thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
 
 boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sensHeat, temp, thermalAnalysis, thermalConduction, thermal_energy,
+  sensHeat, temp, thermalAnalysis, thermalConduction, thermalEnergy,
   thermalConductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
 
   
@@ -68,7 +68,7 @@ thermalConduction  = dcc "thermalConduction"
 thermalConductor   = dcc "thermalConductor"
                       (cn' "thermal conductor")
                       "An object through which thermal energy can be transferred easily"
-thermal_energy      = dcc "thermal_energy" 
+thermalEnergy      = dcc "thermalEnergy" 
                       (cnIES "thermal energy") "The energy that comes from heat"
 
 ener_src            = dcc "enerSrc" (compoundPhrase' (energy ^. term)

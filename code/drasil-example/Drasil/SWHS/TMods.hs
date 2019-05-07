@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermal_energy,
+import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermalEnergy,
   heat_trans, lawConsEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
@@ -162,7 +162,7 @@ latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
 latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [
   ch latentHeat `isThe` S "change in",
-  phrase thermal_energy, sParen (Sy (usymb joule)) `sC`
+  phrase thermalEnergy, sParen (Sy (usymb joule)) `sC`
   phrase latentHeat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
   ch latentHeat, S "with respect to", phrase time,

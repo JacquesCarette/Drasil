@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
-  heat_trans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp, thermal_energy)
+  heat_trans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp, thermalEnergy)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
@@ -388,7 +388,7 @@ htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+. 
   makeRef2S sensHtE, ch w_E `isThe` phrase change, S "in", 
-  phrase thermal_energy, S "of the", phrase liquid, phrase water, 
+  phrase thermalEnergy, S "of the", phrase liquid, phrase water, 
   S "relative to the", phrase energy, S "at the initial", phrase temp, 
   sParen (ch temp_init) +:+. sParen (unwrap $ getUnit pcm_initMltE), 
   (ch htCap_W) `isThe` phrase heat_cap_spec, S "of", phrase liquid, phrase water,
@@ -433,7 +433,7 @@ htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcm_E `isThe` phrase change,
-  S "in", phrase thermal_energy, S "of the", short phsChgMtrl, S "relative to the",
+  S "in", phrase thermalEnergy, S "of the", short phsChgMtrl, S "relative to the",
   phrase energy, S "at the", phrase temp_init, sParen (ch temp_init) +:+.
   (unwrap $ getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
   short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat,

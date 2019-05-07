@@ -11,7 +11,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (boil_pt, meltPt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
-  lawConvCooling, heat_trans, thermal_energy)
+  lawConvCooling, heat_trans, thermalEnergy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
@@ -67,7 +67,7 @@ assumpS14 :: Sentence -> Sentence
 assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
+  phrase CT.thermalEnergy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]

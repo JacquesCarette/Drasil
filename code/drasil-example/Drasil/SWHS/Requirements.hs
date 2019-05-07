@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, dataDefn,
   funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
   nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
-  simulation, srs, thModel, traceyMatrix, unlikelyChg)
+  simulation, srs, thModel, traceyMatrix, unlikelyChg, vavPlan)
 import Drasil.DocLang (nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -145,7 +145,7 @@ nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
   S "quick and use minimal storage.")
 
 swhsNFRequirements :: [ConceptInstance]
-swhsNFRequirements = [correct, understandable, reusable, maintainable]
+swhsNFRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
@@ -156,8 +156,8 @@ correct = cic "correct" (foldlSent [
  
 verifiable :: ConceptInstance
 verifiable = cic "verifiable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Verifiable" nonFuncReqDom
+  S "The", phrase code, S "is tested with complete",
+  phrase vavPlan]) "Verifiable" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [

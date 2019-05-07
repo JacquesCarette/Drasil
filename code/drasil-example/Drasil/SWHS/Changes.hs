@@ -12,7 +12,7 @@ import Drasil.SWHS.Assumptions (assumpTPCAV, assumpTHCCoT, assumpTHCCoL,
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInPCM)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat,
-  thermal_conductor)
+  thermalConductor)
 import Data.Drasil.Quantities.Physics (energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
@@ -33,7 +33,7 @@ likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
 
 likeChgUTP = cic "likeChgUTP" (
   foldlSent [chgsStart assumpTPCAV, short phsChgMtrl, S "is actually a poor",
-  phrase CT.thermal_conductor `sC` S "so the", phrase assumption,
+  phrase CT.thermalConductor `sC` S "so the", phrase assumption,
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
   likeChgDom
 --

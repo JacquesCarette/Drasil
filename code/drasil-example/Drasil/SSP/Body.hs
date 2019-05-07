@@ -139,6 +139,7 @@ mkSRS = [RefSec $ RefProg intro
             OutConstraints] ++ stdFields) sspIMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]
+          , CorrSolnPpties propsDeriv
           ]
         ],
     ReqrmntSec $ ReqsProg [
@@ -519,6 +520,11 @@ waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
+
+-- SECTION 4.2.7 --
+
+propsDeriv :: [Contents]
+propsDeriv = [foldlSP [S "FIXME"]]
 
 -- SECTION 5 --
 

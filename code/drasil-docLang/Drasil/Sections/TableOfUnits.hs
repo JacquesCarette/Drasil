@@ -1,6 +1,6 @@
 -- Standard code to make a table of units
 -- First true example of a (small!) recipe.
-module Drasil.Sections.TableOfUnits(table_of_units, unit_table) where
+module Drasil.Sections.TableOfUnits(tableOfUnits, unit_table) where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -8,8 +8,8 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (symbol_, description)
 
 -- | Table of units section builder. Takes a list of units and an introduction
-table_of_units :: IsUnit s => [s] -> Contents -> Section
-table_of_units u intro = Section (S "Table of Units") [Con intro, Con $ LlC (unit_table u)]
+tableOfUnits :: IsUnit s => [s] -> Contents -> Section
+tableOfUnits u intro = Section (S "Table of Units") [Con intro, Con $ LlC (unit_table u)]
   (makeSecRef "ToU" "ToU")
 
 -- | Creates the actual table of units from a list of units

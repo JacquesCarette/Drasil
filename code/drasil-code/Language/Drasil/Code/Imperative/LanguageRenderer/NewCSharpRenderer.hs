@@ -149,7 +149,7 @@ instance StateTypeSym CSharpCode where
     type StateType CSharpCode = Doc
     bool = return $ boolTypeDocD
     int = return $ intTypeDocD
-    float = return $ csFloatTypeDocD
+    float = return $ csFloatTypeDoc
     char = return $ charTypeDocD
     string = return $ stringTypeDocD
     infile = return $ csInfileTypeDoc
@@ -546,8 +546,8 @@ cstop end inc = vcat [
     inc <+> text "System.Collections" <> end,
     inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDocD :: Doc
-csFloatTypeDocD = text "double" -- Same as Java, maybe make a common function
+csFloatTypeDoc :: Doc
+csFloatTypeDoc = text "double" -- Same as Java and C++, maybe make a common function
 
 csInfileTypeDoc :: Doc
 csInfileTypeDoc = text "StreamReader"

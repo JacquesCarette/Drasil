@@ -36,6 +36,7 @@ before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
+- export LABEL_FILE=/tmp/ci_build_failures
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 
 install:
@@ -44,10 +45,16 @@ install:
 
 script:
  - cd code
- - curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
- - make stackArgs="--no-terminal" NOISY=yes GHCFLAGS=-Werror
- - make tex SUMMARIZE_TEX=yes
- - make docs haddockArgs="--no-haddock-deps"
+ - >
+     ./ci_fstep "CI: HLint" curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+ - >
+     ./ci_fstep "CI: Build" make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
+ - >
+     ./ci_fstep "CI: Stable" make stackArgs="--no-terminal" NOISY=yes
+ - >
+     ./ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
+ - >
+     ./ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
 
 notifications:
   email:

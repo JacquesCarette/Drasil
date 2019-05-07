@@ -116,11 +116,11 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
-game_label :: TraceMap
-game_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' game_concins
+gameLabel :: TraceMap
+gameLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' game_concins
 
 game_refby :: RefbyMap
-game_refby = generateRefbyMap game_label
+game_refby = generateRefbyMap gameLabel
 
 game_datadefn :: [DataDefinition]
 game_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
@@ -186,12 +186,12 @@ everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll) (map nw cpSymbolsAl
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new) chipUnits
-  game_label game_refby game_datadefn game_insmodel game_gendef game_theory
+  gameLabel game_refby game_datadefn game_insmodel game_gendef game_theory
   game_concins game_section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi game_label game_refby
+ ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi gameLabel game_refby
  game_datadefn game_insmodel game_gendef game_theory game_concins game_section
  []
 

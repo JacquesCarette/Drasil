@@ -244,13 +244,13 @@ tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy tank_length_min) (Inc, sy tank_length_max)] (dbl 1.5)
-  0.1
+  defaultUncrt
 
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
   [gtZeroConstr]
-  (dbl 0.412) 0.1
+  (dbl 0.412) defaultUncrt
 
 -- Constraint 3
 pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
@@ -258,7 +258,7 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tank_vol),
    sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tank_vol))] 
-  (dbl 0.05) 0.1
+  (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
@@ -272,13 +272,13 @@ pcm_SA = uqc "pcm_SA"
   (sub cA cP) m_2 Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tank_vol)]
-  (dbl 1.2) 0.1
+  (dbl 1.2) defaultUncrt
 
 -- Constraint 5
 pcm_density = uqc "pcm_density" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (eqSymb density) cP) densityU Rational
-  [ physc $ Bounded (Exc, sy pcm_density_min) (Exc, sy pcm_density_max)] (dbl 1007) 0.1
+  [ physc $ Bounded (Exc, sy pcm_density_min) (Exc, sy pcm_density_max)] (dbl 1007) defaultUncrt
 
 -- Constraint 6
 temp_melt_P = uqc "temp_melt_P"
@@ -286,7 +286,7 @@ temp_melt_P = uqc "temp_melt_P"
   ("Temperature at which the phase change " ++
     "material transitions from a solid to a liquid")
   (sup (sub (eqSymb temp) (Atomic "melt")) cP) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc, sy temp_C)] (dbl 44.2) 0.1
+  [physc $ Bounded (Exc,0) (Exc, sy temp_C)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
 htCap_S_P = uqc "htCap_S_P"
@@ -296,7 +296,7 @@ htCap_S_P = uqc "htCap_S_P"
   (sup (sub (eqSymb heat_cap_spec) cP) cS) UT.heat_cap_spec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCap_S_P_min) (Exc, sy htCap_S_P_max)]
-  (dbl 1760) 0.1
+  (dbl 1760) defaultUncrt
 
 -- Constraint 8
 htCap_L_P = uqc "htCap_L_P"
@@ -306,7 +306,7 @@ htCap_L_P = uqc "htCap_L_P"
   (sup (sub (eqSymb heat_cap_spec) cP) cL) UT.heat_cap_spec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCap_L_P_min) (Exc, sy htCap_L_P_max )]
-  (dbl 2270) 0.1
+  (dbl 2270) defaultUncrt
 
 --Constraint 9
 htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
@@ -314,7 +314,7 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   "completely melt a unit mass of a substance")
   (sub cH lF) specificE Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htFusion_min) (Exc, sy htFusion_max)] (dbl 211600) 0.1
+  sfwrc $ Bounded (Exc, sy htFusion_min) (Exc, sy htFusion_max)] (dbl 211600) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
@@ -324,20 +324,20 @@ coil_SA = uqc "coil_SA"
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ UpTo (Inc, sy coil_SA_max)] (dbl 0.12) 0.1
+  sfwrc $ UpTo (Inc, sy coil_SA_max)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
 temp_C = uqc "temp_C" (nounPhraseSP "temperature of the heating coil")
   "The average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) cC) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) 0.1
+  [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
 w_density = uqc "w_density" (density `of_` water)
   "Mass per unit volume of water"
   (sub (eqSymb density) cW) densityU Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000) 0.1
+  sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000) defaultUncrt
 
 -- Constraint 13
 htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
@@ -345,7 +345,7 @@ htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
     "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heat_cap_spec) cW) UT.heat_cap_spec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) 0.1 
+  sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) defaultUncrt
   
 -- Constraint 14
 coil_HTC = uqc "coil_HTC" (nounPhraseSP
@@ -355,7 +355,7 @@ coil_HTC = uqc "coil_HTC" (nounPhraseSP
   (sub (eqSymb htTransCoeff) cC)
   UT.heat_transfer_coef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy coil_HTC_min) (Inc, sy coil_HTC_max)] (dbl 1000) 0.1
+  sfwrc $ Bounded (Inc, sy coil_HTC_min) (Inc, sy coil_HTC_max)] (dbl 1000) defaultUncrt
 
 -- Constraint 15
 pcm_HTC = uqc "pcm_HTC"
@@ -364,13 +364,13 @@ pcm_HTC = uqc "pcm_HTC"
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcm_HTC_min) (Inc, sy pcm_HTC_max)] (dbl 1000) 0.1
+  sfwrc $ Bounded (Inc, sy pcm_HTC_min) (Inc, sy pcm_HTC_max)] (dbl 1000) defaultUncrt
   
 -- Constraint 16
 temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
   (sub (eqSymb temp)(Atomic "init")) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc, sy melt_pt)] (dbl 40) 0.1
+  [physc $ Bounded (Exc,0) (Exc, sy melt_pt)] (dbl 40) defaultUncrt
   
 -- Constraint 17
 time_final = uqc "time_final" (nounPhraseSP "final time")
@@ -378,7 +378,7 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) 0.1
+  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) defaultUncrt
   
   
 -- Output Constraints
@@ -422,18 +422,18 @@ abs_tol, rel_tol, cons_tol :: UncertainChunk
 abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance") 
   (sub cA (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
-   (dbl (10.0**(-10))) 0.01
+   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 rel_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance") 
   (sub cR (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
-  (dbl (10.0**(-10))) 0.01
+  (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 cons_tol = uvc "pb_tol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
-  (dbl (10.0**(-3))) 0.01
+  (dbl (10.0**(-3))) (uncty 0.01 Nothing)
 
 -------------------------
 -- Max / Min Variables --

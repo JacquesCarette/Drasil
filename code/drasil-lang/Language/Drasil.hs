@@ -166,7 +166,7 @@ module Language.Drasil (
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , titleize, titleize'
   -- Uncertainty
-  , Uncertainty, uncty
+  , Uncertainty, defaultUncrt, uncty
   -- UnitLang
   , USymb(US)
   -- Data.Date

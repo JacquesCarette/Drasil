@@ -222,7 +222,7 @@ none = S "--"
 
 found :: Double -> Maybe Int -> Sentence
 found x Nothing  = addPercent $ x * 100
-found x (Just p) = addPercent $ realFracToDecimal (fromIntegral p) (x*100)
+found x (Just p) = addPercent $ realFracToDecimal (fromIntegral p) (x * 100)
     
 typUncr :: (HasUncertainty c) => c -> Sentence
 typUncr x = found (x ^. valUnc) (x ^. prcUnc)

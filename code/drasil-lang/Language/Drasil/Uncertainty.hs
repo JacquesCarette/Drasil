@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Uncertainty (Uncertainty, uncty) where
+module Language.Drasil.Uncertainty (Uncertainty, defaultUncrt, uncty) where
 
 import Control.Lens (makeLenses)
 
@@ -19,3 +19,6 @@ isDecimal u  =  if (0 < u) && (u < 1) then u
 
 uncty :: Double -> Maybe Int -> Uncertainty
 uncty u = Uncert (isDecimal u)
+
+defaultUncrt :: Uncertainty
+defaultUncrt = uncty 0.1 (Just 0)

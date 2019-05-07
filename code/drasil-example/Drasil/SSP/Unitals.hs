@@ -61,9 +61,6 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
   (idx xi (sy index) $< idx xi (sy index + 1) $=> idx yi (sy index) $< idx yi (sy index + 1))]
 -}
 
-defultUncrt :: Double
-defultUncrt = 0.1
-
 slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip, 
   xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
   dryWeight, satWeight, waterWeight :: UncertQ
@@ -78,75 +75,75 @@ fs, coords :: ConstrConcept
 
 slopeDist = uqc "x_slope,i" (cn $ "x-coordinates of the slope")
   ("x-coordinates of points on the soil slope")
-  (sub (vec lX) (Atomic "slope")) metre Real [] (dbl 0) defultUncrt
+  (sub (vec lX) (Atomic "slope")) metre Real [] (dbl 0) defaultUncrt
 
 slopeHght = uqc "y_slope,i" (cn $ "y-coordinates of the slope")
   ("y-coordinates of points on the soil slope")
-  (sub (vec lY) (Atomic "slope")) metre Real [] (dbl 0) defultUncrt
+  (sub (vec lY) (Atomic "slope")) metre Real [] (dbl 0) defaultUncrt
 
 waterDist = uqc "x_wt,i" (cn $ "x-coordinates of the water table")
   ("x-positions of the water table")
-  (sub (vec lX) (Atomic "wt")) metre Real [] (dbl 0) defultUncrt
+  (sub (vec lX) (Atomic "wt")) metre Real [] (dbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (cn $ "y-coordinates of the water table")
   ("heights of the water table")
-  (sub (vec lY) (Atomic "wt")) metre Real [] (dbl 0) defultUncrt
+  (sub (vec lY) (Atomic "wt")) metre Real [] (dbl 0) defaultUncrt
 
 xMaxExtSlip = uqc "x_slip^maxExt" (cn $ "maximum exit x-coordinate")
   "maximum potential x-coordinate for the exit point of a slip surface"
   (sup (sub lX (Atomic "slip")) (Atomic "maxExt")) metre Real [] (dbl 100) 
-  defultUncrt
+  defaultUncrt
 
 xMaxEtrSlip = uqc "x_slip^maxEtr" (cn $ "maximum entry x-coordinate")
   "maximum potential x-coordinate for the entry point of a slip surface"
   (sup (sub lX (Atomic "slip")) (Atomic "maxEtr")) metre Real [] (dbl 20)
-  defultUncrt
+  defaultUncrt
   
 xMinExtSlip = uqc "x_slip^minExt" (cn $ "minimum exit x-coordinate")
   "minimum potential x-coordinate for the exit point of a slip surface"
   (sup (sub lX (Atomic "slip")) (Atomic "minExt")) metre Real [] (dbl 50) 
-  defultUncrt
+  defaultUncrt
 
 xMinEtrSlip = uqc "x_slip^minEtr" (cn $ "minimum exit x-coordinate")
   "minimum potential x-coordinate for the entry point of a slip surface"
   (sup (sub lX (Atomic "slip")) (Atomic "minEtr")) metre Real [] (dbl 0) 
-  defultUncrt
+  defaultUncrt
 
 yMaxSlip = uqc "y_slip^max" (cn $ "maximum y-coordinate") 
   "maximum potential y-coordinate of a point on a slip surface"
   (sup (sub lY (Atomic "slip")) (Atomic "max")) metre Real [] (dbl 30) 
-  defultUncrt
+  defaultUncrt
 
 yMinSlip = uqc "y_slip^min" (cn $ "minimum y-coordinate") 
   "minimum potential y-coordinate of a point on a slip surface"
   (sup (sub lY (Atomic "slip")) (Atomic "min")) metre Real [] (dbl 0) 
-  defultUncrt
+  defaultUncrt
 
 effCohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10000) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10000) defaultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
-  (dbl 25) defultUncrt
+  (dbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   lGamma specific_weight Real [gtZeroConstr]
-  (dbl 20000) defultUncrt
+  (dbl 20000) defaultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (dbl 20000) defultUncrt
+  (dbl 20000) defaultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
-  (dbl 9800) defultUncrt
+  (dbl 9800) defaultUncrt
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++

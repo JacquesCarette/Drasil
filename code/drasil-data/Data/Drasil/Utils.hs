@@ -30,7 +30,6 @@ module Data.Drasil.Utils
 import Language.Drasil
 
 import Control.Lens ((^.))
-import Data.Decimal
 import Data.List (elem, transpose)
 
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
@@ -84,7 +83,7 @@ getRVal c = uns (c ^. reasVal)
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
-addPercent :: (Num a, Show a) => a -> Sentence -- commented out to suppress type default warning
+addPercent :: (Show a) => a -> Sentence -- commented out to suppress type default warning
 addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences

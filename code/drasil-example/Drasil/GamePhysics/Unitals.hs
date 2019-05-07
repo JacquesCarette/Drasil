@@ -269,12 +269,12 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
 
 cpInputConstraints :: [UncertQ]
-cpInputConstraints = map (\x -> uq x (0.1 :: Double))
+cpInputConstraints = map (\x -> uq x defaultUncrt)
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
 cpOutputConstraints :: [UncertQ]
-cpOutputConstraints = map (\x -> uq x (0.1 :: Double)) 
+cpOutputConstraints = map (\x -> uq x defaultUncrt) 
   [posCons, veloCons, orientCons, angVeloCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints

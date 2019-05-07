@@ -93,7 +93,7 @@ sensHtESrc = makeURI "sensHtESrc"
   shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Relation
-sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
+sensHtEEqn pChange = (sy sens_heat) $= case pChange of
   Liquid -> liquidFormula
   AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
       ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<

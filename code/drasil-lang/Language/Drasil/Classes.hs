@@ -17,8 +17,7 @@ module Language.Drasil.Classes (
   , CommonIdea(abrv)
   , DefiningExpr(defnExpr)
   , Quantity
-  -- , UncertainQuantity (uncert)
-  , HasUncertainty (valUnc, prcUnc)
+  , HasUncertainty (unc)
   , Concept
   , Referable(refAdd, renderRef)
 
@@ -41,7 +40,7 @@ import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
---import Language.Drasil.Uncertainty (Uncertainty)
+import Language.Drasil.Uncertainty (Uncertainty)
 
 import Control.Lens (Lens')
 
@@ -110,10 +109,10 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 
 -- class Quantity c => UncertainQuantity c where
 --   uncert :: Lens' c (Uncertainty)
+--   replaced with HasUncertainty
 
 class HasUncertainty c where
-  valUnc :: Lens' c Double
-  prcUnc :: Lens' c (Maybe Int)
+  unc :: Lens' c Uncertainty
 
 class HasUID s => Referable s where
   refAdd    :: s -> String  -- The referencing address (what we're linking to).

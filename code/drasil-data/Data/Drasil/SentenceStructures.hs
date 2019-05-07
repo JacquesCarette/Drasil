@@ -225,7 +225,7 @@ found x Nothing  = addPercent $ x * 100
 found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
     
 typUncr :: (HasUncertainty c) => c -> Sentence
-typUncr x = found (x ^. valUnc) (x ^. prcUnc)
+typUncr x = found (uncVal $ x ^. unc) (uncPrec $ x ^. unc)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

@@ -10,20 +10,20 @@ import Language.Drasil.Chunk.Concept(cw)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (valUnc, prcUnc))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase(NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Uncertainty (Uncertainty, uncty)
+import Language.Drasil.Uncertainty (Uncertainty)
 import Control.Lens ((^.), makeLenses, view)
 
 {- The order of the following two implementations is the same as in Constrained -}
 
 -- | UncertQ is a chunk which is an instance of UncertainQuantity. It takes a 
--- ConstrainedChunk and a Double (from 0 to 1) which represents a percentage of uncertainty
+-- ConstrainedChunk and an Uncertainty.
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
 makeLenses ''UncertainChunk
 
@@ -36,9 +36,7 @@ instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
 instance Quantity          UncertainChunk where 
 instance Constrained       UncertainChunk where constraints = conc . constraints
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
-instance HasUncertainty    UncertainChunk where
-    valUnc = unc' . valUnc
-    prcUnc = unc' . prcUnc
+instance HasUncertainty    UncertainChunk where unc = unc'
 instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
 
 {-- Constructors --}
@@ -52,12 +50,12 @@ uvc nam trm sym space cs val = uncrtnChunk (cvc nam trm sym space cs (Just val))
 
 -- | projection
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
-uncrtnw c = UCh (cnstrw c) (uncty (c ^. valUnc) (c ^. prcUnc))
+uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
 -- | UncertQ is a chunk which is an instance of UncertainQuantity. It takes a 
--- ConstrConcept and a Double (from 0 to 1) which represents a percentage of uncertainty
+-- ConstrConcept and an Uncertainty.
 
-data UncertQ = UQ { _coco :: ConstrConcept , _unc :: Uncertainty }
+data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
   
 instance Eq             UncertQ where a == b = (a ^. uid) == (b ^. uid)
@@ -67,9 +65,7 @@ instance Idea           UncertQ where getA (UQ q _) = getA q
 instance HasSpace       UncertQ where typ = coco . typ
 instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
 instance Quantity       UncertQ where 
-instance HasUncertainty UncertQ where
-    valUnc = unc . valUnc
-    prcUnc = unc . prcUnc
+instance HasUncertainty UncertQ where unc = unc''
 instance Constrained    UncertQ where constraints = coco . constraints
 instance HasReasVal     UncertQ where reasVal = coco . reasVal
 instance Definition     UncertQ where defn = coco . defn

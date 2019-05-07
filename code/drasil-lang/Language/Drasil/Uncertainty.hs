@@ -1,16 +1,7 @@
-{-# Language TemplateHaskell #-}
-module Language.Drasil.Uncertainty (Uncertainty, defaultUncrt, uncty) where
-
-import Control.Lens (makeLenses)
-
-import Language.Drasil.Classes (HasUncertainty(valUnc, prcUnc))
+module Language.Drasil.Uncertainty (Uncertainty, defaultUncrt, uncty,
+    uncVal, uncPrec) where
  
 data Uncertainty = Uncert { _uncert :: Double, _prec :: Maybe Int }
-makeLenses ''Uncertainty
-
-instance HasUncertainty Uncertainty where
-    valUnc = uncert
-    prcUnc = prec
 
 --make sure that it is between 0 and 1, and throw an error otherwise
 isDecimal :: (Num a, Ord a) => a -> a
@@ -22,3 +13,11 @@ uncty u = Uncert (isDecimal u)
 
 defaultUncrt :: Uncertainty
 defaultUncrt = uncty 0.1 (Just 0)
+
+-- accessor for uncertainty value
+uncVal :: Uncertainty -> Double
+uncVal (Uncert val _) = val
+
+-- accessor for precision value
+uncPrec :: Uncertainty -> Maybe Int
+uncPrec (Uncert _ prec) = prec

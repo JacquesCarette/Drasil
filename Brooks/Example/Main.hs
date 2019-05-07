@@ -29,8 +29,8 @@ main = do
   genCode (classes unCSC) [".cs"]
   setCurrentDirectory workingDir
     
-genCode :: [(Doc, Label)] -> [Label] -> IO()
+genCode :: [(Doc, Label, Bool)] -> [Label] -> IO()
 genCode files exts = createCodeFiles $ makeCode files exts
 
-classes :: (RenderSym repr) => (repr (RenderFile repr) -> (Doc, Label)) -> [(Doc, Label)]
+classes :: (RenderSym repr) => (repr (RenderFile repr) -> (Doc, Label, Bool)) -> [(Doc, Label, Bool)]
 classes unRepr = map unRepr [helloWorld, patternTest, fileTests, observer]

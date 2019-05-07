@@ -4,17 +4,21 @@ module New (
     -- Types
     Label, Library, 
     -- Typeclasses
-    RenderSym(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-    ControlBlockSym(..), BlockSym(..), StateTypeSym(..), UnaryOpSym(..), 
-    BinaryOpSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..),
-    ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-    StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..),
-    ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-    ModuleSym(..)
+    PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
+    BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
+    UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+    BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+    SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
+    ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+    StateVarSym(..), ClassSym(..), ModuleSym(..)
 ) where
 
 type Label = String
 type Library = String
+
+class (RenderSym repr) => PackageSym repr where
+    type Package repr 
+    packMods :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
 
 class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
@@ -102,6 +106,9 @@ class UnaryOpSym repr where
     sinOp    :: repr (UnaryOp repr)
     cosOp    :: repr (UnaryOp repr)
     tanOp    :: repr (UnaryOp repr)
+    asinOp   :: repr (UnaryOp repr)
+    acosOp   :: repr (UnaryOp repr)
+    atanOp   :: repr (UnaryOp repr)
     floorOp  :: repr (UnaryOp repr)
     ceilOp   :: repr (UnaryOp repr)
 
@@ -137,7 +144,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     defaultString :: repr (Value repr)
     defaultBool   :: repr (Value repr)
 
-     --other operators ($)
+        --other operators ($)
     ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     infixl 9 $->
     ($:)  :: Label -> Label -> repr (Value repr)
@@ -181,17 +188,20 @@ class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => NumericExpression re
     (#^)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     infixl 7 #^
     
-    log   :: repr (Value repr) -> repr (Value repr)
-    ln    :: repr (Value repr) -> repr (Value repr)
-    exp   :: repr (Value repr) -> repr (Value repr)
-    sin   :: repr (Value repr) -> repr (Value repr)
-    cos   :: repr (Value repr) -> repr (Value repr)
-    tan   :: repr (Value repr) -> repr (Value repr)
-    csc   :: repr (Value repr) -> repr (Value repr)
-    sec   :: repr (Value repr) -> repr (Value repr)
-    cot   :: repr (Value repr) -> repr (Value repr)
-    floor :: repr (Value repr) -> repr (Value repr)
-    ceil  :: repr (Value repr) -> repr (Value repr)
+    log    :: repr (Value repr) -> repr (Value repr)
+    ln     :: repr (Value repr) -> repr (Value repr)
+    exp    :: repr (Value repr) -> repr (Value repr)
+    sin    :: repr (Value repr) -> repr (Value repr)
+    cos    :: repr (Value repr) -> repr (Value repr)
+    tan    :: repr (Value repr) -> repr (Value repr)
+    csc    :: repr (Value repr) -> repr (Value repr)
+    sec    :: repr (Value repr) -> repr (Value repr)
+    cot    :: repr (Value repr) -> repr (Value repr)
+    arcsin :: repr (Value repr) -> repr (Value repr)
+    arccos :: repr (Value repr) -> repr (Value repr)
+    arctan :: repr (Value repr) -> repr (Value repr)
+    floor  :: repr (Value repr) -> repr (Value repr)
+    ceil   :: repr (Value repr) -> repr (Value repr)
 
 -- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
 -- but this would require cyclic constraints, since it is feasible to have
@@ -324,16 +334,16 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
     assign            :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     assignToListIndex :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
 
-    varDec        :: Label -> repr (StateType repr) -> repr (Statement repr)
-    varDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
-    listDec       :: Label -> Integer -> repr (StateType repr) -> repr (Statement repr)
-    listDecDef    :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
-    objDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
-    objDecNew     :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    varDec           :: Label -> repr (StateType repr) -> repr (Statement repr)
+    varDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    listDec          :: Label -> Integer -> repr (StateType repr) -> repr (Statement repr)
+    listDecDef       :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    objDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    objDecNew        :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
     extObjDecNew     :: Label -> Library -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
     objDecNewVoid    :: Label -> repr (StateType repr) -> repr (Statement repr)
     extObjDecNewVoid :: Label -> Library -> repr (StateType repr) -> repr (Statement repr)
-    constDecDef   :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    constDecDef      :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
 
     print      :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
     printLn    :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
@@ -397,7 +407,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
     multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
 class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
-    ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) 
+    ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
     ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Statement repr)
     switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
     switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
@@ -412,7 +422,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
     tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
 
-    checkState :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
     notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
 
     getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
@@ -459,8 +469,8 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     buildClass :: Label -> Maybe Label -> repr (Scope repr) -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
     enum :: Label -> [Label] -> repr (Scope repr) -> repr (Class repr)
     mainClass :: Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-    privClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-    pubClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    privClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
 
 class (ClassSym repr) => ModuleSym repr where
     type Module repr

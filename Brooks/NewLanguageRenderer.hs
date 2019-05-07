@@ -1,13 +1,12 @@
 -- | The structure for a class of renderers is defined here.
 module NewLanguageRenderer (
-    -- * Code Generation Functions
+    -- * Code Generation functions
     makeCode, createCodeFiles,
-    
     -- * Common Syntax
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
+    packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
     printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
@@ -18,7 +17,8 @@ module NewLanguageRenderer (
     commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
     sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
     lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', 
-    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', unOpDocD, equalOpDocD, 
+    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
+    acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
@@ -30,25 +30,25 @@ module NewLanguageRenderer (
     castDocD, sizeDocD, listAccessDocD, listSetDocD, 
     objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
-    getterName, setterName
+    getterName, setterName, setMain, statementsToStateVars
 ) where
 
 import New (Label, Library)
-import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,
-                            oneTabbed,hicat,vibcat,vmap)
+import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,oneTabbed,hicat,
+    vibcat,vmap,tripFst,tripSnd)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
-  isEmpty, rbrace, lbrace, vcat, char, double, quotes, integer, semi, equals, braces,
-  int, comma, colon, hcat)
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
+    brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
+    integer, semi, equals, braces, int, comma, colon, hcat)
 
 
 -- | Takes code and extensions
-makeCode :: [(Doc, Label)] -> [Label] -> [(FilePath, Doc)]
+makeCode :: [(Doc, Label, Bool)] -> [Label] -> [(FilePath, Doc)]
 makeCode files exts =
-    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) (map snd files)) (zip (map fst files) (cycle exts))]
+    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) (map tripSnd files)) (zip (map tripFst files) (cycle exts))]
 
 repeatListElems :: Int -> [a] -> [a]
 repeatListElems _ [] = []
@@ -87,6 +87,9 @@ observerListName = "observerList"
 -- Functions for rendering code --
 ----------------------------------
 
+packageDocD :: Label -> Doc -> (Doc, Label, Bool) -> (Doc, Label, Bool)
+packageDocD n end (m, l, b) = (vibcat [text "package" <+> text n <> end, m], l, b)
+
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [
     t,
@@ -102,8 +105,8 @@ fileDoc' t m b = vibcat [
 
 -- Module --
 
-moduleDocD :: [Doc] -> Doc
-moduleDocD cs = vibcat cs
+moduleDocD :: [(Doc, Bool)] -> Doc
+moduleDocD cs = vibcat (map fst cs)
 
 -- Class --
 
@@ -162,7 +165,7 @@ bodyDocD bs = vibcat blocks
 -- IO --
 
 outDocD :: Doc -> Doc -> Doc
-outDocD printFn v = printFn <> parens (v)
+outDocD printFn v = printFn <> parens v
 
 printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
 printListDocD open b lastElem close = vcat [open, b, lastElem, close]
@@ -191,7 +194,7 @@ fileTypeDocD :: Doc
 fileTypeDocD = text "File"
 
 typeDocD :: Label -> Doc
-typeDocD t = text t
+typeDocD = text
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
@@ -210,19 +213,19 @@ stateParamDocD :: Label -> Doc -> Doc
 stateParamDocD n t = t <+> text n
 
 paramListDocD :: [Doc] -> Doc
-paramListDocD ps = hicat (text ", ") ps
+paramListDocD = hicat (text ", ")
 
 -- Method --
 
 methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
-    s <+> p <+> t <+> text n <> parens (ps) <+> lbrace,
+    s <+> p <+> t <+> text n <> parens ps <+> lbrace,
     oneTab $ b,
     rbrace]
 
-methodListDocD :: [Doc] -> Doc
+methodListDocD :: [(Doc, Bool)] -> Doc
 methodListDocD ms = vibcat methods
-    where methods = filter (\m -> not $ isEmpty m) ms
+    where methods = filter (\m -> not $ isEmpty m) (map fst ms)
 
 -- StateVar --
 
@@ -230,7 +233,7 @@ stateVarDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
-stateVarListDocD svs = vcat svs
+stateVarListDocD = vcat
 
 -- Controls --
 
@@ -336,7 +339,7 @@ listDecDefDocD :: Label -> Doc -> [Doc] -> Doc
 listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> braces (callFuncParamList vs)
 
 objDecDefDocD :: Label -> Doc -> Doc -> Doc
-objDecDefDocD l st v = varDecDefDocD l st v
+objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
 constDecDefDocD l st v = text "const" <+> st <+> text l <+> equals <+> v
@@ -417,6 +420,24 @@ tanOpDocD = text "tan"
 tanOpDocD' :: Doc
 tanOpDocD' = text "math.tan"
 
+asinOpDocD :: Doc
+asinOpDocD = text "asin"
+
+asinOpDocD' :: Doc
+asinOpDocD' = text "math.asin"
+
+acosOpDocD :: Doc
+acosOpDocD = text "acos"
+
+acosOpDocD' :: Doc
+acosOpDocD' = text "math.acos"
+
+atanOpDocD :: Doc
+atanOpDocD = text "atan"
+
+atanOpDocD' :: Doc
+atanOpDocD' = text "math.atan"
+
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
 
@@ -465,10 +486,10 @@ orOpDocD :: Doc
 orOpDocD = text "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD v1 op v2 = parens (v1 <+> op <+> v2)
+binOpDocD op v1 v2 = parens (v1 <+> op <+> v2)
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
-binOpDocD' v1 op v2 = op <> parens (v1 <> comma <+> v2)
+binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
 
 -- Literals --
 
@@ -482,13 +503,13 @@ litCharD :: Char -> Doc
 litCharD c = quotes $ char c
 
 litFloatD :: Double -> Doc
-litFloatD v = double v
+litFloatD = double
 
 litIntD :: Integer -> Doc
-litIntD v = integer v
+litIntD = integer
 
 litStringD :: String -> Doc
-litStringD s = doubleQuotedText s
+litStringD = doubleQuotedText
 
 defaultCharD :: Doc
 defaultCharD = char ' '
@@ -505,7 +526,7 @@ defaultStringD = doubleQuotedText ""
 -- Value Printers --
 
 varDocD :: Label -> Doc
-varDocD l = text l
+varDocD = text
 
 extVarDocD :: Library -> Label -> Doc
 extVarDocD l n = text l <> dot <> text n
@@ -529,7 +550,7 @@ funcAppDocD :: Label -> [Doc] -> Doc
 funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 
 extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
-extFuncAppDocD l n vs = funcAppDocD (l ++ "." ++ n) vs
+extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
 stateObjDocD :: Doc -> Doc -> Doc
 stateObjDocD st vs = new <+> st <> parens vs
@@ -538,10 +559,10 @@ listStateObjDocD :: Doc -> Doc -> Doc -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 
 notNullDocD :: Doc -> Doc -> Doc -> Doc
-notNullDocD v op nullvar = binOpDocD v op nullvar
+notNullDocD = binOpDocD
 
 listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
-listIndexExistsDocD lst greater index = parens (lst <> text ".Length" <+>      
+listIndexExistsDocD greater lst index = parens (lst <> text ".Length" <+>      
     greater <+> index) 
 
 -- Functions --
@@ -550,13 +571,13 @@ funcDocD :: Doc -> Doc
 funcDocD fnApp = dot <> fnApp
 
 castDocD :: Doc -> Doc
-castDocD targT = parens targT
+castDocD = parens
 
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
 listAccessDocD :: Doc -> Doc
-listAccessDocD i = brackets i
+listAccessDocD = brackets
 
 listSetDocD :: Doc -> Doc -> Doc
 listSetDocD i v = brackets i <+> equals <+> v
@@ -616,10 +637,10 @@ commentDelimit c cStart =
     in com <> text (dashes (render com) commentLength)
 
 endCommentDelimit :: Label -> Doc -> Doc
-endCommentDelimit c cStart = commentDelimit (endCommentLabel ++ " " ++ c) cStart
+endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 
 dashes :: String -> Int -> String
-dashes s l = take (l - length s) (repeat '-')
+dashes s l = replicate (l - length s) '-'
 
 -- Helper Functions --
 
@@ -631,3 +652,10 @@ getterName s = "Get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "Set" ++ capitalize s
+
+setMain :: (Doc, Bool) -> (Doc, Bool)
+setMain (d, _) = (d, True)
+
+-- Hack because modules accept Statement representations of their state variables. Modules should be redesigned/rethought
+statementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Bool) -> Doc
+statementsToStateVars s p end (v, _) = s <+> p <+> v <> end

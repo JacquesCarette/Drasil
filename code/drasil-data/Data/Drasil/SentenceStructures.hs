@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
-import Data.Decimal (realFracToDecimal)
+import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
 
@@ -222,7 +222,7 @@ none = S "--"
 
 found :: Double -> Maybe Int -> Sentence
 found x Nothing  = addPercent $ x * 100
-found x (Just p) = addPercent $ realFracToDecimal (fromIntegral p) (x * 100)
+found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
     
 typUncr :: (HasUncertainty c) => c -> Sentence
 typUncr x = found (x ^. valUnc) (x ^. prcUnc)

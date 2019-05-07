@@ -9,11 +9,11 @@ import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
 thermocon = [boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sensHeat, temp, thermalAnalysis, thermal_conduction, thermal_energy,
+  sensHeat, temp, thermalAnalysis, thermalConduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src]
 
 boiling, boil_pt, degree_', lawConsEnergy, lawConvCooling, latentHeat, melting, meltPt, phaseChange,
-  sensHeat, temp, thermalAnalysis, thermal_conduction, thermal_energy,
+  sensHeat, temp, thermalAnalysis, thermalConduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, htFlux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk
 
   
@@ -62,7 +62,7 @@ temp                = dcc "temperature"     (cn' "temperature")
 thermalAnalysis    = dcc "thermalAnalysis" 
                       (cnIP "thermal analysis" (IrregPlur (\x -> init (init x) ++ "es")))
                       "The study of material properties as they change with temperature"
-thermal_conduction  = dcc "thermal_conduction"
+thermalConduction  = dcc "thermalConduction"
                       (nounPhraseSP "thermal conduction")
                       "The transfer of heat energy through a substance"
 thermal_conductor   = dcc "thermal_conductor"

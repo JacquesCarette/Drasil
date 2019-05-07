@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermalAnalysis, temp,
-  thermal_energy, ht_trans_theo, htFlux, heat_cap_spec, thermal_conduction,
+  thermal_energy, ht_trans_theo, htFlux, heat_cap_spec, thermalConduction,
   thermocon, phaseChange)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
@@ -367,7 +367,7 @@ termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
-  [htFlux, heat_cap_spec, thermal_conduction, transient]
+  [htFlux, heat_cap_spec, thermalConduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]

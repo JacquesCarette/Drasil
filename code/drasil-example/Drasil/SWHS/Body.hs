@@ -55,7 +55,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, 
-  heat_trans, thermal_conduction, htFlux, heat_cap_spec, thermal_energy,
+  heat_trans, thermalConduction, htFlux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermalAnalysis, ener_src)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
@@ -351,7 +351,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.htFlux, phase_change_material, CT.heat_cap_spec,
-  CT.thermal_conduction, transient]
+  CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
 tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]

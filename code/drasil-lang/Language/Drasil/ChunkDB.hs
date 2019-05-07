@@ -87,7 +87,7 @@ idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
 idMap = cdbMap id
 
 traceMap :: HasUID l => (l -> [UID]) -> [l] -> TraceMap
-traceMap f = cdbMap f
+traceMap = cdbMap
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict

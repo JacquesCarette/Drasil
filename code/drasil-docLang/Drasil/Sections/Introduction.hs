@@ -53,8 +53,8 @@ introductionSubsections = foldlList Comma List (map (uncurry ofThe)
 -- programDefinition  - Sentence definition of the specific example
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection problemIntroduction programDefinition subSections = SRS.intro 
-  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
+introductionSection problemIntroduction programDefinition = SRS.intro 
+  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)]
 
 
 -- | Constructor for the overview paragraph for the introduction
@@ -127,7 +127,7 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
-          (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
+          (foldlsC $ map plural [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom,
           S "in", makeRef2S bottomSec +:+

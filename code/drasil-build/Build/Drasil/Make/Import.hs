@@ -11,4 +11,4 @@ toMake rl = M $ makeRules rl
 
 -- | Helper for creating make rules for different document types
 makeRules :: RuleTransformer c => [c] -> [Rule]
-makeRules l = concatMap makeRule l
+makeRules = concatMap makeRule

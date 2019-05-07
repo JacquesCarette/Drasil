@@ -179,7 +179,7 @@ declarationDoc' c (ObjDecDef n t v) = text "objDecDef" <+> lbl n <+> stateType c
 declarationDoc' c (ConstDecDef n l) = text "constDecDef" <+> lbl n <+> litDoc c l
 
 enumElementsDoc' :: Config -> [Label] -> Doc
-enumElementsDoc' _ es = hsList lbl es
+enumElementsDoc' _ = hsList lbl
 
 exceptionDoc' :: Config -> Exception -> Doc
 exceptionDoc' _ (Throw s) = text "throw" <+> lbl s
@@ -206,8 +206,8 @@ funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
-funcDoc' _ (IterBegin) = text "IterBegin"
-funcDoc' _ (IterEnd) = text "IterEnd"
+funcDoc' _ IterBegin = text "IterBegin"
+funcDoc' _ IterEnd = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
 funcDoc' c (ListExtend t) = text "ListExtend" <+> stateType c t Dec
@@ -344,7 +344,7 @@ methodDoc' c _ _ (GetMethod n t) = text "GetMethod" <+> lbl n <+> methodTypeDoc 
 methodDoc' c _ _ (SetMethod n p) = text "SetMethod" <+> lbl n <+> paramDoc c p
 
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDoc' c t m ms = hsVList (methodDoc c t m) ms
+methodListDoc' c t m = hsVList (methodDoc c t m)
 
 methodTypeDoc' :: Config -> MethodType -> Doc
 methodTypeDoc' c (MState t) = parens $ text "typ" <+> stateType c t Dec

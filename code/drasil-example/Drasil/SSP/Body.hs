@@ -13,7 +13,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
@@ -35,8 +35,7 @@ import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
-import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  program, reusability, understandability, softwarecon, performance)
+import Data.Drasil.Concepts.Software (accuracy, program, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
@@ -65,7 +64,7 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable,
+import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
@@ -144,9 +143,9 @@ mkSRS = [RefSec $ RefProg intro
         ],
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub [accuracy,performance] ssppriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+    NonFReqsSub' [accuracy, performance] sspNFRequirements
     (short ssp +:+ S "is intended to be an educational tool")
-    (S "")]
+    EmptyS]
   , LCsSec $ LCsProg likelyChanges_SRS
   , UCsSec $ UCsProg unlikelyChanges_SRS
   , TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
@@ -172,7 +171,7 @@ ssp_theory :: [TheoryModel]
 ssp_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 ssp_concins :: [ConceptInstance]
-ssp_concins = sspGoals ++ assumptions ++ sspRequirements ++ likelyChgs ++ unlikelyChgs
+ssp_concins = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -190,10 +189,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
-
-ssppriorityNFReqs :: [ConceptChunk]
-ssppriorityNFReqs = [correctness, understandability, reusability,
-  maintainability]
 
 traceyMatrix :: LabelledContent
 traceyMatrix = generateTraceTable ssp_si
@@ -529,7 +524,7 @@ slopeVert = verticesConst $ phrase slope
 
 -- SECTION 5.1 --
 funcReqList :: [Contents]
-funcReqList = (mkEnumSimpleD sspRequirements) ++
+funcReqList = (mkEnumSimpleD sspFRequirements) ++
   [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --

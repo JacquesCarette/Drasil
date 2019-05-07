@@ -82,7 +82,7 @@ datCon      cs ss = section (titleize' Doc.datumConstraint)   cs ss datConLabel
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
-nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
+nonfuncReq  cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss funcReqLabel
 
 likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss likeChgLabel
@@ -110,7 +110,8 @@ section' a b c d = section a b c (makeSecRef d (toString a))
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Reference
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, nonfuncReqLabel,
+  solCharSpecLabel :: Reference
 physSystLabel      = makeSecRef "PhysSyst" "Physical System Description"
 datConLabel        = makeSecRef "DataConstraints" "Data Constraints"
 genDefnLabel       = makeSecRef "GDs" "General Definitions"
@@ -125,4 +126,5 @@ referenceLabel     = makeSecRef "References" "References"
 indPRCaseLabel     = makeSecRef "IndividualProdUC" "Individual Product Use Cases"
 assumptLabel       = makeSecRef "Assumps" "Assumptions"
 funcReqLabel       = makeSecRef "FRs" "Functional Requirements"
+nonfuncReqLabel    = makeSecRef "NFRs" "Nonfunctional Requirements"
 solCharSpecLabel   = makeSecRef "SolCharSpec" "Solution Characteristics Specification"

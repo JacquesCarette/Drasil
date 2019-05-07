@@ -69,17 +69,17 @@ instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
 instance Referable          InstanceModel where
-  refAdd    i = getRefAdd i
+  refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Citation] -> String -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes =
-  IM rcon i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe) addNotes
+im' rcon i ic o oc src lbe =
+  IM rcon i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe)
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc src der sn addNotes = 
-  IM rcon i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn) addNotes
+im'' rcon i ic o oc src der sn = 
+  IM rcon i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn)

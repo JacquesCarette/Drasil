@@ -168,9 +168,9 @@ rc _ = error "refineChain helper encountered an unexpected empty list"
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
 likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
 maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOVerb a b = likelyFrame a EmptyS b
-maybeChanged a b = likelyFrame a (S "changed") b
-maybeExpanded a b = likelyFrame a (S "expanded") b
+maybeWOVerb a   = likelyFrame a EmptyS
+maybeChanged a  = likelyFrame a (S "changed")
+maybeExpanded a = likelyFrame a (S "expanded")
 
 sParenDash :: Sentence -> Sentence
 sParenDash x = S " (" :+: x :+: S ") - "

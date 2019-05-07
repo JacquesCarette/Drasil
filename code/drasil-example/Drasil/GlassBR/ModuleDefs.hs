@@ -65,7 +65,7 @@ two = Atomic "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> QuantityDict
-var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
+var nam = implVar nam (nounPhraseSP nam)
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1"          (sub lY one) Real

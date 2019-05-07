@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
-import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
+import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heatCapSpec,
   temp)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
@@ -76,7 +76,7 @@ rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
 
 rocTempSimp_rel :: Relation
-rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
+rocTempSimp_rel = (sy QPP.mass) * (sy QT.heatCapSpec) *
   deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
   sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 
@@ -85,8 +85,8 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
   S "governing the", phrase rOfChng, S "of", phrase temp `sC`
   S "for a given", phrase QPP.vol, ch QPP.vol `sC` S "with" +:+.
   phrase QP.time, ch QPP.mass `isThe` phrase QPP.mass +:+.
-  sParen (Sy $ unit_symb QPP.mass), ch QT.heat_cap_spec `isThe` 
-  phrase QT.heat_cap_spec +:+. sParen (Sy $ unit_symb QT.heat_cap_spec),
+  sParen (Sy $ unit_symb QPP.mass), ch QT.heatCapSpec `isThe` 
+  phrase QT.heatCapSpec +:+. sParen (Sy $ unit_symb QT.heatCapSpec),
   ch temp `isThe` phrase temp, sParen (Sy $ unit_symb temp) `sAnd`
   ch QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
   ch ht_flux_in `sAnd` ch ht_flux_out, S "are the in and out heat",
@@ -112,7 +112,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc1 consThermE vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
-  s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
+  s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
                  makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
@@ -152,22 +152,22 @@ s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+s4_2_3_eq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+s4_2_3_eq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 

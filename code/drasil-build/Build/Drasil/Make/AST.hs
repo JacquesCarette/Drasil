@@ -18,11 +18,11 @@ type Dependencies = Target
 
 -- | Creates a Rule which results in a file being created
 mkFile :: Target -> [Dependencies] -> [Command] -> Rule
-mkFile t d c = R t d File c
+mkFile t d = R t d File
 
 -- | Creates an abstract Rule not associated to a specific file
 mkRule :: Target -> [Dependencies] -> [Command] -> Rule
-mkRule t d c = R t d Abstract c
+mkRule t d = R t d Abstract
 
 -- | Creates a Command which fails the make process if it does not return zero
 mkCheckedCommand :: String -> Command

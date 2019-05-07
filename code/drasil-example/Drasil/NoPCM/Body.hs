@@ -13,7 +13,7 @@ import Data.Drasil.Utils (enumSimple,
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
-  information, goalStmt, physSyst, problem, definition, srs, content, reference,
+  information, physSyst, problem, definition, srs, content, reference,
   document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
@@ -21,13 +21,13 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
+  thermal_energy, ht_trans_theo, ht_flux, heatCapSpec, thermal_conduction,
   thermocon, phase_change)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux, sens_heat)
+  heatCapSpec, ht_flux, sens_heat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -36,7 +36,7 @@ import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, funcReq, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
@@ -47,10 +47,10 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
+  generateTraceTable, goalStmtF, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
+  isThe, sOf, ofThe, foldlSent, foldlSP)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -81,7 +81,8 @@ import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
-import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.NoPCM.Goals (nopcmGoals)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -112,7 +113,7 @@ nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
-  htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
+  htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W, QT.sens_heat]
 
@@ -152,8 +153,8 @@ mkSRS = [RefSec $ RefProg intro
       , TMs [] (Label : stdFields) theoretical_models
       , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-      , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        [eBalanceOnWtr, heatEInWtr] ShowDerivation
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       , CorrSolnPpties propsDerivNoPCM
@@ -368,7 +369,7 @@ termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heat_cap_spec, thermal_conduction, transient]
+  [ht_flux, heatCapSpec, thermal_conduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
@@ -382,18 +383,15 @@ physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
-goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
-  []
+goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
 
-goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> Contents
-goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
-  phrase co `sC` S "initial", phrase temw  `sC` S "and material",
-  plural property `sC` S "the", phrase goalStmt, S "are"]
+goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
+goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
+  S "the initial" +:+ phrase temw,
+  S "the material" +:+ plural property]
 
-goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
-  (S "predict the" +:+ phrase temw +:+ S "over time"),
-  (S "predict the" +:+ phrase we +:+ S "over time")]
+goalStatesList :: [Contents]
+goalStatesList = mkEnumSimpleD nopcmGoals
 
 
 ------------------------------------------------------
@@ -432,22 +430,22 @@ genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefnEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+genDefnEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+genDefnEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 

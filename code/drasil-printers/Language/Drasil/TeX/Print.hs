@@ -230,7 +230,7 @@ dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
-makeRows cs = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty cs
+makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls

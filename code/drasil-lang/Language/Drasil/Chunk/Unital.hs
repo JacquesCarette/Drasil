@@ -28,7 +28,7 @@ instance Idea          UnitalChunk where getA (UC qc _) = getA qc
 instance Definition    UnitalChunk where defn = defq' . defn
 instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
 instance HasSpace      UnitalChunk where typ = defq' . typ
-instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
+instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
@@ -38,7 +38,7 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real
 uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
-uc a b c = ucs' a b Real c
+uc a b = ucs' a b Real
 
 ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
 ucs' a sym space c = UC (dqd (cw a) sym space un) un

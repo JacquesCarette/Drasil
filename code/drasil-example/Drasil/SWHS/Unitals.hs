@@ -10,12 +10,12 @@ import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  ht_flux, latent_heat, boil_pt, heat_cap_spec)
+  ht_flux, latent_heat, boilPt, heatCapSpec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
-  heat_cap_spec, thermal_flux, volHtGenU)
+  heatCapSpec, thermal_flux, volHtGenU)
 
 import Drasil.SWHS.Concepts (water)
 
@@ -32,11 +32,11 @@ swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
 -- Symbols with Units --
 
 swhsUnits :: [UnitaryConceptDict]
-swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
+swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp,boil_pt, temp_env, melt_pt, t_init_melt,
+  temp, boilPt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
@@ -77,19 +77,19 @@ out_SA = uc' "out_SA" (nounPhraseSP
 htCap_L = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given " ++
   "unit mass of a given liquid by a given amount")
-  (sup (eqSymb heat_cap_spec) cL) UT.heat_cap_spec
+  (sup (eqSymb heatCapSpec) cL) UT.heatCapSpec
 
 htCap_S = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
   ("The amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")
-  (sup (eqSymb heat_cap_spec) cS) UT.heat_cap_spec
+  (sup (eqSymb heatCapSpec) cS) UT.heatCapSpec
 
 htCap_V = uc' "htCap_V"
   (nounPhraseSP "specific heat capacity of a vapour")
   ("The amount of energy required to raise the temperature of a given " ++
   "unit mass of vapour by a given amount")
-  (sup (eqSymb heat_cap_spec) cV) UT.heat_cap_spec
+  (sup (eqSymb heatCapSpec) cV) UT.heatCapSpec
 
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
@@ -293,7 +293,7 @@ htCap_S_P = uqc "htCap_S_P"
   (nounPhraseSP "specific heat capacity of PCM as a solid")
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of solid phase change material by a given amount")
-  (sup (sub (eqSymb heat_cap_spec) cP) cS) UT.heat_cap_spec Rational
+  (sup (sub (eqSymb heatCapSpec) cP) cS) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCap_S_P_min) (Exc, sy htCap_S_P_max)]
   (dbl 1760) 0.1
@@ -303,7 +303,7 @@ htCap_L_P = uqc "htCap_L_P"
   (nounPhraseSP "specific heat capacity of PCM as a liquid")
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of liquid phase change material by a given amount")
-  (sup (sub (eqSymb heat_cap_spec) cP) cL) UT.heat_cap_spec Rational
+  (sup (sub (eqSymb heatCapSpec) cP) cL) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCap_L_P_min) (Exc, sy htCap_L_P_max )]
   (dbl 2270) 0.1
@@ -340,10 +340,10 @@ w_density = uqc "w_density" (density `of_` water)
   sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000) 0.1
 
 -- Constraint 13
-htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
+htCap_W = uqc "htCap_W" (heatCapSpec `of_` water)
   ("The amount of energy required to raise the " ++
     "temperature of a given unit mass of water by a given amount")
-  (sub (eqSymb heat_cap_spec) cW) UT.heat_cap_spec Rational
+  (sub (eqSymb heatCapSpec) cW) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) 0.1 
   
@@ -477,29 +477,29 @@ pcm_density_max = mkQuantDef (unitary "pcm_density_max"
 -- Used in Constraint 7
 htCap_S_P_min = mkQuantDef (unitary "htCap_S_P_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (sub (eqSymb htCap_S_P) (Atomic "min")) UT.heat_cap_spec Rational) 100
+  (sub (eqSymb htCap_S_P) (Atomic "min")) UT.heatCapSpec Rational) 100
 
 htCap_S_P_max = mkQuantDef (unitary "htCap_S_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (sub (eqSymb htCap_S_P) (Atomic "max")) UT.heat_cap_spec Rational) 4000
+  (sub (eqSymb htCap_S_P) (Atomic "max")) UT.heatCapSpec Rational) 4000
 
 -- Used in Constraint 8
 htCap_L_P_min = mkQuantDef (unitary "htCap_L_P_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (sub (eqSymb htCap_L_P) (Atomic "min")) UT.heat_cap_spec Rational) 100
+  (sub (eqSymb htCap_L_P) (Atomic "min")) UT.heatCapSpec Rational) 100
 
 htCap_L_P_max = mkQuantDef (unitary "htCap_L_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (sub (eqSymb htCap_L_P) (Atomic "max")) UT.heat_cap_spec Rational) 5000
+  (sub (eqSymb htCap_L_P) (Atomic "max")) UT.heatCapSpec Rational) 5000
 
 -- Used in Constraint 9
 htFusion_min = unitary "htFusion_min"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "min")) UT.heat_cap_spec Rational
+  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational
 
 htFusion_max = unitary "htFusion_max"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "max")) UT.heat_cap_spec Rational
+  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational
 
 -- Used in Constraint 10
 coil_SA_max = unitary "coil_SA_max"
@@ -518,11 +518,11 @@ w_density_max = mkQuantDef (unitary "w_density_max"
 -- Used in Constraint 13
 htCap_W_min = mkQuantDef (unitary "htCap_W_min"
   (nounPhraseSP "minimum specific heat capacity of water")
-  (sup (eqSymb htCap_W) (Atomic "min")) UT.heat_cap_spec Rational) 4170
+  (sup (eqSymb htCap_W) (Atomic "min")) UT.heatCapSpec Rational) 4170
 
 htCap_W_max = mkQuantDef (unitary "htCap_W_max"
   (nounPhraseSP "maximum specific heat capacity of water")
-  (sup (eqSymb htCap_W) (Atomic "max")) UT.heat_cap_spec Rational) 4210
+  (sup (eqSymb htCap_W) (Atomic "max")) UT.heatCapSpec Rational) 4210
 
 -- Used in Constraint 14
 coil_HTC_min = mkQuantDef (unitary "coil_HTC_min"

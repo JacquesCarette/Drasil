@@ -1,5 +1,5 @@
 module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
+  ( rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space
   , cartesian, rightHand, restitutionCoef, acceleration, pressure
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
@@ -16,7 +16,7 @@ import Data.Drasil.SentenceStructures (sOf)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
+physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
@@ -28,7 +28,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
-rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
+rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
@@ -51,7 +51,7 @@ elasticity   = dcc "elasticity" (cnIES "elasticity")
   "of two colliding objects after and before a collision.")
 energy       = dcc "energy" (cn "energy")
   "Power derived from the utilization of physical or chemical resources."
-mech_energy  = dcc "mech_energy" (cn "mechanical energy")
+mechEnergy  = dcc "mechEnergy" (cn "mechanical energy")
   "The energy that comes from motion and position"
 collision    = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++

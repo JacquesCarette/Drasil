@@ -238,7 +238,7 @@ mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
-mkSections si l = map doit l
+mkSections si = map doit
   where
     doit :: DocSection -> Section
     doit (Verbatim s)        = s
@@ -299,10 +299,10 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro 
+tsymb = TSymb 
 -- ^ Default Term and given intro
 
-tsymb' intro = TSymb' Defn intro
+tsymb' = TSymb' Defn
 -- ^ Default Defn and given intro
 
 -- | Custom table of symbols constructor

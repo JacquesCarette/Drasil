@@ -1,39 +1,15 @@
 {-# Language TypeFamilies #-}
-module Data.Drasil.Utils
-  ( foldle
-  , foldle1
-  , mkEnumAbbrevList
-  , zipFTable'
-  , zipSentList
-  , makeTMatrix
-  , itemRefToSent
-  , noRefs
-  , noRefsLT
-  , makeListRef
-  , bulletFlat
-  , bulletNested
-  , enumSimple
-  , enumBullet
-  , enumSimpleU
-  , enumBulletU
-  , mkInputDatTb
-  , getRVal
-  , addPercent
-  , weave
-  , fmtU
-  , unwrap
-  , fterms
-  , prodUCTbl
-  , eqUnR, eqUnR'
-  ) where
+module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSentList,
+  makeTMatrix, itemRefToSent, noRefs, noRefsLT, makeListRef, bulletFlat, bulletNested,
+  enumSimple, enumBullet, enumSimpleU, enumBulletU, mkInputDatTb, getRVal, addPercent,
+  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR' ) where
 
 import Language.Drasil
 
 import Control.Lens ((^.))
 import Data.List (transpose, elem)
 
-import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
-  useCaseTable)
+import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Reference -> LabelledContent
@@ -95,7 +71,7 @@ zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 -- | traceability matrices row from a list of rows and a list of columns
 
 zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
-zipFTable' content l = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS]) l
+zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]

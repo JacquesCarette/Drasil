@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, isThe, ofThe, sAnd)
+  foldlSent, isThe, ofThe', sAnd)
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
@@ -149,7 +149,7 @@ swhsNFRequirements = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  S "The", plural output_ `ofThe` phrase code, S "have the",
+  plural output_ `ofThe'` phrase code, S "have the",
   plural property, S "described in (Properties of a Correct Solution)"
   -- FIXME: (Properties of a Correct Solution) Section doesn't exist
   ]) "Correct" nonFuncReqDom

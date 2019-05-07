@@ -5,8 +5,8 @@ import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
-heat_capacity :: UnitDefn
-heat_capacity = makeDerU (dccWDS "heat_capacity" (cnIES "heat capacity")
+heatCapacity :: UnitDefn
+heatCapacity = makeDerU (dccWDS "heatCapacity" (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
 heat_cap_spec :: UnitDefn --Specific heat capacity

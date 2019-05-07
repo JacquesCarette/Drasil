@@ -13,8 +13,8 @@ heat_cap_spec :: UnitDefn --Specific heat capacity
 heat_cap_spec = makeDerU (dccWDS "heat_cap_spec" (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
-thermal_flux :: UnitDefn
-thermal_flux = makeDerU (dccWDS "thermal_flux" (cn'' "heat flux")
+thermalFlux :: UnitDefn
+thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
 heat_transfer_coef :: UnitDefn

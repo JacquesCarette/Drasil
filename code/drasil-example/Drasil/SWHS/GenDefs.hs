@@ -16,7 +16,7 @@ import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heat_cap_spec,
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.Units.Thermodynamics (thermalFlux)
 import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
@@ -40,7 +40,7 @@ swhsGDs = [nwtnCooling, rocTempSimp]
 
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) 
+nwtnCooling = gd' nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
   [incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
 rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
                  "rocTempSimp" [rocTempSimp_desc]

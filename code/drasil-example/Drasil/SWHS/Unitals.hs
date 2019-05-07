@@ -15,7 +15,7 @@ import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
-  heat_cap_spec, thermal_flux, volHtGenU)
+  heat_cap_spec, thermalFlux, volHtGenU)
 
 import Drasil.SWHS.Concepts (water)
 
@@ -116,25 +116,25 @@ w_mass = uc' "w_mass" (nounPhraseSP "mass of water")
 
 thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "Vector denoting the direction of thermal flux through a surface"
-  (vec lQ) UT.thermal_flux
+  (vec lQ) UT.thermalFlux
 
 ht_flux_C = uc' "ht_flux_C"
   (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
-  (sub (eqSymb htFlux) cC) UT.thermal_flux
+  (sub (eqSymb htFlux) cC) UT.thermalFlux
 
 ht_flux_in = uc' "ht_flux_in" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) (Atomic "in")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "in")) UT.thermalFlux
 
 ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) (Atomic "out")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "out")) UT.thermalFlux
 
 ht_flux_P = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
   ("The rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
-  (sub (eqSymb htFlux) cP) UT.thermal_flux
+  (sub (eqSymb htFlux) cP) UT.thermalFlux
 
 latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++

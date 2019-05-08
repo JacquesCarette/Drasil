@@ -31,7 +31,7 @@ data ScopeType =
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
-                             , _cit :: Maybe [Reference]
+                             , _ref :: Maybe [Reference]
                              , _deri :: Derivation
                              , lbl :: ShortName
                              , ra :: String
@@ -46,7 +46,7 @@ instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e = symbol (e^.qd)
 instance Quantity           DataDefinition where 
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
-instance HasReference       DataDefinition where getReferences = cit
+instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes

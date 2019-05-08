@@ -40,15 +40,15 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 
 --DD1--
 
-risk_eq :: Expr
-risk_eq = ((sy sflawParamK) / 
+riskEq :: Expr
+riskEq = ((sy sflawParamK) / 
   ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
   (sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
 riskQD :: QDefinition
-riskQD = mkQuantDef risk_fun risk_eq
+riskQD = mkQuantDef risk_fun riskEq
 
 risk :: DataDefinition
 risk = mkDD riskQD 
@@ -59,26 +59,26 @@ risk = mkDD riskQD
 
 --DD2--
 
-hFromt_eq :: Relation
-hFromt_eq = (1/1000) * (case_ (zipWith hFromt_helper 
+hFromtEq :: Relation
+hFromtEq = (1/1000) * (case_ (zipWith hFromtHelper 
   actualThicknesses nominalThicknesses))
 
-hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
+hFromtHelper :: Double -> Double -> (Expr, Relation)
+hFromtHelper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromtQD :: QDefinition
-hFromtQD = mkQuantDef min_thick hFromt_eq
+hFromtQD = mkQuantDef min_thick hFromtEq
 
 hFromt :: DataDefinition
 hFromt = mkDD hFromtQD [astm2009] [{-derivation-}] "min_thick" [hMin]
 
 --DD3-- (#749)
 
-loadDF_eq :: Expr 
-loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
+loadDFEq :: Expr 
+loadDFEq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
 loadDFQD :: QDefinition
-loadDFQD = mkQuantDef lDurFac loadDF_eq
+loadDFQD = mkQuantDef lDurFac loadDFEq
 
 loadDF :: DataDefinition
 loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S assumpSV,
@@ -86,13 +86,13 @@ loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S as
 
 --DD4--
 
-strDisFac_eq :: Expr
--- strDisFac_eq = apply (sy stressDistFac)
+strDisFacEq :: Expr
+-- strDisFacEq = apply (sy stressDistFac)
 --   [sy dimlessLoad, sy aspect_ratio]
-strDisFac_eq = apply (asExpr' interpZ) [Str "SDF.txt", sy aspect_ratio, sy dimlessLoad]
+strDisFacEq = apply (asExpr' interpZ) [Str "SDF.txt", sy aspect_ratio, sy dimlessLoad]
   
 strDisFacQD :: QDefinition
-strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
+strDisFacQD = mkQuantDef stressDistFac strDisFacEq
 
 strDisFac :: DataDefinition
 strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
@@ -100,12 +100,12 @@ strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
 
 --DD5--
 
-nonFL_eq :: Expr
-nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
+nonFLEq :: Expr
+nonFLEq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
 nonFLQD :: QDefinition
-nonFLQD = mkQuantDef nonFactorL nonFL_eq
+nonFLQD = mkQuantDef nonFactorL nonFLEq
 
 nonFL :: DataDefinition
 nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
@@ -113,14 +113,14 @@ nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
 
 --DD6--
 
-glaTyFac_eq :: Expr
-glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors $ map (getAccStr . snd) glassType))
+glaTyFacEq :: Expr
+glaTyFacEq = (case_ (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType))
 
-glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
+glaTyFacHelper :: Integer -> String -> (Expr, Relation)
+glaTyFacHelper result condition = (int result, (sy glass_type) $= str condition)
 
 glaTyFacQD :: QDefinition
-glaTyFacQD = mkQuantDef gTF glaTyFac_eq
+glaTyFacQD = mkQuantDef gTF glaTyFacEq
 
 glaTyFac :: DataDefinition
 glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
@@ -128,12 +128,12 @@ glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
 
 --DD7--
 
-dimLL_eq :: Expr
-dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
+dimLLEq :: Expr
+dimLLEq = ((sy demand) * (square (sy plate_len * sy plate_width)))
   / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
 
 dimLLQD :: QDefinition
-dimLLQD = mkQuantDef dimlessLoad dimLL_eq
+dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
@@ -141,12 +141,12 @@ dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-deri
 
 --DD8--
 
-tolPre_eq :: Expr
---tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
-tolPre_eq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdf_tol]
+tolPreEq :: Expr
+--tolPreEq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
+tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdf_tol]
 
 tolPreQD :: QDefinition
-tolPreQD = mkQuantDef tolLoad tolPre_eq
+tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolPre :: DataDefinition
 tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
@@ -154,14 +154,14 @@ tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
 
 --DD9--
 
-tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
+tolStrDisFacEq :: Expr
+tolStrDisFacEq = ln (ln (1 / (1 - (sy pb_tol)))
   * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((sy mod_elas *
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFacQD :: QDefinition
-tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
+tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFacEq
 
 tolStrDisFac :: DataDefinition
 tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
@@ -169,62 +169,62 @@ tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
 
 --DD10--
 
-standOffDis_eq :: Expr
-standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
+standOffDisEq :: Expr
+standOffDisEq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
 
 standOffDisQD :: QDefinition
-standOffDisQD = mkQuantDef standOffDist standOffDis_eq
+standOffDisQD = mkQuantDef standOffDist standOffDisEq
 
 standOffDis :: DataDefinition
 standOffDis = mkDD standOffDisQD [astm2009] [{-derivation-}] "standOffDist" []
 
 --DD11--
 
-aspRat_eq :: Expr
-aspRat_eq = (sy plate_len) / (sy plate_width)
+aspRatEq :: Expr
+aspRatEq = (sy plate_len) / (sy plate_width)
 
 aspRatQD :: QDefinition
-aspRatQD = mkQuantDef aspect_ratio aspRat_eq
+aspRatQD = mkQuantDef aspect_ratio aspRatEq
 
 aspRat :: DataDefinition
 aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
 
 --DD12--
-eqTNTW_eq :: Expr
-eqTNTW_eq = (sy char_weight) * (sy tNT)
+eqTNTWEq :: Expr
+eqTNTWEq = (sy char_weight) * (sy tNT)
 
 eqTNTWQD :: QDefinition
-eqTNTWQD = mkQuantDef eqTNTWeight eqTNTW_eq
+eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
 eqTNTWDD = mkDD eqTNTWQD [astm2009] [] "eqTNTW" []
 
 --DD13--
-probOfBreak_eq :: Expr
-probOfBreak_eq = 1 - (exp (negate (sy risk)))
+probOfBreakEq :: Expr
+probOfBreakEq = 1 - (exp (negate (sy risk)))
 
 probOfBreakQD :: QDefinition
-probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
+probOfBreakQD = mkQuantDef prob_br probOfBreakEq
 
 probOfBreak :: DataDefinition
 probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" [glassBreak]
 
 --DD14--
-calofCapacity_eq :: Expr
-calofCapacity_eq = ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
+calofCapacityEq :: Expr
+calofCapacityEq = ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
 
 calofCapacityQD :: QDefinition
-calofCapacityQD = mkQuantDef lRe calofCapacity_eq
+calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
 calofCapacity :: DataDefinition
 calofCapacity = mkDD calofCapacityQD [astm2009] [{-derivation-}] "calofCapacity" capacityS
 
 --DD15--
-calofDemand_eq :: Expr
-calofDemand_eq = apply (asExpr' interpY) [Str "TSD.txt", sy standOffDist, sy eqTNTWeight]
+calofDemandEq :: Expr
+calofDemandEq = apply (asExpr' interpY) [Str "TSD.txt", sy standOffDist, sy eqTNTWeight]
 
 calofDemandQD :: QDefinition
-calofDemandQD = mkQuantDef demand calofDemand_eq
+calofDemandQD = mkQuantDef demand calofDemandEq
 
 calofDemand :: DataDefinition
 calofDemand = mkDD calofDemandQD [astm2009] [{-derivation-}] "calofDemand" [calofDemandDesc]

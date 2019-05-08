@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
+  col2DLegTerms, mass_A, massI, normalVect, time_c, torque_i, vel_A, vel_i)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
@@ -23,9 +23,9 @@ iModelsNew = [im1_new, im2_new, im3_new]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
-im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
+im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw massI] 
   [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
+            sy force_i $> 0, sy massI $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
 
 transMot :: RelationConcept
 transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
@@ -35,7 +35,7 @@ transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rig
 
 transMotRel :: Relation -- FIXME: add proper equation
 transMotRel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
-  $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_i))
+  $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy massI))
 
 
 --fixme: need referencing

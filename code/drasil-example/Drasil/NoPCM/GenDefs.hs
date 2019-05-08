@@ -28,7 +28,7 @@ swhsGDs = [nwtnCooling, rocTempSimp]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
-  [{-S "FIXME: no sources"-}] "rocTempSimp" [rocTempSimp_desc]
+  Nothing "rocTempSimp" [rocTempSimp_desc]
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =

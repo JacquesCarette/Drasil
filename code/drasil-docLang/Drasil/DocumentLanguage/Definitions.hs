@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), getSource', foldlList, foldlSent)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -163,7 +163,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
-mkGDField g _ l@Source fs = (show l, [mkParagraph $ getSource' g]) : fs
+mkGDField g _ l@Source fs = (show l, helperSourceField $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 

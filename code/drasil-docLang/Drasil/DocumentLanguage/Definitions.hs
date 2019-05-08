@@ -96,15 +96,15 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkTMField t _ l@Source fs = (show l, mkRefParagraph $ t ^. getReferences) : fs
-  where
-    mkRefParagraph :: Maybe [Reference] -> [Contents]
-    mkRefParagraph Nothing  = map (mkParagraph . S)   ["--"]
-    mkRefParagraph (Just x) = map (mkParagraph . Ref) x
+mkTMField t _ l@Source fs = (show l, helperSourceField $ t ^. getReferences) : fs  
 mkTMField t _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
+
+helperSourceField :: Maybe [Reference] -> [Contents]
+helperSourceField Nothing  = map (mkParagraph . S)   ["--"]
+helperSourceField (Just x) = map (mkParagraph . Ref) x
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
 helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) ((_sysinfodb s) ^. refbyTable)
@@ -132,8 +132,8 @@ mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
-mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkDDField d _ l@Source fs = (show l, [mkParagraph $ getSource' d]) : fs
+mkDDField d m l@RefBy fs = (show l, [mkParagraph $ helperRefs d m]) : fs --FIXME: fill this in
+mkDDField d _ l@Source fs = (show l, helperSourceField $ d ^. getReferences) : fs  
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"

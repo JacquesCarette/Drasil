@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Goals (goals) where
+module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 
 import Language.Drasil
 

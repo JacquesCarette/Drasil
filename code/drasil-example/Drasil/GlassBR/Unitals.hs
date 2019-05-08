@@ -36,7 +36,7 @@ gbConstrained :: [ConstrainedChunk]
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
-plateLen, plate_width, char_weight, standOffDist :: UncertQ
+plateLen, plateWidth, char_weight, standOffDist :: UncertQ
 aspect_ratio, pb_tol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
@@ -51,7 +51,7 @@ gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
-gbInputsWUnitsUncrtn = [plateLen, plate_width, standOffDist, char_weight]
+gbInputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
@@ -68,10 +68,10 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom (Inc, sy plate_width),
+    physc $ UpFrom (Inc, sy plateWidth),
     sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max)] (dbl 1.5) defaultUncrt
 
-plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
+plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max)] (dbl 1.2) defaultUncrt

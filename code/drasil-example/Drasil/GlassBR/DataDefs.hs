@@ -20,7 +20,7 @@ import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
-  plateLen, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
+  plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
   demandq, eqTNTWeight)
 
@@ -42,7 +42,7 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 
 riskEq :: Expr
 riskEq = ((sy sflawParamK) / 
-  ((sy plateLen) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
+  ((sy plateLen) * (sy plateWidth)) $^ ((sy sflawParamM) - 1) *
   (sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
@@ -102,7 +102,7 @@ strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
 
 nonFLEq :: Expr
 nonFLEq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
-  (square (sy plateLen * sy plate_width))
+  (square (sy plateLen * sy plateWidth))
 
 nonFLQD :: QDefinition
 nonFLQD = mkQuantDef nonFactorL nonFLEq
@@ -129,7 +129,7 @@ glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
 --DD7--
 
 dimLLEq :: Expr
-dimLLEq = ((sy demand) * (square (sy plateLen * sy plate_width)))
+dimLLEq = ((sy demand) * (square (sy plateLen * sy plateWidth)))
   / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
 
 dimLLQD :: QDefinition
@@ -142,7 +142,7 @@ dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-deri
 --DD8--
 
 tolPreEq :: Expr
---tolPreEq = apply (sy tolLoad) [sy sdf_tol, (sy plateLen) / (sy plate_width)]
+--tolPreEq = apply (sy tolLoad) [sy sdf_tol, (sy plateLen) / (sy plateWidth)]
 tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdf_tol]
 
 tolPreQD :: QDefinition
@@ -156,7 +156,7 @@ tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
 
 tolStrDisFacEq :: Expr
 tolStrDisFacEq = ln (ln (1 / (1 - (sy pb_tol)))
-  * ((((sy plateLen) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
+  * ((((sy plateLen) * (sy plateWidth)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((sy mod_elas *
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
@@ -181,7 +181,7 @@ standOffDis = mkDD standOffDisQD [astm2009] [{-derivation-}] "standOffDist" []
 --DD11--
 
 aspRatEq :: Expr
-aspRatEq = (sy plateLen) / (sy plate_width)
+aspRatEq = (sy plateLen) / (sy plateWidth)
 
 aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRatEq
@@ -254,9 +254,9 @@ glassBreak = (ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+
   makeRef2S risk)
 
 aGrtrThanB :: Sentence
-aGrtrThanB = (ch plateLen `sC` ch plate_width +:+ 
+aGrtrThanB = (ch plateLen `sC` ch plateWidth +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (sy plateLen $>= sy plate_width)))
+  sParen (E (sy plateLen $>= sy plateWidth)))
 
 anGlass :: Sentence
 anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")

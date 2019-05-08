@@ -28,7 +28,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL,
 import Drasil.GlassBR.IMods (gbrIMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
 import Drasil.GlassBR.Unitals (blast, char_weight, glassTy, glass_type, 
-  is_safeLR, is_safePb, nom_thick, notSafe, pb_tol, plateLen, plate_width, 
+  is_safeLR, is_safePb, nom_thick, notSafe, pb_tol, plateLen, plateWidth, 
   safeMessage, sdx, sdy, sdz, tNT)
 
 {--Functional Requirements--}
@@ -78,7 +78,7 @@ inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
-    requiredInputs = (map qw [plateLen, plate_width, char_weight])
+    requiredInputs = (map qw [plateLen, plateWidth, char_weight])
       ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
       ++ (map qw [glass_type, nom_thick])
 

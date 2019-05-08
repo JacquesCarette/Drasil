@@ -28,7 +28,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLenA, momtInert_A, perpLenB, momtInert_B, timeT, inittime, 
+  perpLenA, momtInertA, perpLenB, momtInert_B, timeT, inittime, 
   momtInertK, pointOfCollision, contDisp_k, collisionImpulse, velAP, velBP ]
 
 ----------------------
@@ -59,7 +59,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDisp_A, contDisp_B, 
-  momtInert_A, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
+  momtInertA, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
   contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
 -----------------------
 -- PARAMETRIZED HACK --
@@ -121,7 +121,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLenA, momtInert_A, perpLenB, momtInert_B, timeT, inittime, 
+  perpLenA, momtInertA, perpLenB, momtInert_B, timeT, inittime, 
   momtInertK, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -243,7 +243,7 @@ angVelA    = angParam "A" cA
 angVelB    = angParam "B" cB
 perpLenA   = perpParam "A" $ eqSymb contDisp_A
 perpLenB   = perpParam "B" $ eqSymb contDisp_B
-momtInert_A = momtParam "A" "A"
+momtInertA = momtParam "A" "A"
 momtInert_B = momtParam "B" "B"
 contDisp_A  = contParam "A" "A"
 contDisp_B  = contParam "B" "B"

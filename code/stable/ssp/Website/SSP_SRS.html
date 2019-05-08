@@ -5403,7 +5403,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -5717,7 +5717,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6330,7 +6330,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6485,7 +6485,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#generateCSS>FR: Generate-Critical-Slip-Surfaces</a> <a href=#displayGraph>FR: Display-Graph</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
+<a href=#displayGraph>FR: Display-Graph</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6797,18 +6797,8 @@ Verify-Input: Verify that the input data lie within the physical constraints sho
 </div>
 </p>
 <p>
-<div id="generateCSS">
-Generate-Critical-Slip-Surfaces: Generate potential critical slip surfaces for the input slope (using <a href=#IM:crtSlpId>IM: crtSlpId</a>).
-</div>
-</p>
-<p>
-<div id="calculateFS">
-Calculate-Factors-of-Safety: Calculate the factors of safety for each of the potential critical slip surfaces (using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:intsliceFs>IM: intsliceFs</a>).
-</div>
-</p>
-<p>
 <div id="determineCritSlip">
-Determine-Critical-Slip-Surface: Compare the factor of safety for each potential critical slip surface to determine the minimum factor of safety, corresponding to the critical slip surface (using <a href=#IM:crtSlpId>IM: crtSlpId</a>).
+Determine-Critical-Slip-Surface: Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a> to calculate the factor of safety for a slip surface and using <a href=#IM:crtSlpId>IM: crtSlpId</a> to find the slip surface that minimizes it.
 </div>
 </p>
 <p>
@@ -7331,9 +7321,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
 </th>
 <th>
-<a href=#generateCSS>FR: Generate-Critical-Slip-Surfaces</a>
-</th>
-<th>
 <a href=#displayGraph>FR: Display-Graph</a>
 </th>
 <th>
@@ -7350,9 +7337,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 </th>
 <th>
 <a href=#displayFS>FR: Display-Factor-of-Safety</a>
-</th>
-<th>
-<a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>
 </th>
 <th>
 <a href=#readAndStore>FR: Read-and-Store</a>
@@ -7388,12 +7372,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7694,12 +7672,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -7722,12 +7694,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8016,12 +7982,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8059,12 +8019,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8338,12 +8292,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8378,12 +8326,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8660,12 +8602,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8821,12 +8757,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8870,12 +8800,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9143,12 +9067,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9198,12 +9116,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9465,12 +9377,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9626,12 +9532,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9684,12 +9584,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9833,12 +9727,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10109,12 +9997,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10179,12 +10061,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10431,12 +10307,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10507,12 +10377,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10753,12 +10617,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10838,12 +10696,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11075,12 +10927,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11175,12 +11021,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11397,12 +11237,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11558,12 +11392,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11643,12 +11471,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11880,12 +11702,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11914,12 +11730,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12202,12 +12012,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12363,12 +12167,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12403,12 +12201,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12650,12 +12442,6 @@ X
 X
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -12811,13 +12597,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12972,13 +12752,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13133,13 +12907,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13294,13 +13062,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13455,13 +13217,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13651,12 +13407,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13697,12 +13447,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13973,12 +13717,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14049,12 +13787,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14257,16 +13989,10 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -14386,12 +14112,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14617,12 +14337,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14778,22 +14492,10 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
 <a href=#Table:inDataTable>Table:inDataTable</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15080,12 +14782,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -15223,16 +14919,10 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -15405,12 +15095,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -15432,12 +15116,6 @@ X
 <tr>
 <td>
 <a href=#DD:lengthLs>DD: lengthLs</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15744,12 +15422,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -15784,12 +15456,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16066,12 +15732,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16227,20 +15887,8 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
-<td>
-
-</td>
-<td>
-
-</td>
 <td>
 
 </td>
@@ -16549,12 +16197,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16622,12 +16264,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16871,12 +16507,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16944,12 +16574,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17155,16 +16779,10 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -17233,12 +16851,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17515,12 +17127,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -17600,12 +17206,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 

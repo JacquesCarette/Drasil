@@ -83,48 +83,48 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
-  glassBR_section glassBR_labelledcon
+  ++ map unitWrapper [pascal, newton]) glassBRLabel glassBRRefby
+  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  glassBRSection glassBRLabelledCon
 
-glassBR_label :: TraceMap
-glassBR_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBR_concins
+glassBRLabel :: TraceMap
+glassBRLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBRConcIns
  
-glassBR_refby :: RefbyMap
-glassBR_refby = generateRefbyMap glassBR_label 
+glassBRRefby :: RefbyMap
+glassBRRefby = generateRefbyMap glassBRLabel 
 
-glassBR_datadefn :: [DataDefinition]
-glassBR_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+glassBRDatadefn :: [DataDefinition]
+glassBRDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-glassBR_insmodel :: [InstanceModel]
-glassBR_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+glassBRInsModel :: [InstanceModel]
+glassBRInsModel = getTraceMapFromIM $ getSCSSub mkSRS
 
-glassBR_gendef :: [GenDefn]
-glassBR_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+glassBRGenDef :: [GenDefn]
+glassBRGenDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-glassBR_theory :: [TheoryModel]
-glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
+glassBRTheory :: [TheoryModel]
+glassBRTheory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBR_concins :: [ConceptInstance]
-glassBR_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+glassBRConcIns :: [ConceptInstance]
+glassBRConcIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-glassBR_section :: [Section]
-glassBR_section = glassBR_sec
+glassBRSection :: [Section]
+glassBRSection = glassBRSec
 
-glassBR_labelledcon :: [LabelledContent]
-glassBR_labelledcon = [inputGlassPropsTable]
+glassBRLabelledCon :: [LabelledContent]
+glassBRLabelledCon = [inputGlassPropsTable]
 
-glassBR_sec :: [Section]
-glassBR_sec = extractSection glassBR_srs
+glassBRSec :: [Section]
+glassBRSec = extractSection glassBR_srs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_concins
-  glassBR_section glassBR_labelledcon
+ ([] :: [ConceptChunk]) checkSi glassBRLabel glassBRRefby
+  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  glassBRSection glassBRLabelledCon
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb gbCitations glassBR_concins
+gbRefDB = rdb gbCitations glassBRConcIns
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration

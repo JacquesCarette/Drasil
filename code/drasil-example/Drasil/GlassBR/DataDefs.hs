@@ -19,7 +19,7 @@ import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
   demandq, eqTNTWeight)
@@ -155,7 +155,7 @@ tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
 --DD9--
 
 tolStrDisFacEq :: Expr
-tolStrDisFacEq = ln (ln (1 / (1 - (sy pb_tol)))
+tolStrDisFacEq = ln (ln (1 / (1 - (sy pbTol)))
   * ((((sy plateLen) * (sy plateWidth)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((sy mod_elas *
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
@@ -279,7 +279,7 @@ ldfRef :: Sentence
 ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef2S loadDF)
 
 pbTolUsr :: Sentence
-pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
+pbTolUsr = (ch pbTol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
   phrase user)
 
 jRef :: Sentence
@@ -314,7 +314,7 @@ jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC`
   S "shown in Figure 7")
 
 jtolRelToPbtol :: Sentence
-jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
+jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pbTol)
 
 glassLiteRef :: Sentence 
 glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL)

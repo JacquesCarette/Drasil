@@ -424,12 +424,12 @@ abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance")
   [ physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) 0.01
 
-rel_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance") 
+rel_tol = uvc "pbTol" (nounPhraseSP "relative tolerance") 
   (sub cR (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) 0.01
 
-cons_tol = uvc "pb_tol"
+cons_tol = uvc "pbTol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 

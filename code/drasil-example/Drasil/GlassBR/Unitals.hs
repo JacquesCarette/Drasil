@@ -37,7 +37,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
 plateLen, plateWidth, char_weight, standOffDist :: UncertQ
-aspect_ratio, pb_tol, tNT :: UncertainChunk
+aspect_ratio, pbTol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -55,7 +55,7 @@ gbInputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
+gbInputsWUncrtn = [aspect_ratio, pbTol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -81,7 +81,7 @@ aspect_ratio = uvc "aspect_ratio" (aR ^. term)
   [ physc $ UpFrom (Inc, 1), 
     sfwrc $ UpTo (Inc, sy ar_max)] (dbl 1.5) defaultUncrt
 
-pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
+pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 

@@ -70,7 +70,7 @@ import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, stressDistFac,
+  lateralLoad, load, loadTypes, pbTol, prob_br, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
@@ -444,7 +444,7 @@ physSystDescriptionListPhysys2 imprtntElem = foldlSent [S "The"
 
 goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase glaPlane,
   phrase glassTy, plural characteristic `ofThe` phrase explosion,
-  S "the" +:+ phrase pb_tol]] [goalStmtsList]
+  S "the" +:+ phrase pbTol]] [goalStmtsList]
 
 goalStmtsListGS1 :: [Sentence]
 goalStmtsListGS1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",

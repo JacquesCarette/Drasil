@@ -107,7 +107,7 @@ col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (apply1 angVel_A timeC) $= (apply1 angVel_A QP.time) +
+--im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA QP.time) +
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --im3Rel4 = (apply1 angVel_B timeC) $= (apply1 angVel_B QP.time) -

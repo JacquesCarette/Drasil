@@ -25,10 +25,10 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 --from TSD.txt:
 
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [read_table]
+readTableMod = packmod "ReadTable" [readTable]
 
-read_table :: Func
-read_table = funcData "read_table" $
+readTable :: Func
+readTable = funcData "read_table" $
   [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix,
                          listEntry [WithLine, WithPattern] y_matrix]) ','
@@ -174,7 +174,7 @@ interpY = funcDef "interpY" [filename, x, z] Real
   fdec y_matrix,
   fdec z_vector,
   --
-  call read_table [filename, z_vector, x_matrix, y_matrix],
+  call readTable [filename, z_vector, x_matrix, y_matrix],
   -- endhack
     i     $:= find z_vector z,
     x_z_1 $:= getCol x_matrix i 0,
@@ -198,7 +198,7 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
   fdec y_matrix,
   fdec z_vector,
   --
-  call read_table [filename, z_vector, x_matrix, y_matrix],
+  call readTable [filename, z_vector, x_matrix, y_matrix],
   -- endhack
     ffor i (sy i $< (dim (sy z_vector) - 1))
       [

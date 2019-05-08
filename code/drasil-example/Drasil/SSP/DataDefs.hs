@@ -55,11 +55,7 @@ sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
 sliceWghtNotes :: Sentence
 sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
   phrase assumption, S "that the surface and the base of a", phrase slice, 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The",
-  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
-  ch index, S "because the", phrase soil,
-  S "is assumed to be homogeneous, with", phrase constant, plural soilPrpty, 
-  S "throughout" +:+. sParen (makeRef2S assumpSLH), ch slcWghtL, 
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
   S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
   S "is defined in" +:+ makeRef2S slcWghtRDD]
 
@@ -465,7 +461,11 @@ slcWghtLEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
           (inxiM1 waterHght) $<= (inxiM1 slipHght))
 
 slcWghtNotes :: Sentence
-slcWghtNotes = ch baseWthX +:+ S "is defined in" +:+. makeRef2S lengthB
+slcWghtNotes = foldlSent [S "The", getTandS dryWeight `andThe` 
+  getTandS satWeight, S "are not indexed by", ch index, S "because the", 
+  phrase soil, S "is assumed to be homogeneous, with", phrase constant, 
+  plural soilPrpty, S "throughout" +:+. sParen (makeRef2S assumpSLH), 
+  ch baseWthX +:+ S "is defined in", makeRef2S lengthB]
 
 baseWtrFRQD :: QDefinition
 baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn

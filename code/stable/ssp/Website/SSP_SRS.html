@@ -1504,7 +1504,7 @@ Factor-of-Safety: The factor of safety is assumed to be constant across the enti
 </p>
 <p>
 <div id="assumpSLH">
-Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
+Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
 </p>
 <p>
@@ -2915,7 +2915,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ<sub>dry</sub></em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>W</b><sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em><b>W</b><sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
+This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>W</b><sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em><b>W</b><sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
 </p>
 </td>
 </tr>
@@ -4804,7 +4804,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+The soil dry unit weight <em>γ<sub>dry</sub></em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -4930,7 +4930,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+The soil dry unit weight <em>γ<sub>dry</sub></em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -7454,6 +7454,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#LC_external>LC: Calculate-External-Force</a>
 </th>
 <th>
+<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
+</th>
+<th>
+<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
+</th>
+<th>
 <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>
 </th>
 <th>
@@ -7461,12 +7467,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 </th>
 <th>
 <a href=#DD:lengthLs>DD: lengthLs</a>
-</th>
-<th>
-<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
-</th>
-<th>
-<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
 </th>
 <th>
 <a href=#displayGraph>FR: Display-Graph</a>
@@ -11436,9 +11436,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -11446,24 +11443,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
 </td>
 <td>
 
@@ -11491,6 +11470,27 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -12104,13 +12104,13 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+X
+</td>
+<td>
 
-</td>
-<td>
-X
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -12265,13 +12265,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13812,13 +13812,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16912,13 +16912,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 

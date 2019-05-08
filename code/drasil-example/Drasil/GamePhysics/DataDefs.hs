@@ -7,7 +7,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, massI,
-  momtInertA, momtInert_B, mTot, normalLen, normalVect,
+  momtInertA, momtInertB, mTot, normalLen, normalVect,
   perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -209,7 +209,7 @@ impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
   (sy normalVect)) / ((((1 / (sy mass_A))) + (1 / (sy mass_B))) *
   ((sy normalLen) $^ 2) +
   (((sy perpLenA) $^ 2) / (sy momtInertA)) +
-  (((sy perpLenB) $^ 2)/ (sy momtInert_B)))
+  (((sy perpLenB) $^ 2)/ (sy momtInertB)))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence

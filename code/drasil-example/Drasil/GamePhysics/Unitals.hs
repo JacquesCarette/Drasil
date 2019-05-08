@@ -24,7 +24,7 @@ gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) 
 
 gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
- force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
+ force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
@@ -56,7 +56,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B, force_i, torqueI, timeC, vel_A, vel_B, mass_A, mass_B,
+  perpLen_A, perpLen_B, forceI, torqueI, timeC, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, rOB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
@@ -117,7 +117,7 @@ rigidParam n w = ucs'
 -- CHUNKS WITH UNITS --
 -----------------------
 
-iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
+iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
@@ -221,7 +221,7 @@ collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase'
                 (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
-force_i = ucs' (dccWDS "force_i" (compoundPhrase' 
+forceI = ucs' (dccWDS "forceI" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the i-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
 
@@ -298,7 +298,7 @@ restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (In
 
 transMotLegTerms, rotMotLegTerms, col2DLegTerms :: [UnitalChunk]
 transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime, posCM,
-  QP.acceleration, QP.velocity, force_i]
+  QP.acceleration, QP.velocity, forceI]
 
 rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
   QM.orientation, QP.angularVelocity, QP.angularAccel, torqueI, momtInertK]

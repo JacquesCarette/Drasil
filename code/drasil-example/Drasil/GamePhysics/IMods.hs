@@ -110,7 +110,7 @@ col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
 --im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA QP.time) +
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (apply1 angVel_B timeC) $= (apply1 angVel_B QP.time) -
+--im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB QP.time) -
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing

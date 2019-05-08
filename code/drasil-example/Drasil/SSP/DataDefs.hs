@@ -355,13 +355,13 @@ slcWghtRDD = mkDD slcWghtRQD [fredlund1977] [{-Derivation-}]
 slcWghtLDD = mkDD slcWghtLQD [fredlund1977] [{-Derivation-}] 
   "slcWghtRDD" [slcWghtNotes]
 baseWtrFRDD = mkDD baseWtrFRQD [fredlund1977] [{-Derivation-}] 
-  "baseWtrFRDD" [baseWtrFNotes]
+  "baseWtrFRDD" [baseSurfWtrFNotes]
 baseWtrFLDD = mkDD baseWtrFLQD [fredlund1977] [{-Derivation-}] 
-  "baseWtrFLDD" [baseWtrFNotes]
+  "baseWtrFLDD" [baseSurfWtrFNotes]
 surfWtrFRDD = mkDD surfWtrFRQD [fredlund1977] [{-Derivation-}] 
-  "surfWtrFRDD" [surfWtrFNotes]
+  "surfWtrFRDD" [baseSurfWtrFNotes]
 surfWtrFLDD = mkDD surfWtrFLQD [fredlund1977] [{-Derivation-}] 
-  "surfWtrFLDD" [surfWtrFNotes]
+  "surfWtrFLDD" [baseSurfWtrFNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -428,9 +428,6 @@ baseWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
 
         case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slipHght))
 
-baseWtrFNotes :: Sentence
-baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
-
 surfWtrFRQD :: QDefinition
 surfWtrFRQD = mkQuantDef surfHydroForceR surfWtrFREqn
 
@@ -451,8 +448,8 @@ surfWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
 
         case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slopeHght))
 
-surfWtrFNotes :: Sentence
-surfWtrFNotes = ch surfLngth +:+ S "is defined in" +:+. makeRef2S lengthLs
+baseSurfWtrFNotes :: Sentence
+baseSurfWtrFNotes = ch baseWthX +:+ S "is defined in" +:+. makeRef2S lengthB
 
 --------------------------
 -- Derivation Sentences --

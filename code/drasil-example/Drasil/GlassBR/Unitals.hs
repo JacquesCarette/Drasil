@@ -36,7 +36,7 @@ gbConstrained :: [ConstrainedChunk]
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
 
-plateLen, plateWidth, char_weight, standOffDist :: UncertQ
+plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspect_ratio, pbTol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
@@ -51,7 +51,7 @@ gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
-gbInputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, char_weight]
+gbInputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
@@ -86,7 +86,7 @@ pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
 
-char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
+charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
@@ -167,11 +167,11 @@ ar_max     = mkQuantDef (vc "ar_max"
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (eqSymb char_weight) (Atomic "max")) kilogram Rational) (dbl 910)
+  (sub (eqSymb charWeight) (Atomic "max")) kilogram Rational) (dbl 910)
 
 cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (dbl 4.5)
+  (sub (eqSymb charWeight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
 sd_max     = mkQuantDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
@@ -203,7 +203,7 @@ nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
-  (sub (eqSymb char_weight) (eqSymb tNT)) kilogram Real
+  (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real

@@ -17,7 +17,7 @@ import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
+import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
@@ -191,7 +191,7 @@ aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
-eqTNTWEq = (sy char_weight) * (sy tNT)
+eqTNTWEq = (sy charWeight) * (sy tNT)
 
 eqTNTWQD :: QDefinition
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq

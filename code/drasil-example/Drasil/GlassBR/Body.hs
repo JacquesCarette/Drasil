@@ -67,7 +67,7 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbr
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pbTol, prob_br, probBreak, sD, stressDistFac,
@@ -682,7 +682,7 @@ appdxIntro = foldlSP [
 
 fig_5 = llcc (makeFigRef "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (ch char_weight))
+  `sVersus` at_start charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+

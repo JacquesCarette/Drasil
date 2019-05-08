@@ -7,7 +7,7 @@ import Language.Drasil.Code (asExpr')
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (char_weight, demand, 
+import Drasil.GlassBR.Unitals (charWeight, demand, 
   demandq, eqTNTWeight, plateLen, plateWidth, 
   standOffDist)
 import Drasil.GlassBR.ModuleDefs (interpY)
@@ -19,7 +19,7 @@ gbrIMods :: [InstanceModel]
 gbrIMods = [calofDemandi]
 
 glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plateLen, plateWidth, char_weight, standOffDist] ++ 
+glassBRsymb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
 
 

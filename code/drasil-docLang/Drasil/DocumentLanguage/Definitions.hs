@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (getSource', foldlSent)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), getSource', foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -103,8 +103,8 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 helperSourceField :: Maybe [Reference] -> [Contents]
-helperSourceField Nothing  = map (mkParagraph . S)   ["--"]
-helperSourceField (Just x) = map (mkParagraph . Ref) x
+helperSourceField Nothing  = [mkParagraph $ S "--"]
+helperSourceField (Just x) = [mkParagraph $ foldlList Comma List $ map Ref x]
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
 helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) ((_sysinfodb s) ^. refbyTable)

@@ -78,7 +78,7 @@ class HasSpace c where
   typ      :: Lens' c Space
 
 class HasReference c where
-  getReferences :: Lens' c [Reference]
+  getReferences :: Lens' c (Maybe [Reference])
 
 class HasDerivation c where
   derivations :: Lens' c Derivation

@@ -49,7 +49,7 @@ data TheoryModel = TM
   , _defq :: [QDefinition]
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
-  , _ref  :: [Reference]
+  , _ref  :: Maybe [Reference]
   ,  lb   :: ShortName
   ,  ra   :: String
   , _notes :: [Sentence]
@@ -83,7 +83,7 @@ instance Referable TheoryModel where
 -- have the same type!
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference] ->
+    [Relation] -> [QDefinition] -> Maybe [Reference] ->
     String -> [Sentence] -> TheoryModel
 tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)

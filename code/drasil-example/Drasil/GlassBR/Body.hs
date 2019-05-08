@@ -210,8 +210,8 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-glassBR_code :: CodeSpec
-glassBR_code = codeSpec glassSystInfo allMods
+glassBRCode :: CodeSpec
+glassBRCode = codeSpec glassSystInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 

@@ -65,7 +65,7 @@ import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
-import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
+import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
@@ -76,7 +76,7 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw glasscon
+gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glasscon
   ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
@@ -118,7 +118,7 @@ glassBRSec :: [Section]
 glassBRSec = extractSection glassBRSrs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw checkSi)
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi glassBRLabel glassBRRefby
   glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
@@ -130,7 +130,7 @@ printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits gbSymbMap this_symbols 
+checkSi = collectUnits gbSymbMap thisSymbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

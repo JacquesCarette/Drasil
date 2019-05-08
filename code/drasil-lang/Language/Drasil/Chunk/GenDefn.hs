@@ -45,13 +45,13 @@ instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv _ = abrv gendef
 instance Referable          GenDefn where
-  refAdd    g = getRefAdd g
+  refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 gd' :: (IsUnit u) => RelationConcept -> Maybe u ->
   Derivation -> [Citation] -> String -> [Sentence] -> GenDefn
-gd' r u derivs ref sn_ note = 
-  GD r (fmap unitWrapper u) derivs ref (shortname' sn_) (prependAbrv gendef sn_) note
+gd' r u derivs ref sn_ = 
+  GD r (fmap unitWrapper u) derivs ref (shortname' sn_) (prependAbrv gendef sn_)
 
 gd'' :: RelationConcept -> [Citation] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn_ note = GD r Nothing  [] ref (shortname' sn_) (prependAbrv gendef sn_) note
+gd'' r ref sn_ = GD r Nothing  [] ref (shortname' sn_) (prependAbrv gendef sn_)

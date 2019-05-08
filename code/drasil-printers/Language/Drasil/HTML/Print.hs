@@ -79,7 +79,7 @@ printLO Graph{}                = empty -- FIXME
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
-print l = foldr (($$) . printLO) empty l
+print = foldr (($$) . printLO) empty
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------

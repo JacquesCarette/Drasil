@@ -75,7 +75,7 @@ instance HasShortName       TheoryModel where shortname = lb
 instance HasRefAddress      TheoryModel where getRefAdd = ra
 instance CommonIdea         TheoryModel where abrv _ = abrv theoryMod
 instance Referable TheoryModel where
-  refAdd    t = getRefAdd t
+  refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
@@ -85,6 +85,6 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
-tm c0 q c1 dq inv dfn r lbe nts = 
+tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
-      (prependAbrv theoryMod lbe) nts
+      (prependAbrv theoryMod lbe)

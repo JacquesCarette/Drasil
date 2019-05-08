@@ -89,14 +89,14 @@ isin = IsIn
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 
-defint v low high e = Operator Add (BoundedDD v Continuous low high) e
-int_all v e = Operator Add (AllDD v Continuous) e
+defint v low high = Operator Add (BoundedDD v Continuous low high)
+int_all v = Operator Add (AllDD v Continuous)
 
-defsum v low high e = Operator Add (BoundedDD v Discrete low high) e
-sum_all v e = Operator Add (AllDD v Discrete) e
+defsum v low high = Operator Add (BoundedDD v Discrete low high)
+sum_all v = Operator Add (AllDD v Discrete)
 
-defprod v low high e = Operator Mul (BoundedDD v Discrete low high) e
-prod_all v e = Operator Mul (AllDD v Discrete) e
+defprod v low high = Operator Mul (BoundedDD v Discrete low high)
+prod_all v = Operator Mul (AllDD v Discrete)
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
@@ -130,7 +130,7 @@ vec2D :: Expr -> Expr -> Expr
 vec2D a b    = Matrix [[a],[b]]
 
 dgnl2x2 :: Expr -> Expr -> Expr
-dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d
+dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
 -- Some helper functions to do function application
 apply :: Expr -> [Expr] -> Expr

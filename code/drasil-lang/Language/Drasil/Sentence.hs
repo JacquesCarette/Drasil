@@ -55,16 +55,16 @@ instance Monoid Sentence where
   mappend = (:+:)
 
 sentenceShort :: UID ->Sentence
-sentenceShort u = Ch ShortStyle u
+sentenceShort = Ch ShortStyle
 
 sentenceSymb :: UID ->Sentence
-sentenceSymb u = Ch SymbolStyle u
+sentenceSymb = Ch SymbolStyle
 
 sentenceTerm :: UID ->Sentence
-sentenceTerm u = Ch TermStyle u
+sentenceTerm = Ch TermStyle
 
 sentencePlural :: UID ->Sentence
-sentencePlural u = Ch PluralTerm u
+sentencePlural = Ch PluralTerm
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

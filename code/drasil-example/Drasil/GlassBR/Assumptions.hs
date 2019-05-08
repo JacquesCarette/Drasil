@@ -42,12 +42,14 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to", foldlList Comma Options $ map S ["monolithic",
   "laminated", "insulating"], S "glass constructions" `sOf` S "rectangular", phrase shape, 
   S "with continuous", phrase lateral, S "support along",
-  (foldlList Comma Options $ map S ["one", "two", "three", "four"]) +:+. plural edge, S "This",
-  phrase practice +: S "assumes that", (foldlEnumList Numb Parens SemiCol List $ map foldlSent_
-  [[S "the supported glass", plural edge, S "for two, three" `sAnd` S "four-sided support",
-  plural condition, S "are simply supported" `sAnd` S "free to slip in", phrase plane], 
+  foldlList Comma Options (map S ["one", "two", "three", "four"]) +:+.
+  plural edge, S "This", phrase practice +: S "assumes that",
+  foldlEnumList Numb Parens SemiCol List $ map foldlSent_
+  [[S "the supported glass", plural edge, S "for two, three" `sAnd`
+  S "four-sided support", plural condition, S "are simply supported" `sAnd`
+  S "free to slip in", phrase plane], 
   [S "glass supported on two sides acts as a simply supported", phrase beam], 
-  [S "glass supported on one side acts as a", phrase cantilever]])]
+  [S "glass supported on one side acts as a", phrase cantilever]]]
 
 glassConditionDesc :: Sentence
 glassConditionDesc = foldlSent [S "Following", makeCiteS astm2009, sParen (S "pg. 1") `sC` 

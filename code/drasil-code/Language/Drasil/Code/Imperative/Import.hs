@@ -22,7 +22,6 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import System.FilePath ((</>))
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -96,7 +95,7 @@ generateCode chs g =
           let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
                        Just "Code"
           createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
-            map (if x == Java then \(c,d) -> (prog </> c, d) else id) $
+            map (if x == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
             C.unCode $ makeCode config absCode
           setCurrentDirectory workingDir) $ lang chs
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
@@ -220,13 +219,10 @@ genCalcFunc cdef = do
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
-genCalcBlock t' v' e' = doit t' v' e'
-  where
-  doit :: CalcType -> String -> Expr -> Reader State Body
-  doit t v (Case e)    = genCaseBlock t v e
-  doit t v e
-    | t == CalcAssign  = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
-    | otherwise        = (oneLiner . I.return) <$> convExpr e
+genCalcBlock t v (Case e) = genCaseBlock t v e
+genCalcBlock t v e
+    | t == CalcAssign     = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
+    | otherwise           = (oneLiner . I.return) <$> convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
@@ -371,7 +367,7 @@ variable s' = do
       mm = constMap cs
       doit :: String -> Reader State Value
       doit s | member s mm =
-        maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
              | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
@@ -440,7 +436,7 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
-convType (C.File) = error "convType: File ?"
+convType C.File = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
@@ -578,7 +574,7 @@ convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
-convStmt (FContinue) = return continue
+convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
@@ -668,10 +664,10 @@ genDataFunc nameTitle dd = do
         checkIndex' ((Explicit i):is) n l p v s =
           ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
-        checkIndex' ((WithLine):is) n l p v s =
+        checkIndex' (WithLine:is) n l p v s =
           ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
-        checkIndex' ((WithPattern):is) n l p v s =
+        checkIndex' (WithPattern:is) n l p v s =
           ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------

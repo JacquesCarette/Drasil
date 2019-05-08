@@ -115,7 +115,7 @@ glassBRLabelledCon :: [LabelledContent]
 glassBRLabelledCon = [inputGlassPropsTable]
 
 glassBRSec :: [Section]
-glassBRSec = extractSection glassBR_srs
+glassBRSec = extractSection glassBRSrs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw checkSi)
@@ -135,8 +135,8 @@ checkSi = collectUnits gbSymbMap this_symbols
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
-glassBR_srs :: Document
-glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
+glassBRSrs :: Document
+glassBRSrs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],

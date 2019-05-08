@@ -23,23 +23,23 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
--- this is the new function but it still uses the lrIsSafe_RC,
+-- this is the new function but it still uses the lrIsSafeRC,
 -- so basically we have to combine the old function with the new function
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []
 
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (cw lrIsSafe_RC)
+lrIsSafe = tm (cw lrIsSafeRC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
+   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
    where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
-lrIsSafe_RC :: RelationConcept
-lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
+lrIsSafeRC :: RelationConcept
+lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
   lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand))
 
 lrIsSafeDesc :: Sentence
@@ -53,16 +53,16 @@ lrIsSafeDesc = tModDesc (is_safeLR) s ending
       makeRef2S calofDemand
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafe_RC) 
+pbIsSafe = tm (cw pbIsSafeRC) 
   [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeCite astm2009]
+  [relToQD locSymbMap pbIsSafeRC] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeCite astm2009]
   "isSafePb" [pbIsSafeDesc]
   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 
-pbIsSafe_RC :: RelationConcept
-pbIsSafe_RC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
+pbIsSafeRC :: RelationConcept
+pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
   pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol))
 
 pbIsSafeDesc :: Sentence

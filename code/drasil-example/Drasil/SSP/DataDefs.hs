@@ -12,19 +12,22 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, constant)
 import Data.Drasil.Concepts.Math (equation)
+import Data.Drasil.Concepts.Physics (weight)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, getTandS)
-import Drasil.SSP.Defs (slice, soil, soilPrpty)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, sAnd, 
+  ofThe, getTandS)
+import Drasil.SSP.Defs (slice, slopeSrf, soil, soilPrpty)
 import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, baseLngth, baseWthX, constF, dryWeight, fricAngle, fs, 
-  genericF, genericA, index, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, 
-  slcWghtL, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
-  surfHydroForceR, surfHydroForceL, surfLngth, totStress, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
+  genericF, genericA, genericV, genericW, genericSpWght, index, intNormForce, 
+  indxn, inx, inxi, inxiM1, midpntHght, mobShrC, normToShear, satWeight, 
+  scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, slipDist, slipHght, slopeDist,
+  slopeHght, surfAngle, surfHydroForce, surfHydroForceR, surfHydroForceL, 
+  surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
+  waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -33,9 +36,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
-  sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD, 
-  surfWtrFRDD, surfWtrFLDD]
+  convertFunc1, convertFunc2, weightDD, nrmForceSumDD, watForceSumDD, 
+  sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, 
+  baseWtrFLDD, surfWtrFRDD, surfWtrFLDD]
 
 --DD1
 
@@ -100,6 +103,12 @@ srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   sParen (makeRef2S assumpSBSBISL), ch surfHydroForceL, S "is defined in",
   makeRef2S surfWtrFLDD `sAnd` ch surfHydroForceR, S "is defined in",
   makeRef2S surfWtrFRDD]
+
+srfWtrFDerivSentences :: [Sentence]
+srfWtrFDerivSentences = map foldlSentCol []
+
+srfWtrFDerivIntro :: [Sentence]
+srfWtrFDerivIntro = [S "The", phrase surfHydroForce, S "comes from", phrase weight `ofThe` S "water standing on top of", phrase soil `ofThe` phrase slopeSrf] 
 
 --DD4
 
@@ -292,6 +301,17 @@ convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in",
   makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in", 
   makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in", 
   makeRef2S convertFunc1]
+
+--DD14
+
+weightDD :: DataDefinition
+weightDD = mkDD weightQD [{-Source-}] [{-Derivation-}] "weightDD" [{-Notes-}]
+
+weightQD :: QDefinition
+weightQD = mkQuantDef genericW weightEqn
+
+weightEqn :: Expr
+weightEqn = sy genericV * sy genericSpWght
 
 {--DD10
 

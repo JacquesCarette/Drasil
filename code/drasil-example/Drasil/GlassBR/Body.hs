@@ -619,7 +619,7 @@ traceMatsAndGraphsColsT3_T1, traceMatsAndGraphsColsT3_T2, traceMatsAndGraphsCols
 -- list of each item that "this" item requires for traceability matrix
 traceMatsAndGraphsColsT3_T1  = []
 traceMatsAndGraphsColsT3_T2  = []
-traceMatsAndGraphsColsT3_IM1 = ["A4", "A6", "A7"]
+traceMatsAndGraphsColsT3_IM1 = ["A4"] ++ ["A6", "A7"]
 traceMatsAndGraphsColsT3_IM2 = ["A1", "A2", "A5"]
 traceMatsAndGraphsColsT3_IM3 = []
 traceMatsAndGraphsColsT3_DD1 = []

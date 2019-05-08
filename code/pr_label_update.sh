@@ -9,6 +9,8 @@ if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
 	exit 0
 fi
 
-LABELS=$(head -c -1 $LABEL_FILE | jq -R -s -c 'split("\n")')
-
-curl -H "Authorization: token $BOT_TOKEN" -X PUT -d "{'labels': $LABELS}" "https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/labels"
+if [ -f "$LABEL_FILE" ]; then
+	LABELS=$(head -c -1 $LABEL_FILE | jq -R -s -c 'split("\n")')
+	DATA="{\"labels\": $LABELS}"
+	curl -H "Authorization: token $BOT_TOKEN" -X PUT -d "$DATA" -f -s -S "https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/labels"
+fi

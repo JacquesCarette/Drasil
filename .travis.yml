@@ -50,7 +50,7 @@ install:
 script:
  - cd code
  - >
-     ./ci_fstep "CI: HLint" curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+     ./ci_fstep "CI: HLint" "curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ."
  - >
      ./ci_fstep "CI: Build" make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
  - >
@@ -59,6 +59,7 @@ script:
      ./ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
  - >
      ./ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
+ - travis_retry sh pr_label_update.sh
 
 notifications:
   email:

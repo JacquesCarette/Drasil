@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, massI,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, posCM, posI, velB, vel_O, rOB, finRelVel, velAP, velBP)
+  perpLen_A, perpLen_B, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -227,14 +227,14 @@ chasles = mkQuantDef velB chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy rOB))
+chaslesEqn = (sy velO) + (cross (sy  QP.angularVelocity) (sy rOB))
 
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch velB), (sParen $ Sy $ unit_symb velB), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
-  (phrase QP.velocity), (ch vel_O),
-  (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
+  (phrase QP.velocity), (ch velO),
+  (sParen $ Sy $ unit_symb velO), S "of the", (phrase $ CP.rigidBody),
   S "at the origin (axis of rotation) and the",
   S "resultant vector from the cross product of the",
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 

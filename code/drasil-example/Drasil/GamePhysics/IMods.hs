@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
 import Drasil.GamePhysics.Unitals(accI, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, massI, normalVect, time_c, torque_i, vel_A, velI)
+  col2DLegTerms, mass_A, massI, normalVect, time_c, torqueI, vel_A, velI)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
@@ -56,8 +56,8 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 {-- Rotational Motion --}
 
 im2_new :: InstanceModel
-im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
-  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
+im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI, qw QP.momentOfInertia]
+  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torqueI $> 0, sy QP.momentOfInertia $> 0] 
     (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
   [rotMotDesc]
 
@@ -70,7 +70,7 @@ rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid bo
 rotMotRel :: Relation
 rotMotRel = (sy QP.angularAccel) $= deriv
   (apply1 QP.angularVelocity QP.time) QP.time $= 
-     ((apply1 torque_i QP.time) / (sy QP.momentOfInertia))
+     ((apply1 torqueI QP.time) / (sy QP.momentOfInertia))
 
 --fixme: need referencing
 rotMotDesc, rotMotLeg :: Sentence

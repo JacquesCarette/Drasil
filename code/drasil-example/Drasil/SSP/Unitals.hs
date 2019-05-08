@@ -11,7 +11,8 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, specificWeight)
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
-import Data.Drasil.Quantities.Physics (force)
+import Data.Drasil.Quantities.PhysicalProperties (specWeight, vol)
+import Data.Drasil.Quantities.Physics (force, weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -27,6 +28,9 @@ SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 genericF = force
 genericA = area
+genericV = vol
+genericW = weight
+genericSpWght = specWeight
 
 -------------
 -- HELPERS --
@@ -134,7 +138,7 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  lGamma specificWeight Real [gtZeroConstr]
+  (sub lGamma (Atomic "dry")) specificWeight Real [gtZeroConstr]
   (dbl 20000) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
@@ -174,25 +178,25 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, slipHght, xi,
-  yi, zcoord, critCoords, slipDist, mobilizedShear, resistiveShear,
-  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
-  watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
-  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
-  totStress, effectiveStress, effNormStress]
+sspUnits = map ucw [genericF, genericA, genericV, genericW, genericSpWght,   
+  nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, slipDist, 
+  mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
+  shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, intShrForce, 
+  baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, 
+  surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
+  baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
+  midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
+  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
+  shrStress, totStress, effectiveStress, effNormStress]
 
-genericF, genericA, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, 
-  zcoord, critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, 
-  shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, 
-  resistiveShear, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
-  nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
+genericF, genericA, genericV, genericW, genericSpWght, nrmShearNum, nrmShearDen,
+  slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear, mobShrI, 
+  sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, 
+  slcWghtL, watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
+  baseHydroForceR, baseHydroForceL, surfHydroForce,surfHydroForceR, 
+  surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
+  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
   intNormForce, shrStress, totStress, effectiveStress, 
   effNormStress :: UnitalChunk
   

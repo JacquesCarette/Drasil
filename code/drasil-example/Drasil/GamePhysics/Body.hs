@@ -103,16 +103,16 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub functional_requirements_list,
+      FReqsSub functionalRequirementsList,
       NonFReqsSub [performance] gmpriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
         (S "Games are resource intensive") (S "")],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
-    ExistingSolnSec $ ExistSolnVerb off_the_shelf_solutions,
+    ExistingSolnSec $ ExistSolnVerb offTheShelfSolutions,
     TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-      traceMatTabDefnModel] traceability_matrices_and_graph_traces
+      traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
       (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
-    Verbatim values_of_auxiliary_constatnts,
+    Verbatim valuesOfAuxiliaryConstatnts,
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -136,7 +136,7 @@ gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
 
 gameConcins :: [ConceptInstance]
 gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
-  functional_requirements_list'
+  functionalRequirementsList'
 
 gameSection :: [Section]
 gameSection = gameSec
@@ -395,7 +395,7 @@ problemDescriptionIntroParam lib app = foldlSent
   (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  (sParen $ makeRef2S off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
+  (sParen $ makeRef2S offTheShelfSolutions), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
@@ -404,29 +404,29 @@ problemDescriptionIntroParam lib app = foldlSent
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-terminology_and_definitions_bullets :: Contents
+terminologyAndDefinitionsBullets :: Contents
 
 termAndDefSect :: SubSec
-termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [terminology_and_definitions_bullets])]
+termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [terminologyAndDefinitionsBullets])]
 
-terminology_and_definitions_terms :: [ConceptChunk]
-terminology_and_definitions_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
+terminologyAndDefinitionsTerms :: [ConceptChunk]
+terminologyAndDefinitionsTerms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
   CP.cartesian, CP.rightHand]
 
-terminology_label :: Reference
-terminology_label = makeLstRef "terminologyGM" "terminologyGM"
+terminologyLabel :: Reference
+terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
-terminology_and_definitions_bullets = LlC $ enumBullet terminology_label
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminology_and_definitions_terms)
+terminologyAndDefinitionsBullets = LlC $ enumBullet terminologyLabel
+  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminologyAndDefinitionsTerms)
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
 -----------------------------
 
-goal_statements_list :: Contents
+goalStatementsList :: Contents
 
 goalStatementSect :: SubSec
-goalStatementSect = sSubSec goalStmt [(siCon [goal_statements_list])]
+goalStatementSect = sSubSec goalStmt [(siCon [goalStatementsList])]
 
 goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> [Sentence]
 goalStatementStruct outputs condition1 condition2 = 
@@ -434,10 +434,10 @@ goalStatementStruct outputs condition1 condition2 =
   (phrase QP.time), condition2]
   where listOfOutputs       = (foldlList Comma List $ map plural outputs)
 
-goal_statements_G_linear = goalStatementStruct (take 2 outputSymbols)
+goalStatementsGLinear = goalStatementStruct (take 2 outputSymbols)
   (S "their new") EmptyS
 
-goal_statements_G_angular = goalStatementStruct (drop 3 $ take 5 inputSymbols)
+goalStatementsGAngular = goalStatementStruct (drop 3 $ take 5 inputSymbols)
   (S "their new") EmptyS
 
 {-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
@@ -454,12 +454,12 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
 --GS1: Given the physical properties, initial positions and velocities, 
 --and forces applied on a set of rigid bodies, determine their new positions 
 --and velocities over a period of time. 
-goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
+goalStatementsGLinear = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
   (take 2 outputSymbols) CP.rigidBody
   (S "their new") EmptyS
 
-goal_statements_G_angular = goalStatementStruct (plural physicalProperty) 
+goalStatementsGAngular = goalStatementStruct (plural physicalProperty) 
   (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
   (drop 3 $ take 5 inputSymbols) CP.rigidBody
   (S "their new") EmptyS-}
@@ -480,26 +480,26 @@ goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
   S "that have undergone a" +:+ (phrase CP.collision))-}
 
-{-goal_statements_G_linear, goal_statements_G_angular, 
+{-goalStatementsGLinear, goalStatementsGAngular, 
   goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
 
-goal_statements_list' :: [Sentence]
-goal_statements_list' = map (foldlSent) [goal_statements_G_linear, 
-  goal_statements_G_angular, goal_statements_G_detectCollision, 
+goalStatementsList' :: [Sentence]
+goalStatementsList' = map (foldlSent) [goalStatementsGLinear, 
+  goalStatementsGAngular, goal_statements_G_detectCollision, 
   goal_statements_G_collision]-}
 
-goal_statements_G_linear, goal_statements_G_angular :: [Sentence]
+goalStatementsGLinear, goalStatementsGAngular :: [Sentence]
 
   {-, 
   goal_statements_G_detectCollision, goal_statements_G_collision-} 
 
-goal_statements_list' :: [Sentence]
-goal_statements_list' = map (foldlSent) [goal_statements_G_linear, goal_statements_G_angular]
+goalStatementsList' :: [Sentence]
+goalStatementsList' = map (foldlSent) [goalStatementsGLinear, goalStatementsGAngular]
 
   {-, goal_statements_G_detectCollision, 
   goal_statements_G_collision-}
 
-goal_statements_list = LlC $ enumSimple goalStmtLabel 1 (getAcc goalStmt) goal_statements_list'
+goalStatementsList = LlC $ enumSimple goalStmtLabel 1 (getAcc goalStmt) goalStatementsList'
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -517,10 +517,10 @@ goal_statements_list = LlC $ enumSimple goalStmtLabel 1 (getAcc goalStmt) goal_s
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-general_definitions_intro :: Contents
+generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
-general_definitions_intro = foldlSP 
+generalDefinitionsIntro = foldlSP 
   [S "This", (phrase section_), S "collects the", (plural CM.law) `sAnd` 
   (plural CM.equation), S "that will be used in deriving the", 
   (plural dataDefn) `sC` S "which in turn will be used to build the", 
@@ -536,8 +536,8 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-data_definitions_intro :: Sentence
-data_definitions_intro = foldlSent [S "The", (phrase CPP.dimension)
+dataDefinitionsIntro :: Sentence
+dataDefinitionsIntro = foldlSent [S "The", (phrase CPP.dimension)
    `sOf` S "each", (phrase quantity), S "is also given"]
 
 -----------------------------
@@ -564,16 +564,16 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 
 requirements :: Section
-requirements = reqF [functional_requirements, nonfunctional_requirements]
+requirements = reqF [functionalRequirements, nonfunctionalRequirements]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-functional_requirements :: Section
-functional_requirements_list :: [Contents]
+functionalRequirements :: Section
+functionalRequirementsList :: [Contents]
 
-functional_requirements = SRS.funcReq functional_requirements_list []
+functionalRequirements = SRS.funcReq functionalRequirementsList []
 
 functional_requirements_req1, functional_requirements_req2, 
   functional_requirements_req3, functional_requirements_req4,
@@ -638,27 +638,27 @@ reqDCROT = cic "reqDCROT" functional_requirements_req8 "Determine-Collision-Resp
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
-functional_requirements_list' :: [ConceptInstance]
-functional_requirements_list' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
+functionalRequirementsList' :: [ConceptInstance]
+functionalRequirementsList' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
   reqCROT, reqDC, reqDCROT]
 
-functional_requirements_list = mkEnumSimpleD
-  functional_requirements_list'
+functionalRequirementsList = mkEnumSimpleD
+  functionalRequirementsList'
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
 
-nonfunctional_requirements :: Section
-nonfunctional_requirements_intro :: Contents
+nonfunctionalRequirements :: Section
+nonfunctionalRequirementsIntro :: Contents
 
-nonfunctional_requirements = SRS.nonfuncReq [nonfunctional_requirements_intro] []
+nonfunctionalRequirements = SRS.nonfuncReq [nonfunctionalRequirementsIntro] []
 
 chpmnkPriorityNFReqs :: [ConceptChunk]
 chpmnkPriorityNFReqs = [correctness, understandability, portability,
   reliability, maintainability]
 
-nonfunctional_requirements_intro = foldlSP 
+nonfunctionalRequirementsIntro = foldlSP 
   [(titleize' game), S "are resource intensive, so", phrase performance,
   S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
   S "that are a", phrase priority +: S "are",
@@ -672,17 +672,17 @@ nonfunctional_requirements_intro = foldlSP
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
 -----------------------------------------
 
-off_the_shelf_solutions :: Section
-off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, 
-  off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
+offTheShelfSolutions :: Section
+offTheShelfSolutionsIntro, off_the_shelf_solutions_2dlist, 
+  offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist :: Contents
 
-off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, 
-  off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
+offTheShelfSolutions = SRS.offShelfSol [offTheShelfSolutionsIntro, 
+  off_the_shelf_solutions_2dlist, offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist] []
 
-off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problemDescriptionSection physLib
+offTheShelfSolutionsIntro = offTheShelfSolutionsIntroParam problemDescriptionSection physLib
 
-off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents
-off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentCol 
+offTheShelfSolutionsIntroParam :: NamedIdea n => Section -> n -> Contents
+offTheShelfSolutionsIntroParam problmDescSec lib = mkParagraph $ foldlSentCol 
   [S "As mentioned in", (makeRef2S problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
@@ -690,7 +690,7 @@ off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentC
 off_the_shelf_solutions_2dlist = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
 
-off_the_shelf_solutions_mid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
+offTheShelfSolutionsMid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural physLib), S "include:"]
 
 off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
@@ -704,14 +704,14 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
 traceTable1 :: LabelledContent
 traceTable1 = generateTraceTable chipmunkSysInfo
 
-traceability_matrices_and_graph :: Section
-traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,
-  traceMatTabDefnModel] traceability_matrices_and_graph_traces
+traceabilityMatricesAndGraph :: Section
+traceabilityMatricesAndGraph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,
+  traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
   (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []
 
-traceability_matrices_and_graph_traces, traceability_matrices_and_graph_trace1,
+traceabilityMatricesAndGraphTraces, traceability_matrices_and_graph_trace1,
   traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
-traceability_matrices_and_graph_traces = map (foldlList Comma List) 
+traceabilityMatricesAndGraphTraces = map (foldlList Comma List) 
   [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2,
    traceability_matrices_and_graph_trace3]
 
@@ -746,13 +746,13 @@ traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRef2S assumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRef2S functional_requirements_list'
+traceMatFuncReqRef = map makeRef2S functionalRequirementsList'
 
 traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
-traceMatGoalStmtRef = makeListRef goal_statements_list' problemDescriptionSection
+traceMatGoalStmtRef = makeListRef goalStatementsList' problemDescriptionSection
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])) -- FIXME: hack?
@@ -944,8 +944,8 @@ traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table
 -- VALUES OF AUXILIARY CONSTANTS --
 -----------------------------------
 
-values_of_auxiliary_constatnts :: Section
-values_of_auxiliary_constatnts = valsOfAuxConstantsF chipmunk []
+valuesOfAuxiliaryConstatnts :: Section
+valuesOfAuxiliaryConstatnts = valsOfAuxConstantsF chipmunk []
 
 ----------------
 -- REFERENCES --

@@ -103,7 +103,7 @@ col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
   ((sy QP.impulseS) / (sy massA)) * (sy normalVect)
 
 --im3Rel2 = (apply1 velB timeC) $= (apply1 velB QP.time) -
---  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
+--  ((sy QP.impulseS) / (sy massB)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol

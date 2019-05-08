@@ -982,17 +982,6 @@ Total Base Lengths of Slices: in the direction parallel to the slope of the base
 m
 </td>
 </tr>
-<tr>
-<td>
-<em><b>ℓ</b><sub>s</sub></em>
-</td>
-<td>
-Surface Lengths of Slices: in the direction parallel to the slope of the surface of each slice
-</td>
-<td>
-m
-</td>
-</tr>
 </table>
 </div>
 </div>
@@ -3423,7 +3412,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -3505,7 +3494,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
+<a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a> <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a> <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>.
 </p>
 </td>
 </tr>
@@ -3600,102 +3589,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a> <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:lengthLs">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Surface lengths of slices
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>ℓ</b><sub>s</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>ℓ</b><sub>s</sub> = <b>b</b><sub>i</sub>&#8239;sec(<b>β</b><sub>i</sub>)</em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
-</li>
-<li>
-<em><b>b</b></em> is the base width of slices (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em><b>β</b></em> is the surface angles (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a> <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
@@ -4846,7 +4740,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em><b>U</b><sup>R</sup><sub>b</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>R</sup><sub>b</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -4874,7 +4768,7 @@ Description
 <em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -4897,7 +4791,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -4961,7 +4855,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em><b>U</b><sup>L</sup><sub>b</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>L</sup><sub>b</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -4989,7 +4883,7 @@ Description
 <em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -5012,7 +4906,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -5076,7 +4970,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em><b>U</b><sup>R</sup><sub>t</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>R</sup><sub>t</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -5104,7 +4998,7 @@ Description
 <em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -5127,7 +5021,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>ℓ</b><sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -5191,7 +5085,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em><b>U</b><sup>L</sup><sub>t</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;<span class="casebr">
+<em><b>U</b><sup>L</sup><sub>t</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -5219,7 +5113,7 @@ Description
 <em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic forces on slices (N/m)
 </li>
 <li>
-<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
+<em><b>b</b></em> is the base width of slices (m)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
@@ -5242,7 +5136,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>ℓ</b><sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
 </p>
 </td>
 </tr>
@@ -7322,13 +7216,22 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>
 </th>
 <th>
-<a href=#DD:lengthLs>DD: lengthLs</a>
-</th>
-<th>
 <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
 </th>
 <th>
 <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
+</th>
+<th>
+<a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>
+</th>
+<th>
+<a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>
+</th>
+<th>
+<a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a>
+</th>
+<th>
+<a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>
 </th>
 <th>
 <a href=#generateCSS>FR: Generate-Critical-Slip-Surfaces</a>
@@ -7361,18 +7264,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#displayInput>FR: Display-Input</a>
 </th>
 <th>
-<a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>
-</th>
-<th>
-<a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>
-</th>
-<th>
-<a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>
-</th>
-<th>
-<a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a>
-</th>
-<th>
 <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
 </th>
 <th>
@@ -7388,9 +7279,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7697,9 +7585,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -7722,9 +7607,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8019,9 +7901,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8059,9 +7938,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8341,9 +8217,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8378,9 +8251,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8663,9 +8533,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8824,9 +8691,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8870,9 +8734,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9146,9 +9007,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9198,9 +9056,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9468,9 +9323,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9629,9 +9481,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9684,9 +9533,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9833,9 +9679,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10112,9 +9955,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10179,9 +10019,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10434,9 +10271,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10507,9 +10341,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10756,9 +10587,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -10838,9 +10666,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11078,9 +10903,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11175,9 +10997,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11400,9 +11219,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11561,9 +11377,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11643,9 +11456,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11883,9 +11693,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11914,9 +11721,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12161,16 +11965,13 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
-
-</td>
-<td>
-
+X
 </td>
 <td>
 
@@ -12313,9 +12114,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -12403,9 +12201,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12644,6 +12439,15 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -12651,18 +12455,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12814,19 +12606,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12975,19 +12764,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13136,19 +12922,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13297,19 +13080,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13458,19 +13238,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13654,9 +13431,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13697,9 +13471,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13976,9 +13747,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14049,9 +13817,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14266,6 +14031,15 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -14276,18 +14050,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14386,9 +14148,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14620,9 +14379,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14663,9 +14419,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14922,19 +14675,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15086,19 +14836,16 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15232,6 +14979,15 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -15242,18 +14998,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15411,12 +15155,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -15424,164 +15162,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#DD:lengthLs>DD: lengthLs</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
 </td>
 <td>
 
@@ -15747,9 +15327,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -15784,9 +15361,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16069,9 +15643,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16230,14 +15801,8 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
-<td>
-
-</td>
 <td>
 
 </td>
@@ -16552,9 +16117,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16622,9 +16184,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16874,9 +16433,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -16944,9 +16500,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17164,6 +16717,15 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -17174,18 +16736,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17233,9 +16783,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17518,9 +17065,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -17600,9 +17144,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 

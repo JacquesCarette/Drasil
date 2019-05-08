@@ -412,7 +412,7 @@ baseWtrFRQD :: QDefinition
 baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn
 
 baseWtrFREqn :: Expr
-baseWtrFREqn = (inxi baseLngth)*(case_ [case1,case2])
+baseWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slipHght))
 
@@ -422,7 +422,7 @@ baseWtrFLQD :: QDefinition
 baseWtrFLQD = mkQuantDef baseHydroForceL baseWtrFLEqn
 
 baseWtrFLEqn :: Expr
-baseWtrFLEqn = (inxi baseLngth)*(case_ [case1,case2])
+baseWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxiM1 waterHght)-(inxiM1 slipHght))*(sy waterWeight),
           (inxiM1 waterHght) $> (inxiM1 slipHght))
 
@@ -435,7 +435,7 @@ surfWtrFRQD :: QDefinition
 surfWtrFRQD = mkQuantDef surfHydroForceR surfWtrFREqn
 
 surfWtrFREqn :: Expr
-surfWtrFREqn = (inxi surfLngth)*(case_ [case1,case2])
+surfWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slopeHght))
 
@@ -445,7 +445,7 @@ surfWtrFLQD :: QDefinition
 surfWtrFLQD = mkQuantDef surfHydroForceL surfWtrFLEqn
 
 surfWtrFLEqn :: Expr
-surfWtrFLEqn = (inxi surfLngth)*(case_ [case1,case2])
+surfWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxiM1 waterHght)-(inxiM1 slopeHght))*(sy waterWeight),
           (inxiM1 waterHght) $> (inxiM1 slopeHght))
 

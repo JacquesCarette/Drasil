@@ -27,7 +27,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
-  mass_A, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
+  massA, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
 
@@ -56,7 +56,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
+  perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, massA, mass_B,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
@@ -120,7 +120,7 @@ rigidParam n w = ucs'
 iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
-  mass_A, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
+  massA, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
 
@@ -248,7 +248,7 @@ momtInertB = momtParam "B" "B"
 contDispA  = contParam "A" "A"
 contDispB  = contParam "B" "B"
 contDispK  = contParam "k" "k"
-mass_A      = rigidParam "A" cA
+massA      = rigidParam "A" cA
 mass_B      = rigidParam "B" cB
 
 --------------------------

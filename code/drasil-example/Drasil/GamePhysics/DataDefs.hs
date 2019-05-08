@@ -6,7 +6,7 @@ import Language.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
-import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, massI,
+import Drasil.GamePhysics.Unitals (initRelVel, massA, mass_B, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
   perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP)
 
@@ -206,7 +206,7 @@ impulse = mkQuantDef QP.impulseS impulseEqn
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
 impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
-  (sy normalVect)) / ((((1 / (sy mass_A))) + (1 / (sy mass_B))) *
+  (sy normalVect)) / ((((1 / (sy massA))) + (1 / (sy mass_B))) *
   ((sy normalLen) $^ 2) +
   (((sy perpLenA) $^ 2) / (sy momtInertA)) +
   (((sy perpLenB) $^ 2)/ (sy momtInertB)))

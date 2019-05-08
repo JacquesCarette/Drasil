@@ -37,7 +37,7 @@ eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [0 $< sy time $< sy time_final] [koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
+  [0 $< sy time $< sy time_final] (Just [makeCite koothoor2013 {- +:+ sParen (S "with PCM removed")-}])
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept

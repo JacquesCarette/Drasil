@@ -25,7 +25,7 @@ iModels_new = [im1_new, im2_new, im3_new]
 im1_new :: InstanceModel
 im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
+            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] Nothing "transMot" [transMotDesc]
 
 transMot :: RelationConcept
 transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
@@ -58,7 +58,7 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 im2_new :: InstanceModel
 im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
-    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
+    (qw QP.angularAccel) [sy QP.angularAccel $> 0] Nothing "rotMot"
   [rotMotDesc]
 
 rotMot :: RelationConcept
@@ -89,7 +89,7 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 im3_new :: InstanceModel
 im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
   [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
-  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] "col2D"
+  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] Nothing "col2D"
   [col2DDesc]
 
 col2D :: RelationConcept

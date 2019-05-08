@@ -22,14 +22,12 @@ glassBRsymb :: [DefinedQuantityDict]
 glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
 
-
 {--}
 
 calofDemandi :: InstanceModel
 calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
-  [astm2009] "calOfDemand"
-  [calofDemandDesc]
+  (Just [makeCite astm2009]) "calOfDemand" [calofDemandDesc]
 
 calofDemand_RCi :: RelationConcept
 calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 

@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, rOB, finRelVel, velA_P, velB_P)
+  perpLen_A, perpLen_B, posCM, pos_i, vel_B, vel_O, rOB, finRelVel, velA_P, velB_P)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -42,7 +42,7 @@ ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}] "ctrOfMas
   [makeRef2S assumpOT, makeRef2S assumpOD]
 
 ctrOfMass :: QDefinition
-ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
+ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr

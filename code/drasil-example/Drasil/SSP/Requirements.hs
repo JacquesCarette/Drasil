@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
-  foldlList, foldlSent, ofThe, sAnd)
+  foldlList, foldlSent, ofThe, ofThe', sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
@@ -115,7 +115,7 @@ sspNFRequirements = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  S "The", plural output_ `ofThe` phrase code, S "have the",
+  plural output_ `ofThe'` phrase code, S "have the",
   plural property, S "described in (Properties of a Correct Solution)"
   -- FIXME: (Properties of a Correct Solution) Section doesn't exist
   ]) "Correct" nonFuncReqDom

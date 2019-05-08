@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands
 import Drasil.SSP.Defs (fs_concept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, specificWeight)
+import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
@@ -187,7 +187,7 @@ sspUnits = map ucw [genericF, genericA, genericV, genericW, genericSpWght,
   baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
   midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
-  shrStress, totStress, effectiveStress, effNormStress]
+  shrStress, totStress, effectiveStress, effNormStress, waterVol]
 
 genericF, genericA, genericV, genericW, genericSpWght, nrmShearNum, nrmShearDen,
   slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear, mobShrI, 
@@ -197,8 +197,8 @@ genericF, genericA, genericV, genericW, genericSpWght, nrmShearNum, nrmShearDen,
   surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
-  intNormForce, shrStress, totStress, effectiveStress, 
-  effNormStress :: UnitalChunk
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, 
+  waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -413,6 +413,9 @@ totStress = uc' "sigma" (cn' $ "total stress") "on the soil mass" lSigma pascal
 effectiveStress = uc' "sigma'" (cn' $ "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
+
+waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
+
   
 ----------------------
 -- Unitless Symbols --

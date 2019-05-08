@@ -26,7 +26,7 @@ gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
-  posCM, massI, posI, accI, mTot, velI, torqueI, time_c, initRelVel, 
+  posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
@@ -56,7 +56,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B, force_i, torqueI, time_c, vel_A, vel_B, mass_A, mass_B,
+  perpLen_A, perpLen_B, force_i, torqueI, timeC, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, rOB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision, 
@@ -119,7 +119,7 @@ rigidParam n w = ucs'
 
 iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
-  posCM, massI, posI, accI, mTot, velI, torqueI, time_c, initRelVel, 
+  posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
@@ -181,7 +181,7 @@ torqueI = ucs' (dccWDS "torqueI"
 mTot = ucs' (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
 
-time_c = ucs' (dccWDS "time_c" (cn "denotes the time at collision") 
+timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision") 
                 (phrase QP.time)) (sub (eqSymb QP.time) lC) Real second
 
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
@@ -303,7 +303,7 @@ transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime, posC
 rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
   QM.orientation, QP.angularVelocity, QP.angularAccel, torqueI, momtInert_k]
 
-col2DLegTerms = [massIRigidBody, momtInert_k, timeT, inittime, time_c, posCM,
+col2DLegTerms = [massIRigidBody, momtInert_k, timeT, inittime, timeC, posCM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
   collisionImpulse, pointOfCollision, contDisp_k]
 

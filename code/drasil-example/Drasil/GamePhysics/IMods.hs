@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
 import Drasil.GamePhysics.Unitals(accI, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, massI, normalVect, time_c, torqueI, vel_A, velI)
+  col2DLegTerms, mass_A, massI, normalVect, timeC, torqueI, vel_A, velI)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
@@ -89,7 +89,7 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 im3_new :: InstanceModel
 im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
   [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
-  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] "col2D"
+  (qw timeC) [sy vel_A $> 0, sy timeC $> 0] [] "col2D"
   [col2DDesc]
 
 col2D :: RelationConcept
@@ -99,18 +99,18 @@ col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
+col2DRel = (apply1 vel_A timeC) $= (apply1 vel_A QP.time) +
   ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
 
---im3Rel2 = (apply1 vel_B time_c) $= (apply1 vel_B QP.time) -
+--im3Rel2 = (apply1 vel_B timeC) $= (apply1 vel_B QP.time) -
 --  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (apply1 angVel_A time_c) $= (apply1 angVel_A QP.time) +
+--im3Rel3 = (apply1 angVel_A timeC) $= (apply1 angVel_A QP.time) +
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (apply1 angVel_B time_c) $= (apply1 angVel_B QP.time) -
+--im3Rel4 = (apply1 angVel_B timeC) $= (apply1 angVel_B QP.time) -
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing

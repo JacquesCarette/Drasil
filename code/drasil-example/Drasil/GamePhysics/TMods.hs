@@ -30,7 +30,7 @@ cpTMods_new = [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new,
 t1NewtonSL_new :: TheoryModel
 t1NewtonSL_new = tm (cw newtonSL)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] [] 
+  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] Nothing
   "NewtonSecLawMot" [newtonSLDesc]
 
 newtonSL :: RelationConcept
@@ -56,7 +56,7 @@ newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
 t2NewtonTL_new :: TheoryModel
 t2NewtonTL_new = tm (cw newtonTL)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [(sy force_1) $= (negate (sy force_2))] [] [] 
+  [] [(sy force_1) $= (negate (sy force_2))] [] Nothing
   "NewtonThirdLawMot" [newtonTLDesc]
 
 newtonTL :: RelationConcept
@@ -84,7 +84,7 @@ t3NewtonLUG_new = tm (cw newtonLUG)
   [] [(sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
   (sy mass_2) / ((sy dispNorm) $^ 2)) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
-  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
+  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] [] Nothing
   "UniversalGravLaw" [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
@@ -133,7 +133,7 @@ t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm (cw chaslesThm)
   [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
   ([] :: [ConceptChunk]) [] [(sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] [] [] "ChaslesThm" [chaslesThmDesc]
+  (sy  QP.angularVelocity) (sy r_OB))] [] Nothing "ChaslesThm" [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
@@ -164,7 +164,7 @@ t5NewtonSLR_new :: TheoryModel
 t5NewtonSLR_new = tm (cw newtonSLR)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [(sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] [] [] "NewtonSecLawRotMot" [newtonSLRDesc]
+  * (sy QP.angularAccel)] [] Nothing "NewtonSecLawRotMot" [newtonSLRDesc]
 
 newtonSLR :: RelationConcept
 newtonSLR = makeRC "newtonSLR" 
@@ -187,6 +187,4 @@ newtonSLRDesc = foldlSent [S "The net", (phrase QP.torque),
   S "denotes the", (phrase QP.momentOfInertia), S "of the" +:+.
   (phrase CP.rigidBody), S "We also assume that all",
   (plural CP.rigidBody), S "involved are two-dimensional",
-  makeRef2S assumpOD]
-
-  
+  makeRef2S assumpOD]  

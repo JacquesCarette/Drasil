@@ -32,7 +32,7 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
+   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] (Just [makeCite astm2009])
    "isSafeLR" [lrIsSafeDesc]
    where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
@@ -55,7 +55,7 @@ lrIsSafeDesc = tModDesc (is_safeLR) s ending
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
   [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeCite astm2009]
+  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] (Just [makeCite astm2009])
   "isSafePb" [pbIsSafeDesc]
   where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []

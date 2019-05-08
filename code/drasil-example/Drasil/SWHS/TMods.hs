@@ -34,7 +34,7 @@ consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
+  [] [consThermERel] [] (Just [consThemESrc]) "consThermE" [consThermEdesc]
 
 consThermE_rc :: RelationConcept
 consThermE_rc = makeRC "consThermE_rc"
@@ -78,7 +78,7 @@ sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
 sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
+  [] [eqn] [] (Just [sensHtESrc]) "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
 
@@ -143,7 +143,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
   [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
+  [] [latHtEEqn] [] (Just [latHtESrc]) "latentHtE" [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"

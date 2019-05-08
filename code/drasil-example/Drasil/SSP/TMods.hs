@@ -27,7 +27,7 @@ import Drasil.SSP.DataDefs (stressDD)
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" []
+  [] [factOfSafety_rel] [] (Just [makeCite fredlund1977]) "factOfSafety" []
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -41,7 +41,7 @@ factOfSafety_rel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibrium_rc)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
+  [] [eq_rel] [] (Just [makeCite fredlund1977]) "equilibrium" [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -65,7 +65,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
+  [] [mcSS_rel] [] (Just [makeCite fredlund1977]) "mcShrStrgth" [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -95,7 +95,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
+  [] [effS_rel] [] (Just [makeCite fredlund1977]) "effStress" [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept

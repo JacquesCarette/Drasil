@@ -25,7 +25,7 @@ gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) 
 gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
+  dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
@@ -58,7 +58,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
+  dispNorm, sqrDist, vel_O, rOB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision, 
   contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velA_P, velB_P]
 -----------------------
@@ -118,7 +118,7 @@ rigidParam n w = ucs'
 -----------------------
 
 iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
+  dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
@@ -143,7 +143,7 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
                (Atomic "2")) Real m_2
 
-r_OB    = uc' "r_OB" 
+rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre

@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel, velA_P, velB_P)
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, rOB, finRelVel, velA_P, velB_P)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -227,7 +227,7 @@ chasles = mkQuantDef vel_B chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
+chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy rOB))
 
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
@@ -240,8 +240,8 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
-  (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]
+  (phrase rOB) `sC` (ch rOB), 
+  (sParen $ Sy $ unit_symb rOB)]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition

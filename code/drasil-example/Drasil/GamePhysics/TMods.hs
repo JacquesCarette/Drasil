@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, r_OB, sqrDist, vel_B, vel_O)
+  mass_1, mass_2, rOB, sqrDist, vel_B, vel_O)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -131,9 +131,9 @@ newtonLUGDesc = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 
 t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm (cw chaslesThm)
-  [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
+  [qw vel_B, qw vel_O, qw QP.angularVelocity, qw rOB] 
   ([] :: [ConceptChunk]) [] [(sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] [] [] "ChaslesThm" [chaslesThmDesc]
+  (sy  QP.angularVelocity) (sy rOB))] [] [] "ChaslesThm" [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
@@ -141,7 +141,7 @@ chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesThmRel :: Relation
-chaslesThmRel = (sy vel_B) $= (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
+chaslesThmRel = (sy vel_B) $= (sy vel_O) + (cross (sy  QP.angularVelocity) (sy rOB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 chaslesThmDesc :: Sentence
@@ -155,8 +155,8 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
-  (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]
+  (phrase rOB) `sC` (ch rOB), 
+  (sParen $ Sy $ unit_symb rOB)]
 
 -- T5 : Newton's second law for rotational motion --
 

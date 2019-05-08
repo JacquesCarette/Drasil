@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
-  foldlList, foldlSent, foldlSP, ofThe, sAnd)
+  foldlList, foldlSent, foldlSP, ofThe, ofThe', sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
@@ -120,7 +120,7 @@ propsDeriv = [foldlSP [S "FIXME"]]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  S "The", plural output_ `ofThe` phrase code, S "have the",
+  plural output_ `ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
   ]) "Correct" nonFuncReqDom
 

@@ -26,7 +26,7 @@ gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
-  posCM, massI, posI, accI, mTot, vel_i, torque_i, time_c, initRelVel, 
+  posCM, massI, posI, accI, mTot, velI, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
@@ -54,7 +54,7 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 cpUnits :: [UnitalChunk]
 cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, vel_i,
+  QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
@@ -119,7 +119,7 @@ rigidParam n w = ucs'
 
 iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_A, vel_B, vel_O, rOB, angVel_A, angVel_B,
-  posCM, massI, posI, accI, mTot, vel_i, torque_i, time_c, initRelVel, 
+  posCM, massI, posI, accI, mTot, velI, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
@@ -170,7 +170,7 @@ accI = ucs' (dccWDS "accI" (compoundPhrase' (cn "the i-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lI) Real accelU
 
-vel_i = ucs' (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
+velI = ucs' (dccWDS "velI" (compoundPhrase' (QP.velocity ^. term) 
                (cn "of the i-th body's velocity")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lI) Real velU
 

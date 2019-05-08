@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
 import Drasil.GamePhysics.Unitals(accI, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, massI, normalVect, time_c, torque_i, vel_A, vel_i)
+  col2DLegTerms, mass_A, massI, normalVect, time_c, torque_i, vel_A, velI)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
@@ -23,8 +23,8 @@ iModelsNew = [im1_new, im2_new, im3_new]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
-im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw massI] 
-  [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
+im1_new = im' transMot [qw velI, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw massI] 
+  [sy velI $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
             sy force_i $> 0, sy massI $> 0 ] (qw accI) [] [] "transMot" [transMotDesc]
 
 transMot :: RelationConcept
@@ -34,7 +34,7 @@ transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = (sy accI) $= (deriv (apply1 vel_i QP.time) QP.time)
+transMotRel = (sy accI) $= (deriv (apply1 velI QP.time) QP.time)
   $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy massI))
 
 

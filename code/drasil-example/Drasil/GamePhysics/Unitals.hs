@@ -29,7 +29,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
+  momtInertK, pointOfCollision, contDisp_k, collisionImpulse, velA_P, velB_P ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -59,7 +59,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   perpLen_A, perpLen_B, force_i, torqueI, timeC, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, rOB, massIRigidBody, contDisp_A, contDisp_B, 
-  momtInert_A, momtInert_B, timeT, inittime, momtInert_k, pointOfCollision, 
+  momtInert_A, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
   contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velA_P, velB_P]
 -----------------------
 -- PARAMETRIZED HACK --
@@ -122,7 +122,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
-  momtInert_k, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
+  momtInertK, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velA_P, velB_P :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -208,7 +208,7 @@ timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))
 inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.time)) (sub (eqSymb QP.time) (Atomic "0")) Real second
 
-momtInert_k = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
+momtInertK = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertia ^. term) 
                (cn $ "of the k-th rigid body"))
                (phrase QP.momentOfInertia)) 
@@ -301,9 +301,9 @@ transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime, posC
   QP.acceleration, QP.velocity, force_i]
 
 rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
-  QM.orientation, QP.angularVelocity, QP.angularAccel, torqueI, momtInert_k]
+  QM.orientation, QP.angularVelocity, QP.angularAccel, torqueI, momtInertK]
 
-col2DLegTerms = [massIRigidBody, momtInert_k, timeT, inittime, timeC, posCM,
+col2DLegTerms = [massIRigidBody, momtInertK, timeT, inittime, timeC, posCM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
   collisionImpulse, pointOfCollision, contDisp_k]
 

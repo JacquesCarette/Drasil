@@ -27,9 +27,9 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
-  mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
+  mass_A, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDisp_k, collisionImpulse, velAP, velBP ]
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -58,9 +58,9 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, velO, rOB, massIRigidBody, contDisp_A, contDisp_B, 
+  dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDisp_k, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
+  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -120,9 +120,9 @@ rigidParam n w = ucs'
 iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
-  mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
+  mass_A, mass_B, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -241,13 +241,13 @@ velB       = velParam "B" cB
 velO       = velParam "origin" cO
 angVelA    = angParam "A" cA
 angVelB    = angParam "B" cB
-perpLenA   = perpParam "A" $ eqSymb contDisp_A
-perpLenB   = perpParam "B" $ eqSymb contDisp_B
+perpLenA   = perpParam "A" $ eqSymb contDispA
+perpLenB   = perpParam "B" $ eqSymb contDispB
 momtInertA = momtParam "A" "A"
 momtInertB = momtParam "B" "B"
-contDisp_A  = contParam "A" "A"
-contDisp_B  = contParam "B" "B"
-contDisp_k  = contParam "k" "k"
+contDispA  = contParam "A" "A"
+contDispB  = contParam "B" "B"
+contDispK  = contParam "k" "k"
 mass_A      = rigidParam "A" cA
 mass_B      = rigidParam "B" cB
 
@@ -305,7 +305,7 @@ rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
 
 col2DLegTerms = [massIRigidBody, momtInertK, timeT, inittime, timeC, posCM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
-  collisionImpulse, pointOfCollision, contDisp_k]
+  collisionImpulse, pointOfCollision, contDispK]
 
 ---------------------
 -- GOAL STATEMENTS --

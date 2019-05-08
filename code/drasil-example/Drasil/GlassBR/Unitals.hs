@@ -23,10 +23,10 @@ import Drasil.GlassBR.Units (sFlawPU)
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
-glassBRSymbolsWithDefns = [mod_elas]
+glassBRSymbolsWithDefns = [modElas]
 
-mod_elas :: UnitalChunk
-mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
+modElas :: UnitalChunk
+modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE pascal
 
 {--}
@@ -393,7 +393,7 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadSF :: QDefinition
 constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constant_M       = mkQuantDef sflawParamM  $ dbl 7
-constant_ModElas = mkQuantDef mod_elas     $ dbl 7.17e10
+constant_ModElas = mkQuantDef modElas     $ dbl 7.17e10
 constant_LoadDur = mkQuantDef load_dur     $ dbl 3
 constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--

@@ -19,7 +19,7 @@ import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, mod_elas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
+  lDurFac, load_dur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
   demandq, eqTNTWeight)
@@ -43,7 +43,7 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 riskEq :: Expr
 riskEq = ((sy sflawParamK) / 
   ((sy plateLen) * (sy plateWidth)) $^ ((sy sflawParamM) - 1) *
-  (sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
+  (sy modElas * (square $ sy min_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
@@ -101,7 +101,7 @@ strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
 --DD5--
 
 nonFLEq :: Expr
-nonFLEq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
+nonFLEq = ((sy tolLoad) * (sy modElas) * (sy min_thick) $^ 4) /
   (square (sy plateLen * sy plateWidth))
 
 nonFLQD :: QDefinition
@@ -130,7 +130,7 @@ glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
 
 dimLLEq :: Expr
 dimLLEq = ((sy demand) * (square (sy plateLen * sy plateWidth)))
-  / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
+  / ((sy modElas) * (sy min_thick $^ 4) * (sy gTF))
 
 dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
@@ -157,7 +157,7 @@ tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
 tolStrDisFacEq :: Expr
 tolStrDisFacEq = ln (ln (1 / (1 - (sy pbTol)))
   * ((((sy plateLen) * (sy plateWidth)) $^ (sy sflawParamM - 1) / 
-    ((sy sflawParamK) * ((sy mod_elas *
+    ((sy sflawParamK) * ((sy modElas *
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFacQD :: QDefinition

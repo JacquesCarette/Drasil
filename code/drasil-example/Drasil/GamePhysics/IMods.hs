@@ -102,7 +102,7 @@ col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equat
 col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
   ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
 
---im3Rel2 = (apply1 vel_B timeC) $= (apply1 vel_B QP.time) -
+--im3Rel2 = (apply1 velB timeC) $= (apply1 velB QP.time) -
 --  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
 
 

@@ -25,7 +25,7 @@ gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) 
 gamephyUnitSymbs :: [UnitaryConceptDict]
 gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, velA, vel_B, vel_O, rOB, angVel_A, angVel_B,
+  dispNorm, sqrDist, velA, velB, vel_O, rOB, angVel_A, angVel_B,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
@@ -56,7 +56,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B, forceI, torqueI, timeC, velA, vel_B, mass_A, mass_B,
+  perpLen_A, perpLen_B, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, rOB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
@@ -118,7 +118,7 @@ rigidParam n w = ucs'
 -----------------------
 
 iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
-  dispNorm, sqrDist, velA, vel_B, vel_O, rOB, angVel_A, angVel_B,
+  dispNorm, sqrDist, velA, velB, vel_O, rOB, angVel_A, angVel_B,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
@@ -237,7 +237,7 @@ force_2     = forceParam "2" "second"
 mass_1      = massParam "1" "first"
 mass_2      = massParam "2" "second"
 velA       = velParam "A" cA
-vel_B       = velParam "B" cB
+velB       = velParam "B" cB
 vel_O       = velParam "origin" cO
 angVel_A    = angParam "A" cA
 angVel_B    = angParam "B" cB

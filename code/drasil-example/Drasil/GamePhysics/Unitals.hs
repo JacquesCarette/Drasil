@@ -28,7 +28,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
+  perpLenA, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInertK, pointOfCollision, contDisp_k, collisionImpulse, velAP, velBP ]
 
 ----------------------
@@ -56,7 +56,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
+  perpLenA, perpLen_B, forceI, torqueI, timeC, velA, velB, mass_A, mass_B,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDisp_A, contDisp_B, 
   momtInert_A, momtInert_B, timeT, inittime, momtInertK, pointOfCollision, 
@@ -121,7 +121,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
+  perpLenA, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInertK, pointOfCollision, contDisp_k, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -241,7 +241,7 @@ velB       = velParam "B" cB
 velO       = velParam "origin" cO
 angVelA    = angParam "A" cA
 angVelB    = angParam "B" cB
-perpLen_A   = perpParam "A" $ eqSymb contDisp_A
+perpLenA   = perpParam "A" $ eqSymb contDisp_A
 perpLen_B   = perpParam "B" $ eqSymb contDisp_B
 momtInert_A = momtParam "A" "A"
 momtInert_B = momtParam "B" "B"

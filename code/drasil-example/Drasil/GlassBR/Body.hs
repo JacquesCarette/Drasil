@@ -218,7 +218,7 @@ termsAndDesc, physSystDescription, goalStmts :: Section
 physSystDescriptionList, appdxIntro :: Contents
 
 inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, 
-  traceMatsAndGraphsTable3, fig_glassbr, fig_2, fig_3, fig_4, fig_5, fig_6 :: LabelledContent
+  traceMatsAndGraphsTable3, figGlassbr, fig_2, fig_3, fig_4, fig_5, fig_6 :: LabelledContent
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
@@ -417,10 +417,10 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short gLassBR) fig_glassbr 
-  [physSystDescriptionList, LlC fig_glassbr]
+physSystDescription = physSystDesc (short gLassBR) figGlassbr 
+  [physSystDescriptionList, LlC figGlassbr]
 
-fig_glassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
+figGlassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys

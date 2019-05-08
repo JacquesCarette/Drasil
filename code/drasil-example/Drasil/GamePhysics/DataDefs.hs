@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, massI,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, posCM, posI, vel_B, vel_O, rOB, finRelVel, velAP, velB_P)
+  perpLen_A, perpLen_B, posCM, posI, vel_B, vel_O, rOB, finRelVel, velAP, velBP)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -252,7 +252,7 @@ reVelInColl :: QDefinition
 reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
 reVelInCollEqn :: Expr
-reVelInCollEqn = (sy velAP) - (sy velB_P)
+reVelInCollEqn = (sy velAP) - (sy velBP)
 
 reVelInCollDesc :: Sentence
 reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 

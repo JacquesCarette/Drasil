@@ -34,7 +34,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw prob_fail] 
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspect_ratio, pbTol, tNT :: UncertainChunk
@@ -69,17 +69,17 @@ plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
     physc $ UpFrom (Inc, sy plateWidth),
-    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max)] (dbl 1.5) defaultUncrt
+    sfwrc $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
-    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max)] (dbl 1.2) defaultUncrt
+    sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspect_ratio = uvc "aspect_ratio" (aR ^. term)
   (Atomic "AR") Real
   [ physc $ UpFrom (Inc, 1), 
-    sfwrc $ UpTo (Inc, sy ar_max)] (dbl 1.5) defaultUncrt
+    sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -99,7 +99,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc, sy sd_min) (Inc, sy sd_max)]
+    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)]
   (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
@@ -130,15 +130,15 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
 
 
 gbProbs :: [QuantityDict]
-gbProbs = map qw [prob_fail,pb_fail] 
+gbProbs = map qw [probFail,pbFail] 
 
-prob_fail :: ConstrainedChunk
-prob_fail = cvc "prob_fail" (nounPhraseSP "probability of failure")
+probFail :: ConstrainedChunk
+probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lF) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-pb_fail :: ConstrainedChunk
-pb_fail = cvc "pb_fail" (nounPhraseSP "tolerable probability of failure") 
+pbFail :: ConstrainedChunk
+pbFail = cvc "pbFail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Atomic "ftol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
 
@@ -147,21 +147,21 @@ pb_fail = cvc "pb_fail" (nounPhraseSP "tolerable probability of failure")
 {--}
 
 gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
-  sd_max, sd_min]
+gBRSpecParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
+  sdMax, sdMin]
 
-dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_max,
-  sd_min :: QDefinition
+dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
+  sdMin :: QDefinition
 
-dim_max     = mkQuantDef (unitary "dim_max"
+dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) metre Real) (dbl 5)
 
-dim_min     = mkQuantDef (unitary "dim_min"
+dimMin     = mkQuantDef (unitary "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "min")) metre Real) (dbl 0.1)
 
-ar_max     = mkQuantDef (vc "ar_max"
+arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational) (dbl 5)
 
@@ -173,11 +173,11 @@ cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
   (sub (eqSymb charWeight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
-sd_max     = mkQuantDef (unitary "sd_max"
+sdMax     = mkQuantDef (unitary "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
   (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
 
-sd_min     = mkQuantDef (unitary "sd_min"
+sdMin     = mkQuantDef (unitary "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
 

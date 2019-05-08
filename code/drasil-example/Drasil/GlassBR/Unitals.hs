@@ -38,7 +38,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspect_ratio, pbTol, tNT :: UncertainChunk
-glass_type, nom_thick :: ConstrainedChunk
+glass_type, nomThick :: ConstrainedChunk
 
 {--}
 
@@ -59,7 +59,7 @@ gbInputsWUncrtn = [aspect_ratio, pbTol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
-gbInputsNoUncrtn = [glass_type, nom_thick]
+gbInputsNoUncrtn = [glass_type, nomThick]
 
 gbInputDataConstraints :: [UncertainChunk]
 gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ 
@@ -103,9 +103,9 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
   (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
-nom_thick = cuc "nom_thick" 
+nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
-    nom_thick (map show nominalThicknesses))
+    nomThick (map show nominalThicknesses))
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
   [enumc nominalThicknesses] 8
 

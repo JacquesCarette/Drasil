@@ -19,7 +19,7 @@ import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pbTol, 
+  lDurFac, load_dur, mod_elas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
   demandq, eqTNTWeight)
@@ -64,7 +64,7 @@ hFromtEq = (1/1000) * (case_ (zipWith hFromtHelper
   actualThicknesses nominalThicknesses))
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)
-hFromtHelper result condition = (dbl result, (sy nom_thick) $= dbl condition)
+hFromtHelper result condition = (dbl result, (sy nomThick) $= dbl condition)
 
 hFromtQD :: QDefinition
 hFromtQD = mkQuantDef min_thick hFromtEq
@@ -287,7 +287,7 @@ jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defi
   makeRef2S strDisFac)
 
 hMin :: Sentence
-hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
+hMin = (ch nomThick +:+ S "is a function that maps from the nominal thickness"
   +:+ sParen (ch min_thick) +:+ S "to the" +:+. phrase min_thick)
 
 qHtTlExtra :: Sentence

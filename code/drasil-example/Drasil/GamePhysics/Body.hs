@@ -57,7 +57,7 @@ import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntr
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
-import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
+import Drasil.GamePhysics.IMods (iModelsNew, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
@@ -180,12 +180,12 @@ chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb (map qw iModels_new ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
-  ++ map nw cpAcronyms ++ map nw prodtcon ++ map nw iModels_new
+everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
+  ++ map nw cpAcronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains ++ map cw iModels_new) chipUnits
+  (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
   gameLabel gameRefby gameDatadefn gameInsmodel gameGendef gameTheory
   gameConcins gameSection []
 
@@ -734,7 +734,7 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRef2S iModels_new
+traceMatInstaModelRef = map makeRef2S iModelsNew
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
 traceMatTheoryModelRef = map makeRef2S cpTMods_new

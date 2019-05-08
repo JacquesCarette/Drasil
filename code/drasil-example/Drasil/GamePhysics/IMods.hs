@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new) where
+module Drasil.GamePhysics.IMods (iModels, iModelsNew, im1_new, im2_new, im3_new) where
 
 import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
@@ -18,8 +18,8 @@ import Data.Drasil.Utils (fmtU, foldle1)
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]
 
-iModels_new :: [InstanceModel]
-iModels_new = [im1_new, im2_new, im3_new]
+iModelsNew :: [InstanceModel]
+iModelsNew = [im1_new, im2_new, im3_new]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel

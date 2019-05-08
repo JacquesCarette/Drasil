@@ -21,7 +21,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, load_dur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
+  sflawParamM, stressDistFac, tNT, tolLoad, min_thick, probBr, lRe, loadSF,
   demandq, eqTNTWeight)
 
 ----------------------
@@ -204,7 +204,7 @@ probOfBreakEq :: Expr
 probOfBreakEq = 1 - (exp (negate (sy risk)))
 
 probOfBreakQD :: QDefinition
-probOfBreakQD = mkQuantDef prob_br probOfBreakEq
+probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
 probOfBreak :: DataDefinition
 probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" [glassBreak]

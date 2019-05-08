@@ -70,7 +70,7 @@ import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pbTol, prob_br, probBreak, sD, stressDistFac,
+  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
@@ -232,7 +232,7 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym probBreak prob_br]
+  [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
@@ -467,7 +467,7 @@ goalStmtsListGS1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 {-input and output tables-}
 
 inputDataConstraints = inDataConstTbl gbInputDataConstraints
-outputDataConstraints = outDataConstTbl [prob_br]
+outputDataConstraints = outDataConstTbl [probBr]
 
 {--REQUIREMENTS--}
 

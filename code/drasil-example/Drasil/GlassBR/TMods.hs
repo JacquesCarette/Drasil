@@ -11,7 +11,7 @@ import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pbTol, prob_br)
+import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pbTol, probBr)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
@@ -54,8 +54,8 @@ lrIsSafeDesc = tModDesc (is_safeLR) s ending
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafeRC) 
-  [qw is_safePb, qw prob_br, qw pbTol] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafeRC] [(sy is_safePb) $= (sy prob_br) $< (sy pbTol)] [] [makeCite astm2009]
+  [qw is_safePb, qw probBr, qw pbTol] ([] :: [ConceptChunk])
+  [relToQD locSymbMap pbIsSafeRC] [(sy is_safePb) $= (sy probBr) $< (sy pbTol)] [] [makeCite astm2009]
   "isSafePb" [pbIsSafeDesc]
   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
@@ -63,14 +63,14 @@ pbIsSafe = tm (cw pbIsSafeRC)
 
 pbIsSafeRC :: RelationConcept
 pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pbTol))
+  pbIsSafeDesc ((sy is_safePb) $= (sy probBr) $< (sy pbTol))
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safePb) s ending
   where 
     s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
       (makeRef2S lrIsSafe))
-    ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
+    ending = ((ch probBr) `isThe` (phrase probBr)) `sC` S "as calculated in" +:+.
       (makeRef2S probOfBreak) +:+ (ch pbTol) `isThe` (phrase pbTol) +:+ S "entered by the user"
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence

@@ -34,7 +34,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrainedChunk]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br, cnstrw prob_fail] 
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw prob_fail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspect_ratio, pbTol, tNT :: UncertainChunk
@@ -121,10 +121,10 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br] 
+gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [probBr] 
 
-prob_br :: ConstrainedChunk
-prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
+probBr :: ConstrainedChunk
+probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
@@ -357,7 +357,7 @@ nonFactoredL  = cc' nFL
   S "per 1000 for monolithic", (getAcc annealed), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
-probBreak     = cc' prob_br
+probBreak     = cc' probBr
   (foldlSent [S "The fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
   S "in lites per 1000", sParen $ makeCiteS astm2016])

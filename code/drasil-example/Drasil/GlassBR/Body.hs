@@ -153,7 +153,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
       Cstmr gLassBR],
   GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-    UsrChars [user_characteristics_intro], SystCons [] [] ],
+    UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
@@ -383,8 +383,8 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
    
 {--User Characteristics--}
 
-user_characteristics_intro :: Contents
-user_characteristics_intro = LlC $ enumBullet characteristicsLabel $ map foldlSent
+userCharacteristicsIntro :: Contents
+userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",

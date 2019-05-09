@@ -21,7 +21,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tNT, tolLoad, min_thick, probBr, lRe, loadSF,
+  sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
   demandq, eqTNTWeight)
 
 ----------------------
@@ -43,7 +43,7 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 riskEq :: Expr
 riskEq = ((sy sflawParamK) / 
   ((sy plateLen) * (sy plateWidth)) $^ ((sy sflawParamM) - 1) *
-  (sy modElas * (square $ sy min_thick)) $^ (sy sflawParamM) 
+  (sy modElas * (square $ sy minThick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
@@ -67,10 +67,10 @@ hFromtHelper :: Double -> Double -> (Expr, Relation)
 hFromtHelper result condition = (dbl result, (sy nomThick) $= dbl condition)
 
 hFromtQD :: QDefinition
-hFromtQD = mkQuantDef min_thick hFromtEq
+hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = mkDD hFromtQD [astm2009] [{-derivation-}] "min_thick" [hMin]
+hFromt = mkDD hFromtQD [astm2009] [{-derivation-}] "minThick" [hMin]
 
 --DD3-- (#749)
 
@@ -101,7 +101,7 @@ strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
 --DD5--
 
 nonFLEq :: Expr
-nonFLEq = ((sy tolLoad) * (sy modElas) * (sy min_thick) $^ 4) /
+nonFLEq = ((sy tolLoad) * (sy modElas) * (sy minThick) $^ 4) /
   (square (sy plateLen * sy plateWidth))
 
 nonFLQD :: QDefinition
@@ -130,7 +130,7 @@ glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
 
 dimLLEq :: Expr
 dimLLEq = ((sy demand) * (square (sy plateLen * sy plateWidth)))
-  / ((sy modElas) * (sy min_thick $^ 4) * (sy gTF))
+  / ((sy modElas) * (sy minThick $^ 4) * (sy gTF))
 
 dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
@@ -158,7 +158,7 @@ tolStrDisFacEq :: Expr
 tolStrDisFacEq = ln (ln (1 / (1 - (sy pbTol)))
   * ((((sy plateLen) * (sy plateWidth)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((sy modElas *
-    (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
+    (square (sy minThick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFacQD :: QDefinition
 tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFacEq
@@ -269,7 +269,7 @@ ftGlass :: Sentence
 ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
 
 hRef :: Sentence
-hRef = (ch min_thick +:+ S "is the" +:+ phrase min_thick `sC` 
+hRef = (ch minThick +:+ S "is the" +:+ phrase minThick `sC` 
   S "which is based on the nominal thicknesses as shown in" +:+. makeRef2S hFromt)
 
 hsGlass :: Sentence
@@ -288,7 +288,7 @@ jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defi
 
 hMin :: Sentence
 hMin = (ch nomThick +:+ S "is a function that maps from the nominal thickness"
-  +:+ sParen (ch min_thick) +:+ S "to the" +:+. phrase min_thick)
+  +:+ sParen (ch minThick) +:+ S "to the" +:+. phrase minThick)
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 

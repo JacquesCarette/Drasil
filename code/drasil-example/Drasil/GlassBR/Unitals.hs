@@ -387,13 +387,13 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 --Constants--
 
 gbConstants :: [QDefinition]
-gbConstants = [constantM, constantK, constant_ModElas, constant_LoadDur, constant_LoadSF]
+gbConstants = [constantM, constantK, constantModElas, constant_LoadDur, constant_LoadSF]
                 ++ gBRSpecParamVals 
 
-constantM, constantK, constant_ModElas, constant_LoadDur, constant_LoadSF :: QDefinition
+constantM, constantK, constantModElas, constant_LoadDur, constant_LoadSF :: QDefinition
 constantK       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM  $ dbl 7
-constant_ModElas = mkQuantDef modElas     $ dbl 7.17e10
+constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constant_LoadDur = mkQuantDef loadDur     $ dbl 3
 constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--

@@ -295,6 +295,8 @@ instance Selector PythonCode where
 
     listIndexExists lst index = (listSizeAccess lst) ?> index
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+    
+    indexOf v l = objAccess l (fmap funcDocD (funcApp "index" [v]))
 
     stringEqual v1 v2 = v1 ?== v2
 
@@ -308,8 +310,6 @@ instance FunctionSym PythonCode where
     castListToInt = cast int (listType static int)
     get n = fmap funcDocD (var n)
     set n v = fmap (funcDocD . fst) (assign (var n) v)
-
-    indexOf v = fmap funcDocD (funcApp "index" [v])
 
     listSize = return $ text "len"
     listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
@@ -469,6 +469,7 @@ instance MethodTypeSym PythonCode where
 instance ParameterSym PythonCode where
     type Parameter PythonCode = Doc
     stateParam n _ = return $ text n
+    pointerParam = stateParam
 
 instance MethodSym PythonCode where
     type Method PythonCode = (Doc, Bool)

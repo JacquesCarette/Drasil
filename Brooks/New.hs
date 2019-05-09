@@ -267,6 +267,8 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) => Selector repr w
 
     listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     argExists       :: Integer -> repr (Value repr)
+    
+    indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
     stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
@@ -280,8 +282,6 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
     castListToInt  :: repr (Function repr)
     get            :: Label -> repr (Function repr)
     set            :: Label -> repr (Value repr) -> repr (Function repr)
-
-    indexOf :: repr (Value repr) -> repr (Function repr)
 
     listSize           :: repr (Function repr)
     listAdd            :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
@@ -448,6 +448,7 @@ class ParameterSym repr where
     type Parameter repr
     stateParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
     -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
+    pointerParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
     type Method repr

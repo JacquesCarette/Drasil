@@ -323,6 +323,8 @@ instance Selector JavaCode where
     listIndexExists = liftA3 jListIndexExists greaterOp
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
+    indexOf v l = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
+
     stringEqual v1 str = objAccess v1 (func "equals" [str])
 
     castObj = liftA2 castObjDocD
@@ -335,8 +337,6 @@ instance FunctionSym JavaCode where
     castListToInt = fmap funcDocD (funcApp "ordinal" [])
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = fmap funcDocD (funcApp "indexOf" [v])
 
     listSize = fmap funcDocD (funcApp "size" [])
     listAdd i v = fmap funcDocD (funcApp "add" [i, v])
@@ -497,6 +497,7 @@ instance MethodTypeSym JavaCode where
 instance ParameterSym JavaCode where
     type Parameter JavaCode = Doc
     stateParam n = fmap (stateParamDocD n)
+    pointerParam = stateParam
 
 instance MethodSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise

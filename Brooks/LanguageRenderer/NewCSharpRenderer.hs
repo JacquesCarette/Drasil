@@ -324,6 +324,8 @@ instance Selector CSharpCode where
     listIndexExists = liftA3 listIndexExistsDocD greaterOp
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
+    indexOf v l = objAccess l (fmap funcDocD (funcApp "IndexOf" [v]))
+
     stringEqual v1 v2 = v1 ?== v2
 
     castObj = liftA2 castObjDocD
@@ -336,8 +338,6 @@ instance FunctionSym CSharpCode where
     castListToInt = cast (listType static int) int
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = fmap funcDocD (funcApp "IndexOf" [v])
 
     listSize = fmap funcDocD (var "Count")
     listAdd i v = fmap funcDocD (funcApp "Insert" [i, v])
@@ -499,6 +499,7 @@ instance MethodTypeSym CSharpCode where
 instance ParameterSym CSharpCode where
     type Parameter CSharpCode = Doc
     stateParam n = fmap (stateParamDocD n)
+    pointerParam = stateParam
 
 instance MethodSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise

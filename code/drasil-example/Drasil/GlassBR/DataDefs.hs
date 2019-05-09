@@ -18,7 +18,7 @@ import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, char_weight,
-  demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
+  demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, prob_br, lRe, loadSF,
@@ -114,7 +114,7 @@ nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
+glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors $ map (getAccStr . snd) glassType))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)

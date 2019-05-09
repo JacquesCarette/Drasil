@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.19
+Version:	0.1.20
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -20,11 +20,11 @@ executable tiny
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.9,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints
 
@@ -54,11 +54,11 @@ executable glassbr
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.10,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -74,6 +74,7 @@ executable nopcm
     , Drasil.NoPCM.DataDesc
     , Drasil.NoPCM.IMods
     , Drasil.NoPCM.GenDefs
+    , Drasil.NoPCM.Goals
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
@@ -82,6 +83,7 @@ executable nopcm
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Goals
     , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
@@ -98,11 +100,11 @@ executable nopcm
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.7,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -118,6 +120,7 @@ executable swhs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
+    , Drasil.SWHS.Goals
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Labels
     , Drasil.SWHS.References
@@ -133,11 +136,11 @@ executable swhs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.7,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -171,11 +174,11 @@ executable ssp
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.7,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -188,6 +191,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.Goals
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
@@ -201,11 +205,11 @@ executable chipmunkdocs
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.6,
+    drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.22
+    drasil-docLang >= 0.1.23
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 

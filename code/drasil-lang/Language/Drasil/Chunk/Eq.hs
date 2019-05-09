@@ -24,7 +24,7 @@ instance HasUID        QDefinition where uid = qua . uid
 instance NamedIdea     QDefinition where term = qua . term
 instance Idea          QDefinition where getA c = getA $ c ^. qua
 instance HasSpace      QDefinition where typ = qua . typ
-instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
+instance HasSymbol     QDefinition where symbol e = symbol (e^.qua)
 instance Definition    QDefinition where defn = defn'
 instance Quantity      QDefinition where 
 instance DefiningExpr  QDefinition where defnExpr = equat
@@ -35,15 +35,15 @@ instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 -- unit, and defining equation.
 --FIXME: Space hack
 fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
-fromEqn nm desc def symb un eqn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn
+fromEqn nm desc def symb un = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) def eqn
+fromEqn' nm desc def symb = EC (mkQuant nm desc symb Real Nothing Nothing) def
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
-ec c eqn = EC (qw c) EmptyS eqn
+ec c = EC (qw c) EmptyS

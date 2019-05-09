@@ -1,18 +1,20 @@
-module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new) where
+module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new, instModIntro) where
 
 import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
+import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
   col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
+import Data.Drasil.Concepts.Documentation (goal)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, sAnd)
 import Data.Drasil.Utils (fmtU, foldle1)
 
 iModels :: [RelationConcept]
@@ -139,3 +141,9 @@ col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms
   (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th
   body and point P"))) (sub (QP.displacement ^. symbol) ) 
 --}
+
+{- Intro -}
+
+instModIntro :: Sentence
+instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS, 
+  S "is met by" +:+. (makeRef2S im1_new `sAnd` makeRef2S im3_new), S "The", phrase goal, makeRef2S angularGS, S "is met by", makeRef2S im2_new `sAnd` makeRef2S im3_new]

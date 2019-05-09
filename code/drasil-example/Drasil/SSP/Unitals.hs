@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands
 import Drasil.SSP.Defs (fs_concept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal, specificWeight)
 
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
@@ -31,13 +31,8 @@ genericA = area
 -------------
 -- HELPERS --
 -------------
-fixme, fsi, fisi, wiif, wla, smsi :: String
-fixme = "FIXME: missing description"
-fsi   = "for slice index i"
-fisi  = "for interslice index i"
+wiif :: String
 wiif  = "without the influence of interslice forces"
-wla   = "without length adjustment"
-smsi  = "refers to either slice i midpoint, or slice interface i"
 
 --------------------------------
 -- START OF CONSTRAINEDCHUNKS --
@@ -139,18 +134,18 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  lGamma specific_weight Real [gtZeroConstr]
+  lGamma specificWeight Real [gtZeroConstr]
   (dbl 20000) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
-  (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
+  (sub lGamma (Atomic "Sat")) specificWeight Real [gtZeroConstr]
   (dbl 20000) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
-  (sub lGamma lW) specific_weight Real [gtZeroConstr]
+  (sub lGamma lW) specificWeight Real [gtZeroConstr]
   (dbl 9800) defultUncrt
 
 constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 

@@ -109,15 +109,14 @@ nom_thick = cuc "nom_thick"
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
   [enumc nominalThicknesses] 8
 
--- FIXME glassTypeAbbrsStr should really not exist...
 -- the S "glass type" is supposed to be using "phrase glassTy"
 -- but the problem is still the Capitalization issue with new 
--- constructor `Ch` of generateing the sentence. So for the sentence
+-- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
 glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glass_type glassTypeAbbrsStr)
-  lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr] Nothing
+    displayConstrntsAsSet glass_type (map (getAccStr . snd) glassType))
+  lG ({-DiscreteS (map (getAccStr . snd) glassType)-} String)
+  [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 
 {--}
 
@@ -426,23 +425,14 @@ nominalThicknesses = map fst glassThickness
 glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
-glassTypeAbbrsStr :: [String]
-glassTypeAbbrsStr = map snd glassType
-
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map S glassTypeAbbrsStr
+glassTypeAbbrs = map (getAcc . snd) glassType
 
-glassConcepts :: [CI]
-glassConcepts = [annealed, fullyT, heatS]
-
--- FIXME: this String is really an awful cheat...
-type GlassType = [(Integer, String)] -- [(Factor, Abbreviation)]
+type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
--- What it should really be:
---glassType = [(1, annealed), (4, fullyT), (2, heatS)]
-glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
+glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 
 glassThickness :: GlassThickness
 glassThickness =   

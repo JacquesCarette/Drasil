@@ -28,7 +28,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, nonFuncReqF', reqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -238,7 +238,7 @@ mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
-mkSections si l = map doit l
+mkSections si = map doit
   where
     doit :: DocSection -> Section
     doit (Verbatim s)        = s
@@ -261,7 +261,7 @@ mkSections si l = map doit l
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
-mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
+mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
@@ -299,10 +299,10 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro 
+tsymb = TSymb 
 -- ^ Default Term and given intro
 
-tsymb' intro = TSymb' Defn intro
+tsymb' = TSymb' Defn
 -- ^ Default Defn and given intro
 
 -- | Custom table of symbols constructor
@@ -500,7 +500,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
-    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nonFuncReqF' noPrrty (mkEnumSimpleD nfrs) rsn explain
+    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (length nfrs) rsn explain (mkEnumSimpleD nfrs)
 
 {--}
 

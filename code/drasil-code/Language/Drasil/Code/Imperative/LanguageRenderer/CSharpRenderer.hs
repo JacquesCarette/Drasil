@@ -132,9 +132,9 @@ unOpDoc' op = unOpDocD op
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "Double.Parse" [v]
-objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "Add" <> parens (dftVal)
+objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "Add" <> parens dftVal
     where dftVal = case t of Base bt     -> valueDoc c (defaultValue bt)
-                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens (empty)
+                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens empty
                              _           -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 

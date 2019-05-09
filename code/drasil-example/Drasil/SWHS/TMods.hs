@@ -5,15 +5,15 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
-import Data.Drasil.Concepts.Physics (mech_energy)
+import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
-  heat_trans, law_cons_energy)
+  heatTrans, law_cons_energy)
 
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
-  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
+import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
+  latent_heat, melt_pt, boilPt, sens_heat, heatCapSpec)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
@@ -33,7 +33,7 @@ swhsTMods = [consThermE, sensHtE, latentHtE]
 consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
-    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
+    qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
 
 consThermE_rc :: RelationConcept
@@ -42,7 +42,7 @@ consThermE_rc = makeRC "consThermE_rc"
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
-  (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
+  (sy density) * (sy heatCapSpec) * (pderiv (sy temp) time)
 
 -- the second argument is a 'ShortName'...
 consThemESrc :: Reference
@@ -53,15 +53,15 @@ consThemESrc = makeURI "consThemESrc"
 consThermEdesc :: Sentence
 consThermEdesc = foldlSent [
   S "The above", phrase equation, S "gives the", phrase law_cons_energy, S "for",
-  phrase transient, phrase heat_trans, S "in a material of", phrase heat_cap_spec,
-  ch heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)) `sAnd` phrase density `sC`
+  phrase transient, phrase heatTrans, S "in a material of", phrase heatCapSpec,
+  ch heatCapSpec, sParen (Sy (unit_symb heatCapSpec)) `sAnd` phrase density `sC`
   ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 
   foldlList Comma List [ch thFluxVect `isThe` phrase thFluxVect +:+ sParen (Sy (unit_symb thFluxVect)),
   ch vol_ht_gen `isThe` phrase vol_ht_gen +:+ sParen (Sy (unit_symb vol_ht_gen)),
   ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
-  S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
+  S "other forms of", phrase energy `sC` S "such as", phrase mechEnergy `sC`
   S "are assumed to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]
 
 -------------------------
@@ -77,7 +77,7 @@ data PhaseChange = AllPhases
 sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
 sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
   [qw sens_heat, qw htCap_S, qw mass, 
-    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
+    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
@@ -97,8 +97,8 @@ sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
   Liquid -> liquidFormula
   AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
       ((sy temp) $< (sy melt_pt))), (liquidFormula, ((sy melt_pt) $< (sy temp) $<
-      (sy boil_pt))), ((sy htCap_V) * (sy mass) *
-      (sy deltaT), ((sy boil_pt) $< (sy temp)))]
+      (sy boilPt))), ((sy htCap_V) * (sy mass) *
+      (sy deltaT), ((sy boilPt) $< (sy temp)))]
   where
     liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
 
@@ -112,19 +112,19 @@ sensHtEdesc = foldlSent [
   phrase sens_heat, phrase energy +:+. sParen (Sy (usymb joule)),
   ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
-  S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
+  S "respectively" +:+. sParen (Sy (unit_symb heatCapSpec)),
   ch mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
   ch temp `isThe` phrase temp,
   sParen (Sy (unit_symb temp)) `sC` S "and", ch deltaT `isThe`
   phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  ch melt_pt `sAnd` ch boil_pt,
-  S "are the", phrase melt_pt `sAnd` phrase boil_pt `sC`
+  ch melt_pt `sAnd` ch boilPt,
+  S "are the", phrase melt_pt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start sens_heat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
   phrase phase_change, S "occurs. A",
   phrase phase_change, S "occurs if",
-  ch temp :+: S "=" :+: ch boil_pt,
+  ch temp :+: S "=" :+: ch boilPt,
   S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
   (makeRef2S latentHtE) `sC` at_start latent_heat,
@@ -173,8 +173,8 @@ latentHtEdesc = foldlSent [
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
   (makeRef2S dd3HtFusion) :+: S ".",
-  ch melt_pt `sAnd` ch boil_pt, S "are the",
-  phrase melt_pt `sAnd` phrase boil_pt `sC`
+  ch melt_pt `sAnd` ch boilPt, S "are the",
+  phrase melt_pt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",
   S "changed to the new phase"]

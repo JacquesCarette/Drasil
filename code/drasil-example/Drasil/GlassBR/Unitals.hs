@@ -387,15 +387,15 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 --Constants--
 
 gbConstants :: [QDefinition]
-gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constant_LoadSF]
+gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ gBRSpecParamVals 
 
-constantM, constantK, constantModElas, constantLoadDur, constant_LoadSF :: QDefinition
+constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
 constantK       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM  $ dbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ dbl 3
-constant_LoadSF  = mkQuantDef loadSF       $ 1
+constantLoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
 
 sdVectorSent :: Sentence

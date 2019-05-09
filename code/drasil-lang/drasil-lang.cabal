@@ -64,6 +64,7 @@ library
     , Language.Drasil.SystemInformation
     , Language.Drasil.UID
     , Language.Drasil.Uncertainty
+    , Language.Drasil.Uncertainty.Core
     , Language.Drasil.Unicode
     , Language.Drasil.UnitLang
     , Language.Drasil.Derivation

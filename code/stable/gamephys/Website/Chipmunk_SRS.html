@@ -1050,10 +1050,14 @@ Given the inputs, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Determine their new positions and velocities over a period of time.
+<div id="linearGS">
+Determine-Linear-Properties: Determine their new positions and velocities over a period of time.
+</div>
 </p>
 <p>
-GS2: Determine their new orientations and angular velocities over a period of time.
+<div id="angularGS">
+Determine-Angular-Properties: Determine their new orientations and angular velocities over a period of time.
+</div>
 </p>
 </div>
 </div>
@@ -2923,6 +2927,9 @@ Instance Models
 </h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+</p>
+<p class="paragraph">
+The goal <a href=#linearGS>GS: Determine-Linear-Properties</a> is met by <a href=#IM:transMot>IM: transMot</a> and <a href=#IM:col2D>IM: col2D</a>. The goal <a href=#angularGS>GS: Determine-Angular-Properties</a> is met by <a href=#IM:rotMot>IM: rotMot</a> and <a href=#IM:col2D>IM: col2D</a>.
 </p>
 <div id="IM:transMot">
 <table class="idefn">

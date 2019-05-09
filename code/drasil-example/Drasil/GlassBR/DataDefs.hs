@@ -20,7 +20,7 @@ import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
-  plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
+  plateLen, plateWidth, riskFun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
   demandq, eqTNTWeight)
 
@@ -48,13 +48,13 @@ riskEq = ((sy sflawParamK) /
 
 -- FIXME [4] !!!
 riskQD :: QDefinition
-riskQD = mkQuantDef risk_fun riskEq
+riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
 risk = mkDD riskQD 
   [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
   campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
-  [{-derivation-}] "risk_fun"
+  [{-derivation-}] "riskFun"
   [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--

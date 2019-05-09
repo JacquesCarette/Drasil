@@ -229,10 +229,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [QuantityDict]
-glassBRUnitless = [risk_fun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
+glassBRUnitless = [riskFun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-risk_fun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
+riskFun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -254,7 +254,7 @@ lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 loadSF        = vc'' (lShareFac) (Atomic "LSF") Natural
 
 
-risk_fun      = vc "risk_fun"    (nounPhraseSP "risk of failure") cB Real
+riskFun      = vc "riskFun"    (nounPhraseSP "risk of failure") cB Real
 
 sdf_tol       = vc "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 

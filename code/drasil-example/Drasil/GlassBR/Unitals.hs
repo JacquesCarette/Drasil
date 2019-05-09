@@ -121,7 +121,7 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [isSafePb, is_safeLR] ++ map qw [probBr] 
+gbOutputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
 
 probBr :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
@@ -229,10 +229,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [QuantityDict]
-glassBRUnitless = [risk_fun, isSafePb, is_safeLR, stressDistFac, sdf_tol,
+glassBRUnitless = [risk_fun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-risk_fun, isSafePb, is_safeLR, stressDistFac, sdf_tol,
+risk_fun, isSafePb, isSafeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -245,7 +245,7 @@ isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned 
   " probability is less than tolerable probability")
   (Atomic "is-safePb") Boolean
 
-is_safeLR      = vc "is_safeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
+isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
   (Atomic "is-safeLR") Boolean
 

@@ -158,6 +158,7 @@ instance StateTypeSym CppSrcCode where
     boolListType = listType p bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator t = fmap cppIterTypeDoc (listType dynamic t)
 
 -- ControlBlockSym Not translated yet
 instance ControlBlockSym CppSrcCode where
@@ -185,6 +186,8 @@ instance ControlBlockSym CppSrcCode where
               getE (Just n) = n
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
+
+    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
 
 instance UnaryOpSym CppSrcCode where
     type UnaryOp CppSrcCode = Doc
@@ -250,6 +253,7 @@ instance ValueSym CppSrcCode where
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar l = return $ text $ "(*" ++ l ++ ")"
     
     inputFunc = return $ text "std::cin"
 
@@ -395,38 +399,38 @@ instance StatementSym CppSrcCode where
     printStrLn s = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc (litString s), True)
 
     -- All below still needs to be translated
-    printFile f _ v = liftPairFst (liftA2 outDocD (printFileFunc f) v, True)
-    printFileLn f _ v = liftPairFst (liftA2 outDocD (printFileLnFunc f) v, True)
-    printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), True)
-    printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), True)
+    printFile f _ v = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) v, True)
+    printFileLn f _ v = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) v, True)
+    printFileStr f s = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) (litString s), True)
+    printFileStrLn f s = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) (litString s), True)
 
+    -- Keep this block as is for now, I think this should work. Consult CppRenderer.hs if not
     printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
     printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
     printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
     printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
 
-    getIntInput v = liftPairFst (liftA2 (csInput "Int32.Parse") v inputFunc, True)
-    getFloatInput v = liftPairFst (liftA2 (csInput "Double.Parse") v inputFunc, True)
-    getBoolInput _ = error "Boolean input not yet implemented for C#"
-    getStringInput v = liftPairFst (liftA2 (csInput "") v inputFunc, True)
-    getCharInput _ = error "Char input not yet implemented for C#"
-    discardInput = liftPairFst (fmap csDiscardInput inputFunc, True)
+    getIntInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    getFloatInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    getBoolInput _ = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    getStringInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    getCharInput _ = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    discardInput = liftPairFst (fmap cppDiscardInput " " inputFunc, True)
 
-    getIntFileInput f v = liftPairFst (liftA2 (csInput "Int32.Parse") v (fmap csFileInput f), True)
-    getFloatFileInput f v = liftPairFst (liftA2 (csInput "Double.Parse") v (fmap csFileInput f), True)
-    getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
-    getStringFileInput f v = liftPairFst (liftA2 (csInput "") v (fmap csFileInput f), True)
-    getCharFileInput _ _ = error "Char input not yet implemented for C#"
-    discardFileInput f = liftPairFst (fmap csFileInput f, True)
+    getIntFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
+    getFloatFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
+    getBoolFileInput _ _ = liftPairFst (liftA3 cppInput v f endStatement, True)
+    getStringFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
+    getCharFileInput _ _ = liftPairFst (liftA3 cppInput v f endStatement, True)
+    discardFileInput f = liftPairFst (fmap cppDiscardInput " " f, True)
 
-    openFileR f n = liftPairFst (liftA3 csOpenFileR f n infile, True)
-    openFileW f n = liftPairFst (liftA4 csOpenFileWorA f n outfile litFalse, True)
-    openFileA f n = liftPairFst (liftA4 csOpenFileWorA f n outfile litTrue, True)
-    closeFile f = valState $ objMethodCall f "Close" []
+    openFileR f n = liftPairFst (liftA3 cppOpenFile "std::fstream::in" f n, True)
+    openFileW f n = liftPairFst (liftA3 cppOpenFile f n "std::fstream::out", True)
+    openFileA f n = liftPairFst (liftA3 cppOpenFile f n "std::fstream::app", True)
+    closeFile f = valState $ objMethodCall f "close" []
 
-    getFileInputLine = getStringFileInput
-    discardFileLine f = liftPairFst (fmap csFileInput f, True)
-    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
+    getFileInputLine f v = valState $ funcApp "std::getLine" [f, v]
+    discardFileLine f = liftPairFst (fmap cppDiscardInput "\\n" f, True)
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)
@@ -438,9 +442,9 @@ instance StatementSym CppSrcCode where
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, False)
 
-    free _ = error "Cannot free variables in C#" -- could set variable to null? Might be misleading.
+    free v = liftPairFst (fmap freeDocD v, True)
 
-    throw errMsg = liftPairFst (fmap csThrowDoc (litString errMsg), True)
+    throw errMsg = liftPairFst (fmap cppThrowDoc (litString errMsg), True)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
@@ -465,12 +469,12 @@ instance ControlStatementSym CppSrcCode where
 
     for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
     forRange i initv finalv stepv = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv)
-    forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b, False)
+    forEach l t v = for (varDecDef l (iterator t) (v $. iterBegin)) (var l ?!= v $. iterEnd) (&.++ l)
     while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
 
-    tryCatch tb cb = liftPairFst (liftA2 csTryCatch tb cb, False)
+    tryCatch tb cb = liftPairFst (liftA2 cppTryCatch tb cb, False)
 
-    checkState l = switch (var l)
+    checkState l = switch (var l) 
 
     notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
         where obsList = observerListName `listOf` t
@@ -478,8 +482,12 @@ instance ControlStatementSym CppSrcCode where
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while ((?!) (objVar f (var "EndOfStream")))
-        (oneLiner $ valState $ v $. (listAppend $ fmap csFileInput f))
+    getFileInputAll f v = let l_line = "nextLine"
+                              v_line = var l_line
+                          in
+        multi [varDec l_line string,
+            while ((?!) (funcApp "std::getline" [f, v_line]))
+                (oneLiner $ valState $ v $. (listAppend $ v_line))]
 
 instance ScopeSym CppSrcCode where
     type Scope CppSrcCode = Doc
@@ -579,6 +587,9 @@ cppInfileTypeDoc = text "ifstream"
 cppOutfileTypeDoc :: Doc
 cppOutfileTypeDoc = text "ofstream"
 
+cppIterTypeDoc :: Doc -> Doc
+cppIterTypeDoc t = text "std::" <> t <> text "::iterator"
+
 cppStateObjDoc :: Doc -> Doc -> Doc
 cppStateObjDoc t ps = t <> parens ps
 
@@ -595,34 +606,28 @@ cppPrintDocD :: Bool -> Doc -> Doc -> Doc
 cppPrintDocD newLn printFn v = printFn <+> text "<<" <+> v <+> end
     where end = if newLn then text "<<" <+> text "std::endl" else empty
 
-csThrowDoc :: Doc -> Doc
-csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
+cppThrowDoc :: Doc -> Doc
+cppThrowDoc errMsg = text "throw" <> parens errMsg
 
-csTryCatch :: Doc -> Doc -> Doc
-csTryCatch tb cb= vcat [
+cppTryCatch :: Doc -> Doc -> Doc
+cppTryCatch tb cb= vcat [
     text "try" <+> lbrace,
     oneTab $ tb,
-    rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
+    rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
     oneTab $ cb,
     rbrace]
 
-csDiscardInput :: Doc -> Doc
-csDiscardInput inFn = inFn
+cppDiscardInput :: Label -> Doc -> Doc
+cppDiscardInput sep inFn = inFn <> dot <> text "ignore" <+> parens 
+    (text "std::numeric_limits<std::streamsize>::max()" <> comma <+> quotes sep)
 
-csInput :: Label -> Doc -> Doc -> Doc
-csInput it v inFn = v <+> equals <+> text it <> parens inFn
+cppInput :: Doc -> Doc -> Doc -> Doc
+csInput v inFn end = vcat [
+    inFn <+> text ">>" <+> v <> end,
+    inFn <> dot <> text "ignore (std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-csFileInput :: Doc -> Doc
-csFileInput f = f <> dot <> text "ReadLine()"
-
-csOpenFileR :: Doc -> Doc -> Doc -> Doc
-csOpenFileR f n r = f <+> equals <+> new <+> r <> parens n
-
-csOpenFileWorA :: Doc -> Doc -> Doc -> Doc -> Doc
-csOpenFileWorA f n w a = f <+> equals <+> new <+> w <> parens (n <> comma <+> a)
-
-csListExtend :: Doc -> Doc
-csListExtend v = dot <> text "Add" <> parens v
+cppOpenFile :: Label -> Doc -> Doc -> Doc
+cppOpenFile mode f n = f <> dot <> text "open" <> parens (n <> comma <+> text mode)
 
 cppListExtendList :: Doc -> Doc
 cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0))

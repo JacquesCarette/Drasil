@@ -149,7 +149,7 @@ helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hel
 
 helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
 helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) 
-  (oneLiner (printLn (float) (funcApp "doubleAndAdd" [(var "num"), (litFloat 1.0)])))
+  (oneLiner (printLn (float) (funcApp "doubleAndAdd" [(iterVar "num"), (litFloat 1.0)])))
 
 helloTryCatch :: (RenderSym repr) => repr (Statement repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))

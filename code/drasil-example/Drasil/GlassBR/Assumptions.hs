@@ -16,7 +16,7 @@ import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR,
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constant_LoadDur, 
-  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lDurFac,
+  constant_LoadSF, constantM, constant_ModElas, explosion, lateral, lDurFac,
   loadDur)
 
 assumptions :: [ConceptInstance]
@@ -24,7 +24,7 @@ assumptions = [assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC,
   assumpRT, assumpLDFC]
 
 assumptionConstants :: [QDefinition]
-assumptionConstants = [constant_M, constantK, constant_ModElas,
+assumptionConstants = [constantM, constantK, constant_ModElas,
   constant_LoadDur, constant_LoadSF]
 
 assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC :: ConceptInstance

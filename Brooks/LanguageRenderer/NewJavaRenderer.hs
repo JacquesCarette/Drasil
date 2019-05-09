@@ -157,6 +157,7 @@ instance StateTypeSym JavaCode where
     boolListType = return jBoolListTypeDocD
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator _ = error "Iterator-type variables do not exist in Java"
 
 instance ControlBlockSym JavaCode where
     runStrategy l strats rv av = 
@@ -251,6 +252,7 @@ instance ValueSym JavaCode where
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar = var
     
     inputFunc = return (parens (text "new Scanner(System.in)"))
 

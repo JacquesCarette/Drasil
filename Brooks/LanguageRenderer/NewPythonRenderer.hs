@@ -143,6 +143,7 @@ instance StateTypeSym PythonCode where
     boolListType = return $ brackets empty
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator _ = error "Iterator-type variables do not exist in Python"
 
 instance ControlBlockSym PythonCode where
     runStrategy l strats rv av = 
@@ -223,6 +224,7 @@ instance ValueSym PythonCode where
     objVarSelf n = liftA2 objVarDocD self (var n)
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar = var
 
     inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
     

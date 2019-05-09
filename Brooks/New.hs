@@ -88,6 +88,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
     boolListType  :: repr (StateType repr)
     obj           :: Label -> repr (StateType repr)
     enumType      :: Label -> repr (StateType repr)
+    iterator      :: repr (StateType repr) -> repr (StateType repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
     runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
@@ -165,6 +166,8 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     objVarSelf   :: Label -> repr (Value repr)
     listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
     listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
+    -- Use for iterator variables, i.e. in a forEach loop.
+    iterVar      :: Label -> repr (Value repr)
     
     inputFunc :: repr (Value repr)
 

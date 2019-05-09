@@ -12,7 +12,7 @@ import Data.Drasil.Utils (enumSimple,
 
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
-  physicalConstraint, condition, property, variable, description, symbol_,
+  condition, property, variable, description, symbol_,
   information, physSyst, problem, definition, srs, content, reference,
   document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
@@ -65,7 +65,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
+import Drasil.SWHS.Requirements (checkWithPhysConsts, propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -536,7 +536,7 @@ reqFMExpr :: Expr
 reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
   (sy tank_length) * (sy w_density)))
 
-reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
+reqIIV, reqFM, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
 reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
@@ -546,10 +546,12 @@ reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqI
     S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
+{-
 reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
     S "satisfy the required" +:+ phrase physicalConstraint +:+
     S "shown in" +:+. makeRef2S dataConstTable1)
     "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
+-}
 reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
     +:+ plural quantity +:+
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
@@ -572,7 +574,7 @@ reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
 reqs :: [ConceptInstance]
-reqs = [reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT]
+reqs = [reqIIV, reqFM, checkWithPhysConsts, reqOIDQ, reqCTWOT, reqCCHEWT]
 
 funcReqsListWordsNum :: [Contents]
 funcReqsListWordsNum =

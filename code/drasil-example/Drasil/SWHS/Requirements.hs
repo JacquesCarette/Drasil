@@ -2,6 +2,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 
+import Drasil.DocLang (inDataConstTbl)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
@@ -23,10 +24,24 @@ import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, pcm_E, pcm_HTC, pcm_SA,
-  pcm_density, pcm_mass, pcm_vol, sim_time, t_final_melt, t_init_melt, tank_length,
-  tank_vol, tau_L_P, tau_S_P, tau_W, temp_C, temp_PCM, temp_W, w_E, w_density,
-  w_mass, w_vol)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
+  htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
+  sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
+  tau_W, temp_C, temp_PCM, temp_W, temp_init, temp_melt_P, time_final, w_E,
+  w_density, w_mass, w_vol)
+
+------------------------------
+-- Data Constraint: Table 1 --
+------------------------------
+
+-- FIXME: This probably shouldn't be here.
+dataConTable1 :: LabelledContent
+dataConTable1 = inDataConstTbl inputConstraints
+
+inputConstraints :: [UncertQ]
+inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -69,8 +84,7 @@ findMassEqn = (sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hac
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  plural physicalConstraint {-, S "shown in"
-  --FIXME , makeRefS s7_table1-}] )
+  plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
 outputInputDerivQuants = cic "outputInputDerivQuants" ( foldlSent [

@@ -65,12 +65,13 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (checkWithPhysConsts, propsDerivNoPCM, swhsNFRequirements)
+import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
+  checkWithPhysConsts, propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
+  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
   w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
@@ -536,7 +537,7 @@ reqFMExpr :: Expr
 reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
   (sy tank_length) * (sy w_density)))
 
-reqIIV, reqFM, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
+reqIIV, reqFM, reqOIDQ:: ConceptInstance
 reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
@@ -558,6 +559,7 @@ reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_
     plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
     phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ makeRef2S eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
+{-
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
@@ -566,6 +568,7 @@ reqCCHEWT = cic "reqCCHEWT"
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time +:+. sParen (S "from" +:+ makeRef2S heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
+-}
 
 reqIVRTable :: LabelledContent
 reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
@@ -574,7 +577,7 @@ reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
 reqs :: [ConceptInstance]
-reqs = [reqIIV, reqFM, checkWithPhysConsts, reqOIDQ, reqCTWOT, reqCCHEWT]
+reqs = [reqIIV, reqFM, checkWithPhysConsts, reqOIDQ, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
 
 funcReqsListWordsNum :: [Contents]
 funcReqsListWordsNum =

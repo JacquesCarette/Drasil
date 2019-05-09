@@ -156,6 +156,9 @@ instance ControlBlockSym PythonCode where
         where getVal Nothing = return empty
               getVal (Just v) = v
 
+    stringSplit d vnew s = block [assign vnew (objAccess s 
+        (func "split" [litString [d]]))]                                  
+
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
     notOp = return $ notOpDocD'
@@ -396,8 +399,6 @@ instance StatementSym PythonCode where
 
     getFileInputLine f v = v &= (objMethodCall f "readline" [])
     discardFileLine f = valState $ objMethodCall f "readline" []
-    stringSplit d vnew s = assign vnew (objAccess s 
-        (func "split" [litString [d]]))
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)

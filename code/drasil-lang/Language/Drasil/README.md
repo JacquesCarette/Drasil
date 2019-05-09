@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 20, 2018
+Last updated: May 9, 2019
 --------------------------------------------------
 
 **Chunk**
@@ -26,9 +26,6 @@ Last updated: July 20, 2018
 
 **URI**
   - URI AST
-
-ChunkDB.hs
-  - Chunk databases. Used by System Information for looking up knowledge.
 
 Classes.hs
   - Defines the classes for the Drasil data types

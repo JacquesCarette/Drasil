@@ -32,8 +32,6 @@ library
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.UnitDefn
-    , Language.Drasil.ChunkDB
-    , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
     , Language.Drasil.Classes.Citations

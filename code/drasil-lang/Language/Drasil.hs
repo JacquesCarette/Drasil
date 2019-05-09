@@ -142,22 +142,8 @@ module Language.Drasil (
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
-  -- ChunkDB
-  , ChunkDB, cdb
-  , symbLookup, symbolTable
-  , termLookup, termTable
-  , conceptMap, traceMap, defTable, defLookup, labelledconLookup
-  , unitTable, collectUnits
-  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
-  , refbyLookup, refbyTable, labelledcontentTable
-  , datadefnLookup, insmodelLookup, sectionLookup
-  , gendefLookup, theoryModelLookup, conceptinsLookup, dataDefnTable
-  , insmodelTable, gendefTable, theoryModelTable, sectionTable
-  , conceptinsTable, asOrderedList
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
-  -- Document.getChunk
-  , vars, vars', combine, combine', ccss, getIdeaDict
   -- Label.Type
   , getAdd
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -226,7 +212,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -258,7 +243,6 @@ import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
-import Language.Drasil.ChunkDB
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
   , author, editor
       -- Sentence -> CiteField

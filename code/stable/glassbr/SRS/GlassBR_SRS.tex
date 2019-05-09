@@ -72,6 +72,8 @@ $B$ & Risk of failure & --
 \\
 $b$ & Plate width (short dimension) & m
 \\
+$capacity$ & Capacity or load resistance & Pa
+\\
 ${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & m
 \\
 ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & m
@@ -88,9 +90,13 @@ $interpY$ & InterpY & --
 \\
 $interpZ$ & InterpZ & --
 \\
+$is-safeLoad$ & Variable that is assigned true when load resistance (capacity) is greater than applied load (demand) & --
+\\
 $is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
 \\
 $is-safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
+\\
+$is-safeProb$ & Variable that is assigned true when probability of failure is less than tolerable probability of failure & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -99,6 +105,8 @@ ${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & --
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LDF$ & Load duration factor & --
+\\
+$Load$ & Applied load (demand) or pressure & Pa
 \\
 $LR$ & Load resistance & Pa
 \\

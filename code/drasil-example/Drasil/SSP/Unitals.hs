@@ -177,7 +177,7 @@ sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, slipHght, xi,
   watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
   totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
+  impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
   totStress, effectiveStress, effNormStress]
@@ -188,7 +188,7 @@ genericF, genericA, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi,
   resistiveShear, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
   nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
+  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
   watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
   intNormForce, shrStress, totStress, effectiveStress, 
   effNormStress :: UnitalChunk
@@ -340,10 +340,6 @@ baseWthX = uc' "b_i" (cn $ "base width of slices")
 baseLngth = uc' "l_b,i" (cn $ "total base lengths of slices") 
   "in the direction parallel to the slope of the base of each slice"
   (sub (vec lEll) lB) metre
-
-surfLngth = uc' "l_s,i" (cn $ "surface lengths of slices")
-  "in the direction parallel to the slope of the surface of each slice"
-  (sub (vec lEll) lS) metre
 
 midpntHght = uc' "h_i" (cn $ "y-direction heights of slices")
   ("heights in the y-direction from the base of each slice to the slope " ++

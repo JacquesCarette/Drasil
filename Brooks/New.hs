@@ -268,7 +268,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) => Selector repr w
     listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     argExists       :: Integer -> repr (Value repr)
     
-    indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+    indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
     stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 

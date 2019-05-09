@@ -10,9 +10,9 @@ module NewLanguageRenderer (
     printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
-    methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
-    forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD,
-    plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
+    methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
+    switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
+    plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
     varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
     commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
     sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
@@ -234,6 +234,9 @@ stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
+
+alwaysDel :: Int
+alwaysDel = 4
 
 -- Controls --
 

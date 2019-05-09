@@ -482,6 +482,8 @@ instance MethodSym PythonCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method initName public dynamic (construct n)
+    destructor _ _ = error "Destructors not allowed in Python"
+
 
     function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList paramListDocD ps) b, False)
 
@@ -491,6 +493,7 @@ instance StateVarSym PythonCode where
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar = stateVar
 
 instance ClassSym PythonCode where
     type Class PythonCode = (Doc, Bool)

@@ -82,6 +82,9 @@ lift4Pair f a1 a2 a3 a4 as = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (u
 lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> [(CppSrcCode d, CppSrcCode e)] -> CppSrcCode f
 lift3Pair f a1 a2 a3 as = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (map unCPPSCPair as)
 
+liftPair :: (CppSrcCode a, CppSrcCode b) -> CppSrcCode (a, b)
+liftPair (a, b) = CPPSC $ (unCPPSC a, unCPPSC b)
+
 liftPairFst :: (CppSrcCode a, b) -> CppSrcCode (a, b)
 liftPairFst (c, n) = CPPSC $ (unCPPSC c, n)
 
@@ -505,7 +508,7 @@ instance ScopeSym CppSrcCode where
     private = return privateDocD
     public = return publicDocD
 
-    includeScope s = s
+    includeScope s = empty
 
 instance MethodTypeSym CppSrcCode where
     type MethodType CppSrcCode = Doc
@@ -530,22 +533,36 @@ instance MethodSym CppSrcCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
+    destructor n vs = 
+        let i = "i"
+            deleteStatements = fmap snd vs
+            loopIndexDec = [varDec i int]
+            dbody = bodyStatements $ loopIndexDec ++ deleteStatements
+        in pubMethod ('~':n) void [] dbody
 
     function = method
 
 instance StateVarSym CppSrcCode where
-    type StateVar CppSrcCode = Doc
-    stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
+    -- 2nd Doc is the corresponding destructor code for the stateVar
+    type StateVar CppSrcCode = (Doc, Doc)
+    stateVar del l s p t = liftPair (liftA4 (stateVarDocD l) (includeScope s) p t endStatement, if del < alwaysDel then empty else free $ var l)
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar del l s p t = 
+        let i = "i"
+            guard l = var i ?< (l $. listSize)
+            loopBody l = oneLiner $ free (l $. at i)
+            initv = (i &.= litInt 0)
+            deleteLoop l = for initv (guard l) (i &.++) (loopBody l)
+        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then empty else deleteLoop $ var l)
 
 instance ClassSym CppSrcCode where
-    -- Bool is True if the method is a main method, False otherwise
+    -- Bool is True if the class is a main class, False otherwise
     type Class CppSrcCode = (Doc, Bool)
-    buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unCPPSC) fs)
-    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
-    mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
+    buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD (fs ++ destructor n vs), any (snd . unCPPSC) fs)
+    enum _ _ _ = return (empty, False)
+    mainClass n vs fs = liftPairFst (liftA2 (cppMainClass n (null vs)) (stateVarListDocD vs) (methodListDocD fs), True)
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -666,3 +683,9 @@ cppMainMethod n t b bStart bEnd = vcat [
     blank,
     text "return 0;",
     bEnd]
+
+cppMainClass :: Label -> Bool -> Doc -> Doc
+cppMainClass n b vs fs = vcat [
+    vs,
+    if b then empty else blank,
+    fs]

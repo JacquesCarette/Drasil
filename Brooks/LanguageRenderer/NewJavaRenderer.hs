@@ -511,6 +511,8 @@ instance MethodSym JavaCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
+    destructor _ _ = error "Destructors not allowed in Java"
+
 
     function = method
 
@@ -520,6 +522,7 @@ instance StateVarSym JavaCode where
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar = stateVar
 
 instance ClassSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise

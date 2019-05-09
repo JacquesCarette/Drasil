@@ -450,7 +450,7 @@ class ParameterSym repr where
     -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
     pointerParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
 
-class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
+class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr, BodySym repr) => MethodSym repr where
     type Method repr
     method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     getMethod   :: Label -> repr (MethodType repr) -> repr (Method repr)
@@ -459,6 +459,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => Me
     privMethod  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    destructor :: Label -> [repr (StateVar repr)] -> repr (Method repr)
 
     function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods not parameterized by self in python
 
@@ -468,6 +469,7 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr
     privMVar :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
     pubMVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
     pubGVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
+    listStateVar :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     type Class repr

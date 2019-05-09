@@ -5297,7 +5297,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -5611,7 +5611,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6224,7 +6224,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>.
+<a href=#IM:nrmShrFor>IM: nrmShrFor</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:intsliceFs>IM: intsliceFs</a> <a href=#IM:fctSfty>IM: fctSfty</a> <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a> <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a> <a href=#displayFS>FR: Display-Factor-of-Safety</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6379,7 +6379,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#generateCSS>FR: Generate-Critical-Slip-Surfaces</a> <a href=#displayGraph>FR: Display-Graph</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
+<a href=#displayGraph>FR: Display-Graph</a> <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>.
 </p>
 </td>
 </tr>
@@ -6659,6 +6659,16 @@ Output Data Constraints
 </div>
 </div>
 </div>
+<div id="Sec:CorSolProps">
+<div class="subsubsection">
+<h3>
+Properties of a Correct Solution
+</h3>
+<p class="paragraph">
+FIXME.
+</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6691,18 +6701,8 @@ Verify-Input: Verify that the input data lie within the physical constraints sho
 </div>
 </p>
 <p>
-<div id="generateCSS">
-Generate-Critical-Slip-Surfaces: Generate potential critical slip surfaces for the input slope (using <a href=#IM:crtSlpId>IM: crtSlpId</a>).
-</div>
-</p>
-<p>
-<div id="calculateFS">
-Calculate-Factors-of-Safety: Calculate the factors of safety for each of the potential critical slip surfaces (using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:intsliceFs>IM: intsliceFs</a>).
-</div>
-</p>
-<p>
 <div id="determineCritSlip">
-Determine-Critical-Slip-Surface: Compare the factor of safety for each potential critical slip surface to determine the minimum factor of safety, corresponding to the critical slip surface (using <a href=#IM:crtSlpId>IM: crtSlpId</a>).
+Determine-Critical-Slip-Surface: Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a> to calculate the factor of safety for a slip surface and using <a href=#IM:crtSlpId>IM: crtSlpId</a> to find the slip surface that minimizes it.
 </div>
 </p>
 <p>
@@ -7033,7 +7033,7 @@ SSP is intended to be an educational tool, so accuracy and performance are not p
 <div class="list">
 <p>
 <div id="correct">
-Correct: The the outputs of the code have the properties described in (Properties of a Correct Solution).
+Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
 </div>
 </p>
 <p>
@@ -7115,6 +7115,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <tr>
 <th>
 
+</th>
+<th>
+<a href=#correct>NFR: Correct</a>
 </th>
 <th>
 <a href=#GD:normForcEq>GD: normForcEq</a>
@@ -7234,9 +7237,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>
 </th>
 <th>
-<a href=#generateCSS>FR: Generate-Critical-Slip-Surfaces</a>
-</th>
-<th>
 <a href=#displayGraph>FR: Display-Graph</a>
 </th>
 <th>
@@ -7255,9 +7255,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#displayFS>FR: Display-Factor-of-Safety</a>
 </th>
 <th>
-<a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>
-</th>
-<th>
 <a href=#readAndStore>FR: Read-and-Store</a>
 </th>
 <th>
@@ -7272,19 +7269,171 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td>
+<a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a>
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7439,19 +7588,16 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
-
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -7606,13 +7752,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7767,16 +7910,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7931,19 +8071,16 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
-
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -8065,37 +8202,10 @@ X
 <a href=#Sec:PhysSyst>Section: Physical System Description</a>
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -8105,6 +8215,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -8247,16 +8381,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8417,13 +8548,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8578,13 +8706,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8733,13 +8858,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8894,13 +9016,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9019,39 +9138,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -9062,6 +9148,36 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -9171,6 +9287,12 @@ X
 <a href=#DD:surfWtrF>DD: surfWtrF</a>
 </td>
 <td>
+
+</td>
+<td>
+X
+</td>
+<td>
 X
 </td>
 <td>
@@ -9183,9 +9305,6 @@ X
 X
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -9205,12 +9324,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9374,13 +9487,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9532,13 +9642,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9645,34 +9752,16 @@ X
 <a href=#DD:sliceWght>DD: sliceWght</a>
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
+X
 </td>
 <td>
 
@@ -9685,6 +9774,21 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -9803,6 +9907,9 @@ X
 <a href=#DD:angleA>DD: angleA</a>
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -9819,24 +9926,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
 </td>
 <td>
 
@@ -9861,6 +9950,18 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10015,16 +10116,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10143,40 +10241,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -10186,6 +10254,33 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10340,13 +10435,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10462,36 +10554,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -10501,7 +10563,31 @@ X
 
 </td>
 <td>
-X
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -10510,7 +10596,10 @@ X
 
 </td>
 <td>
-
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10635,33 +10724,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -10672,6 +10734,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10787,42 +10873,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -10832,7 +10882,7 @@ X
 X
 </td>
 <td>
-X
+
 </td>
 <td>
 X
@@ -10842,6 +10892,39 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10936,36 +11019,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -10996,6 +11049,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -11003,6 +11062,27 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -11094,36 +11174,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -11157,6 +11207,9 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -11164,6 +11217,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -11270,30 +11347,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -11318,6 +11371,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -11325,6 +11384,21 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -11455,13 +11529,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11613,13 +11684,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11720,13 +11788,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11866,42 +11931,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -11929,6 +11958,45 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 
 </td>
 <td>
@@ -11972,12 +12040,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12015,6 +12077,12 @@ X
 <a href=#DD:angleB>DD: angleB</a>
 </td>
 <td>
+
+</td>
+<td>
+X
+</td>
+<td>
 X
 </td>
 <td>
@@ -12027,9 +12095,6 @@ X
 X
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -12049,12 +12114,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12200,13 +12259,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12448,16 +12504,13 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -12638,9 +12691,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12774,9 +12824,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12954,9 +13001,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13090,9 +13134,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13270,9 +13311,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13321,13 +13359,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13437,37 +13472,10 @@ X
 <a href=#TM:equilibrium>TM: equilibrium</a>
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -13477,6 +13485,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -13625,52 +13657,10 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13698,6 +13688,45 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -13816,13 +13845,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13935,40 +13961,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -13981,6 +13977,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -14041,6 +14061,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -14147,13 +14170,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14305,13 +14325,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14394,27 +14411,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -14425,6 +14421,24 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -14541,9 +14555,6 @@ X
 <tr>
 <td>
 <a href=#Table:inDataTable>Table:inDataTable</a>
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14842,9 +14853,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -14883,40 +14891,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -14929,6 +14907,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -14989,6 +14991,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -15023,60 +15028,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -15089,6 +15040,54 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -15096,6 +15095,9 @@ X
 </td>
 <td>
 
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -15247,13 +15249,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15357,16 +15356,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15518,13 +15514,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15709,13 +15702,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15803,9 +15793,6 @@ X
 </td>
 </tr>
 <tr>
-<td>
-
-</td>
 <td>
 
 </td>
@@ -15992,13 +15979,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16150,36 +16134,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -16190,6 +16144,33 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -16341,13 +16322,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16499,13 +16477,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16606,54 +16581,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -16672,25 +16599,7 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
+X
 </td>
 <td>
 X
@@ -16727,6 +16636,69 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -16779,16 +16751,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16976,13 +16945,10 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17113,33 +17079,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -17150,6 +17089,30 @@ X
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 <td>
 

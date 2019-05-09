@@ -6,7 +6,7 @@ v_R1, v_R2, v_nMass, v_tMass, v_bounce, v_jnAcc, v_jtAcc, v_jBias,
   v_bias, v_a, v_b, v_id, v_normal, v_count, v_arr, v_elast,
   v_surfaceVal, v_as, v_ab, v_bodyA, v_bodyB, v_threadA, 
   v_threadB, v_contacts, v_handler, v_handlerA,
-  v_hanlderB, v_swapper, v_stamp, v_state, v_points, v_arb :: VarChunk
+  v_handlerB, v_swapper, v_stamp, v_state, v_points, v_arb :: VarChunk
 
 v_R1         = makeVC "R1"         (nounPhrase "R1")         (sub (lR) (Atomic "1"))
 v_R2         = makeVC "R2"         (nounPhrase "R2")         (sub (lR) (Atomic "2"))
@@ -21,7 +21,7 @@ v_b          = makeVC "b"          (nounPhrase "b")          (Atomic "b")
 v_id         = makeVC "id"         (nounPhrase "id")         (Atomic "id")
 v_normal     = makeVC "normal"     (nounPhrase "normal")     (Atomic "normal")
 v_count      = makeVC "count"      (nounPhrase "count")      (Atomic "count")
-v_handler    = makeVC "handler"    (nounPhrase "hanlder")    (Atomic "hanlder")
+v_handler    = makeVC "handler"    (nounPhrase "handler")    (Atomic "handler")
 v_handlerA   = makeVC "handlerA"   (nounPhrase "handlerA")   (Atomic "handlerA")
 v_handlerB   = makeVC "handlerB"   (nounPhrase "handlerB")   (Atomic "handlerB")
 v_arr        = makeVC "arr"        (nounPhrase "arr")        (Atomic "arr")

@@ -11,32 +11,31 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
-  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, reqF, termDefnF, 
+  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
   getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (funcReq,
-  likeChg, probDesc, sysCont, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, corSol, dataConst, dataDefn, datum, definition, description, document, 
+  content, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
-import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
-  understandability, reusability, maintainability)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness,
+  understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
@@ -48,37 +47,36 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latent_heat, temp)
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
+  foldlSent, foldlSent_, foldlSP, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
-  heatTrans, thermal_conduction, ht_flux, heatCapSpec, thermal_energy,
-  ht_trans_theo, thermal_analysis, ener_src)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, thermal_conduction,
+  ht_flux, heatCapSpec, thermal_energy, ht_trans_theo, thermal_analysis, ener_src)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
+import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
+import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
-  heatEInWtr, heatEInPCM, swhsIMods, instModIntro)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
+  swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
-  temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
-  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
-  out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
-  specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
-  swhsInputs, swhsSymbols, swhsSymbolsAll, swhsUC)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
+  htCap_W, htFusion, ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA,
+  out_SA, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
+  specParamValList, swhsConstrained, swhsInputs, swhsOutputs, swhsSymbols,
+  swhsSymbolsAll, swhsUC, tank_length, tau_S_P, tau_W, temp_C, temp_PCM, temp_W,
+  temp_init, temp_melt_P, thFluxVect, thickness, time_final, vol_ht_gen, w_E,
+  w_density, w_mass)
 import Drasil.SWHS.Labels (inputInitQuantsLbl)
 
 -------------------------------------------------------------------------------
@@ -187,10 +185,12 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-  FReqsSub funcReqsList,
-  NonFReqsSub [performance] swhspriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
-  (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+    FReqsSub funcReqsList,
+    NonFReqsSub' [performance] swhsNFRequirements
+      (S "This problem is small in size and relatively simple")
+      (S "Any reasonable implementation will be very quick and use minimal storage.")
+  ],
+  --NonFReqsSub [performance] swhspriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
@@ -481,30 +481,12 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propsDeriv :: [Contents]
-propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
-    dd2HtFluxP surface CT.heatTrans,
-  propCorSolDeriv2,
-  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
-  propCorSolDeriv4,
-  propCorSolDeriv5 equation progName rightSide]
-
--- Remember to insert references in above derivation when available
-
 ------------------------------
 -- Section 5 : REQUIREMENTS --
 ------------------------------
-
-reqS :: Section
-reqS = reqF [funcReqsSect, nonFuncReqs]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsSect :: Section
-funcReqsSect = SRS.funcReq funcReqsList []
 
 funcReqsList :: [Contents]
 funcReqsList = reqs ++ [inputInitQuantsTbl]
@@ -1264,54 +1246,6 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
-  S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
-  S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef2S d1hfc) `sAnd` (makeRef2S d2hfp) `sC`
-  S "multiplying each by their respective", phrase su,
-  S "area of", phrase ht `sC` S "and integrating each",
-  S "over the", phrase sim_time `sC` S "as follows"]
-
-propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' $ 
-  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
-  - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
-propCorSolDeriv3 epcm en pcmat wa =
-  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
-  phrase en, phrase input_, S "to the", short pcmat,
-  S "from the" +:+. phrase wa, S "This can be expressed as"]
-
-propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' $ 
-  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
-  S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
-  S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef2S verifyEnergyOutput]
-
--- Above section only occurs in this example (although maybe it SHOULD be in
--- the others).
-
--- Remember to insert references in above derivation when available
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --

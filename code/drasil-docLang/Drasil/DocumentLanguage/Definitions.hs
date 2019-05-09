@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent, getSource')
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 

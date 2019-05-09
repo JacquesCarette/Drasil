@@ -79,7 +79,7 @@ findMass = cic "findMass" ( foldlSent [
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
-  (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
+  ((((sy diam) / 2) $^ 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
 
 findMassEqn = (sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hack
 --

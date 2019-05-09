@@ -17,7 +17,7 @@ import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR,
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lDurFac,
-  load_dur)
+  loadDur)
 
 assumptions :: [ConceptInstance]
 assumptions = [assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC,
@@ -31,7 +31,7 @@ assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC
 assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom
 assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom
 assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
+assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)     "standardValues"      Doc.assumpDom
 assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
 assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom

@@ -185,10 +185,10 @@ sdMin     = mkQuantDef (unitary "sdMin"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, lRe, nonFactorL, load_dur,
+glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, lRe, nonFactorL, loadDur,
   eqTNTWeight]
 
-min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, load_dur,
+min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, loadDur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
@@ -205,7 +205,7 @@ eqTNTWeight = unitary "eqTNTWeight"
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
   (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
 
-load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
+loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
 
 min_thick   = unitary "min_thick"   (nounPhraseSP "minimum thickness")
@@ -394,7 +394,7 @@ constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadSF :: Q
 constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constant_M       = mkQuantDef sflawParamM  $ dbl 7
 constant_ModElas = mkQuantDef modElas     $ dbl 7.17e10
-constant_LoadDur = mkQuantDef load_dur     $ dbl 3
+constant_LoadDur = mkQuantDef loadDur     $ dbl 3
 constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
 

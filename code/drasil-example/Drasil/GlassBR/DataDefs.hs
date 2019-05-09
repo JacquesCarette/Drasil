@@ -19,7 +19,7 @@ import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
+  lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, min_thick, probBr, lRe, loadSF,
   demandq, eqTNTWeight)
@@ -75,7 +75,7 @@ hFromt = mkDD hFromtQD [astm2009] [{-derivation-}] "min_thick" [hMin]
 --DD3-- (#749)
 
 loadDFEq :: Expr 
-loadDFEq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
+loadDFEq = (sy loadDur / 60) $^ (sy sflawParamM / 16)
 
 loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDFEq

@@ -7,15 +7,13 @@ module Language.Drasil.Chunk.InstanceModel
   ) where
 
 import Data.Drasil.IdeaDicts (instanceMod)
-import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
-import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Quantity, HasSpace(typ),
+  Quantity, HasSpace(typ), HasReference(getReferences),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
   ConceptDomain(cdom), CommonIdea(abrv), Definition(defn),
   Referable(refAdd, renderRef))
@@ -23,6 +21,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Label.Type (LblType(RP), prepend)
 import Language.Drasil.Expr (Relation)
+import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
 
@@ -44,7 +43,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _inCons :: InputConstraints
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
-                        , _cit :: [Citation]
+                        , _ref :: [Reference]
                         , _deri :: Derivation
                         ,  lb :: ShortName
                         ,  ra :: String
@@ -59,7 +58,7 @@ instance Definition         InstanceModel where defn = rc . defn
 instance ConceptDomain      InstanceModel where cdom = cdom . view rc
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
-instance HasCitation        InstanceModel where getCitations = cit
+instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb
 instance HasRefAddress      InstanceModel where getRefAdd = ra
 instance HasAdditionalNotes InstanceModel where getNotes = notes
@@ -74,12 +73,12 @@ instance Referable          InstanceModel where
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Citation] -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 im' rcon i ic o oc src lbe =
   IM rcon i ic o oc src [] (shortname' lbe) (prependAbrv instanceMod lbe)
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn = 
   IM rcon i ic o oc src der (shortname' sn) (prependAbrv instanceMod sn)

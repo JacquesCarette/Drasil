@@ -32,7 +32,7 @@ gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
   (lH `sub` lP) Real
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` lC) Real
 
-htTransCladCoolEq, htTransCladFuel_eq :: Expr
+htTransCladCoolEq, htTransCladFuelEq :: Expr
 htTransCladCool, htTransCladFuel :: QDefinition
 
 ---
@@ -59,9 +59,9 @@ htTransCladFuelDD = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTr
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
-  (lH `sub` lG) heatTransferCoef htTransCladFuel_eq
+  (lH `sub` lG) heatTransferCoef htTransCladFuelEq
 
-htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
+htTransCladFuelEq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
   + ((sy cladThick) * (sy gapFilmCond)))
 
 ---

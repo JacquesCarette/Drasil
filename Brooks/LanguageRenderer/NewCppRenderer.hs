@@ -175,11 +175,11 @@ instance ControlBlockSym CppSrcCode where
             l_i = "i_temp"
             v_i = var l_i
         in
-        (bodyStatements [
+        block [
             (listDec l_temp 0 t),
             for (varDecDef l_i int (getB b)) (v_i ?< getE e) (getS s v_i)
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            (vnew &= v_temp)])
+            (vnew &= v_temp)]
         where getB Nothing = litInt 0
               getB (Just n) = n
               getE Nothing = vold $. listSize
@@ -187,7 +187,18 @@ instance ControlBlockSym CppSrcCode where
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
 
-    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
+    stringSplit d vnew s = let l_ss = "ss"
+                               v_ss = var l_ss
+                               l_word = "word"
+                               v_word = var l_word
+                           in
+        block [
+            valState $ vnew $. (funcApp "clear" []),
+            varDec l_ss (obj "std::stringstream"),
+            valState $ objMethodCall v_ss "str" [s]
+            varDec l_word string,
+            while (funcApp "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valState $ vnew $. (listAppend v_word))
+        ]
 
 instance UnaryOpSym CppSrcCode where
     type UnaryOp CppSrcCode = Doc
@@ -323,11 +334,13 @@ instance Selector CppSrcCode where
 
     listIndexExists v i = listSizeAccess v ?> i
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+    
+    indexOf v = objAccess l (fmap funcDocD (funcApp "find" [l $. iterBegin, l $. iterEnd, v])) #- v $. iterBegin
 
     stringEqual v1 v2 = v1 ?== v2
 
     castObj = liftA2 castObjDocD
-    castStrToFloat v = funcApp "stof" [v]
+    castStrToFloat v = funcApp "std::stod" [v]
 
 instance FunctionSym CppSrcCode where
     type Function CppSrcCode = Doc
@@ -336,8 +349,6 @@ instance FunctionSym CppSrcCode where
     castListToInt = cast (listType static int) int
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = error "No indexOf function in C++"
 
     listSize = fmap funcDocD (var "size")
     listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
@@ -505,16 +516,17 @@ instance MethodTypeSym CppSrcCode where
 instance ParameterSym CppSrcCode where
     type Parameter CppSrcCode = Doc
     stateParam n = fmap (stateParamDocD n)
+    pointerParam n = fmap (cppPointerParamDoc n)
 
 instance MethodSym CppSrcCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method CppSrcCode = (Doc, Bool)
-    method n s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
+    method n _ _ t ps b = liftPairFst (liftA5 (cppMethod n) t (liftList paramListDocD ps) b blockStart blockEnd, False)
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = fmap setMain $ method "Main" public static void [return $ text "string[] args"] b
+    mainMethod b = liftPairFst (liftA4 (cppMainMethod "main") int b blockStart blockEnd, True)
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
@@ -547,6 +559,11 @@ instance ModuleSym CppSrcCode where
                                         Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [any (snd . unCPPSC) ms, any (snd . unCPPSC) cs])
     -- Note: need to print libraries here instead of in cppstop
+
+-- helpers
+isDtor :: Label -> Bool
+isDtor ('~':_) = True
+isDtor _ = False
 
 -- convenience
 cppHeaderExt :: Label
@@ -631,3 +648,21 @@ cppOpenFile mode f n = f <> dot <> text "open" <> parens (n <> comma <+> text mo
 
 cppListExtendList :: Doc -> Doc
 cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0))
+
+cppPointerParamDoc :: Label -> Doc -> Doc
+cppPointerParamDoc n t = t <+> text "&" <> text n
+
+cppMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cppMethod n t b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
+    oneTab b,
+    bEnd]
+    where ttype | isDtor n = empty
+                | otherwise = t
+
+cppMainMethod :: Label -> Doc -> Doc -> Doc
+cppMainMethod n t b bStart bEnd = vcat [
+    t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
+    oneTab b,
+    blank,
+    text "return 0;",
+    bEnd]

@@ -1,7 +1,9 @@
 module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
-  sspInputDataTable, sspInputsToOutputTable) where
+  sspInputDataTable, sspInputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
+
+import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
@@ -11,11 +13,11 @@ import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
-  foldlList, foldlSent, ofThe, sAnd)
+  foldlList, foldlSent, foldlSP, ofThe, ofThe', sAnd)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
-import Drasil.SSP.Defs (crtSlpSrf, slope)
+import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
 import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce, 
   intShrForce, sspInputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
@@ -24,13 +26,13 @@ import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce,
 {-Functional Requirements-}
 
 sspFRequirements :: [ConceptInstance]
-sspFRequirements = [readAndStore, verifyInput, generateCSS, calculateFS, 
-  determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS,
-  displayNormal, displayShear, writeToFile]
+sspFRequirements = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
+  displayInput, displayGraph, displayFS, displayNormal, displayShear, 
+  writeToFile]
 
-readAndStore, verifyInput, generateCSS, calculateFS, determineCritSlip, 
-  verifyOutput, displayInput, displayGraph, displayFS,
-  displayNormal, displayShear, writeToFile :: ConceptInstance
+readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, 
+  displayGraph, displayFS, displayNormal, displayShear, 
+  writeToFile :: ConceptInstance
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
@@ -42,20 +44,13 @@ verifyInput = cic "verifyInput" ( foldlSent [
   plural physicalConstraint, S "shown in", makeRef2S data_constraint_Table2])
   "Verify-Input" funcReqDom
 
-generateCSS = cic "generateCSS" ( foldlSent [
-  S "Generate potential", plural crtSlpSrf, S "for the", 
-  phrase input_, phrase slope, sParen (S "using" +:+ makeRef2S crtSlpId)]) "Generate-Critical-Slip-Surfaces" funcReqDom
-
-calculateFS = cic "calculateFS" ( foldlSent [
-  S "Calculate the", plural fs, S "for each of the potential", 
-  plural crtSlpSrf, sParen (S "using" +:+ makeRef2S fctSfty `sC` 
-  makeRef2S nrmShrFor `sC` makeRef2S intsliceFs)])
-  "Calculate-Factors-of-Safety" funcReqDom
-
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
-  S "Compare the", phrase fs, S "for each potential", phrase crtSlpSrf,
-  S "to determine the minimum", phrase fs `sC` S "corresponding to the", 
-  phrase crtSlpSrf, sParen (S "using" +:+ makeRef2S crtSlpId)]) 
+  S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
+  phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
+  S "by using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and", 
+  makeRef2S intsliceFs, S "to calculate the", phrase fs, S "for a", 
+  phrase slpSrf `sAnd` S "using", makeRef2S crtSlpId, S "to find the", 
+  phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
@@ -113,11 +108,13 @@ sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
 sspNFRequirements :: [ConceptInstance]
 sspNFRequirements = [correct, understandable, reusable, maintainable]
 
+propsDeriv :: [Contents]
+propsDeriv = [foldlSP [S "FIXME"]]
+
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  S "The", plural output_ `ofThe` phrase code, S "have the",
-  plural property, S "described in (Properties of a Correct Solution)"
-  -- FIXME: (Properties of a Correct Solution) Section doesn't exist
+  plural output_ `ofThe'` phrase code, S "have the",
+  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance

@@ -15,8 +15,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtLabel, solutionLabel)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
+  getSCSSub, generateTraceTable, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -42,7 +42,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
-  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
+  makeListRef, bulletFlat, bulletNested, enumBullet)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
@@ -57,7 +57,8 @@ import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntr
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
-import Drasil.GamePhysics.IMods (iModelsNew, im1_new, im2_new, im3_new)
+import Drasil.GamePhysics.Goals (goals)
+import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
@@ -96,8 +97,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
             [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
         , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-            [im1_new, im2_new, im3_new] ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+          iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
             [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
         ]
@@ -423,22 +424,10 @@ terminologyAndDefinitionsBullets = LlC $ enumBullet terminologyLabel
 -- 4.1.2 : Goal Statements --
 -----------------------------
 
-goalStatementsList :: Contents
+goalStatementsList :: [Contents]
 
 goalStatementSect :: SubSec
-goalStatementSect = sSubSec goalStmt [(siCon [goalStatementsList])]
-
-goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> [Sentence]
-goalStatementStruct outputs condition1 condition2 = 
-  [ S "Determine", condition1, listOfOutputs, S "over a period of",
-  (phrase QP.time), condition2]
-  where listOfOutputs       = (foldlList Comma List $ map plural outputs)
-
-goalStatementsGLinear = goalStatementStruct (take 2 outputSymbols)
-  (S "their new") EmptyS
-
-goalStatementsGAngular = goalStatementStruct (drop 3 $ take 5 inputSymbols)
-  (S "their new") EmptyS
+goalStatementSect = sSubSec goalStmt [siCon goalStatementsList]
 
 {-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
   Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
@@ -488,18 +477,13 @@ goalStatementsList' = map (foldlSent) [goalStatementsGLinear,
   goalStatementsGAngular, goal_statements_G_detectCollision, 
   goal_statements_G_collision]-}
 
-goalStatementsGLinear, goalStatementsGAngular :: [Sentence]
-
   {-, 
   goal_statements_G_detectCollision, goal_statements_G_collision-} 
-
-goalStatementsList' :: [Sentence]
-goalStatementsList' = map (foldlSent) [goalStatementsGLinear, goalStatementsGAngular]
 
   {-, goal_statements_G_detectCollision, 
   goal_statements_G_collision-}
 
-goalStatementsList = LlC $ enumSimple goalStmtLabel 1 (getAcc goalStmt) goalStatementsList'
+goalStatementsList = mkEnumSimpleD goals
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -752,7 +736,7 @@ traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
-traceMatGoalStmtRef = makeListRef goalStatementsList' problemDescriptionSection
+traceMatGoalStmtRef = makeListRef goals problemDescriptionSection
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])) -- FIXME: hack?

@@ -36,16 +36,16 @@ import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, funcReq, inModel)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmtF, physSystDescriptionLabel, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
@@ -57,8 +57,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing,
-  swhspriorityNFReqs)
+  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
@@ -66,7 +65,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (nonFuncReqs)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -122,8 +121,7 @@ nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 
-probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, specParamVal :: Section
+probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
 
 
 -------------------
@@ -158,13 +156,15 @@ mkSRS = [RefSec $ RefProg intro
         iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
+      , CorrSolnPpties propsDerivNoPCM
       ]
     ],
   ReqrmntSec $ ReqsProg [
-  FReqsSub funcReqsList,
-  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
-  (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+    FReqsSub funcReqsList,
+    NonFReqsSub' [performance] swhsNFRequirements
+      (S "This problem is small in size and relatively simple")
+      (S "Any reasonable implementation will be very quick and use minimal storage.")
+  ],
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
@@ -525,13 +525,9 @@ inputVar = map qw dataConstListIn
 --Section 5 : REQUIREMENTS
 --------------------------
 
-reqS = reqF [funcReqs, nonFuncReqs]
-
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
-
-funcReqs = SRS.funcReq funcReqsList [] --TODO: Placeholder values until content can be added
 
 funcReqsList :: [Contents]
 funcReqsList = funcReqsListWordsNum

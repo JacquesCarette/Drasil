@@ -1,5 +1,5 @@
 module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, surfWtrF, 
-  intersliceWtrF, angleA, angleB, lengthB, lengthLs, lengthLb, slcHeight, 
+  intersliceWtrF, angleA, angleB, lengthB, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
   watForceSumDD) where 
 
@@ -23,7 +23,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
   genericF, genericA, index, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
   mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, 
   slcWghtL, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce,
-  surfHydroForceR, surfHydroForceL, surfLngth, totStress, nrmForceSum, 
+  surfHydroForceR, surfHydroForceL, totStress, nrmForceSum, 
   watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
@@ -32,7 +32,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
+  lengthB, lengthLb, slcHeight, stressDD, ratioVariation,
   convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
   sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD, 
   surfWtrFRDD, surfWtrFLDD]
@@ -191,23 +191,6 @@ lengthLbNotes = foldlSent [ch baseWthX, S "is defined in",
 
 --DD9
 
-lengthLs :: DataDefinition
-lengthLs = mkDD lengthLsQD [makeCite fredlund1977] [{-Derivation-}] "lengthLs"
-  [lengthLsNotes]--Notes
---FIXME: fill empty lists in
-
-lengthLsQD :: QDefinition
-lengthLsQD = mkQuantDef surfLngth lengthLsEqn
-
-lengthLsEqn :: Expr
-lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
-
-lengthLsNotes :: Sentence
-lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
-  makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
-
---DD10
-
 slcHeight :: DataDefinition
 slcHeight = mkDD slcHeightQD [makeCite fredlund1977] [{-Derivation-}] "slcHeight"
   slcHeightNotes
@@ -226,7 +209,7 @@ slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+
   makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
   S "respectively."]
 
---DD11 
+--DD10
 
 stressDD :: DataDefinition
 stressDD = mkDD stressQD [makeCite huston2008] [{-Derivation-}] "stress" []
@@ -237,7 +220,7 @@ stressQD = mkQuantDef totStress stressEqn
 stressEqn :: Expr
 stressEqn = (sy genericF) / (sy genericA)
 
---DD12
+--DD11
 
 ratioVariation :: DataDefinition
 ratioVariation = mkDD ratioVarQD [makeCite fredlund1977] [{-Derivation-}] 
@@ -253,7 +236,7 @@ ratioVarEqn = case_ [case1, case2]
         case2 = (sin ((sy QM.pi_) * (((inxi slipDist) - (idx (sy slipDist) 0)) /
                 ((indxn slipDist) - (idx (sy slipDist) 0)))), UnaryOp Not (sy constF))
 
---DD13
+--DD12
 
 convertFunc1 :: DataDefinition
 convertFunc1 = mkDD convertFunc1QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
@@ -271,7 +254,7 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
 convertFunc1Notes :: Sentence
 convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
---DD14
+--DD13
 
 convertFunc2 :: DataDefinition
 convertFunc2 = mkDD convertFunc2QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
@@ -355,13 +338,13 @@ slcWghtRDD = mkDD slcWghtRQD [makeCite fredlund1977] [{-Derivation-}]
 slcWghtLDD = mkDD slcWghtLQD [makeCite fredlund1977] [{-Derivation-}] 
   "slcWghtRDD" [slcWghtNotes]
 baseWtrFRDD = mkDD baseWtrFRQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFRDD" [baseWtrFNotes]
+  "baseWtrFRDD" [baseSurfWtrFNotes]
 baseWtrFLDD = mkDD baseWtrFLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFLDD" [baseWtrFNotes]
+  "baseWtrFLDD" [baseSurfWtrFNotes]
 surfWtrFRDD = mkDD surfWtrFRQD [makeCite fredlund1977] [{-Derivation-}] 
-  "surfWtrFRDD" [surfWtrFNotes]
+  "surfWtrFRDD" [baseSurfWtrFNotes]
 surfWtrFLDD = mkDD surfWtrFLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "surfWtrFLDD" [surfWtrFNotes]
+  "surfWtrFLDD" [baseSurfWtrFNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -412,7 +395,7 @@ baseWtrFRQD :: QDefinition
 baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn
 
 baseWtrFREqn :: Expr
-baseWtrFREqn = (inxi baseLngth)*(case_ [case1,case2])
+baseWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slipHght))
 
@@ -422,20 +405,17 @@ baseWtrFLQD :: QDefinition
 baseWtrFLQD = mkQuantDef baseHydroForceL baseWtrFLEqn
 
 baseWtrFLEqn :: Expr
-baseWtrFLEqn = (inxi baseLngth)*(case_ [case1,case2])
+baseWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxiM1 waterHght)-(inxiM1 slipHght))*(sy waterWeight),
           (inxiM1 waterHght) $> (inxiM1 slipHght))
 
         case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slipHght))
 
-baseWtrFNotes :: Sentence
-baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
-
 surfWtrFRQD :: QDefinition
 surfWtrFRQD = mkQuantDef surfHydroForceR surfWtrFREqn
 
 surfWtrFREqn :: Expr
-surfWtrFREqn = (inxi surfLngth)*(case_ [case1,case2])
+surfWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slopeHght))
 
@@ -445,14 +425,14 @@ surfWtrFLQD :: QDefinition
 surfWtrFLQD = mkQuantDef surfHydroForceL surfWtrFLEqn
 
 surfWtrFLEqn :: Expr
-surfWtrFLEqn = (inxi surfLngth)*(case_ [case1,case2])
+surfWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
   where case1 = (((inxiM1 waterHght)-(inxiM1 slopeHght))*(sy waterWeight),
           (inxiM1 waterHght) $> (inxiM1 slopeHght))
 
         case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slopeHght))
 
-surfWtrFNotes :: Sentence
-surfWtrFNotes = ch surfLngth +:+ S "is defined in" +:+. makeRef2S lengthLs
+baseSurfWtrFNotes :: Sentence
+baseSurfWtrFNotes = ch baseWthX +:+ S "is defined in" +:+. makeRef2S lengthB
 
 --------------------------
 -- Derivation Sentences --

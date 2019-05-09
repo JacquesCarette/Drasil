@@ -65,15 +65,16 @@ inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 inputInitQuants = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
   makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
-  plural parameter `sC` S "material", plural property, S "and initial" +:+.
-  plural condition, makeRef2S assumpVCN]) "Input-Initial-Quantities" funcReqDom
+  plural parameter `sC` S "material", plural property, S "and initial",
+  plural condition]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = cic "findMass" ( foldlSent [
   S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
   S "to find the", phrase mass, S "needed for",
   (foldlList Comma List $ map makeRef2S swhsIMods) `sC`
   S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",
-  ch w_vol `isThe` phrase w_vol, S "and", ch tank_vol `isThe` phrase tank_vol] )
+  ch w_vol `isThe` phrase w_vol, S "and" +:+. (ch tank_vol `isThe`
+  phrase tank_vol), makeRef2S assumpVCN])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=

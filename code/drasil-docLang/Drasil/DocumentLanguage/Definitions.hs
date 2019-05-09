@@ -20,7 +20,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (getSource', foldlSent)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent, getSource')
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -96,7 +96,7 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkTMField t _ l@Source fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
+mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -120,6 +120,9 @@ helpToRefField t si
     s = _sysinfodb si
     r = citeDB si
 
+helperSources :: [Reference] -> [Contents]
+helperSources x = [mkParagraph $ foldlList Comma List $ map Ref x]
+
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ at_start d]) : fs
@@ -129,7 +132,7 @@ mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr])
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkDDField d _ l@Source fs = (show l, [mkParagraph $ getSource' d]) : fs
+mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"

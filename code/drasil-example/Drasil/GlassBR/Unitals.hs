@@ -121,7 +121,7 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [probBr] 
+gbOutputs = map qw [isSafePb, is_safeLR] ++ map qw [probBr] 
 
 probBr :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
@@ -229,10 +229,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [QuantityDict]
-glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
+glassBRUnitless = [risk_fun, isSafePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
+risk_fun, isSafePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -241,7 +241,7 @@ dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
 
 gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
 
-is_safePb      = vc "is_safePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
+isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
   " probability is less than tolerable probability")
   (Atomic "is-safePb") Boolean
 

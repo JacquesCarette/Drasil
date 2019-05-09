@@ -20,7 +20,7 @@ import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
   demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
   lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
-  plateLen, plateWidth, riskFun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
+  plateLen, plateWidth, riskFun, sdfTol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
   demandq, eqTNTWeight)
 
@@ -142,8 +142,8 @@ dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-deri
 --DD8--
 
 tolPreEq :: Expr
---tolPreEq = apply (sy tolLoad) [sy sdf_tol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdf_tol]
+--tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
+tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdfTol]
 
 tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPreEq
@@ -161,10 +161,10 @@ tolStrDisFacEq = ln (ln (1 / (1 - (sy pbTol)))
     (square (sy minThick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFacQD :: QDefinition
-tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFacEq
+tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
 
 tolStrDisFac :: DataDefinition
-tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
+tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdfTol"
   (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S assumpSV])
 
 --DD10--
@@ -292,8 +292,8 @@ hMin = (ch nomThick +:+ S "is a function that maps from the nominal thickness"
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
-  +:+ ch sdf_tol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
-  +:+ titleize' calculation `sOf` ch sdf_tol `sAnd` ch aspect_ratio +:+ 
+  +:+ ch sdfTol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
+  +:+ titleize' calculation `sOf` ch sdfTol `sAnd` ch aspect_ratio +:+ 
   S "are defined in" +:+. makeRef2S tolStrDisFac `sAnd` makeRef2S aspRat `sC` S "respectively")
 
 qHtTlTolRef :: Sentence
@@ -314,7 +314,7 @@ jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC`
   S "shown in Figure 7")
 
 jtolRelToPbtol :: Sentence
-jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pbTol)
+jtolRelToPbtol = (ch sdfTol +:+ S " is calculated with reference to " +:+. ch pbTol)
 
 glassLiteRef :: Sentence 
 glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL)

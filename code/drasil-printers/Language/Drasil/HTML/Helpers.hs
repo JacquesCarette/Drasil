@@ -12,27 +12,27 @@ import Language.Drasil.Printing.AST (Expr)
 html, head_tag, body, title, paragraph, code, tr, th, td, figure,
   figcaption :: Doc -> Doc
 -- | HTML tag wrapper
-html       = wrap "html" []
+html       = oldWrap "html" []
 -- | Head tag wrapper
-head_tag   = wrap "head" []
+head_tag   = oldWrap "head" []
 -- | Body tag wrapper
-body       = wrap "body" []
+body       = oldWrap "body" []
 -- | Title tag wrapper
-title      = wrap "title" []
+title      = oldWrap "title" []
 -- | Paragraph tag wrapper
-paragraph  = wrap "p" ["paragraph"]
+paragraph  = oldWrap "p" ["paragraph"]
 -- | Code tag wrapper
-code       = wrap "code" ["code"]
+code       = oldWrap "code" ["code"]
 -- | Table row tag wrapper
-tr         = wrap "tr" []
+tr         = oldWrap "tr" []
 -- | Table header tag wrapper
-th         = wrap "th" []
+th         = oldWrap "th" []
 -- | Table cell tag wrapper
-td         = wrap "td" []
+td         = oldWrap "td" []
 -- | Figure tag wrapper
-figure     = wrap "figure" []
+figure     = oldWrap "figure" []
 -- | Figcaption tag wrapper
-figcaption = wrap "figcaption" []
+figcaption = oldWrap "figcaption" []
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper
@@ -42,15 +42,15 @@ img        = wrapInside "img"
 h :: Int -> Doc -> Doc
 h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
-          | otherwise = wrap ("h"++show n) []
+          | otherwise = oldWrap ("h"++show n) []
 
 -- | Helper for wrapping HTML tags.
 -- The second argument provides class names for the CSS.
-wrap :: String -> [String] -> Doc -> Doc
-wrap s [] = \x -> 
+oldWrap :: String -> [String] -> Doc -> Doc
+oldWrap s [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
   in vcat [tb s, x, tb $ '/':s]
-wrap s ts = \x ->
+oldWrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
@@ -65,7 +65,7 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc
-caption = wrap "p" ["caption"]
+caption = oldWrap "p" ["caption"]
 
 -- | Helper for setting up references
 refwrap :: Doc -> Doc -> Doc
@@ -111,11 +111,11 @@ author a        = div_tag ["author"] (h 2 a)
 
 -- | Div tag wrapper
 div_tag :: [String] -> Doc -> Doc
-div_tag = wrap "div"
+div_tag = oldWrap "div"
   
 -- | Span tag wrapper
 span_tag :: [String] -> String -> Doc
-span_tag t = wrap "span" t . text
+span_tag t = oldWrap "span" t . text
 
 
 -- | Create and markup fractions

@@ -14,7 +14,7 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
+import Language.Drasil.HTML.Helpers (em, oldWrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
   author, article_title, title, head_tag)
 import qualified Language.Drasil.Output.Formats as F
@@ -236,7 +236,7 @@ p_in (x:xs) = p_in [x] ++ p_in xs
 -- | Renders HTML table, called by 'printLO'
 makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
+makeTable ts (l:lls) r b t = refwrap r (oldWrap "table" ts (
     tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
 -- | Helper for creating table rows
@@ -257,7 +257,7 @@ makeColumns = vcat . map (td . p_spec)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
+makeDefn dt ps l = refwrap l $ oldWrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
         dtag (L.TM)       = "tdefn"
@@ -276,17 +276,17 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ p_spec b <> text ": "
+  vcat $ map (\(b,e,l) -> oldWrap "p" [] $ mlref l $ p_spec b <> text ": "
    <> p_item e) items
 makeList (Desc items)   = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ wrap "b" [] $ p_spec b
+  vcat $ map (\(b,e,l) -> oldWrap "p" [] $ mlref l $ oldWrap "b" [] $ p_spec b
    <> text ": " <> p_item e) items
-makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
-  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
-  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Definitions items) = wrap "ul" ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> wrap "li" [] $ mlref l $ p_spec b <> text " is the"
+makeList (Ordered items) = oldWrap "ol" ["list"] (vcat $ map
+  (oldWrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
+makeList (Unordered items) = oldWrap "ul" ["list"] (vcat $ map
+  (oldWrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
+makeList (Definitions items) = oldWrap "ul" ["hide-list-style-no-indent"] $
+  vcat $ map (\(b,e,l) -> oldWrap "li" [] $ mlref l $ p_spec b <> text " is the"
    <+> p_item e) items
 
 -- | Helper for setting up references
@@ -307,7 +307,7 @@ makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = wrap "li" [] (refwrap l (i <> text ": " <> a))
+makeRefList a l i = oldWrap "li" [] (refwrap l (i <> text ": " <> a))
 
 ---------------------
 --HTML bibliography--
@@ -315,7 +315,7 @@ makeRefList a l i = wrap "li" [] (refwrap l (i <> text ": " <> a))
 -- **THE MAIN FUNCTION**
 
 makeBib :: BibRef -> Doc
-makeBib = wrap "ul" ["hide-list-style"] . vcat .
+makeBib = oldWrap "ul" ["hide-list-style"] . vcat .
   map (\(x,(y,z)) -> makeRefList z y x) .
   zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
 

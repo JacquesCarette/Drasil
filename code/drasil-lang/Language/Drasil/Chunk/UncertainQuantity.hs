@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept(cw)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty(uncert, prec))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
@@ -36,9 +36,7 @@ instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
 instance Quantity          UncertainChunk where 
 instance Constrained       UncertainChunk where constraints = conc . constraints
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
-instance HasUncertainty    UncertainChunk where 
-        uncert = unc' . uncert
-        prec   = unc' . prec
+instance HasUncertainty    UncertainChunk where unc = unc'
 instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
 
 {-- Constructors --}
@@ -67,9 +65,7 @@ instance Idea           UncertQ where getA (UQ q _) = getA q
 instance HasSpace       UncertQ where typ = coco . typ
 instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
 instance Quantity       UncertQ where 
-instance HasUncertainty UncertQ where
-        uncert = unc'' . uncert
-        prec   = unc'' . prec
+instance HasUncertainty UncertQ where unc = unc''
 instance Constrained    UncertQ where constraints = coco . constraints
 instance HasReasVal     UncertQ where reasVal = coco . reasVal
 instance Definition     UncertQ where defn = coco . defn

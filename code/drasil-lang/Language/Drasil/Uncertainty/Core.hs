@@ -1,6 +1,10 @@
-module Language.Drasil.Uncertainty.Core (Uncertainty, uncty) where
- 
+{-# Language TemplateHaskell #-}
+module Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty) where
+
+import Control.Lens (makeLenses)
+
 data Uncertainty = Uncert { _uncert :: Double, _prec :: Maybe Int }
+makeLenses ''Uncertainty
 
 uncty :: Double -> Maybe Int -> Uncertainty
 uncty u = Uncert (isDecimal u)

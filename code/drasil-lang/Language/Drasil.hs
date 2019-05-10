@@ -45,7 +45,7 @@ module Language.Drasil (
   , Constrained(constraints)
   , ExprRelat(relat)
   , DefiningExpr(defnExpr)
-  , HasUncertainty (unc)
+  , HasUncertainty(unc)
   , Quantity
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
@@ -164,8 +164,10 @@ module Language.Drasil (
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , titleize, titleize'
+  -- Uncertainty.Core
+  , Uncertainty, uncty
   -- Uncertainty
-  , Uncertainty, defaultUncrt, uncty, uncVal, uncPrec
+  , defaultUncrt, uncVal, uncPrec
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -224,7 +226,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
-  DefiningExpr(defnExpr), Quantity, HasUncertainty (unc))
+  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation)
@@ -291,7 +293,8 @@ import Language.Drasil.RefProg(Reference(Reference))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 
 import Language.Drasil.UnitLang (USymb(US))
-import Language.Drasil.Uncertainty
+import Language.Drasil.Uncertainty.Core(Uncertainty, uncty)
+import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec)
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)

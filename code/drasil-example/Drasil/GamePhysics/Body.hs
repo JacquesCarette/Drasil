@@ -58,7 +58,7 @@ import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (functionalRequirementsList, 
-  functionalRequirementsList', requirements)
+  functionalRequirementsList', propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
@@ -100,6 +100,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
             [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+        , CorrSolnPpties propsDeriv
         ]
       ],
     ReqrmntSec $ ReqsProg [

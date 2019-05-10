@@ -9,6 +9,8 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg))
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -17,7 +19,6 @@ import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
 import Data.Drasil.Phrase (for)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []

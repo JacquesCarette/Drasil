@@ -3,6 +3,7 @@ module Drasil.NoPCM.Body where
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map

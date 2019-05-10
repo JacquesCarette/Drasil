@@ -3,6 +3,7 @@ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD) where
 
 import Language.Drasil
+import Database.Drasil (Block(Parallel))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 

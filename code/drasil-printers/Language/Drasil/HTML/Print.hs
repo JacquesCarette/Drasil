@@ -150,7 +150,7 @@ oldP_expr (Int i)        = show i
 oldP_expr (Str s)        = s
 oldP_expr (Div a b)      = oldFraction (oldP_expr a) (oldP_expr b)
 oldP_expr (Case ps)      = oldCases ps oldP_expr
-oldP_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
+oldP_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ oldP_matrix a ++ "</table>"
 oldP_expr (Row l)        = concatMap oldP_expr l
 oldP_expr (Ident s)      = s
 oldP_expr (Spec s)       = unPH $ L.special s
@@ -219,15 +219,15 @@ fence _     Abs   = "|"
 fence _     Norm  = "||"
 
 -- | For printing Matrix
-p_matrix :: [[Expr]] -> String
-p_matrix [] = ""
-p_matrix [x] = "<tr>" ++ p_in x ++ "</tr>\n"
-p_matrix (x:xs) = p_matrix [x] ++ p_matrix xs
+oldP_matrix :: [[Expr]] -> String
+oldP_matrix [] = ""
+oldP_matrix [x] = "<tr>" ++ oldP_in x ++ "</tr>\n"
+oldP_matrix (x:xs) = oldP_matrix [x] ++ oldP_matrix xs
 
-p_in :: [Expr] -> String
-p_in [] = ""
-p_in [x] = "<td>" ++ oldP_expr x ++ "</td>"
-p_in (x:xs) = p_in [x] ++ p_in xs
+oldP_in :: [Expr] -> String
+oldP_in [] = ""
+oldP_in [x] = "<td>" ++ oldP_expr x ++ "</td>"
+oldP_in (x:xs) = oldP_in [x] ++ oldP_in xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

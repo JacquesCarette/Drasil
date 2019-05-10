@@ -10,7 +10,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -64,7 +64,8 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
+  inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, char_weight,
@@ -168,14 +169,16 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
                       S "gives", (plural value `ofThe` S "specification"),
                       plural parameter, S "used in", makeRef2S inputDataConstraints])
                       [inputDataConstraints, outputDataConstraints]
+        , CorrSolnPpties propsDeriv
         ]
       ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub [performance] gBRpriorityNFReqs
+    NonFReqsSub' [performance] nonfuncReqs
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
-    (S "will be very quick" `sAnd` S "use minimal storage"))],
+    (S "will be very quick" `sAnd` S "use minimal storage"))
+  ],
   LCsSec' $ LCsProg' likelyChgs,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $

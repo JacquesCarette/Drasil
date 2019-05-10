@@ -4,7 +4,10 @@ import Language.Drasil
 import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, ofThe, sAnd, 
   sOf)
-import Data.Drasil.Concepts.Documentation (body, constant)
+import Data.Drasil.Concepts.Documentation (body, component, constant, value)
+import Data.Drasil.Concepts.Math (vector)
+import Data.Drasil.Concepts.Physics (cartesian, twoD)
+import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, force, 
@@ -55,12 +58,24 @@ weightDeriv :: Derivation
 weightDeriv = weave [weightDerivSentences, weightDerivEqns]
 
 weightDerivSentences, weightDerivEqns :: [Sentence]
-weightDerivSentences = map foldlSentCol [weightDerivNewtonSentence, weightDerivReplaceMassSentence, weightDerivSpecWeightSentence]
-weightDerivEqns = map E [weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
+weightDerivSentences = map foldlSentCol [weightDerivAccelSentence, 
+  weightDerivNewtonSentence, weightDerivReplaceMassSentence, 
+  weightDerivSpecWeightSentence]
+weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn, 
+  weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
+
+weightDerivAccelSentence :: [Sentence]
+weightDerivAccelSentence = [S "Under the influence of gravity" `sC` 
+  S "and assuming a", short twoD, phrase cartesian, 
+  S "with down as positive" `sC` S "an object has an", phrase QP.acceleration, 
+  phrase vector, S "of"]
 
 weightDerivNewtonSentence :: [Sentence]
-weightDerivNewtonSentence = [S "Directly applying", phrase newtonSL, S "from",
-  makeRef2S newtonSL, S "to the concept of", phrase QP.weight, S "yields"]
+weightDerivNewtonSentence = [S "Since there is only one non-zero", 
+  phrase vector, phrase component `sC` S "the scalar", phrase value, 
+  ch QP.weight, S "will be used for the" +:+. phrase QP.weight,
+  S "In this scenario" `sC` phrase newtonSL, S "from", makeRef2S newtonSL, 
+  S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
 weightDerivReplaceMassSentence = [at_start QPP.mass, S "can be expressed as",
@@ -70,6 +85,10 @@ weightDerivSpecWeightSentence :: [Sentence]
 weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight, 
   S "as the product of", phrase QPP.density `sAnd` phrase QP.gravitationalAccel,
   S "yields"]
+
+weightDerivAccelEqn :: Expr
+weightDerivAccelEqn = sy QP.acceleration $= vec2D 0 (sy QP.gravitationalAccel * 
+  sy QM.unitVectj)
 
 weightDerivNewtonEqn :: Expr
 weightDerivNewtonEqn = sy QP.weight $= sy QPP.mass * sy QP.gravitationalAccel

@@ -10,7 +10,7 @@ import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
-import Data.Drasil.Quantities.Math (area, pi_)
+import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
@@ -413,8 +413,8 @@ waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by wate
 ----------------------
 
 sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblV, fs_min]
+sspUnitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
+  mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

@@ -15,7 +15,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
+  dataConstraintUncertainty, genSysF, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
@@ -68,16 +68,15 @@ import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, propsDeriv, swhsNFRequirements)
+import Drasil.SWHS.Requirements (dataConTable1, inputConstraints,
+  funcReqs, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
-  htCap_W, htFusion, ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA,
-  out_SA, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
-  specParamValList, swhsConstrained, swhsInputs, swhsOutputs, swhsSymbols,
-  swhsSymbolsAll, swhsUC, tank_length, tau_S_P, tau_W, temp_C, temp_PCM, temp_W,
-  temp_init, temp_melt_P, thFluxVect, thickness, time_final, vol_ht_gen, w_E,
-  w_density, w_mass)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
+  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
+  pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
+  swhsOutputs, swhsSymbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
+  temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass)
 import Drasil.SWHS.Labels (inputInitQuantsLbl)
 
 -------------------------------------------------------------------------------
@@ -451,14 +450,6 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
-
-dataConTable1 :: LabelledContent
-dataConTable1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 ------------------------------
 -- Data Constraint: Table 2 --

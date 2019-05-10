@@ -300,7 +300,7 @@ makeColumns = vcat . map (td . p_spec)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = oldRefwrap l $ oldWrap "table" [dtag dt] (makeDRows ps)
+makeDefn dt ps l = refwrap l $ table [dtag dt] (makeDRows ps)
   where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
         dtag (L.TM)       = "tdefn"

@@ -568,11 +568,12 @@ reqCCHEWT = cic "reqCCHEWT"
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 -}
 
-oIDQQuants :: Sentence
-oIDQQuants = foldlSent [
-  S "the", plural quantity, S "from", makeRef2S reqIIV `sC` S "the",
-    phrase mass, S "from", makeRef2S reqFM `sAnd` ch tau_W,
-    sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
+oIDQQuants :: [Sentence]
+oIDQQuants = map foldlSent_ [
+  [S "the", plural quantity, S "from", makeRef2S reqIIV],
+  [S "the", phrase mass, S "from", makeRef2S reqFM],
+  [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
+  ]
 
 reqIVRTable :: LabelledContent
 reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $ 

@@ -90,20 +90,21 @@ checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
 --
 outputInputDerivQuants = oIDQConstruct oIDQQuants
 
-oIDQConstruct :: Sentence -> ConceptInstance
+oIDQConstruct :: [Sentence] -> ConceptInstance
 oIDQConstruct x = cic "outputInputDerivQuants" ( foldlSent_ [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
-  S "derived", plural quantity +: S "in the following list"] +:+ x)
-  "Output-Input-Derived-Quantities" funcReqDom
+  S "derived", plural quantity +: S "in the following list"] +:+.
+  (foldlList Comma List x)) "Output-Input-Derived-Quantities" funcReqDom
 
-oIDQQuants :: Sentence
-oIDQQuants = foldlSent [
-  S "the", plural quantity, S "from", makeRef2S inputInitQuants `sC` S "the",
-  plural mass, S "from", makeRef2S findMass `sC` ch tau_W,
-  sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch eta,
-  sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch tau_S_P,
-  sParen (S "from" +:+ makeRef2S eBalanceOnPCM) `sAnd` ch tau_L_P,
-  sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+oIDQQuants :: [Sentence]
+oIDQQuants = map foldlSent_ [
+  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
+  [S "the", plural mass, S "from", makeRef2S findMass],
+  [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
+  [ch eta, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
+  [ch tau_S_P, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
+  [ch tau_L_P, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+  ]
   
 --
 calcTempWtrOverTime = cic "calcTempWtrOverTime" ( foldlSent [

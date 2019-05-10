@@ -1,7 +1,8 @@
 module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
+import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat, nest,
+  ($+$), cat, sep, fcat)
 import Data.List (intersperse, foldl1)
 
 import Language.Drasil hiding (Expr)
@@ -10,7 +11,7 @@ import Language.Drasil hiding (Expr)
 import Language.Drasil.Printing.AST (Expr)
 
 html, head_tag, body, title, paragraph, code, tr, th, td, figure,
-  figcaption :: Doc -> Doc
+  figcaption, li, pa, ba :: Doc -> Doc
 -- | HTML tag wrapper
 html       = oldWrap "html" []
 -- | Head tag wrapper
@@ -33,6 +34,20 @@ td         = oldWrap "td" []
 figure     = oldWrap "figure" []
 -- | Figcaption tag wrapper
 figcaption = oldWrap "figcaption" []
+-- | List tag wrapper
+li         = wrap "li" []
+-- | Paragraph in list tag wrapper
+pa         = wrap "p" []
+
+ba          = wrap "b" []
+
+ol, ul, table :: [String] -> Doc -> Doc
+-- | Ordered list tag wrapper
+ol a b       = wrap "ol" a b
+-- | Unordered list tag wrapper
+ul a b       = wrap "ul" a b
+-- | Table tag wrapper
+table a b    = wrap "table" a b
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper
@@ -44,6 +59,8 @@ h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = oldWrap ("h"++show n) []
 
+-- OLD FUNCTIONS
+--------------------------------------------------
 -- | Helper for wrapping HTML tags.
 -- The second argument provides class names for the CSS.
 oldWrap :: String -> [String] -> Doc -> Doc
@@ -54,6 +71,27 @@ oldWrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
+--------------------------------------------------
+
+data Variation = Class | Id
+
+wrap :: String -> [String] -> Doc -> Doc
+wrap a = wrap_gen Class a empty
+-- | Helper for wrapping HTML tags.
+-- The forth argument provides class names for the CSS.
+wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrap_gen _ s _ [] = \x -> 
+  let tb c = text $ "<" ++ c ++ ">"
+  in cat [tb s, indent x, tb $ '/':s]
+wrap_gen Class s _ ts = \x ->
+  let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
+  in let te c = text $ "</" ++ c ++ ">"
+  in cat [tb s, indent x, te s]
+wrap_gen Id s ti _ = \x ->
+  let tb c = text ("<" ++c++ " id=\"") <> ti <> text ("\">")
+      te c = text $ "</" ++ c ++ ">"
+  in cat [tb s, indent x, te s] 
+
 
 -- | Helper for wrapping attributes in a tag.
 -- | The first argument is tag name.
@@ -61,15 +99,21 @@ oldWrap s ts = \x ->
 -- | The Doc is the value for different attributes.
 wrapInside :: String -> [(String, Doc)] -> Doc
 wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
- where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
+  where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc
 caption = oldWrap "p" ["caption"]
 
+-- OLD FUNCTIONS
+--------------------------------------------------
 -- | Helper for setting up references
+oldRefwrap :: Doc -> Doc -> Doc
+oldRefwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
+--------------------------------------------------
+
 refwrap :: Doc -> Doc -> Doc
-refwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
+refwrap = flip (wrap_gen Id "div") [""]
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
@@ -91,17 +135,30 @@ image f c wp =
   figcaption c
   ]
 
-em :: Doc -> Doc
+-- OLD FUNCTIONS
+--------------------------------------------------
+oldEm :: Doc -> Doc
 -- | Emphasis (italics) tag
-em x = text "<em>"  <> x <> text "</em>"
+oldEm x = text "<em>"  <> x <> text "</em>"
 
-sub,sup,bold :: String -> String  
+oldSub, oldSup, oldBold :: String -> String  
 -- | Subscript tag
-sub x = "<sub>" ++ x ++ "</sub>"
+oldSub x = "<sub>" ++ x ++ "</sub>"
 -- | Superscript tag
-sup x = "<sup>" ++ x ++ "</sup>"
+oldSup x = "<sup>" ++ x ++ "</sup>"
 -- | Bold tag
-bold x  = "<b>"  ++ x ++ "</b>"
+oldBold x  = "<b>"  ++ x ++ "</b>"
+--------------------------------------------------
+
+em, sup, sub, bold :: Doc -> Doc
+-- | Emphasis (italics) tag
+em = wrap "em" []
+-- | Superscript tag
+sup = wrap "sup" []
+-- | Subscript tag
+sub = wrap "sub" []
+-- | Bold tag
+bold = wrap "b" []
 
 article_title, author :: Doc -> Doc
 -- | Title header
@@ -113,24 +170,55 @@ author a        = div_tag ["author"] (h 2 a)
 div_tag :: [String] -> Doc -> Doc
 div_tag = oldWrap "div"
   
+-- OLD FUNCTIONS
+--------------------------------------------------
 -- | Span tag wrapper
-span_tag :: [String] -> String -> Doc
-span_tag t = oldWrap "span" t . text
-
+oldSpan_tag :: [String] -> String -> Doc
+oldSpan_tag t = oldWrap "span" t . text
 
 -- | Create and markup fractions
-fraction :: String -> String -> String  
-fraction a b =
-  render $ div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+oldFraction :: String -> String -> String  
+oldFraction a b =
+  render $ div_tag ["fraction"] (oldSpan_tag ["fup"] a $$ oldSpan_tag ["fdn"] b)
 
--- | Build cases for case expressions
-cases :: [(Expr,Expr)] -> (Expr -> String) -> String
-cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
-                  (makeCases ps p_expr))
+-- | Build oldCases for case expressions
+oldCases :: [(Expr,Expr)] -> (Expr -> String) -> String
+oldCases ps p_expr = render $ (oldSpan_tag ["casebr"] "{" $$ div_tag ["cases"] 
+                  (oldMakeCases ps p_expr))
 
 -- | Build case expressions
-makeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
+oldMakeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
+oldMakeCases [] _ = empty
+oldMakeCases (p:ps) p_expr = ((oldSpan_tag [] (p_expr (fst p) ++ " , " ++
+                            (render $ oldSpan_tag ["case"] (p_expr (snd p))))) $$
+                            oldMakeCases ps p_expr)
+--------------------------------------------------
+
+span_tag :: [String] -> Doc -> Doc
+span_tag t = wrap "span" t
+
+indent :: Doc -> Doc
+indent = nest 4
+
+indentl :: [Doc] -> [Doc]
+indentl = map $ nest 4
+
+vvcat :: [Doc] -> Doc
+vvcat = foldr ($+$) empty
+
+-- | Create and markup fractions
+fraction :: Doc -> Doc -> Doc
+fraction a b =
+  div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+
+-- | Build cases for case expressions
+cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
+cases ps p_expr = (span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
+                  (makeCases ps p_expr))
+
+-- | Build case expressions              
+makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) ++ " , " ++
-                            (render $ span_tag ["case"] (p_expr (snd p))))) $$
+makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) <> text " , " <>
+                            (span_tag ["case"] (p_expr (snd p))))) $$
                             makeCases ps p_expr)

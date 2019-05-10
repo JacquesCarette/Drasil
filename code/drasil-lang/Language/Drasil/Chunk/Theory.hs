@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
+module Language.Drasil.Chunk.Theory (TheoryModel, tm, tmNoRefs, Theory(..)) where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -87,4 +87,11 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     String -> [Sentence] -> TheoryModel
 tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
+      (prependAbrv theoryMod lbe)
+
+tmNoRefs :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
+    [q] -> [c1] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+    String -> [Sentence] -> TheoryModel
+tmNoRefs c0 q c1 dq inv dfn lbe = 
+  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn [] (shortname' lbe)
       (prependAbrv theoryMod lbe)

@@ -11,6 +11,7 @@ library
   other-modules:
       Database.Drasil.ChunkDB
     , Database.Drasil.ChunkDB.GetChunk
+    , Database.Drasil.SystemInformation
 
   Build-Depends:
     base >= 4.7,

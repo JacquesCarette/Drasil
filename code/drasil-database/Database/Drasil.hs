@@ -14,7 +14,11 @@ module Language.Drasil (
   , conceptinsTable, asOrderedList
   -- ChunkDB.GetChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
+  -- SystemInformation
+  , SystemInformation(..), Block(..), citeDB
+  , ReferenceDB, rdb, RefMap, simpleMap
 ) where
 
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.ChunkDB
+import Language.Drasil.SystemInformation

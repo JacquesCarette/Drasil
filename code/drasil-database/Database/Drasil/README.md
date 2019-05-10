@@ -11,3 +11,6 @@ ChunkDB.hs
 
 README.md
   - This file
+
+SystemInformation.hs
+  - Defines the SI type

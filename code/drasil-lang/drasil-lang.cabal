@@ -59,7 +59,6 @@ library
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SystemInformation
     , Language.Drasil.UID
     , Language.Drasil.Unicode
     , Language.Drasil.UnitLang

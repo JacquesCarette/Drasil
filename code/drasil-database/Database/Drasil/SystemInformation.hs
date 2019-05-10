@@ -4,12 +4,13 @@ module Language.Drasil.SystemInformation(SystemInformation(..), Block(..),
   conceptDB
   ) where
 
+{-
 import Language.Drasil.Chunk.Citation (BibRef, Citation)
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Concept.Core (sDom)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
-import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (CommonIdea, Concept, ConceptDomain(cdom), Constrained, 
   Idea, Quantity)
@@ -17,13 +18,14 @@ import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.People (HasName, People, comparePeople)
 import Language.Drasil.UID (UID)
+-}
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
+import Database.Drasil.ChunkDB (ChunkDB)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation

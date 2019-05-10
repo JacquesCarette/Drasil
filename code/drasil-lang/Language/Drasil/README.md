@@ -80,9 +80,6 @@ Symbol.hs
 SymbolAlphabet.hs
   - Symbols for all lower and uppercase English letters
 
-SystemInformation.hs
-  - Defines the SI type
-
 UID.hs
   - Defines the UID type
 

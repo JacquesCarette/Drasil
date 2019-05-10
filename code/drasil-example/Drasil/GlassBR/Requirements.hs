@@ -1,4 +1,5 @@
-module Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable) where
+module Drasil.GlassBR.Requirements (funcReqsList, nonfuncReqs, funcReqs,
+  inputGlassPropsTable, propsDeriv) where
 
 import Control.Lens ((^.))
 import Data.Function (on)
@@ -6,19 +7,21 @@ import Data.List (sortBy)
 
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
-import Drasil.DocLang.SRS (datCon)
+import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
-import Data.Drasil.Concepts.Documentation (characteristic, condition,
-  datumConstraint, description, failure, funcReqDom, input_, message, output_,
-  quantity, symbol_, system, value)
+import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
+  condition, dataDefn, datumConstraint, description, environment, failure,
+  funcReqDom, genDefn, inModel, input_, likelyChg, message, mg, mis, module_,
+  nonFuncReqDom, output_, property, quantity, requirement, srs, symbol_, system,
+  thModel, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
-  foldlList, foldlSent, foldlSent_, follows, ofThe, sAnd, sOf)
+  foldlList, foldlSent, foldlSent_, foldlSP, follows, ofThe, ofThe', sAnd, sOf)
 import Data.Drasil.Utils (bulletFlat)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
@@ -131,3 +134,43 @@ outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqLis
 
 mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
 mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef2S c)))
+
+{--Functional Requirements--}
+
+nonfuncReqs :: [ConceptInstance]
+nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
+
+propsDeriv :: [Contents]
+propsDeriv = [foldlSP [S "FIXME"]]
+
+correct :: ConceptInstance
+correct = cic "correct" (foldlSent [
+  plural output_ `ofThe'` phrase code, S "have the",
+  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  ]) "Correct" nonFuncReqDom
+ 
+verifiable :: ConceptInstance
+verifiable = cic "verifiable" (foldlSent [
+  S "The", phrase code, S "is tested with complete",
+  phrase vavPlan]) "Verifiable" nonFuncReqDom
+
+understandable :: ConceptInstance
+understandable = cic "understandable" (foldlSent [
+  S "The", phrase code, S "is modularized with complete",
+  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+
+reusable :: ConceptInstance
+reusable = cic "reusable" (foldlSent [
+  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+
+maintainable :: ConceptInstance
+maintainable = cic "maintainable" (foldlSent [
+  S "The traceability between", foldlList Comma List [plural requirement,
+  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
+  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
+  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+
+portable :: ConceptInstance
+portable = cic "portable" (foldlSent [
+  S "The", phrase code, S "is able to be run in different", plural environment])
+  "Portable" nonFuncReqDom

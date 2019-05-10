@@ -350,7 +350,7 @@ makeFigure r c f wp = oldRefwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = oldWrap "li" [] (oldRefwrap l (i <> text ": " <> a))
+makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
 ---------------------
 --HTML bibliography--

@@ -139,7 +139,7 @@ srfWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
    makeRef2S surfWtrF +:+ S "with" +:+ makeRef2S surfWtrFRDD `sAnd` 
    makeRef2S surfWtrFLDD +:+. S "substituted in"]
 
-srfWtrFDerivWeightEqn = sy surfHydroForce $= sy waterVol * sy waterWeight
+srfWtrFDerivWeightEqn = inxi surfHydroForce $= inxi waterVol * sy waterWeight
 
 srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi baseWthX * 0.5 *
   (((inxi waterHght) - (inxi slopeHght)) + ((inxiM1 waterHght) - (inxiM1 slopeHght))) * sy waterWeight

@@ -279,7 +279,7 @@ p_in (x:xs) = p_in [x] <> p_in xs
 -- | Renders HTML table, called by 'printLO'
 makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t = oldRefwrap r (oldWrap "table" ts (
+makeTable ts (l:lls) r b t = refwrap r (table ts (
     tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
 -- | Helper for creating table rows

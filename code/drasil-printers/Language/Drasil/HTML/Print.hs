@@ -19,7 +19,8 @@ import Language.Drasil.HTML.Helpers (oldEm, oldWrap, oldRefwrap, caption, image,
   bold, sub, sup, cases, fraction, em, wrap, refwrap,
   oldBold, oldSub, oldSup, oldCases, oldFraction,
   reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, head_tag)
+  author, article_title, title, head_tag,
+  table, ol, ul, li, pa, ba)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 

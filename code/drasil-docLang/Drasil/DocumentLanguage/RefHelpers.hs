@@ -5,7 +5,7 @@ module Drasil.DocumentLanguage.RefHelpers
   ) where
 
 import Language.Drasil
-import Database.Drasil
+import Database.Drasil(RefMap, simpleMap)
 
 import Data.List (sortBy)
 import Data.Function (on)

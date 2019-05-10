@@ -18,7 +18,12 @@ import Data.List (elem)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Database.Drasil
+import Database.Drasil(SystemInformation, citeDB, 
+  conceptinsLookup, conceptinsTable, datadefnLookup,
+  dataDefnTable, gendefLookup, gendefTable,
+  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
+  refbyLookup, refbyTable, sectionLookup, sectionTable,
+  theoryModelLookup, theoryModelTable, vars, _sysinfodb)
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)

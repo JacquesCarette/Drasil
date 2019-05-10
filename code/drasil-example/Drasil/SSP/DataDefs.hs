@@ -1,22 +1,18 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, surfWtrF, 
+module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
   intersliceWtrF, angleA, angleB, lengthB, lengthLs, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
-  watForceSumDD) where 
+  watForceSumDD, surfWtrFRDD, surfWtrFLDD, weightDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
- 
-import Data.Drasil.Utils (weave)
 
-import Data.Drasil.Concepts.Documentation (assumption, constant, value)
-import Data.Drasil.Concepts.Math (area, equation)
-import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.Concepts.Physics (weight, distance)
+import Data.Drasil.Concepts.Documentation (assumption, constant)
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, sAnd, 
-  sIs, sOf, isThe, ofThe, getTandS)
-import Drasil.SSP.Defs (slice, slopeSrf, soil, soilPrpty, waterTable)
-import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH, assumpPSC)
+import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, 
+  getTandS)
+import Drasil.SSP.Defs (slice, soil, soilPrpty)
+import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
@@ -24,16 +20,16 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
   genericF, genericA, genericV, genericW, genericSpWght, index, intNormForce, 
   indxn, inx, inxi, inxiM1, midpntHght, mobShrC, normToShear, satWeight, 
   scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, slipDist, slipHght, slopeDist,
-  slopeHght, surfAngle, surfHydroForce, surfHydroForceR, surfHydroForceL, 
+  slopeHght, surfAngle, surfHydroForceR, surfHydroForceL, 
   surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
-  waterHght, waterWeight, waterVol, watrForce)
+  waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
 ------------------------
 
 dataDefns :: [DataDefinition]
-dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
+dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
   convertFunc1, convertFunc2, weightDD, nrmForceSumDD, watForceSumDD, 
   sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, 
@@ -78,72 +74,6 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   sParen (makeRef2S assumpSBSBISL), ch baseHydroForceL, S "is defined in",
   makeRef2S baseWtrFLDD `sAnd` ch baseHydroForceR, S "is defined in",
   makeRef2S baseWtrFRDD]
-
---DD3
-
-surfWtrF :: DataDefinition
-surfWtrF = mkDD srfWtrFQD [fredlund1977] srfWtrFDeriv "surfWtrF"
-  [srfWtrFNotes]
---FIXME: fill empty lists in
-
-srfWtrFQD :: QDefinition
-srfWtrFQD = mkQuantDef surfHydroForce srfWtrFEqn
-
-srfWtrFEqn :: Expr
-srfWtrFEqn = 0.5 * ((inxi surfHydroForceL) + (inxi surfHydroForceR))
-
-srfWtrFNotes :: Sentence
-srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the surface of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch surfHydroForceL, S "is defined in",
-  makeRef2S surfWtrFLDD `sAnd` ch surfHydroForceR, S "is defined in",
-  makeRef2S surfWtrFRDD]
-
-srfWtrFDeriv :: Derivation
-srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 
-  srfWtrFDerivEndSentence
-
-srfWtrFDerivEqns :: [Sentence]
-srfWtrFDerivEqns = map E [srfWtrFDerivWeightEqn, srfWtrFDerivSliceEqn]
-
-srfWtrFDerivSentences :: [Sentence]
-srfWtrFDerivSentences = map foldlSentCol [srfWtrFDerivIntroSentence, srfWtrFDeriv2DSentence]
-
-srfWtrFDerivIntroSentence, srfWtrFDeriv2DSentence, srfWtrFDerivEndSentence :: [Sentence]
-
-srfWtrFDerivWeightEqn, srfWtrFDerivSliceEqn :: Expr
-
-srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from", 
-  phrase weight `ofThe` S "water standing on top of" +:+. (phrase soil `ofThe` 
-  phrase slopeSrf), S "Substituting", plural value, S "for water into the",
-  phrase equation, S "for", phrase weight, S "from", makeRef2S weightDD, 
-  S "yields"] 
-
-srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only 2 dimensions are considered, so the", plural area `sOf` 
-  S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
-  phrase slice `sC` S "in the case where", S "height" `ofThe` phrase waterTable,
-  S "is below" +:+. ((S "height" `ofThe` phrase slopeSrf) `sC`
-  (phrase area `ofThe` S "water is zero")), S "In the case where", 
-  S "height" `ofThe` phrase waterTable, S "is above", S "height" `ofThe` 
-  phrase slopeSrf `sC` S "the water forms a trapezoid on top of the" +:+. 
-  phrase slopeSrf, S "The", phrase area, S "of a trapezoid is the average of",
-  plural len `ofThe` S "parallel sides multiplied by the", phrase len +:+.
-  S "between the parallel sides", S "The parallel sides in this case are the",
-  plural distance, S "between the", phrase waterTable `andThe` phrase slopeSrf,
-  S "for the edges of the", phrase slice `sC` S "and the", phrase len, 
-  S "between them" `isThe` S "width of the" +:+. phrase slice, S "Thus" `sC`
-  S "the", phrase surfHydroForce, S "are defined as"]
-
-srfWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
-   makeRef2S surfWtrF +:+ S "with" +:+ makeRef2S surfWtrFRDD `sAnd` 
-   makeRef2S surfWtrFLDD +:+. S "substituted in"]
-
-srfWtrFDerivWeightEqn = inxi surfHydroForce $= inxi waterVol * sy waterWeight
-
-srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi baseWthX * 0.5 *
-  (((inxi waterHght) - (inxi slopeHght)) + ((inxiM1 waterHght) - (inxiM1 slopeHght))) * sy waterWeight
-
 
 --DD4
 

@@ -66,7 +66,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
-  sspInputsToOutputTable)
+  sspInputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
@@ -139,6 +139,7 @@ mkSRS = [RefSec $ RefProg intro
             OutConstraints] ++ stdFields) sspIMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]
+          , CorrSolnPpties propsDeriv
           ]
         ],
     ReqrmntSec $ ReqsProg [
@@ -520,6 +521,8 @@ waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
+
+-- SECTION 4.2.7 --
 
 -- SECTION 5 --
 

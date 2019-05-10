@@ -191,6 +191,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.Goals
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods

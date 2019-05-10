@@ -191,22 +191,20 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, 
-  baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
-  midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
-  shrStress, totStress, effectiveStress, effNormStress, waterVol]
+  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, midpntHght, momntOfBdy, porePressure, sliceHght, 
+  sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
   shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, 
-  baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
-  midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
-  sliceHghtLeft, porePressure, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, waterVol :: UnitalChunk
+  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum,
+  sliceHghtRight, sliceHghtLeft, porePressure, intNormForce, shrStress, 
+  totStress, effectiveStress, effNormStress, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -344,10 +342,6 @@ baseWthX = uc' "b_i" (cn $ "base width of slices")
 baseLngth = uc' "l_b,i" (cn $ "total base lengths of slices") 
   "in the direction parallel to the slope of the base of each slice"
   (sub (vec lEll) lB) metre
-
-surfLngth = uc' "l_s,i" (cn $ "surface lengths of slices")
-  "in the direction parallel to the slope of the surface of each slice"
-  (sub (vec lEll) lS) metre
 
 midpntHght = uc' "h_i" (cn $ "y-direction heights of slices")
   ("heights in the y-direction from the base of each slice to the slope " ++

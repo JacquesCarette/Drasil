@@ -38,7 +38,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
   inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
   shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
-  shrResI, slcWght, slopeHght, surfHydroForce, surfLngth,
+  shrResI, slcWght, slopeHght, surfHydroForce,
   surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
 
 ---------------------------
@@ -273,7 +273,7 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
   srfWtrFNotes srfWtrFEqn
 
 srfWtrFEqn :: Relation
-srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 * 
+srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 * 
   case_ [case1, case2]
   where case1 = ((inxi waterHght - inxi slopeHght) + (inxiM1 waterHght - inxiM1 slopeHght), inxi waterHght $>= inxi slopeHght)
         case2 = (0, inxi waterHght $< inxi slopeHght)
@@ -281,7 +281,7 @@ srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 *
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the surface of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch surfLngth, S "is defined in",
+  sParen (makeRef2S assumpSBSBISL), ch baseWthX, S "is defined in",
   makeRef2S lengthB]
 
 srfWtrFDeriv :: Derivation

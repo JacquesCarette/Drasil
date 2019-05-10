@@ -62,9 +62,12 @@ inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
 
 inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
-inputInitQuants = cic "inputInitQuants" ( foldlSent [
+inputInitQuants = iIQConstruct inputInitQuantsTblabled
+
+iIQConstruct :: (Referable l, HasShortName l) => l -> ConceptInstance
+iIQConstruct x = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
-  makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
+  makeRef2S x `sC` S "which define the", phrase tank,
   plural parameter `sC` S "material", plural property, S "and initial",
   plural condition]) "Input-Initial-Quantities" funcReqDom
 --

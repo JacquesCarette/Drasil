@@ -2113,13 +2113,13 @@ This section provides the functional requirements, the tasks and behaviours that
 </p>
 <div class="list">
 <p>
-<div id="reqIIV">
-Input-Inital-Values: Input the quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
+<div id="inputInitQuants">
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
 </div>
 </p>
 <p>
 <div id="reqFM">
-Find-Mass: Use the inputs in <a href=#reqIIV>FR: Input-Inital-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank: <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
+Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank: <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 D
 </span>
@@ -2136,7 +2136,7 @@ Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the requir
 </p>
 <p>
 <div id="outputInputDerivQuants">
-Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#reqIIV>FR: Input-Inital-Values</a>, the mass from <a href=#reqFM>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
+Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the mass from <a href=#reqFM>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
 </div>
 </p>
 <p>
@@ -2377,7 +2377,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>
 </th>
 <th>
-<a href=#reqIIV>FR: Input-Inital-Values</a>
+<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>
 </th>
 <th>
 <a href=#IM:heatEInWtr>IM: heatEInWtr</a>
@@ -3611,6 +3611,68 @@ X
 </tr>
 <tr>
 <td>
+<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 <a href=#reqFM>FR: Find-Mass</a>
 </td>
 <td>
@@ -3660,68 +3722,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#reqIIV>FR: Input-Inital-Values</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -4067,7 +4067,7 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 Data Constraints (<a href=#Table:InDataConstraints>Table:InDataConstraints</a>)
 </th>
 <th>
-R1 (<a href=#reqIIV>FR: Input-Inital-Values</a>)
+R1 (<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>)
 </th>
 <th>
 R2 (<a href=#reqFM>FR: Find-Mass</a>)
@@ -4151,7 +4151,7 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 </tr>
 <tr>
 <td>
-R1 (<a href=#reqIIV>FR: Input-Inital-Values</a>)
+R1 (<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>)
 </td>
 <td>
 

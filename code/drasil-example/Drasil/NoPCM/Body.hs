@@ -12,7 +12,7 @@ import Data.Drasil.Utils (enumSimple,
 
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, quantity, input_, 
-  condition, property, variable, description, symbol_,
+  property, variable, description, symbol_,
   information, physSyst, problem, definition, srs, content, reference,
   document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
 
@@ -59,14 +59,13 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
-  swhscon)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
-  checkWithPhysConsts, oIDQConstruct, propsDerivNoPCM, swhsNFRequirements)
+  checkWithPhysConsts, iIQConstruct, oIDQConstruct, propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -537,12 +536,17 @@ reqFMExpr :: Expr
 reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
   (sy tank_length) * (sy w_density)))
 
-reqIIV, reqFM :: ConceptInstance
+{-
 reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
+    S "described in" +:+ makeRef2S inputInitQuantsTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
+-}
+inputInitQuants :: ConceptInstance
+inputInitQuants = iIQConstruct inputInitQuantsTable
+
+reqFM :: ConceptInstance
+reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S inputInitQuants +:+
     S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr `sC`
     S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
@@ -570,24 +574,24 @@ reqCCHEWT = cic "reqCCHEWT"
 
 oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
-  [S "the", plural quantity, S "from", makeRef2S reqIIV],
+  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
   [S "the", phrase mass, S "from", makeRef2S reqFM],
   [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
   ]
 
-reqIVRTable :: LabelledContent
-reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
+inputInitQuantsTable :: LabelledContent
+inputInitQuantsTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch, U.toSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
 reqs :: [ConceptInstance]
-reqs = [reqIIV, reqFM, checkWithPhysConsts, oIDQConstruct oIDQQuants,
-        calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
+reqs = [inputInitQuants, reqFM, checkWithPhysConsts,
+        oIDQConstruct oIDQQuants, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
 
 funcReqsListWordsNum :: [Contents]
 funcReqsListWordsNum =
-  (mkEnumSimpleD reqs) ++ [LlC reqIVRTable]
+  (mkEnumSimpleD reqs) ++ [LlC inputInitQuantsTable]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

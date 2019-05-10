@@ -36,7 +36,7 @@ dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, lengthB,
 --DD1
 
 sliceWght :: DataDefinition
-sliceWght = mkDD sliceWghtQD [fredlund1977] [{-Derivation-}] "sliceWght" 
+sliceWght = mkDD sliceWghtQD [makeCite fredlund1977] [{-Derivation-}] "sliceWght" 
   [sliceWghtNotes]
 --FIXME: fill empty lists in
 
@@ -56,7 +56,7 @@ sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD2
 
 baseWtrF :: DataDefinition
-baseWtrF = mkDD baseWtrFQD [fredlund1977] [{-Derivation-}] "baseWtrF"
+baseWtrF = mkDD baseWtrFQD [makeCite fredlund1977] [{-Derivation-}] "baseWtrF"
   [bsWtrFNotes]
 --FIXME: fill empty lists in
 
@@ -76,7 +76,7 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDD intersliceWtrFQD [fredlund1977] [{-Derivation-}] "intersliceWtrF"
+intersliceWtrF = mkDD intersliceWtrFQD [makeCite fredlund1977] [{-Derivation-}] "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
@@ -97,7 +97,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDD angleAQD [fredlund1977] [{-Derivation-}] "angleA" 
+angleA = mkDD angleAQD [makeCite fredlund1977] [{-Derivation-}] "angleA" 
   [angleANotes]
 --FIXME: fill empty lists in
 
@@ -116,7 +116,7 @@ angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD6
 
 angleB :: DataDefinition
-angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
+angleB = mkDD angleBQD [makeCite fredlund1977] [{-Derivation-}] "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -135,7 +135,7 @@ angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD7
 
 lengthB :: DataDefinition
-lengthB = mkDD lengthBQD [fredlund1977] [{-Derivation-}] "lengthB" []--Notes
+lengthB = mkDD lengthBQD [makeCite fredlund1977] [{-Derivation-}] "lengthB" []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -147,7 +147,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD8
 
 lengthLb :: DataDefinition
-lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
+lengthLb = mkDD lengthLbQD [makeCite fredlund1977] [{-Derivation-}] "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -164,7 +164,7 @@ lengthLbNotes = foldlSent [ch baseWthX, S "is defined in",
 --DD9
 
 slcHeight :: DataDefinition
-slcHeight = mkDD slcHeightQD [fredlund1977] [{-Derivation-}] "slcHeight"
+slcHeight = mkDD slcHeightQD [makeCite fredlund1977] [{-Derivation-}] "slcHeight"
   slcHeightNotes
 
 slcHeightQD :: QDefinition
@@ -184,7 +184,7 @@ slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+
 --DD10
 
 stressDD :: DataDefinition
-stressDD = mkDD stressQD [huston2008] [{-Derivation-}] "stress" []
+stressDD = mkDD stressQD [makeCite huston2008] [{-Derivation-}] "stress" []
 
 stressQD :: QDefinition
 stressQD = mkQuantDef totStress stressEqn
@@ -195,7 +195,7 @@ stressEqn = (sy genericF) / (sy genericA)
 --DD11
 
 ratioVariation :: DataDefinition
-ratioVariation = mkDD ratioVarQD [fredlund1977] [{-Derivation-}] 
+ratioVariation = mkDD ratioVarQD [makeCite fredlund1977] [{-Derivation-}] 
   "ratioVariation" []
 
 ratioVarQD :: QDefinition
@@ -211,7 +211,7 @@ ratioVarEqn = case_ [case1, case2]
 --DD12
 
 convertFunc1 :: DataDefinition
-convertFunc1 = mkDD convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
+convertFunc1 = mkDD convertFunc1QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
   "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: QDefinition
@@ -229,7 +229,7 @@ convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVa
 --DD13
 
 convertFunc2 :: DataDefinition
-convertFunc2 = mkDD convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
+convertFunc2 = mkDD convertFunc2QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
   "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: QDefinition
@@ -304,13 +304,13 @@ sliceHghtRightDD = mkDD sliceHghtRightQD [{-References-}] [{-Derivation-}]
   "sliceHghtRightDD" []--Notes
 sliceHghtLeftDD = mkDD sliceHghtLeftQD [{-References-}] [{-Derivation-}] 
   "sliceHghtLeftDD" []--Notes
-slcWghtRDD = mkDD slcWghtRQD [fredlund1977] [{-Derivation-}] 
+slcWghtRDD = mkDD slcWghtRQD [makeCite fredlund1977] [{-Derivation-}] 
   "slcWghtRDD" [slcWghtNotes]
-slcWghtLDD = mkDD slcWghtLQD [fredlund1977] [{-Derivation-}] 
+slcWghtLDD = mkDD slcWghtLQD [makeCite fredlund1977] [{-Derivation-}] 
   "slcWghtRDD" [slcWghtNotes]
-baseWtrFRDD = mkDD baseWtrFRQD [fredlund1977] [{-Derivation-}] 
+baseWtrFRDD = mkDD baseWtrFRQD [makeCite fredlund1977] [{-Derivation-}] 
   "baseWtrFRDD" [baseWtrFNotes]
-baseWtrFLDD = mkDD baseWtrFLQD [fredlund1977] [{-Derivation-}] 
+baseWtrFLDD = mkDD baseWtrFLQD [makeCite fredlund1977] [{-Derivation-}] 
   "baseWtrFLDD" [baseWtrFNotes]
 
 nrmForceSumQD :: QDefinition

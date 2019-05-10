@@ -28,6 +28,10 @@ main = do
   setCurrentDirectory "csharp"
   genCode (classes unCSC) [".cs"]
   setCurrentDirectory workingDir
+  createDirectoryIfMissing False "cpp"
+  setCurrentDirectory "cpp"
+  genCode (classes unCPPSC) [".cpp"]
+  setCurrentDirectory workingDir
     
 genCode :: [(Doc, Label, Bool)] -> [Label] -> IO()
 genCode files exts = createCodeFiles $ makeCode files exts

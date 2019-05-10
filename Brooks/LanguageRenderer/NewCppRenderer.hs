@@ -98,7 +98,7 @@ instance PackageSym CppSrcCode where
 instance RenderSym CppSrcCode where
     type RenderFile CppSrcCode = (Doc, Label, Bool)
     fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPSC code, tripThird $ unCPPSC code)
-    top m = liftA3 cppstop m (include "") (list dynamic) endStatement
+    top m = liftA3 cppstop m (list dynamic) endStatement
     bottom = return empty
 
 instance KeywordSym CppSrcCode where
@@ -106,7 +106,7 @@ instance KeywordSym CppSrcCode where
     endStatement = return semi
     endStatementLoop = return empty
 
-    include _ = return $ text "#include"
+    include n = return $ text "#include" <+> doubleQuotedText n
     inherit = return colon
 
     list _ = return $ text "vector"
@@ -570,12 +570,7 @@ instance ModuleSym CppSrcCode where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
     type Module CppSrcCode = (Doc, Label, Bool)
-    buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unCPPSC) cs) 
-                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
-                                        Nothing (map (liftA4 statementsToStateVars
-                                        public static endStatement) vs) ms):cs), n, or [any (snd . unCPPSC) ms, any (snd . unCPPSC) cs])
-    -- Note: need to print libraries here instead of in cppstop
+    buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD ms) (liftList vibcat cs), n, any (snd . unCPPSC) cs || any (snd . unCPPSC) ms)
 
 -- helpers
 isDtor :: Label -> Bool
@@ -586,8 +581,8 @@ isDtor _ = False
 cppHeaderExt :: Label
 cppHeaderExt = ".hpp"
 
-cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc -> Doc
-cppstop (m, n, b) inc lst end = vcat [
+cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc
+cppstop (m, n, b) lst end = vcat [
     if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
     blank,
     inc <+> angles (text "algorithm"),
@@ -604,6 +599,7 @@ cppstop (m, n, b) inc lst end = vcat [
     usingNameSpace "std" (Just $ render lst) end,
     usingNameSpace "std" (Just "ifstream") end,
     usingNameSpace "std" (Just "ofstream") end]
+    where inc = text "#include"
 
 usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <> text m <> end
@@ -688,4 +684,12 @@ cppMainClass :: Label -> Bool -> Doc -> Doc
 cppMainClass n b vs fs = vcat [
     vs,
     if b then empty else blank,
+    fs]
+
+cppModuleDoc :: Doc -> Doc -> Doc
+cppModuleDoc ls fs cs = vcat [
+    ls,
+    blank,
+    cs,
+    blank,
     fs]

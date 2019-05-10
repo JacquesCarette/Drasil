@@ -28,7 +28,7 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, baseWtrF, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation, surfWtrFRDD, surfWtrFLDD)
+  ratioVariation)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
@@ -38,7 +38,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
   inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
   shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
-  shrResI, slcWght, slopeHght, surfHydroForce, surfHydroForceL, surfHydroForceR,
+  shrResI, slcWght, slopeHght, surfHydroForce, surfLngth,
   surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
 
 ---------------------------
@@ -273,14 +273,16 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
   srfWtrFNotes srfWtrFEqn
 
 srfWtrFEqn :: Relation
-srfWtrFEqn = inxi surfHydroForce $= 0.5 * ((inxi surfHydroForceL) + (inxi surfHydroForceR))
+srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 * 
+  case_ [case1, case2]
+  where case1 = ((inxi waterHght - inxi slopeHght) + (inxiM1 waterHght - inxiM1 slopeHght), inxi waterHght $>= inxi slopeHght)
+        case2 = (0, inxi waterHght $< inxi slopeHght)
 
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the surface of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch surfHydroForceL, S "is defined in",
-  makeRef2S surfWtrFLDD `sAnd` ch surfHydroForceR, S "is defined in",
-  makeRef2S surfWtrFRDD]
+  sParen (makeRef2S assumpSBSBISL), ch surfLngth, S "is defined in",
+  makeRef2S lengthB]
 
 srfWtrFDeriv :: Derivation
 srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 
@@ -323,8 +325,7 @@ srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC`
   S "the", phrase surfHydroForce, S "are defined as"]
 
 srfWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
-    makeRef2S srfWtrFGD +:+ S "with" +:+ makeRef2S surfWtrFRDD `sAnd` 
-    makeRef2S surfWtrFLDD +:+. S "substituted in"]
+    S "a rearrangement of the non-zero case of" +:+. makeRef2S srfWtrFGD]
 
 srfWtrFDerivWeightEqn = inxi surfHydroForce $= inxi waterVol * sy waterWeight
 

@@ -1,7 +1,7 @@
 module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
   intersliceWtrF, angleA, angleB, lengthB, lengthLs, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
-  watForceSumDD, surfWtrFRDD, surfWtrFLDD) where 
+  watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -20,7 +20,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
   genericF, genericA, index, intNormForce, 
   indxn, inx, inxi, inxiM1, midpntHght, mobShrC, normToShear, satWeight, 
   scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, slipDist, slipHght, slopeDist,
-  slopeHght, surfAngle, surfHydroForceR, surfHydroForceL, 
+  slopeHght, surfAngle,
   surfLngth, totStress, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft,
   waterHght, waterWeight, watrForce)
 
@@ -33,7 +33,7 @@ dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB,
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
   convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, 
   sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, 
-  baseWtrFLDD, surfWtrFRDD, surfWtrFLDD]
+  baseWtrFLDD]
 
 --DD1
 
@@ -314,8 +314,7 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -----------------
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD,
-  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD, surfWtrFRDD, 
-  surfWtrFLDD :: DataDefinition
+  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD :: DataDefinition
 nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
 watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
@@ -332,10 +331,6 @@ baseWtrFRDD = mkDD baseWtrFRQD [fredlund1977] [{-Derivation-}]
   "baseWtrFRDD" [baseWtrFNotes]
 baseWtrFLDD = mkDD baseWtrFLQD [fredlund1977] [{-Derivation-}] 
   "baseWtrFLDD" [baseWtrFNotes]
-surfWtrFRDD = mkDD surfWtrFRQD [fredlund1977] [{-Derivation-}] 
-  "surfWtrFRDD" [surfWtrFNotes]
-surfWtrFLDD = mkDD surfWtrFLQD [fredlund1977] [{-Derivation-}] 
-  "surfWtrFLDD" [surfWtrFNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -408,29 +403,6 @@ baseWtrFLEqn = (inxi baseLngth)*(case_ [case1,case2])
 
 baseWtrFNotes :: Sentence
 baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
-
-surfWtrFRQD :: QDefinition
-surfWtrFRQD = mkQuantDef surfHydroForceR surfWtrFREqn
-
-surfWtrFREqn :: Expr
-surfWtrFREqn = (inxi surfLngth)*(case_ [case1,case2])
-  where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
-          (inxi waterHght) $> (inxi slopeHght))
-
-        case2 = (0, (inxi waterHght) $<= (inxi slopeHght))
-
-surfWtrFLQD :: QDefinition
-surfWtrFLQD = mkQuantDef surfHydroForceL surfWtrFLEqn
-
-surfWtrFLEqn :: Expr
-surfWtrFLEqn = (inxi surfLngth)*(case_ [case1,case2])
-  where case1 = (((inxiM1 waterHght)-(inxiM1 slopeHght))*(sy waterWeight),
-          (inxiM1 waterHght) $> (inxiM1 slopeHght))
-
-        case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slopeHght))
-
-surfWtrFNotes :: Sentence
-surfWtrFNotes = ch surfLngth +:+ S "is defined in" +:+. makeRef2S lengthLs
 
 --------------------------
 -- Derivation Sentences --

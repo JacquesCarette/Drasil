@@ -191,7 +191,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
+  totNrmForce, nrmFSubWat, surfLoad, 
   baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
   midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
@@ -202,7 +202,7 @@ accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
   shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
+  totNrmForce, nrmFSubWat, surfLoad, 
   baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
   midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
   sliceHghtLeft, porePressure, intNormForce, shrStress, totStress, 
@@ -309,17 +309,6 @@ surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic forces")
   ("per meter in the z-direction from water pressure acting into each slice " ++
    "from standing water on the slope surface")
   (sub (vec cU) lT) forcePerMeterU
-
-surfHydroForceR = uc' "U^R_t,i" (cn $ "right surface hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure acting into each slice" ++ " from standing water on the slope surface, assuming the entire slice has " ++
-  "the height of the right side of the slice")
-  (sub (sup (vec cU) cR) lT) forcePerMeterU
-
-surfHydroForceL = uc' "U^L_t,i" (cn $ "left surface hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure acting into each slice " ++
-  "from standing water on the slope surface, assuming the entire slice has " ++
-  "the height of the left side of the slice")
-  (sub (sup (vec cU) cL) lT) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn $ "normal forces")
   ("total reactive forces per meter in the z-direction for each slice of a " ++

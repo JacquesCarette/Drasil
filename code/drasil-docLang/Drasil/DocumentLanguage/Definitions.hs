@@ -18,6 +18,7 @@ import Data.List (elem)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Database.Drasil
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (getSource', foldlSent)

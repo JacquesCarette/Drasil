@@ -5,6 +5,7 @@ module Drasil.Sections.TraceabilityMandGs
    ) where
 
 import Language.Drasil
+import Database.Drasil
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
  reference, section_, traceyGraph, traceyMatrix)

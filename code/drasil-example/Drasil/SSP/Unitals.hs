@@ -28,14 +28,13 @@ SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 genericF = force
 genericA = area
+
+-- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
 genericV = vol
 genericW = weight
 genericSpWght = specWeight
-
--- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
 accel = acceleration
 genericMass = mass
-
 
 -------------
 -- HELPERS --

@@ -1,7 +1,7 @@
 module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
   intersliceWtrF, angleA, angleB, lengthB, lengthLs, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
-  watForceSumDD, surfWtrFRDD, surfWtrFLDD, weightDD) where 
+  watForceSumDD, surfWtrFRDD, surfWtrFLDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -17,7 +17,7 @@ import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012,
   huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
   baseHydroForceL, baseLngth, baseWthX, constF, dryWeight, fricAngle, fs, 
-  genericF, genericA, genericV, genericW, genericSpWght, index, intNormForce, 
+  genericF, genericA, index, intNormForce, 
   indxn, inx, inxi, inxiM1, midpntHght, mobShrC, normToShear, satWeight, 
   scalFunc, shrResC, slcWght, slcWghtR, slcWghtL, slipDist, slipHght, slopeDist,
   slopeHght, surfAngle, surfHydroForceR, surfHydroForceL, 
@@ -31,7 +31,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, 
   lengthB, lengthLb, lengthLs, slcHeight, stressDD, ratioVariation,
-  convertFunc1, convertFunc2, weightDD, nrmForceSumDD, watForceSumDD, 
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, 
   sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD, slcWghtLDD, baseWtrFRDD, 
   baseWtrFLDD, surfWtrFRDD, surfWtrFLDD]
 
@@ -266,17 +266,6 @@ convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in",
   makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in", 
   makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in", 
   makeRef2S convertFunc1]
-
---DD14
-
-weightDD :: DataDefinition
-weightDD = mkDD weightQD [{-Source-}] [{-Derivation-}] "weightDD" [{-Notes-}]
-
-weightQD :: QDefinition
-weightQD = mkQuantDef genericW weightEqn
-
-weightEqn :: Expr
-weightEqn = sy genericV * sy genericSpWght
 
 {--DD10
 

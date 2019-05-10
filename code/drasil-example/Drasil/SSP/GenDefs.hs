@@ -18,6 +18,7 @@ import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (distance, weight)
 import Data.Drasil.Quantities.Physics (force)
+import Data.Drasil.Theories.Physics (weightGD)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, 
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
@@ -27,7 +28,7 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, baseWtrF, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation, surfWtrFRDD, surfWtrFLDD, weightDD)
+  ratioVariation, surfWtrFRDD, surfWtrFLDD)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
@@ -45,7 +46,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 ---------------------------
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
- effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, srfWtrFGD]
+ effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, srfWtrFGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, srfWtrFGD :: GenDefn
 normForcEqGD = gd' normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
@@ -66,7 +67,7 @@ normShrRGD   = gd' normShrR   (getUnit intShrForce)    []
   [chen2005]                   "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd' momentEql  (Just newton)           [momEql_deriv]  
   [chen2005]                   "momentEql"   [momEql_desc]
-srfWtrFGD    = gd' srfWtrF   (getUnit surfHydroForce) srfWtrFDeriv   
+srfWtrFGD    = gd' srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
   [fredlund1977]               "srfWtrF"    [srfWtrFNotes]
 
 --
@@ -298,7 +299,7 @@ srfWtrFDerivWeightEqn, srfWtrFDerivSliceEqn :: Expr
 srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from", 
   phrase weight `ofThe` S "water standing on top of" +:+. (phrase soil `ofThe` 
   phrase slopeSrf), S "Substituting", plural value, S "for water into the",
-  phrase equation, S "for", phrase weight, S "from", makeRef2S weightDD, 
+  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
   S "yields"] 
 
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 

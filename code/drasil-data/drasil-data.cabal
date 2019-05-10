@@ -33,6 +33,7 @@ library
     Data.Drasil.Units.PhysicalProperties
     Data.Drasil.Units.Physics
     Data.Drasil.Units.SolidMechanics
+    Data.Drasil.Theories.Physics
 
   Build-Depends:
     base >= 4.7,

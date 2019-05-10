@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
+module Drasil.GamePhysics.TMods (cpTMods, t2NewtonTL_new, 
 t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new) where
 
 import Language.Drasil
@@ -12,44 +12,21 @@ import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  angularAccel, angularVelocity, displacement, force, gravitationalConst, 
+import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
+  angularVelocity, displacement, force, gravitationalConst, 
   momentOfInertia, torque, velocity)
+import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
 
 ----- Theoretical Models -----
 
 cpTMods :: [RelationConcept]
-cpTMods = [newtonSL, newtonTL, newtonLUG, chaslesThm, newtonSLR]
+cpTMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
 
 cpTMods_new :: [TheoryModel]
-cpTMods_new = [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
+cpTMods_new = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
   t4ChaslesThm_new, t5NewtonSLR_new]
 
 -- T1 : Newton's second law of motion --
-
-t1NewtonSL_new :: TheoryModel
-t1NewtonSL_new = tm (cw newtonSL)
-  [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] [] 
-  "NewtonSecLawMot" [newtonSLDesc]
-
-newtonSL :: RelationConcept
-newtonSL = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel
-
-newtonSLRel :: Relation
-newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
-
-newtonSLDesc :: Sentence
-newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
-  (sParen $ Sy $ unit_symb QP.force), S "on a", (phrase CP.rigidBody),
-  S "is proportional to the", (phrase QP.acceleration),
-  (ch QP.acceleration), (sParen $ Sy $ unit_symb QP.acceleration),
-  S "of the", (phrase CP.rigidBody) `sC`
-  S "where", (ch QPP.mass), (sParen $ Sy $ unit_symb QPP.mass),
-  S "denotes the", (phrase QPP.mass), S "of the",
-  (phrase $ CP.rigidBody),
-  S "as the constant of proportionality"]
 
 -- T2 : Newton's third law of motion --
 

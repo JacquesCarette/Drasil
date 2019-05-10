@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
-module Language.Drasil (
+module Database.Drasil (
   -- ChunkDB
-  , ChunkDB, cdb
+  ChunkDB, cdb
   , symbLookup, symbolTable
   , termLookup, termTable
   , conceptMap, traceMap, defTable, defLookup, labelledconLookup
@@ -19,6 +19,6 @@ module Language.Drasil (
   , ReferenceDB, rdb, RefMap, simpleMap
 ) where
 
-import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
-import Language.Drasil.ChunkDB
-import Language.Drasil.SystemInformation
+import Database.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
+import Database.Drasil.ChunkDB
+import Database.Drasil.SystemInformation

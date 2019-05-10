@@ -1,31 +1,17 @@
 {-# LANGUAGE GADTs, TemplateHaskell #-}
-module Language.Drasil.SystemInformation(SystemInformation(..), Block(..),
+module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
   citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
   conceptDB
   ) where
 
-{-
-import Language.Drasil.Chunk.Citation (BibRef, Citation)
-import Language.Drasil.Chunk.Concept (ConceptInstance)
-import Language.Drasil.Chunk.Concept.Core (sDom)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
-import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (CommonIdea, Concept, ConceptDomain(cdom), Constrained, 
-  Idea, Quantity)
-import Language.Drasil.Classes.Citations (HasFields(getFields))
-import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
-import Language.Drasil.People (HasName, People, comparePeople)
-import Language.Drasil.UID (UID)
--}
+import Language.Drasil
+
+import Database.Drasil.ChunkDB (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
-
-import Database.Drasil.ChunkDB (ChunkDB)
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation

@@ -4,6 +4,8 @@ module Language.Drasil (
   Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
+  -- Expr.Extract
+  , dep
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
@@ -37,7 +39,7 @@ module Language.Drasil (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
-  , IsUnit
+  , IsUnit(getUnits)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , ExprRelat(relat)
@@ -46,6 +48,8 @@ module Language.Drasil (
   , Quantity
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
+  -- Chunk.Concept.Core
+  , sDom
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict
   -- Chunk.NamedIdea
@@ -102,6 +106,8 @@ module Language.Drasil (
   -- Sentence
   , Sentence(..), sParen, (+:+), (+:+.), sC, (+:), ch
   , SentenceStyle(..)
+  -- Sentence.Extract
+  , sdep, shortdep
   -- RefProg
   , Reference(..)
   -- NounPhrase
@@ -133,6 +139,7 @@ module Language.Drasil (
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
+  , comparePeople
   -- Chunk.Theory
   , TheoryModel, tm, Theory(..)
   -- Stages
@@ -179,6 +186,7 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), DerivType(..),
           BoolOper(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
+import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, idx, int, dbl, str, isin, case_,
@@ -201,7 +209,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
   HasRefAddress(getRefAdd), HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
-  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
+  IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
   DefiningExpr(defnExpr), Quantity, UncertainQuantity(uncert))
@@ -223,6 +231,7 @@ import Language.Drasil.Chunk.Citation (
   , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
@@ -256,6 +265,7 @@ import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
 import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
+import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
@@ -264,7 +274,7 @@ import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
-  rendPersLFM', rendPersLFM'')
+  rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.RefProg(Reference(Reference))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 

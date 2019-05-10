@@ -1,5 +1,5 @@
 Name:		drasil-database
-Version:	0.1.60
+Version:	0.1.0
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -31,4 +31,4 @@ library
 source-repository head
   type:     git
   location: git://github.com/JacquesCarette/Drasil.git
-  subdir: code
+  subdir: database

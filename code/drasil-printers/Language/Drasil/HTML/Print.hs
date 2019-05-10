@@ -358,7 +358,7 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 -- **THE MAIN FUNCTION**
 
 makeBib :: BibRef -> Doc
-makeBib = oldWrap "ul" ["hide-list-style"] . vcat .
+makeBib = ul ["hide-list-style"] . vcat .
   map (\(x,(y,z)) -> makeRefList z y x) .
   zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
 

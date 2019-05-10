@@ -13,19 +13,19 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   LCsSec(..), UCsSec(..), generateTraceMap',
   assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
+  mkEnumSimpleD, outDataConstTbl, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
+import Data.Drasil.Concepts.Documentation as Doc(assumption,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
-  information, input_, interface, item, model, nonfunctionalRequirement,
-  object, organization, physical, physicalConstraint, physicalSim, physics,
-  priority, problem, problemDescription, product_, project, property, quantity,
+  information, input_, interface, item, model,
+  object, organization, physical, physicalSim, physics,
+  problem, problemDescription, product_, project, quantity,
   realtime, reference, requirement, section_, simulation, software, softwareSys,
   srs, srsDomains, system, systemConstraint, sysCont, task, template,
   termAndDef, thModel, traceyMatrix, user, userCharacteristic, doccon, doccon')
@@ -52,6 +52,7 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   position, time, velocity)
+
 import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
@@ -60,6 +61,8 @@ import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.Requirements (functionalRequirementsList, 
+  functionalRequirementsList', requirements)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
@@ -547,106 +550,15 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
 
-requirements :: Section
-requirements = reqF [functionalRequirements, nonfunctionalRequirements]
+-- in Requirements.hs
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-functionalRequirements :: Section
-functionalRequirementsList :: [Contents]
-
-functionalRequirements = SRS.funcReq functionalRequirementsList []
-
-functional_requirements_req1, functional_requirements_req2, 
-  functional_requirements_req3, functional_requirements_req4,
-  functional_requirements_req5, functional_requirements_req6,
-  functional_requirements_req7, functional_requirements_req8 :: Sentence
-
-  -- | template for requirements
-requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
-  S "over a period of", (phrase QP.time), S "of the", x, z]
-
-  -- | with added constraint
-requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-requirementS a b = requirementTemplate (plural a) (plural b) ((getAcc twoD)
-  +:+ (plural CP.rigidBody))
-
-  -- | without added constraint
-requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-requirementS' a b = requirementS a b EmptyS 
-
--- some requirements look like they could be parametrized
-functional_requirements_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
-  (plural CP.rigidBody), S "in the", (phrase physicalSim), 
-  S "to interact in"]
-
-functional_requirements_req2 = foldlSent [S "Input the initial", 
-  (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
-  (plural QM.orientation) `sC` (plural QP.angularVelocity), 
-  S "of" `sC` S "and", (plural QP.force), S "applied on", 
-  (plural CP.rigidBody)]
-
-functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface), 
-  (plural property), S "of the", plural body, S "such as",
-  (phrase CP.friction) `sOr` (phrase CP.elasticity)]
-
-functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
-  S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section]))]
-
-functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
-  (S "acted upon by a" +:+ (phrase QP.force))
-
-functional_requirements_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
-
-functional_requirements_req7 = foldlSent [S "Determine if any of the", 
-  (plural CP.rigidBody), S "in the", (phrase CP.space), 
-  S "have collided"]
-
-functional_requirements_req8 = requirementS (QP.position) (QP.velocity) 
-  (S "that have undergone a" +:+ (phrase CP.collision))
-
-reqSS, reqIIC, reqISP, reqVPC, reqCTOT, reqCROT, reqDC, reqDCROT :: ConceptInstance
-
-reqSS = cic "reqSS" functional_requirements_req1 "Simulation-Space" funcReqDom
-reqIIC = cic "reqIIC" functional_requirements_req2 "Input-Initial-Conditions" funcReqDom
-reqISP = cic "reqISP" functional_requirements_req3 "Input-Surface-Properties" funcReqDom
-reqVPC = cic "reqVPC" functional_requirements_req4 "Verify-Physical_Constraints" funcReqDom
-reqCTOT = cic "reqCTOT" functional_requirements_req5 "Calculate-Translation-Over-Time" funcReqDom
-reqCROT = cic "reqCROT" functional_requirements_req6 "Calculate-Rotation-Over-Time" funcReqDom
-reqDC = cic "reqDC" functional_requirements_req7 "Determine-Collisions" funcReqDom
-reqDCROT = cic "reqDCROT" functional_requirements_req8 "Determine-Collision-Response-Over-Time" funcReqDom
-
--- Currently need separate chunks for plurals like rigid bodies,
--- velocities, etc.
-functionalRequirementsList' :: [ConceptInstance]
-functionalRequirementsList' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
-  reqCROT, reqDC, reqDCROT]
-
-functionalRequirementsList = mkEnumSimpleD
-  functionalRequirementsList'
-
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
-
-nonfunctionalRequirements :: Section
-nonfunctionalRequirementsIntro :: Contents
-
-nonfunctionalRequirements = SRS.nonfuncReq [nonfunctionalRequirementsIntro] []
-
-chpmnkPriorityNFReqs :: [ConceptChunk]
-chpmnkPriorityNFReqs = [correctness, understandability, portability,
-  reliability, maintainability]
-
-nonfunctionalRequirementsIntro = foldlSP 
-  [(titleize' game), S "are resource intensive, so", phrase performance,
-  S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
-  S "that are a", phrase priority +: S "are",
-  foldlList Comma List (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --

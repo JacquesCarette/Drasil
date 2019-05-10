@@ -7,31 +7,33 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple,
-  itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
+import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
-import Data.Drasil.Concepts.Documentation as Doc (inModel,
-  requirement, item, assumption, thModel, traceyMatrix, model, quantity, input_, 
-  property, variable, description, symbol_,
-  information, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, srsDomains, doccon, doccon', material_)
-
-import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
+import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
+  definition, doccon, doccon', document, goal, inModel, information, item,
+  material_, model, physSyst, problem, property, purpose, reference,
+  requirement, srs, srsDomains, thModel, traceyMatrix)
 import Data.Drasil.Concepts.Education (educon)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
-import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heatCapSpec, thermal_conduction,
   thermocon, phase_change)
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Computation (algorithm)
+
+import qualified Data.Drasil.Concepts.Math as M (ode, de, equation)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, ht_flux, sens_heat)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
+
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
+import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+
+import Data.Drasil.Phrase (for)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
+  isThe, sOf, ofThe, foldlSent, foldlSP)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
@@ -48,9 +50,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmtF, physSystDescription_label, generateTraceMap')
-import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSent, foldlSP)
+
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -64,9 +64,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
-  checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct, propsDerivNoPCM,
-  swhsNFRequirements)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -83,6 +81,7 @@ import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.Goals (nopcmGoals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
+import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -505,10 +504,6 @@ dataConstTable1 = inDataConstTbl dataConstListIn
   -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
   -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
 
-dataConstListIn :: [UncertQ]
-dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
-  coil_HTC, temp_init, time_final]
-
 dataConstTable2 :: LabelledContent
 dataConstTable2 = outDataConstTbl dataConstListOut
 -- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
@@ -518,61 +513,19 @@ dataConstTable2 = outDataConstTbl dataConstListOut
 dataConstListOut :: [ConstrConcept]
 dataConstListOut = [temp_W, w_E]
 
-inputVar :: [QuantityDict]
-inputVar = map qw dataConstListIn 
-
-
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
+
+-- in Requirements.hs
 
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
 
-funcReqsList :: [Contents]
-funcReqsList = funcReqsListWordsNum
-
---
-inputInitQuants :: ConceptInstance
-inputInitQuants = iIQConstruct inputInitQuantsTable
-
---
-findMassExpr :: Expr
-findMassExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
-  (sy tank_length) * (sy w_density)))
-
-findMass :: ConceptInstance
-findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)
-              (E findMassExpr) (ch w_vol `isThe` phrase w_vol)
-
---
-oIDQQuants :: [Sentence]
-oIDQQuants = map foldlSent_ [
-  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
-  [S "the", phrase mass, S "from", makeRef2S findMass],
-  [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
-  ]
-
-inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
-  Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable [ch, U.toSentence, phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
-
-reqs :: [ConceptInstance]
-reqs = [inputInitQuants, findMass, checkWithPhysConsts,
-        oIDQConstruct oIDQQuants, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
-
-funcReqsListWordsNum :: [Contents]
-funcReqsListWordsNum =
-  (mkEnumSimpleD reqs) ++ [LlC inputInitQuantsTable]
-
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
 -------------------------------------------
-
---imports from SWHS
 
 ----------------------------
 --Section 6 : LIKELY CHANGES

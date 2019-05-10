@@ -126,8 +126,6 @@ ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
 \\
 $V$ & Volume & $\text{m}^{3}$
 \\
-${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
-\\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
@@ -519,7 +517,7 @@ Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is 
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
-RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[reqFM]{FR: Find-Mass} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
+RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
@@ -635,9 +633,9 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
-\item[Find-Mass:\phantomsection\label{reqFM}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank: ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$
+\item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$, where ${V_{W}}$ is the volume of water.
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[reqFM]{FR: Find-Mass}, and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
 \end{itemize}
@@ -699,7 +697,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. \hyperref[Table:TraceyRI]{Table:TraceyRI} shows the dependencies of instance models, requirements, and data constraints on each other. \hyperref[Table:TraceyRIs]{Table:TraceyRIs} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} & \hyperref[TM:sensHtE]{TM: sensHtE} & \hyperref[reqFM]{FR: Find-Mass} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
+ & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} & \hyperref[TM:sensHtE]{TM: sensHtE} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
 \\
 \midrule
 \endhead
@@ -737,13 +735,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X & X & X & 
 \\
+\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\\
 \hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
 \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  & 
-\\
-\hyperref[reqFM]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -777,7 +775,7 @@ IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & Data Constraints (\hyperref[Table:InDataConstraints]{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[reqFM]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & Data Constraints (\hyperref[Table:InDataConstraints]{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[findMass]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time})
 \\
 \midrule
 \endhead
@@ -787,7 +785,7 @@ IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  &
 \\
 R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) &  &  &  &  &  &  &  &  & 
 \\
-R2 (\hyperref[reqFM]{FR: Find-Mass}) & X &  &  & X &  &  &  &  & 
+R2 (\hyperref[findMass]{FR: Find-Mass}) & X &  &  & X &  &  &  &  & 
 \\
 R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) &  &  & X &  &  &  &  &  & 
 \\

@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, quantity, input_, 
   property, variable, description, symbol_,
   information, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
+  document, goal, purpose, srsDomains, doccon, doccon', material_)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Education (educon)
@@ -65,7 +65,8 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
-  checkWithPhysConsts, iIQConstruct, oIDQConstruct, propsDerivNoPCM, swhsNFRequirements)
+  checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct, propsDerivNoPCM,
+  swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -532,50 +533,24 @@ inputVar = map qw dataConstListIn
 funcReqsList :: [Contents]
 funcReqsList = funcReqsListWordsNum
 
-reqFMExpr :: Expr
-reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
-  (sy tank_length) * (sy w_density)))
-
-{-
-reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRef2S inputInitQuantsTable `sC` S "which define the" +:+
-    plural tank_para `sC` S "material" +:+ plural property +:+
-    S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
--}
+--
 inputInitQuants :: ConceptInstance
 inputInitQuants = iIQConstruct inputInitQuantsTable
 
-reqFM :: ConceptInstance
-reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S inputInitQuants +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr `sC`
-    S "as follows, where" +:+ ch w_vol `isThe`
-    phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
-    S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
-{-
-reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
-    S "satisfy the required" +:+ phrase physicalConstraint +:+
-    S "shown in" +:+. makeRef2S dataConstTable1)
-    "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
-reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
-    +:+ plural quantity +:+
-    S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-    plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
-    phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
-    sParen (S "from" +:+ makeRef2S eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
-reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
-    sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
-reqCCHEWT = cic "reqCCHEWT" 
-    (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
-    phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ makeRef2S heatEInWtr))
-    "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
--}
+--
+findMassExpr :: Expr
+findMassExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
+  (sy tank_length) * (sy w_density)))
 
+findMass :: ConceptInstance
+findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)
+              (E findMassExpr) (ch w_vol `isThe` phrase w_vol)
+
+--
 oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
   [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
-  [S "the", phrase mass, S "from", makeRef2S reqFM],
+  [S "the", phrase mass, S "from", makeRef2S findMass],
   [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
   ]
 
@@ -586,7 +561,7 @@ inputInitQuantsTable = llcc (makeTabRef "Input-Variable-Requirements") $
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
 reqs :: [ConceptInstance]
-reqs = [inputInitQuants, reqFM, checkWithPhysConsts,
+reqs = [inputInitQuants, findMass, checkWithPhysConsts,
         oIDQConstruct oIDQQuants, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
 
 funcReqsListWordsNum :: [Contents]

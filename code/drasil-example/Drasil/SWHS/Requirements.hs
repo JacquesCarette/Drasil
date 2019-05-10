@@ -71,13 +71,16 @@ iIQConstruct x = cic "inputInitQuants" ( foldlSent [
   plural parameter `sC` S "material", plural property, S "and initial",
   plural condition]) "Input-Initial-Quantities" funcReqDom
 --
-findMass = cic "findMass" ( foldlSent [
-  S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
-  S "to find the", plural mass, S "needed for",
-  (foldlList Comma List $ map makeRef2S swhsIMods) `sC`
-  S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",
-  ch w_vol `isThe` phrase w_vol, S "and" +:+. (ch tank_vol `isThe`
-  phrase tank_vol), makeRef2S assumpVCN])
+findMass = findMassConstruct inputInitQuants (plural mass)
+            (foldlList Comma List $ map makeRef2S swhsIMods)
+            (foldlList Comma List $ [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
+            (ch w_vol `isThe` phrase w_vol `sAnd` ch tank_vol `isThe` phrase tank_vol)
+
+findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
+                                   Sentence -> Sentence -> Sentence -> ConceptInstance
+findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
+  S "Use the", plural input_, S "in", makeRef2S fr, S "to find the", 
+  m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=

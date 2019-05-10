@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Goals (goals) where
+module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
 

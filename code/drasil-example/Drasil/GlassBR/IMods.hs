@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi) where
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -6,12 +6,14 @@ import Language.Drasil
 import Language.Drasil.Code (asExpr')
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
+import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (charWeight, demand, 
   demandq, eqTNTWeight, plateLen, plateWidth, 
   standOffDist)
 import Drasil.GlassBR.ModuleDefs (interpY)
 
+import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
@@ -46,3 +48,9 @@ calofDemandDesc =
   (ch eqTNTWeight), S "is defined in" +:+.
   makeRef2S eqTNTWDD, (ch standOffDist) `isThe`
   (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
+
+-- Intro --
+
+instModIntro :: Sentence
+instModIntro = foldlSent [S "The", phrase goal, makeRef2S willBreakGS, 
+  S "is met by", makeRef2S calofDemandi]

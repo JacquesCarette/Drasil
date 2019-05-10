@@ -319,18 +319,18 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> oldWrap "p" [] $ mlref l $ p_spec b <> text ": "
-   <> p_item e) items
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ p_spec b <> text ": "
+  <> p_item e) items
 makeList (Desc items)   = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> oldWrap "p" [] $ mlref l $ oldWrap "b" [] $ p_spec b
-   <> text ": " <> p_item e) items
-makeList (Ordered items) = oldWrap "ol" ["list"] (vcat $ map
-  (oldWrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Unordered items) = oldWrap "ul" ["list"] (vcat $ map
-  (oldWrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Definitions items) = oldWrap "ul" ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> oldWrap "li" [] $ mlref l $ p_spec b <> text " is the"
-   <+> p_item e) items
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ p_spec b
+  <> text ": " <> p_item e) items
+makeList (Ordered items) = ol ["list"] (vcat $ map
+  (li . \(i,l) -> mlref l $ p_item i) items)
+makeList (Unordered items) = ul ["list"] (vcat $ map
+  (li . \(i,l) -> mlref l $ p_item i) items)
+makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
+  vcat $ map (\(b,e,l) -> li $ mlref l $ p_spec b <> text " is the"
+  <+> p_item e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc

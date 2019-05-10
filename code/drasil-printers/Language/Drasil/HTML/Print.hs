@@ -118,8 +118,8 @@ symbol (L.Special s) = unPH $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ oldSup (symbol x)
-symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ oldSub (symbol x)
+symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ (render . sup . text) (symbol x)
+symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ (render . sub . text) (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of L.Corners (general)"

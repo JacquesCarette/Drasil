@@ -22,7 +22,7 @@ import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc(assumption,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
-  environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
+  environment, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model,
   object, organization, physical, physicalSim, physics,
   problem, problemDescription, product_, project, quantity,
@@ -36,22 +36,18 @@ import Data.Drasil.Concepts.Software (physLib, understandability, portability,
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
-  sOf, sOr)
+  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
-  makeListRef, bulletFlat, bulletNested, enumBullet)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, itemRefToSent,
+  makeListRef, makeTMatrix)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, physicCon)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
-  position, time, velocity)
+  cartesian, rightHand, physicCon)
+import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
+import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,

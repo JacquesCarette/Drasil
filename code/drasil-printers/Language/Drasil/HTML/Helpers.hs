@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat, nest,
-  ($+$), cat, sep, fcat)
+  ($+$), cat, sep, fcat, hsep)
 import Data.List (intersperse, foldl1)
 
 import Language.Drasil hiding (Expr)
@@ -77,20 +77,28 @@ data Variation = Class | Id
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrap_gen Class a empty
+
+wrapAux :: String -> [String] -> Doc -> Doc
+wrapAux a = wrap_genAux hsep Class a empty
+
 -- | Helper for wrapping HTML tags.
 -- The forth argument provides class names for the CSS.
-wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_gen _ s _ [] = \x -> 
+wrap_genAux :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+
+wrap_genAux sep _ s _ [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
   in sep [tb s, indent x, tb $ '/':s]
-wrap_gen Class s _ ts = \x ->
+wrap_genAux sep Class s _ ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in sep [tb s, indent x, te s]
-wrap_gen Id s ti _ = \x ->
+wrap_genAux sep Id s ti _ = \x ->
   let tb c = text ("<" ++c++ " id=\"") <> ti <> text ("\">")
       te c = text $ "</" ++ c ++ ">"
   in sep [tb s, indent x, te s] 
+
+wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrap_gen = wrap_genAux cat
 
 
 -- | Helper for wrapping attributes in a tag.

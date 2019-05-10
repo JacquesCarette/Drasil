@@ -97,7 +97,7 @@ title_spec s         = p_spec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: Spec -> Doc
-p_spec (E e)             = oldEm $ text $ oldP_expr e
+p_spec (E e)             = em $ p_expr e
 p_spec (a :+: b)         = p_spec a <> p_spec b
 p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s

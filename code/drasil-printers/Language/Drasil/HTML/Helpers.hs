@@ -160,13 +160,13 @@ oldBold x  = "<b>"  ++ x ++ "</b>"
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag
-em = wrap "em" []
+em = wrapAux "em" []
 -- | Superscript tag
-sup = wrap "sup" []
+sup = wrapAux "sup" []
 -- | Subscript tag
-sub = wrap "sub" []
+sub = wrapAux "sub" []
 -- | Bold tag
-bold = wrap "b" []
+bold = wrapAux "b" []
 
 article_title, author :: Doc -> Doc
 -- | Title header

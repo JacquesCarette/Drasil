@@ -66,7 +66,7 @@ import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
+import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
@@ -131,8 +131,7 @@ mkSRS = [RefSec $ RefProg intro
       SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          , TMs [] (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-           effStress]
+          , TMs [] (Label : stdFields) tMods
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 

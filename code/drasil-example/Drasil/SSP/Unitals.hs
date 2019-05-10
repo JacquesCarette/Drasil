@@ -11,8 +11,8 @@ import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
-import Data.Drasil.Quantities.PhysicalProperties (specWeight, vol)
-import Data.Drasil.Quantities.Physics (force, weight)
+import Data.Drasil.Quantities.PhysicalProperties (mass, specWeight, vol)
+import Data.Drasil.Quantities.Physics (acceleration, force, weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -31,6 +31,11 @@ genericA = area
 genericV = vol
 genericW = weight
 genericSpWght = specWeight
+
+-- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
+accel = acceleration
+genericMass = mass
+
 
 -------------
 -- HELPERS --
@@ -178,9 +183,9 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, genericV, genericW, genericSpWght,   
-  nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, slipDist, 
-  mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
+sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
+  genericSpWght, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords,
+  slipDist, mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
   shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, intShrForce, 
   baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, 
   surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
@@ -189,16 +194,16 @@ sspUnits = map ucw [genericF, genericA, genericV, genericW, genericSpWght,
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
   shrStress, totStress, effectiveStress, effNormStress, waterVol]
 
-genericF, genericA, genericV, genericW, genericSpWght, nrmShearNum, nrmShearDen,
-  slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear, mobShrI, 
-  sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, 
-  slcWghtL, watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
-  baseHydroForceR, baseHydroForceL, surfHydroForce,surfHydroForceR, 
-  surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, 
-  waterVol :: UnitalChunk
+accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
+  nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, 
+  mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl,
+  slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI, intShrForce, 
+  baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
+  surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
+  baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
+  midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
+  sliceHghtLeft, porePressure, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}

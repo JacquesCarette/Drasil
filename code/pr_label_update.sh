@@ -11,6 +11,9 @@ fi
 
 if [ -f "$LABEL_FILE" ]; then
 	LABELS=$(head -c -1 $LABEL_FILE | jq -R -s -c 'split("\n")')
-	DATA="{\"labels\": $LABELS}"
-	curl -H "Authorization: token $BOT_TOKEN" -X PUT -d "$DATA" -f -s -S "https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/labels"
+else
+	LABELS="[]"
 fi
+
+DATA="{\"labels\": $LABELS}"
+curl -H "Authorization: token $BOT_TOKEN" -X PUT -d "$DATA" -f -s -S "https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/labels"

@@ -275,8 +275,12 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
 srfWtrFEqn :: Relation
 srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 * 
   case_ [case1, case2]
-  where case1 = ((inxi waterHght - inxi slopeHght) + (inxiM1 waterHght - inxiM1 slopeHght), inxi waterHght $>= inxi slopeHght)
-        case2 = (0, inxi waterHght $< inxi slopeHght)
+  where case1 = ((inxi waterHght - inxi slopeHght) + 
+          (inxiM1 waterHght - inxiM1 slopeHght), 
+          (inxi waterHght $>= inxi slopeHght) $|| 
+          (inxiM1 waterHght $>= inxiM1 slopeHght))
+        case2 = (0, (inxi waterHght $< inxi slopeHght) $|| 
+          (inxiM1 waterHght $< inxiM1 slopeHght))
 
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",

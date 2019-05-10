@@ -7,8 +7,8 @@ import Language.Drasil.Code (asExpr')
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (char_weight, demand, 
-  demandq, eqTNTWeight, plate_len, plate_width, 
+import Drasil.GlassBR.Unitals (charWeight, demand, 
+  demandq, eqTNTWeight, plateLen, plateWidth, 
   standOffDist)
 import Drasil.GlassBR.ModuleDefs (interpY)
 
@@ -19,20 +19,20 @@ gbrIMods :: [InstanceModel]
 gbrIMods = [calofDemandi]
 
 glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
+glassBRsymb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
 
 
 {--}
 
 calofDemandi :: InstanceModel
-calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
+calofDemandi = im' calofDemandRCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
-  [astm2009] "calOfDemand"
+  [makeCite astm2009] "calOfDemand"
   [calofDemandDesc]
 
-calofDemand_RCi :: RelationConcept
-calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
+calofDemandRCi :: RelationConcept
+calofDemandRCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
   --calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
   calofDemandDesc $ (sy demand) $= apply (asExpr' interpY) [Str "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   

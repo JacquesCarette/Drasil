@@ -9,13 +9,13 @@ import Data.Drasil.Phrase (of_)
 import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
-  ht_flux, latent_heat, boilPt, heatCapSpec)
+import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
+  htFlux, latentHeat, boilPt, heatCapSpec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
 import Data.Drasil.Units.PhysicalProperties (densityU)
-import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
-  heatCapSpec, thermal_flux, volHtGenU)
+import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
+  heatCapSpec, thermalFlux, volHtGenU)
 
 import Drasil.SWHS.Concepts (water)
 
@@ -33,10 +33,10 @@ swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
 
 swhsUnits :: [UnitaryConceptDict]
 swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
-  htCap_S, htCap_V, sens_heat, pcm_initMltE,
-  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
+  htCap_S, htCap_V, sensHeat, pcm_initMltE,
+  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp, boilPt, temp_env, melt_pt, t_init_melt,
+  temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
@@ -94,7 +94,7 @@ htCap_V = uc' "htCap_V"
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
-  (sup (sub (sub (eqSymb sens_heat)
+  (sup (sub (sub (eqSymb sensHeat)
   (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
 
 vol_ht_gen = uc' "vol_ht_gen"
@@ -105,7 +105,7 @@ htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
   ("The proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
-  lH UT.heat_transfer_coef
+  lH UT.heatTransferCoef
 
 pcm_mass = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
@@ -116,30 +116,30 @@ w_mass = uc' "w_mass" (nounPhraseSP "mass of water")
 
 thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "Vector denoting the direction of thermal flux through a surface"
-  (vec lQ) UT.thermal_flux
+  (vec lQ) UT.thermalFlux
 
 ht_flux_C = uc' "ht_flux_C"
   (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
-  (sub (eqSymb ht_flux) cC) UT.thermal_flux
+  (sub (eqSymb htFlux) cC) UT.thermalFlux
 
 ht_flux_in = uc' "ht_flux_in" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb ht_flux) (Atomic "in")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "in")) UT.thermalFlux
 
 ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb ht_flux) (Atomic "out")) UT.thermal_flux
+  (sub (eqSymb htFlux) (Atomic "out")) UT.thermalFlux
 
 ht_flux_P = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
   ("The rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
-  (sub (eqSymb ht_flux) cP) UT.thermal_flux
+  (sub (eqSymb htFlux) cP) UT.thermalFlux
 
 latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
-  "change material") (sub (eqSymb latent_heat) cP) joule
+  "change material") (sub (eqSymb latentHeat) cP) joule
 
 temp_env = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment"
@@ -353,7 +353,7 @@ coil_HTC = uqc "coil_HTC" (nounPhraseSP
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the coil to the surrounding water")
   (sub (eqSymb htTransCoeff) cC)
-  UT.heat_transfer_coef Rational
+  UT.heatTransferCoef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy coil_HTC_min) (Inc, sy coil_HTC_max)] (dbl 1000) 0.1
 
@@ -362,7 +362,7 @@ pcm_HTC = uqc "pcm_HTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the phase change material to the surrounding water")
-  (sub lH cP) UT.heat_transfer_coef Rational
+  (sub lH cP) UT.heatTransferCoef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy pcm_HTC_min) (Inc, sy pcm_HTC_max)] (dbl 1000) 0.1
   
@@ -370,7 +370,7 @@ pcm_HTC = uqc "pcm_HTC"
 temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
   (sub (eqSymb temp)(Atomic "init")) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc, sy melt_pt)] (dbl 40) 0.1
+  [physc $ Bounded (Exc,0) (Exc, sy meltPt)] (dbl 40) 0.1
   
 -- Constraint 17
 time_final = uqc "time_final" (nounPhraseSP "final time")
@@ -404,13 +404,13 @@ temp_PCM = cuc' "temp_PCM"
 -- Constraint 20
 w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" 
-  (sub (eqSymb sens_heat) cW) joule Rational
+  (sub (eqSymb sensHeat) cW) joule Rational
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
 pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
-  (sub (eqSymb sens_heat) cP) joule Rational
+  (sub (eqSymb sensHeat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)
 
 ---------------------------------
@@ -424,12 +424,12 @@ abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance")
   [ physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) 0.01
 
-rel_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance") 
+rel_tol = uvc "pbTol" (nounPhraseSP "relative tolerance") 
   (sub cR (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) 0.01
 
-cons_tol = uvc "pb_tol"
+cons_tol = uvc "pbTol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
@@ -528,23 +528,23 @@ htCap_W_max = mkQuantDef (unitary "htCap_W_max"
 coil_HTC_min = mkQuantDef (unitary "coil_HTC_min"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "min")) UT.heat_transfer_coef Rational) 10
+  (sup (eqSymb coil_HTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
 coil_HTC_max = mkQuantDef (unitary "coil_HTC_max"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "max")) UT.heat_transfer_coef Rational) 10000
+  (sup (eqSymb coil_HTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 15
 pcm_HTC_min = mkQuantDef (unitary "pcm_HTC_min"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between PCM and water")
-  (sup (eqSymb pcm_HTC) (Atomic "min")) UT.heat_transfer_coef Rational) 10
+  (sup (eqSymb pcm_HTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
 pcm_HTC_max = mkQuantDef (unitary "pcm_HTC_max"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
-  (sup (eqSymb pcm_HTC) (Atomic "max")) UT.heat_transfer_coef Rational) 10000
+  (sup (eqSymb pcm_HTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 17
 time_final_max = mkQuantDef (unitary "time_final_max"

@@ -15,6 +15,10 @@ dist: xenial
 # Do not choose a language; we provide our own build tools.
 language: generic
 
+env:
+  global:
+    secure: "zpSgEG8GvxOl8qJl+3OLiW7p5KdvzOOkC9g2ukLftmJ5cQUO2c7Zr7g/L/6ZQak96eDjyinV953laKXnrgy0BhZV1lnwPrnfEnvIV8BRkxIJ2XjMv3oNmwvAX5ayAKzeE7LBqeQyuFf83K+NP8QV5N432Ar9PryoJC5HvK4B/iQ1SuzWYcFSSuowNC1oukQUCKBVyzuhjv88VrZWqj2pLb7QgWlKNfokMsyYgNSytbu4A8xBn3zd51z2wgIjvfQlW9YnmENrloqPd4EcTnnjE+/2g4OSJ5ULWAu3n2QWmO5X5MhI7yGfQsH8fSR1pPSjw6iGYQ8G9woci5kyWCKCYZvYMUWUEZY6+vP+xhknRxkN9X/s9v6S9/Di2kKU0kOxcZC4p+9RF0NT3cZDzValhhRINAiprQYX8ri5G+BOq2fsKyENezvc+OuLvEHXhvskMuuZUJuWYB0ScUYooqIRgJE79Fr3d1EjDM0cQwFrMbOt6LF1P3wgPMo06Zy+4dfgqEx/heeKxX1yNFFbdd5WaSqhWac/7s4Y4v4UKHwbpKwZ1KjlW464VC/Dtwdwc/yS/iHRlcTdBjLl3MNdBA2sdxbDfsuao5osnCLdnt/qQ5B4cRpy3fJkbsmyNfLF57aE3bqpneUWHWrmbhgQ5PSRW6nyKpqgQkyzFD8B0WbfzIM="
+
 # Caching so the next build will be fast too.
 cache:
   directories:
@@ -36,6 +40,7 @@ before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
+- export LABEL_FILE=/tmp/ci_build_failures
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 
 install:
@@ -44,10 +49,17 @@ install:
 
 script:
  - cd code
- - curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
- - make stackArgs="--no-terminal" NOISY=yes GHCFLAGS=-Werror
- - make tex SUMMARIZE_TEX=yes
- - make docs haddockArgs="--no-haddock-deps"
+ - >
+     ./ci_fstep "CI: HLint" "curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ."
+ - >
+     ./ci_fstep "CI: Build" make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
+ - >
+     ./ci_fstep "CI: Stable" make stackArgs="--no-terminal" NOISY=yes
+ - >
+     ./ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
+ - >
+     ./ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
+ - travis_retry sh pr_label_update.sh
 
 notifications:
   email:

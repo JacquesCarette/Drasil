@@ -55,6 +55,14 @@ angle (degree)
 </tr>
 <tr>
 <td>
+kg
+</td>
+<td>
+mass (kilogram)
+</td>
+</tr>
+<tr>
+<td>
 m
 </td>
 <td>
@@ -75,6 +83,14 @@ Pa
 </td>
 <td>
 pressure (pascal)
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time (second)
 </td>
 </tr>
 </table>
@@ -122,6 +138,17 @@ Area: A part of an object or surface
 </td>
 <td>
 m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em><b>a</b></em>
+</td>
+<td>
+Acceleration: The rate of change of a body's velocity
+</td>
+<td>
+m/s<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -225,6 +252,17 @@ Minimum Factor of Safety: The minimum factor of safety associated with the criti
 </tr>
 <tr>
 <td>
+<em><b>F</b></em>
+</td>
+<td>
+Force: An interaction that tends to produce change in the motion of an object
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em><b>F</b><sub>x</sub><sup>G</sup></em>
 </td>
 <td>
@@ -240,17 +278,6 @@ N
 </td>
 <td>
 Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-<em><b>F</b></em>
-</td>
-<td>
-Force: An interaction that tends to produce change in the motion of an object
 </td>
 <td>
 N
@@ -375,6 +402,17 @@ Net Moment: a measure of the tendency of a body to rotate about a specific point
 </td>
 <td>
 N&sdot;m
+</td>
+</tr>
+<tr>
+<td>
+<em>m</em>
+</td>
+<td>
+Mass: the quantity of matter in a body
+</td>
+<td>
+kg
 </td>
 </tr>
 <tr>
@@ -1524,7 +1562,7 @@ Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and
 </p>
 <p>
 <div id="assumpPSC">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a> <a href=#DD:surfWtrF>DD: surfWtrF</a>.
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </div>
 </p>
 <p>
@@ -1534,7 +1572,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -1851,6 +1889,75 @@ RefBy
 </tr>
 </table>
 </div>
+<div id="TM:NewtonSecLawMot">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's second law of motion
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>F</b> = m&#8239;<b>a</b></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>F</b></em> is the force (N)
+</li>
+<li>
+<em>m</em> is the mass (kg)
+</li>
+<li>
+<em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The net force <em><b>F</b></em> (N) on a body is proportional to the acceleration <em><b>a</b></em> (m/s<sup>2</sup>) of the body, where <em>m</em> (kg) denotes the mass of the body as the constant of proportionality.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:GDs">
@@ -1944,7 +2051,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -2056,7 +2163,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
 </p>
 </td>
 </tr>
@@ -2461,7 +2568,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2555,7 +2662,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
+<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
 </p>
 </td>
 </tr>
@@ -2800,7 +2907,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -2828,6 +2935,192 @@ RefBy
 </div>
 <p class="paragraph">
 Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+</p>
+<div id="GD:weight">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Weight
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>W = V&#8239;γ</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>W</em> is the weight (N)
+</li>
+<li>
+<em>V</em> is the volume (m<sup>3</sup>)
+</li>
+<li>
+<em>γ</em> is the specific weight (N/m<sup>3</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#GD:srfWtrF>GD: srfWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GD:srfWtrF">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Surface hydrostatic force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>U</b><sub>t,i</sub> = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(<b>U</b><sup>L</sup><sub>t,i</sub>&plus;<b>U</b><sup>R</sup><sub>t,i</sub>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic forces on slices (N/m)
+</li>
+<li>
+<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic forces on slices (N/m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>U</b><sup>L</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> and <em><b>U</b><sup>R</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="paragraph">
+The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
+</p>
+<div class="equation">
+<em><b>U</b><sub>t,i</sub> = <b>V</b><sub>wat,i</sub>&#8239;γ<sub>w</sub></em>
+</div>
+<p class="paragraph">
+Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, in the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
+</p>
+<div class="equation">
+<em><b>U</b><sub>t,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub></em>
+</div>
+<p class="paragraph">
+This equation is <a href=#GD:srfWtrF>GD: srfWtrF</a> with <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a> and <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> substituted in.
 </p>
 </div>
 </div>
@@ -3043,130 +3336,6 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:surfWtrF">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Surface hydrostatic forces
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>U</b><sub>t</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N/m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>U</b><sub>t</sub> = <div class="fraction">
-<span class="fup">
-1
-</span>
-<span class="fdn">
-2
-</span>
-</div>&#8239;(<b>U</b><sup>L</sup><sub>t,i</sub>&plus;<b>U</b><sup>R</sup><sub>t,i</sub>)</em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
-</li>
-<li>
-<em><b>U</b><sup>L</sup><sub>t</sub></em> is the left surface hydrostatic forces on slices (N/m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em><b>U</b><sup>R</sup><sub>t</sub></em> is the right surface hydrostatic forces on slices (N/m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>U</b><sup>L</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> and <em><b>U</b><sup>R</sup><sub>t</sub></em> is defined in <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a>.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a> <a href=#DD:surfWtrF>DD: surfWtrF</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<p class="paragraph">
-The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from <a href=#DD:weightDD>DD: weightDD</a> yields:
-</p>
-<div class="equation">
-<em><b>U</b><sub>t</sub> = <b>V</b><sub>wat</sub>&#8239;γ<sub>w</sub></em>
-</div>
-<p class="paragraph">
-Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, in the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
-</p>
-<div class="equation">
-<em><b>U</b><sub>t,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
-<span class="fup">
-1
-</span>
-<span class="fdn">
-2
-</span>
-</div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub></em>
-</div>
-<p class="paragraph">
-This equation is <a href=#DD:surfWtrF>DD: surfWtrF</a> with <a href=#DD:surfWtrFRDD>DD: surfWtrFRDD</a> and <a href=#DD:surfWtrFLDD>DD: surfWtrFLDD</a> substituted in.
-</p>
 <div id="DD:intersliceWtrF">
 <table class="ddefn">
 <tr>
@@ -4288,88 +4457,6 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:weightDD">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Weight
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>W</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em>W = V&#8239;γ</em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>V</em> is the volume (m<sup>3</sup>)
-</li>
-<li>
-<em>γ</em> is the specific weight (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#DD:surfWtrF>DD: surfWtrF</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
 <div id="DD:nrmForceSumDD">
 <table class="ddefn">
 <tr>
@@ -5295,7 +5382,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:surfWtrF>DD: surfWtrF</a>.
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:srfWtrF>GD: srfWtrF</a>.
 </p>
 </td>
 </tr>
@@ -5410,7 +5497,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:surfWtrF>DD: surfWtrF</a> <a href=#DD:surfWtrF>DD: surfWtrF</a>.
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:srfWtrF>GD: srfWtrF</a>.
 </p>
 </td>
 </tr>
@@ -6164,7 +6251,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#DD:surfWtrF>DD: surfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
 </p>
 </td>
 </tr>
@@ -7400,7 +7487,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:baseWtrF>DD: baseWtrF</a>
 </th>
 <th>
-<a href=#DD:surfWtrF>DD: surfWtrF</a>
+<a href=#GD:srfWtrF>GD: srfWtrF</a>
 </th>
 <th>
 <a href=#GD:effNormF>GD: effNormF</a>
@@ -9264,161 +9351,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#DD:surfWtrF>DD: surfWtrF</a>
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17433,7 +17365,162 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:weightDD>DD: weightDD</a>
+<a href=#GD:srfWtrF>GD: srfWtrF</a>
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#GD:weight>GD: weight</a>
 </td>
 <td>
 

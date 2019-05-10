@@ -41,11 +41,15 @@ Symbol & Description
 \endhead
 ${}^{\circ}$ & angle (degree)
 \\
+kg & mass (kilogram)
+\\
 m & length (metre)
 \\
 N & force (newton)
 \\
 Pa & pressure (pascal)
+\\
+s & time (second)
 \\
 \bottomrule
 \caption{}
@@ -63,6 +67,8 @@ Symbol & Description & Units
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
 $A$ & Area: A part of an object or surface & $\text{m}^{2}$
+\\
+$\mathbf{a}$ & Acceleration: The rate of change of a body's velocity & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{b}$ & Base Width of Slices: in the x-direction & m
 \\
@@ -82,11 +88,11 @@ ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
 ${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
+$\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
+\\
 ${{\mathbf{F}_{x}}^{G}}$ & Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries & N
 \\
 ${{\mathbf{F}_{x}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries & N
-\\
-$\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
@@ -109,6 +115,8 @@ $i$ & Index: representing a single slice & --
 ${K_{c}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
 $M$ & Net Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
+\\
+$m$ & Mass: the quantity of matter in a body & kg
 \\
 $n$ & Number of Slices: the slip mass has been divided into & --
 \\
@@ -406,9 +414,9 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr}.
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr}.
 \item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\mathbf{f}$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF} \hyperref[DD:surfWtrF]{DD: surfWtrF}.
+\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF}.
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:sliceWght]{DD: sliceWght} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_seismic]{LC: Calculate-Seismic-Force}.
 \item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external forces, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_external]{LC: Calculate-External-Force}.
@@ -523,6 +531,33 @@ Source & \cite{fredlund1977}
 RefBy & \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
+\phantomsection 
+\label{TM:NewtonSecLawMot}
+\\ \midrule \\
+Label & Newton's second law of motion
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=m \mathbf{a}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (N)}
+              \item{$m$ is the mass (kg)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the body, where $m$ (kg) denotes the mass of the body as the constant of proportionality.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -557,7 +592,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the normal direction. $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the normal direction. $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -596,7 +631,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -733,7 +768,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{ℓ}_{b}}$ is the total base lengths of slices (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${\mathbf{U}_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}, and ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${\mathbf{U}_{b}}$ is defined in \hyperref[DD:baseWtrF]{DD: baseWtrF}, and ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
@@ -766,7 +801,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
+Notes & $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
@@ -837,7 +872,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{ω}$ is the imposed load angles (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for the net moment. $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for the net moment. $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{W}$ is defined in \hyperref[DD:sliceWght]{DD: sliceWght}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -845,6 +880,72 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:weight}
+\phantomsection 
+\label{GD:weight}
+\\ \midrule \\
+Label & Weight
+\\ \midrule \\
+Units & N
+\\ \midrule \\
+Equation & \begin{displaymath}
+           W=V γ
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$W$ is the weight (N)}
+              \item{$V$ is the volume ($\text{m}^{3}$)}
+              \item{$γ$ is the specific weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:srfWtrF}
+\phantomsection 
+\label{GD:srfWtrF}
+\\ \midrule \\
+Label & Surface hydrostatic force
+\\ \midrule \\
+Units & $\frac{\text{N}}{\text{m}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{U}_{t,i}}=\frac{1}{2} \left({{\mathbf{U}^{L}}_{t,i}}+{{\mathbf{U}^{R}}_{t,i}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{$i$ is the index (Unitless)}
+              \item{${{\mathbf{U}^{L}}_{t}}$ is the left surface hydrostatic forces on slices ($\frac{\text{N}}{\text{m}}$)}
+              \item{${{\mathbf{U}^{R}}_{t}}$ is the right surface hydrostatic forces on slices ($\frac{\text{N}}{\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${{\mathbf{U}^{L}}_{t}}$ is defined in \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} and ${{\mathbf{U}^{R}}_{t}}$ is defined in \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD}.
+\\ \midrule \\
+Source & \cite{fredlund1977}
+\\ \midrule \\
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
+\begin{displaymath}
+{\mathbf{U}_{t,i}}={\mathbf{V}_{wat,i}} {γ_{w}}
+\end{displaymath}
+Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, in the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
+\begin{displaymath}
+{\mathbf{U}_{t,i}}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right) {γ_{w}}
+\end{displaymath}
+This equation is \hyperref[GD:srfWtrF]{GD: srfWtrF} with \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} and \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} substituted in.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -912,47 +1013,6 @@ Source & \cite{fredlund1977}
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:effNormF]{GD: effNormF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:surfWtrF}
-\phantomsection 
-\label{DD:surfWtrF}
-\\ \midrule \\
-Label & Surface hydrostatic forces
-\\ \midrule \\
-Symbol & ${\mathbf{U}_{t}}$
-\\ \midrule \\
-Units & $\frac{\text{N}}{\text{m}}$
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {\mathbf{U}_{t}}=\frac{1}{2} \left({{\mathbf{U}^{L}}_{t,i}}+{{\mathbf{U}^{R}}_{t,i}}\right)
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${{\mathbf{U}^{L}}_{t}}$ is the left surface hydrostatic forces on slices ($\frac{\text{N}}{\text{m}}$)}
-              \item{$i$ is the index (Unitless)}
-              \item{${{\mathbf{U}^{R}}_{t}}$ is the right surface hydrostatic forces on slices ($\frac{\text{N}}{\text{m}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${{\mathbf{U}^{L}}_{t}}$ is defined in \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} and ${{\mathbf{U}^{R}}_{t}}$ is defined in \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD}.
-\\ \midrule \\
-Source & \cite{fredlund1977}
-\\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq} \hyperref[DD:surfWtrF]{DD: surfWtrF}.
-\\ \bottomrule \end{tabular}
-\end{minipage}
-The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from \hyperref[DD:weightDD]{DD: weightDD} yields:
-\begin{displaymath}
-{\mathbf{U}_{t}}={\mathbf{V}_{wat}} {γ_{w}}
-\end{displaymath}
-Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, in the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
-\begin{displaymath}
-{\mathbf{U}_{t,i}}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right) {γ_{w}}
-\end{displaymath}
-This equation is \hyperref[DD:surfWtrF]{DD: surfWtrF} with \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} and \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} substituted in.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1317,35 +1377,6 @@ RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSf
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:weightDD}
-\phantomsection 
-\label{DD:weightDD}
-\\ \midrule \\
-Label & Weight
-\\ \midrule \\
-Symbol & $W$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{displaymath}
-           W=V γ
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$W$ is the weight (N)}
-              \item{$V$ is the volume ($\text{m}^{3}$)}
-              \item{$γ$ is the specific weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & \hyperref[DD:surfWtrF]{DD: surfWtrF}.
-\\ \bottomrule \end{tabular}
-\end{minipage}
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:nrmForceSumDD}
 \phantomsection 
 \label{DD:nrmForceSumDD}
@@ -1648,7 +1679,7 @@ Notes & ${\mathbf{ℓ}_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:surfWtrF]{DD: surfWtrF}.
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:srfWtrF]{GD: srfWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1685,7 +1716,7 @@ Notes & ${\mathbf{ℓ}_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:surfWtrF]{DD: surfWtrF}.
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:srfWtrF]{GD: srfWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -1919,7 +1950,7 @@ Description & \begin{symbDescription}
               \item{$n$ is the number of slices (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[DD:surfWtrF]{DD: surfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
@@ -2239,7 +2270,7 @@ If changes were to be made with regard to the following, a different algorithm w
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of items of different sections on each other.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[DD:baseWtrF]{DD: baseWtrF} & \hyperref[DD:surfWtrF]{DD: surfWtrF} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[DD:sliceWght]{DD: sliceWght} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_seismic]{LC: Calculate-Seismic-Force} & \hyperref[LC_external]{LC: Calculate-External-Force} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[writeToFile]{FR: Write-Results-To-File} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} & \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} & \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} & \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[TM:effStress]{TM: effStress}
+ & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[DD:baseWtrF]{DD: baseWtrF} & \hyperref[GD:srfWtrF]{GD: srfWtrF} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[DD:sliceWght]{DD: sliceWght} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_seismic]{LC: Calculate-Seismic-Force} & \hyperref[LC_external]{LC: Calculate-External-Force} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[writeToFile]{FR: Write-Results-To-File} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[DD:baseWtrFRDD]{DD: baseWtrFRDD} & \hyperref[DD:baseWtrFLDD]{DD: baseWtrFLDD} & \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} & \hyperref[DD:surfWtrFLDD]{DD: surfWtrFLDD} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[TM:effStress]{TM: effStress}
 \\
 \midrule
 \endhead
@@ -2266,8 +2297,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[DD:surfWtrFRDD]{DD: surfWtrFRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:baseWtrF]{DD: baseWtrF} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:surfWtrF]{DD: surfWtrF} & X & X & X & X & X &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:slcWghtRDD]{DD: slcWghtRDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -2371,7 +2400,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-\hyperref[DD:weightDD]{DD: weightDD} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:srfWtrF]{GD: srfWtrF} & X & X & X & X & X &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:weight]{GD: weight} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

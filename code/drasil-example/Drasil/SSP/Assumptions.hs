@@ -41,8 +41,8 @@ assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
 assumpWISE = cic "assumpWISE" waterIntersect "Water-Intersects-Slice-Edge" 
   assumpDom
 
-monotonicF, slopeS, homogeneousL, isotropicP, linearS,
-  planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
+monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN, 
+  straightS, propertiesS, edgeS, seismicF, surfaceL, waterIntersect :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",

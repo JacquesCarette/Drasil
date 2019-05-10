@@ -16,7 +16,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
 import Data.Drasil.Utils (eqUnR')
 
 import Drasil.SWHS.Assumptions (assumpVCN)
@@ -88,16 +88,23 @@ checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
   plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
-outputInputDerivQuants = cic "outputInputDerivQuants" ( foldlSent [
+outputInputDerivQuants = oIDQConstruct oIDQQuants
+
+oIDQConstruct :: Sentence -> ConceptInstance
+oIDQConstruct x = cic "outputInputDerivQuants" ( foldlSent_ [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
-  S "derived", plural quantity +: S "in the following list",
+  S "derived", plural quantity +: S "in the following list"] +:+ x)
+  "Output-Input-Derived-Quantities" funcReqDom
+
+oIDQQuants :: Sentence
+oIDQQuants = foldlSent [
   S "the", plural quantity, S "from", makeRef2S inputInitQuants `sC` S "the",
   plural mass, S "from", makeRef2S findMass `sC` ch tau_W,
   sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch eta,
   sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch tau_S_P,
   sParen (S "from" +:+ makeRef2S eBalanceOnPCM) `sAnd` ch tau_L_P,
-  sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
-  "Output-Input-Derived-Quantities" funcReqDom
+  sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+  
 --
 calcTempWtrOverTime = cic "calcTempWtrOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,

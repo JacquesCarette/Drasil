@@ -338,7 +338,7 @@ The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:
 \label{Sec:GoalStmt}
 Given the dimensions of the glass plane, glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statements are:
 \begin{itemize}
-\item[GS1:]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+\item[Predict-Glass-Withstands-Explosion:\phantomsection\label{willBreakGS}]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -945,6 +945,7 @@ RefBy & \hyperref[TM:isSafeLR]{TM: isSafeLR} \hyperref[DD:dimlessLoad]{DD: dimle
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met by \hyperref[IM:calOfDemand]{IM: calOfDemand}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}

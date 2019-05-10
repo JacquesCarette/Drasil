@@ -37,6 +37,7 @@ executable glassbr
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.Goals
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.References

@@ -13,7 +13,7 @@ import Language.Drasil.Printing.AST (Expr)
 html, head_tag, body, title, paragraph, code, tr, th, td, figure,
   figcaption, li, pa, ba :: Doc -> Doc
 -- | HTML tag wrapper
-html       = oldWrap "html" []
+html       = wrap "html" []
 -- | Head tag wrapper
 head_tag   = oldWrap "head" []
 -- | Body tag wrapper

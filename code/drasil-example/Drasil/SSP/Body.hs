@@ -40,6 +40,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -200,7 +201,8 @@ traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other
 sspSymMap :: ChunkDB
 sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw sspIMods
-  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
+  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon 
+  ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)

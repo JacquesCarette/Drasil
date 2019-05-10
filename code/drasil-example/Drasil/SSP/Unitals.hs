@@ -11,8 +11,10 @@ import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_)
-import Data.Drasil.Quantities.PhysicalProperties (mass, specWeight, vol)
-import Data.Drasil.Quantities.Physics (acceleration, force, weight)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
+  vol)
+import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
+  weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -35,6 +37,8 @@ genericW = weight
 genericSpWght = specWeight
 accel = acceleration
 genericMass = mass
+gravAccel = gravitationalAccel
+dens = density
 
 -------------
 -- HELPERS --
@@ -183,10 +187,10 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords,
-  slipDist, mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
-  shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, intShrForce, 
-  baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce, 
+  genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
+  zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
+  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
   surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
   baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
   midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
@@ -194,10 +198,10 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   shrStress, totStress, effectiveStress, effNormStress, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, 
-  mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl,
-  slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI, intShrForce, 
-  baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
+  gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
+  critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
+  shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
   surfHydroForceR, surfHydroForceL, totNrmForce, nrmFSubWat, surfLoad, 
   baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, 
   midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 

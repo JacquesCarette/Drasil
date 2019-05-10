@@ -38,7 +38,7 @@ newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
 --
 
 weightGD :: GenDefn
-weightGD = gd' weightRC (getUnit QP.weight) weightDeriv [{-Source-}] 
+weightGD = gd' weightRC (getUnit QP.weight) weightDeriv [weightSrc] 
   "weight" [{-Notes-}]
 
 weightRC :: RelationConcept
@@ -46,6 +46,10 @@ weightRC = makeRC "weight" (nounPhraseSP "weight") EmptyS weightEqn
 
 weightEqn :: Relation
 weightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
+
+weightSrc :: Reference
+weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
+  shortname' "Definition of Weight"
 
 weightDeriv :: Derivation
 weightDeriv = weave [weightDerivSentences, weightDerivEqns]

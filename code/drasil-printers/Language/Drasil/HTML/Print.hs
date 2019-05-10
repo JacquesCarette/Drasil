@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print, (<>))
 import Data.List (intercalate, partition, sortBy)
-import Text.PrettyPrint hiding (render, Str)
+import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
 
@@ -142,7 +142,7 @@ uSymb (L.US ls) = formatu t b
     line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
     pow :: (L.Symbol,Integer) -> String
     pow (x,1) = symbol x
-    pow (x,p) = symbol x ++ oldSup (show p)
+    pow (x,p) = symbol x ++ (render . sup . text) (show p)
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

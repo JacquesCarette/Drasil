@@ -1,10 +1,19 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 20, 2018
+Last updated: May 3, 2019
 --------------------------------------------------
 
 **Chunk**
   - Contains different chunk data structures, classes, and helpers
+
+**ChunkDB**
+  - Contains helpers to get certain chunks by UID
+
+**Classes**
+  - Contains additional classes for Drasil data types
+
+**Data**
+  - Contains data for dates and citations
 
 **Development**
   - Contains supporting code for development
@@ -24,17 +33,23 @@ Last updated: July 20, 2018
 **Sentence**
   - Contains helpers for the Sentence type
 
+**Symbol**
+  - Contains helpers for dealing with symbols and stages
+
 **URI**
   - URI AST
 
 ChunkDB.hs
-  - Chunk databases. Used by System Information for looking up knowledge.
+  - Chunk databases used by System Information for looking up knowledge
 
 Classes.hs
   - Defines the classes for the Drasil data types
 
-Config.hs
-  - Global example configuration file for output generation
+Constraint.hs
+  - Constraint representations in Drasil
+
+Derivation.hs
+  - Defines the Derivation type
 
 Development.hs
   - Re-exports the Development module
@@ -44,9 +59,6 @@ Document.hs
 
 Expr.hs
   - Internal Drasil expression language
-
-Label.hs
-  - Helper functions for the Label type
 
 Misc.hs
   - Helper functions
@@ -61,27 +73,28 @@ README.md
   - This file
 
 Reference.hs
-  - Reference creation. Used for inter-document referencing and extra-document
-  citations.
+  - Reference creation for inter-document referencing and extra-document citations
 
-RefTypes.hs
-  - Types of supported inter-document references
+RefProg.hs
+  - Defines Reference data type
 
-Setup.hs
-  - Used by cabal
+Sentence.hs
+  - Defines Sentence data type
+
+ShortHands.hs
+  - Symbols for all lower and uppercase English and Greek letters
+
+ShortName.hs
+  - Defines ShortName data type
 
 Space.hs
   - Space data type
 
-Spec.hs
-  - Contains the internal Drasil Sentence representation and associated items
+Stages.hs
+  - Defines Stage data type
 
 Symbol.hs
-  - Symbol representation in Drasil. Strictly the graphical representation.
-  Made up of many types of items
-
-SymbolAlphabet.hs
-  - Symbols for all lower and uppercase English letters
+  - Strictly graphical representation in Drasil made up of many types of items
 
 SystemInformation.hs
   - Defines the SI type
@@ -89,5 +102,14 @@ SystemInformation.hs
 UID.hs
   - Defines the UID type
 
+Uncertainty.hs
+  - Defines Uncertainty data type
+
 Unicode.hs
   - Contains special symbols including Unicode and Greek symbols
+
+UnitLang.hs
+  - Defines the language for working with Units
+
+Utils.hs
+  - Contains utilities (currently only a function for sorting by symbol)

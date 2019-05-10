@@ -141,7 +141,7 @@ module Language.Drasil (
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
   -- Chunk.Theory
-  , TheoryModel, tm, Theory(..)
+  , TheoryModel, tm, tmNoRefs, Theory(..)
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers

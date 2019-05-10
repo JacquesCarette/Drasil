@@ -35,11 +35,11 @@ figure     = oldWrap "figure" []
 -- | Figcaption tag wrapper
 figcaption = oldWrap "figcaption" []
 -- | List tag wrapper
-li         = wrap "li" []
+li         = oldWrap "li" []
 -- | Paragraph in list tag wrapper
-pa         = wrap "p" []
+pa         = oldWrap "p" []
 
-ba          = wrap "b" []
+ba         = oldWrap "b" []
 
 ol, ul, table :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper

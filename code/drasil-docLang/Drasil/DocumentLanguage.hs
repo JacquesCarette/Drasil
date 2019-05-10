@@ -18,9 +18,9 @@ import Database.Drasil
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table)
-import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.Sections.TableOfUnits (tableOfUnits)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
@@ -267,9 +267,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_usedinfodb = db}  TUnits =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
     mkSubRef SI {_usedinfodb = db} (TUnits' con) =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,
@@ -279,7 +279,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
+      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

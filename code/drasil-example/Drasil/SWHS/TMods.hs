@@ -6,17 +6,17 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.Physics (mechEnergy)
-import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
-  heatTrans, law_cons_energy)
+import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermalEnergy,
+  heatTrans, lawConsEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
-  latent_heat, melt_pt, boilPt, sens_heat, heatCapSpec)
+  latentHeat, meltPt, boilPt, sensHeat, heatCapSpec)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-    foldlList, foldlSent, isThe, sAnd)
+  foldlList, foldlSent, isThe, sAnd)
 import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
@@ -52,7 +52,7 @@ consThemESrc = makeURI "consThemESrc"
 
 consThermEdesc :: Sentence
 consThermEdesc = foldlSent [
-  S "The above", phrase equation, S "gives the", phrase law_cons_energy, S "for",
+  S "The above", phrase equation, S "gives the", phrase lawConsEnergy, S "for",
   phrase transient, phrase heatTrans, S "in a material of", phrase heatCapSpec,
   ch heatCapSpec, sParen (Sy (unit_symb heatCapSpec)) `sAnd` phrase density `sC`
   ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 
@@ -76,8 +76,8 @@ data PhaseChange = AllPhases
 
 sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
 sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
-  [qw sens_heat, qw htCap_S, qw mass, 
-    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
+  [qw sensHeat, qw htCap_S, qw mass, 
+    qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
@@ -93,10 +93,10 @@ sensHtESrc = makeURI "sensHtESrc"
   shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Relation
-sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
+sensHtEEqn pChange = (sy sensHeat) $= case pChange of
   Liquid -> liquidFormula
   AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
-      ((sy temp) $< (sy melt_pt))), (liquidFormula, ((sy melt_pt) $< (sy temp) $<
+      ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<
       (sy boilPt))), ((sy htCap_V) * (sy mass) *
       (sy deltaT), ((sy boilPt) $< (sy temp)))]
   where
@@ -108,8 +108,8 @@ sensHtEEqn phaseChange = (sy sens_heat) $= case phaseChange of
 -- were implemented incorrectly.
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
-  ch sens_heat `isThe` S "change in",
-  phrase sens_heat, phrase energy +:+. sParen (Sy (usymb joule)),
+  ch sensHeat `isThe` S "change in",
+  phrase sensHeat, phrase energy +:+. sParen (Sy (usymb joule)),
   ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heatCapSpec)),
@@ -117,17 +117,17 @@ sensHtEdesc = foldlSent [
   ch temp `isThe` phrase temp,
   sParen (Sy (unit_symb temp)) `sC` S "and", ch deltaT `isThe`
   phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  ch melt_pt `sAnd` ch boilPt,
-  S "are the", phrase melt_pt `sAnd` phrase boilPt `sC`
+  ch meltPt `sAnd` ch boilPt,
+  S "are the", phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start sens_heat :+: S "ing occurs as long as the material does",
+  at_start sensHeat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
-  phrase phase_change, S "occurs. A",
-  phrase phase_change, S "occurs if",
+  phrase phaseChange, S "occurs. A",
+  phrase phaseChange, S "occurs if",
   ch temp :+: S "=" :+: ch boilPt,
-  S "or", ch temp :+: S "=" +:+. ch melt_pt,
+  S "or", ch temp :+: S "=" +:+. ch meltPt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef2S latentHtE) `sC` at_start latent_heat,
+  (makeRef2S latentHtE) `sC` at_start latentHeat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -142,7 +142,7 @@ sensHtEdesc = foldlSent [
 -------------------------
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
-  [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+  [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
@@ -150,8 +150,8 @@ latentHtE_rc = makeRC "latentHtE_rc"
   (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
 
 latHtEEqn :: Relation
-latHtEEqn = apply1 latent_heat time $= 
-  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
+latHtEEqn = apply1 latentHeat time $= 
+  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
 
@@ -161,20 +161,20 @@ latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
 
 latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [
-  ch latent_heat `isThe` S "change in",
-  phrase thermal_energy, sParen (Sy (usymb joule)) `sC`
-  phrase latent_heat +:+. phrase energy, 
+  ch latentHeat `isThe` S "change in",
+  phrase thermalEnergy, sParen (Sy (usymb joule)) `sC`
+  phrase latentHeat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latent_heat, S "with respect to", phrase time,
+  ch latentHeat, S "with respect to", phrase time,
   ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
-  phrase phase_change, S "is not complete. The status of",
-  S "the", phrase phase_change,
+  phrase phaseChange, S "is not complete. The status of",
+  S "the", phrase phaseChange,
   S "depends on the", phrase melt_frac `sC`
   (makeRef2S dd3HtFusion) :+: S ".",
-  ch melt_pt `sAnd` ch boilPt, S "are the",
-  phrase melt_pt `sAnd` phrase boilPt `sC`
+  ch meltPt `sAnd` ch boilPt, S "are the",
+  phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start latent_heat :+: S "ing stops when all material has",
+  at_start latentHeat :+: S "ing stops when all material has",
   S "changed to the new phase"]

@@ -21,14 +21,14 @@ import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heatCapSpec, thermal_conduction,
-  thermocon, phase_change)
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
+  thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
+  phaseChange)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heatCapSpec, ht_flux, sens_heat)
+  heatCapSpec, htFlux, sensHeat)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
@@ -48,7 +48,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtF, physSystDescription_label, generateTraceMap')
+  generateTraceTable, goalStmtF, physSystDescriptionLabel, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSent, foldlSP)
@@ -89,8 +89,8 @@ import Drasil.NoPCM.Unitals (temp_init)
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
-check_si :: [UnitDefn]
-check_si = collectUnits nopcm_SymbMap symbTT 
+checkSi :: [UnitDefn]
+checkSi = collectUnits nopcm_SymbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
@@ -112,10 +112,10 @@ nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
-  htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
+  htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W, QT.sens_heat]
+  vol, w_mass, w_vol, tau_W, QT.sensHeat]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
@@ -138,12 +138,12 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
   TAandA],
-  IntroSec $ IntroProg (introStart ener_src energy progName)
+  IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
+  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
     water),
-  IChar [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
+  IChar [] ((charReader1 htTransTheo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   Verbatim genSystDesc,
   SSDSec $
@@ -244,14 +244,14 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
-  nw ht_trans] ++ map nw check_si)
+  nw ht_trans] ++ map nw checkSi)
  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si nopcm_label nopcm_refby
+usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi nopcm_label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 
@@ -369,18 +369,18 @@ termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heatCapSpec, thermal_conduction, transient]
+  [htFlux, heatCapSpec, thermalConduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
 
 fig_tank :: LabelledContent
-fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
+fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
 goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
@@ -405,8 +405,8 @@ sensHtE :: TheoryModel
 sensHtE = sensHtE_template Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
-sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
+sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

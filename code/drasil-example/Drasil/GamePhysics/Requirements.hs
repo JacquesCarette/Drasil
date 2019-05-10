@@ -1,19 +1,17 @@
-module Drasil.GamePhysics.Requirements (functionalRequirementsList, 
-  functionalRequirementsList', propsDeriv, requirements) where
+module Drasil.GamePhysics.Requirements (funcReqsContent, 
+  funcReqs, nonfuncReqs, propsDeriv, requirements) where
 
 import Language.Drasil hiding (Vector, organization)
 
 import Drasil.DocLang (mkEnumSimpleD, reqF)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Concepts.Documentation as Doc(body, funcReqDom, game,
-  input_, nonFuncReqDom, nonfunctionalRequirement, physicalConstraint,
-  physicalSim, priority, property)
-import Data.Drasil.Concepts.Software (understandability, portability,
-  reliability, maintainability, performance, correctness, reliability)
+import Data.Drasil.Concepts.Documentation as Doc(assumption, body, code,
+  dataDefn, environment, funcReqDom, genDefn, inModel, input_, likelyChg, mg,
+  mis, module_, nonFuncReqDom, output_, physicalConstraint, physicalSim,
+  property, requirement, srs, thModel, traceyMatrix, unlikelyChg)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
-  sOf, sOr)
+  foldlSent, foldlSP, ofThe', sAnd, sOr)
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)
@@ -33,23 +31,22 @@ propsDeriv :: [Contents]
 propsDeriv = [foldlSP [S "FIXME"]]
 
 requirements :: Section
-requirements = reqF [functionalRequirements, nonfunctionalRequirements]
+requirements = reqF [funcReqsSection, nonfuncReqsSection]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-functionalRequirements :: Section
-functionalRequirements = SRS.funcReq functionalRequirementsList []
+funcReqsSection :: Section
+funcReqsSection = SRS.funcReq funcReqsContent []
 
-functionalRequirementsList :: [Contents]
-functionalRequirementsList = mkEnumSimpleD
-  functionalRequirementsList'
+funcReqsContent :: [Contents]
+funcReqsContent = (mkEnumSimpleD funcReqs)
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
-functionalRequirementsList' :: [ConceptInstance]
-functionalRequirementsList' = [simSpace, inputInitialConds, inputSurfaceProps,
+funcReqs :: [ConceptInstance]
+funcReqs = [simSpace, inputInitialConds, inputSurfaceProps,
   verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime]
 
 simSpaceDesc, inputInitialCondsDesc, 
@@ -118,17 +115,39 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
 
-nonfunctionalRequirements :: Section
-nonfunctionalRequirementsIntro :: Contents
+nonfuncReqsSection :: Section
+nonfuncReqsSection = SRS.nonfuncReq (mkEnumSimpleD nonfuncReqs) []
 
-nonfunctionalRequirements = SRS.nonfuncReq [nonfunctionalRequirementsIntro] []
+nonfuncReqs :: [ConceptInstance] 
+nonfuncReqs = [correct, understandable, portable, reliable, reusable, maintainable]
 
-chpmnkPriorityNFReqs :: [ConceptChunk]
-chpmnkPriorityNFReqs = [correctness, understandability, portability,
-  reliability, maintainability]
+correct :: ConceptInstance
+correct = cic "correct" (foldlSent [
+  plural output_ `ofThe'` phrase code, S "have the",
+  plural property, S "described in", makeRef2S (SRS.propCorSol propsDeriv [])
+  ]) "Correct" nonFuncReqDom
+ 
+understandable :: ConceptInstance
+understandable = cic "understandable" (foldlSent [
+  S "The", phrase code, S "is modularized with complete",
+  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
 
-nonfunctionalRequirementsIntro = foldlSP 
-  [(titleize' game), S "are resource intensive, so", phrase performance,
-  S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
-  S "that are a", phrase priority +: S "are",
-  foldlList Comma List (map phrase chpmnkPriorityNFReqs)]
+portable :: ConceptInstance
+portable = cic "portable" (foldlSent [
+  S "The", phrase code, S "is able to be run in different", plural environment])
+  "Portable" nonFuncReqDom
+
+reliable :: ConceptInstance
+reliable = cic "reliable" (foldlSent [
+  S "The", phrase code, S "gives consistent", plural output_]) "Reliable" nonFuncReqDom
+
+reusable :: ConceptInstance
+reusable = cic "reusable" (foldlSent [
+  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+
+maintainable :: ConceptInstance
+maintainable = cic "maintainable" (foldlSent [
+  S "The traceability between", foldlList Comma List [plural requirement,
+  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
+  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
+  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom

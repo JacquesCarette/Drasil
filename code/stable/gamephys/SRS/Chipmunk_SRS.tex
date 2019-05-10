@@ -1126,7 +1126,16 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are:
+\begin{itemize}
+\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
+\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
+\item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
+\item[Reliable:\phantomsection\label{reliable}]The code gives consistent outputs.
+\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
+\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+\end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the game physics library.

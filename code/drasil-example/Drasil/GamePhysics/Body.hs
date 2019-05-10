@@ -9,7 +9,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
   LCsSec(..), UCsSec(..), generateTraceMap',
   assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
@@ -31,8 +31,7 @@ import Data.Drasil.Concepts.Documentation as Doc(assumption,
   termAndDef, thModel, traceyMatrix, user, userCharacteristic, doccon, doccon')
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
-import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness, softwarecon, reliability)
+import Data.Drasil.Concepts.Software (physLib, performance, softwarecon)
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
@@ -57,8 +56,8 @@ import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (functionalRequirementsList, 
-  functionalRequirementsList', propsDeriv, requirements)
+import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
+    propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
@@ -104,8 +103,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub functionalRequirementsList,
-      NonFReqsSub [performance] gmpriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+      FReqsSub funcReqsContent,
+      NonFReqsSub' [performance] nonfuncReqs
         (S "Games are resource intensive") (S "")],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
@@ -137,7 +136,7 @@ gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
 
 gameConcins :: [ConceptInstance]
 gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
-  functionalRequirementsList'
+  funcReqs
 
 gameSection :: [Section]
 gameSection = gameSec
@@ -204,10 +203,6 @@ chipCode = codeSpec chipmunkSysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
-
-gmpriorityNFReqs :: [ConceptChunk]
-gmpriorityNFReqs = [correctness, understandability, portability, reliability,
-  maintainability]
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -639,7 +634,7 @@ traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRef2S assumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRef2S functionalRequirementsList'
+traceMatFuncReqRef = map makeRef2S funcReqs
 
 traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]

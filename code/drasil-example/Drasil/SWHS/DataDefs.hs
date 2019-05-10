@@ -13,7 +13,7 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Thermodynamics (latent_heat)
+import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 swhsRefMDB :: ModelDB
 swhsRefMDB = mdb [] [] swhsDDefs []
@@ -85,7 +85,7 @@ dd3HtFusionQD :: QDefinition
 dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (sy latent_heat) / (sy mass)
+htFusionEqn = (sy latentHeat) / (sy mass)
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition

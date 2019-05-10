@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
   nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
   simulation, solution, srs, thModel, traceyMatrix, unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
-import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, law_cons_energy, melting)
+import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, lawConsEnergy, melting)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
@@ -111,7 +111,7 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
 verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
-  sParen (ch time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
+  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
   S "as outlined in"
   --FIXME , makeRefS s4_2_7 `sC` -}
   S "with relative error no greater than 0.001%"] )
@@ -172,7 +172,7 @@ maintainable = cic "maintainable" (foldlSent [
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.lawConsEnergy w_E energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcm_E energy phsChgMtrl water,

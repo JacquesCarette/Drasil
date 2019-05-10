@@ -24,7 +24,7 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol,
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
-  assumpINSFL, assumpPSC, assumpSBSBISL)
+  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWISE)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, baseWtrF, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
@@ -305,7 +305,11 @@ srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from",
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
   S "only 2 dimensions are considered, so the", plural area `sOf` 
   S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
-  phrase slice `sC` S "in the case where", S "height" `ofThe` phrase waterTable,
+  phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
+  S "is below", S "height" `ofThe` phrase slopeSrf, S "at one edge and above", 
+  S "height" `ofThe` phrase slopeSrf, S "at the other edge is", 
+  S "assumed not to occur" +:+. sParen (makeRef2S assumpWISE), 
+  S "In the case where", S "height" `ofThe` phrase waterTable,
   S "is below" +:+. ((S "height" `ofThe` phrase slopeSrf) `sC`
   (phrase area `ofThe` S "water is zero")), S "In the case where", 
   S "height" `ofThe` phrase waterTable, S "is above", S "height" `ofThe` 

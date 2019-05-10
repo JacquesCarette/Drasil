@@ -3,7 +3,7 @@ module Drasil.SSP.Assumptions where
 import Language.Drasil
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
-  soil, soilPrpty, intrslce, slice)
+  soil, soilPrpty, intrslce, slice, waterTable)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
   normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
   xi, zcoord)
@@ -20,11 +20,11 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
-  assumpSL]
+  assumpSL, assumpWISE]
 
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
-  assumpSL :: ConceptInstance
+  assumpSL, assumpWISE :: ConceptInstance
 
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
@@ -38,6 +38,8 @@ assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Inters
 assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
 assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
 assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
+assumpWISE = cic "assumpWISE" waterIntersect "Water-Intersects-Slice-Edge" 
+  assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS,
   planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
@@ -87,3 +89,6 @@ seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", 
 
 surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
   S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]
+
+waterIntersect = foldlSent [S "The", phrase waterTable, S "only intersects the",
+  phrase slopeSrf, S "at the edge of a", phrase slice]

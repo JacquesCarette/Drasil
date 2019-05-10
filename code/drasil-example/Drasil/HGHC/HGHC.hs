@@ -10,7 +10,10 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil
+import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
+  collectUnits, rdb, refdb, _authors, _concepts, _constants, _constraints,
+  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _sys, _sysinfodb, _usedinfodb)
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)

@@ -14,8 +14,11 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (oldEm, oldWrap, oldRefwrap, caption, image, div_tag,
-  td, th, tr, oldBold, oldSub, oldSup, oldCases, oldFraction, reflink, reflinkURI, paragraph, h, html, body,
+import Language.Drasil.HTML.Helpers (oldEm, oldWrap, oldRefwrap, caption, image,
+  div_tag, td, th, tr,
+  bold, sub, sup, cases, fraction,
+  oldBold, oldSub, oldSup, oldCases, oldFraction,
+  reflink, reflinkURI, paragraph, h, html, body,
   author, article_title, title, head_tag)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
@@ -143,6 +146,9 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
+
+-- OLD FUNCTIONS
+--------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 oldP_expr :: Expr -> String
 oldP_expr (Dbl d)        = showEFloat Nothing d ""
@@ -164,6 +170,29 @@ oldP_expr (Font Bold e)  = oldBold $ oldP_expr e
 oldP_expr (Font Emph e)  = "<em>" ++ oldP_expr e ++ "</em>" -- FIXME
 oldP_expr (Spc Thin)     = "&#8239;"
 oldP_expr (Sqrt e)       = "&radic;(" ++ oldP_expr e ++")"
+--------------------------------------------------
+
+-- | Renders expressions in the HTML (called by multiple functions)
+p_expr :: Expr -> Doc
+p_expr (Dbl d)        = text $ showEFloat Nothing d ""
+p_expr (Int i)        = text $ show i
+p_expr (Str s)        = text s
+p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
+p_expr (Case ps)      = cases ps p_expr
+p_expr (Mtx a)        = text ("<table class=\"matrix\">\n") <> p_matrix a <> text ("</table>")
+p_expr (Row l)        = hcat $ map p_expr l
+p_expr (Ident s)      = text s
+p_expr (Spec s)       = text $ unPH $ L.special s
+--p_expr (Gr g)         = unPH $ greek g
+p_expr (Sub e)        = sub $ p_expr e
+p_expr (Sup e)        = sup $ p_expr e
+p_expr (Over Hat s)   = p_expr s <> text ("&#770;")
+p_expr (MO o)         = text $ p_ops o
+p_expr (Fenced l r e) = text (fence Open l) <> p_expr e <> text (fence Close r)
+p_expr (Font Bold e)  = bold $ p_expr e
+p_expr (Font Emph e)  = text ("<em>") <> p_expr e <> text ("</em>") -- FIXME
+p_expr (Spc Thin)     = text ("&#8239;")
+p_expr (Sqrt e)       = text ("&radic;(") <> p_expr e <> text (")")
 
 p_ops :: Ops -> String
 p_ops IsIn     = "&thinsp;&isin;&thinsp;"
@@ -218,6 +247,8 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
+-- OLD FUNCTIONS
+--------------------------------------------------
 -- | For printing Matrix
 oldP_matrix :: [[Expr]] -> String
 oldP_matrix [] = ""
@@ -228,6 +259,17 @@ oldP_in :: [Expr] -> String
 oldP_in [] = ""
 oldP_in [x] = "<td>" ++ oldP_expr x ++ "</td>"
 oldP_in (x:xs) = oldP_in [x] ++ oldP_in xs
+--------------------------------------------------
+
+p_matrix :: [[Expr]] -> Doc
+p_matrix [] = text ""
+p_matrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
+p_matrix (x:xs) = p_matrix [x] <> p_matrix xs
+
+p_in :: [Expr] -> Doc
+p_in [] = text ""
+p_in [x] = text "<td>" <> p_expr x <> text "</td>"
+p_in (x:xs) = p_in [x] <> p_in xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

@@ -46,13 +46,13 @@ functionalRequirementsList = mkEnumSimpleD
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 functionalRequirementsList' :: [ConceptInstance]
-functionalRequirementsList' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
-  reqCROT, reqDC, reqDCROT]
+functionalRequirementsList' = [simSpace, inputInitialConds, inputSurfaceProps,
+  verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime]
 
-functional_requirements_req1, functional_requirements_req2, 
-  functional_requirements_req3, functional_requirements_req4,
-  functional_requirements_req5, functional_requirements_req6,
-  functional_requirements_req7, functional_requirements_req8 :: Sentence
+simSpaceDesc, inputInitialCondsDesc, 
+  inputSurfacePropsDesc, verifyPhysConsDesc,
+  calcTransOverTimeDesc, calcRotOverTimeDesc,
+  deterCollsDesc, deterCollRespOverTimeDesc :: Sentence
 
   -- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
@@ -69,46 +69,47 @@ requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 requirementS' a b = requirementS a b EmptyS 
 
 -- some requirements look like they could be parametrized
-functional_requirements_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
+simSpaceDesc = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
   (plural CP.rigidBody), S "in the", (phrase physicalSim), 
   S "to interact in"]
 
-functional_requirements_req2 = foldlSent [S "Input the initial", 
+inputInitialCondsDesc = foldlSent [S "Input the initial", 
   (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
   (plural QM.orientation) `sC` (plural QP.angularVelocity), 
   S "of" `sC` S "and", (plural QP.force), S "applied on", 
   (plural CP.rigidBody)]
 
-functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface), 
+inputSurfacePropsDesc = foldlSent [S "Input the", (phrase CM.surface), 
   (plural property), S "of the", plural body, S "such as",
   (phrase CP.friction) `sOr` (phrase CP.elasticity)]
 
-functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
+verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
   (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section]))]
 
-functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
+calcTransOverTimeDesc = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
 
-functional_requirements_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
+calcRotOverTimeDesc = requirementS' (QM.orientation) (QP.angularVelocity)
 
-functional_requirements_req7 = foldlSent [S "Determine if any of the", 
+deterCollsDesc = foldlSent [S "Determine if any of the", 
   (plural CP.rigidBody), S "in the", (phrase CP.space), 
   S "have collided"]
 
-functional_requirements_req8 = requirementS (QP.position) (QP.velocity) 
+deterCollRespOverTimeDesc = requirementS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
 
-reqSS, reqIIC, reqISP, reqVPC, reqCTOT, reqCROT, reqDC, reqDCROT :: ConceptInstance
+simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime,
+  calcRotOverTime, deterColls, deterCollRespOverTime :: ConceptInstance
 
-reqSS = cic "reqSS" functional_requirements_req1 "Simulation-Space" funcReqDom
-reqIIC = cic "reqIIC" functional_requirements_req2 "Input-Initial-Conditions" funcReqDom
-reqISP = cic "reqISP" functional_requirements_req3 "Input-Surface-Properties" funcReqDom
-reqVPC = cic "reqVPC" functional_requirements_req4 "Verify-Physical_Constraints" funcReqDom
-reqCTOT = cic "reqCTOT" functional_requirements_req5 "Calculate-Translation-Over-Time" funcReqDom
-reqCROT = cic "reqCROT" functional_requirements_req6 "Calculate-Rotation-Over-Time" funcReqDom
-reqDC = cic "reqDC" functional_requirements_req7 "Determine-Collisions" funcReqDom
-reqDCROT = cic "reqDCROT" functional_requirements_req8 "Determine-Collision-Response-Over-Time" funcReqDom
+simSpace              = cic "simSpace"              simSpaceDesc              "Simulation-Space"                       funcReqDom
+inputInitialConds     = cic "inputInitialConds"     inputInitialCondsDesc     "Input-Initial-Conditions"               funcReqDom
+inputSurfaceProps     = cic "inputSurfaceProps"     inputSurfacePropsDesc     "Input-Surface-Properties"               funcReqDom
+verifyPhysCons        = cic "verifyPhysCons"        verifyPhysConsDesc        "Verify-Physical_Constraints"            funcReqDom
+calcTransOverTime     = cic "calcTransOverTime"     calcTransOverTimeDesc     "Calculate-Translation-Over-Time"        funcReqDom
+calcRotOverTime       = cic "calcRotOverTime"       calcRotOverTimeDesc       "Calculate-Rotation-Over-Time"           funcReqDom
+deterColls            = cic "deterColls"            deterCollsDesc            "Determine-Collisions"                   funcReqDom
+deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "Determine-Collision-Response-Over-Time" funcReqDom
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --

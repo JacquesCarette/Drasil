@@ -14,9 +14,9 @@ physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
-newtonSL = tm (cw newtonSLRC)
+newtonSL = tmNoRefs (cw newtonSLRC)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] [] 
+  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] []
   "NewtonSecLawMot" [newtonSLDesc]
 
 newtonSLRC :: RelationConcept

@@ -137,7 +137,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- Chunk.Theory
-  , TheoryModel, tm, Theory(..)
+  , TheoryModel, tm, tmNoRefs, Theory(..)
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers

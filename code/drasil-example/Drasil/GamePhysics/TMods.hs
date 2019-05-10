@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.TMods (cpTMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new) where
+t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew) where
 
 import Language.Drasil
 import Prelude hiding (id)
@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, r_OB, sqrDist, vel_B, vel_O)
+  mass_1, mass_2, rOB, sqrDist, velB, velO)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -22,8 +22,8 @@ import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
 cpTMods :: [RelationConcept]
 cpTMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
 
-cpTMods_new :: [TheoryModel]
-cpTMods_new = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
+cpTModsNew :: [TheoryModel]
+cpTModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
   t4ChaslesThm_new, t5NewtonSLR_new]
 
 -- T1 : Newton's second law of motion --
@@ -31,9 +31,9 @@ cpTMods_new = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new,
 -- T2 : Newton's third law of motion --
 
 t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tm (cw newtonTL)
+t2NewtonTL_new = tmNoRefs (cw newtonTL)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [(sy force_1) $= (negate (sy force_2))] [] [] 
+  [] [(sy force_1) $= (negate (sy force_2))] []
   "NewtonThirdLawMot" [newtonTLDesc]
 
 newtonTL :: RelationConcept
@@ -55,13 +55,13 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 -- T3 : Newton's law of universal gravitation --
 
 t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tm (cw newtonLUG)
+t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [(sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
   (sy mass_2) / ((sy dispNorm) $^ 2)) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
-  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
+  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] []
   "UniversalGravLaw" [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
@@ -107,10 +107,10 @@ newtonLUGDesc = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 -- T4 : Chasles' theorem --
 
 t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tm (cw chaslesThm)
-  [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
-  ([] :: [ConceptChunk]) [] [(sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] [] [] "ChaslesThm" [chaslesThmDesc]
+t4ChaslesThm_new = tmNoRefs (cw chaslesThm)
+  [qw velB, qw velO, qw QP.angularVelocity, qw rOB] 
+  ([] :: [ConceptChunk]) [] [(sy velB) $= (sy velO) + (cross 
+  (sy  QP.angularVelocity) (sy rOB))] [] "ChaslesThm" [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
@@ -118,30 +118,30 @@ chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesThmRel :: Relation
-chaslesThmRel = (sy vel_B) $= (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
+chaslesThmRel = (sy velB) $= (sy velO) + (cross (sy  QP.angularVelocity) (sy rOB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
-  (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
+  (ch velB), (sParen $ Sy $ unit_symb velB), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
-  (phrase QP.velocity), (ch vel_O),
-  (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
+  (phrase QP.velocity), (ch velO),
+  (sParen $ Sy $ unit_symb velO), S "of the", (phrase $ CP.rigidBody),
   S "at the origin (axis of rotation) and the",
   S "resultant vector from the cross product of the",
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
-  (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]
+  (phrase rOB) `sC` (ch rOB), 
+  (sParen $ Sy $ unit_symb rOB)]
 
 -- T5 : Newton's second law for rotational motion --
 
 t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tm (cw newtonSLR)
+t5NewtonSLR_new = tmNoRefs (cw newtonSLR)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [(sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] [] [] "NewtonSecLawRotMot" [newtonSLRDesc]
+  * (sy QP.angularAccel)] [] "NewtonSecLawRotMot" [newtonSLRDesc]
 
 newtonSLR :: RelationConcept
 newtonSLR = makeRC "newtonSLR" 

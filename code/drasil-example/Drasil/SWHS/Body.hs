@@ -19,8 +19,9 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
-  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont, unlikeChg, inModel)
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
+  unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
@@ -42,7 +43,7 @@ import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
-import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latent_heat, temp)
+import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
@@ -52,9 +53,9 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
-
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, thermal_conduction,
-  ht_flux, heatCapSpec, thermal_energy, ht_trans_theo, thermal_analysis, ener_src)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
+  thermalConduction, htFlux, heatCapSpec, thermalEnergy, htTransTheo,
+  thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -86,8 +87,8 @@ this_si = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbTT
+checkSi :: [UnitDefn]
+checkSi = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -128,8 +129,8 @@ swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
+usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
  swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
@@ -160,13 +161,13 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
-    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl
-    progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
+    IntroProg (introP1 CT.enerSrc energy swhs_pcm phsChgMtrl
+    progName CT.thermalEnergy latentHeat unit_) (introP2 swhs_pcm program
     progName)
     [IPurpose $ purpDoc swhs_pcm progName,
-     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) $
-       scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT,
-     IChar [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
+     IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
+       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
+     IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhs_pcm progName],
   Verbatim genSystDesc,
@@ -350,8 +351,8 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.ht_flux, phase_change_material, CT.heatCapSpec,
-  CT.thermal_conduction, transient]
+  [CT.htFlux, phase_change_material, CT.heatCapSpec,
+  CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
 tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
@@ -373,7 +374,7 @@ physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, 
 -- this paragraph can not be abstracted out as is.
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,

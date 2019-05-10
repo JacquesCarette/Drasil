@@ -114,6 +114,8 @@ ${\mathbf{h}_{z,w}}$ & Heights Halfway to Water Table: the heights in the y-dire
 \\
 $i$ & Index: representing a single slice & --
 \\
+$\mathbf{\hat{j}}$ & Unit Vector: A vector that has a magnitude of one & --
+\\
 ${K_{c}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
 $M$ & Net Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
@@ -906,7 +908,14 @@ Source & \hyperref{https://en.wikipedia.org/wiki/Weight}{}{}{Definition of Weigh
 RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Directly applying Newton's second law of motion from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} to the concept of weight yields:
+Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
+\begin{displaymath}
+\mathbf{a}=\begin{bmatrix}
+0\\
+g \mathbf{\hat{j}}
+\end{bmatrix}
+\end{displaymath}
+Since there is only one non-zero vector component, the scalar value $W$ will be used for the weight. In this scenario, Newton's second law of motion from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} can be expressed as:
 \begin{displaymath}
 W=m g
 \end{displaymath}
@@ -932,8 +941,8 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{U}_{t,i}}={\mathbf{b}}_{i} {γ_{w}} \frac{1}{2} \begin{cases}
-{\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slope,i}}\\
-0, & {\mathbf{y}_{wt,i}}<{\mathbf{y}_{slope,i}}
+{\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}\geq{}{\mathbf{y}_{slope,i-1}}\\
+0, & {\mathbf{y}_{wt,i}}<{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}<{\mathbf{y}_{slope,i-1}}
 \end{cases}
            \end{displaymath}
 \\ \midrule \\

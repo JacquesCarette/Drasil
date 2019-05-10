@@ -395,6 +395,17 @@ Index: representing a single slice
 </tr>
 <tr>
 <td>
+<em><b>j&#770;</b></em>
+</td>
+<td>
+Unit Vector: A vector that has a magnitude of one
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>K<sub>c</sub></em>
 </td>
 <td>
@@ -3006,7 +3017,16 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-Directly applying Newton's second law of motion from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a> to the concept of weight yields:
+Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
+</p>
+<div class="equation">
+<em><b>a</b> = <table class="matrix">
+<tr><td>0</td></tr>
+<tr><td>g&#8239;<b>j&#770;</b></td></tr>
+</table></em>
+</div>
+<p class="paragraph">
+Since there is only one non-zero vector component, the scalar value <em>W</em> will be used for the weight. In this scenario, Newton's second law of motion from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a> can be expressed as:
 </p>
 <div class="equation">
 <em>W = m&#8239;g</em>
@@ -3064,12 +3084,12 @@ Equation
 <div class="cases">
 <span>
 <b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub> , <span class="case">
-<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i</sub>
+<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 </span>
 <span>
 0 , <span class="case">
-<b>y</b><sub>wt,i</sub>&thinsp;&lt;&thinsp;<b>y</b><sub>slope,i</sub>
+<b>y</b><sub>wt,i</sub>&thinsp;&lt;&thinsp;<b>y</b><sub>slope,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&lt;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
 </span>
 </span>
 </div></em>

@@ -128,19 +128,19 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-
-gbProbs :: [QuantityDict]
-gbProbs = map qw [probFail,pbFail] 
+gbTMSymbols :: [QuantityDict]
+gbTMSymbols = map qw [probFail, probFail] ++ map qw [is_safeProb, is_safeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lF) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-pbFail :: ConstrainedChunk
-pbFail = cvc "pbFail" (nounPhraseSP "tolerable probability of failure") 
+pbTolfail :: ConstrainedChunk
+pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Atomic "ftol")) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
+  
 
   --FIXME: no typical value!
 
@@ -185,17 +185,23 @@ sdMin     = mkQuantDef (unitary "sdMin"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [minThick, sflawParamK, sflawParamM, demand, lRe, nonFactorL, loadDur,
+glassBRSymbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight]
 
-minThick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, lRe, nonFactorL, loadDur,
+minThick, sflawParamK, sflawParamM, demand, tm_demand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
+
+tm_demand      = unitary "tm_demand"      (nounPhraseSP "applied load (demand) or pressure")
+  (Atomic "Load") pascal Rational --correct Space used?
   
 lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
   (Atomic "LR") pascal Rational --correct Space used?
+
+tm_lRe      = unitary "tm_lRe"      (nounPhraseSP "capacity or load resistance")
+  (Atomic "capacity") pascal Rational --correct Space used?
 
 nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
   (Atomic "NFL") pascal Rational --correct Space used?
@@ -229,10 +235,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [QuantityDict]
-glassBRUnitless = [riskFun, isSafePb, isSafeLR, stressDistFac, sdfTol,
+glassBRUnitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-riskFun, isSafePb, isSafeLR, stressDistFac, sdfTol,
+riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -245,9 +251,17 @@ isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned 
   " probability is less than tolerable probability")
   (Atomic "is-safePb") Boolean
 
+is_safeProb      = vc "is_safeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
+  " probability of failure is less than tolerable probability of failure")
+  (Atomic "is-safeProb") Boolean
+
 isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
   (Atomic "is-safeLR") Boolean
+
+is_safeLoad      = vc "is_safeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
+  ++ " (capacity) is greater than applied load (demand)")
+  (Atomic "is-safeLoad") Boolean
 
 lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 

@@ -82,15 +82,15 @@ wrap a = wrap_gen Class a empty
 wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrap_gen _ s _ [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
-  in cat [tb s, indent x, tb $ '/':s]
+  in sep [tb s, indent x, tb $ '/':s]
 wrap_gen Class s _ ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
-  in cat [tb s, indent x, te s]
+  in sep [tb s, indent x, te s]
 wrap_gen Id s ti _ = \x ->
   let tb c = text ("<" ++c++ " id=\"") <> ti <> text ("\">")
       te c = text $ "</" ++ c ++ ">"
-  in cat [tb s, indent x, te s] 
+  in sep [tb s, indent x, te s] 
 
 
 -- | Helper for wrapping attributes in a tag.

@@ -1187,7 +1187,7 @@ explainScenario: This system only considers the external explosion scenario for 
 </p>
 <p>
 <div id="assumpSV">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#assumpLDFC>A: ldfConstant</a>.
+standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#assumpLDFC>A: ldfConstant</a>.
 </div>
 </p>
 <p>
@@ -1385,7 +1385,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:risk.fun">
+<div id="DD:riskFun">
 <table class="ddefn">
 <tr>
 <th>
@@ -1479,7 +1479,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
@@ -1511,7 +1511,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:min.thick">
+<div id="DD:minThick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1665,7 +1665,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:risk.fun>DD: risk_fun</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+<a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:riskFun>DD: riskFun</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
 </p>
 </td>
 </tr>
@@ -1774,7 +1774,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:risk.fun>DD: risk_fun</a>.
+<a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:riskFun>DD: riskFun</a>.
 </p>
 </td>
 </tr>
@@ -1875,7 +1875,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:risk.fun>DD: risk_fun</a>.
+<a href=#DD:riskFun>DD: riskFun</a>.
 </p>
 </td>
 </tr>
@@ -1966,7 +1966,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>q&#770;<sub>tol</sub></em> is the tolerable load defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
@@ -2203,7 +2203,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>GTF</em> is the glass type factor, as given by <a href=#DD:gTF>DD: gTF</a>.
@@ -2307,7 +2307,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in <a href=#DD:sdf.tol>DD: sdf_tol</a>. and <a href=#DD:aspect.ratio>DD: aspect_ratio</a>, respectively
+<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in <a href=#DD:sdfTol>DD: sdfTol</a>. and <a href=#DD:aspect.ratio>DD: aspect_ratio</a>, respectively
 </p>
 </td>
 </tr>
@@ -2333,7 +2333,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:sdf.tol">
+<div id="DD:sdfTol">
 <table class="ddefn">
 <tr>
 <th>
@@ -2437,7 +2437,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
@@ -2801,7 +2801,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>B</em> is the risk of failure, as defined in <a href=#DD:risk.fun>DD: risk_fun</a>
+<em>B</em> is the risk of failure, as defined in <a href=#DD:riskFun>DD: riskFun</a>
 </p>
 </td>
 </tr>
@@ -3382,7 +3382,7 @@ System-Set-Values-Following-Assumptions: The system shall set the known values a
                                          LSF following <a href=#assumpGL>A: glassLite</a>
                                          </li>
                                          <li>
-                                         <em>h</em> from <a href=#DD:min.thick>DD: min_thick</a>
+                                         <em>h</em> from <a href=#DD:minThick>DD: minThick</a>
                                          </li>
                                          <li>
                                          <em>GTF</em> from <a href=#DD:gTF>DD: gTF</a>
@@ -3419,19 +3419,19 @@ Output-Quantities: Output the following quantities:
                    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect_ratio</a>)
                    </li>
                    <li>
-                   Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD: risk_fun</a>)
+                   Risk of failure (<em>B</em>) (<a href=#DD:riskFun>DD: riskFun</a>)
                    </li>
                    <li>
                    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
                    </li>
                    <li>
-                   Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD: min_thick</a>)
+                   Minimum thickness (<em>h</em>) (<a href=#DD:minThick>DD: minThick</a>)
                    </li>
                    <li>
                    Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
                    </li>
                    <li>
-                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdfTol>DD: sdfTol</a>)
                    </li>
                    <li>
                    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
@@ -3736,7 +3736,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>
 </th>
 <th>
-<a href=#DD:sdf.tol>DD: sdf_tol</a>
+<a href=#DD:sdfTol>DD: sdfTol</a>
 </th>
 <th>
 <a href=#DD:nFL>DD: nFL</a>
@@ -3760,7 +3760,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
 </th>
 <th>
-<a href=#DD:risk.fun>DD: risk_fun</a>
+<a href=#DD:riskFun>DD: riskFun</a>
 </th>
 <th>
 <a href=#TM:isSafePb>TM: isSafePb</a>
@@ -5351,7 +5351,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:min.thick>DD: min_thick</a>
+<a href=#DD:minThick>DD: minThick</a>
 </td>
 <td>
 
@@ -5600,7 +5600,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:risk.fun>DD: risk_fun</a>
+<a href=#DD:riskFun>DD: riskFun</a>
 </td>
 <td>
 
@@ -5849,7 +5849,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:sdf.tol>DD: sdf_tol</a>
+<a href=#DD:sdfTol>DD: sdfTol</a>
 </td>
 <td>
 
@@ -6283,10 +6283,10 @@ T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
 DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
@@ -6307,7 +6307,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 <th>
 DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
@@ -6447,7 +6447,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 
@@ -6491,7 +6491,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -6799,7 +6799,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 
@@ -6906,10 +6906,10 @@ T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
 DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
@@ -6930,7 +6930,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 <th>
 DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
@@ -7472,7 +7472,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 X
@@ -7501,7 +7501,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -7704,7 +7704,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 

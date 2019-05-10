@@ -30,8 +30,8 @@ import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL,
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (gbrIMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (blast, char_weight, glassTy, glass_type, 
-  is_safeLR, is_safePb, nom_thick, notSafe, pb_tol, plate_len, plate_width, 
+import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
+  isSafeLR, isSafePb, nomThick, notSafe, pbTol, plateLen, plateWidth, 
   safeMessage, sdx, sdy, sdz, tNT)
 
 {--Functional Requirements--}
@@ -81,9 +81,9 @@ inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
-    requiredInputs = (map qw [plate_len, plate_width, char_weight])
-      ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
-      ++ (map qw [glass_type, nom_thick])
+    requiredInputs = (map qw [plateLen, plateWidth, charWeight])
+      ++ (map qw [pbTol, tNT]) ++ (map qw [sdx, sdy, sdz])
+      ++ (map qw [glass_type, nomThick])
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall set the known",
@@ -111,7 +111,7 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S inputGlassProps `andThe` S "known", plural quantity,
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
-checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
+checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch isSafePb), S "∧", (ch isSafeLR),
   sParen (S "from" +:+ (makeRef2S pbIsSafe)
   `sAnd` (makeRef2S lrIsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),

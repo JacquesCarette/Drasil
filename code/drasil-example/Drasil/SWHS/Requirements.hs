@@ -70,7 +70,7 @@ inputInitQuants = cic "inputInitQuants" ( foldlSent [
 --
 findMass = cic "findMass" ( foldlSent [
   S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
-  S "to find the", phrase mass, S "needed for",
+  S "to find the", plural mass, S "needed for",
   (foldlList Comma List $ map makeRef2S swhsIMods) `sC`
   S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",
   ch w_vol `isThe` phrase w_vol, S "and" +:+. (ch tank_vol `isThe`

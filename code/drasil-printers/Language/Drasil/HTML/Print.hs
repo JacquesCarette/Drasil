@@ -93,7 +93,7 @@ title_spec s         = p_spec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: Spec -> Doc
-p_spec (E e)             = oldEm $ text $ p_expr e
+p_spec (E e)             = oldEm $ text $ oldP_expr e
 p_spec (a :+: b)         = p_spec a <> p_spec b
 p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
@@ -113,7 +113,7 @@ symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPH $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
--- handle the special oldCases first, then general case
+-- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ oldSup (symbol x)
 symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ oldSub (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
@@ -144,26 +144,26 @@ uSymb (L.US ls) = formatu t b
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
-p_expr :: Expr -> String
-p_expr (Dbl d)        = showEFloat Nothing d ""
-p_expr (Int i)        = show i
-p_expr (Str s)        = s
-p_expr (Div a b)      = oldFraction (p_expr a) (p_expr b)
-p_expr (Case ps)      = oldCases ps p_expr
-p_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Row l)        = concatMap p_expr l
-p_expr (Ident s)      = s
-p_expr (Spec s)       = unPH $ L.special s
---p_expr (Gr g)         = unPH $ greek g
-p_expr (Sub e)        = oldSub $ p_expr e
-p_expr (Sup e)        = oldSup $ p_expr e
-p_expr (Over Hat s)   = p_expr s ++ "&#770;"
-p_expr (MO o)         = p_ops o
-p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
-p_expr (Font Bold e)  = oldBold $ p_expr e
-p_expr (Font Emph e)  = "<em>" ++ p_expr e ++ "</am>" -- FIXME
-p_expr (Spc Thin)     = "&#8239;"
-p_expr (Sqrt e)       = "&radic;(" ++ p_expr e ++")"
+oldP_expr :: Expr -> String
+oldP_expr (Dbl d)        = showEFloat Nothing d ""
+oldP_expr (Int i)        = show i
+oldP_expr (Str s)        = s
+oldP_expr (Div a b)      = oldFraction (oldP_expr a) (oldP_expr b)
+oldP_expr (Case ps)      = oldCases ps oldP_expr
+oldP_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
+oldP_expr (Row l)        = concatMap oldP_expr l
+oldP_expr (Ident s)      = s
+oldP_expr (Spec s)       = unPH $ L.special s
+--oldP_expr (Gr g)         = unPH $ greek g
+oldP_expr (Sub e)        = oldSub $ oldP_expr e
+oldP_expr (Sup e)        = oldSup $ oldP_expr e
+oldP_expr (Over Hat s)   = oldP_expr s ++ "&#770;"
+oldP_expr (MO o)         = p_ops o
+oldP_expr (Fenced l r e) = fence Open l ++ oldP_expr e ++ fence Close r
+oldP_expr (Font Bold e)  = oldBold $ oldP_expr e
+oldP_expr (Font Emph e)  = "<em>" ++ oldP_expr e ++ "</em>" -- FIXME
+oldP_expr (Spc Thin)     = "&#8239;"
+oldP_expr (Sqrt e)       = "&radic;(" ++ oldP_expr e ++")"
 
 p_ops :: Ops -> String
 p_ops IsIn     = "&thinsp;&isin;&thinsp;"
@@ -226,7 +226,7 @@ p_matrix (x:xs) = p_matrix [x] ++ p_matrix xs
 
 p_in :: [Expr] -> String
 p_in [] = ""
-p_in [x] = "<td>" ++ p_expr x ++ "</td>"
+p_in [x] = "<td>" ++ oldP_expr x ++ "</td>"
 p_in (x:xs) = p_in [x] ++ p_in xs
 
 -----------------------------------------------------------------

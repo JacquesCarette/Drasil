@@ -183,15 +183,15 @@ oldFraction a b =
 
 -- | Build oldCases for case expressions
 oldCases :: [(Expr,Expr)] -> (Expr -> String) -> String
-oldCases ps p_expr = render $ (oldSpan_tag ["casebr"] "{" $$ div_tag ["cases"] 
-                  (oldMakeCases ps p_expr))
+oldCases ps oldP_expr = render $ (oldSpan_tag ["casebr"] "{" $$ div_tag ["cases"] 
+                  (oldMakeCases ps oldP_expr))
 
 -- | Build case expressions
 oldMakeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
 oldMakeCases [] _ = empty
-oldMakeCases (p:ps) p_expr = ((oldSpan_tag [] (p_expr (fst p) ++ " , " ++
-                            (render $ oldSpan_tag ["case"] (p_expr (snd p))))) $$
-                            oldMakeCases ps p_expr)
+oldMakeCases (p:ps) oldP_expr = ((oldSpan_tag [] (oldP_expr (fst p) ++ " , " ++
+                            (render $ oldSpan_tag ["case"] (oldP_expr (snd p))))) $$
+                            oldMakeCases ps oldP_expr)
 --------------------------------------------------
 
 span_tag :: [String] -> Doc -> Doc
@@ -213,12 +213,12 @@ fraction a b =
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps p_expr = (span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
-                  (makeCases ps p_expr))
+cases ps oldP_expr = (span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
+                  (makeCases ps oldP_expr))
 
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) <> text " , " <>
-                            (span_tag ["case"] (p_expr (snd p))))) $$
-                            makeCases ps p_expr)
+makeCases (p:ps) oldP_expr = ((span_tag [] (oldP_expr (fst p) <> text " , " <>
+                            (span_tag ["case"] (oldP_expr (snd p))))) $$
+                            makeCases ps oldP_expr)

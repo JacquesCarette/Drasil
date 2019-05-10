@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
+module Language.Drasil.Chunk.Theory (TheoryModel, tm, tmNoRefs, Theory(..)) where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -18,7 +18,7 @@ import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Data.Drasil.IdeaDicts (theoryMod)
 
-import Control.Lens (Lens', view, makeLenses)
+import Control.Lens (Lens', view, makeLenses, (^.))
 
 class Theory t where
   valid_context :: Lens' t [TheoryModel]
@@ -85,6 +85,14 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
+tm c _ _ _ _ _ [] _         = error $ "Source field of" ++ c ^. uid ++ "is empty"
 tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
+      (prependAbrv theoryMod lbe)
+
+tmNoRefs :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
+    [q] -> [c1] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+    String -> [Sentence] -> TheoryModel
+tmNoRefs c0 q c1 dq inv dfn lbe = 
+  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn [] (shortname' lbe)
       (prependAbrv theoryMod lbe)

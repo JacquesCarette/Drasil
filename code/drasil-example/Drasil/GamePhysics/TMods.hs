@@ -28,9 +28,9 @@ cpTMods_new = [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new,
 -- T1 : Newton's second law of motion --
 
 t1NewtonSL_new :: TheoryModel
-t1NewtonSL_new = tm (cw newtonSL)
+t1NewtonSL_new = tmNoRefs (cw newtonSL)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] [] 
+  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] 
   "NewtonSecLawMot" [newtonSLDesc]
 
 newtonSL :: RelationConcept
@@ -54,9 +54,9 @@ newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
 -- T2 : Newton's third law of motion --
 
 t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tm (cw newtonTL)
+t2NewtonTL_new = tmNoRefs (cw newtonTL)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [(sy force_1) $= (negate (sy force_2))] [] [] 
+  [] [(sy force_1) $= (negate (sy force_2))] []
   "NewtonThirdLawMot" [newtonTLDesc]
 
 newtonTL :: RelationConcept
@@ -78,13 +78,13 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 -- T3 : Newton's law of universal gravitation --
 
 t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tm (cw newtonLUG)
+t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [(sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
   (sy mass_2) / ((sy dispNorm) $^ 2)) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
-  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
+  $^ 2)) * ((sy QP.displacement) / (sy dispNorm))] []
   "UniversalGravLaw" [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
@@ -130,10 +130,10 @@ newtonLUGDesc = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 -- T4 : Chasles' theorem --
 
 t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tm (cw chaslesThm)
+t4ChaslesThm_new = tmNoRefs (cw chaslesThm)
   [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
   ([] :: [ConceptChunk]) [] [(sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] [] [] "ChaslesThm" [chaslesThmDesc]
+  (sy  QP.angularVelocity) (sy r_OB))] [] "ChaslesThm" [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
@@ -161,10 +161,10 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 -- T5 : Newton's second law for rotational motion --
 
 t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tm (cw newtonSLR)
+t5NewtonSLR_new = tmNoRefs (cw newtonSLR)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [(sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] [] [] "NewtonSecLawRotMot" [newtonSLRDesc]
+  * (sy QP.angularAccel)] [] "NewtonSecLawRotMot" [newtonSLRDesc]
 
 newtonSLR :: RelationConcept
 newtonSLR = makeRC "newtonSLR" 

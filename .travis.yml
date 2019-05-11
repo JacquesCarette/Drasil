@@ -35,6 +35,7 @@ addons:
       - texlive-math-extra
       - texlive-xetex
       - texlive-luatex
+      - python3
 
 before_install:
 # Download and unpack the stack executable
@@ -59,7 +60,7 @@ script:
      ./ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
  - >
      ./ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
- - travis_retry sh pr_label_update.sh
+ - travis_retry python3 pr_label_update.py
 
 notifications:
   email:

@@ -60,6 +60,8 @@ library
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
     , Language.Drasil.UID
+    , Language.Drasil.Uncertainty
+    , Language.Drasil.Uncertainty.Core
     , Language.Drasil.Unicode
     , Language.Drasil.UnitLang
     , Language.Drasil.Derivation

@@ -38,6 +38,7 @@ executable glassbr
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.Goals
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.References
@@ -77,6 +78,7 @@ executable nopcm
     , Drasil.NoPCM.IMods
     , Drasil.NoPCM.GenDefs
     , Drasil.NoPCM.Goals
+    , Drasil.NoPCM.Requirements
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Labels
     , Drasil.SWHS.Body

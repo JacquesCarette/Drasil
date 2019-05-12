@@ -64,5 +64,6 @@ script:
 notifications:
   email:
     - szymczdm@mcmaster.ca
+    - carette@mcmaster.ca
   on_success: change
   on_failure: always

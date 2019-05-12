@@ -32,6 +32,7 @@ MANAGED_LABEL_FILE = os.environ["MANAGED_LABEL_FILE"]
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 TRAVIS_REPO_SLUG = os.environ["TRAVIS_REPO_SLUG"]
 TRAVIS_PULL_REQUEST = os.environ["TRAVIS_PULL_REQUEST"]
+TRAVIS_PULL_REQUEST_SHA = os.environ["TRAVIS_PULL_REQUEST_SHA"]
 
 def wrap_terminal_yellow(s):
   return "\033[0K\033[33;1m{}\033[0m".format(s)
@@ -75,7 +76,7 @@ def make_mutation_request(labelable_id, labels):
   }}
 }}""".format(labelable_id, ",".join(map(lambda l: '"{}"'.format(l), labels)))
 
-if __name__ == "__main__":
+def update_labels():
   labels = read_labels(LABEL_FILE)
   managed_labels = read_labels(MANAGED_LABEL_FILE)
 
@@ -86,6 +87,17 @@ if __name__ == "__main__":
     print(pr.stdout)
 
     pr_blob = json.loads(pr.stdout)
+    pr_sha = pr_blob["head"]["sha"]
+
+    if pr_sha != TRAVIS_PULL_REQUEST_SHA:
+      def exit_func():
+        print("Current build and latest PR hash don't match.")
+        print("This build is not the most recent.")
+        print("Current hash: {}".format(TRAVIS_PULL_REQUEST_SHA))
+        print("Latest hash:  {}".format(pr_sha))
+        print("Skipping update.")
+      return exit_func
+
     pr_labels = {l["name"]: l["node_id"] for l in pr_blob["labels"]}
 
     managed_labels_on_pr = managed_labels & set(pr_labels.keys());
@@ -103,3 +115,8 @@ if __name__ == "__main__":
           "Authorization: token {}".format(BOT_TOKEN),
           "https://api.github.com/repos/{0}/issues/{1}/labels".format(TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST)])
       print(c.stdout)
+
+if __name__ == "__main__":
+  ret = update_labels()
+  if ret is not None:
+    ret()

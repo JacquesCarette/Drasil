@@ -22,6 +22,7 @@ executable tiny
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23
@@ -57,6 +58,7 @@ executable glassbr
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23
@@ -104,6 +106,7 @@ executable nopcm
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23
@@ -140,6 +143,7 @@ executable swhs
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23
@@ -178,6 +182,7 @@ executable ssp
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23
@@ -209,6 +214,7 @@ executable chipmunkdocs
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
     drasil-code >= 0.1.4,
+    drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.23

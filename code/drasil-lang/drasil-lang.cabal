@@ -32,8 +32,6 @@ library
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.UnitDefn
-    , Language.Drasil.ChunkDB
-    , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
     , Language.Drasil.Classes.Citations
@@ -61,7 +59,6 @@ library
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SystemInformation
     , Language.Drasil.UID
     , Language.Drasil.Uncertainty
     , Language.Drasil.Uncertainty.Core

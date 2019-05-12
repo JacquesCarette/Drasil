@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 3, 2019
+Last updated: May 9, 2019
 --------------------------------------------------
 
 **Chunk**
@@ -38,9 +38,6 @@ Last updated: May 3, 2019
 
 **URI**
   - URI AST
-
-ChunkDB.hs
-  - Chunk databases used by System Information for looking up knowledge
 
 Classes.hs
   - Defines the classes for the Drasil data types
@@ -95,9 +92,6 @@ Stages.hs
 
 Symbol.hs
   - Strictly graphical representation in Drasil made up of many types of items
-
-SystemInformation.hs
-  - Defines the SI type
 
 UID.hs
   - Defines the UID type

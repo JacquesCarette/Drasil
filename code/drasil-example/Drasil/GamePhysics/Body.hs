@@ -3,6 +3,10 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
+  TraceMap, ccss, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
+  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 

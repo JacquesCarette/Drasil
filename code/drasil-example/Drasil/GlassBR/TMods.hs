@@ -2,6 +2,7 @@ module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
+import Database.Drasil (cdb)
 
 import Control.Lens ((^.))
 

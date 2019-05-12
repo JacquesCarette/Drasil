@@ -5,6 +5,10 @@ import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
+  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
+  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 

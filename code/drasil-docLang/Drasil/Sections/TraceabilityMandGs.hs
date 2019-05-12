@@ -5,6 +5,8 @@ module Drasil.Sections.TraceabilityMandGs
    ) where
 
 import Language.Drasil
+import Database.Drasil(ChunkDB, SystemInformation, refbyLookup, refbyTable,
+  _sysinfodb)
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
  reference, section_, traceyGraph, traceyMatrix)

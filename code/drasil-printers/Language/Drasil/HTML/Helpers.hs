@@ -84,17 +84,17 @@ wrapAux a = wrap_genAux hsep Class a empty
 -- | Helper for wrapping HTML tags.
 -- The forth argument provides class names for the CSS.
 wrap_genAux :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_genAux sep _ s _ [] = \x -> 
+wrap_genAux sepf _ s _ [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
-  in sep [tb s, indent x, tb $ '/':s]
-wrap_genAux sep Class s _ ts = \x ->
+  in sepf [tb s, indent x, tb $ '/':s]
+wrap_genAux sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
-  in sep [tb s, indent x, te s]
-wrap_genAux sep Id s ti _ = \x ->
+  in sepf [tb s, indent x, te s]
+wrap_genAux sepf Id s ti _ = \x ->
   let tb c = text ("<" ++c++ " id=\"") <> ti <> text ("\">")
       te c = text $ "</" ++ c ++ ">"
-  in sep [tb s, indent x, te s] 
+  in sepf [tb s, indent x, te s] 
 
 wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrap_gen = wrap_genAux cat

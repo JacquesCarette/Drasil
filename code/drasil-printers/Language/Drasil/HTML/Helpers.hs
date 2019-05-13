@@ -110,7 +110,7 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc
-caption = oldWrap "p" ["caption"]
+caption = wrap "p" ["caption"]
 
 -- OLD FUNCTIONS
 --------------------------------------------------

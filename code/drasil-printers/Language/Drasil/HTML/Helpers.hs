@@ -176,30 +176,6 @@ author a        = div_tag ["author"] (h 2 a)
 -- | Div tag wrapper
 div_tag :: [String] -> Doc -> Doc
 div_tag = oldWrap "div"
-  
--- OLD FUNCTIONS
---------------------------------------------------
--- | Span tag wrapper
-oldSpan_tag :: [String] -> String -> Doc
-oldSpan_tag t = oldWrap "span" t . text
-
--- | Create and markup fractions
-oldFraction :: String -> String -> String  
-oldFraction a b =
-  render $ div_tag ["fraction"] (oldSpan_tag ["fup"] a $$ oldSpan_tag ["fdn"] b)
-
--- | Build oldCases for case expressions
-oldCases :: [(Expr,Expr)] -> (Expr -> String) -> String
-oldCases ps oldP_expr = render $ (oldSpan_tag ["casebr"] "{" $$ div_tag ["cases"] 
-                  (oldMakeCases ps oldP_expr))
-
--- | Build case expressions
-oldMakeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
-oldMakeCases [] _ = empty
-oldMakeCases (p:ps) oldP_expr = ((oldSpan_tag [] (oldP_expr (fst p) ++ " , " ++
-                            (render $ oldSpan_tag ["case"] (oldP_expr (snd p))))) $$
-                            oldMakeCases ps oldP_expr)
---------------------------------------------------
 
 span_tag :: [String] -> Doc -> Doc
 span_tag t = wrap "span" t

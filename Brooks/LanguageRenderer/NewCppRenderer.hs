@@ -13,27 +13,25 @@ import New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
-    enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
-    printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD,
-    typeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD, 
-    paramListDocD, methodDocD, methodListDocD, stateVarDocD, stateVarListDocD,
-    alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
-    assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
-    listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD,
-    returnDocD, commentDocD, freeDocD, notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unOpDocD, equalOpDocD, 
-    notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-    lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-    moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, 
-    litFalseD, litCharD, litFloatD, litIntD, litStringD, defaultCharD, 
-    defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD,
-    argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-    extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-    listIndexExistsDocD, funcDocD, castDocD, listSetDocD, listAccessDocD, 
-    objAccessDocD, 
-    castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-    publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
-    callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
+import NewLanguageRenderer (fileDoc',
+    multiStateDocD, blockDocD, bodyDocD, intTypeDocD, charTypeDocD, 
+    stringTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
+    stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
+    stateVarListDocD, alwaysDel, ifCondDocD, switchDocD, forDocD, whileDocD, 
+    stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, 
+    varDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD,
+    returnDocD, commentDocD, freeDocD, notOpDocD, negateOpDocD, sqrtOpDocD, 
+    absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, 
+    acosOpDocD, atanOpDocD, unOpDocD, equalOpDocD, notEqualOpDocD, 
+    greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+    minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD,
+    orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, litCharD, litFloatD, 
+    litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
+    defaultStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
+    funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
+    continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, 
+    observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
+    getterName, setterName)
 import Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
     tripThird, vibcat)
 
@@ -65,9 +63,6 @@ liftA5 f a1 a2 a3 a4 a5 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCP
 
 liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e -> CppSrcCode f -> CppSrcCode g
 liftA6 f a1 a2 a3 a4 a5 a6 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (unCPPSC a5) (unCPPSC a6)
-
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CppSrcCode a -> CppSrcCode b -> CppSrcCode c -> CppSrcCode d -> CppSrcCode e -> CppSrcCode f -> CppSrcCode g -> CppSrcCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = CPPSC $ f (unCPPSC a1) (unCPPSC a2) (unCPPSC a3) (unCPPSC a4) (unCPPSC a5) (unCPPSC a6) (unCPPSC a7)
 
 liftList :: ([a] -> b) -> [CppSrcCode a] -> CppSrcCode b
 liftList f as = CPPSC $ f (map unCPPSC as)
@@ -510,7 +505,7 @@ instance ScopeSym CppSrcCode where
     private = return privateDocD
     public = return publicDocD
 
-    includeScope s = return empty
+    includeScope _ = return empty
 
 instance MethodTypeSym CppSrcCode where
     type MethodType CppSrcCode = Doc
@@ -531,7 +526,7 @@ instance MethodSym CppSrcCode where
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = liftPairFst (liftA4 (cppMainMethod "main") int b blockStart blockEnd, True)
+    mainMethod b = liftPairFst (liftA4 cppMainMethod int b blockStart blockEnd, True)
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
@@ -553,18 +548,18 @@ instance StateVarSym CppSrcCode where
     pubGVar del l = stateVar del l public static
     listStateVar del l s p t = 
         let i = "i"
-            guard l = var i ?< (l $. listSize)
-            loopBody l = oneLiner $ free (l $. at i)
+            guard = var i ?< (var l $. listSize)
+            loopBody = oneLiner $ free (var l $. at i)
             initv = (i &.= litInt 0)
-            deleteLoop l = for initv (guard l) ((&.++) i) (loopBody l)
-        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then return (empty, False) else deleteLoop $ var l)
+            deleteLoop = for initv guard ((&.++) i) loopBody
+        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then return (empty, False) else deleteLoop)
 
 instance ClassSym CppSrcCode where
     -- Bool is True if the class is a main class, False otherwise
     type Class CppSrcCode = (Doc, Bool)
     buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD (fs ++ [destructor n vs]), any (snd . unCPPSC) fs)
     enum _ _ _ = return (empty, False)
-    mainClass n vs fs = liftPairFst (liftA2 (cppMainClass n (null vs)) (liftList stateVarListDocD (map (fmap fst) vs)) (liftList methodListDocD fs), True)
+    mainClass _ vs fs = liftPairFst (liftA2 (cppMainClass (null vs)) (liftList stateVarListDocD (map (fmap fst) vs)) (liftList methodListDocD fs), True)
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -584,7 +579,7 @@ cppHeaderExt :: Label
 cppHeaderExt = ".hpp"
 
 cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc
-cppstop (m, n, b) lst end = vcat [
+cppstop (_, n, b) lst end = vcat [
     if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
     blank,
     inc <+> angles (text "algorithm"),
@@ -674,16 +669,16 @@ cppMethod n t ps b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
     where ttype | isDtor n = empty
                 | otherwise = t
 
-cppMainMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-cppMainMethod n t b bStart bEnd = vcat [
+cppMainMethod :: Doc -> Doc -> Doc -> Doc -> Doc
+cppMainMethod t b bStart bEnd = vcat [
     t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
     oneTab b,
     blank,
     text "return 0;",
     bEnd]
 
-cppMainClass :: Label -> Bool -> Doc -> Doc -> Doc
-cppMainClass n b vs fs = vcat [
+cppMainClass :: Bool -> Doc -> Doc -> Doc
+cppMainClass b vs fs = vcat [
     vs,
     if b then empty else blank,
     fs]

@@ -51,7 +51,7 @@ module Language.Drasil (
   -- Chunk.Concept.Core
   , sDom
   -- Chunk.CommonIdea
-  , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict
+  , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -66,8 +66,6 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
   , DataDefinition, mkQuantDef, mkDD, qdFromDD
-  -- Chunk.GenDefn
-  , GenDefn, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
   , inCons, outCons, imOutput, imInputs, im', im''
@@ -149,7 +147,7 @@ module Language.Drasil (
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2
   -- Label.Type
-  , getAdd
+  , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
@@ -242,7 +240,6 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, qdFromDD)
-import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
@@ -280,7 +277,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.RefProg(Reference(Reference))
-import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
+import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty.Core(Uncertainty, uncty)

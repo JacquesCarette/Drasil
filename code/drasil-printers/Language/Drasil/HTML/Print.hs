@@ -14,10 +14,9 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (oldEm, oldWrap, oldRefwrap, caption, image,
+import Language.Drasil.HTML.Helpers (oldRefwrap, caption, image,
   div_tag, td, th, tr,
-  bold, sub, sup, cases, fraction, em, wrap, refwrap,
-  oldBold, oldSub, oldSup, oldCases, oldFraction,
+  bold, sub, sup, cases, fraction, em, refwrap,
   reflink, reflinkURI, paragraph, h, html, body,
   author, article_title, title, head_tag,
   table, ol, ul, li, pa, ba)

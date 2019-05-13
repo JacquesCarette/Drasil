@@ -148,31 +148,6 @@ uSymb (L.US ls) = formatu t b
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 
--- OLD FUNCTIONS
---------------------------------------------------
--- | Renders expressions in the HTML (called by multiple functions)
-oldP_expr :: Expr -> String
-oldP_expr (Dbl d)        = showEFloat Nothing d ""
-oldP_expr (Int i)        = show i
-oldP_expr (Str s)        = s
-oldP_expr (Div a b)      = oldFraction (oldP_expr a) (oldP_expr b)
-oldP_expr (Case ps)      = oldCases ps oldP_expr
-oldP_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ oldP_matrix a ++ "</table>"
-oldP_expr (Row l)        = concatMap oldP_expr l
-oldP_expr (Ident s)      = s
-oldP_expr (Spec s)       = unPH $ L.special s
---oldP_expr (Gr g)         = unPH $ greek g
-oldP_expr (Sub e)        = oldSub $ oldP_expr e
-oldP_expr (Sup e)        = oldSup $ oldP_expr e
-oldP_expr (Over Hat s)   = oldP_expr s ++ "&#770;"
-oldP_expr (MO o)         = p_ops o
-oldP_expr (Fenced l r e) = fence Open l ++ oldP_expr e ++ fence Close r
-oldP_expr (Font Bold e)  = oldBold $ oldP_expr e
-oldP_expr (Font Emph e)  = "<em>" ++ oldP_expr e ++ "</em>" -- FIXME
-oldP_expr (Spc Thin)     = "&#8239;"
-oldP_expr (Sqrt e)       = "&radic;(" ++ oldP_expr e ++")"
---------------------------------------------------
-
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> Doc
 p_expr (Dbl d)        = text $ showEFloat Nothing d ""
@@ -247,20 +222,6 @@ fence Open  Curly = "{"
 fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
-
--- OLD FUNCTIONS
---------------------------------------------------
--- | For printing Matrix
-oldP_matrix :: [[Expr]] -> String
-oldP_matrix [] = ""
-oldP_matrix [x] = "<tr>" ++ oldP_in x ++ "</tr>\n"
-oldP_matrix (x:xs) = oldP_matrix [x] ++ oldP_matrix xs
-
-oldP_in :: [Expr] -> String
-oldP_in [] = ""
-oldP_in [x] = "<td>" ++ oldP_expr x ++ "</td>"
-oldP_in (x:xs) = oldP_in [x] ++ oldP_in xs
---------------------------------------------------
 
 p_matrix :: [[Expr]] -> Doc
 p_matrix [] = text ""

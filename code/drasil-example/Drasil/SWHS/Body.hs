@@ -28,14 +28,12 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
 import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
   unlikeChg, inModel)
 
-import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, dataConst, dataDefn, datum, definition, description, document, 
-  environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
-  model, organization, output_, physical, physics, physSyst, problem, property, 
-  purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  content, dataConst, dataDefn, datum, definition, document, environment, genDefn, goalStmt,
+  information, inModel, input_, item, likelyChg, model, organization, output_, physical,
+  physics, physSyst, problem, property, purpose, quantity, reference, requirement, section_,
+  software, softwareSys, srs, srsDomains, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
@@ -73,16 +71,14 @@ import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (dataConTable1, inputConstraints,
-  funcReqs, funcReqsList, propsDeriv, swhsNFRequirements)
+import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
   swhsOutputs, swhsSymbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
-import Drasil.SWHS.Labels (inputInitQuantsLbl)
 
 -------------------------------------------------------------------------------
 

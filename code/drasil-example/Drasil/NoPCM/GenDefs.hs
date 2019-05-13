@@ -1,7 +1,7 @@
 module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd')
+import Theory.Drasil (GenDefn, gd)
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -28,7 +28,7 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
-rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
+rocTempSimp = gd rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
   [{-S "FIXME: no sources"-}] "rocTempSimp" [rocTempSimp_desc]
 
 roc_temp_simp_deriv :: Derivation

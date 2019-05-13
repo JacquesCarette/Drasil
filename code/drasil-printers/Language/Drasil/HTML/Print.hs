@@ -334,7 +334,7 @@ makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ oldRefwrap . p_spec
+mlref = maybe id $ refwrap . p_spec
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc

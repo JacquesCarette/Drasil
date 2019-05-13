@@ -346,7 +346,7 @@ p_item (Nested s l) = vcat [p_spec s, makeList l]
 -----------------------------------------------------------------
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = oldRefwrap r (image f c wp)
+makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc

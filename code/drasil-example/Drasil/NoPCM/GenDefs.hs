@@ -1,6 +1,7 @@
 module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
 
 import Language.Drasil
+import Theory.Drasil (GenDefn, gd')
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)

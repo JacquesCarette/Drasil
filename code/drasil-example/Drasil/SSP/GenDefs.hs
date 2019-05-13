@@ -5,6 +5,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
+import Theory.Drasil (GenDefn, gd')
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 

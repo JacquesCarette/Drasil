@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: May 1, 2019
+Last updated: May 13, 2019
 ----------------------------------------------------------
 
 **Concept**
@@ -20,7 +20,7 @@ Constrained.hs
   - Defines ConstrainedChunk and ConstrConcept data types
 
 DataDefinition.hs
-  - Defines DataDefinition data type and constructors
+  - Defines DataDefinition data type and constructors *TODO: Move from drasil-lang to drasil-theory*
 
 DefinedQuantity.hs
   - Defines DefinedQuantityDict data type and constructors
@@ -28,11 +28,8 @@ DefinedQuantity.hs
 Eq.hs
   - Defines QDefinition data type (quantity with units and defining equations)
 
-GenDefn.hs
-  - General Definition chunks *TODO: Move from drasil-lang to drasil-docLang*
-
 InstanceModel.hs
-  - Instance model chunks *TODO: Move from drasil-lang to drasil-docLang*
+  - Instance model chunks *TODO: Move from drasil-lang to drasil-theory*
 
 NamedIdea.hs
   - NamedChunk and IdeaDict data types
@@ -50,7 +47,7 @@ Relation.hs
 
 Theory.hs
   - `Theory` class definition
-  - TheoryChunk and TheoryModel data types *TODO: Move from drasil-lang to drasil-docLang*
+  - TheoryChunk and TheoryModel data types *TODO: Move from drasil-lang to drasil-theory*
 
 UncertainQuantity.hs
   - `UncertainQuantity` class definition

@@ -15,6 +15,7 @@ module Database.Drasil.ChunkDB
   ) where
 
 import Language.Drasil hiding (tm, sec)
+import Theory.Drasil (GenDefn)
 
 import Control.Lens ((^.), makeLenses)
 import Data.List (sortOn)

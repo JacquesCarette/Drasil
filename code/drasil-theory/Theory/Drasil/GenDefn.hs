@@ -1,21 +1,8 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
+module Theory.Drasil.GenDefn (GenDefn, gd) where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), IsUnit,
-  ExprRelat(relat), HasDerivation(derivations), Referable(refAdd, renderRef),
-  HasAdditionalNotes(getNotes), CommonIdea(abrv), HasReference(getReferences))
+import Language.Drasil
 import Data.Drasil.IdeaDicts (gendef)
-import Language.Drasil.Chunk.CommonIdea (prependAbrv)
-import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Label.Type (LblType(RP), prepend)
-import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Chunk.UnitDefn (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.RefProg (Reference)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.ShortName (ShortName, shortname')
 
 import Control.Lens (makeLenses, view)
 
@@ -47,10 +34,7 @@ instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
-gd' :: (IsUnit u) => RelationConcept -> Maybe u ->
+gd :: (IsUnit u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r u derivs refs sn_ = 
+gd r u derivs refs sn_ = 
   GD r (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv gendef sn_)
-
-gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r refs sn_ = GD r Nothing  [] refs (shortname' sn_) (prependAbrv gendef sn_)

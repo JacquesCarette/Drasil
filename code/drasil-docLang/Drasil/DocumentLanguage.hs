@@ -13,10 +13,9 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 import Language.Drasil.Utils (sortBySymbol)
-import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB,
-  conceptinsTable, termTable, unitTable, _authors,
-  _concepts, _kind, _quants, _sys, _sysinfodb,
-  _usedinfodb)
+import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
+  termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)

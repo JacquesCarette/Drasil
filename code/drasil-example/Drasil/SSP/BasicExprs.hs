@@ -65,14 +65,14 @@ sliceExpr n = idx (sy intNormForce) (int n) * idx (sy shrResC) (int n) $=
   idx (sy shearRNoIntsl) (int n)
 
 momExpr :: (Expr -> Expr -> Expr) -> Expr
-momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
+momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght +
   inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *
-  (inxiM1 sliceHght + inxi baseWthX / 2 * tan (inxi baseAngle)) -
-  inxi watrForce * (inxi sliceHghtW - inxi baseWthX / 2 *
-  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHghtW +
+  (inxiM1 sliceHght - inxi baseWthX / 2 * tan (inxi baseAngle)) -
+  inxi watrForce * (inxi sliceHghtW + inxi baseWthX / 2 *
+  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHghtW -
   inxi baseWthX / 2 * tan (inxi baseAngle))) `_e_`
-  (sy earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 -
-  inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght -
+  (sy earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 +
+  inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght +
   inxi surfLoad * sin (inxi impLoadAngle) * inxi midpntHght)
 
 momExprNoKQ :: (Expr -> Expr -> Expr) -> Expr

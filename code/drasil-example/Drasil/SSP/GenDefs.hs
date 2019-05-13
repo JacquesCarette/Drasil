@@ -240,8 +240,8 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel -- genDef6Label
 
 momEql_rel :: Relation
-momEql_rel = 0 $= momExpr (\ x y -> x -
-  (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
+momEql_rel = 0 $= momExpr (\ x y -> x +
+  (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) - y)
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 

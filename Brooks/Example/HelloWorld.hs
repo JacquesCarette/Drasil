@@ -38,11 +38,10 @@ helloInitVariables = block [ (comment "Initializing variables"),
 
 helloAfterSplit :: (RenderSym repr) => repr (Block repr)
 helloAfterSplit = block [
-  (printLn (string) (var "myName")),
   (printLnList (string) (var "myName")),
   (listDec "boringList" 5 boolListType),
   (valState $ listPopulateAccess (var "boringList") (listPopulateBool (litInt 5))),
-  (printLn (boolListType) (var "boringList")),
+  (printLnList bool (var "boringList")),
   (listDec "mySlicedList" 2 $ floatListType static)]
 
 helloStringSplit :: (RenderSym repr) => repr (Block repr)

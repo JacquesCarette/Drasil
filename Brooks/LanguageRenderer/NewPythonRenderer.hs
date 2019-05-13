@@ -296,7 +296,7 @@ instance Selector PythonCode where
     listIndexExists lst index = (listSizeAccess lst) ?> index
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     
-    indexOf v l = objAccess l (fmap funcDocD (funcApp "index" [v]))
+    indexOf l v = objAccess l (fmap funcDocD (funcApp "index" [v]))
 
     stringEqual v1 v2 = v1 ?== v2
 

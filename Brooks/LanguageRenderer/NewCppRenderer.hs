@@ -340,7 +340,7 @@ instance Selector CppSrcCode where
     listIndexExists v i = listSizeAccess v ?> i
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     
-    indexOf v l = funcApp "find" [v $. iterBegin, v $. iterEnd, l] #- v $. iterBegin
+    indexOf l v = funcApp "find" [l $. iterBegin, l $. iterEnd, v] #- l $. iterBegin
 
     stringEqual v1 v2 = v1 ?== v2
 
@@ -355,7 +355,7 @@ instance FunctionSym CppSrcCode where
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
 
-    listSize = fmap funcDocD (var "size")
+    listSize = func "size" []
     listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
     listPopulateInt _ = return empty
     listPopulateFloat _ = return empty
@@ -481,7 +481,7 @@ instance ControlStatementSym CppSrcCode where
     switchAsIf v cs = ifCond cases
         where cases = map (\(l, b) -> (v ?== l, b)) cs
 
-    ifExists v ifBody = ifCond [(notNull v, ifBody)]
+    ifExists _ ifBody _ = liftPairFst (ifBody, False) -- All variables are initialized in C++
 
     for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
     forRange i initv finalv stepv = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv)

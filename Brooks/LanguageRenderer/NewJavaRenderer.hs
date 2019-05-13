@@ -323,7 +323,7 @@ instance Selector JavaCode where
     listIndexExists = liftA3 jListIndexExists greaterOp
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
-    indexOf v l = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
+    indexOf l v = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
 
     stringEqual v1 str = objAccess v1 (func "equals" [str])
 

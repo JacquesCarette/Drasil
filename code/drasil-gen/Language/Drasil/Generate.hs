@@ -6,9 +6,10 @@ import Prelude hiding (id)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
 
+import Build.Drasil (genMake)
 import Language.Drasil
 import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
-  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
+  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
 
@@ -29,7 +30,7 @@ prnt sm dt@(DocSpec _ _) body =
 
 -- | Helper for writing the documents (TeX / HTML) to file
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-prntDoc (DocSpec dt fn) body sm = prntDoc' dt fn (fmt dt) body sm
+prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
   where fmt SRS = TeX
         fmt MG  = TeX
         fmt MIS = TeX

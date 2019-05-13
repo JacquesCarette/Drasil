@@ -3,53 +3,38 @@ module Language.Drasil.Code.Imperative.AST (
     -- * AbstractCode
     Label,
     -- ** Statement Structure
-    Body, Block(..),
-    Statement(..), IOSt(..), IOType(..), Complex(..),
+    Body, Block(..), Statement(..), IOSt(..), IOType(..), Complex(..),
     Pattern(..), StatePattern(..), StratPattern(..), Strategies(..), ObserverPattern(..),
-    Assignment(..), Declaration(..), Conditional(..),
-    Iteration(..), Exception(..), Jump(..), Return(..), Value(..), Comment(..),
-    Literal(..), Function(..),
-    Expression(..), UnaryOp(..), BinaryOp(..),
+    Assignment(..), Declaration(..), Conditional(..), Iteration(..), Exception(..), 
+    Jump(..), Return(..), Value(..), Comment(..), Literal(..), Function(..), Expression(..),
+    UnaryOp(..), BinaryOp(..),
     -- ** Overall AbstractCode Structure
-    BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..),
-    Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), 
-    VarDecl, FunctionDecl, Library, Module(..), Package(..),
-    AbstractCode(..),
+    BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..), Scope(..),
+    Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), VarDecl, FunctionDecl,
+    Library, Module(..), Package(..), AbstractCode(..),
 
     -- * Convenience functions
-    bool,int,float,char,string,infile,outfile,listT,obj,
-    methodType,methodTypeVoid,
-    block,body,defaultValue,defaultValue',
-    true,false,
-    var, extvar, arg, self, svToVar,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
-    mainMethod,
-    (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
-    (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
-    (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
-    ($->),($.),($:),
-    log,ln,exp,sin,cos,tan,csc,sec,cot,alwaysDel,neverDel,
-    assign,at,binExpr,break,cast,cast',constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
-    listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
-    param,params,paramToVar,
-    print,printLn,printStr,printStrLn,
-    printFile,printFileLn,printFileStr,printFileStrLn,
-    print',printLn',printStr',printStrLn',
-    getInput,getFileInput,getFileInputAll,getFileInputLine,
-    discardFileInput,discardFileLine,
-    openFileR, openFileW, closeFile,
-    return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
-    addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
-    getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, listAppend, listSlice, stringSplit, listExtend,
-    valStmt,funcApp,funcApp',func,continue,
-    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi,
-    convToClass
+    bool, int, float, char, string, infile, outfile, listT, obj, methodType, methodTypeVoid,
+    block, body, defaultValue, defaultValue', true, false, var, extvar, arg, self, svToVar,
+    pubClass, privClass, privMVar, pubMVar, pubGVar, privMethod, pubMethod, constructor, mainMethod,
+    (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||), (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
+    (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-), ($->),($.),($:),
+    log, ln, exp, sin, cos, tan, csc, sec, cot, alwaysDel, neverDel, assign, at, binExpr, break, cast, cast', 
+    constDecDef, extends, for, forEach, ifCond, ifExists, listDec, listDecValues, listDec', listOf, litBool, 
+    litChar, litFloat, litInt, litObj, litObj', litString, noElse, noParent, objDecDef, oneLiner, param, params,
+    paramToVar, print, printLn, printStr, printStrLn, printFile, printFileLn ,printFileStr, printFileStrLn,
+    print', printLn', printStr', printStrLn', getInput, getFileInput, getFileInputAll, getFileInputLine,
+    discardFileInput, discardFileLine, openFileR, openFileW, closeFile, return, returnVar, switch, throw,
+    tryCatch, typ, varDec, varDecDef, while, zipBlockWith, zipBlockWith4, addComments, comment, commentDelimit,
+    endCommentDelimit, prefixFirstBlock, getterName, setterName, convertToClass, convertToMethod, bodyReplace,
+    funcReplace, valListReplace, objDecNew, objDecNewVoid, objDecNew', objDecNewVoid', objMethodCall,
+    objMethodCallVoid, listSize, listAccess, listAppend, listSlice, stringSplit, listExtend, valStmt, funcApp,
+    funcApp', func, continue, toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, 
+    ignoreMain, notMainModule, multi, convToClass
 ) where
 
-import Data.List (zipWith4, find)
-import Prelude hiding (break,print,return,log,exp,sin,cos,tan)
+import Data.List (find, zipWith4)
+import Prelude hiding (break, print, return, log, exp, sin, cos, tan)
 
 import Language.Drasil.Code.Imperative.Helpers (capitalize)
 
@@ -218,7 +203,7 @@ type FunctionDecl = Method
 type VarDecl = Declaration
 data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
-newtype AbstractCode = AbsCode Package
+newtype AbstractCode = AbsCode {unAbs :: Package}
 
 ---------------------------
 -- Convenience Functions --
@@ -233,13 +218,13 @@ infile = Base $ FileType Read
 outfile = Base $ FileType Write
 
 listT :: StateType -> StateType
-listT t = List Dynamic t
+listT = List Dynamic
 
 obj :: Label -> StateType
 obj = Type
 
 methodType :: StateType -> MethodType
-methodType t = MState t
+methodType = MState
 
 methodTypeVoid :: MethodType
 methodTypeVoid = Void
@@ -251,11 +236,11 @@ body :: [Statement] -> Body
 body s = [ block s ]
 
 defaultValue :: BaseType -> Value
-defaultValue (Boolean) = false
-defaultValue (Integer) = litInt 0
-defaultValue (Float) = litFloat 0.0
-defaultValue (Character) = litChar ' '
-defaultValue (String) = litString ""
+defaultValue Boolean = false
+defaultValue Integer = litInt 0
+defaultValue Float = litFloat 0.0
+defaultValue Character = litChar ' '
+defaultValue String = litString ""
 defaultValue (FileType _) = error $
   "defaultValue undefined for (File _) pattern. See " ++
   "Language.Drasil.Code.Imperative.AST"
@@ -274,7 +259,7 @@ var :: Label -> Value
 var = Var Nothing
 
 extvar :: Library -> Label -> Value
-extvar l v = Var (Just l) v
+extvar l = Var (Just l)
 
 arg :: Int -> Value
 arg = Arg 
@@ -286,10 +271,10 @@ svToVar :: StateVar -> Value
 svToVar (StateVar n _ _ _ _) = Self $-> var n
 
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
-pubClass n p vs fs = Class n p Public vs fs
+pubClass n p = Class n p Public
 
 privClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
-privClass n p vs fs = Class n p Private vs fs
+privClass n p= Class n p Private
 
 privMVar :: Int -> StateType -> Label -> StateVar
 privMVar del t n = StateVar n Private Dynamic t del
@@ -301,13 +286,13 @@ pubGVar :: Int -> StateType -> Label -> StateVar
 pubGVar del t n = StateVar n Public Static t del
 
 privMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-privMethod t n ps b = Method n Private Dynamic t ps b
+privMethod t n = Method n Private Dynamic t
 
 pubMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-pubMethod t n ps b = Method n Public Dynamic t ps b
+pubMethod t n = Method n Public Dynamic t
 
 constructor :: Label -> [Parameter] -> Body -> Method
-constructor n ps b = Method n Public Dynamic (Construct n) ps b
+constructor n = Method n Public Dynamic (Construct n)
 
 mainMethod :: Body -> Method
 mainMethod = MainMethod
@@ -315,7 +300,7 @@ mainMethod = MainMethod
 --comparison operators (?)
 (?!) :: Value -> Value  --logical Not
 infixr 6 ?!
-(?!) v = unExpr Not v
+(?!) = unExpr Not
 
 (?<) :: Value -> Value -> Value
 infixl 4 ?<
@@ -352,15 +337,15 @@ v1 ?|| v2 = binExpr v1 Or v2
 --arithmetic operators (#)
 (#~) :: Value -> Value  --unary negation
 infixl 8 #~
-(#~) v = unExpr Negate v
+(#~) = unExpr Negate
 
 (#/^) :: Value -> Value     --square root
 infixl 7 #/^
-(#/^) v = unExpr SquareRoot v
+(#/^) = unExpr SquareRoot
 
 (#|) :: Value -> Value      --absolute value
 infixl 7 #|
-(#|) v = unExpr Abs v
+(#|) = unExpr Abs
 
 (#+) :: Value -> Value -> Value
 infixl 5 #+
@@ -511,7 +496,7 @@ ifCond :: [(Value, Body)] -> Body -> Statement
 ifCond ifResults elseResult = CondState $ If ifResults elseResult
 
 ifExists :: Value -> Body -> Body -> Statement
-ifExists v ifBody elseBody = ifCond [(Expr $ Exists v, ifBody)] elseBody
+ifExists v ifBody = ifCond [(Expr $ Exists v, ifBody)]
 
 listDec :: Permanence -> Label -> StateType -> Int -> Statement
 listDec lt n t s = DeclState $ ListDec lt n t s
@@ -538,10 +523,10 @@ litInt :: Integer -> Value
 litInt = Lit . LitInt
 
 litObj :: Library -> StateType -> [Value] -> Value
-litObj l t vs = StateObj (Just l) t vs
+litObj l = StateObj (Just l)
 
 litObj' :: StateType -> [Value] -> Value
-litObj' t vs = StateObj Nothing t vs
+litObj' = StateObj Nothing
 
 litString :: Label -> Value
 litString = Lit . LitStr
@@ -713,10 +698,10 @@ valStmt :: Value -> Statement
 valStmt = ValState
 
 funcApp :: Library -> Label -> [Value] -> Value
-funcApp lib lbl vs = FuncApp (Just lib) lbl vs
+funcApp lib = FuncApp (Just lib)
 
 funcApp' :: Label -> [Value] -> Value
-funcApp' lbl vs = FuncApp Nothing lbl vs
+funcApp' = FuncApp Nothing
 
 func :: Label -> [Value] -> Function
 func = Func
@@ -783,7 +768,7 @@ convertToMethod t = t
 -- | Takes a "find" Value (old), a "replace" Value (new),
 -- and performs a find-and-replace with these Values on the specified Body.
 bodyReplace :: Value -> Value -> Body -> Body
-bodyReplace old new b = map fixBlockIndexes b
+bodyReplace old new = map fixBlockIndexes
     where fixBlockIndexes (Block ss) = Block $ map (statementReplace old new) ss
 
 --private functions
@@ -821,7 +806,7 @@ iterReplace old new (ForEach lbl val b) = ForEach lbl (valueReplace old new val)
 iterReplace old new (While lbl b) = While lbl (bodyReplace old new b)
 
 valListReplace :: Value -> Value -> [Value] -> [Value]
-valListReplace old new vals = map (valueReplace old new) vals
+valListReplace old new = map (valueReplace old new)
 
 exprReplace :: Value -> Value -> Expression -> Expression
 exprReplace old new (UnaryExpr r v) = UnaryExpr r $ valueReplace old new v
@@ -872,7 +857,7 @@ functions :: Module -> [Method]
 functions (Mod _ _ _ fs _) = fs
 
 ignoreMain :: [Module] -> [Module]
-ignoreMain ms = filter notMainModule ms
+ignoreMain = filter notMainModule
 
 notMain :: Method -> Bool
 notMain (MainMethod _) = False
@@ -883,9 +868,6 @@ notMainModule = all notMain . functions
 
 multi :: [Statement] -> Statement
 multi = MultiState
-
-
-
 
 convToClass :: Module -> Module
 convToClass (Mod n l vs fs cs) = Mod n l [] [] (replaceClass n cs vs fs)
@@ -900,7 +882,6 @@ replaceClass n cs vs fs =
                                 then removeClass ct
                                 else ch:removeClass ct
                                                        
-
 addToClass :: Class -> [Declaration] -> [Method] -> Class
 addToClass (Class n p s v m) ds fs = let containsMain = any isMain fs
   in    

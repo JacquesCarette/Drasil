@@ -13,13 +13,17 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 import Language.Drasil.Utils (sortBySymbol)
+import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB,
+  conceptinsTable, termTable, unitTable, _authors,
+  _concepts, _kind, _quants, _sys, _sysinfodb,
+  _usedinfodb)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table)
-import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.Sections.TableOfUnits (tableOfUnits)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
@@ -28,7 +32,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -184,10 +188,10 @@ data SolChSpec where
 -- | Solution Characteristics Specification subsections
 data SCSSub where
   Assumptions    :: SCSSub
-  TMs            :: Fields  -> [TheoryModel] -> SCSSub
-  GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
+  TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
+  GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
+  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
@@ -199,7 +203,8 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub --FIXME: Remove this in favour of NonFReqsSub' when all examples have migrated over to using NonFReqsSub'
+  NonFReqsSub' :: [ConceptChunk] -> [ConceptInstance] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 
@@ -237,7 +242,7 @@ mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
-mkSections si l = map doit l
+mkSections si = map doit
   where
     doit :: DocSection -> Section
     doit (Verbatim s)        = s
@@ -260,14 +265,14 @@ mkSections si l = map doit l
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
-mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
+mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_usedinfodb = db}  TUnits =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
     mkSubRef SI {_usedinfodb = db} (TUnits' con) =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,
@@ -277,7 +282,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
+      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -298,10 +303,10 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro 
+tsymb = TSymb 
 -- ^ Default Term and given intro
 
-tsymb' intro = TSymb' Defn intro
+tsymb' = TSymb' Defn
 -- ^ Default Defn and given intro
 
 -- | Custom table of symbols constructor
@@ -440,35 +445,37 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
-    mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') $ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
-    mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS $ map (LlC . ddefn fields si') dds
-    mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF $ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
-    mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF $ map (LlC . gdefn fields si') gs'
-    mkSubSCS si' (IMs fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $
+    mkSubSCS _ (TMs _ _ [])   = error "There are no Theoretical Models"
+    mkSubSCS _ (GDs _ _ [] _) = SSD.genDefnF []
+    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
+    mkSubSCS si' (TMs intro fields ts) =
+      SSD.thModF (siSys si') $ (map mkParagraph intro) ++ map (LlC . tmodel fields si') ts
+    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
+    mkSubSCS si' (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ map (LlC . ddefn fields si') dds
+    mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
+      SSD.genDefnF $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
+    mkSubSCS si' (GDs intro fields gs' _) =
+      SSD.genDefnF $ (map mkParagraph intro) ++ map (LlC . gdefn fields si') gs'
+    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
       concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
-    mkSubSCS si' (IMs fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map (LlC . instanceModel fields si') ims
+    mkSubSCS si' (IMs intro fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ (_sysinfodb si') ^. conceptinsTable
-      where
+      {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        -- Commented out since its imported from drasil-database now
         sDom :: [UID] -> UID
         sDom [u] = u
         sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
-          show (length u) ++ " instead."
+          show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -498,6 +505,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
+    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (length nfrs) rsn explain (mkEnumSimpleD nfrs)
 
 {--}
 

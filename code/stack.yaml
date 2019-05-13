@@ -37,7 +37,9 @@ resolver: lts-12.25
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - drasil-lang/
+- drasil-build/
 - drasil-code/
+- drasil-database/
 - drasil-printers/
 - drasil-gen/
 - drasil-data/

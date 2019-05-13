@@ -9,6 +9,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,
           update,forBody)
+import Language.Drasil.Code.Imperative.Build.AST (buildAll, cCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -21,12 +22,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
   renderCode, argsList, Options, ioDocD, inputDocD,
   valueDocD, methodDocD, methodDocD', methodListDocD, paramDocD, 
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
+  objAccessDocD, iterationDocD, funcDocD, declarationDocD, assignDocD, stateTypeD, fileCode,
   functionListDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, enumElementsDocD,
   exprDocD', litDocD, conditionalDocD'', bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, addDefaultCtor, fixCtorNames, complexDocD,
-  functionDocD, objVarDocD, objcstaticlist)
+  functionDocD, objVarDocD, objcstaticlist, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                                             doubleQuotedText,himap,vmap,vibmap)
 
@@ -51,6 +52,8 @@ objcConfig options c =
         enumsEqualInts   = False,
         ext              = ".m",
         dir              = "obj-c",
+        buildConfig      = buildAll $ \i o -> [cCompiler, unwords i, "-o", o],
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#import",
         includeScope     = const $ empty,
@@ -136,12 +139,12 @@ objctop c Source p _ = vcat [
     include c "<Foundation/NSAutoreleasePool.h>"]
 
 objcbody :: Config -> FileType -> Label -> Module -> Doc
-objcbody c f@(Header) p (Mod _ _ _ _ cs) =
+objcbody c f@Header p (Mod _ _ _ _ cs) =
     vcat [
     clsDecListDoc c cs,
     blank,
     vibmap (classDoc c f p) (fixCtorNames sagaInit cs)]
-objcbody c f@(Source) p (Mod _ _ _ _ cs) =
+objcbody c f@Source p (Mod _ _ _ _ cs) =
     vibmap (classDoc c f p) (fixCtorNames sagaInit cs)
 
 -- code doc functions
@@ -151,16 +154,16 @@ assignDoc' :: Config -> Assignment -> Doc
 --    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
 --    valueDoc c v <+> equals <+> nsFromCString c temp]
 --    where temp = text "temp"
-assignDoc' c a = assignDocD c a
+assignDoc' = assignDocD
 
 callFuncParamList' :: Config -> [Value] -> Doc
-callFuncParamList' c vs = colonMapListDoc (text " : ") (valueDoc c) vs
+callFuncParamList' c = colonMapListDoc (text " : ") (valueDoc c)
 
 declarationDoc' :: Config -> Declaration -> Doc
 declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj Nothing (List lt t) [Lit $ LitInt $ toInteger s])
 declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> brackets (alloc c (List lt t) <+> initList)
     where initList = if null vs then text defaultInit else text "initWithObjects" <> listInitObjectsDoc c vs
-declarationDoc' c d = declarationDocD' c d
+declarationDoc' c d = declarationDocD c d
 
 exceptionDoc' :: Config -> Exception -> Doc
 exceptionDoc' c (Throw s) = text "@throw" <> parens (litDoc c $ LitStr s)
@@ -212,12 +215,12 @@ litDoc' (LitStr v)      = text "@" <> doubleQuotedText v
 litDoc' l               = litDocD l
 
 classDoc' :: Config -> FileType -> Label -> Class -> Doc
-classDoc' c (Header) _ (Enum n _ es) = vcat [
+classDoc' c Header _ (Enum n _ es) = vcat [
     text "typedef" <+> text "enum" <+> lbrace,
     oneTab $ enumElementsDoc c es,
     rbrace <+> text n <> endStatement c]
-classDoc' _ (Source) _ Enum{} = empty
-classDoc' c ft@(Header) _ (Class n p _ vs fs) =
+classDoc' _ Source _ Enum{} = empty
+classDoc' c ft@Header _ (Class n p _ vs fs) =
     let pubVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Public]) vs
         privVars = concatMap (\v@(StateVar _ s _ _ _) -> [v | s == Private]) vs
         pubScope = if null pubVars then empty else text "@" <> scopeDoc c Public
@@ -240,14 +243,14 @@ classDoc' c ft@(Header) _ (Class n p _ vs fs) =
         methodListDoc c ft n $ addDefaultCtor c n sagaInit fs,
         text "@end"
     ]
-classDoc' c ft@(Source) _ (Class n _ _ vs fs) =
+classDoc' c ft@Source _ (Class n _ _ vs fs) =
     let funcs = fs ++ [destructor c vs]
     in vcat [
         text "@implementation" <+> text n,
         methodListDoc c ft n $ addDefaultCtor c n sagaInit funcs,
         text "@end"
     ]
-classDoc' _ (Header) _ MainClass{} = empty
+classDoc' _ Header _ MainClass{} = empty
 classDoc' c ft _ (MainClass n vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
@@ -261,8 +264,8 @@ objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Bas
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
           forBody = oneLiner $ ValState $ v $. ListAdd (var i) dftVal
-objAccessDoc' c v (Floor) = text "floor" <> parens(valueDoc c v)
-objAccessDoc' c v (Ceiling) = text "ceil" <> parens(valueDoc c v)
+objAccessDoc' c v Floor = text "floor" <> parens(valueDoc c v)
+objAccessDoc' c v Ceiling = text "ceil" <> parens(valueDoc c v)
 objAccessDoc' c v f = brackets (valueDoc c v <> funcDoc c f)
 
 paramDoc' :: Config -> Parameter -> Doc
@@ -270,7 +273,7 @@ paramDoc' c (StateParam n t) = parens (stateType c t Dec) <+> text n
 paramDoc' c p@FuncParam{} = paramDocD c p
 
 paramListDoc' :: Config -> [Parameter] -> Doc
-paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps
+paramListDoc' c = colonMapListDoc (text " : ") (paramDoc c)
 
 printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
 printDoc' c Console newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)
@@ -312,7 +315,7 @@ methodDoc' c Source _ f@(Method _ _ _ _ _ b) = vcat [
     transDecLine c f <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
-methodDoc' c ft@(Source) m (MainMethod b) = methodDocD' c ft m $ MainMethod poolB
+methodDoc' c ft@Source m (MainMethod b) = methodDocD' c ft m $ MainMethod poolB
     where poolB = poolDec ++ b ++ poolDrain
           poolDec = if null b then [] else oneLiner $ varDecDef "pool" (Type "NSAutoreleasePool") $ var "[[NSAutoreleasePool alloc] init]"
           poolDrain = if null b then [] else oneLiner $ ValState $ ObjAccess (var "pool") (Func "drain" [])
@@ -324,7 +327,7 @@ methodTypeDoc' _ Void = dash <> parens (text "void")
 methodTypeDoc' _ (Construct m) = dash <> parens (text m <> ptr)
 
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
+methodListDoc' c f@Header m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
 
 unOpDoc' :: UnaryOp -> Doc
@@ -343,7 +346,7 @@ valueDoc' c (ObjAccess v@(ObjVar _ (ListVar _ t)) f@(ListSet _ e)) = objAccessDo
 valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _ _))) = vcat [
     objAccessDoc c v f <> endStatement c,
     objAccessDoc c e (Func release [])]
-valueDoc' _ (Self) = text "self"
+valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
     where init = case lt of Static  -> defaultInit
                             Dynamic -> "initWithCapacity"
@@ -368,7 +371,7 @@ destructor _ vs =
                                                   | otherwise = [s]
         releaseVars = concatMap checkDelPriority vs
         releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (var lbl $. Func release [])]) releaseVars
-        releaseBlock = if null releaseVars then [] else [Block(releaseStatements)]
+        releaseBlock = if null releaseVars then [] else [Block releaseStatements]
         deallocBody = releaseBlock ++ (oneLiner $ ValState (super $. Func dealloc []))
     in Method dealloc Public Dynamic Void [] deallocBody
 

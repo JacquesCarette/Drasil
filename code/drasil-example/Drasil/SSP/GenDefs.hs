@@ -26,7 +26,7 @@ import Drasil.SSP.DataDefs (sliceWght, baseWtrF, surfWtrF, intersliceWtrF,
   ratioVariation)
 import Drasil.SSP.Defs (slice, slope, slpSrf, soil, soilPrpty)
 import Drasil.SSP.Figures (fig_forceacting)
-import Drasil.SSP.References (chen2005)
+import Drasil.SSP.References (chen2005, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
@@ -43,23 +43,23 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
 normForcEqGD = gd' normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
-  [chen2005]   "normForcEq"  [nmFEq_desc]
+  [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
-  [chen2005]   "bsShrFEq"    [bShFEq_desc]
+  [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd' resShr     (getUnit shrResI)       [resShr_deriv]   
-  [chen2005]   "resShr"      [resShr_desc]
+  [makeCite chen2005]                      "resShr"      [resShr_desc]
 mobShrGD     = gd' mobShr     (getUnit mobShrI)       [mobShr_deriv]   
-  [chen2005]   "mobShr"      [mobShr_desc]
+  [makeCite chen2005]                      "mobShr"      [mobShr_desc]
 effNormFGD   = gd' effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
-  [chen2005]   "effNormF"    [effNormF_desc]
+  [makeCite chen2005]                      "effNormF"    [effNormF_desc]
 resShearWOGD = gd' resShearWO (getUnit shearRNoIntsl) []         
-  [chen2005]   "resShearWO"  [resShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
 mobShearWOGD = gd' mobShearWO (getUnit shearFNoIntsl) []
-  [chen2005]   "mobShearWO"  [mobShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd' normShrR   (getUnit intShrForce)   [] 
-  [chen2005]   "normShrR"    [nmShrR_desc]
+  [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd' momentEql  (Just newton)           [momEql_deriv]  
-  [chen2005]   "momentEql"   [momEql_desc]
+  [makeCite chen2005]                      "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept
@@ -79,9 +79,9 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 nmFEq_deriv :: Sentence
-nmFEq_deriv = foldlSent [at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
+  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 bsShrFEq :: RelationConcept
@@ -101,9 +101,9 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 bShFEq_deriv :: Sentence
-bShFEq_deriv = foldlSent [at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S fig_forceacting,
-  S "in", (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+bShFEq_deriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
+  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 shrResEqn :: Expr
@@ -253,6 +253,6 @@ momEql_desc = foldlSent [S "This", phrase equation, S "satisfies",
   S "is defined in", makeRef2S angleB]
 
 momEql_deriv :: Sentence
-momEql_deriv = foldlSent_ [S "Moment equilibrium is derived from the free",
+momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]

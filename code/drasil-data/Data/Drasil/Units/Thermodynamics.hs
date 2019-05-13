@@ -5,20 +5,20 @@ import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
-heat_capacity :: UnitDefn
-heat_capacity = makeDerU (dccWDS "heat_capacity" (cnIES "heat capacity")
+heatCapacity :: UnitDefn
+heatCapacity = makeDerU (dccWDS "heatCapacity" (cnIES "heat capacity")
   (S "heat capacity (constant pressure)")) (joule /: centigrade)
 
-heat_cap_spec :: UnitDefn --Specific heat capacity
-heat_cap_spec = makeDerU (dccWDS "heat_cap_spec" (cn' "specific heat")
+heatCapSpec :: UnitDefn --Specific heat capacity
+heatCapSpec = makeDerU (dccWDS "heatCapSpec" (cn' "specific heat")
   (S "heat capacity per unit mass")) (joule /$ (kilogram *: centigrade))
 
-thermal_flux :: UnitDefn
-thermal_flux = makeDerU (dccWDS "thermal_flux" (cn'' "heat flux")
+thermalFlux :: UnitDefn
+thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
-heat_transfer_coef :: UnitDefn
-heat_transfer_coef = new_unit "heat transfer coefficient" $ (watt /$ (m_2 *: centigrade))
+heatTransferCoef :: UnitDefn
+heatTransferCoef = new_unit "heat transfer coefficient" $ (watt /$ (m_2 *: centigrade))
 
 volHtGenU :: UnitDefn
 volHtGenU = makeDerU (dcc "volHtGenU" (cn "volumetric heat generation")

@@ -15,8 +15,8 @@ import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
-  fricAngle, fs, fx, fy, mobShrI, momntOfBdy, nrmFSubWat, porePressure, shrResI,
-  shrStress, totStress)
+  fricAngle, fs, fx, fy, mobilizedShear, momntOfBdy, nrmFSubWat, porePressure, 
+  resistiveShear, shrStress, totStress)
 import Drasil.SSP.DataDefs (stressDD)
 
 --------------------------
@@ -26,7 +26,7 @@ import Drasil.SSP.DataDefs (stressDD)
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
-  [qw fs, qw shrResI, qw mobShrI] ([] :: [ConceptChunk])
+  [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
   [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
@@ -34,7 +34,7 @@ factOfSafety_rc :: RelationConcept
 factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety EmptyS factOfSafety_rel
 
 factOfSafety_rel :: Relation
-factOfSafety_rel = (sy fs) $= (sy shrResI) / (sy mobShrI)
+factOfSafety_rel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
 
 --
 ------------- New Chunk -----------

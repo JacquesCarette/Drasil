@@ -5,9 +5,11 @@ module Drasil.Sections.TraceabilityMandGs
    ) where
 
 import Language.Drasil
+import Database.Drasil(ChunkDB, SystemInformation, refbyLookup, refbyTable,
+  _sysinfodb)
 
-import Data.Drasil.Concepts.Documentation (purpose, component, column,
-  dependency, item, reference, section_, traceyGraph, traceyMatrix)
+import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
+ reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math ( graph)
 import Data.Drasil.SentenceStructures (ofThe', foldlSent, showingCxnBw,
   tableShows)
@@ -22,7 +24,7 @@ import qualified Data.Map as Map
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
+traceMGF refs trailing otherContents = SRS.traceyMandG ((traceMIntro refs trailing):otherContents)
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
@@ -31,7 +33,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [(phrase purpose
         `ofThe'` (plural traceyMatrix), S "is to provide easy", plural reference, 
         S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component, 
-        S "is changed, the", plural item, S "in the", phrase column, S "of that", 
+        S "is changed, the", plural item, S "in the row of that", 
         phrase component, S "that are marked with an", Quote (S "X"), 
         S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
 

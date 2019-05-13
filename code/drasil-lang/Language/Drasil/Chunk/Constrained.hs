@@ -50,7 +50,7 @@ cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just
 
 -- | Creates a constrained
 cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
-cvc i des sym space cs rv = ConstrainedChunk (qw (vc i des sym space)) cs rv
+cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
 
 cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

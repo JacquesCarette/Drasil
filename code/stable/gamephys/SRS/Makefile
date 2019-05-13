@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 \documentclass[12pt]{article}
 \usepackage{fontspec}
 \usepackage{fullpage}
@@ -1398,3 +1399,29 @@ number={1}}
 \bibstyle{ieeetr}
 \printbibliography[heading=none]
 \end{document}
+=======
+ifeq "$(OS)" "Windows_NT"
+	TARGET_EXTENSION=.exe
+	RM=del
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Linux)
+		TARGET_EXTENSION=
+		RM=rm
+	endif
+	ifeq ($(UNAME_S), Darwin)
+		TARGET_EXTENSION=
+		RM=rm
+	endif
+endif
+
+srs: Chipmunk_SRS.pdf
+
+Chipmunk_SRS.pdf: Chipmunk_SRS.tex
+	lualatex $(TEXFLAGS) Chipmunk_SRS
+	-bibtex $(BIBTEXFLAGS) Chipmunk_SRS
+	lualatex $(TEXFLAGS) Chipmunk_SRS
+	lualatex $(TEXFLAGS) Chipmunk_SRS
+
+.PHONY: srs
+>>>>>>> 63c5c4a305a8123b4b10c33913c02c01a848e44a

@@ -1,26 +1,33 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
 
+import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
-  heat_trans)
+import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec, 
+  heatTrans)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, 
-  sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe, 
+  ofThe, sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
+import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
+import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
+
+iMods :: [InstanceModel]
+iMods = [eBalanceOnWtr, heatEInWtr]
+
 ---------
 -- IM1 --
 ---------
@@ -30,7 +37,7 @@ eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [0 $< sy time $< sy time_final] [koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
+  [0 $< sy time $< sy time_final] [makeCite koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept
@@ -53,7 +60,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively"
+  plural boilPt, S "of", phrase water `sC` S "respectively"
   +:+ sParen (makeRef2S assumpWAL)]
 
 ----------------------------------------------
@@ -66,8 +73,8 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heatCapSpec
+    htCap_W heatTrans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW vol_ht_gen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]
@@ -123,3 +130,12 @@ eBalanceOnWtrDerivEqn4 =
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]
+
+-----------
+-- Intro --
+-----------
+
+instModIntro :: Sentence
+instModIntro = foldlSent [S "The", phrase goal, makeRef2S waterTempGS,
+  S "is met by", makeRef2S eBalanceOnWtr `andThe` phrase goal,
+  makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]

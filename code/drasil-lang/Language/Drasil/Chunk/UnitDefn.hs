@@ -41,7 +41,7 @@ instance Eq            UnitDefn where a == b = (usymb a) == (usymb b)
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
 instance HasUnitSymbol UnitDefn where usymb = get_usymb . view cas
 instance IsUnit        UnitDefn where udefn = get_defn . view cas
-                                      getUnits u = view cu u
+                                      getUnits = view cu
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
 
@@ -51,7 +51,7 @@ makeLenses ''UnitEquation
 instance HasUnitSymbol UnitEquation where usymb u = u ^. us
 
 getCu :: UnitEquation -> [UID]
-getCu a = view contributingUnit a
+getCu = view contributingUnit
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
@@ -151,7 +151,7 @@ shift a b = UShift a (usymb b)
 
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> UnitEquation -> UnitDefn
-new_unit s u = makeDerU (unitCon s) u
+new_unit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn

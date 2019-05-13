@@ -8,13 +8,13 @@ import Data.Drasil.Concepts.Documentation (system, simulation, model,
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
-  law_conv_cooling, heat_trans, thermal_energy)
+  lawConvCooling, heatTrans, thermalEnergy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
-import Data.Drasil.Concepts.Physics (mech_energy)
+import Data.Drasil.Concepts.Physics (mechEnergy)
 
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
@@ -67,10 +67,10 @@ assumpS14 :: Sentence -> Sentence
 assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mech_energy `sC` S "are assumed to be negligible"]
+  phrase CT.thermalEnergy, S "All other forms of", phrase energy `sC`
+  S "such as", phrase mechEnergy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]
+  S "All", phrase CT.heatTrans, S "coefficients are constant over", phrase time]
 assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
@@ -88,14 +88,14 @@ assumpS6 = foldlSent [
   S "is" `sC` S "they are each constant over their entire",
   phrase vol]
 assumpS7 = foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
+  CT.lawConvCooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length"]
 assumpS10 = foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
+  CT.lawConvCooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
@@ -115,8 +115,8 @@ assumpS14 mat = foldlSent [
   S "is such that the", mat,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
-  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt]
+  phrase meltPt, S "of", phrase water `sC` S "or rise above its",
+  phrase boilPt]
 assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
@@ -133,7 +133,7 @@ assumpS18 = foldlSent [
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn]
 assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
-  phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
+  phrase meltPt `sAnd` phrase boilPt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [

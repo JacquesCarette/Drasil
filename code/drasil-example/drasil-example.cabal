@@ -207,6 +207,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.GamePhysics.References
+    , Drasil.GamePhysics.Requirements
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

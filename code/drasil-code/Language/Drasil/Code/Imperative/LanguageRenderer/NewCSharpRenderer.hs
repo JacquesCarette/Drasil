@@ -28,14 +28,14 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD,
-  litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
-  listAccessDocD, objAccessDocD, 
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
-  callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
+  litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, 
+  defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, 
+  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, notNullDocD, listIndexExistsDocD, funcDocD, 
+  castDocD, listSetDocD, listAccessDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
+  setterName, setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (oneTab, tripFst, tripSnd, tripThird)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -453,7 +453,7 @@ instance StatementSym CSharpCode where
               lastelem = obsList $. listSize
 
     state = fmap statementDocD
-    loopState = fmap statementDocD
+    loopState = fmap (statementDocD . setEmpty)
     multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where

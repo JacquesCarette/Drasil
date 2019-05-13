@@ -32,7 +32,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
     continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, 
     observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
-    getterName, setterName)
+    getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
     tripThird, vibcat)
 
@@ -470,7 +470,7 @@ instance StatementSym CppSrcCode where
               lastelem = obsList $. listSize
 
     state = fmap statementDocD
-    loopState = fmap statementDocD
+    loopState = fmap (statementDocD . setEmpty)
     multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CppSrcCode where

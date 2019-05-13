@@ -35,7 +35,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
-    setMain, statementsToStateVars)
+    setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (angles,oneTab,tripFst,tripSnd,
     tripThird)
 
@@ -461,7 +461,7 @@ instance StatementSym JavaCode where
               lastelem = obsList $. listSize
 
     state = fmap statementDocD
-    loopState = fmap statementDocD
+    loopState = fmap (statementDocD . setEmpty)
     multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym JavaCode where

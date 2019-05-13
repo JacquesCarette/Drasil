@@ -18,13 +18,13 @@ import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
     printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD,
     typeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD, 
     paramListDocD, methodDocD, methodListDocD, stateVarDocD, stateVarListDocD,
-    ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
+    alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD,
-    returnDocD, commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+    returnDocD, commentDocD, freeDocD, notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-    moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, 
+    moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, 
     litFalseD, litCharD, litFloatD, litIntD, litStringD, defaultCharD, 
     defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD,
     argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
@@ -34,13 +34,15 @@ import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD,
     castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
     publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
     callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
-import Helpers (angles, oneTab, tripFst, tripSnd, tripThird)
+import Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
+    tripThird, vibcat)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  equals, semi, vcat, lbrace, rbrace, render, colon, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
+  empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon, 
+  render)
 
 newtype CppSrcCode a = CPPSC {unCPPSC :: a}
 
@@ -158,7 +160,7 @@ instance StateTypeSym CppSrcCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
-    boolListType = listType p bool
+    boolListType = listType dynamic bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
     iterator t = fmap cppIterTypeDoc (listType dynamic t)
@@ -196,9 +198,9 @@ instance ControlBlockSym CppSrcCode where
                                v_word = var l_word
                            in
         block [
-            valState $ vnew $. (funcApp "clear" []),
+            valState $ vnew $. (func "clear" []),
             varDec l_ss (obj "std::stringstream"),
-            valState $ objMethodCall v_ss "str" [s]
+            valState $ objMethodCall v_ss "str" [s],
             varDec l_word string,
             while (funcApp "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valState $ vnew $. (listAppend v_word))
         ]
@@ -338,7 +340,7 @@ instance Selector CppSrcCode where
     listIndexExists v i = listSizeAccess v ?> i
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     
-    indexOf v = objAccess l (fmap funcDocD (funcApp "find" [l $. iterBegin, l $. iterEnd, v])) #- v $. iterBegin
+    indexOf v l = funcApp "find" [v $. iterBegin, v $. iterEnd, l] #- v $. iterBegin
 
     stringEqual v1 v2 = v1 ?== v2
 
@@ -399,7 +401,7 @@ instance StatementSym CppSrcCode where
     varDec l t = liftPairFst (fmap (varDecDocD l) t, True)
     varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, True)
     listDec l n t = liftPairFst (liftA2 (cppListDecDoc l) (litInt n) t, True) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = liftPairFst (liftA2 (cppListDecDefDoc l) t (callFuncParamList vs), True)
+    listDecDef l t vs = liftPairFst (liftA2 (cppListDecDefDoc l) t (liftList callFuncParamList vs), True)
     objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, True)
     objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), True)
     extObjDecNew l _ = objDecNew l
@@ -426,25 +428,25 @@ instance StatementSym CppSrcCode where
 
     getIntInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
     getFloatInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
-    getBoolInput _ = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    getBoolInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
     getStringInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
-    getCharInput _ = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
-    discardInput = liftPairFst (fmap cppDiscardInput " " inputFunc, True)
+    getCharInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, True)
+    discardInput = liftPairFst (fmap (cppDiscardInput " ") inputFunc, True)
 
     getIntFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
     getFloatFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
-    getBoolFileInput _ _ = liftPairFst (liftA3 cppInput v f endStatement, True)
+    getBoolFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
     getStringFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
-    getCharFileInput _ _ = liftPairFst (liftA3 cppInput v f endStatement, True)
-    discardFileInput f = liftPairFst (fmap cppDiscardInput " " f, True)
+    getCharFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, True)
+    discardFileInput f = liftPairFst (fmap (cppDiscardInput " ") f, True)
 
-    openFileR f n = liftPairFst (liftA3 cppOpenFile "std::fstream::in" f n, True)
-    openFileW f n = liftPairFst (liftA3 cppOpenFile f n "std::fstream::out", True)
-    openFileA f n = liftPairFst (liftA3 cppOpenFile f n "std::fstream::app", True)
+    openFileR f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::in") f n, True)
+    openFileW f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::out") f n, True)
+    openFileA f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::app") f n, True)
     closeFile f = valState $ objMethodCall f "close" []
 
     getFileInputLine f v = valState $ funcApp "std::getLine" [f, v]
-    discardFileLine f = liftPairFst (fmap cppDiscardInput "\\n" f, True)
+    discardFileLine f = liftPairFst (fmap (cppDiscardInput "\\n") f, True)
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)
@@ -483,7 +485,7 @@ instance ControlStatementSym CppSrcCode where
 
     for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, False)
     forRange i initv finalv stepv = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv)
-    forEach l t v = for (varDecDef l (iterator t) (v $. iterBegin)) (var l ?!= v $. iterEnd) (&.++ l)
+    forEach l t v = for (varDecDef l (iterator t) (v $. iterBegin)) (var l ?!= v $. iterEnd) ((&.++) l)
     while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, False)
 
     tryCatch tb cb = liftPairFst (liftA2 cppTryCatch tb cb, False)
@@ -508,7 +510,7 @@ instance ScopeSym CppSrcCode where
     private = return privateDocD
     public = return publicDocD
 
-    includeScope s = empty
+    includeScope s = return empty
 
 instance MethodTypeSym CppSrcCode where
     type MethodType CppSrcCode = Doc
@@ -535,17 +537,17 @@ instance MethodSym CppSrcCode where
     constructor n = method n public dynamic (construct n)
     destructor n vs = 
         let i = "i"
-            deleteStatements = fmap snd vs
-            loopIndexDec = [varDec i int]
-            dbody = bodyStatements $ loopIndexDec ++ deleteStatements
+            deleteStatements = map (fmap snd) vs
+            loopIndexDec = varDec i int
+            dbody = bodyStatements $ loopIndexDec : deleteStatements
         in pubMethod ('~':n) void [] dbody
 
     function = method
 
 instance StateVarSym CppSrcCode where
-    -- 2nd Doc is the corresponding destructor code for the stateVar
-    type StateVar CppSrcCode = (Doc, Doc)
-    stateVar del l s p t = liftPair (liftA4 (stateVarDocD l) (includeScope s) p t endStatement, if del < alwaysDel then empty else free $ var l)
+    -- (Doc, Bool) is the corresponding destructor code for the stateVar
+    type StateVar CppSrcCode = (Doc, (Doc, Bool))
+    stateVar del l s p t = liftPair (liftA4 (stateVarDocD l) (includeScope s) p t endStatement, if del < alwaysDel then return (empty, False) else free $ var l)
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
@@ -554,15 +556,15 @@ instance StateVarSym CppSrcCode where
             guard l = var i ?< (l $. listSize)
             loopBody l = oneLiner $ free (l $. at i)
             initv = (i &.= litInt 0)
-            deleteLoop l = for initv (guard l) (i &.++) (loopBody l)
-        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then empty else deleteLoop $ var l)
+            deleteLoop l = for initv (guard l) ((&.++) i) (loopBody l)
+        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then return (empty, False) else deleteLoop $ var l)
 
 instance ClassSym CppSrcCode where
     -- Bool is True if the class is a main class, False otherwise
     type Class CppSrcCode = (Doc, Bool)
-    buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD (fs ++ destructor n vs), any (snd . unCPPSC) fs)
+    buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD (fs ++ [destructor n vs]), any (snd . unCPPSC) fs)
     enum _ _ _ = return (empty, False)
-    mainClass n vs fs = liftPairFst (liftA2 (cppMainClass n (null vs)) (stateVarListDocD vs) (methodListDocD fs), True)
+    mainClass n vs fs = liftPairFst (liftA2 (cppMainClass n (null vs)) (liftList stateVarListDocD (map (fmap fst) vs)) (liftList methodListDocD fs), True)
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -570,7 +572,7 @@ instance ModuleSym CppSrcCode where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
     type Module CppSrcCode = (Doc, Label, Bool)
-    buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD ms) (liftList vibcat cs), n, any (snd . unCPPSC) cs || any (snd . unCPPSC) ms)
+    buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD ms) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPSC) cs || any (snd . unCPPSC) ms)
 
 -- helpers
 isDtor :: Label -> Bool
@@ -624,13 +626,13 @@ cppStateObjDoc :: Doc -> Doc -> Doc
 cppStateObjDoc t ps = t <> parens ps
 
 cppListSetDoc :: Doc -> Doc -> Doc
-cppListSetDoc i v = dot <> at <> parens i <+> equals <+> v
+cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
 cppListDecDoc :: Label -> Doc -> Doc -> Doc
 cppListDecDoc l n t = t <+> text l <> parens n
 
 cppListDecDefDoc :: Label -> Doc -> Doc -> Doc
-cppListDecDefDoc l t vs = t <+> l <> braces vs
+cppListDecDefDoc l t vs = t <+> text l <> braces vs
 
 cppPrintDocD :: Bool -> Doc -> Doc -> Doc
 cppPrintDocD newLn printFn v = printFn <+> text "<<" <+> v <+> end
@@ -649,10 +651,10 @@ cppTryCatch tb cb= vcat [
 
 cppDiscardInput :: Label -> Doc -> Doc
 cppDiscardInput sep inFn = inFn <> dot <> text "ignore" <+> parens 
-    (text "std::numeric_limits<std::streamsize>::max()" <> comma <+> quotes sep)
+    (text "std::numeric_limits<std::streamsize>::max()" <> comma <+> quotes (text sep))
 
 cppInput :: Doc -> Doc -> Doc -> Doc
-csInput v inFn end = vcat [
+cppInput v inFn end = vcat [
     inFn <+> text ">>" <+> v <> end,
     inFn <> dot <> text "ignore (std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
@@ -666,13 +668,13 @@ cppPointerParamDoc :: Label -> Doc -> Doc
 cppPointerParamDoc n t = t <+> text "&" <> text n
 
 cppMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-cppMethod n t b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
+cppMethod n t ps b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
     oneTab b,
     bEnd]
     where ttype | isDtor n = empty
                 | otherwise = t
 
-cppMainMethod :: Label -> Doc -> Doc -> Doc
+cppMainMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 cppMainMethod n t b bStart bEnd = vcat [
     t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
     oneTab b,
@@ -680,13 +682,13 @@ cppMainMethod n t b bStart bEnd = vcat [
     text "return 0;",
     bEnd]
 
-cppMainClass :: Label -> Bool -> Doc -> Doc
+cppMainClass :: Label -> Bool -> Doc -> Doc -> Doc
 cppMainClass n b vs fs = vcat [
     vs,
     if b then empty else blank,
     fs]
 
-cppModuleDoc :: Doc -> Doc -> Doc
+cppModuleDoc :: Doc -> Doc -> Doc -> Doc
 cppModuleDoc ls fs cs = vcat [
     ls,
     blank,

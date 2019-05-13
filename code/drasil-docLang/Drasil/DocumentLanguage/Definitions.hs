@@ -1,7 +1,7 @@
 {-# Language GADTs #-}
 
-module Drasil.DocumentLanguage.Definitions
-  ( Fields
+module Drasil.DocumentLanguage.Definitions (
+    Fields
   , Field(..)
   , Verbosity(..)
   , tmodel
@@ -11,19 +11,19 @@ module Drasil.DocumentLanguage.Definitions
   , InclUnits(..)
   , helperRefs
   , helpToRefField
-  )where
+) where
 
 import Data.Map (keys)
 import Data.List (elem)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Database.Drasil(SystemInformation, citeDB, 
-  conceptinsLookup, conceptinsTable, datadefnLookup,
-  dataDefnTable, gendefLookup, gendefTable,
+import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
+  conceptinsTable, datadefnLookup, dataDefnTable, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
-  refbyLookup, refbyTable, sectionLookup, sectionTable,
-  theoryModelLookup, theoryModelTable, vars, _sysinfodb)
+  refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
+  theoryModelTable, vars, _sysinfodb)
+import Theory.Drasil (GenDefn)
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)

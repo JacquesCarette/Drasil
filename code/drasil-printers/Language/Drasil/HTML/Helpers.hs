@@ -19,7 +19,7 @@ head_tag   = wrap "head" []
 -- | Body tag wrapper
 body       = oldWrap "body" []
 -- | Title tag wrapper
-title      = oldWrap "title" []
+title      = wrap "title" []
 -- | Paragraph tag wrapper
 paragraph  = oldWrap "p" ["paragraph"]
 -- | Code tag wrapper

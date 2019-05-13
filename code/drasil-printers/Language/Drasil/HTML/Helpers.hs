@@ -220,12 +220,12 @@ fraction a b =
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps oldP_expr = (span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
-                  (makeCases ps oldP_expr))
+cases ps p_expr = (span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
+                  (makeCases ps p_expr))
 
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) oldP_expr = ((span_tag [] (oldP_expr (fst p) <> text " , " <>
-                            (span_tag ["case"] (oldP_expr (snd p))))) $$
-                            makeCases ps oldP_expr)
+makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) <> text " , " <>
+                            (span_tag ["case"] (p_expr (snd p))))) $$
+                            makeCases ps p_expr)

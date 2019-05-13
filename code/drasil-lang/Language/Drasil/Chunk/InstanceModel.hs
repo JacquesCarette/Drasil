@@ -25,7 +25,7 @@ import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.ShortName (ShortName, shortname')
 
-import Control.Lens (makeLenses, view)
+import Control.Lens ((^.), makeLenses, view)
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -74,14 +74,16 @@ instance Referable          InstanceModel where
 -- | Smart constructor for instance models with everything defined
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
-im rcon i ic o oc ref der sn = 
-  IM rcon i ic o oc ref der (shortname' sn) (prependAbrv instanceMod sn)
+im rcon _ _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
+im rcon i ic o oc r der sn = 
+  IM rcon i ic o oc r der (shortname' sn) (prependAbrv instanceMod sn)
 
 -- | Smart constructor for instance models; no derivation
 imNoDeriv :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
-imNoDeriv rcon i ic o oc ref sn =
-  IM rcon i ic o oc ref [] (shortname' sn) (prependAbrv instanceMod sn)
+imNoDeriv rcon _ _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
+imNoDeriv rcon i ic o oc r sn =
+  IM rcon i ic o oc r [] (shortname' sn) (prependAbrv instanceMod sn)
 
 -- | Smart constructor for instance models; no references
 imNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

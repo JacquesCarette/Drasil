@@ -63,6 +63,10 @@ instance Referable DataDefinition where
 mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
 mkDD a b c d = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d)
 
+-- | Smart constructor for data definitions with no references
+ddNoRefs :: QDefinition -> Derivation -> String -> [Sentence] -> DataDefinition
+ddNoRefs q der short = DatDef q Global [] der (shortname' short) (prependAbrv dataDefn short)
+
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD dd = dd ^. qd
 

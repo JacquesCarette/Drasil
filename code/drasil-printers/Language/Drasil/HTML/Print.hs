@@ -485,7 +485,7 @@ artclMLA i         = bookMLA i
 
 artclAPA :: CiteField -> Doc
 artclAPA (Title  s)  = dot $ p_spec s
-artclAPA (Volume n)  = oldEm $ text $ show n
+artclAPA (Volume n)  = em $ text $ show n
 artclAPA (Number  n) = comm $ text $ paren $ show n
 artclAPA i           = bookAPA i
 

@@ -39,7 +39,7 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
-ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}] "ctrOfMass" 
+ctrOfMassDD = ddNoRefs ctrOfMass [{-- Derivation --}] "ctrOfMass" 
   [makeRef2S assumpOT, makeRef2S assumpOD]
 
 ctrOfMass :: QDefinition

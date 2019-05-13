@@ -70,15 +70,15 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
   (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
-  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes im),
+  (traceMap' extractSFromNotes d), (traceMap' extractSFromNotes im),
   -- Theory models do not have derivations.
   (traceMap' extractSFromDeriv gd),
-  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv im)]
+  (traceMap' extractSFromDeriv d), (traceMap' extractSFromDeriv im)]
   where
     tt = getTraceMapFromTM $ getSCSSub a
     gd = getTraceMapFromGD $ getSCSSub a
     im = getTraceMapFromIM $ getSCSSub a
-    dd = getTraceMapFromDD $ getSCSSub a
+    d  = getTraceMapFromDD $ getSCSSub a
     ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.

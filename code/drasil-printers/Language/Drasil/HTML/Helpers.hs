@@ -142,21 +142,6 @@ image f c wp =
   figcaption c
   ]
 
--- OLD FUNCTIONS
---------------------------------------------------
-oldEm :: Doc -> Doc
--- | Emphasis (italics) tag
-oldEm x = text "<em>"  <> x <> text "</em>"
-
-oldSub, oldSup, oldBold :: String -> String  
--- | Subscript tag
-oldSub x = "<sub>" ++ x ++ "</sub>"
--- | Superscript tag
-oldSup x = "<sup>" ++ x ++ "</sup>"
--- | Bold tag
-oldBold x  = "<b>"  ++ x ++ "</b>"
---------------------------------------------------
-
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag
 em = wrapAux "em" []

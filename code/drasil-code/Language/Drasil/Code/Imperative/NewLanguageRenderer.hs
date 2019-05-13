@@ -1,7 +1,7 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     -- * Common Syntax
-    classDec, dot, doubleSlash, forLabel, new, observerListName,
+    classDec, dot, doubleSlash, forLabel, new, observerListName, Terminator(..),
     
     -- * Default Functions available for use in renderers
     packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
@@ -54,6 +54,8 @@ new = text "new"
 
 observerListName :: Label
 observerListName = "observerList"
+
+data Terminator = Semi | Empty
 
 ----------------------------------
 -- Functions for rendering code --
@@ -113,13 +115,12 @@ enumElementsDocD' es = vcat $
 
 -- Groupings --
 
-multiStateDocD :: Doc -> [(Doc, Bool)] -> (Doc, Bool)
+multiStateDocD :: Doc -> [(Doc, Terminator)] -> (Doc, Terminator)
 multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
-        applyEnd ((s, True):ss) = (s <> end):(applyEnd ss)
-        applyEnd ((s, False):ss) = s:(applyEnd ss)
-        needsEnd [] = False
+        applyEnd ((s, t):ss) = (s <> getTermDoc t):(applyEnd ss)
+        needsEnd [] = Empty
         needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
         notNullStatement s = (not $ isEmpty (fst s)) && (render (fst s) /= render end)
@@ -232,7 +233,7 @@ ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) =
         vmap elseIfSect cs,
         elseSect]
 
-switchDocD :: (Doc, Bool) -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+switchDocD :: (Doc, Terminator) -> Doc -> Doc -> [(Doc, Doc)] -> Doc
 switchDocD breakState v defBody cs = 
     let caseDoc (l, result) = vcat [
             text "case" <+> l <> colon,
@@ -253,7 +254,7 @@ switchDocD breakState v defBody cs =
 
 -- These signatures wont be quite so horrendous if/when we pass language options
 -- (blockStart, etc.) in as shared environment
-forDocD :: Doc -> Doc -> (Doc, Bool) -> Doc -> (Doc, Bool) -> Doc -> Doc
+forDocD :: Doc -> Doc -> (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc -> Doc
 forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
     forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) <+> blockStart,
     oneTab b,
@@ -279,7 +280,7 @@ tryCatchDocD tb cb = vcat [
     oneTab $ cb,
     rbrace]
 
-stratDocD :: Doc -> (Doc, Bool) -> Doc
+stratDocD :: Doc -> (Doc, Terminator) -> Doc
 stratDocD b resultState = vcat [
     b,
     fst resultState]
@@ -332,9 +333,12 @@ throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
     parens errMsg
 
-statementDocD :: (Doc, Bool) -> Doc -> (Doc, Bool)
-statementDocD (s, True) end = (s <> end, False)
-statementDocD (s, False) _ = (s, False)
+statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
+statementDocD (s, t) = (s <> getTermDoc t, Empty)
+
+getTermDoc :: Terminator -> Doc
+getTermDoc Semi = semi
+getTermDoc Empty = empty
 
 -- Unary Operators --
 
@@ -632,5 +636,5 @@ setMain :: (Doc, Bool) -> (Doc, Bool)
 setMain (d, _) = (d, True)
 
 -- Hack because modules accept Statement representations of their state variables. Modules should be redesigned/rethought
-statementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Bool) -> Doc
+statementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Terminator) -> Doc
 statementsToStateVars s p end (v, _) = s <+> p <+> v <> end

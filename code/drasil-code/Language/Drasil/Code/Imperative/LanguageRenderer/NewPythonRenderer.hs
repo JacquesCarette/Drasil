@@ -14,14 +14,14 @@ import Language.Drasil.Code.Imperative.New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
     ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
     StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc', 
-    enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, intTypeDocD, 
-    floatTypeDocD, typeDocD, voidDocD, constructDocD, paramListDocD, 
-    methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
-    plusPlusDocD', statementDocD, returnDocD, commentDocD, notOpDocD', 
-    negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-    tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unOpDocD, equalOpDocD, 
-    notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
+    fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
+    intTypeDocD, floatTypeDocD, typeDocD, voidDocD, constructDocD, 
+    paramListDocD, methodListDocD, ifCondDocD, stratDocD, assignDocD, 
+    plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
+    notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD',
+    cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unOpDocD,
+    equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
     moduloOpDocD, binOpDocD, litCharD, litFloatD, litIntD, litStringD, 
     defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD, 
@@ -151,7 +151,7 @@ instance ControlBlockSym PythonCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
                                                    Just b  -> liftA2 stratDocD b (state resultState)
-        where resultState = case av of Nothing    -> return (empty, False)
+        where resultState = case av of Nothing    -> return (empty, Empty)
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
 
@@ -338,26 +338,26 @@ instance SelectorFunction PythonCode where
     at l = listAccess (var l)
 
 instance StatementSym PythonCode where
-    -- Bool determines whether statement needs to end in a separator
-    type Statement PythonCode = (Doc, Bool)
-    assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, True)
+    -- Terminator determines how statements end to end in a separator
+    type Statement PythonCode = (Doc, Terminator)
+    assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, Empty)
     assignToListIndex lst index v = valState $ lst $. listSet index v
     (&=) = assign
     (&.=) l = assign (var l)
     (&=.) v l = assign v (var l)
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = liftPairFst (liftA3 plusEqualsDocD' v1 plusOp v2, True)
+    (&+=) v1 v2 = liftPairFst (liftA3 plusEqualsDocD' v1 plusOp v2, Empty)
     (&.+=) l v = (var l) &+= v
-    (&++) v = liftPairFst (liftA2 plusPlusDocD' v plusOp, True)
+    (&++) v = liftPairFst (liftA2 plusPlusDocD' v plusOp, Empty)
     (&.++) l = (&++) (var l)
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
 
-    varDec _ _ = return (empty, False)
-    varDecDef l _ v = liftPairFst (fmap (pyVarDecDef l) v, True)
-    listDec l _ t = liftPairFst (fmap (pyListDec l) (listType static t), True)
-    listDecDef l _ vs = liftPairFst (fmap (pyListDecDef l) (liftList callFuncParamList vs), True)
+    varDec _ _ = return (empty, Empty)
+    varDecDef l _ v = liftPairFst (fmap (pyVarDecDef l) v, Empty)
+    listDec l _ t = liftPairFst (fmap (pyListDec l) (listType static t), Empty)
+    listDecDef l _ vs = liftPairFst (fmap (pyListDecDef l) (liftList callFuncParamList vs), Empty)
     objDecDef = varDecDef
     objDecNew l t vs = varDecDef l t (stateObj t vs)
     extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
@@ -365,13 +365,13 @@ instance StatementSym PythonCode where
     extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
     constDecDef = varDecDef
 
-    print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") (return empty), True)
-    printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty) (return empty), True)
+    print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") (return empty), Empty)
+    printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty) (return empty), Empty)
     printStr s = print string (litString s)
     printStrLn s = printLn string (litString s)
 
-    printFile f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end='', file=") f, True)
-    printFileLn f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", file=") f, True)
+    printFile f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end='', file=") f, Empty)
+    printFileLn f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", file=") f, Empty)
     printFileStr f s = printFile f string (litString s)
     printFileStrLn f s = printFileLn f string (litString s)
 
@@ -403,19 +403,19 @@ instance StatementSym PythonCode where
     stringSplit d vnew s = assign vnew (objAccess s 
         (func "split" [litString [d]]))    
 
-    break = return (breakDocD, True)
-    continue = return (continueDocD, True)
+    break = return (breakDocD, Empty)
+    continue = return (continueDocD, Empty)
 
-    returnState v = liftPairFst (fmap returnDocD v, True)
-    returnVar l = liftPairFst (fmap returnDocD (var l), True)
+    returnState v = liftPairFst (fmap returnDocD v, Empty)
+    returnVar l = liftPairFst (fmap returnDocD (var l), Empty)
 
-    valState v = liftPairFst (v, True)
+    valState v = liftPairFst (v, Empty)
 
-    comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, False)
+    comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
     free v = v &= (var "None")
 
-    throw errMsg = liftPairFst (fmap pyThrow (litString errMsg), True)
+    throw errMsg = liftPairFst (fmap pyThrow (litString errMsg), Empty)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
@@ -425,12 +425,12 @@ instance StatementSym PythonCode where
         where obsList = observerListName `listOf` t
               lastelem = listSizeAccess obsList
 
-    state s = liftA2 statementDocD s endStatement
-    loopState s = liftA2 statementDocD s endStatementLoop
+    state = fmap statementDocD
+    loopState = fmap statementDocD
     multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
-    ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, False)
+    ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, Empty)
     ifNoElse bs = ifCond bs $ body []
     switch = switchAsIf
     switchAsIf v cs = ifCond cases
@@ -439,11 +439,11 @@ instance ControlStatementSym PythonCode where
     ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
     for _ _ _ _ = error "Classic for loops not available in Python, please use forRange, forEach, or while instead"
-    forRange i initv finalv stepv b = liftPairFst (liftA5 (pyForRange i) iterInLabel initv finalv stepv b, False)
-    forEach l _ v b = liftPairFst (liftA4 (pyForEach l) iterForEachLabel iterInLabel v b, False)
-    while v b = liftPairFst (liftA2 pyWhile v b, False)
+    forRange i initv finalv stepv b = liftPairFst (liftA5 (pyForRange i) iterInLabel initv finalv stepv b, Empty)
+    forEach l _ v b = liftPairFst (liftA4 (pyForEach l) iterForEachLabel iterInLabel v b, Empty)
+    while v b = liftPairFst (liftA2 pyWhile v b, Empty)
 
-    tryCatch tb cb = liftPairFst (liftA2 pyTryCatch tb cb, False)
+    tryCatch tb cb = liftPairFst (liftA2 pyTryCatch tb cb, Empty)
 
     checkState l = switch (var l)
     notifyObservers fn t ps = forRange index initv ((listSizeAccess obsList)) (litInt 1) notify
@@ -628,7 +628,7 @@ pyClass n pn fs = vcat [
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat
 
-pyModuleVarList :: [(Doc, Bool)] -> Doc
+pyModuleVarList :: [(Doc, Terminator)] -> Doc
 pyModuleVarList vs = vcat (map fst vs)
 
 pyModuleClassList :: [(Doc, Bool)] -> Doc

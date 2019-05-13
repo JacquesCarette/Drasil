@@ -5,6 +5,10 @@ import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
+  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
+  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
@@ -17,8 +21,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmtLabel, characteristicsLabel, physSystDescriptionLabel,
-  generateTraceMap')
+  generateTraceTable, characteristicsLabel, physSystDescriptionLabel,
+  generateTraceMap', mkEnumSimpleD)
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
   assumpt, inModel)
@@ -27,11 +31,11 @@ import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorith
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content,
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
-  goal, goalStmt, implementation, information, inModel, input_, interface, item, 
+  goal, implementation, information, inModel, input_, interface, item, 
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
   product_, purpose, reference, requirement, section_, software, softwareSys,
   srs, srsDomains, standard, sysCont, system, template, term_, thModel,
-  traceyMatrix, user, userInput, value, doccon, doccon')
+  traceyMatrix, user, value, doccon, doccon')
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
@@ -40,7 +44,6 @@ import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
   performance, softwarecon)
-import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -61,7 +64,8 @@ import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
-import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
+import Drasil.GlassBR.Goals (goals)
+import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
@@ -163,7 +167,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , TMs [] (Label : stdFields) gbrTMods
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
                       S "gives", (plural value `ofThe` S "specification"),
@@ -250,8 +254,8 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
 
 --Used in "Goal Statements" Section--
 
-goalStmtsList :: Contents
-goalStmtsList = LlC $ enumSimple goalStmtLabel 1 (short goalStmt) goalStmtsListGS1
+goalStmtsList :: [Contents]
+goalStmtsList = mkEnumSimpleD goals
 
 --Used in "Traceability Matrices and Graphs" Section--
 
@@ -447,13 +451,7 @@ physSystDescriptionListPhysys2 imprtntElem = foldlSent [S "The"
 
 goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase glaPlane,
   phrase glassTy, plural characteristic `ofThe` phrase explosion,
-  S "the" +:+ phrase pbTol]] [goalStmtsList]
-
-goalStmtsListGS1 :: [Sentence]
-goalStmtsListGS1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
-  S "the", phrase glaSlab, S "under consideration will be able to withstand",
-  S "the", phrase explosion `sOf` S "a certain", phrase degree_',
-  S "which is calculated based on", phrase userInput]]
+  S "the" +:+ phrase pbTol]] goalStmtsList
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 

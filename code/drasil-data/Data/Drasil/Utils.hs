@@ -7,7 +7,7 @@ module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSen
 import Language.Drasil
 
 import Control.Lens ((^.))
-import Data.List (transpose, elem)
+import Data.List (elem, transpose)
 
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
@@ -59,7 +59,7 @@ getRVal c = uns (c ^. reasVal)
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
-addPercent :: Float ->  Sentence
+addPercent :: (Show a) => a -> Sentence -- commented out to suppress type default warning
 addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences

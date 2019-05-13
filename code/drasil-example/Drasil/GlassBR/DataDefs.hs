@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asExpr')
 import Prelude hiding (log, exp, sqrt)
+import Database.Drasil (Block(Parallel))
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)

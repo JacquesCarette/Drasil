@@ -2,6 +2,11 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
+  _constants,
+  _constraints, _datadefs,
+  _definitions, _inputs, _outputs,
+  _quants, _sys, _sysinfodb)
 import Language.Drasil.Development (dep, names')
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,

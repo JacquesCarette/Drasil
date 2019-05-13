@@ -37,12 +37,6 @@ resolver: lts-11.2
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - ../drasil-lang
-- ../drasil-data
-- ../drasil-code
-- ../drasil-printers
-- ../drasil-gen
-- ../drasil-docLang
-- ../drasil-database
 - ./
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

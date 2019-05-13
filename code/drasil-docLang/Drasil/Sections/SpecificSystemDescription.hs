@@ -203,7 +203,7 @@ mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),

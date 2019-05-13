@@ -1146,7 +1146,9 @@ Given the dimensions of the glass plane, glass type, the characteristics of the 
 </p>
 <div class="list">
 <p>
-GS1: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+<div id="willBreakGS">
+Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+</div>
 </p>
 </div>
 </div>
@@ -2942,6 +2944,9 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
+<p class="paragraph">
+The goal <a href=#willBreakGS>GS: Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+</p>
 <div id="IM:calOfDemand">
 <table class="idefn">
 <tr>
@@ -3103,7 +3108,7 @@ Uncert.
 <em>1.5</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3120,7 +3125,7 @@ Uncert.
 <em>1.5</em>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3137,7 +3142,7 @@ Uncert.
 <em>1.2</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3171,7 +3176,7 @@ Uncert.
 <em>45.0</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3188,7 +3193,7 @@ Uncert.
 <em>1.0</em>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3205,7 +3210,7 @@ Uncert.
 <em>42.0</em> kg
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 </table>

@@ -13,6 +13,10 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 import Language.Drasil.Utils (sortBySymbol)
+import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB,
+  conceptinsTable, termTable, unitTable, _authors,
+  _concepts, _kind, _quants, _sys, _sysinfodb,
+  _usedinfodb)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -465,12 +469,13 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ (_sysinfodb si') ^. conceptinsTable
-      where
+      {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        -- Commented out since its imported from drasil-database now
         sDom :: [UID] -> UID
         sDom [u] = u
         sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
-          show (length u) ++ " instead."
+          show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

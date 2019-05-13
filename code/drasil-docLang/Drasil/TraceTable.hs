@@ -13,7 +13,8 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
-import Database.Drasil(TraceMap, traceMap)
+import Database.Drasil (TraceMap, traceMap)
+import Theory.Drasil (GenDefn)
 
 import Drasil.DocumentLanguage
 

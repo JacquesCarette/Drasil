@@ -5,11 +5,9 @@ import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
     acceleration, displacement, distance, energy, force, gravitationalAccel, 
     gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
-<<<<<<< HEAD
-    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, chgMomentum, chgInVelocity)
-=======
-    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, kEnergy)
->>>>>>> master
+    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, kEnergy, 
+    chgMomentum, chgInVelocity)
+
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -21,20 +19,12 @@ physicscon :: [UnitalChunk]
 physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-<<<<<<< HEAD
-  position, pressure, time, torque, velocity, chgMomentum, chgInVelocity]
-=======
-  position, pressure, time, torque, velocity, kEnergy]
->>>>>>> master
+  position, pressure, time, torque, velocity, kEnergy, chgMomentum, chgInVelocity]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-<<<<<<< HEAD
-  position, pressure, time, torque, velocity, chgMomentum, chgInVelocity :: UnitalChunk
-=======
-  position, pressure, time, torque, velocity, kEnergy :: UnitalChunk
->>>>>>> master
+  position, pressure, time, torque, velocity, kEnergy, chgMomentum, chgInVelocity :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian

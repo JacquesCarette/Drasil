@@ -3,14 +3,9 @@ module Data.Drasil.Concepts.Physics
   , cartesian, rightHand, restitutionCoef, acceleration, pressure
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
-<<<<<<< HEAD
-  , time, torque, fbd, angular, linear, tension, chgMomentum, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon, chgInVelocity 
-=======
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
   , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
-  , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
->>>>>>> master
+  , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity, chgMomentum
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -27,15 +22,10 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-<<<<<<< HEAD
-  joint, damping, pressure, chgMomentum, chgInVelocity]
-=======
-  joint, damping, pressure, cohesion, isotropy, kEnergy]
-
+  joint, damping, pressure, cohesion, isotropy, kEnergy, chgMomentum, chgInVelocity]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
->>>>>>> master
 
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
@@ -43,15 +33,11 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-<<<<<<< HEAD
-  joint, damping, pressure, chgMomentum, chgInVelocity :: ConceptChunk
-=======
-  joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgMomentum, chgInVelocity :: ConceptChunk
 
   -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
 twoD, threeD :: CI
->>>>>>> master
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."

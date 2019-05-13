@@ -21,17 +21,13 @@ Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith
 </div>
 <div id="Sec:RefMat">
 <div class="section">
-<h1>
-Reference Material
-</h1>
+<h1>Reference Material</h1>
 <p class="paragraph">
 This section records information for easy reference.
 </p>
 <div id="Sec:ToU">
 <div class="subsection">
-<h2>
-Table of Units
-</h2>
+<h2>Table of Units</h2>
 <p class="paragraph">
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
@@ -99,9 +95,7 @@ power (watt)
 </div>
 <div id="Sec:ToS">
 <div class="subsection">
-<h2>
-Table of Symbols
-</h2>
+<h2>Table of Symbols</h2>
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 </p>
@@ -828,9 +822,7 @@ Gradient
 </div>
 <div id="Sec:TAbbAcc">
 <div class="subsection">
-<h2>
-Abbreviations and Acronyms
-</h2>
+<h2>Abbreviations and Acronyms</h2>
 <div id="Table:TAbbAcc">
 <table class="table">
 <tr>
@@ -977,9 +969,7 @@ Typical Uncertainty
 </div>
 <div id="Sec:Intro">
 <div class="section">
-<h1>
-Introduction
-</h1>
+<h1>Introduction</h1>
 <p class="paragraph">
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 </p>
@@ -988,9 +978,7 @@ The following section provides an overview of the Software Requirements Specific
 </p>
 <div id="Sec:DocPurpose">
 <div class="subsection">
-<h2>
-Purpose of Document
-</h2>
+<h2>Purpose of Document</h2>
 <p class="paragraph">
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
@@ -1001,9 +989,7 @@ This document will be used as a starting point for subsequent development phases
 </div>
 <div id="Sec:ReqsScope">
 <div class="subsection">
-<h2>
-Scope of Requirements
-</h2>
+<h2>Scope of Requirements</h2>
 <p class="paragraph">
 The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 </p>
@@ -1011,9 +997,7 @@ The scope of the requirements includes thermal analysis of a single solar water 
 </div>
 <div id="Sec:ReaderChars">
 <div class="subsection">
-<h2>
-Characteristics of Intended Reader
-</h2>
+<h2>Characteristics of Intended Reader</h2>
 <p class="paragraph">
 Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
@@ -1021,9 +1005,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 </div>
 <div id="Sec:DocOrg">
 <div class="subsection">
-<h2>
-Organization of Document
-</h2>
+<h2>Organization of Document</h2>
 <p class="paragraph">
 The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>dParnas1972</a> and <a href=#parnasClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
 </p>
@@ -1036,17 +1018,13 @@ The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are ref
 </div>
 <div id="Sec:GenSysDesc">
 <div class="section">
-<h1>
-General System Description
-</h1>
+<h1>General System Description</h1>
 <p class="paragraph">
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
 </p>
 <div id="Sec:SysContext">
 <div class="subsection">
-<h2>
-System Context
-</h2>
+<h2>System Context</h2>
 <p class="paragraph">
 <a href=#Figure:SysCon>Fig:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
@@ -1092,9 +1070,7 @@ Calculate the required outputs
 </div>
 <div id="Sec:UserChars">
 <div class="subsection">
-<h2>
-User Characteristics
-</h2>
+<h2>User Characteristics</h2>
 <p class="paragraph">
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 </p>
@@ -1102,9 +1078,7 @@ The end user of SWHS should have an understanding of undergraduate Level 1 Calcu
 </div>
 <div id="Sec:SysConstraints">
 <div class="subsection">
-<h2>
-System Constraints
-</h2>
+<h2>System Constraints</h2>
 <p class="paragraph">
 There are no system constraints.
 </p>
@@ -1114,25 +1088,19 @@ There are no system constraints.
 </div>
 <div id="Sec:SpecSystDesc">
 <div class="section">
-<h1>
-Specific System Description
-</h1>
+<h1>Specific System Description</h1>
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
-<h2>
-Problem Description
-</h2>
+<h2>Problem Description</h2>
 <p class="paragraph">
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
-<h3>
-Terminology and Definitions
-</h3>
+<h3>Terminology and Definitions</h3>
 <p class="paragraph">
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
@@ -1157,9 +1125,7 @@ Transient: Changing with time.
 </div>
 <div id="Sec:PhysSyst">
 <div class="subsubsection">
-<h3>
-Physical System Description
-</h3>
+<h3>Physical System Description</h3>
 <p class="paragraph">
 The physical system of SWHS, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
 </p>
@@ -1186,9 +1152,7 @@ Solar water heating tank, with heat flux into the water from the coil of <em>q<s
 </div>
 <div id="Sec:GoalStmt">
 <div class="subsubsection">
-<h3>
-Goal Statements
-</h3>
+<h3>Goal Statements</h3>
 <p class="paragraph">
 Given the temperature of the heating coil, the initial conditions for the temperature of the water, the temperature of the phase change material, and the material properties, the goal statements are:
 </p>
@@ -1220,17 +1184,13 @@ Predict-PCM-Energy: Predict the change in heat energy in the PCM over time.
 </div>
 <div id="Sec:SolCharSpec">
 <div class="subsection">
-<h2>
-Solution Characteristics Specification
-</h2>
+<h2>Solution Characteristics Specification</h2>
 <p class="paragraph">
 The instance models that govern SWHS are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
-<h3>
-Assumptions
-</h3>
+<h3>Assumptions</h3>
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
 </p>
@@ -1340,9 +1300,7 @@ Volume-Coil-Negligible: When considering the volume of water in the tank, the vo
 </div>
 <div id="Sec:TMs">
 <div class="subsubsection">
-<h3>
-Theoretical Models
-</h3>
+<h3>Theoretical Models</h3>
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
@@ -1630,9 +1588,7 @@ RefBy
 </div>
 <div id="Sec:GDs">
 <div class="subsubsection">
-<h3>
-General Definitions
-</h3>
+<h3>General Definitions</h3>
 <p class="paragraph">
 This section collects the laws and equations that will be used to build the instance models.
 </p>
@@ -1881,9 +1837,7 @@ Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </div>
 <div id="Sec:DDs">
 <div class="subsubsection">
-<h3>
-Data Definitions
-</h3>
+<h3>Data Definitions</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
@@ -2472,9 +2426,7 @@ RefBy
 </div>
 <div id="Sec:IMs">
 <div class="subsubsection">
-<h3>
-Instance Models
-</h3>
+<h3>Instance Models</h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
@@ -3278,9 +3230,7 @@ RefBy
 </div>
 <div id="Sec:DataConstraints">
 <div class="subsubsection">
-<h3>
-Data Constraints
-</h3>
+<h3>Data Constraints</h3>
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
@@ -3662,9 +3612,7 @@ Output Data Constraints
 </div>
 <div id="Sec:CorSolProps">
 <div class="subsubsection">
-<h3>
-Properties of a Correct Solution
-</h3>
+<h3>Properties of a Correct Solution</h3>
 <p class="paragraph">
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
@@ -3688,17 +3636,13 @@ Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanit
 </div>
 <div id="Sec:Requirements">
 <div class="section">
-<h1>
-Requirements
-</h1>
+<h1>Requirements</h1>
 <p class="paragraph">
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <div id="Sec:FRs">
 <div class="subsection">
-<h2>
-Functional Requirements
-</h2>
+<h2>Functional Requirements</h2>
 <p class="paragraph">
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 </p>
@@ -3975,9 +3919,7 @@ Input Variable Requirements
 </div>
 <div id="Sec:NFRs">
 <div class="subsection">
-<h2>
-Non-Functional Requirements
-</h2>
+<h2>Non-Functional Requirements</h2>
 <p class="paragraph">
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
@@ -4015,9 +3957,7 @@ Maintainable: The traceability between requirements, assumptions, theoretical mo
 </div>
 <div id="Sec:LCs">
 <div class="section">
-<h1>
-Likely Changes
-</h1>
+<h1>Likely Changes</h1>
 <div class="list">
 <p>
 <div id="likeChgUTP">
@@ -4054,9 +3994,7 @@ Tank-Lose-Heat: <a href=#assumpPIT>A: Perfect-Insulation-Tank</a> - Any real tan
 </div>
 <div id="Sec:UCs">
 <div class="section">
-<h1>
-Unlikely Changes
-</h1>
+<h1>Unlikely Changes</h1>
 <div class="list">
 <p>
 <div id="unlikeChgWPFS">
@@ -4078,9 +4016,7 @@ No-Gaseous-State: <a href=#assumpNGSP>A: No-Gaseous-State-PCM</a> - Is used for 
 </div>
 <div id="Sec:TraceMatrices">
 <div class="section">
-<h1>
-Traceability Matrices and Graphs
-</h1>
+<h1>Traceability Matrices and Graphs</h1>
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:Tracey2>Table:Tracey2</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:Tracey1>Table:Tracey1</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 </p>
@@ -11086,9 +11022,7 @@ Traceability Graph Showing the Connections Between Instance Models, Requirements
 </div>
 <div id="Sec:AuxConstants">
 <div class="section">
-<h1>
-Values of Auxiliary Constants
-</h1>
+<h1>Values of Auxiliary Constants</h1>
 <p class="paragraph">
 This section contains the standard values that are used for calculations in SWHS.
 </p>
@@ -11369,9 +11303,7 @@ Auxiliary Constants
 </div>
 <div id="Sec:References">
 <div class="section">
-<h1>
-References
-</h1>
+<h1>References</h1>
 <ul class="hide-list-style">
 <li>
 <div id="bueche1986">

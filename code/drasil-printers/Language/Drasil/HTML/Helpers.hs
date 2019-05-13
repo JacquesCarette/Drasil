@@ -57,7 +57,7 @@ img        = wrapInside "img"
 h :: Int -> Doc -> Doc
 h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
-          | otherwise = oldWrap ("h"++show n) []
+          | otherwise = wrap ("h"++show n) []
 
 -- OLD FUNCTIONS
 --------------------------------------------------

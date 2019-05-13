@@ -26,7 +26,7 @@ iModelsNew = [im1_new, im2_new, im3_new]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
-im1_new = im' transMot [qw velI, qw QP.time, qw QP.gravitationalAccel, qw forceI, qw massI] 
+im1_new = imNoDeriv transMot [qw velI, qw QP.time, qw QP.gravitationalAccel, qw forceI, qw massI] 
   [sy velI $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
             sy forceI $> 0, sy massI $> 0 ] (qw accI) [] [] "transMot" [transMotDesc]
 
@@ -59,7 +59,7 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 {-- Rotational Motion --}
 
 im2_new :: InstanceModel
-im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI, qw QP.momentOfInertia]
+im2_new = imNoDeriv rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI, qw QP.momentOfInertia]
   [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torqueI $> 0, sy QP.momentOfInertia $> 0] 
     (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
   [rotMotDesc]
@@ -90,7 +90,7 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 {-- 2D Collision --}
 
 im3_new :: InstanceModel
-im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw massA, qw normalVect] 
+im3_new = imNoDeriv col2D [qw QP.time, qw QP.impulseS, qw massA, qw normalVect] 
   [sy QP.time $> 0, sy QP.impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
   (qw timeC) [sy velA $> 0, sy timeC $> 0] [] "col2D"
   [col2DDesc]

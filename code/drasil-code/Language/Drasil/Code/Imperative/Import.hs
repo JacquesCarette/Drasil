@@ -2,6 +2,8 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
+import Database.Drasil(ChunkDB, symbLookup, symbolTable)
+
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
   Float, Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 

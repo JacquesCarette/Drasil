@@ -4,7 +4,7 @@ module Language.Drasil.Printing.PrintingInformation where
 
 import Control.Lens (makeLenses, Lens')
 
-import Language.Drasil (ChunkDB)
+import Database.Drasil (ChunkDB)
 
 data Notation = Scientific
               | Engineering

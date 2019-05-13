@@ -2,6 +2,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 
+import Drasil.DocLang (inDataConstTbl)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
@@ -15,7 +16,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
 import Data.Drasil.Utils (eqUnR')
 
 import Drasil.SWHS.Assumptions (assumpVCN)
@@ -23,10 +24,24 @@ import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, pcm_E, pcm_HTC, pcm_SA,
-  pcm_density, pcm_mass, pcm_vol, sim_time, t_final_melt, t_init_melt, tank_length,
-  tank_vol, tau_L_P, tau_S_P, tau_W, temp_C, temp_PCM, temp_W, w_E, w_density,
-  w_mass, w_vol)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
+  htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
+  sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
+  tau_W, temp_C, temp_PCM, temp_W, temp_init, temp_melt_P, time_final, w_E,
+  w_density, w_mass, w_vol)
+
+------------------------------
+-- Data Constraint: Table 1 --
+------------------------------
+
+-- FIXME: This probably shouldn't be here.
+dataConTable1 :: LabelledContent
+dataConTable1 = inDataConstTbl inputConstraints
+
+inputConstraints :: [UncertQ]
+inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -47,42 +62,56 @@ inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
 
 inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
-inputInitQuants = cic "inputInitQuants" ( foldlSent [
+inputInitQuants = iIQConstruct inputInitQuantsTblabled
+
+iIQConstruct :: (Referable l, HasShortName l) => l -> ConceptInstance
+iIQConstruct x = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
-  makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
-  plural parameter `sC` S "material", plural property, S "and initial" +:+.
-  plural condition, makeRef2S assumpVCN]) "Input-Initial-Quantities" funcReqDom
+  makeRef2S x `sC` S "which define the", phrase tank,
+  plural parameter `sC` S "material", plural property, S "and initial",
+  plural condition]) "Input-Initial-Quantities" funcReqDom
 --
-findMass = cic "findMass" ( foldlSent [
-  S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
-  S "to find the", phrase mass, S "needed for",
-  (foldlList Comma List $ map makeRef2S swhsIMods) `sC`
-  S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",
-  ch w_vol `isThe` phrase w_vol, S "and", ch tank_vol `isThe` phrase tank_vol] )
+findMass = findMassConstruct inputInitQuants (plural mass)
+            (foldlList Comma List $ map makeRef2S swhsIMods)
+            (foldlList Comma List $ [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
+            (ch w_vol `isThe` phrase w_vol `sAnd` ch tank_vol `isThe` phrase tank_vol)
+
+findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
+                                   Sentence -> Sentence -> Sentence -> ConceptInstance
+findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
+  S "Use the", plural input_, S "in", makeRef2S fr, S "to find the", 
+  m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
-  (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
+  ((((sy diam) / 2) $^ 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
 
 findMassEqn = (sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  plural physicalConstraint {-, S "shown in"
-  --FIXME , makeRefS s7_table1-}] )
+  plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
-outputInputDerivQuants = cic "outputInputDerivQuants" ( foldlSent [
+outputInputDerivQuants = oIDQConstruct oIDQQuants
+
+oIDQConstruct :: [Sentence] -> ConceptInstance
+oIDQConstruct x = cic "outputInputDerivQuants" ( foldlSent_ [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
-  S "derived", plural quantity +: S "in the following list",
-  S "the", plural quantity, S "from", makeRef2S inputInitQuants `sC` S "the",
-  plural mass, S "from", makeRef2S findMass `sC` ch tau_W,
-  sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch eta,
-  sParen (S "from" +:+ makeRef2S eBalanceOnWtr) `sC` ch tau_S_P,
-  sParen (S "from" +:+ makeRef2S eBalanceOnPCM) `sAnd` ch tau_L_P,
-  sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
-  "Output-Input-Derived-Quantities" funcReqDom
+  S "derived", plural quantity +: S "in the following list"] +:+.
+  (foldlList Comma List x)) "Output-Input-Derived-Quantities" funcReqDom
+
+oIDQQuants :: [Sentence]
+oIDQQuants = map foldlSent_ [
+  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
+  [S "the", plural mass, S "from", makeRef2S findMass],
+  [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
+  [ch eta, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
+  [ch tau_S_P, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
+  [ch tau_L_P, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+  ]
+  
 --
 calcTempWtrOverTime = cic "calcTempWtrOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,

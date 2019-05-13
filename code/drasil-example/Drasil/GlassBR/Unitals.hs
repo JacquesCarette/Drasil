@@ -42,9 +42,6 @@ glass_type, nomThick :: ConstrainedChunk
 
 {--}
 
-defaultUncrt :: Double
-defaultUncrt = 0.1
-
 gbInputs :: [QuantityDict]
 gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
   (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
@@ -83,8 +80,7 @@ aspect_ratio = uvc "aspect_ratio" (aR ^. term)
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
-
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real

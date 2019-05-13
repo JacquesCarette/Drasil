@@ -18,13 +18,14 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, addPercent)
+import Data.Drasil.Utils (addPercent, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
-import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -218,11 +219,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "--"
 
-found :: Double -> Sentence
-found x = (addPercent . realToFrac) (x*100)
-
-typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)
+found :: Double -> Maybe Int -> Sentence
+found x Nothing  = addPercent $ x * 100
+found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
+    
+typUncr :: (HasUncertainty c) => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

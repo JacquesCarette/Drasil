@@ -1,11 +1,12 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module LanguageRenderer.NewCppRenderer (
+-- | The logic to render C++ code is contained in this module
+module Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (
     -- * C++ Code Configuration -- defines syntax of all C++ code
     CppSrcCode(..)
 ) where
 
-import New (Label,
+import Language.Drasil.Code.Imperative.New (Label,
     PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
     UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
@@ -13,7 +14,7 @@ import New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc',
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (fileDoc',
     multiStateDocD, blockDocD, bodyDocD, intTypeDocD, charTypeDocD, 
     stringTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
     stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
@@ -32,7 +33,7 @@ import NewLanguageRenderer (fileDoc',
     continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, 
     observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
     getterName, setterName)
-import Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
+import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
     tripThird, vibcat)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)

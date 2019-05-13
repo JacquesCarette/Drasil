@@ -95,8 +95,6 @@ class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
 
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
-    stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> repr (Block repr)
-
 class UnaryOpSym repr where
     type UnaryOp repr
     notOp    :: repr (UnaryOp repr)
@@ -385,6 +383,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) =>
 
     getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     discardFileLine  :: repr (Value repr) -> repr (Statement repr)
+    stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
 
     break :: repr (Statement repr)
     continue :: repr (Statement repr)

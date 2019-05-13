@@ -187,8 +187,6 @@ instance ControlBlockSym CSharpCode where
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
 
-    stringSplit d vnew s = block [assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]]
-
 instance UnaryOpSym CSharpCode where
     type UnaryOp CSharpCode = Doc
     notOp = return $ notOpDocD
@@ -429,6 +427,7 @@ instance StatementSym CSharpCode where
 
     getFileInputLine = getStringFileInput
     discardFileLine f = liftPairFst (fmap csFileInput f, True)
+    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)

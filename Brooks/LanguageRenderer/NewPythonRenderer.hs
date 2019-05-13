@@ -155,10 +155,7 @@ instance ControlBlockSym PythonCode where
 
     listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
         where getVal Nothing = return empty
-              getVal (Just v) = v
-
-    stringSplit d vnew s = block [assign vnew (objAccess s 
-        (func "split" [litString [d]]))]                                  
+              getVal (Just v) = v                                  
 
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
@@ -401,6 +398,8 @@ instance StatementSym PythonCode where
 
     getFileInputLine f v = v &= (objMethodCall f "readline" [])
     discardFileLine f = valState $ objMethodCall f "readline" []
+    stringSplit d vnew s = assign vnew (objAccess s 
+        (func "split" [litString [d]]))
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)

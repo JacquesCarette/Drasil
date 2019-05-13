@@ -13,8 +13,8 @@ import Language.Drasil.Code.Imperative.New (Label,
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (buildAll, BuildConfig, 
-  buildSingle, inCodePackage, interp, interpMM, mainModule, mainModuleFile, 
-  nativeBinary, Runnable, withExt)
+  buildSingle, cppCompiler, inCodePackage, interp, interpMM, mainModule, 
+  mainModuleFile, nativeBinary, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
@@ -30,6 +30,7 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
+import Data.List.Utils (endswith)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.FilePath ((</>))
 import Data.Map (member)
@@ -153,20 +154,21 @@ getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
 getExt CSharp = [".cs"]
-getExt _ = error "Language not yet implemented"
+getExt Cpp = [".cpp"]
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
 getRunnable Python = interpMM "python"
 getRunnable CSharp = nativeBinary
-getRunnable _ = error "Language not yet implemented"
+getRunnable Cpp = nativeBinary
 
 getBuildConfig :: Lang -> Maybe BuildConfig
 getBuildConfig Java = buildSingle (\i _ -> ["javac", unwords i]) $
   inCodePackage $ mainModuleFile
 getBuildConfig Python = Nothing
 getBuildConfig CSharp = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o]
-getBuildConfig _ = error "Language not yet implemented"
+getBuildConfig Cpp = buildAll $ \i o -> [cppCompiler, unwords $
+  filter (not . endswith ".hpp") i, "--std=c++11", "-o", o]
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

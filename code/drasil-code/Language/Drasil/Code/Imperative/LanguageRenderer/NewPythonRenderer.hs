@@ -81,8 +81,8 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
     type RenderFile PythonCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' top (fmap tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
-    top = return pytop
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
+    top _ = return pytop
     bottom = return empty
 
 instance KeywordSym PythonCode where
@@ -145,6 +145,7 @@ instance StateTypeSym PythonCode where
     boolListType = return $ brackets empty
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator _ = error "Iterator-type variables do not exist in Python"
 
 instance ControlBlockSym PythonCode where
     runStrategy l strats rv av = 
@@ -156,7 +157,7 @@ instance ControlBlockSym PythonCode where
 
     listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
         where getVal Nothing = return empty
-              getVal (Just v) = v
+              getVal (Just v) = v                           
 
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
@@ -222,6 +223,7 @@ instance ValueSym PythonCode where
     objVarSelf n = liftA2 objVarDocD self (var n)
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar = var
 
     inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
     
@@ -292,6 +294,8 @@ instance Selector PythonCode where
 
     listIndexExists lst index = (listSizeAccess lst) ?> index
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+    
+    indexOf l v = objAccess l (fmap funcDocD (funcApp "index" [v]))
 
     stringEqual v1 v2 = v1 ?== v2
 
@@ -305,8 +309,6 @@ instance FunctionSym PythonCode where
     castListToInt = cast int (listType static int)
     get n = fmap funcDocD (var n)
     set n v = fmap (funcDocD . fst) (assign (var n) v)
-
-    indexOf v = fmap funcDocD (funcApp "index" [v])
 
     listSize = return $ text "len"
     listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
@@ -399,7 +401,7 @@ instance StatementSym PythonCode where
     getFileInputLine f v = v &= (objMethodCall f "readline" [])
     discardFileLine f = valState $ objMethodCall f "readline" []
     stringSplit d vnew s = assign vnew (objAccess s 
-        (func "split" [litString [d]]))
+        (func "split" [litString [d]]))    
 
     break = return (breakDocD, True)
     continue = return (continueDocD, True)
@@ -468,6 +470,7 @@ instance MethodTypeSym PythonCode where
 instance ParameterSym PythonCode where
     type Parameter PythonCode = Doc
     stateParam n _ = return $ text n
+    pointerParam = stateParam
 
 instance MethodSym PythonCode where
     type Method PythonCode = (Doc, Bool)
@@ -480,6 +483,8 @@ instance MethodSym PythonCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method initName public dynamic (construct n)
+    destructor _ _ = error "Destructors not allowed in Python"
+
 
     function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList paramListDocD ps) b, False)
 
@@ -489,6 +494,7 @@ instance StateVarSym PythonCode where
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar = stateVar
 
 instance ClassSym PythonCode where
     type Class PythonCode = (Doc, Bool)
@@ -551,8 +557,8 @@ pyListExtend dftVal = dot <> text "append" <> parens dftVal
 
 pyListExtendList :: Integer -> Doc
 pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
-  where nestedList 0 = empty
-        nestedList n = brackets $ nestedList (n-1)
+    where nestedList 0 = empty
+          nestedList n = brackets $ nestedList (n-1)
 
 pyVarDecDef :: Label -> Doc -> Doc
 pyVarDecDef l v = text l <+> equals <+> v

@@ -185,9 +185,6 @@ instance ControlBlockSym JavaCode where
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
 
-    stringSplit d vnew s = block [liftPairFst (liftA3 jStringSplit vnew (listType dynamic string) 
-        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])]), True)]
-
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
     notOp = return $ notOpDocD
@@ -428,6 +425,8 @@ instance StatementSym JavaCode where
 
     getFileInputLine f v = v &= (f $. (func "nextLine" []))
     discardFileLine f = valState $ f $. (func "nextLine" [])
+    stringSplit d vnew s = liftPairFst (liftA3 jStringSplit vnew (listType dynamic string) 
+        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])]), True)
 
     break = return (breakDocD, True)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
     continue = return (continueDocD, True)

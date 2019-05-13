@@ -21,6 +21,7 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 

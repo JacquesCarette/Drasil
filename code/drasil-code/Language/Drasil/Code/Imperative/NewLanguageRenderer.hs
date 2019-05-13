@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
-    methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
+    methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, switchDocD, 
     forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD,
     plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
     varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
@@ -206,6 +206,9 @@ stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
+
+alwaysDel :: Int
+alwaysDel = 4
 
 -- Controls --
 

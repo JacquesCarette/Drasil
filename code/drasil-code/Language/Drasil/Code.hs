@@ -6,7 +6,7 @@ module Language.Drasil.Code (
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton,
-  unJC, unPC, unCSC
+  unJC, unPC, unCSC, unCPPSC
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -25,3 +25,4 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), Con
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (unJC)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer (unPC)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer (unCSC)
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (unCPPSC)

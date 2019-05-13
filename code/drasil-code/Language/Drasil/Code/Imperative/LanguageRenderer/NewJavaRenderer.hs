@@ -103,8 +103,8 @@ instance PackageSym JavaCode where
 
 instance RenderSym JavaCode where
     type RenderFile JavaCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' top (fmap tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
-    top = liftA3 jtop endStatement (include "") (list static)
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
+    top _ = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
 instance KeywordSym JavaCode where
@@ -167,6 +167,7 @@ instance StateTypeSym JavaCode where
     boolListType = return jBoolListTypeDocD
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator _ = error "Iterator-type variables do not exist in Java"
 
 instance ControlBlockSym JavaCode where
     runStrategy l strats rv av = 
@@ -258,6 +259,7 @@ instance ValueSym JavaCode where
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar = var
     
     inputFunc = return (parens (text "new Scanner(System.in)"))
 
@@ -328,6 +330,8 @@ instance Selector JavaCode where
     listIndexExists = liftA3 jListIndexExists greaterOp
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
+    indexOf l v = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
+
     stringEqual v1 str = objAccess v1 (func "equals" [str])
 
     castObj = liftA2 castObjDocD
@@ -340,8 +344,6 @@ instance FunctionSym JavaCode where
     castListToInt = fmap funcDocD (funcApp "ordinal" [])
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = fmap funcDocD (funcApp "indexOf" [v])
 
     listSize = fmap funcDocD (funcApp "size" [])
     listAdd i v = fmap funcDocD (funcApp "add" [i, v])
@@ -504,6 +506,7 @@ instance MethodTypeSym JavaCode where
 instance ParameterSym JavaCode where
     type Parameter JavaCode = Doc
     stateParam n = fmap (stateParamDocD n)
+    pointerParam = stateParam
 
 instance MethodSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
@@ -517,6 +520,8 @@ instance MethodSym JavaCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
+    destructor _ _ = error "Destructors not allowed in Java"
+
 
     function = method
 
@@ -526,6 +531,7 @@ instance StateVarSym JavaCode where
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar = stateVar
 
 instance ClassSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise

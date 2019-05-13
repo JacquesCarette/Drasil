@@ -96,8 +96,8 @@ instance PackageSym CSharpCode where
 
 instance RenderSym CSharpCode where
     type RenderFile CSharpCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' top (fmap tripFst code) bottom, tripSnd $ unCSC code, tripThird $ unCSC code)
-    top = liftA2 cstop endStatement (include "")
+    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCSC code, tripThird $ unCSC code)
+    top _ = liftA2 cstop endStatement (include "")
     bottom = return empty
 
 instance KeywordSym CSharpCode where
@@ -160,6 +160,7 @@ instance StateTypeSym CSharpCode where
     boolListType = return csBoolListTypeDoc
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+    iterator _ = error "Iterator-type variables do not exist in C#"
 
 instance ControlBlockSym CSharpCode where
     runStrategy l strats rv av = 
@@ -251,6 +252,7 @@ instance ValueSym CSharpCode where
     objVarSelf n = liftA2 objVarDocD self (var n)
     listVar n _ = var n
     n `listOf` t = listVar n t
+    iterVar = var
     
     inputFunc = return $ text "Console.ReadLine()"
 
@@ -293,7 +295,7 @@ instance BooleanExpression CSharpCode where
     (?>=) = liftA3 binOpDocD greaterEqualOp
     (?==) = liftA3 binOpDocD equalOp
     (?!=) = liftA3 binOpDocD notEqualOp
-   
+    
 instance ValueExpression CSharpCode where
     inlineIf = liftA3 inlineIfDocD
     funcApp n = liftList (funcAppDocD n)
@@ -321,6 +323,8 @@ instance Selector CSharpCode where
     listIndexExists = liftA3 listIndexExistsDocD greaterOp
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
+    indexOf l v = objAccess l (fmap funcDocD (funcApp "IndexOf" [v]))
+
     stringEqual v1 v2 = v1 ?== v2
 
     castObj = liftA2 castObjDocD
@@ -333,8 +337,6 @@ instance FunctionSym CSharpCode where
     castListToInt = cast (listType static int) int
     get n = fmap funcDocD (funcApp (getterName n) [])
     set n v = fmap funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = fmap funcDocD (funcApp "IndexOf" [v])
 
     listSize = fmap funcDocD (var "Count")
     listAdd i v = fmap funcDocD (funcApp "Insert" [i, v])
@@ -497,6 +499,7 @@ instance MethodTypeSym CSharpCode where
 instance ParameterSym CSharpCode where
     type Parameter CSharpCode = Doc
     stateParam n = fmap (stateParamDocD n)
+    pointerParam = stateParam
 
 instance MethodSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise
@@ -510,6 +513,7 @@ instance MethodSym CSharpCode where
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
+    destructor _ _ = error "Destructors not allowed in C#"
 
     function = method
 
@@ -519,6 +523,7 @@ instance StateVarSym CSharpCode where
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
+    listStateVar = stateVar
 
 instance ClassSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise
@@ -547,7 +552,7 @@ cstop end inc = vcat [
     inc <+> text "System.Collections.Generic" <> end]
 
 csFloatTypeDoc :: Doc
-csFloatTypeDoc = text "double" -- Same as Java and C++, maybe make a common function
+csFloatTypeDoc = text "double" -- Same as Java, maybe make a common function
 
 csInfileTypeDoc :: Doc
 csInfileTypeDoc = text "StreamReader"

@@ -23,7 +23,7 @@ class (RenderSym repr) => PackageSym repr where
 class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
     fileDoc :: repr (Module repr) -> repr (RenderFile repr)
-    top :: repr (Block repr)
+    top :: repr(Module repr) -> repr (Block repr)
     bottom :: repr (Block repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
@@ -88,6 +88,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
     boolListType  :: repr (StateType repr)
     obj           :: Label -> repr (StateType repr)
     enumType      :: Label -> repr (StateType repr)
+    iterator      :: repr (StateType repr) -> repr (StateType repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
     runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
@@ -163,6 +164,8 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     objVarSelf   :: Label -> repr (Value repr)
     listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
     listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
+    -- Use for iterator variables, i.e. in a forEach loop.
+    iterVar      :: Label -> repr (Value repr)
     
     inputFunc :: repr (Value repr)
 
@@ -262,6 +265,8 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) => Selector repr w
 
     listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     argExists       :: Integer -> repr (Value repr)
+    
+    indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
     stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
@@ -275,8 +280,6 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
     castListToInt  :: repr (Function repr)
     get            :: Label -> repr (Function repr)
     set            :: Label -> repr (Value repr) -> repr (Function repr)
-
-    indexOf :: repr (Value repr) -> repr (Function repr)
 
     listSize           :: repr (Function repr)
     listAdd            :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
@@ -444,8 +447,9 @@ class ParameterSym repr where
     type Parameter repr
     stateParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
     -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
+    pointerParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
 
-class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
+class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr, BodySym repr) => MethodSym repr where
     type Method repr
     method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     getMethod   :: Label -> repr (MethodType repr) -> repr (Method repr)
@@ -454,6 +458,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => Me
     privMethod  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    destructor :: Label -> [repr (StateVar repr)] -> repr (Method repr)
 
     function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods not parameterized by self in python
 
@@ -463,6 +468,7 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr
     privMVar :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
     pubMVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
     pubGVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
+    listStateVar :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     type Class repr

@@ -68,7 +68,7 @@ module Language.Drasil (
   , DataDefinition, mkQuantDef, mkDD, qdFromDD
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im', im''
+  , inCons, outCons, imOutput, imInputs, im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , Constraints
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant

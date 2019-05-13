@@ -54,9 +54,9 @@ getTraceMapFromDD l = concat $ mapMaybe getDD l
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ _ im _):_)  = im
-getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
-getTraceMapFromIM []                = []
+getTraceMapFromIM ((IMs _ _ imod _):_) = imod
+getTraceMapFromIM  (_:tl)              = getTraceMapFromIM tl
+getTraceMapFromIM []                   = []
 
 extractSFromNotes :: HasAdditionalNotes l => l -> [Sentence]
 extractSFromNotes c = c ^. getNotes
@@ -71,15 +71,15 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
   (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
-  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes im),
+  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes imod),
   -- Theory models do not have derivations.
   (traceMap' extractSFromDeriv gd),
-  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv im)]
+  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv imod)]
   where
-    tt = getTraceMapFromTM $ getSCSSub a
-    gd = getTraceMapFromGD $ getSCSSub a
-    im = getTraceMapFromIM $ getSCSSub a
-    dd = getTraceMapFromDD $ getSCSSub a
+    tt   = getTraceMapFromTM $ getSCSSub a
+    gd   = getTraceMapFromGD $ getSCSSub a
+    imod = getTraceMapFromIM $ getSCSSub a
+    dd   = getTraceMapFromDD $ getSCSSub a
     ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.

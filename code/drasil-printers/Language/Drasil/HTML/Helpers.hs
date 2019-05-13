@@ -15,7 +15,7 @@ html, head_tag, body, title, paragraph, code, tr, th, td, figure,
 -- | HTML tag wrapper
 html       = wrap "html" []
 -- | Head tag wrapper
-head_tag   = oldWrap "head" []
+head_tag   = wrap "head" []
 -- | Body tag wrapper
 body       = oldWrap "body" []
 -- | Title tag wrapper

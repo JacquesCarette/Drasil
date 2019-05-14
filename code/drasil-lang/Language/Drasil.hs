@@ -66,10 +66,6 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
   , DataDefinition, mkQuantDef, mkDD, qdFromDD
-  -- Chunk.InstanceModel
-  , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , Constraints
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
   , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
@@ -240,7 +236,6 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, qdFromDD)
-import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)

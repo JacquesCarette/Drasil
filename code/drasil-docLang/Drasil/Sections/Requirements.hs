@@ -17,9 +17,8 @@ reqF = SRS.require [reqIntro]
 fReqF :: [Contents] -> Section
 fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
 
-nfReqF :: (Concept c) => [c] -> Int -> Sentence -> Sentence -> [Contents] -> Section
-nfReqF no num r e nfrs = SRS.nonfuncReq
-  (nfReqIntro : ((nonFuncReq' (map phrase no) num r e) : nfrs)) []
+nfReqF :: [Contents] -> Section
+nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []
 
 --helpers for requirements intros
 reqIntroStart :: Sentence

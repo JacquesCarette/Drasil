@@ -33,7 +33,9 @@ import NewLanguageRenderer (packageDocD,
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
     setMain, statementsToStateVars)
-import Helpers (angles,oneTab,tripFst,tripSnd,tripThird)
+import Helpers (angles, oneTab, tripFst, tripSnd, tripThird, liftA4, liftA5,
+    liftA6, liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair, 
+    liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -53,39 +55,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
     return = JC
     JC x >>= f = f x
-
-liftA4 :: (a -> b -> c -> d -> e) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e
-liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
-
-liftA5 :: (a -> b -> c -> d -> e -> f) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f
-liftA5 f a1 a2 a3 a4 a5 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5)
-
-liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f -> JavaCode g
-liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
-
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f -> JavaCode g -> JavaCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6) (unJC a7)
-
-liftList :: ([a] -> b) -> [JavaCode a] -> JavaCode b
-liftList f as = JC $ f (map unJC as)
-
-lift1List :: (a -> [b] -> c) -> JavaCode a -> [JavaCode b] -> JavaCode c
-lift1List f a as = JC $ f (unJC a) (map unJC as)
-
-unJCPair :: (JavaCode a, JavaCode b) -> (a, b)
-unJCPair (a1, a2) = (unJC a1, unJC a2) 
-
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> [(JavaCode e, JavaCode f)] -> JavaCode g
-lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
-
-lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> JavaCode a -> JavaCode b -> JavaCode c -> [(JavaCode d, JavaCode e)] -> JavaCode f
-lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
-
-liftPairFst :: (JavaCode a, b) -> JavaCode (a, b)
-liftPairFst (c, n) = JC $ (unJC c, n)
-
-liftTripFst :: (JavaCode a, b, c) -> JavaCode (a, b, c)
-liftTripFst (c, n, b) = JC $ (unJC c, n, b)
 
 instance PackageSym JavaCode where
     type Package JavaCode = ([(Doc, Label, Bool)], Label)

@@ -28,7 +28,9 @@ import NewLanguageRenderer (fileDoc',
     funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
-import Helpers (blank,oneTab,vibcat,tripFst,tripSnd,tripThird)
+import Helpers (blank, oneTab, vibcat, tripFst, tripSnd, tripThird, liftA4, 
+    liftA5, liftA6, liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair,
+    liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -48,30 +50,6 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
     return = PC
     PC x >>= f = f x
-
-liftA4 :: (a -> b -> c -> d -> e) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> PythonCode e
-liftA4 f a1 a2 a3 a4 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4)
-
-liftA5 :: (a -> b -> c -> d -> e -> f) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> PythonCode e -> PythonCode f
-liftA5 f a1 a2 a3 a4 a5 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (unPC a5)
-
-liftList :: ([a] -> b) -> [PythonCode a] -> PythonCode b
-liftList f as = PC $ f (map unPC as)
-
-lift1List :: (a -> [b] -> c) -> PythonCode a -> [PythonCode b] -> PythonCode c
-lift1List f a as = PC $ f (unPC a) (map unPC as)
-
-unPCPair :: (PythonCode a, PythonCode b) -> (a, b)
-unPCPair (a1, a2) = (unPC a1, unPC a2) 
-
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> PythonCode a -> PythonCode b -> PythonCode c -> PythonCode d -> [(PythonCode e, PythonCode f)] -> PythonCode g
-lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map unPCPair as)
-
-liftPairFst :: (PythonCode a, b) -> PythonCode (a, b)
-liftPairFst (c, n) = PC $ (unPC c, n)
-
-liftTripFst :: (PythonCode a, b, c) -> PythonCode (a, b, c)
-liftTripFst (c, n, b) = PC $ (unPC c, n, b)
 
 instance PackageSym PythonCode where
     type Package PythonCode = ([(Doc, Label, Bool)], Label)

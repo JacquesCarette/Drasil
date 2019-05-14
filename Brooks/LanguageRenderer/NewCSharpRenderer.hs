@@ -35,7 +35,9 @@ import NewLanguageRenderer (fileDoc',
     castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
     publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
     callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
-import Helpers (oneTab, tripFst, tripSnd, tripThird)
+import Helpers (oneTab, tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, 
+  liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  liftTripFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -55,39 +57,6 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
     return = CSC
     CSC x >>= f = f x
-
-liftA4 :: (a -> b -> c -> d -> e) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e
-liftA4 f a1 a2 a3 a4 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4)
-
-liftA5 :: (a -> b -> c -> d -> e -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f
-liftA5 f a1 a2 a3 a4 a5 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5)
-
-liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g
-liftA6 f a1 a2 a3 a4 a5 a6 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6)
-
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g -> CSharpCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6) (unCSC a7)
-
-liftList :: ([a] -> b) -> [CSharpCode a] -> CSharpCode b
-liftList f as = CSC $ f (map unCSC as)
-
-lift1List :: (a -> [b] -> c) -> CSharpCode a -> [CSharpCode b] -> CSharpCode c
-lift1List f a as = CSC $ f (unCSC a) (map unCSC as)
-
-unCSCPair :: (CSharpCode a, CSharpCode b) -> (a, b)
-unCSCPair (a1, a2) = (unCSC a1, unCSC a2) 
-
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> [(CSharpCode e, CSharpCode f)] -> CSharpCode g
-lift4Pair f a1 a2 a3 a4 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (map unCSCPair as)
-
-lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> [(CSharpCode d, CSharpCode e)] -> CSharpCode f
-lift3Pair f a1 a2 a3 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (map unCSCPair as)
-
-liftPairFst :: (CSharpCode a, b) -> CSharpCode (a, b)
-liftPairFst (c, n) = CSC $ (unCSC c, n)
-
-liftTripFst :: (CSharpCode a, b, c) -> CSharpCode (a, b, c)
-liftTripFst (c, n, b) = CSC $ (unCSC c, n, b)
 
 instance PackageSym CSharpCode where
     type Package CSharpCode = ([(Doc, Label, Bool)], Label)

@@ -435,8 +435,8 @@ loggedAssign a b =
       assign a b,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g))
-        b,
+      printFile v_outfile (convType $ varType (valName a) (vMap $ codeSpec g))
+        a,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 

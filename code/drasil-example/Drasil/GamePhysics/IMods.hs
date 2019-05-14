@@ -1,31 +1,34 @@
-module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new) where
+module Drasil.GamePhysics.IMods (iModels, iModelsNew, im1_new, im2_new, im3_new, instModIntro) where
 
 import Language.Drasil
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
-import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
-  col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
+import Drasil.GamePhysics.Goals (linearGS, angularGS)
+import Drasil.GamePhysics.Unitals(accI, forceI, transMotLegTerms, 
+  rotMotLegTerms, col2DLegTerms, massA, massI, normalVect, timeC, torqueI, velA,
+  velI)
 import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD)
 
+import Data.Drasil.Concepts.Documentation (goal)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, sAnd)
 import Data.Drasil.Utils (fmtU, foldle1)
 
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]
 
-iModels_new :: [InstanceModel]
-iModels_new = [im1_new, im2_new, im3_new]
+iModelsNew :: [InstanceModel]
+iModelsNew = [im1_new, im2_new, im3_new]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
-im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
-  [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
+im1_new = im' transMot [qw velI, qw QP.time, qw QP.gravitationalAccel, qw forceI, qw massI] 
+  [sy velI $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
+            sy forceI $> 0, sy massI $> 0 ] (qw accI) [] [] "transMot" [transMotDesc]
 
 transMot :: RelationConcept
 transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
@@ -34,8 +37,8 @@ transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
-  $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_i))
+transMotRel = (sy accI) $= (deriv (apply1 velI QP.time) QP.time)
+  $= (sy QP.gravitationalAccel) + ((apply1 forceI QP.time) / (sy massI))
 
 
 --fixme: need referencing
@@ -56,8 +59,8 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 {-- Rotational Motion --}
 
 im2_new :: InstanceModel
-im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
-  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
+im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI, qw QP.momentOfInertia]
+  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torqueI $> 0, sy QP.momentOfInertia $> 0] 
     (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
   [rotMotDesc]
 
@@ -70,7 +73,7 @@ rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid bo
 rotMotRel :: Relation
 rotMotRel = (sy QP.angularAccel) $= deriv
   (apply1 QP.angularVelocity QP.time) QP.time $= 
-     ((apply1 torque_i QP.time) / (sy QP.momentOfInertia))
+     ((apply1 torqueI QP.time) / (sy QP.momentOfInertia))
 
 --fixme: need referencing
 rotMotDesc, rotMotLeg :: Sentence
@@ -87,9 +90,9 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 {-- 2D Collision --}
 
 im3_new :: InstanceModel
-im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
-  [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
-  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] "col2D"
+im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw massA, qw normalVect] 
+  [sy QP.time $> 0, sy QP.impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
+  (qw timeC) [sy velA $> 0, sy timeC $> 0] [] "col2D"
   [col2DDesc]
 
 col2D :: RelationConcept
@@ -99,18 +102,18 @@ col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
-  ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
+col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
+  ((sy QP.impulseS) / (sy massA)) * (sy normalVect)
 
---im3Rel2 = (apply1 vel_B time_c) $= (apply1 vel_B QP.time) -
---  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
+--im3Rel2 = (apply1 velB timeC) $= (apply1 velB QP.time) -
+--  ((sy QP.impulseS) / (sy massB)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (apply1 angVel_A time_c) $= (apply1 angVel_A QP.time) +
+--im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA QP.time) +
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (apply1 angVel_B time_c) $= (apply1 angVel_B QP.time) -
+--im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB QP.time) -
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing
@@ -139,3 +142,9 @@ col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms
   (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th
   body and point P"))) (sub (QP.displacement ^. symbol) ) 
 --}
+
+{- Intro -}
+
+instModIntro :: Sentence
+instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS, 
+  S "is met by" +:+. (makeRef2S im1_new `sAnd` makeRef2S im3_new), S "The", phrase goal, makeRef2S angularGS, S "is met by", makeRef2S im2_new `sAnd` makeRef2S im3_new]

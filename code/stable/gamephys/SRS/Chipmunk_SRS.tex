@@ -33,7 +33,7 @@ This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable*}{l l}
+\begin{longtable}{l l}
 \toprule
 Symbol & Description
 \\
@@ -52,8 +52,9 @@ rad & angle (radian)
 s & time (second)
 \\
 \bottomrule
+\caption{}
 \label{Table:ToU}
-\end{longtable*}
+\end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
@@ -183,11 +184,12 @@ $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 $ϕ$ & Orientation & rad
 \\
 \bottomrule
+\caption{}
 \label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable*}{l l}
+\begin{longtable}{l l}
 \toprule
 Abbreviation & Full Form
 \\
@@ -224,8 +226,9 @@ UC & Unlikely Change
 Uncert. & Typical Uncertainty
 \\
 \bottomrule
+\caption{}
 \label{Table:TAbbAcc}
-\end{longtable*}
+\end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
@@ -298,8 +301,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
 \begin{itemize}
-\item[GS1:]Determine their new positions and velocities over a period of time.
-\item[GS2:]Determine their new orientations and angular velocities over a period of time.
+\item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
+\item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -352,21 +355,22 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \label{TM:NewtonSecLawMot}
 \\ \midrule \\
 Label & Newton's second law of motion
-        \\ \midrule \\
-        Equation & \begin{displaymath}
-                   \mathbf{F}=m \mathbf{a}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$\mathbf{F}$ is the force (N)}
-                                 \item{$m$ is the mass (kg)}
-                                 \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
-                                         \\ \midrule \\
-                                         Source & \\ \midrule \\
-                                                  RefBy & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=m \mathbf{a}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (N)}
+              \item{$m$ is the mass (kg)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -378,20 +382,21 @@ Label & Newton's second law of motion
 \label{TM:NewtonThirdLawMot}
 \\ \midrule \\
 Label & Newton's third law of motion
-        \\ \midrule \\
-        Equation & \begin{displaymath}
-                   {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{${\mathbf{F}_{1}}$ is the force exerted by the first body (on another body) (N)}
-                                 \item{${\mathbf{F}_{2}}$ is the force exerted by the second body (on another body) (N)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
-                                         \\ \midrule \\
-                                         Source & \\ \midrule \\
-                                                  RefBy & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{F}_{1}}$ is the force exerted by the first body (on another body) (N)}
+              \item{${\mathbf{F}_{2}}$ is the force exerted by the second body (on another body) (N)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -403,25 +408,26 @@ Label & Newton's third law of motion
 \label{TM:UniversalGravLaw}
 \\ \midrule \\
 Label & Newton's law of universal gravitation
-        \\ \midrule \\
-        Equation & \begin{displaymath}
-                   \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$\mathbf{F}$ is the force (N)}
-                                 \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
-                                 \item{${m_{1}}$ is the mass of the first body (kg)}
-                                 \item{${m_{2}}$ is the mass of the second body (kg)}
-                                 \item{$||\mathbf{r}||$ is the Euclidean norm of the displacement (m)}
-                                 \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
-                                 \item{$\mathbf{r}$ is the displacement (m)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
-                                         \\ \midrule \\
-                                         Source & \\ \midrule \\
-                                                  RefBy & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (N)}
+              \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
+              \item{${m_{1}}$ is the mass of the first body (kg)}
+              \item{${m_{2}}$ is the mass of the second body (kg)}
+              \item{$||\mathbf{r}||$ is the Euclidean norm of the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -433,22 +439,23 @@ Label & Newton's law of universal gravitation
 \label{TM:ChaslesThm}
 \\ \midrule \\
 Label & Chasles' theorem
-        \\ \midrule \\
-        Equation & \begin{displaymath}
-                   {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
-                                 \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
-                                 \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                 \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
-                                         \\ \midrule \\
-                                         Source & \\ \midrule \\
-                                                  RefBy & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -460,21 +467,22 @@ Label & Chasles' theorem
 \label{TM:NewtonSecLawRotMot}
 \\ \midrule \\
 Label & Newton's second law for rotational motion
-        \\ \midrule \\
-        Equation & \begin{displaymath}
-                   τ=\mathbf{I} α
-                   \end{displaymath}
-                   \\ \midrule \\
-                   Description & \begin{symbDescription}
-                                 \item{$τ$ is the torque (Nm)}
-                                 \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
-                                 \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-                                 \end{symbDescription}
-                                 \\ \midrule \\
-                                 Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional \hyperref[assumpOD]{A: objectDimension}.
-                                         \\ \midrule \\
-                                         Source & \\ \midrule \\
-                                                  RefBy & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           τ=\mathbf{I} α
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$τ$ is the torque (Nm)}
+              \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional \hyperref[assumpOD]{A: objectDimension}.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
@@ -492,27 +500,28 @@ This section collects and defines all the data needed to build the instance mode
 \label{DD:ctrOfMass}
 \\ \midrule \\
 Label & Center of Mass
-        \\ \midrule \\
-        Symbol & ${\mathbf{p}_{CM}}$
-                 \\ \midrule \\
-                 Units & m
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{${\mathbf{p}_{CM}}$ is the Center of Mass (m)}
-                                                  \item{${m_{j}}$ is the mass of the j-th particle (kg)}
-                                                  \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
-                                                  \item{$M$ is the total mass of the rigid body (kg)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:col2D]{IM: col2D}.
+\\ \midrule \\
+Symbol & ${\mathbf{p}_{CM}}$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{p}_{CM}}$ is the Center of Mass (m)}
+              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
+              \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
+              \item{$M$ is the total mass of the rigid body (kg)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -524,27 +533,28 @@ Label & Center of Mass
 \label{DD:linDisp}
 \\ \midrule \\
 Label & Linear Displacement
-        \\ \midrule \\
-        Symbol & $\mathbf{r}(t)$
-                 \\ \midrule \\
-                 Units & m
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$\mathbf{r}(t)$ is the linear displacement (m)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$\mathbf{p}$ is the position (m)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:transMot]{IM: transMot}.
+\\ \midrule \\
+Symbol & $\mathbf{r}(t)$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{r}(t)$ is the linear displacement (m)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{p}$ is the position (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -556,27 +566,28 @@ Label & Linear Displacement
 \label{DD:linVel}
 \\ \midrule \\
 Label & Linear Velocity
-        \\ \midrule \\
-        Symbol & $\mathbf{v}(t)$
-                 \\ \midrule \\
-                 Units & $\frac{\text{m}}{\text{s}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$\mathbf{r}$ is the displacement (m)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:transMot]{IM: transMot}.
+\\ \midrule \\
+Symbol & $\mathbf{v}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -588,27 +599,28 @@ Label & Linear Velocity
 \label{DD:linAcc}
 \\ \midrule \\
 Label & Linear Acceleration
-        \\ \midrule \\
-        Symbol & $\mathbf{a}(t)$
-                 \\ \midrule \\
-                 Units & $\frac{\text{m}}{\text{s}^{2}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:transMot]{IM: transMot}.
+\\ \midrule \\
+Symbol & $\mathbf{a}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -620,27 +632,28 @@ Label & Linear Acceleration
 \label{DD:angDisp}
 \\ \midrule \\
 Label & Angular Displacement
-        \\ \midrule \\
-        Symbol & $θ$
-                 \\ \midrule \\
-                 Units & rad
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    θ=\frac{d\,ϕ\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$θ$ is the angular displacement (rad)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$ϕ$ is the orientation (rad)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+\\ \midrule \\
+Symbol & $θ$
+\\ \midrule \\
+Units & rad
+\\ \midrule \\
+Equation & \begin{displaymath}
+           θ=\frac{d\,ϕ\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$θ$ is the angular displacement (rad)}
+              \item{$t$ is the time (s)}
+              \item{$ϕ$ is the orientation (rad)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -652,27 +665,28 @@ Label & Angular Displacement
 \label{DD:angVel}
 \\ \midrule \\
 Label & Angular Velocity
-        \\ \midrule \\
-        Symbol & $ω$
-                 \\ \midrule \\
-                 Units & $\frac{\text{rad}}{\text{s}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    ω=\frac{d\,θ\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$θ$ is the angular displacement (rad)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+\\ \midrule \\
+Symbol & $ω$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           ω=\frac{d\,θ\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$θ$ is the angular displacement (rad)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -684,27 +698,28 @@ Label & Angular Velocity
 \label{DD:angAccel}
 \\ \midrule \\
 Label & Angular Acceleration
-        \\ \midrule \\
-        Symbol & $α$
-                 \\ \midrule \\
-                 Units & $\frac{\text{rad}}{\text{s}^{2}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    α=\frac{d\,ω\left(t\right)}{d\,t}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-                                                  \item{$t$ is the time (s)}
-                                                  \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+\\ \midrule \\
+Symbol & $α$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           α=\frac{d\,ω\left(t\right)}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -716,36 +731,37 @@ Label & Angular Acceleration
 \label{DD:impulse}
 \\ \midrule \\
 Label & Impulse (scalar)
-        \\ \midrule \\
-        Symbol & $j$
-                 \\ \midrule \\
-                 Units & Ns
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{$j$ is the impulse (scalar) (Ns)}
-                                                  \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
-                                                  \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{$\mathbf{n}$ is the collision normal vector (m)}
-                                                  \item{${m_{A}}$ is the mass of rigid body A (kg)}
-                                                  \item{${m_{B}}$ is the mass of rigid body B (kg)}
-                                                  \item{$||\mathbf{n}||$ is the length of the normal vector (m)}
-                                                  \item{$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
-                                                  \item{${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
-                                                  \item{$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
-                                                  \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpAD]{A: axesDefined}
-                                                          \hyperref[assumpCT]{A: collisionType}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & \hyperref[IM:col2D]{IM: col2D}.
+\\ \midrule \\
+Symbol & $j$
+\\ \midrule \\
+Units & Ns
+\\ \midrule \\
+Equation & \begin{displaymath}
+           j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$j$ is the impulse (scalar) (Ns)}
+              \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
+              \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{n}$ is the collision normal vector (m)}
+              \item{${m_{A}}$ is the mass of rigid body A (kg)}
+              \item{${m_{B}}$ is the mass of rigid body B (kg)}
+              \item{$||\mathbf{n}||$ is the length of the normal vector (m)}
+              \item{$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
+              \item{${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
+              \item{$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
+              \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpAD]{A: axesDefined}
+        \hyperref[assumpCT]{A: collisionType}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -763,29 +779,30 @@ Label & Impulse (scalar)
 >>>>>>> master
 \\ \midrule \\
 Label & Velocity At Point B
-        \\ \midrule \\
-        Symbol & ${\mathbf{v}_{B}}$
-                 \\ \midrule \\
-                 Units & $\frac{\text{m}}{\text{s}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                                  \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
-                                                          \hyperref[assumpOT]{A: objectTy}
-                                                          \hyperref[assumpOD]{A: objectDimension}
-                                                          \hyperref[assumpDI]{A: dampingInvolvement}
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & 
+\\ \midrule \\
+Symbol & ${\mathbf{v}_{B}}$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+        \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 <<<<<<< HEAD
 \end{minipage}\\
@@ -803,6 +820,7 @@ Label & Velocity At Point B
 \label{DD:torque}
 \\ \midrule \\
 Label & Torque
+<<<<<<< HEAD
         \\ \midrule \\
         Symbol & $τ$
                  \\ \midrule \\
@@ -828,6 +846,28 @@ Label & Torque
                                                           \\ \midrule \\
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
+=======
+\\ \midrule \\
+Symbol & $τ$
+\\ \midrule \\
+Units & Nm
+\\ \midrule \\
+Equation & \begin{displaymath}
+           τ=\mathbf{r}\times\mathbf{F}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$τ$ is the torque (Nm)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{F}$ is the force (N)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
+>>>>>>> master
 \\ \bottomrule \end{tabular}
 <<<<<<< HEAD
 \end{minipage}\\
@@ -867,6 +907,7 @@ Label & Impulse (vector)
 \label{DD:kEnergy}
 \\ \midrule \\
 Label & Kinetic energy
+<<<<<<< HEAD
         \\ \midrule \\
         Symbol & $KE$
                  \\ \midrule \\
@@ -890,6 +931,31 @@ Label & Kinetic energy
                                                           \\ \midrule \\
                                                           Source & \\ \midrule \\
                                                                    RefBy & 
+=======
+\\ \midrule \\
+Symbol & $KE$
+\\ \midrule \\
+Units & J
+\\ \midrule \\
+Equation & \begin{displaymath}
+           KE=\frac{m \mathbf{v}^{2}}{2}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$KE$ is the kinetic energy (J)}
+              \item{$m$ is the mass (kg)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The kinetic energy of an object is the energy it possess due to its motion.
+        \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
+>>>>>>> master
 \\ \bottomrule \end{tabular}
 <<<<<<< HEAD
 \end{minipage}\\
@@ -904,26 +970,27 @@ Label & Kinetic energy
 \label{DD:coeffRestitution}
 \\ \midrule \\
 Label & Coefficient of restitution
-        \\ \midrule \\
-        Symbol & ${C_{R}}$
-                 \\ \midrule \\
-                 Units & Unitless
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    {C_{R}}=-\left(\frac{{{\mathbf{v}_{f}}^{AB}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}\right)
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
-                                                  \item{${{\mathbf{v}_{f}}^{AB}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{$\mathbf{n}$ is the collision normal vector (m)}
-                                                  \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & The coefficient of restitution ${C_{R}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{R}}=1$ results in an elastic collision, while ${C_{R}}<1$ results in an inelastic collision, and ${C_{R}}=0$ results in a totally inelastic collision.
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & 
+\\ \midrule \\
+Symbol & ${C_{R}}$
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {C_{R}}=-\left(\frac{{{\mathbf{v}_{f}}^{AB}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
+              \item{${{\mathbf{v}_{f}}^{AB}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{n}$ is the collision normal vector (m)}
+              \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The coefficient of restitution ${C_{R}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{R}}=1$ results in an elastic collision, while ${C_{R}}<1$ results in an inelastic collision, and ${C_{R}}=0$ results in a totally inelastic collision.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -935,31 +1002,33 @@ Label & Coefficient of restitution
 \label{DD:reVeInColl}
 \\ \midrule \\
 Label & Initial Relative Velocity Between Rigid Bodies of A and B
-        \\ \midrule \\
-        Symbol & ${{\mathbf{v}_{i}}^{AB}}$
-                 \\ \midrule \\
-                 Units & $\frac{\text{m}}{\text{s}}$
-                         \\ \midrule \\
-                         Equation & \begin{displaymath}
-                                    {{\mathbf{v}_{i}}^{AB}}={\mathbf{v}^{AP}}-{\mathbf{v}^{BP}}
-                                    \end{displaymath}
-                                    \\ \midrule \\
-                                    Description & \begin{symbDescription}
-                                                  \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{${\mathbf{v}^{AP}}$ is the velocity of the point of collision P in body A ($\frac{\text{m}}{\text{s}}$)}
-                                                  \item{${\mathbf{v}^{BP}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
-                                                  \end{symbDescription}
-                                                  \\ \midrule \\
-                                                  Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocities of A and B at point P.
-                                                          \\ \midrule \\
-                                                          Source & \\ \midrule \\
-                                                                   RefBy & 
+\\ \midrule \\
+Symbol & ${{\mathbf{v}_{i}}^{AB}}$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {{\mathbf{v}_{i}}^{AB}}={\mathbf{v}^{AP}}-{\mathbf{v}^{BP}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${{\mathbf{v}_{i}}^{AB}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}^{AP}}$ is the velocity of the point of collision P in body A ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}^{BP}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocities of A and B at point P.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 >>>>>>> master
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}. The goal \hyperref[angularGS]{GS: Determine-Angular-Properties} is met by \hyperref[IM:rotMot]{IM: rotMot} and \hyperref[IM:col2D]{IM: col2D}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -969,45 +1038,47 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \label{IM:transMot}
 \\ \midrule \\
 Label & Force on the translational motion of a set of 2d rigid bodies
-        \\ \midrule \\
-        Input & ${\mathbf{v}_{i}}$, $t$, $g$, ${\mathbf{F}_{i}}$, ${m_{j}}$
-                \\ \midrule \\
-                Output & ${\mathbf{a}_{i}}$
-                         \\ \midrule \\
-                         Input Constraints & \begin{displaymath}
-                                             {\mathbf{v}_{i}}>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             t>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             g>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             {\mathbf{F}_{i}}>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             {m_{j}}>0
-                                             \end{displaymath}
-                                             \\ \midrule \\
-                                             Output Constraints & \\ \midrule \\
-                                                                  Equation & \begin{displaymath}
-                                                                             {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
-                                                                             \end{displaymath}
-                                                                             \\ \midrule \\
-                                                                             Description & \begin{symbDescription}
-                                                                                           \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-                                                                                           \item{$t$ is the time (s)}
-                                                                                           \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
-                                                                                           \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-                                                                                           \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
-                                                                                           \item{${m_{j}}$ is the mass of the j-th particle (kg)}
-                                                                                           \end{symbDescription}
-                                                                                           \\ \midrule \\
-                                                                                           Notes & The above equation expresses the total acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
-                                                                                                   \\ \midrule \\
-                                                                                                   Source & \\ \midrule \\
-                                                                                                            RefBy & 
+\\ \midrule \\
+Input & ${\mathbf{v}_{i}}$, $t$, $g$, ${\mathbf{F}_{i}}$, ${m_{j}}$
+\\ \midrule \\
+Output & ${\mathbf{a}_{i}}$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {\mathbf{v}_{i}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    t>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    g>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {\mathbf{F}_{i}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {m_{j}}>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
+              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The above equation expresses the total acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1019,44 +1090,45 @@ Label & Force on the translational motion of a set of 2d rigid bodies
 \label{IM:rotMot}
 \\ \midrule \\
 Label & Force on the rotational motion of a set of 2D rigid body
-        \\ \midrule \\
-        Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
-                \\ \midrule \\
-                Output & $α$
-                         \\ \midrule \\
-                         Input Constraints & \begin{displaymath}
-                                             ω>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             t>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             {τ_{i}}>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             \mathbf{I}>0
-                                             \end{displaymath}
-                                             \\ \midrule \\
-                                             Output Constraints & \begin{displaymath}
-                                                                  α>0
-                                                                  \end{displaymath}
-                                                                  \\ \midrule \\
-                                                                  Equation & \begin{displaymath}
-                                                                             α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
-                                                                             \end{displaymath}
-                                                                             \\ \midrule \\
-                                                                             Description & \begin{symbDescription}
-                                                                                           \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-                                                                                           \item{$t$ is the time (s)}
-                                                                                           \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-                                                                                           \item{${τ_{i}}$ is the torque applied to the i-th body (Nm)}
-                                                                                           \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
-                                                                                           \end{symbDescription}
-                                                                                           \\ \midrule \\
-                                                                                           Notes & The above equation for the total angular acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angAccel]{DD: angAccel}. It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[assumpAD]{A: axesDefined}
-                                                                                                   \\ \midrule \\
-                                                                                                   Source & \\ \midrule \\
-                                                                                                            RefBy & 
+\\ \midrule \\
+Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
+\\ \midrule \\
+Output & $α$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    ω>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    t>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {τ_{i}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    \mathbf{I}>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     α>0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${τ_{i}}$ is the torque applied to the i-th body (Nm)}
+              \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The above equation for the total angular acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angAccel]{DD: angAccel}. It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[assumpAD]{A: axesDefined}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1068,48 +1140,49 @@ Label & Force on the rotational motion of a set of 2D rigid body
 \label{IM:col2D}
 \\ \midrule \\
 Label & Collisions on 2D rigid bodies
-        \\ \midrule \\
-        Input & $t$, $j$, ${m_{A}}$, $\mathbf{n}$
-                \\ \midrule \\
-                Output & ${t_{c}}$
-                         \\ \midrule \\
-                         Input Constraints & \begin{displaymath}
-                                             t>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             j>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             {m_{A}}>0
-                                             \end{displaymath}
-                                             \begin{displaymath}
-                                             \mathbf{n}>0
-                                             \end{displaymath}
-                                             \\ \midrule \\
-                                             Output Constraints & \begin{displaymath}
-                                                                  {\mathbf{v}_{A}}>0
-                                                                  \end{displaymath}
-                                                                  \begin{displaymath}
-                                                                  {t_{c}}>0
-                                                                  \end{displaymath}
-                                                                  \\ \midrule \\
-                                                                  Equation & \begin{displaymath}
-                                                                             {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
-                                                                             \end{displaymath}
-                                                                             \\ \midrule \\
-                                                                             Description & \begin{symbDescription}
-                                                                                           \item{${\mathbf{v}_{A}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
-                                                                                           \item{${t_{c}}$ is the denotes the time at collision (s)}
-                                                                                           \item{$t$ is the time (s)}
-                                                                                           \item{$j$ is the impulse (scalar) (Ns)}
-                                                                                           \item{${m_{A}}$ is the mass of rigid body A (kg)}
-                                                                                           \item{$\mathbf{n}$ is the collision normal vector (m)}
-                                                                                           \end{symbDescription}
-                                                                                           \\ \midrule \\
-                                                                                           Notes & This instance model is based on our assumptions regarding rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} collisions \hyperref[assumpCT]{A: collisionType} Again, this does not take damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} into account. \hyperref[assumpAD]{A: axesDefined}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:impulse]{DD: impulse}
-                                                                                                   \\ \midrule \\
-                                                                                                   Source & \\ \midrule \\
-                                                                                                            RefBy & 
+\\ \midrule \\
+Input & $t$, $j$, ${m_{A}}$, $\mathbf{n}$
+\\ \midrule \\
+Output & ${t_{c}}$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    t>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    j>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {m_{A}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    \mathbf{n}>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     {\mathbf{v}_{A}}>0
+                     \end{displaymath}
+                     \begin{displaymath}
+                     {t_{c}}>0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{v}_{A}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
+              \item{${t_{c}}$ is the denotes the time at collision (s)}
+              \item{$t$ is the time (s)}
+              \item{$j$ is the impulse (scalar) (Ns)}
+              \item{${m_{A}}$ is the mass of rigid body A (kg)}
+              \item{$\mathbf{n}$ is the collision normal vector (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & This instance model is based on our assumptions regarding rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} collisions \hyperref[assumpCT]{A: collisionType} Again, this does not take damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} into account. \hyperref[assumpAD]{A: axesDefined}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:impulse]{DD: impulse}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
@@ -1121,27 +1194,27 @@ Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
 \endhead
-${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $800.0\cdot{}10^{-3}$ & 10.0$\%$
+${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $800.0\cdot{}10^{-3}$ & 10$\%$
 \\
-$\mathbf{F}$ & -- & $98.1$ N & 10.0$\%$
+$\mathbf{F}$ & -- & $98.1$ N & 10$\%$
 \\
-$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0$\%$
+$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10$\%$
 \\
-$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10.0$\%$
+$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
 \\
-$L$ & $L\geq{}0$ & $44.2$ m & 10.0$\%$
+$L$ & $L\geq{}0$ & $44.2$ m & 10$\%$
 \\
-$m$ & $m\geq{}0$ & $56.2$ kg & 10.0$\%$
+$m$ & $m\geq{}0$ & $56.2$ kg & 10$\%$
 \\
-$\mathbf{p}$ & -- & $412.0\cdot{}10^{-3}$ m & 10.0$\%$
+$\mathbf{p}$ & -- & $412.0\cdot{}10^{-3}$ m & 10$\%$
 \\
-$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0$\%$
+$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$τ$ & -- & $200.0$ Nm & 10.0$\%$
+$τ$ & -- & $200.0$ Nm & 10$\%$
 \\
-$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0$\%$
+$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
-$ϕ$ & -- & $\frac{π}{2}$ rad & 10.0$\%$
+$ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1167,9 +1240,10 @@ $ω$
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requirements}
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Simulation-Space:\phantomsection\label{reqSS}]Create a space for all of the rigid bodies in the physical simulation to interact in.
 \item[Input-Initial-Conditions:\phantomsection\label{reqIIC}]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
@@ -1216,6 +1290,7 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
+<<<<<<< HEAD
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 <<<<<<< HEAD
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
@@ -1253,6 +1328,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 =======
+=======
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+>>>>>>> master
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
  & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}

@@ -7,6 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,guard,update)
+import Language.Drasil.Code.Imperative.Build.AST (interpMM)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -24,7 +25,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, 
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, fileNameD, forLabel, exprDocD, declarationDocD,
-  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD')
+  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD', buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
@@ -44,6 +45,8 @@ pythonConfig _ c =
         enumsEqualInts   = True,
         ext              = ".py",
         dir              = "python",
+        buildConfig      = Nothing,
+        runnable         = interpMM "python",
         fileName         = fileNameD c,
         include          = include',
         includeScope     = const empty,
@@ -101,7 +104,7 @@ include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
 
 pystateType :: Config -> StateType -> DecDef -> Doc
-pystateType _   (List _ _)     _ = brackets (empty)
+pystateType _   (List _ _)     _ = brackets empty
 pystateType c s@(Base Integer) d = stateTypeD c s d
 pystateType c s@(Base Float)   d = stateTypeD c s d
 pystateType _   (Base String)  _ = text "str"
@@ -173,7 +176,7 @@ funcDoc' c (ListAdd i v) = dot <> funcAppDoc c "insert" [i, v]
 funcDoc' c (ListPopulate size t) = brackets (valueDoc c dftVal) <+> char '*' <+> valueDoc c size
     where dftVal = case t of Base bt   -> defaultValue bt
                              _         -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
-funcDoc' c (ListExtend t) = dot <> text "append" <> parens (dftVal)
+funcDoc' c (ListExtend t) = dot <> text "append" <> parens dftVal
     where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
                              List _ _  -> brackets empty   
                              _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
@@ -214,11 +217,11 @@ classDoc' c f _ m = vcat [
                                 _ -> empty
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
-objAccessDoc' c v@(Self) f = valueDoc c v <> funcDoc c f
-objAccessDoc' c v f@(ListSize) = funcDoc c f <> parens (valueDoc c v)
+objAccessDoc' c v@Self f = valueDoc c v <> funcDoc c f
+objAccessDoc' c v f@ListSize = funcDoc c f <> parens (valueDoc c v)
 objAccessDoc' c v f@(ListPopulate _ _) = valueDoc c v <+> equals <+> funcDoc c f
-objAccessDoc' c v   (Floor) = funcAppDoc c "math.floor" [v]
-objAccessDoc' c v   (Ceiling) = funcAppDoc c "math.ceil" [v]
+objAccessDoc' c v Floor = funcAppDoc c "math.floor" [v]
+objAccessDoc' c v Ceiling = funcAppDoc c "math.ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
 
 objVarDoc' :: Config -> Value -> Value -> Doc
@@ -251,7 +254,7 @@ methodDoc' c _ _ (MainMethod b) = bodyDoc c b
 methodDoc' _ _ _ _ = empty
 
 valueDoc' :: Config -> Value -> Doc
-valueDoc' _ (Self) = text "self"
+valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List _ _) _) = stateType c t Def
 valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (callFuncParamList c vs)
   where prefixLib Nothing = empty

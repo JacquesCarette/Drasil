@@ -95,20 +95,20 @@ genSec d
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
-ref      t x = custRef (t ++ "~\\ref") x
+ref      t   = custRef (t ++ "~\\ref")
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
 href :: String -> String -> D
-href a0 a1 = command2 "href" a0 a1
+href = command2 "href"
 
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x
 
 cite :: D -> D
-cite  x = custRef "\\cite"  x
+cite = custRef "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
@@ -132,7 +132,7 @@ label           = commandD "label"
 title           = commandD "title"
 
 item' :: D -> D -> D
-item' bull s = command1oD "item" (Just bull) s
+item' bull = command1oD "item" (Just bull)
 
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"

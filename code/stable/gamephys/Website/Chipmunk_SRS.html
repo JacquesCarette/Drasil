@@ -1071,10 +1071,14 @@ Given the inputs, the goal statements are:
 </p>
 <div class="list">
 <p>
-GS1: Determine their new positions and velocities over a period of time.
+<div id="linearGS">
+Determine-Linear-Properties: Determine their new positions and velocities over a period of time.
+</div>
 </p>
 <p>
-GS2: Determine their new orientations and angular velocities over a period of time.
+<div id="angularGS">
+Determine-Angular-Properties: Determine their new orientations and angular velocities over a period of time.
+</div>
 </p>
 </div>
 </div>
@@ -1215,6 +1219,9 @@ The net force <em><b>F</b></em> (N) on a rigid body is proportional to the accel
 Source
 </th>
 <td>
+<p class="paragraph">
+
+</p>
 </td>
 </tr>
 <tr>
@@ -1281,6 +1288,9 @@ Every action has an equal and opposite reaction. In other words, the force <em><
 Source
 </th>
 <td>
+<p class="paragraph">
+
+</p>
 </td>
 </tr>
 <tr>
@@ -1383,6 +1393,9 @@ Two rigid bodies in the universe attract each other with a force <em><b>F</b></e
 Source
 </th>
 <td>
+<p class="paragraph">
+
+</p>
 </td>
 </tr>
 <tr>
@@ -1455,6 +1468,9 @@ The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigi
 Source
 </th>
 <td>
+<p class="paragraph">
+
+</p>
 </td>
 </tr>
 <tr>
@@ -1524,6 +1540,9 @@ The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its ang
 Source
 </th>
 <td>
+<p class="paragraph">
+
+</p>
 </td>
 </tr>
 <tr>
@@ -3152,6 +3171,9 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
+<p class="paragraph">
+The goal <a href=#linearGS>GS: Determine-Linear-Properties</a> is met by <a href=#IM:transMot>IM: transMot</a> and <a href=#IM:col2D>IM: col2D</a>. The goal <a href=#angularGS>GS: Determine-Angular-Properties</a> is met by <a href=#IM:rotMot>IM: rotMot</a> and <a href=#IM:col2D>IM: col2D</a>.
+</p>
 <div id="IM:transMot">
 <table class="idefn">
 <tr>
@@ -3614,7 +3636,7 @@ Uncert.
 <em>800.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3628,7 +3650,7 @@ Uncert.
 <em>98.1</em> N
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3642,7 +3664,7 @@ Uncert.
 <em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3656,7 +3678,7 @@ Uncert.
 <em>74.5</em> kg&sdot;m<sup>2</sup>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3670,7 +3692,7 @@ Uncert.
 <em>44.2</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3684,7 +3706,7 @@ Uncert.
 <em>56.2</em> kg
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3698,7 +3720,7 @@ Uncert.
 <em>412.0&sdot;10<sup>-3</sup></em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3712,7 +3734,7 @@ Uncert.
 <em>2.51</em> m/s
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3726,7 +3748,7 @@ Uncert.
 <em>200.0</em> N&sdot;m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3740,7 +3762,7 @@ Uncert.
 <em>2.1</em> rad/s
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3761,7 +3783,7 @@ Uncert.
 </div></em> rad
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 </table>
@@ -3813,13 +3835,16 @@ Output Data Constraints
 Requirements
 </h1>
 <p class="paragraph">
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <div id="Sec:FRs">
 <div class="subsection">
 <h2>
 Functional Requirements
 </h2>
+<p class="paragraph">
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+</p>
 <div class="list">
 <p>
 <div id="reqSS">
@@ -3978,7 +4003,7 @@ Newton Game Dynamics: http://newtondynamics.com/
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
 <div id="Table:Tracey">
 <table class="table">

@@ -13,6 +13,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
+import Database.Drasil(TraceMap, traceMap)
 
 import Drasil.DocumentLanguage
 
@@ -37,22 +38,22 @@ getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ t):_)     = t
+getTraceMapFromTM ((TMs _ _ t):_)     = t
 getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
 getTraceMapFromTM []                = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ gd _):_)  = gd
+getTraceMapFromGD ((GDs _ _ gd _):_)  = gd
 getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
 getTraceMapFromGD []                = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
 getTraceMapFromDD l = concat $ mapMaybe getDD l
-  where getDD (DDs _ d _) = Just d
+  where getDD (DDs _ _ d _) = Just d
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ im _):_)  = im
+getTraceMapFromIM ((IMs _ _ im _):_)  = im
 getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
 getTraceMapFromIM []                = []
 

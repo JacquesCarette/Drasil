@@ -71,10 +71,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
-
-section'' :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section'' title intro secs lbe = section title intro secs lbe
+section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 extractSection :: Document -> [Section]
 extractSection (Document _ _ sec) = concatMap getSec sec
@@ -113,4 +110,4 @@ makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd 
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r s = Reference u (URI r) s
+makeURI u r = Reference u (URI r)

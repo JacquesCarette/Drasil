@@ -18,9 +18,15 @@ import Data.List (elem)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Database.Drasil(SystemInformation, citeDB, 
+  conceptinsLookup, conceptinsTable, datadefnLookup,
+  dataDefnTable, gendefLookup, gendefTable,
+  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
+  refbyLookup, refbyTable, sectionLookup, sectionTable,
+  theoryModelLookup, theoryModelTable, vars, _sysinfodb)
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (getSource', foldlSent)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -95,9 +101,9 @@ mkTMField t _ l@DefiningEquation fs =
   (show l, map eqUnR' (t ^. invariants)) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
-mkTMField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
-mkTMField t _ l@(Notes) fs = 
+mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
+mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
+mkTMField t _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
@@ -120,6 +126,9 @@ helpToRefField t si
     s = _sysinfodb si
     r = citeDB si
 
+helperSources :: [Reference] -> [Contents]
+helperSources x = [mkParagraph $ foldlList Comma List $ map Ref x]
+
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ at_start d]) : fs
@@ -128,9 +137,9 @@ mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
-mkDDField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource' d]) : fs
-mkDDField d _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
+mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
+mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
@@ -158,9 +167,9 @@ mkGDField g _ l@Units fs =
 mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
-mkGDField g m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
-mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource' g]) : fs
-mkGDField g _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
+mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
+mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
+mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
@@ -169,20 +178,20 @@ mkIMField i _ l@Label fs  = (show l, [mkParagraph $ at_start i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
-mkIMField i m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
-mkIMField i _ l@(Source) fs = (show l, [mkParagraph $ getSource' i]) : fs
-mkIMField i _ l@(Output) fs = (show l, [mkParagraph x]) : fs
+mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
+mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
+mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
-mkIMField i _ l@(Input) fs = 
+mkIMField i _ l@Input fs = 
   case (i ^. imInputs) of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
-  (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
+  (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb) $ i ^. imInputs
-mkIMField i _ l@(InConstraints) fs  = 
+mkIMField i _ l@InConstraints fs  = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
-mkIMField i _ l@(OutConstraints) fs = 
+mkIMField i _ l@OutConstraints fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
-mkIMField i _ l@(Notes) fs = 
+mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
@@ -190,8 +199,8 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
-firstPair' (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
-firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
+firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
+firstPair' IncludeUnits d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
   toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation

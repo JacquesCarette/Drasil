@@ -2,6 +2,11 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
+  _constants,
+  _constraints, _datadefs,
+  _definitions, _inputs, _outputs,
+  _quants, _sys, _sysinfodb)
 import Language.Drasil.Development (dep, names')
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
@@ -71,7 +76,7 @@ getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec (SI {_sys = sys
+codeSpec SI {_sys = sys
               , _quants = q
               , _definitions = defs'
               , _datadefs = ddefs
@@ -79,12 +84,12 @@ codeSpec (SI {_sys = sys
               , _outputs = outs
               , _constraints = cs
               , _constants = constants
-              , _sysinfodb = db}) ms = 
+              , _sysinfodb = db} ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
-      rels = (map qtoc (defs' ++ (map qdFromDD ddefs))) \\ derived
-      mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
+      rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
+      mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
@@ -160,7 +165,7 @@ convertRel _ _ = error "Conversion failed"
 data Mod = Mod Name [Func]
 
 packmod :: Name -> [Func] -> Mod
-packmod n fs = Mod (toCodeName n) fs
+packmod n = Mod (toCodeName n)
 
 data DMod = DMod [Name] Mod
      
@@ -175,7 +180,7 @@ funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
+funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map codevar i) (spaceToCodeType t) fs 
      
 data FuncData where
   FuncData :: Name -> DataDesc -> FuncData
@@ -201,7 +206,7 @@ data FuncStmt where
 v $:= e = FAsg (codevar v) e
 
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
-ffor v e fs  = FFor (codevar  v) e fs
+ffor v = FFor (codevar  v)
 
 fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
@@ -268,12 +273,12 @@ fstdep sm (FCond e tfs efs)  = codevars e sm ++ concatMap (fstdep sm ) tfs ++ co
 fstdep sm (FRet e)  = codevars  e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
-fstdep _  (FContinue) = []
-fstdep sm (FProcCall f l)  = (codefunc (asVC f)) : (concatMap (`codevars` sm) l)
+fstdep _  FContinue = []
+fstdep sm (FProcCall f l)  = codefunc (asVC f) : concatMap (`codevars` sm) l
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
-fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
+fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
     fstvars _  (FDec cch _) = [cch]
@@ -284,7 +289,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     fstvars sm (FRet e) = codevars' e sm
     fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
-    fstvars _  (FContinue) = []
+    fstvars _  FContinue = []
     fstvars sm (FProcCall _ l) = concatMap (`codevars` sm) l
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
@@ -297,7 +302,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     declared _  (FRet _) = []
     declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
     declared _  (FThrow _) = [] -- is this right?
-    declared _  (FContinue) = []
+    declared _  FContinue = []
     declared _  (FProcCall _ _) = []
     declared _  (FAppend _ _) = []
        
@@ -316,7 +321,7 @@ getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins consts sm  =
   let refSet = ins ++ map codevar consts
-  in  if null ddefs then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
+  in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
 type Known = CodeChunk
@@ -326,14 +331,15 @@ getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
-          let new  = filter ((`subsetOf` k) . flip (codevars') sm . codeEquat) defs'
+          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs'
               cnew = map codevar new
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 
-              then error ("Cannot find path from inputs to outputs: " ++ (show $ map (^. uid) n)
-                        ++ " given Defs as " ++ (show $ map (^. uid) defs')
-                        ++ " and Knowns as " ++ (show $ map (^. uid) k) )
+              then error ("Cannot find path from inputs to outputs: " ++
+                        show (map (^. uid) n)
+                        ++ " given Defs as " ++ show (map (^. uid) defs')
+                        ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool

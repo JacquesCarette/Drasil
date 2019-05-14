@@ -4,6 +4,7 @@ import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
+import Database.Drasil
 
 import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P

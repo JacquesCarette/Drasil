@@ -38,6 +38,7 @@ resolver: lts-11.2
 packages:
 - .
 - ../drasil-lang
+- ../drasil-build
 - ../drasil-code
 - ../drasil-printers
 # Dependency packages to be pulled from upstream that are not in the resolver

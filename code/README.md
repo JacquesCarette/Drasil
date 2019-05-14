@@ -25,7 +25,7 @@ top level
 7. Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
 
 ```Haskell
-  S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
+  S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
   S "is the"
   ...
 ```
@@ -97,6 +97,9 @@ Updating Haddock index for local packages in
 **data-files**
   - Contains additional "helper" files for each of the examples
 
+**drasil-build**
+  - Contains build system generators for Drasil artifacts
+
 **drasil-code**
   - Contains the code for code generation in Drasil
 
@@ -116,7 +119,7 @@ Updating Haddock index for local packages in
   - Contains the base for the Drasil language
 
 **drasil-printers**
-  - Containts the printers for the Drasil language
+  - Contains the printers for the Drasil language
   
 **stable**
   - Contains the (currently) expected output for each of the examples

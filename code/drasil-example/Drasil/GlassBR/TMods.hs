@@ -2,6 +2,7 @@ module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
+import Database.Drasil (cdb)
 
 import Control.Lens ((^.))
 
@@ -11,8 +12,8 @@ import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
-import Drasil.GlassBR.Symbols (this_symbols)
+import Drasil.GlassBR.Unitals (demand, demandq, isSafePb, isSafeLR, lRe, pbTol, probBr)
+import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
 
@@ -23,29 +24,29 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
--- this is the new function but it still uses the lrIsSafe_RC,
+-- this is the new function but it still uses the lrIsSafeRC,
 -- so basically we have to combine the old function with the new function
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []
 
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (cw lrIsSafe_RC)
-   [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
+lrIsSafe = tm (cw lrIsSafeRC)
+   [qw isSafeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
+   [relToQD locSymbMap lrIsSafeRC] [(sy isSafeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
-   where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
+   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
-lrIsSafe_RC :: RelationConcept
-lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand))
+lrIsSafeRC :: RelationConcept
+lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
+  lrIsSafeDesc ( (sy isSafeLR) $= (sy lRe) $> (sy demand))
 
 lrIsSafeDesc :: Sentence
-lrIsSafeDesc = tModDesc (is_safeLR) s ending
+lrIsSafeDesc = tModDesc (isSafeLR) s ending
   where 
-    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLR))
+    s = ((ch isSafePb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch isSafeLR))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (makeRef2S calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
@@ -53,25 +54,25 @@ lrIsSafeDesc = tModDesc (is_safeLR) s ending
       makeRef2S calofDemand
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafe_RC) 
-  [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeCite astm2009]
+pbIsSafe = tm (cw pbIsSafeRC) 
+  [qw isSafePb, qw probBr, qw pbTol] ([] :: [ConceptChunk])
+  [relToQD locSymbMap pbIsSafeRC] [(sy isSafePb) $= (sy probBr) $< (sy pbTol)] [] [makeCite astm2009]
   "isSafePb" [pbIsSafeDesc]
-  where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
+  where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 
-pbIsSafe_RC :: RelationConcept
-pbIsSafe_RC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol))
+pbIsSafeRC :: RelationConcept
+pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
+  pbIsSafeDesc ((sy isSafePb) $= (sy probBr) $< (sy pbTol))
 
 pbIsSafeDesc :: Sentence
-pbIsSafeDesc = tModDesc (is_safePb) s ending
+pbIsSafeDesc = tModDesc (isSafePb) s ending
   where 
-    s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
+    s = (ch isSafePb) `sAnd` (ch isSafeLR) +:+ sParen (S "from" +:+
       (makeRef2S lrIsSafe))
-    ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (makeRef2S probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+    ending = ((ch probBr) `isThe` (phrase probBr)) `sC` S "as calculated in" +:+.
+      (makeRef2S probOfBreak) +:+ (ch pbTol) `isThe` (phrase pbTol) +:+ S "entered by the user"
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

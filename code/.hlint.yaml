@@ -8,7 +8,6 @@
 
 # Warnings currently triggered by your code
 - ignore: {name: "Move brackets to avoid $"}
-- ignore: {name: "Eta reduce"}
 - ignore: {name: "Redundant bracket"}
 - ignore: {name: "Redundant $"}
 - ignore: {name: "Use camelCase"}

@@ -167,6 +167,17 @@ m
 </tr>
 <tr>
 <td>
+<em>capacity</em>
+</td>
+<td>
+Capacity or load resistance
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
 <em>d<sub>max</sub></em>
 </td>
 <td>
@@ -255,6 +266,17 @@ InterpZ
 </tr>
 <tr>
 <td>
+<em>is-safeLoad</em>
+</td>
+<td>
+Variable that is assigned true when load resistance (capacity) is greater than applied load (demand)
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>is-safeLR</em>
 </td>
 <td>
@@ -270,6 +292,17 @@ Variable that is assigned true when load resistance (capacity) is greater than l
 </td>
 <td>
 Variable that is assigned true when calculated probability is less than tolerable probability
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>is-safeProb</em>
+</td>
+<td>
+Variable that is assigned true when probability of failure is less than tolerable probability of failure
 </td>
 <td>
 --
@@ -317,6 +350,17 @@ Load duration factor
 </td>
 <td>
 --
+</td>
+</tr>
+<tr>
+<td>
+<em>Load</em>
+</td>
+<td>
+Applied load (demand) or pressure
+</td>
+<td>
+Pa
 </td>
 </tr>
 <tr>
@@ -1102,7 +1146,9 @@ Given the dimensions of the glass plane, glass type, the characteristics of the 
 </p>
 <div class="list">
 <p>
-GS1: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+<div id="willBreakGS">
+Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+</div>
 </p>
 </div>
 </div>
@@ -1143,7 +1189,7 @@ explainScenario: This system only considers the external explosion scenario for 
 </p>
 <p>
 <div id="assumpSV">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#assumpLDFC>A: ldfConstant</a>.
+standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> <a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:loadDurFactor>DD: loadDurFactor</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a> <a href=#assumpLDFC>A: ldfConstant</a>.
 </div>
 </p>
 <p>
@@ -1341,7 +1387,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:risk.fun">
+<div id="DD:riskFun">
 <table class="ddefn">
 <tr>
 <th>
@@ -1435,7 +1481,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
@@ -1467,7 +1513,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:min.thick">
+<div id="DD:minThick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1621,7 +1667,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:risk.fun>DD: risk_fun</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+<a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:riskFun>DD: riskFun</a> <a href=#DD:nFL>DD: nFL</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
 </p>
 </td>
 </tr>
@@ -1730,7 +1776,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:sdf.tol>DD: sdf_tol</a> <a href=#DD:risk.fun>DD: risk_fun</a>.
+<a href=#DD:sdfTol>DD: sdfTol</a> <a href=#DD:riskFun>DD: riskFun</a>.
 </p>
 </td>
 </tr>
@@ -1831,7 +1877,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:risk.fun>DD: risk_fun</a>.
+<a href=#DD:riskFun>DD: riskFun</a>.
 </p>
 </td>
 </tr>
@@ -1922,7 +1968,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>q&#770;<sub>tol</sub></em> is the tolerable load defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
@@ -2159,7 +2205,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>GTF</em> is the glass type factor, as given by <a href=#DD:gTF>DD: gTF</a>.
@@ -2263,7 +2309,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in <a href=#DD:sdf.tol>DD: sdf_tol</a>. and <a href=#DD:aspect.ratio>DD: aspect_ratio</a>, respectively
+<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in <a href=#DD:sdfTol>DD: sdfTol</a>. and <a href=#DD:aspect.ratio>DD: aspect_ratio</a>, respectively
 </p>
 </td>
 </tr>
@@ -2289,7 +2335,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:sdf.tol">
+<div id="DD:sdfTol">
 <table class="ddefn">
 <tr>
 <th>
@@ -2393,7 +2439,7 @@ Notes
 <em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
-<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
+<em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
 </p>
 <p class="paragraph">
 <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
@@ -2757,7 +2803,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>B</em> is the risk of failure, as defined in <a href=#DD:risk.fun>DD: risk_fun</a>
+<em>B</em> is the risk of failure, as defined in <a href=#DD:riskFun>DD: riskFun</a>
 </p>
 </td>
 </tr>
@@ -2992,6 +3038,9 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
+<p class="paragraph">
+The goal <a href=#willBreakGS>GS: Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+</p>
 <div id="IM:calOfDemand">
 <table class="idefn">
 <tr>
@@ -3153,7 +3202,7 @@ Uncert.
 <em>1.5</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3170,7 +3219,7 @@ Uncert.
 <em>1.5</em>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3187,7 +3236,7 @@ Uncert.
 <em>1.2</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3196,23 +3245,6 @@ Uncert.
 </td>
 <td>
 <em>0&thinsp;&lt;&thinsp;P<sub>btol</sub>&thinsp;&lt;&thinsp;1</em>
-</td>
-<td>
---
-</td>
-<td>
-<em>8.0&sdot;10<sup>-3</sup></em>
-</td>
-<td>
-0.1<em>%</em>
-</td>
-</tr>
-<tr>
-<td>
-<em>P<sub>ftol</sub></em>
-</td>
-<td>
-<em>0&thinsp;&lt;&thinsp;P<sub>ftol</sub>&thinsp;&lt;&thinsp;1</em>
 </td>
 <td>
 --
@@ -3238,7 +3270,7 @@ Uncert.
 <em>45.0</em> m
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3255,7 +3287,7 @@ Uncert.
 <em>1.0</em>
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 <tr>
@@ -3272,7 +3304,7 @@ Uncert.
 <em>42.0</em> kg
 </td>
 <td>
-10.0<em>%</em>
+10<em>%</em>
 </td>
 </tr>
 </table>
@@ -3305,6 +3337,16 @@ Output Data Constraints
 </div>
 </div>
 </div>
+<div id="Sec:CorSolProps">
+<div class="subsubsection">
+<h3>
+Properties of a Correct Solution
+</h3>
+<p class="paragraph">
+FIXME.
+</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3315,17 +3357,20 @@ Output Data Constraints
 Requirements
 </h1>
 <p class="paragraph">
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <div id="Sec:FRs">
 <div class="subsection">
 <h2>
 Functional Requirements
 </h2>
+<p class="paragraph">
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+</p>
 <div class="list">
 <p>
 <div id="inputGlassProps">
-Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>Table:InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>Table:InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
 </div>
 </p>
 <p>
@@ -3342,7 +3387,7 @@ System-Set-Values-Following-Assumptions: The system shall set the known values a
                                          LSF following <a href=#assumpGL>A: glassLite</a>
                                          </li>
                                          <li>
-                                         <em>h</em> from <a href=#DD:min.thick>DD: min_thick</a>
+                                         <em>h</em> from <a href=#DD:minThick>DD: minThick</a>
                                          </li>
                                          <li>
                                          <em>GTF</em> from <a href=#DD:gTF>DD: gTF</a>
@@ -3379,19 +3424,19 @@ Output-Quantities: Output the following quantities:
                    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect_ratio</a>)
                    </li>
                    <li>
-                   Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD: risk_fun</a>)
+                   Risk of failure (<em>B</em>) (<a href=#DD:riskFun>DD: riskFun</a>)
                    </li>
                    <li>
                    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
                    </li>
                    <li>
-                   Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD: min_thick</a>)
+                   Minimum thickness (<em>h</em>) (<a href=#DD:minThick>DD: minThick</a>)
                    </li>
                    <li>
                    Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
                    </li>
                    <li>
-                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdfTol>DD: sdfTol</a>)
                    </li>
                    <li>
                    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
@@ -3545,8 +3590,43 @@ Required Inputs following <a href=#inputGlassProps>FR: Input-Glass-Props</a>
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
+<p class="paragraph">
+This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are:
+</p>
+<div class="list">
+<p>
+<div id="correct">
+Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+</div>
+</p>
+<p>
+<div id="verifiable">
+Verifiable: The code is tested with complete verification and validation plan.
+</div>
+</p>
+<p>
+<div id="understandable">
+Understandable: The code is modularized with complete module guide and module interface specification.
+</div>
+</p>
+<p>
+<div id="reusable">
+Reusable: The code is modularized.
+</div>
+</p>
+<p>
+<div id="maintainable">
+Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+</div>
+</p>
+<p>
+<div id="portable">
+Portable: The code is able to be run in different environments.
+</div>
+</p>
+</div>
 </div>
 </div>
 </div>
@@ -3610,7 +3690,7 @@ Accommodate-Altered-Glass: <a href=#assumpGC>A: glassCondition</a> requires that
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyItemSecs>Table:TraceyItemSecs</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyReqsItems>Table:TraceyReqsItems</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyItemSecs>Table:TraceyItemSecs</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyReqsItems>Table:TraceyReqsItems</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
 <div id="Table:Tracey">
 <table class="table">
@@ -3661,7 +3741,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>
 </th>
 <th>
-<a href=#DD:sdf.tol>DD: sdf_tol</a>
+<a href=#DD:sdfTol>DD: sdfTol</a>
 </th>
 <th>
 <a href=#DD:nFL>DD: nFL</a>
@@ -3685,7 +3765,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
 </th>
 <th>
-<a href=#DD:risk.fun>DD: risk_fun</a>
+<a href=#DD:riskFun>DD: riskFun</a>
 </th>
 <th>
 <a href=#TM:isSafePb>TM: isSafePb</a>
@@ -5276,7 +5356,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:min.thick>DD: min_thick</a>
+<a href=#DD:minThick>DD: minThick</a>
 </td>
 <td>
 
@@ -5525,7 +5605,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:risk.fun>DD: risk_fun</a>
+<a href=#DD:riskFun>DD: riskFun</a>
 </td>
 <td>
 
@@ -5774,7 +5854,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:sdf.tol>DD: sdf_tol</a>
+<a href=#DD:sdfTol>DD: sdfTol</a>
 </td>
 <td>
 
@@ -6208,10 +6288,10 @@ T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
 DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
@@ -6232,7 +6312,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 <th>
 DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
@@ -6372,7 +6452,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 
@@ -6416,7 +6496,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -6724,7 +6804,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 
@@ -6831,10 +6911,10 @@ T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
 DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
@@ -6855,7 +6935,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 <th>
 DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
@@ -7397,7 +7477,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 X
@@ -7426,7 +7506,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:min.thick>DD: min_thick</a>)
+IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -7629,7 +7709,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 

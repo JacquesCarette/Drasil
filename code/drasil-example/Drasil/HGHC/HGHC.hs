@@ -9,15 +9,19 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg))
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
+  collectUnits, rdb, refdb, _authors, _concepts, _constants, _constraints,
+  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _sys, _sysinfodb, _usedinfodb)
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
-import Data.Drasil.SI_Units (si_units, fundamentals, derived, degree)
+import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
 import Data.Drasil.Phrase (for)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []
@@ -41,18 +45,18 @@ thisSI = SI {
    refdb = rdb [] [] -- FIXME?
 }
 
-check_si :: [UnitDefn] -- FIXME? Probably shouldn't be done here
-check_si = collectUnits allSymbols symbols 
+checkSi :: [UnitDefn] -- FIXME? Probably shouldn't be done here
+checkSi = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  si_units Map.empty Map.empty [] [] [] [] [] [] []
+  siUnits Map.empty Map.empty [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si)
-           ([] :: [ConceptChunk]) check_si Map.empty Map.empty [] [] [] []
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw checkSi)
+           ([] :: [ConceptChunk]) checkSi Map.empty Map.empty [] [] [] []
            [] [] []
 
 printSetting :: PrintingInformation
@@ -63,7 +67,7 @@ thisSRS = [RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
-        DDs [Label, Symbol, Units, DefiningEquation,
+        DDs [] [Label, Symbol, Units, DefiningEquation,
           Description Verbose IncludeUnits] hghcVarsDD HideDerivation
       ]]]
   

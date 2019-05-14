@@ -2,14 +2,17 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
-import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
-  String, Boolean, Integer))
+import Database.Drasil(ChunkDB, symbLookup, symbolTable)
+
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
+  Float, Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
   Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode, makeLangConfig)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
   codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
@@ -91,14 +94,15 @@ generateCode chs g =
           createDirectoryIfMissing False (getDir x)
           setCurrentDirectory (getDir x)
           when (x == Java) $ createDirectoryIfMissing False prog
-          when (x == Java) $ setCurrentDirectory prog
-          createCodeFiles $ makeCode
-            (getLabel x)
-            (Options Nothing Nothing Nothing (Just "Code"))
-            (toAbsCode prog modules)
-          setCurrentDirectory workingDir) (lang $ chs)
+          let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
+                       Just "Code"
+          createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
+            map (if x == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
+            C.unCode $ makeCode config absCode
+          setCurrentDirectory workingDir) $ lang chs
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         modules = runReader genModules g
+        absCode = toAbsCode prog modules
 
 genModules :: Reader State [Module]
 genModules = do
@@ -108,7 +112,7 @@ genModules = do
   inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ (mn : inp ++ out ++ moddef)
+  return $ mn : inp ++ out ++ moddef
 
 -- private utilities used in generateCode
 getLabel, getDir :: Lang -> String
@@ -217,13 +221,10 @@ genCalcFunc cdef = do
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
-genCalcBlock t' v' e' = doit t' v' e'
-  where
-  doit :: CalcType -> String -> Expr -> Reader State Body
-  doit t v (Case e)    = genCaseBlock t v e
-  doit t v e
-    | t == CalcAssign  = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
-    | otherwise        = (oneLiner . I.return) <$> convExpr e
+genCalcBlock t v (Case e) = genCaseBlock t v e
+genCalcBlock t v e
+    | t == CalcAssign     = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
+    | otherwise           = (oneLiner . I.return) <$> convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
@@ -368,7 +369,7 @@ variable s' = do
       mm = constMap cs
       doit :: String -> Reader State Value
       doit s | member s mm =
-        maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
              | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
@@ -437,7 +438,7 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
-convType (C.File) = error "convType: File ?"
+convType C.File = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
 convExpr (Dbl d)      = return $ litFloat d
@@ -575,7 +576,7 @@ convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
-convStmt (FContinue) = return continue
+convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
@@ -665,10 +666,10 @@ genDataFunc nameTitle dd = do
         checkIndex' ((Explicit i):is) n l p v s =
           ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
-        checkIndex' ((WithLine):is) n l p v s =
+        checkIndex' (WithLine:is) n l p v s =
           ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
-        checkIndex' ((WithPattern):is) n l p v s =
+        checkIndex' (WithPattern:is) n l p v s =
           ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
           : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------

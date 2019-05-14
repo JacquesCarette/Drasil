@@ -6,6 +6,7 @@ import Data.Drasil.Concepts.Documentation as Doc (description, input_,
   quantity, requirement, symbol_, variable)
 
 import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DocLang (mkEnumSimpleD)
@@ -45,7 +46,7 @@ inputInitQuants = iIQConstruct inputInitQuantsTable
 --
 findMassExpr :: Expr
 findMassExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
-  ((((sy diam) / 2) $^ 2) * (sy tank_length) * (sy w_density)))
+  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tank_length) * (sy w_density)))
 
 findMass :: ConceptInstance
 findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)

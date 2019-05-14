@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -45,6 +46,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -71,7 +73,7 @@ import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable, propsDeriv)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
+import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   sspConstrained, sspInputs, sspOutputs, sspSymbols)
 
@@ -136,8 +138,7 @@ mkSRS = [RefSec $ RefProg intro
       SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          , TMs [] (Label : stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-           effStress]
+          , TMs [] (Label : stdFields) tMods
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
@@ -207,7 +208,8 @@ traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other
 sspSymMap :: ChunkDB
 sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw sspIMods
-  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon
+  ++ map nw sspdef ++ map nw sspdef' ++ map nw softwarecon ++ map nw physicCon 
+  ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)

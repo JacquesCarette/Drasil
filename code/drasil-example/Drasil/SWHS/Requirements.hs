@@ -12,6 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, lawConsEnergy, melting)
 
+import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
@@ -91,7 +92,7 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
-  ((((sy diam) / 2) $^ 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
+  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
 
 findMassEqn = (sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hack
 --

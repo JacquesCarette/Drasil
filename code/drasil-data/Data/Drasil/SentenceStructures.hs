@@ -233,16 +233,20 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldIfNotEmpty c $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldIfNotEmpty c $ filter isSfwrC (c ^. constraints)
 
 -- Helper for formatting constraints
-foldConstraints :: [Sentence] -> Sentence
-foldConstraints []     = EmptyS
+foldIfNotEmpty :: (Quantity c) => c -> [Constraint] -> Sentence
+foldIfNotEmpty _ [] = EmptyS
+foldIfNotEmpty c e  = E $ foldConstraints $ map (constraintToExpr c) e
+
+foldConstraints :: [Expr] -> Expr
+foldConstraints []     = error "foldIfNotEmpty didn't catch an empty list of constraints."
 foldConstraints [x]    = x
-foldConstraints (x:xs) = x +:+ S "∧" +:+ foldConstraints xs
+foldConstraints (x:xs) = x $&& foldConstraints xs
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none

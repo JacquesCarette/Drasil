@@ -52,7 +52,7 @@ riskQD :: QDefinition
 riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
-risk = mkDD riskQD 
+risk = dd riskQD 
   (map makeCite [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
   campidelli {- FIXME +:+ sParen (S "Eq. 14") -}])
   [{-derivation-}] "riskFun"
@@ -71,7 +71,7 @@ hFromtQD :: QDefinition
 hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = mkDD hFromtQD [makeCite astm2009] [{-derivation-}] "minThick" [hMin]
+hFromt = dd hFromtQD [makeCite astm2009] [{-derivation-}] "minThick" [hMin]
 
 --DD3-- (#749)
 
@@ -82,7 +82,7 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDFEq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [makeCite astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S assumpSV,
+loadDF = dd loadDFQD [makeCite astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S assumpSV,
   makeRef2S assumpLDFC]
 
 --DD4--
@@ -96,7 +96,7 @@ strDisFacQD :: QDefinition
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
 
 strDisFac :: DataDefinition
-strDisFac = mkDD strDisFacQD [makeCite astm2009] [{-derivation-}] "stressDistFac"
+strDisFac = dd strDisFacQD [makeCite astm2009] [{-derivation-}] "stressDistFac"
   [jRef2, qHtRef, arRef]
 
 --DD5--
@@ -109,7 +109,7 @@ nonFLQD :: QDefinition
 nonFLQD = mkQuantDef nonFactorL nonFLEq
 
 nonFL :: DataDefinition
-nonFL = mkDD nonFLQD [makeCite astm2009] [{-derivation-}] "nFL"
+nonFL = dd nonFLQD [makeCite astm2009] [{-derivation-}] "nFL"
   (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S assumpSV])
 
 --DD6--
@@ -124,7 +124,7 @@ glaTyFacQD :: QDefinition
 glaTyFacQD = mkQuantDef gTF glaTyFacEq
 
 glaTyFac :: DataDefinition
-glaTyFac = mkDD glaTyFacQD [makeCite astm2009] [{-derivation-}] "gTF"
+glaTyFac = dd glaTyFacQD [makeCite astm2009] [{-derivation-}] "gTF"
   [anGlass, ftGlass, hsGlass]
 
 --DD7--
@@ -137,7 +137,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = mkDD dimLLQD (map makeCite [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}]) [{-derivation-}] "dimlessLoad"
+dimLL = dd dimLLQD (map makeCite [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}]) [{-derivation-}] "dimlessLoad"
   [qRef , aGrtrThanB , hRef, gtfRef, glassLiteRef, makeRef2S assumpSV]
 
 --DD8--
@@ -150,7 +150,7 @@ tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolPre :: DataDefinition
-tolPre = mkDD tolPreQD [makeCite astm2009] [{-derivation-}] "tolLoad"
+tolPre = dd tolPreQD [makeCite astm2009] [{-derivation-}] "tolLoad"
   [qHtTlExtra]
 
 --DD9--
@@ -165,7 +165,7 @@ tolStrDisFacQD :: QDefinition
 tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
 
 tolStrDisFac :: DataDefinition
-tolStrDisFac = mkDD tolStrDisFacQD [makeCite astm2009] [{-derivation-}] "sdfTol"
+tolStrDisFac = dd tolStrDisFacQD [makeCite astm2009] [{-derivation-}] "sdfTol"
   (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S assumpSV])
 
 --DD10--
@@ -177,7 +177,7 @@ standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
 
 standOffDis :: DataDefinition
-standOffDis = mkDD standOffDisQD [makeCite astm2009] [{-derivation-}] "standOffDist" []
+standOffDis = dd standOffDisQD [makeCite astm2009] [{-derivation-}] "standOffDist" []
 
 --DD11--
 
@@ -188,7 +188,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRatEq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [makeCite astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
+aspRat = dd aspRatQD [makeCite astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
@@ -198,7 +198,7 @@ eqTNTWQD :: QDefinition
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
-eqTNTWDD = mkDD eqTNTWQD [makeCite astm2009] [] "eqTNTW" []
+eqTNTWDD = dd eqTNTWQD [makeCite astm2009] [] "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
@@ -208,7 +208,7 @@ probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
 probOfBreak :: DataDefinition
-probOfBreak = mkDD probOfBreakQD (map makeCite [astm2009, beasonEtAl1998]) [{-derivation-}] "probOfBreak" [glassBreak]
+probOfBreak = dd probOfBreakQD (map makeCite [astm2009, beasonEtAl1998]) [{-derivation-}] "probOfBreak" [glassBreak]
 
 --DD14--
 calofCapacityEq :: Expr
@@ -218,7 +218,7 @@ calofCapacityQD :: QDefinition
 calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
 calofCapacity :: DataDefinition
-calofCapacity = mkDD calofCapacityQD [makeCite astm2009] [{-derivation-}] "calofCapacity" capacityS
+calofCapacity = dd calofCapacityQD [makeCite astm2009] [{-derivation-}] "calofCapacity" capacityS
 
 --DD15--
 calofDemandEq :: Expr
@@ -228,7 +228,7 @@ calofDemandQD :: QDefinition
 calofDemandQD = mkQuantDef demand calofDemandEq
 
 calofDemand :: DataDefinition
-calofDemand = mkDD calofDemandQD [makeCite astm2009] [{-derivation-}] "calofDemand" [calofDemandDesc]
+calofDemand = dd calofDemandQD [makeCite astm2009] [{-derivation-}] "calofDemand" [calofDemandDesc]
 
 
 --Additional Notes--

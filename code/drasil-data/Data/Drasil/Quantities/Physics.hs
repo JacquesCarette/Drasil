@@ -18,9 +18,9 @@ physicscon :: [UnitalChunk]
 physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity, kEnergy, chgMomentum, chgInVelocity]
-  position, pressure, time, torque, velocity, weight, kEnergy]
-  angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
+  position, pressure, time, torque, velocity, weight, kEnergy, chgMomentum, chgInVelocity]
+  
+angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, pressure, time, torque, velocity, weight, kEnergy, chgMomentum, chgInVelocity :: UnitalChunk

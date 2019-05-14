@@ -36,7 +36,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
-    equals, vcat, colon, brackets, isEmpty, render)
+    equals, vcat, colon, brackets, isEmpty)
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -155,7 +155,7 @@ instance ControlBlockSym PythonCode where
                                                                 Just res -> assign vari res
 
     listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
-        where getVal Nothing = return empty
+        where getVal Nothing = return (empty, Nothing)
               getVal (Just v) = v                           
 
 instance UnaryOpSym PythonCode where
@@ -194,94 +194,91 @@ instance BinaryOpSym PythonCode where
     orOp = return $ text "or"
 
 instance ValueSym PythonCode where
-    type Value PythonCode = Doc
-    litTrue = return $ text "True"
-    litFalse = return $ text "False"
-    litChar c = return $ litCharD c
-    litFloat v = return $ litFloatD v
-    litInt v = return $ litIntD v
-    litString s = return $ litStringD s
+    type Value PythonCode = (Doc, Maybe String)
+    litTrue = return $ (text "True", Just "True")
+    litFalse = return $ (text "False", Just "False")
+    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return $ (litFloatD v, Just $ show v)
+    litInt v = return $ (litIntD v, Just $ show v)
+    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ defaultCharD
-    defaultFloat = return $ defaultFloatD
-    defaultInt = return $ defaultIntD
-    defaultString = return $ defaultStringD
+    defaultChar = return $ (defaultCharD, Just "space character")
+    defaultFloat = return $ (defaultFloatD, Just $ "0.0")
+    defaultInt = return $ (defaultIntD, Just $ "0")
+    defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
-    self = return $ text "self"
-    arg n = liftA2 argDocD (litInt (n + 1)) argsList
-    enumElement en e = return $ enumElemDocD en e
+    var n = return $ (varDocD n, Just n)
+    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
+    self = return $ (text "self", Nothing)
+    arg n = liftPairFst (liftA2 argDocD (litInt (n + 1)) argsList, Nothing)
+    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
-    objVar = liftA2 objVarDocD
-    objVarSelf n = liftA2 objVarDocD self (var n)
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Nothing)
+    objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Nothing)
     listVar n _ = var n
     n `listOf` t = listVar n t
     iterVar = var
 
-    inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
-    argsList = return $ text "sys.argv"
-    
-    valName v = unPC $ fmap render v
+    inputFunc = return $ (text "input()", Nothing)  -- raw_input() for < Python 3.0
+    argsList = return $ (text "sys.argv", Nothing)
 
 instance NumericExpression PythonCode where
-    (#~) = liftA2 unOpDocD negateOp
-    (#/^) = liftA2 unOpDocD sqrtOp
-    (#|) = liftA2 unOpDocD absOp
-    (#+) = liftA3 binOpDocD plusOp
-    (#-) = liftA3 binOpDocD minusOp
-    (#*) = liftA3 binOpDocD multOp
-    (#/) = liftA3 binOpDocD divideOp
-    (#%) = liftA3 binOpDocD moduloOp
-    (#^) = liftA3 binOpDocD powerOp
+    (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
+    (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
+    (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
+    (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
+    (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
+    (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
+    (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
+    (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
+    (#^) v1 v2 = liftPairFst (liftA3 binOpDocD powerOp v1 v2, Nothing)
 
-    log = liftA2 unOpDocD logOp
-    ln = liftA2 unOpDocD lnOp
-    exp = liftA2 unOpDocD expOp
-    sin = liftA2 unOpDocD sinOp
-    cos = liftA2 unOpDocD cosOp
-    tan = liftA2 unOpDocD tanOp
+    log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
+    ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
+    exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
+    sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
+    cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
+    tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
-    arcsin = liftA2 unOpDocD asinOp
-    arccos = liftA2 unOpDocD acosOp
-    arctan = liftA2 unOpDocD atanOp
-
-    floor = liftA2 unOpDocD floorOp
-    ceil = liftA2 unOpDocD ceilOp
+    arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
+    arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
+    arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
+    floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
+    ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
 
 instance BooleanExpression PythonCode where
-    (?!) = liftA2 unOpDocD notOp
-    (?&&) = liftA3 binOpDocD andOp
-    (?||) = liftA3 binOpDocD orOp
+    (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
+    (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
+    (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
 
-    (?<)  = liftA3 binOpDocD lessOp
-    (?<=) = liftA3 binOpDocD lessEqualOp
-    (?>)  = liftA3 binOpDocD greaterOp
-    (?>=) = liftA3 binOpDocD greaterEqualOp
-    (?==) = liftA3 binOpDocD equalOp
-    (?!=) = liftA3 binOpDocD notEqualOp
+    (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
+    (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
+    (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
+    (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
+    (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
+    (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
 
 instance ValueExpression PythonCode where
-    inlineIf = liftA3 pyInlineIf
-    funcApp n = liftList (funcAppDocD n)
+    inlineIf b v1 v2 = liftPairFst (liftA3 pyInlineIf b v1 v2, Nothing)
+    funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
     selfFuncApp = funcApp
-    extFuncApp l n = liftList (extFuncAppDocD l n)
-    stateObj t vs = liftA2 pyStateObj t (liftList callFuncParamList vs)
-    extStateObj l t vs = liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs)
-    listStateObj t _ = t
+    extFuncApp l n vs = liftPairFst (liftList (extFuncAppDocD l n) vs, Nothing)
+    stateObj t vs = liftPairFst (liftA2 pyStateObj t (liftList callFuncParamList vs), Nothing)
+    extStateObj l t vs = liftPairFst (liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs), Nothing)
+    listStateObj t _ = liftPairFst (t, Nothing)
 
     exists v = v ?!= (var "None")
     notNull = exists
 
 instance Selector PythonCode where
-    objAccess = liftA2 objAccessDocD
+    objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
     ($.) = objAccess 
 
     objMethodCall o f ps = objAccess o (func f ps)
@@ -289,8 +286,8 @@ instance Selector PythonCode where
 
     selfAccess = objAccess self
 
-    listPopulateAccess = liftA2 pyListPopAccess
-    listSizeAccess v = liftA2 pyListSizeAccess v listSize
+    listPopulateAccess v f = liftPairFst (liftA2 pyListPopAccess v f, Nothing)
+    listSizeAccess v = liftPairFst (liftA2 pyListSizeAccess v listSize, Nothing)
 
     listIndexExists lst index = (listSizeAccess lst) ?> index
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
@@ -299,7 +296,7 @@ instance Selector PythonCode where
 
     stringEqual v1 v2 = v1 ?== v2
 
-    castObj = liftA2 castObjDocD
+    castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
     castStrToFloat = castObj (cast float string)
 
 instance FunctionSym PythonCode where
@@ -308,7 +305,7 @@ instance FunctionSym PythonCode where
     cast targT _ = targT
     castListToInt = cast int (listType static int)
     get n = fmap funcDocD (var n)
-    set n v = fmap (funcDocD . fst) (assign (var n) v)
+    set n v = fmap funcDocD (liftPairFst (fmap fst $ assign (var n) v, Nothing))
 
     listSize = return $ text "len"
     listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
@@ -365,8 +362,8 @@ instance StatementSym PythonCode where
     extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
     constDecDef = varDecDef
 
-    print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") (return empty), Empty)
-    printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty) (return empty), Empty)
+    print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") (return (empty, Nothing)), Empty)
+    printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty) (return (empty, Nothing)), Empty)
     printStr s = print string (litString s)
     printStrLn s = printLn string (litString s)
 
@@ -409,7 +406,7 @@ instance StatementSym PythonCode where
     returnState v = liftPairFst (fmap returnDocD v, Empty)
     returnVar l = liftPairFst (fmap returnDocD (var l), Empty)
 
-    valState v = liftPairFst (v, Empty)
+    valState v = liftPairFst (fmap fst v, Empty)
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
@@ -537,31 +534,31 @@ pyStateObj t vs = t <> parens vs
 pyExtStateObj :: Label -> Doc -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
-pyInlineIf :: Doc -> Doc -> Doc -> Doc
-pyInlineIf c v1 v2 = parens $ v1 <+> text "if" <+> c <+> text "else" <+> v2
+pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+pyInlineIf (c, _) (v1, _) (v2, _) = parens $ v1 <+> text "if" <+> c <+> text "else" <+> v2
 
-pyListPopAccess :: Doc -> Doc -> Doc
-pyListPopAccess v f = v <+> equals <+> f
+pyListPopAccess :: (Doc, Maybe String) -> Doc -> Doc
+pyListPopAccess (v, _) f = v <+> equals <+> f
 
-pyListSizeAccess :: Doc -> Doc -> Doc
-pyListSizeAccess v f = f <> parens v
+pyListSizeAccess :: (Doc, Maybe String) -> Doc -> Doc
+pyListSizeAccess (v, _) f = f <> parens v
 
 pyStringType :: Doc
 pyStringType = text "str"
 
-pyListPop :: Doc -> Doc -> Doc
-pyListPop dftVal size = brackets dftVal <+> text "*" <+> size
+pyListPop :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+pyListPop (dftVal, _) (size, _) = brackets dftVal <+> text "*" <+> size
 
-pyListExtend :: Doc -> Doc
-pyListExtend dftVal = dot <> text "append" <> parens dftVal
+pyListExtend :: (Doc, Maybe String) -> Doc
+pyListExtend (dftVal, _) = dot <> text "append" <> parens dftVal
 
 pyListExtendList :: Integer -> Doc
 pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
     where nestedList 0 = empty
           nestedList n = brackets $ nestedList (n-1)
 
-pyVarDecDef :: Label -> Doc -> Doc
-pyVarDecDef l v = text l <+> equals <+> v
+pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
+pyVarDecDef l (v, _) = text l <+> equals <+> v
 
 pyListDec :: Label -> Doc -> Doc
 pyListDec l t = text l <+> equals <+> t
@@ -569,27 +566,27 @@ pyListDec l t = text l <+> equals <+> t
 pyListDecDef :: Label -> Doc -> Doc
 pyListDecDef l vs = text l <+> equals <+> brackets vs
 
-pyOut :: Doc -> Doc -> Doc -> Doc -> Doc
-pyOut prf v txt f = prf <> parens (v <> txt <> f)
+pyOut :: Doc ->  (Doc, Maybe String) -> Doc ->  (Doc, Maybe String) -> Doc
+pyOut prf (v, _) txt (f, _) = prf <> parens (v <> txt <> f)
 
-pyThrow :: Doc -> Doc
-pyThrow errMsg = text "raise" <+> text "Exception" <> parens errMsg
+pyThrow ::  (Doc, Maybe String) -> Doc
+pyThrow (errMsg, _) = text "raise" <+> text "Exception" <> parens errMsg
 
-pyListAccess :: Doc -> Doc
-pyListAccess = brackets
+pyListAccess :: (Doc, Maybe String) -> Doc
+pyListAccess (v, _) = brackets v
 
-pyForRange :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-pyForRange i inLabel initv finalv stepv b = vcat [
+pyForRange :: Label -> Doc ->  (Doc, Maybe String) ->  (Doc, Maybe String) ->  (Doc, Maybe String) -> Doc -> Doc
+pyForRange i inLabel (initv, _) (finalv, _) (stepv, _) b = vcat [
     forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
     oneTab $ b]
 
-pyForEach :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-pyForEach i forEachLabel inLabel lstVar b = vcat [
+pyForEach :: Label -> Doc -> Doc ->  (Doc, Maybe String) -> Doc -> Doc
+pyForEach i forEachLabel inLabel (lstVar, _) b = vcat [
     forEachLabel <+> text i <+> inLabel <+> lstVar <> colon,
     oneTab $ b]
 
-pyWhile :: Doc -> Doc -> Doc
-pyWhile v b = vcat [
+pyWhile ::  (Doc, Maybe String) -> Doc -> Doc
+pyWhile (v, _) b = vcat [
     text "while" <+> v <> colon,
     oneTab $ b]
 
@@ -600,12 +597,12 @@ pyTryCatch tryB catchB = vcat [
     text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
     oneTab $ catchB]
 
-pyListSlice :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-pyListSlice vnew vold b e s = vnew <+> equals <+> vold <> (brackets $ 
-    b <> colon <> e <> colon <> s)
+pyListSlice :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+pyListSlice (vnew, _) (vold, _) (b, _) (e, _) (s, _) = vnew <+> equals <+> 
+    vold <> (brackets $ b <> colon <> e <> colon <> s)
 
-pyMethod :: Label -> Doc -> Doc -> Doc -> Doc
-pyMethod n slf ps b = vcat [
+pyMethod :: Label ->  (Doc, Maybe String) -> Doc -> Doc -> Doc
+pyMethod n (slf, _) ps b = vcat [
     text "def" <+> text n <> parens (slf <> oneParam <> ps) <> colon,
     oneTab $ bodyD]
         where oneParam | isEmpty ps = empty

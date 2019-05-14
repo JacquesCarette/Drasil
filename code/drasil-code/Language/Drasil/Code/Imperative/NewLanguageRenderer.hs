@@ -558,8 +558,8 @@ sizeDocD = dot <> text "Count"
 listAccessDocD :: Doc -> Doc
 listAccessDocD = brackets
 
-listSetDocD :: Doc -> Doc -> Doc
-listSetDocD i v = brackets i <+> equals <+> v
+listSetDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+listSetDocD (i, _) (v, _) = brackets i <+> equals <+> v
 
 objAccessDocD :: (Doc, Maybe String) -> Doc -> Doc
 objAccessDocD (v, _) f = v <> f

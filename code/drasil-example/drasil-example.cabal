@@ -61,7 +61,8 @@ executable glassbr
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.23
+    drasil-docLang >= 0.1.23,
+    drasil-theory >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -109,7 +110,8 @@ executable nopcm
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.23
+    drasil-docLang >= 0.1.23,
+    drasil-theory >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -146,7 +148,8 @@ executable swhs
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.23
+    drasil-docLang >= 0.1.23,
+    drasil-theory >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -185,7 +188,8 @@ executable ssp
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.23
+    drasil-docLang >= 0.1.23,
+    drasil-theory >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -203,6 +207,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.GamePhysics.References
+    , Drasil.GamePhysics.Requirements
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -217,7 +222,8 @@ executable chipmunkdocs
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.23
+    drasil-docLang >= 0.1.23,
+    drasil-theory >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 

@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
-import Data.Drasil.Quantities.Math (gradient, surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
@@ -22,11 +22,10 @@ import Drasil.SWHS.Concepts (water)
 import Control.Lens ((^.))
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
+swhsSymbols = pi_ : (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
 
 swhsSymbolsAll :: [QuantityDict]
-swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
-  (map qw swhsConstrained) ++ (map qw specParamValList) ++
+swhsSymbolsAll = (map qw swhsSymbols) ++ (map qw specParamValList) ++
   (map qw [htFusion_min, htFusion_max, coil_SA_max])
 
 -- Symbols with Units --

@@ -1,4 +1,4 @@
-module Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress) 
+module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
   where
 
 import Prelude hiding (tan)
@@ -8,6 +8,7 @@ import Data.Drasil.Quantities.Physics (distance, force)
 
 import Data.Drasil.Concepts.Documentation (model)
 import Data.Drasil.Concepts.Physics (friction, linear)
+import Data.Drasil.Theories.Physics (newtonSL)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, sAnd)
 
@@ -22,6 +23,8 @@ import Drasil.SSP.DataDefs (stressDD)
 --------------------------
 --  Theoretical Models  --
 --------------------------
+tMods :: [TheoryModel]
+tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel

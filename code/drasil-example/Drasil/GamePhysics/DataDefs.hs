@@ -16,8 +16,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   impulseV, force, torque, kEnergy, energy, chgInVelocity, chgMomentum)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.SentenceStructures (foldlSent)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Data.Drasil.SentenceStructures (foldlSent)
 
 ----- Data Definitions -----
 

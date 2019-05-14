@@ -42,7 +42,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  equals, semi, vcat, lbrace, rbrace, render, colon, render)
+  equals, semi, vcat, lbrace, rbrace, render, colon)
 
 newtype CSharpCode a = CSC {unCSC :: a}
 
@@ -223,93 +223,91 @@ instance BinaryOpSym CSharpCode where
     orOp = return $ orOpDocD
 
 instance ValueSym CSharpCode where
-    type Value CSharpCode = Doc
-    litTrue = return $ litTrueD
-    litFalse = return $ litFalseD
-    litChar c = return $ litCharD c
-    litFloat v = return $ litFloatD v
-    litInt v = return $ litIntD v
-    litString s = return $ litStringD s
+    type Value CSharpCode = (Doc, Maybe String)
+    litTrue = return $ (litTrueD, Just "true")
+    litFalse = return $ (litFalseD, Just "false")
+    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return $ (litFloatD v, Just $ show v)
+    litInt v = return $ (litIntD v, Just $ show v)
+    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ defaultCharD
-    defaultFloat = return $ defaultFloatD
-    defaultInt = return $ defaultIntD
-    defaultString = return $ defaultStringD
+    defaultChar = return $ (defaultCharD, Just "space character")
+    defaultFloat = return $ (defaultFloatD, Just $ "0.0")
+    defaultInt = return $ (defaultIntD, Just $ "0")
+    defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
-    self = return $ selfDocD
-    arg n = liftA2 argDocD (litInt n) argsList
-    enumElement en e = return $ enumElemDocD en e
+    var n = return $ (varDocD n, Just n)
+    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
+    self = return $ (selfDocD, Nothing)
+    arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
+    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
-    objVar = liftA2 objVarDocD
-    objVarSelf n = liftA2 objVarDocD self (var n)
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Nothing)
+    objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Nothing)
     listVar n _ = var n
     n `listOf` t = listVar n t
     iterVar = var
     
-    inputFunc = return $ text "Console.ReadLine()"
-    argsList = return $ text "args"
-
-    valName v = unCSC $ fmap render v
+    inputFunc = return $ (text "Console.ReadLine()", Nothing)
+    argsList = return $ (text "args", Nothing)
 
 instance NumericExpression CSharpCode where
-    (#~) = liftA2 unOpDocD negateOp
-    (#/^) = liftA2 unOpDocD sqrtOp
-    (#|) = liftA2 unOpDocD absOp
-    (#+) = liftA3 binOpDocD plusOp
-    (#-) = liftA3 binOpDocD minusOp
-    (#*) = liftA3 binOpDocD multOp
-    (#/) = liftA3 binOpDocD divideOp
-    (#%) = liftA3 binOpDocD moduloOp
-    (#^) = liftA3 binOpDocD' powerOp
+    (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
+    (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
+    (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
+    (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
+    (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
+    (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
+    (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
+    (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
+    (#^) v1 v2 = liftPairFst (liftA3 binOpDocD' powerOp v1 v2, Nothing)
 
-    log = liftA2 unOpDocD logOp
-    ln = liftA2 unOpDocD lnOp
-    exp = liftA2 unOpDocD expOp
-    sin = liftA2 unOpDocD sinOp
-    cos = liftA2 unOpDocD cosOp
-    tan = liftA2 unOpDocD tanOp
+    log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
+    ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
+    exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
+    sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
+    cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
+    tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
-    arcsin = liftA2 unOpDocD asinOp
-    arccos = liftA2 unOpDocD acosOp
-    arctan = liftA2 unOpDocD atanOp
-    floor = liftA2 unOpDocD floorOp
-    ceil = liftA2 unOpDocD ceilOp
+    arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
+    arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
+    arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
+    floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
+    ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
 
 instance BooleanExpression CSharpCode where
-    (?!) = liftA2 unOpDocD notOp
-    (?&&) = liftA3 binOpDocD andOp
-    (?||)= liftA3 binOpDocD orOp
+    (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
+    (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
+    (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
 
-    (?<) = liftA3 binOpDocD lessOp
-    (?<=) = liftA3 binOpDocD lessEqualOp
-    (?>) = liftA3 binOpDocD greaterOp
-    (?>=) = liftA3 binOpDocD greaterEqualOp
-    (?==) = liftA3 binOpDocD equalOp
-    (?!=) = liftA3 binOpDocD notEqualOp
+    (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
+    (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
+    (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
+    (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
+    (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
+    (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
     
 instance ValueExpression CSharpCode where
-    inlineIf = liftA3 inlineIfDocD
-    funcApp n = liftList (funcAppDocD n)
+    inlineIf b v1 v2 = liftPairFst (liftA3 inlineIfDocD b v1 v2, Nothing)
+    funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
     selfFuncApp = funcApp
-    extFuncApp l n = liftList (extFuncAppDocD l n)
-    stateObj t vs = liftA2 stateObjDocD t (liftList callFuncParamList vs)
+    extFuncApp l n vs = liftPairFst (liftList (extFuncAppDocD l n) vs, Nothing)
+    stateObj t vs = liftPairFst (liftA2 stateObjDocD t (liftList callFuncParamList vs), Nothing)
     extStateObj _ = stateObj
-    listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
+    listStateObj t vs = liftPairFst (liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs), Nothing)
 
     exists = notNull
-    notNull v = liftA3 notNullDocD notEqualOp v (var "null")
+    notNull v = liftPairFst (liftA3 notNullDocD notEqualOp v (var "null"), Nothing)
 
 instance Selector CSharpCode where
-    objAccess = liftA2 objAccessDocD
+    objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
     ($.) = objAccess
 
     objMethodCall o f ps = objAccess o (func f ps)
@@ -317,17 +315,17 @@ instance Selector CSharpCode where
 
     selfAccess = objAccess self
 
-    listPopulateAccess _ _ = return empty
+    listPopulateAccess _ _ = return (empty, Nothing)
     listSizeAccess v = objAccess v listSize
 
-    listIndexExists = liftA3 listIndexExistsDocD greaterOp
+    listIndexExists l i = liftPairFst (liftA3 listIndexExistsDocD greaterOp l i, Nothing)
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
     indexOf l v = objAccess l (fmap funcDocD (funcApp "IndexOf" [v]))
 
     stringEqual v1 v2 = v1 ?== v2
 
-    castObj = liftA2 castObjDocD
+    castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
     castStrToFloat v = funcApp "Double.Parse" [v]
 
 instance FunctionSym CSharpCode where
@@ -419,7 +417,7 @@ instance StatementSym CSharpCode where
     getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
     getStringFileInput f v = liftPairFst (liftA2 (csInput "") v (fmap csFileInput f), Semi)
     getCharFileInput _ _ = error "Char input not yet implemented for C#"
-    discardFileInput f = liftPairFst (fmap csFileInput f, Semi)
+    discardFileInput f = valState $ fmap csFileInput f
 
     openFileR f n = liftPairFst (liftA3 csOpenFileR f n infile, Semi)
     openFileW f n = liftPairFst (liftA4 csOpenFileWorA f n outfile litFalse, Semi)
@@ -427,7 +425,7 @@ instance StatementSym CSharpCode where
     closeFile f = valState $ objMethodCall f "Close" []
 
     getFileInputLine = getStringFileInput
-    discardFileLine f = liftPairFst (fmap csFileInput f, Semi)
+    discardFileLine f = valState $ fmap csFileInput f
     stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
 
     break = return (breakDocD, Semi)
@@ -436,7 +434,7 @@ instance StatementSym CSharpCode where
     returnState v = liftPairFst (fmap returnDocD v, Semi)
     returnVar l = liftPairFst (fmap returnDocD (var l), Semi)
 
-    valState v = liftPairFst (v, Semi)
+    valState v = liftPairFst (fmap fst v, Semi)
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
@@ -563,8 +561,8 @@ csOutfileTypeDoc = text "StreamWriter"
 csBoolListTypeDoc :: Doc
 csBoolListTypeDoc = text "BitArray"
 
-csThrowDoc :: Doc -> Doc
-csThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
+csThrowDoc :: (Doc, Maybe String) -> Doc
+csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 
 csTryCatch :: Doc -> Doc -> Doc
 csTryCatch tb cb= vcat [
@@ -574,23 +572,23 @@ csTryCatch tb cb= vcat [
     oneTab $ cb,
     rbrace]
 
-csDiscardInput :: Doc -> Doc
-csDiscardInput inFn = inFn
+csDiscardInput :: (Doc, Maybe String) -> Doc
+csDiscardInput (inFn, _) = inFn
 
-csInput :: Label -> Doc -> Doc -> Doc
-csInput it v inFn = v <+> equals <+> text it <> parens inFn
+csInput :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+csInput it (v, _) (inFn, _) = v <+> equals <+> text it <> parens inFn
 
-csFileInput :: Doc -> Doc
-csFileInput f = f <> dot <> text "ReadLine()"
+csFileInput :: (Doc, Maybe String) -> (Doc, Maybe String)
+csFileInput (f, s) = (f <> dot <> text "ReadLine()", s)
 
-csOpenFileR :: Doc -> Doc -> Doc -> Doc
-csOpenFileR f n r = f <+> equals <+> new <+> r <> parens n
+csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> Doc
+csOpenFileR (f, _) (n, _) r = f <+> equals <+> new <+> r <> parens n
 
-csOpenFileWorA :: Doc -> Doc -> Doc -> Doc -> Doc
-csOpenFileWorA f n w a = f <+> equals <+> new <+> w <> parens (n <> comma <+> a)
+csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> (Doc, Maybe String) -> Doc
+csOpenFileWorA (f, _) (n, _) w (a, _) = f <+> equals <+> new <+> w <> parens (n <> comma <+> a)
 
-csListExtend :: Doc -> Doc
-csListExtend v = dot <> text "Add" <> parens v
+csListExtend :: (Doc, Maybe String) -> Doc
+csListExtend (v, _) = dot <> text "Add" <> parens v
 
 csListExtendList :: Doc -> Doc
 csListExtendList t = dot <> text "Add" <> parens (new <+> t <> parens empty)

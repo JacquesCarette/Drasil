@@ -540,9 +540,9 @@ listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 notNullDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 notNullDocD = binOpDocD
 
-listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
-listIndexExistsDocD greater lst index = parens (lst <> text ".Length" <+>      
-    greater <+> index) 
+listIndexExistsDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+listIndexExistsDocD greater (lst, _) (index, _) = parens (lst <> 
+    text ".Length" <+> greater <+> index) 
 
 -- Functions --
 
@@ -555,8 +555,8 @@ castDocD = parens
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
-listAccessDocD :: Doc -> Doc
-listAccessDocD = brackets
+listAccessDocD :: (Doc, Maybe String) -> Doc
+listAccessDocD (v, _) = brackets v
 
 listSetDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 listSetDocD (i, _) (v, _) = brackets i <+> equals <+> v

@@ -23,7 +23,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF,
+    reqF,
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
@@ -64,7 +64,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF)
+import Drasil.Sections.Requirements (reqF)
 --import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)

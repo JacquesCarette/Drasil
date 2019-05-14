@@ -1,12 +1,10 @@
-module Drasil.Sections.Requirements
-  (fReqF, reqF, nfReqF, nonFuncReqF) where
+module Drasil.Sections.Requirements (fReqF, reqF, nfReqF) where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequirement,
+import Data.Drasil.Concepts.Documentation (software, nonfunctionalRequirement,
   functionalRequirement, section_)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures (foldlList, foldlSent_, sAnd, SepType(Comma), FoldType(List))
+import Data.Drasil.SentenceStructures (foldlSent_, sAnd)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -55,6 +53,7 @@ nfReqIntroS = reqIntroStart +:+. nfrReqIntroBody
 fReqIntro :: Contents
 fReqIntro = mkParagraph fReqIntroS
 
+{-
 -- wrapper for nonfuncReq
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section
 nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
@@ -89,3 +88,4 @@ listT' :: Int -> Sentence
 listT' 0 = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+. (phrase nonfunctionalRequirement)
 listT' 1 = (phrase nonfunctionalRequirement) +:+ (phrase priority) +: S "is"
 listT' _ = (phrase nonfunctionalRequirement) +:+ (plural priority) +: S "are"
+-}

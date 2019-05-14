@@ -1,0 +1,30 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 5 and 1 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# Changes to be committed:
+#	modified:   drasil-data/Data/Drasil/Concepts/PhysicalProperties.hs
+#	modified:   drasil-data/Data/Drasil/Concepts/Physics.hs
+#	modified:   drasil-data/Data/Drasil/Quantities/Math.hs
+#	modified:   drasil-data/Data/Drasil/Quantities/PhysicalProperties.hs
+#	modified:   drasil-data/Data/Drasil/Quantities/Physics.hs
+#	modified:   drasil-data/drasil-data.cabal
+#	modified:   drasil-example/Drasil/GamePhysics/Body.hs
+#	modified:   drasil-example/Drasil/GamePhysics/TMods.hs
+#	modified:   drasil-example/Drasil/SSP/Assumptions.hs
+#	modified:   drasil-example/Drasil/SSP/Body.hs
+#	modified:   drasil-example/Drasil/SSP/DataDefs.hs
+#	modified:   drasil-example/Drasil/SSP/GenDefs.hs
+#	modified:   drasil-example/Drasil/SSP/IMods.hs
+#	modified:   drasil-example/Drasil/SSP/TMods.hs
+#	modified:   drasil-example/Drasil/SSP/Unitals.hs
+#	deleted:    stable/gamephys/SRS/Chipmunk_SRS.tex
+#	modified:   stable/gamephys/Website/Chipmunk_SRS.html
+#	modified:   stable/ssp/SRS/SSP_SRS.tex
+#	modified:   stable/ssp/Website/SSP_SRS.html
+#

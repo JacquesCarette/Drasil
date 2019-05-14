@@ -6,12 +6,15 @@ import Language.Drasil.ShortHands
 import Drasil.SSP.Defs (fs_concept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, specificWeight)
+import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
-import Data.Drasil.Quantities.Math (area, pi_)
-import Data.Drasil.Quantities.Physics (force)
+import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
+  vol)
+import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
+  weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -27,6 +30,15 @@ SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 genericF = force
 genericA = area
+
+-- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
+genericV = vol
+genericW = weight
+genericSpWght = specWeight
+accel = acceleration
+genericMass = mass
+gravAccel = gravitationalAccel
+dens = density
 
 -------------
 -- HELPERS --
@@ -131,7 +143,7 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn $ "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  lGamma specificWeight Real [gtZeroConstr]
+  (sub lGamma (Atomic "dry")) specificWeight Real [gtZeroConstr]
   (dbl 20000) defaultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "soil saturated unit weight")
@@ -171,27 +183,25 @@ coords = cuc' "(x,y)"
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [genericF, genericA, nrmShearNum, nrmShearDen, slipHght, xi,
-  yi, zcoord, critCoords, slipDist, mobilizedShear, resistiveShear,
-  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL,
-  watrForce, intShrForce, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, surfHydroForce, surfHydroForceR, surfHydroForceL, 
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
-  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, 
-  totStress, effectiveStress, effNormStress]
+sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
+  genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
+  zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
+  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
+  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, midpntHght, momntOfBdy, porePressure, sliceHght, 
+  sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, waterVol]
 
-genericF, genericA, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, 
-  zcoord, critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, 
-  shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce, 
-  resistiveShear, shrResI, intShrForce, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, surfHydroForce,surfHydroForceR, surfHydroForceL, totNrmForce,
-  nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, 
-  watForceSum, sliceHghtRight, sliceHghtLeft, porePressure,
-  intNormForce, shrStress, totStress, effectiveStress, 
-  effNormStress :: UnitalChunk
+accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
+  gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
+  critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
+  shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
+  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
+  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
+  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum,
+  sliceHghtRight, sliceHghtLeft, porePressure, intNormForce, shrStress, 
+  totStress, effectiveStress, effNormStress, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -295,17 +305,6 @@ surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic forces")
    "from standing water on the slope surface")
   (sub (vec cU) lT) forcePerMeterU
 
-surfHydroForceR = uc' "U^R_t,i" (cn $ "right surface hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure acting into each slice" ++ " from standing water on the slope surface, assuming the entire slice has " ++
-  "the height of the right side of the slice")
-  (sub (sup (vec cU) cR) lT) forcePerMeterU
-
-surfHydroForceL = uc' "U^L_t,i" (cn $ "left surface hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure acting into each slice " ++
-  "from standing water on the slope surface, assuming the entire slice has " ++
-  "the height of the left side of the slice")
-  (sub (sup (vec cU) cL) lT) forcePerMeterU
-
 totNrmForce = uc' "N_i" (cn $ "normal forces")
   ("total reactive forces per meter in the z-direction for each slice of a " ++
   "soil surface subject to a body resting on it")
@@ -402,14 +401,17 @@ totStress = uc' "sigma" (cn' $ "total stress") "on the soil mass" lSigma pascal
 effectiveStress = uc' "sigma'" (cn' $ "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
+
+waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
+
   
 ----------------------
 -- Unitless Symbols --
 ----------------------
 
 sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, mobShrC, shrResC, index, pi_, varblV, fs_min]
+sspUnitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
+  mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

@@ -40,8 +40,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon, 
-  render)
+  empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon)
 
 -----------------
 -- Source File --
@@ -127,8 +126,8 @@ instance KeywordSym CppSrcCode where
     
     printFunc = return $ text "std::cout"
     printLnFunc = return $ text "std::cout"
-    printFileFunc v = v -- is this right?
-    printFileLnFunc v = v
+    printFileFunc = fmap fst -- is this right?
+    printFileLnFunc = fmap fst
 
 instance PermanenceSym CppSrcCode where
     type Permanence CppSrcCode = Doc
@@ -227,85 +226,86 @@ instance BinaryOpSym CppSrcCode where
     orOp = return $ orOpDocD
 
 instance ValueSym CppSrcCode where
-    type Value CppSrcCode = Doc
-    litTrue = return $ litTrueD
-    litFalse = return $ litFalseD
-    litChar c = return $ litCharD c
-    litFloat v = return $ litFloatD v
-    litInt v = return $ litIntD v
-    litString s = return $ litStringD s
+    type Value CppSrcCode = (Doc, Maybe String)
+    litTrue = return $ (litTrueD, Just "true")
+    litFalse = return $ (litFalseD, Just "false")
+    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return $ (litFloatD v, Just $ show v)
+    litInt v = return $ (litIntD v, Just $ show v)
+    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ defaultCharD
-    defaultFloat = return $ defaultFloatD
-    defaultInt = return $ defaultIntD
-    defaultString = return $ defaultStringD
+    defaultChar = return $ (defaultCharD, Just "space character")
+    defaultFloat = return $ (defaultFloatD, Just "0.0")
+    defaultInt = return $ (defaultIntD, Just "0")
+    defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ varDocD n
+    var n = return $ (varDocD n, Just n)
     extVar _ = var
-    self = return $ selfDocD
-    arg n = liftA2 argDocD (litInt (n+1)) argsList
-    enumElement _ e = return $ text e
+    self = return $ (selfDocD, Just "this")
+    arg n = liftPairFst (liftA2 argDocD (litInt (n+1)) argsList, Nothing)
+    enumElement _ e = return $ (text e, Just e)
     enumVar = var
-    objVar = liftA2 objVarDocD
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
-    iterVar l = return $ text $ "(*" ++ l ++ ")"
+    iterVar l = return $ (text $ "(*" ++ l ++ ")", Nothing)
     
-    inputFunc = return $ text "std::cin"
-    argsList = return $ text "argv"
+    inputFunc = return $ (text "std::cin", Nothing)
+    argsList = return $ (text "argv", Nothing)
 
-    valName v = unCPPSC $ fmap render v
+    valName (CPPSC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
+                                       Just valstr -> valstr
 
 instance NumericExpression CppSrcCode where
-    (#~) = liftA2 unOpDocD negateOp
-    (#/^) = liftA2 unOpDocD sqrtOp
-    (#|) = liftA2 unOpDocD absOp
-    (#+) = liftA3 binOpDocD plusOp
-    (#-) = liftA3 binOpDocD minusOp
-    (#*) = liftA3 binOpDocD multOp
-    (#/) = liftA3 binOpDocD divideOp
-    (#%) = liftA3 binOpDocD moduloOp
-    (#^) = liftA3 binOpDocD' powerOp
+    (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
+    (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
+    (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
+    (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
+    (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
+    (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
+    (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
+    (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
+    (#^) v1 v2 = liftPairFst (liftA3 binOpDocD' powerOp v1 v2, Nothing)
 
-    log = liftA2 unOpDocD logOp
-    ln = liftA2 unOpDocD lnOp
-    exp = liftA2 unOpDocD expOp
-    sin = liftA2 unOpDocD sinOp
-    cos = liftA2 unOpDocD cosOp
-    tan = liftA2 unOpDocD tanOp
+    log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
+    ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
+    exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
+    sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
+    cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
+    tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
-    arcsin = liftA2 unOpDocD asinOp
-    arccos = liftA2 unOpDocD acosOp
-    arctan = liftA2 unOpDocD atanOp
-    floor = liftA2 unOpDocD floorOp
-    ceil = liftA2 unOpDocD ceilOp
+    arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
+    arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
+    arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
+    floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
+    ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
 
 instance BooleanExpression CppSrcCode where
-    (?!) = liftA2 unOpDocD notOp
-    (?&&) = liftA3 binOpDocD andOp
-    (?||)= liftA3 binOpDocD orOp
+    (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
+    (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
+    (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
 
-    (?<) = liftA3 binOpDocD lessOp
-    (?<=) = liftA3 binOpDocD lessEqualOp
-    (?>) = liftA3 binOpDocD greaterOp
-    (?>=) = liftA3 binOpDocD greaterEqualOp
-    (?==) = liftA3 binOpDocD equalOp
-    (?!=) = liftA3 binOpDocD notEqualOp
+    (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
+    (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
+    (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
+    (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
+    (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
+    (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
    
 instance ValueExpression CppSrcCode where
-    inlineIf = liftA3 inlineIfDocD
-    funcApp n = liftList (funcAppDocD n)
+    inlineIf b v1 v2 = liftPairFst (liftA3 inlineIfDocD b v1 v2, Nothing)
+    funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
     selfFuncApp = funcApp
     extFuncApp _ = funcApp
-    stateObj t vs = liftA2 cppStateObjDoc t (liftList callFuncParamList vs)
+    stateObj t vs = liftPairFst (liftA2 cppStateObjDoc t (liftList callFuncParamList vs), Nothing)
     extStateObj _ = stateObj
     listStateObj = stateObj
 
@@ -313,7 +313,7 @@ instance ValueExpression CppSrcCode where
     notNull v = v
 
 instance Selector CppSrcCode where
-    objAccess = liftA2 objAccessDocD
+    objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
     ($.) = objAccess
 
     objMethodCall o f ps = objAccess o (func f ps)
@@ -321,7 +321,7 @@ instance Selector CppSrcCode where
 
     selfAccess = objAccess self
 
-    listPopulateAccess _ _ = return empty
+    listPopulateAccess _ _ = return (empty, Nothing)
     listSizeAccess v = objAccess v listSize
 
     listIndexExists v i = listSizeAccess v ?> i
@@ -331,7 +331,7 @@ instance Selector CppSrcCode where
 
     stringEqual v1 v2 = v1 ?== v2
 
-    castObj = liftA2 castObjDocD
+    castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
     castStrToFloat v = funcApp "std::stod" [v]
 
 instance FunctionSym CppSrcCode where
@@ -453,7 +453,7 @@ instance StatementSym CppSrcCode where
     returnState v = liftPairFst (fmap returnDocD v, Semi)
     returnVar l = liftPairFst (fmap returnDocD (var l), Semi)
 
-    valState v = liftPairFst (v, Semi)
+    valState v = liftPairFst (fmap fst v, Semi)
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
@@ -624,21 +624,21 @@ cppIterTypeDoc t = text "std::" <> t <> text "::iterator"
 cppStateObjDoc :: Doc -> Doc -> Doc
 cppStateObjDoc t ps = t <> parens ps
 
-cppListSetDoc :: Doc -> Doc -> Doc
-cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
+cppListSetDoc :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+cppListSetDoc (i, _) (v, _) = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: Label -> Doc -> Doc -> Doc
-cppListDecDoc l n t = t <+> text l <> parens n
+cppListDecDoc :: Label -> (Doc, Maybe String) -> Doc -> Doc
+cppListDecDoc l (n, _) t = t <+> text l <> parens n
 
 cppListDecDefDoc :: Label -> Doc -> Doc -> Doc
 cppListDecDefDoc l t vs = t <+> text l <> braces vs
 
-cppPrintDocD :: Bool -> Doc -> Doc -> Doc
-cppPrintDocD newLn printFn v = printFn <+> text "<<" <+> v <+> end
+cppPrintDocD :: Bool -> Doc -> (Doc, Maybe String) -> Doc
+cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
     where end = if newLn then text "<<" <+> text "std::endl" else empty
 
-cppThrowDoc :: Doc -> Doc
-cppThrowDoc errMsg = text "throw" <> parens errMsg
+cppThrowDoc :: (Doc, Maybe String) -> Doc
+cppThrowDoc (errMsg, _) = text "throw" <> parens errMsg
 
 cppTryCatch :: Doc -> Doc -> Doc
 cppTryCatch tb cb= vcat [
@@ -648,17 +648,17 @@ cppTryCatch tb cb= vcat [
     oneTab $ cb,
     rbrace]
 
-cppDiscardInput :: Label -> Doc -> Doc
-cppDiscardInput sep inFn = inFn <> dot <> text "ignore" <+> parens 
+cppDiscardInput :: Label -> (Doc, Maybe String) -> Doc
+cppDiscardInput sep (inFn, _) = inFn <> dot <> text "ignore" <+> parens 
     (text "std::numeric_limits<std::streamsize>::max()" <> comma <+> quotes (text sep))
 
-cppInput :: Doc -> Doc -> Doc -> Doc
-cppInput v inFn end = vcat [
+cppInput :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> Doc
+cppInput (v, _) (inFn, _) end = vcat [
     inFn <+> text ">>" <+> v <> end,
     inFn <> dot <> text "ignore (std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> Doc -> Doc -> Doc
-cppOpenFile mode f n = f <> dot <> text "open" <> parens (n <> comma <+> text mode)
+cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> parens (n <> comma <+> text mode)
 
 cppListExtendList :: Doc -> Doc
 cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0))

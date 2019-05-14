@@ -42,7 +42,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  equals, semi, vcat, lbrace, rbrace, render, colon)
+  equals, semi, vcat, lbrace, rbrace, colon, render)
 
 newtype CSharpCode a = CSC {unCSC :: a}
 
@@ -232,8 +232,8 @@ instance ValueSym CSharpCode where
     litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
     defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just $ "0.0")
-    defaultInt = return $ (defaultIntD, Just $ "0")
+    defaultFloat = return $ (defaultFloatD, Just "0.0")
+    defaultInt = return $ (defaultIntD, Just "0")
     defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
@@ -241,20 +241,23 @@ instance ValueSym CSharpCode where
     ($:) = enumElement
 
     const = var
-    var n = return $ (varDocD n, Just n)
+    var n = return (varDocD n, Just n)
     extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
-    self = return $ (selfDocD, Nothing)
+    self = return (selfDocD, Just "this")
     arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
-    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
+    enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
-    objVar o v = liftPairFst (liftA2 objVarDocD o v, Nothing)
-    objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Nothing)
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
+    objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Just $ "self." ++ n)
     listVar n _ = var n
     n `listOf` t = listVar n t
     iterVar = var
     
     inputFunc = return $ (text "Console.ReadLine()", Nothing)
     argsList = return $ (text "args", Nothing)
+
+    valName (CSC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
+                                     Just valstr -> valstr
 
 instance NumericExpression CSharpCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)

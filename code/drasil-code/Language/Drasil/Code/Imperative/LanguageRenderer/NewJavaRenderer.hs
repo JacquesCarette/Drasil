@@ -240,8 +240,8 @@ instance ValueSym JavaCode where
     litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
     defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just $ "0.0")
-    defaultInt = return $ (defaultIntD, Just $ "0")
+    defaultFloat = return $ (defaultFloatD, Just "0.0")
+    defaultInt = return $ (defaultIntD, Just "0")
     defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
@@ -251,11 +251,11 @@ instance ValueSym JavaCode where
     const = var
     var n = return $ (varDocD n, Just n)
     extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
-    self = return $ (selfDocD, Nothing)
+    self = return $ (selfDocD, Just "this")
     arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
     enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
-    objVar o v = liftPairFst (liftA2 objVarDocD o v, Nothing)
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
@@ -263,6 +263,9 @@ instance ValueSym JavaCode where
     
     inputFunc = return (parens (text "new Scanner(System.in)"), Nothing)
     argsList = return $ (text "args", Nothing)
+
+    valName (JC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
+                                    Just valstr -> valstr
 
 instance NumericExpression JavaCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)

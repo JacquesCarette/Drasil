@@ -326,8 +326,8 @@ returnDocD (v, _) = text "return" <+> v
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: Doc -> Doc
-freeDocD v = text "delete" <+> v
+freeDocD :: (Doc, Maybe String) -> Doc
+freeDocD (v, _) = text "delete" <+> v
 
 throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>

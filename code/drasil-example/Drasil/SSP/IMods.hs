@@ -22,9 +22,9 @@ import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
 import Drasil.SSP.DataCons (data_constraint_Table3)
 import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, 
-  surfWtrF, intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
+  intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
-  resShearWOGD, bsShrFEqGD, mobShrGD)
+  resShearWOGD, bsShrFEqGD, mobShrGD, srfWtrFGD)
 import Drasil.SSP.Goals (identifyCritAndFSGS, determineNormalFGS, 
   determineShearFGS)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, morPrice, slice, 
@@ -485,7 +485,7 @@ nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in",
   makeRef2S intersliceWtrF `sC` ch baseAngle, S "is defined in", 
   makeRef2S angleA `sC` ch midpntHght, S "is defined in", 
   makeRef2S slcHeight `sC` ch surfHydroForce, S "is defined in",
-  makeRef2S surfWtrF `sC` S "and", ch surfAngle, S "is defined in", 
+  makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, S "is defined in", 
   makeRef2S angleB]
 
 ---------------------------------------------------------------------------

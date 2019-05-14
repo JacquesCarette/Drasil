@@ -42,6 +42,8 @@ packages:
 - ../drasil-printers
 - ../drasil-gen
 - ../drasil-docLang
+- ../drasil-database
+- ../drasil-theory
 - ./
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

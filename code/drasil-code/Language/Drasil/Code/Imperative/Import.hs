@@ -2,10 +2,11 @@
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
-import Language.Drasil hiding (int, Block, ($.), log, ln, exp,
+import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, Float, 
-  Object, String, Boolean, Integer))
+import Database.Drasil(ChunkDB, symbLookup, symbolTable)
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
+  Float, Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.New (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -32,7 +33,6 @@ import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
 import Data.List.Utils (endswith)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import System.FilePath ((</>))
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -117,7 +117,7 @@ generateCode l unRepr g =
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
      createCodeFiles $ makeBuild (unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
-            map (if l == Java then \(c,d) -> (prog </> c, d) else id) $
+            map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
             C.unCode $ makeCode (fst $ unRepr pckg) (getExt l)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
@@ -283,12 +283,8 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
   repr) (repr (Block repr))
-genCalcBlock t' v' e' = doit t' v' e'
-  where
-  doit :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
-    repr) (repr (Block repr))
-  doit t v (Case e)    = genCaseBlock t v e
-  doit t v e
+genCalcBlock t v (Case e) = genCaseBlock t v e
+genCalcBlock t v e
     | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
       convExpr e; assign' vv ee}
     | otherwise        = fmap block $ liftS $ fmap returnState $ convExpr e
@@ -454,9 +450,8 @@ variable s' = do
       doit :: (RenderSym repr) => String -> Reader (State repr) 
         (repr (Value repr))
       doit s | member s mm =
-        maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-             | s `elem` (map codeName $ inputs cs) = return $
-               (var "inParams")$->(var s)
+        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+             | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
   
@@ -541,7 +536,7 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = getListTypeFunc t dynamic
 convType (C.Object n) = obj n
-convType (C.File) = error "convType: File ?"
+convType C.File = error "convType: File ?"
 
 convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d)      = return $ litFloat d
@@ -692,7 +687,7 @@ convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
-convStmt (FContinue) = return continue
+convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
   (getListTypeFunc t dynamic)
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
@@ -821,11 +816,11 @@ genDataFunc nameTitle dd = do
             valState $
             v $.(getListExtend (getListType s n)) ] )
             : checkIndex is (n+1) l p (v $.(listAccess $ litInt i)) s
-        checkIndex ((WithLine):is) n l p v s =
+        checkIndex (WithLine:is) n l p v s =
           ( while (listSizeAccess  v ?<= l) $ bodyStatements [ valState $
           v $.(getListExtend (getListType s n)) ] )
           : checkIndex is (n+1) l p (v $.(listAccess l)) s
-        checkIndex ((WithPattern):is) n l p v s =
+        checkIndex (WithPattern:is) n l p v s =
           ( while (listSizeAccess v ?<= p) $ bodyStatements [ valState $ 
           v $.(getListExtend (getListType s n)) ] )
           : checkIndex is (n+1) l p (v $.(listAccess p)) s

@@ -3,75 +3,78 @@ module Drasil.NoPCM.Body where
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
+  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
+  rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple,
-  itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
+import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
-import Data.Drasil.Concepts.Documentation as Doc (inModel,
-  requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
-  physicalConstraint, condition, property, variable, description, symbol_,
-  information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon', material_)
-
-import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
+import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
+  definition, doccon, doccon', document, goal, inModel, information, item,
+  material_, model, physSyst, problem, property, purpose, reference,
+  requirement, srs, srsDomains, thModel, traceyMatrix)
 import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Software (program, softwarecon, performance)
-import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
-  thermocon, phase_change)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance)
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
+  thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
+  phaseChange)
+
+import qualified Data.Drasil.Concepts.Math as M (ode, de, equation)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux, sens_heat)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+  heatCapSpec, htFlux, sensHeat)
+
+import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+
+import Data.Drasil.Phrase (for)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
+  isThe, sOf, ofThe, foldlSent, foldlSP)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
-import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
+  generateTraceTable, goalStmtF, physSystDescriptionLabel, generateTraceMap')
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing,
-  swhspriorityNFReqs)
+  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
-  swhscon)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (nonFuncReqs)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
+  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
   w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
@@ -81,19 +84,21 @@ import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
-import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.NoPCM.Goals (nopcmGoals)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
+import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
-check_si :: [UnitDefn]
-check_si = collectUnits nopcm_SymbMap symbTT 
+checkSi :: [UnitDefn]
+checkSi = collectUnits nopcm_SymbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+nopcm_Symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -103,26 +108,22 @@ resourcePath = "../../../datafiles/NoPCM/"
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
-  (map qw [temp_W, w_E]) ++
-  (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
-  (map qw [surface]) ++ (map qw [uNormalVect, gradient, eta])
+nopcm_SymbolsAll = map qw nopcm_Symbols ++ (map qw specParamValList) ++ 
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta])
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
-  htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
-  htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
+  htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
+  htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W, QT.sens_heat]
+  vol, w_mass, w_vol, tau_W, QT.sensHeat]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 
-probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, specParamVal :: Section
+probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
 
 
 -------------------
@@ -138,12 +139,12 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
   TAandA],
-  IntroSec $ IntroProg (introStart ener_src energy progName)
+  IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
+  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
     water),
-  IChar [] ((charReader1 ht_trans_theo) ++ (charReader2 M.de)) [],
+  IChar [] ((charReader1 htTransTheo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   Verbatim genSystDesc,
   SSDSec $
@@ -153,17 +154,19 @@ mkSRS = [RefSec $ RefProg intro
       , TMs [] (Label : stdFields) theoretical_models
       , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
-      , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        [eBalanceOnWtr, heatEInWtr] ShowDerivation
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+        iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
+      , CorrSolnPpties propsDerivNoPCM
       ]
     ],
   ReqrmntSec $ ReqsProg [
-  FReqsSub funcReqsList,
-  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
-  (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")],
+    FReqsSub funcReqsList,
+    NonFReqsSub' [performance] swhsNFRequirements
+      (S "This problem is small in size and relatively simple")
+      (S "Any reasonable implementation will be very quick and use minimal storage.")
+  ],
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
@@ -242,14 +245,14 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
-  nw ht_trans] ++ map nw check_si)
+  nw ht_trans] ++ map nw checkSi)
  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si nopcm_label nopcm_refby
+usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi nopcm_label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 
@@ -367,32 +370,29 @@ termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heat_cap_spec, thermal_conduction, transient]
+  [htFlux, heatCapSpec, thermalConduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
 
 fig_tank :: LabelledContent
-fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
+fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
-goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
-  []
+goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
 
-goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> Contents
-goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
-  phrase co `sC` S "initial", phrase temw  `sC` S "and material",
-  plural property `sC` S "the", phrase goalStmt, S "are"]
+goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
+goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
+  S "the initial" +:+ phrase temw,
+  S "the material" +:+ plural property]
 
-goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = LlC $ enumSimple goalStmt_label 1 (short goalStmt) [
-  (S "predict the" +:+ phrase temw +:+ S "over time"),
-  (S "predict the" +:+ phrase we +:+ S "over time")]
+goalStatesList :: [Contents]
+goalStatesList = mkEnumSimpleD nopcmGoals
 
 
 ------------------------------------------------------
@@ -406,8 +406,8 @@ sensHtE :: TheoryModel
 sensHtE = sensHtE_template Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
-sensHtEdesc = foldlSent [ch QT.sens_heat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phase_change, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
+sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
+  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -431,22 +431,22 @@ genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefnEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+genDefnEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+genDefnEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
@@ -506,10 +506,6 @@ dataConstTable1 = inDataConstTbl dataConstListIn
   -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
   -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
 
-dataConstListIn :: [UncertQ]
-dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
-  coil_HTC, temp_init, time_final]
-
 dataConstTable2 :: LabelledContent
 dataConstTable2 = outDataConstTbl dataConstListOut
 -- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
@@ -519,76 +515,19 @@ dataConstTable2 = outDataConstTbl dataConstListOut
 dataConstListOut :: [ConstrConcept]
 dataConstListOut = [temp_W, w_E]
 
-inputVar :: [QuantityDict]
-inputVar = map qw dataConstListIn 
-
-
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
 
-reqS = reqF [funcReqs, nonFuncReqs]
+-- in Requirements.hs
 
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
 
-funcReqs = SRS.funcReq funcReqsList [] --TODO: Placeholder values until content can be added
-
-funcReqsList :: [Contents]
-funcReqsList = funcReqsListWordsNum
-
-reqFMExpr :: Expr
-reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
-  (sy tank_length) * (sy w_density)))
-
-reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
-reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
-    plural tank_para `sC` S "material" +:+ plural property +:+
-    S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr `sC`
-    S "as follows, where" +:+ ch w_vol `isThe`
-    phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
-    S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
-reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
-    S "satisfy the required" +:+ phrase physicalConstraint +:+
-    S "shown in" +:+. makeRef2S dataConstTable1)
-    "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
-reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
-    +:+ plural quantity +:+
-    S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-    plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
-    phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
-    sParen (S "from" +:+ makeRef2S eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
-reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
-    sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
-reqCCHEWT = cic "reqCCHEWT" 
-    (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
-    phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ makeRef2S heatEInWtr))
-    "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
-
-reqIVRTable :: LabelledContent
-reqIVRTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
-  Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable [ch, U.toSentence, phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
-
-reqs :: [ConceptInstance]
-reqs = [reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT]
-
-funcReqsListWordsNum :: [Contents]
-funcReqsListWordsNum =
-  (mkEnumSimpleD reqs) ++ [LlC reqIVRTable]
-
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
 -------------------------------------------
-
---imports from SWHS
 
 ----------------------------
 --Section 6 : LIKELY CHANGES

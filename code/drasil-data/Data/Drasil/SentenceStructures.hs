@@ -15,17 +15,17 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
-  , getSource'
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, addPercent)
+import Data.Drasil.Utils (addPercent, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
-import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -168,9 +168,9 @@ rc _ = error "refineChain helper encountered an unexpected empty list"
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
 likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
 maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOVerb a b = likelyFrame a EmptyS b
-maybeChanged a b = likelyFrame a (S "changed") b
-maybeExpanded a b = likelyFrame a (S "expanded") b
+maybeWOVerb a   = likelyFrame a EmptyS
+maybeChanged a  = likelyFrame a (S "changed")
+maybeExpanded a = likelyFrame a (S "expanded")
 
 sParenDash :: Sentence -> Sentence
 sParenDash x = S " (" :+: x :+: S ") - "
@@ -219,11 +219,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "--"
 
-found :: Double -> Sentence
-found x = (addPercent . realToFrac) (x*100)
-
-typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)
+found :: Double -> Maybe Int -> Sentence
+found x Nothing  = addPercent $ x * 100
+found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
+    
+typUncr :: (HasUncertainty c) => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri
@@ -240,7 +241,3 @@ fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s = s
-
--- | Get the source citations (if any)
-getSource' :: HasCitation c => c -> Sentence
-getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations

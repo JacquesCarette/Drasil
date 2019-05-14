@@ -31,7 +31,7 @@ prnt sm dt@(DocSpec _ _) body =
 
 -- | Helper for writing the documents (TeX / HTML) to file
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-prntDoc (DocSpec dt fn) body sm = prntDoc' dt fn (fmt dt) body sm
+prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
   where fmt SRS = TeX
         fmt MG  = TeX
         fmt MIS = TeX

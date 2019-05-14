@@ -25,7 +25,7 @@ top level
 7. Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
 
 ```Haskell
-  S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
+  S "The" +:+ (phrase $ heatTrans ^. term) +:+ 
   S "is the"
   ...
 ```

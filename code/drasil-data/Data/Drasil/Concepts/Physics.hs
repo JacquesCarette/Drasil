@@ -1,11 +1,11 @@
 module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
+  ( rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space
   , cartesian, rightHand, restitutionCoef, acceleration, pressure
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
-  , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
-  , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
+  , time, torque, weight, fbd, angular, linear, tension, compression, stress
+  , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
+  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -16,11 +16,11 @@ import Data.Drasil.SentenceStructures (sOf)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
+physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, fbd, linear, angular, tension, compression, stress, 
+  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure, cohesion, isotropy, kEnergy]
 
@@ -28,11 +28,11 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, col
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
-rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
+rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, fbd, linear, angular, tension, compression, stress, 
+  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
 
@@ -51,7 +51,7 @@ elasticity   = dcc "elasticity" (cnIES "elasticity")
   "of two colliding objects after and before a collision.")
 energy       = dcc "energy" (cn "energy")
   "Power derived from the utilization of physical or chemical resources."
-mech_energy  = dcc "mech_energy" (cn "mechanical energy")
+mechEnergy  = dcc "mechEnergy" (cn "mechanical energy")
   "The energy that comes from motion and position"
 collision    = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++
@@ -137,6 +137,9 @@ time   = dcc "time"   (cn' "time")
   "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
 torque = dcc "torque" (cn' "torque") 
   "A twisting force that tends to cause rotation"
+
+weight = dcc "weight" (cn' "weight") 
+  "The gravitational force acting on an object"
 
 fbd = dcc "FBD" (cn' "free body diagram")
   "A graphical illustration used to visualize the applied forces, movements, and resulting reactions on a body in a steady state condition"

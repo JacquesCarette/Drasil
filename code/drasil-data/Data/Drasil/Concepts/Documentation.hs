@@ -40,10 +40,10 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc]
+  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc]
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc, sec :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc, sec :: CI
 
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
@@ -60,6 +60,7 @@ unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")          
 physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
 thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")                           "T"         [softEng]
+mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"        [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
 notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
@@ -239,7 +240,7 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- r
 
 -- compounds
 
-designDoc, fullForm, generalSystemDescription, indPRCase,
+designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
@@ -253,6 +254,7 @@ designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
+moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution

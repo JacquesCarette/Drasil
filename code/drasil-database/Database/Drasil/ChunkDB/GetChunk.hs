@@ -1,21 +1,14 @@
 -- | Utilities to get grab certain chunks (from Expr, Sentence, etc) by UID and
 -- dereference the chunk it refers to.
-module Language.Drasil.ChunkDB.GetChunk (vars, combine', vars', combine, ccss,
-  getIdeaDict) where
+module Database.Drasil.ChunkDB.GetChunk (ccss, combine,
+  getIdeaDict, vars) where
+
+import Language.Drasil
+
+import Database.Drasil.ChunkDB (symbLookup, symbolTable,
+ defLookup, defTable, ChunkDB, termLookup, termTable)
 
 import Data.List(nub)
-
-import Language.Drasil.Expr (Expr)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Expr.Extract(dep)
-import Language.Drasil.Sentence.Extract (sdep, shortdep)
-
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.ChunkDB (symbLookup, symbolTable,
- defLookup, defTable, ChunkDB, termLookup, termTable)
-import Language.Drasil.Chunk.Concept(ConceptChunk)
-import Language.Drasil.Chunk.DefinedQuantity(DefinedQuantityDict, dqdQd)
-import Language.Drasil.Chunk.NamedIdea(IdeaDict)
 
 -- | Get a list of quantities (QuantityDict) from an equation in order to print
 vars :: Expr -> ChunkDB -> [QuantityDict]

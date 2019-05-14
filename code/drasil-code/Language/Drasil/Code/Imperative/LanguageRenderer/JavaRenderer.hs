@@ -142,7 +142,7 @@ binOpDoc' Power = text "Math.pow"
 binOpDoc' op = binOpDocD op
 
 declarationDoc' :: Config -> Declaration -> Doc
-declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> new <+> stateType c (List lt t) Dec <> parens (listElements)
+declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> new <+> stateType c (List lt t) Dec <> parens listElements
     where listElements = if null vs then empty else text "Arrays.asList" <> parens (callFuncParamList c vs)
 declarationDoc' c (ConstDecDef n l) = text "final" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 declarationDoc' c d = declarationDocD c d
@@ -182,9 +182,9 @@ objAccessDoc' c v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _)) (Cast (Bas
 objAccessDoc' c v Floor = funcAppDoc c "Math.floor" [v]
 objAccessDoc' c v Ceiling = funcAppDoc c "Math.ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "Double.parseDouble" [v]
-objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens (dftVal)
+objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens dftVal
     where dftVal = case t of Base bt     -> valueDoc c (defaultValue bt)
-                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens (empty)
+                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens empty
                              _           -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 

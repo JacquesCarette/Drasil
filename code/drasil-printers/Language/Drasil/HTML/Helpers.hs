@@ -21,7 +21,7 @@ body       = oldWrap "body" []
 -- | Title tag wrapper
 title      = wrap "title" []
 -- | Paragraph tag wrapper
-paragraph  = oldWrap "p" ["paragraph"]
+paragraph  = wrap "p" ["paragraph"]
 -- | Code tag wrapper
 code       = oldWrap "code" ["code"]
 -- | Table row tag wrapper

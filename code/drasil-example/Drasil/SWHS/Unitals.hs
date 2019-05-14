@@ -377,7 +377,7 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) defaultUncrt
+  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) (uncty 0.0 $ Just 0)
   
   
 -- Output Constraints

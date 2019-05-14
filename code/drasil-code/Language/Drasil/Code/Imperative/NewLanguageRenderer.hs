@@ -137,14 +137,14 @@ bodyDocD bs = vibcat blocks
 
 -- IO --
 
-outDocD :: Doc -> Doc -> Doc
-outDocD printFn v = printFn <> parens v
+outDocD :: Doc -> (Doc, Maybe String) -> Doc
+outDocD printFn (v, _) = printFn <> parens v
 
 printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
 printListDocD open b lastElem close = vcat [open, b, lastElem, close]
 
-printFileDocD :: Label -> Doc -> Doc
-printFileDocD fn f = f <> dot <> text fn
+printFileDocD :: Label -> (Doc, Maybe String) -> Doc
+printFileDocD fn (f, _) = f <> dot <> text fn
 
 -- Type Printers --
 
@@ -213,14 +213,14 @@ alwaysDel = 4
 
 -- Controls --
 
-ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [((Doc, Maybe String), Doc)] -> Doc
 ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
 ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
-    let ifSect (v, b) = vcat [
+    let ifSect ((v, _), b) = vcat [
             text "if" <+> parens v <+> ifStart,
             oneTab b,
             blockEnd]
-        elseIfSect (v, b) = vcat [
+        elseIfSect ((v, _), b) = vcat [
             elseIf <+> parens v <+> ifStart,
             oneTab b,
             blockEnd]
@@ -233,9 +233,9 @@ ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) =
         vmap elseIfSect cs,
         elseSect]
 
-switchDocD :: (Doc, Terminator) -> Doc -> Doc -> [(Doc, Doc)] -> Doc
-switchDocD breakState v defBody cs = 
-    let caseDoc (l, result) = vcat [
+switchDocD :: (Doc, Terminator) -> (Doc, Maybe String) -> Doc -> [((Doc, Maybe String), Doc)] -> Doc
+switchDocD breakState (v, _) defBody cs = 
+    let caseDoc ((l, _), result) = vcat [
             text "case" <+> l <> colon,
             oneTabbed [
                 result,
@@ -254,20 +254,20 @@ switchDocD breakState v defBody cs =
 
 -- These signatures wont be quite so horrendous if/when we pass language options
 -- (blockStart, etc.) in as shared environment
-forDocD :: Doc -> Doc -> (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc -> Doc
-forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
+forDocD :: Doc -> Doc -> (Doc, Terminator) -> (Doc, Maybe String) -> (Doc, Terminator) -> Doc -> Doc
+forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
     forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) <+> blockStart,
     oneTab b,
     blockEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t v b = vcat [
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
+forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b = vcat [
     iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+> blockStart,
     oneTab $ b,
     blockEnd]
 
-whileDocD :: Doc -> Doc -> Doc -> Doc -> Doc
-whileDocD blockStart blockEnd v b= vcat [
+whileDocD :: Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
+whileDocD blockStart blockEnd (v, _) b = vcat [
     text "while" <+> parens v <+> blockStart,
     oneTab b,
     blockEnd]
@@ -287,41 +287,41 @@ stratDocD b resultState = vcat [
 
 -- Statements --
 
-assignDocD :: Doc-> Doc -> Doc
-assignDocD v1 v2 = v1 <+> equals <+> v2
+assignDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+assignDocD (v1, _) (v2, _) = v1 <+> equals <+> v2
 
-plusEqualsDocD :: Doc -> Doc -> Doc
-plusEqualsDocD v1 v2 = v1 <+> text "+=" <+> v2
+plusEqualsDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+plusEqualsDocD (v1, _) (v2, _) = v1 <+> text "+=" <+> v2
 
-plusEqualsDocD' :: Doc -> Doc -> Doc -> Doc
-plusEqualsDocD' v1 plusOp v2 = v1 <+> equals <+> v1 <+> plusOp <+> v2
+plusEqualsDocD' :: (Doc, Maybe String) -> Doc -> (Doc, Maybe String) -> Doc
+plusEqualsDocD' (v1, _) plusOp (v2, _) = v1 <+> equals <+> v1 <+> plusOp <+> v2
 
-plusPlusDocD :: Doc -> Doc
-plusPlusDocD v = v <> text "++"
+plusPlusDocD :: (Doc, Maybe String) -> Doc
+plusPlusDocD (v, _) = v <> text "++"
 
-plusPlusDocD' :: Doc -> Doc -> Doc
-plusPlusDocD' v plusOp = v <+> equals <+> v <+> plusOp <+> int 1
+plusPlusDocD' :: (Doc, Maybe String) -> Doc -> Doc
+plusPlusDocD' (v, _) plusOp = v <+> equals <+> v <+> plusOp <+> int 1
 
 varDecDocD :: Label -> Doc -> Doc
 varDecDocD l st = st <+> text l
 
-varDecDefDocD :: Label -> Doc -> Doc -> Doc
-varDecDefDocD l st v = st <+> text l <+> equals <+> v
+varDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc
+varDecDefDocD l st (v, _) = st <+> text l <+> equals <+> v
 
-listDecDocD :: Label -> Doc -> Doc -> Doc
-listDecDocD l n st = st <+> text l <+> equals <+> new <+> st <> parens n
+listDecDocD :: Label -> (Doc, Maybe String) -> Doc -> Doc
+listDecDocD l (n, _) st = st <+> text l <+> equals <+> new <+> st <> parens n
 
-listDecDefDocD :: Label -> Doc -> [Doc] -> Doc
+listDecDefDocD :: Label -> Doc -> [(Doc, Maybe String)] -> Doc
 listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> braces (callFuncParamList vs)
 
-objDecDefDocD :: Label -> Doc -> Doc -> Doc
+objDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st v = text "const" <+> st <+> text l <+> equals <+> v
+constDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
+constDecDefDocD l st (v, _) = text "const" <+> st <+> text l <+> equals <+> v
 
-returnDocD :: Doc -> Doc
-returnDocD v = text "return" <+> v
+returnDocD :: (Doc, Maybe String) -> Doc
+returnDocD (v, _) = text "return" <+> v
 
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
@@ -417,8 +417,8 @@ atanOpDocD = text "atan"
 atanOpDocD' :: Doc
 atanOpDocD' = text "math.atan"
 
-unOpDocD :: Doc -> Doc -> Doc
-unOpDocD op v = op <> parens v
+unOpDocD :: Doc -> (Doc, Maybe String) -> Doc
+unOpDocD op (v, _) = op <> parens v
 
 -- Binary Operators --
 
@@ -464,11 +464,11 @@ andOpDocD = text "&&"
 orOpDocD :: Doc
 orOpDocD = text "||"
 
-binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD op v1 v2 = parens (v1 <+> op <+> v2)
+binOpDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+binOpDocD op (v1, _) (v2, _) = parens (v1 <+> op <+> v2)
 
-binOpDocD' :: Doc -> Doc -> Doc -> Doc
-binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
+binOpDocD' :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+binOpDocD' op (v1, _) (v2, _) = op <> parens (v1 <> comma <+> v2)
 
 -- Literals --
 
@@ -513,22 +513,22 @@ extVarDocD l n = text l <> dot <> text n
 selfDocD :: Doc
 selfDocD = text "this"
 
-argDocD :: Doc -> Doc -> Doc
-argDocD n args = args <> brackets n
+argDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+argDocD (n, _) (args, _) = args <> brackets n
 
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
 
-objVarDocD :: Doc -> Doc ->  Doc
-objVarDocD n1 n2 = n1 <> dot <> n2
+objVarDocD :: (Doc, Maybe String) -> (Doc, Maybe String) ->  Doc
+objVarDocD (n1, _) (n2, _) = n1 <> dot <> n2
 
-inlineIfDocD :: Doc -> Doc -> Doc -> Doc
-inlineIfDocD c v1 v2 = parens (parens c <+> text "?" <+> v1 <+> text ":" <+> v2)
+inlineIfDocD :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+inlineIfDocD (c, _) (v1, _) (v2, _) = parens (parens c <+> text "?" <+> v1 <+> text ":" <+> v2)
 
-funcAppDocD :: Label -> [Doc] -> Doc
+funcAppDocD :: Label -> [(Doc, Maybe String)] -> Doc
 funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 
-extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
+extFuncAppDocD :: Library -> Label -> [(Doc, Maybe String)] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
 stateObjDocD :: Doc -> Doc -> Doc
@@ -537,7 +537,7 @@ stateObjDocD st vs = new <+> st <> parens vs
 listStateObjDocD :: Doc -> Doc -> Doc -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 
-notNullDocD :: Doc -> Doc -> Doc -> Doc
+notNullDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 notNullDocD = binOpDocD
 
 listIndexExistsDocD :: Doc -> Doc -> Doc -> Doc
@@ -546,8 +546,8 @@ listIndexExistsDocD greater lst index = parens (lst <> text ".Length" <+>
 
 -- Functions --
 
-funcDocD :: Doc -> Doc
-funcDocD fnApp = dot <> fnApp
+funcDocD :: (Doc, Maybe String) -> Doc
+funcDocD (fnApp, _) = dot <> fnApp
 
 castDocD :: Doc -> Doc
 castDocD = parens
@@ -561,11 +561,11 @@ listAccessDocD = brackets
 listSetDocD :: Doc -> Doc -> Doc
 listSetDocD i v = brackets i <+> equals <+> v
 
-objAccessDocD :: Doc -> Doc -> Doc
-objAccessDocD v f = v <> f
+objAccessDocD :: (Doc, Maybe String) -> Doc -> Doc
+objAccessDocD (v, _) f = v <> f
 
-castObjDocD :: Doc -> Doc -> Doc
-castObjDocD f v = f <> parens v
+castObjDocD :: Doc -> (Doc, Maybe String) -> Doc
+castObjDocD f (v, _) = f <> parens v
 
 -- Keywords --
 
@@ -623,8 +623,8 @@ dashes s l = replicate (l - length s) '-'
 
 -- Helper Functions --
 
-callFuncParamList :: [Doc] -> Doc
-callFuncParamList vs = hcat (intersperse (text ", ") vs)
+callFuncParamList :: [(Doc, Maybe String)] -> Doc
+callFuncParamList vs = hcat (intersperse (text ", ") (map fst vs))
 
 getterName :: String -> String
 getterName s = "Get" ++ capitalize s

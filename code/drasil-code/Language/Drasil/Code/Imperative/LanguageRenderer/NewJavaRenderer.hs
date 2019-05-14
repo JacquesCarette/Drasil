@@ -116,7 +116,6 @@ instance KeywordSym JavaCode where
     inherit = return $ text "extends"
 
     list _ = return $ text "ArrayList"
-    argsList = return $ text "args"
     listObj = return new
 
     blockStart = return lbrace
@@ -231,92 +230,92 @@ instance BinaryOpSym JavaCode where
     orOp = return $ orOpDocD
 
 instance ValueSym JavaCode where
-    type Value JavaCode = Doc
-    litTrue = return $ litTrueD
-    litFalse = return $ litFalseD
-    litChar c = return $ litCharD c
-    litFloat v = return $ litFloatD v
-    litInt v = return $ litIntD v
-    litString s = return $ litStringD s
+    -- Maybe String is the String representation of the value
+    type Value JavaCode = (Doc, Maybe String)
+    litTrue = return $ (litTrueD, Just "true")
+    litFalse = return $ (litFalseD, Just "false")
+    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return $ (litFloatD v, Just $ show v)
+    litInt v = return $ (litIntD v, Just $ show v)
+    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ defaultCharD
-    defaultFloat = return $ defaultFloatD
-    defaultInt = return $ defaultIntD
-    defaultString = return $ defaultStringD
+    defaultChar = return $ (defaultCharD, Just "space character")
+    defaultFloat = return $ (defaultFloatD, Just $ "0.0")
+    defaultInt = return $ (defaultIntD, Just $ "0")
+    defaultString = return $ (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
-    self = return $ selfDocD
-    arg n = liftA2 argDocD (litInt n) argsList
-    enumElement en e = return $ enumElemDocD en e
+    var n = return $ (varDocD n, Just n)
+    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
+    self = return $ (selfDocD, Nothing)
+    arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
+    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
-    objVar = liftA2 objVarDocD
+    objVar o v = liftPairFst (liftA2 objVarDocD o v, Nothing)
     objVarSelf = var
     listVar n _ = var n
     n `listOf` t = listVar n t
     iterVar = var
     
-    inputFunc = return (parens (text "new Scanner(System.in)"))
-
-    valName v = unJC $ fmap render v
+    inputFunc = return (parens (text "new Scanner(System.in)"), Nothing)
+    argsList = return $ (text "args", Nothing)
 
 instance NumericExpression JavaCode where
-    (#~) = liftA2 unOpDocD negateOp
-    (#/^) = liftA2 unOpDocD sqrtOp
-    (#|) = liftA2 unOpDocD absOp
-    (#+) = liftA3 binOpDocD plusOp
-    (#-) = liftA3 binOpDocD minusOp
-    (#*) = liftA3 binOpDocD multOp
-    (#/) = liftA3 binOpDocD divideOp
-    (#%) = liftA3 binOpDocD moduloOp
-    (#^) = liftA3 binOpDocD' powerOp
+    (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
+    (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
+    (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
+    (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
+    (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
+    (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
+    (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
+    (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
+    (#^) v1 v2 = liftPairFst (liftA3 binOpDocD' powerOp v1 v2, Nothing)
 
-    log = liftA2 unOpDocD logOp
-    ln = liftA2 unOpDocD lnOp
-    exp = liftA2 unOpDocD expOp
-    sin = liftA2 unOpDocD sinOp
-    cos = liftA2 unOpDocD cosOp
-    tan = liftA2 unOpDocD tanOp
+    log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
+    ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
+    exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
+    sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
+    cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
+    tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
-    arcsin = liftA2 unOpDocD asinOp
-    arccos = liftA2 unOpDocD acosOp
-    arctan = liftA2 unOpDocD atanOp
-    floor = liftA2 unOpDocD floorOp
-    ceil = liftA2 unOpDocD ceilOp
+    arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
+    arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
+    arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
+    floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
+    ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
 
 instance BooleanExpression JavaCode where
-    (?!) = liftA2 unOpDocD notOp
-    (?&&) = liftA3 binOpDocD andOp
-    (?||) = liftA3 binOpDocD orOp
+    (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
+    (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
+    (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
 
-    (?<) = liftA3 binOpDocD lessOp
-    (?<=) = liftA3 binOpDocD lessEqualOp
-    (?>) = liftA3 binOpDocD greaterOp
-    (?>=) = liftA3 binOpDocD greaterEqualOp
-    (?==) = liftA3 binOpDocD equalOp
-    (?!=) = liftA3 binOpDocD notEqualOp
+    (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
+    (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
+    (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
+    (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
+    (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
+    (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
     
 instance ValueExpression JavaCode where
-    inlineIf = liftA3 inlineIfDocD
-    funcApp n = liftList (funcAppDocD n)
+    inlineIf b v1 v2 = liftPairFst (liftA3 inlineIfDocD b v1 v2, Nothing)
+    funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
     selfFuncApp = funcApp
-    extFuncApp l n = liftList (extFuncAppDocD l n)
-    stateObj t vs = liftA2 stateObjDocD t (liftList callFuncParamList vs)
+    extFuncApp l n vs = liftPairFst (liftList (extFuncAppDocD l n) vs, Nothing)
+    stateObj t vs = liftPairFst (liftA2 stateObjDocD t (liftList callFuncParamList vs), Nothing)
     extStateObj _ = stateObj
-    listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
+    listStateObj t vs = liftPairFst (liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs), Nothing)
 
     exists = notNull
-    notNull v = liftA3 notNullDocD notEqualOp v (var "null")
+    notNull v = liftPairFst (liftA3 notNullDocD notEqualOp v (var "null"), Nothing)
 
 instance Selector JavaCode where
-    objAccess = liftA2 objAccessDocD
+    objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
     ($.) = objAccess
 
     objMethodCall o f ps = objAccess o (func f ps)
@@ -324,17 +323,17 @@ instance Selector JavaCode where
 
     selfAccess = objAccess self
 
-    listPopulateAccess _ _ = return empty
+    listPopulateAccess _ _ = return (empty, Nothing)
     listSizeAccess v = objAccess v listSize
 
-    listIndexExists = liftA3 jListIndexExists greaterOp
+    listIndexExists l i = liftPairFst (liftA3 jListIndexExists greaterOp l i, Nothing)
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
     indexOf l v = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
 
     stringEqual v1 str = objAccess v1 (func "equals" [str])
 
-    castObj = liftA2 castObjDocD
+    castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
     castStrToFloat v = funcApp "Double.parseDouble" [v]
 
 instance FunctionSym JavaCode where
@@ -444,7 +443,7 @@ instance StatementSym JavaCode where
     returnState v = liftPairFst (fmap returnDocD v, Semi)
     returnVar l = liftPairFst (fmap returnDocD (var l), Semi)
 
-    valState v = liftPairFst (v, Semi)
+    valState v = liftPairFst (fmap fst v, Semi)
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
@@ -586,11 +585,11 @@ jListDecDef :: Label -> Doc -> Doc -> Doc
 jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens listElements
     where listElements = if isEmpty vs then empty else text "Arrays.asList" <> parens vs
 
-jConstDecDef :: Label -> Doc -> Doc -> Doc
-jConstDecDef l st v = text "final" <+> st <+> text l <+> equals <+> v
+jConstDecDef :: Label -> Doc -> (Doc, Maybe String) -> Doc
+jConstDecDef l st (v, _) = text "final" <+> st <+> text l <+> equals <+> v
 
-jThrowDoc :: Doc -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
+jThrowDoc :: (Doc, Maybe String) -> Doc
+jThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 
 jTryCatch :: Doc -> Doc -> Doc
 jTryCatch tb cb = vcat [
@@ -600,29 +599,29 @@ jTryCatch tb cb = vcat [
     oneTab $ cb,
     rbrace]
 
-jDiscardInput :: Doc -> Doc
-jDiscardInput inFn = inFn <> dot <> text "next()"
+jDiscardInput :: (Doc, Maybe String) -> Doc
+jDiscardInput (inFn, _) = inFn <> dot <> text "next()"
 
-jInput :: Doc -> Doc -> Doc -> Doc
-jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
+jInput :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+jInput it (v, _) (inFn, _) = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
 
-jInput' :: Doc -> Doc -> Doc -> Doc
-jInput' it v inFn = v <+> equals <+> it <> parens (inFn <> dot <> text "nextLine()")
+jInput' :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+jInput' it (v, _) (inFn, _) = v <+> equals <+> it <> parens (inFn <> dot <> text "nextLine()")
 
-jOpenFileR :: Doc -> Doc -> Doc
-jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
+jOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+jOpenFileR (f, _) (n, _) = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
 
-jOpenFileWorA :: Doc -> Doc -> Doc -> Doc
-jOpenFileWorA f n wa = f <+> equals <+> new <+> text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> parens n <> comma <+> wa))
+jOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+jOpenFileWorA (f, _) (n, _) (wa, _) = f <+> equals <+> new <+> text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> parens n <> comma <+> wa))
 
-jListExtend :: Doc -> Doc
-jListExtend v = dot <> text "add" <> parens v
+jListExtend :: (Doc, Maybe String) -> Doc
+jListExtend (v, _) = dot <> text "add" <> parens v
 
 jListExtendList :: Doc -> Doc
 jListExtendList t = dot <> text "add" <> parens (new <+> t <> parens empty)
 
-jStringSplit :: Doc -> Doc -> Doc -> Doc
-jStringSplit vnew t s = vnew <+> equals <+> new <+> t
+jStringSplit :: (Doc, Maybe String) -> Doc -> (Doc, Maybe String) -> Doc
+jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> t
     <> parens s
 
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
@@ -631,5 +630,5 @@ jMethod n s p t ps b = vcat [
     oneTab $ b,
     rbrace]
 
-jListIndexExists :: Doc -> Doc -> Doc -> Doc
-jListIndexExists greater lst index = parens (lst <> text ".length" <+> greater <+> index)
+jListIndexExists :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+jListIndexExists greater (lst, _) (index, _) = parens (lst <> text ".length" <+> greater <+> index)

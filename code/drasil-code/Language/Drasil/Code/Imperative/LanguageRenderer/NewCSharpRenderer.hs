@@ -109,7 +109,6 @@ instance KeywordSym CSharpCode where
     inherit = return colon
 
     list _ = return $ text "List"
-    argsList = return $ text "args"
     listObj = return new
 
     blockStart = return lbrace
@@ -255,6 +254,7 @@ instance ValueSym CSharpCode where
     iterVar = var
     
     inputFunc = return $ text "Console.ReadLine()"
+    argsList = return $ text "args"
 
     valName v = unCSC $ fmap render v
 

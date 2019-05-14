@@ -112,7 +112,6 @@ instance KeywordSym CppSrcCode where
     inherit = return colon
 
     list _ = return $ text "vector"
-    argsList = return $ text "argv"
     listObj = return empty
 
     blockStart = return lbrace
@@ -259,6 +258,7 @@ instance ValueSym CppSrcCode where
     iterVar l = return $ text $ "(*" ++ l ++ ")"
     
     inputFunc = return $ text "std::cin"
+    argsList = return $ text "argv"
 
     valName v = unCPPSC $ fmap render v
 

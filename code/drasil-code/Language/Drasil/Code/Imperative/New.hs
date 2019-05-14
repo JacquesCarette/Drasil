@@ -35,7 +35,6 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     inherit :: repr (Keyword repr)
 
     list     :: repr (Permanence repr) -> repr (Keyword repr)
-    argsList :: repr (Keyword repr)
     listObj  :: repr (Keyword repr)
 
     blockStart :: repr (Keyword repr)
@@ -168,6 +167,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     iterVar      :: Label -> repr (Value repr)
     
     inputFunc :: repr (Value repr)
+    argsList  :: repr (Value repr)
 
     valName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
 

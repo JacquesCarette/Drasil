@@ -94,7 +94,6 @@ instance KeywordSym PythonCode where
     inherit = return $ empty
 
     list _ = return $ empty
-    argsList = return $ text "sys.argv"
     listObj = return empty
 
     blockStart = return colon
@@ -226,6 +225,7 @@ instance ValueSym PythonCode where
     iterVar = var
 
     inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
+    argsList = return $ text "sys.argv"
     
     valName v = unPC $ fmap render v
 

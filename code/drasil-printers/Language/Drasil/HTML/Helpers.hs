@@ -25,7 +25,7 @@ paragraph  = wrap "p" ["paragraph"]
 -- | Code tag wrapper
 code       = wrap "code" ["code"]
 -- | Table row tag wrapper
-tr         = oldWrap "tr" []
+tr         = wrap "tr" []
 -- | Table header tag wrapper
 th         = oldWrap "th" []
 -- | Table cell tag wrapper

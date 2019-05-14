@@ -230,11 +230,11 @@ swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
 swhsInputs :: [UncertQ]
 swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: UncertQ
+  htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
@@ -378,7 +378,13 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   (Atomic "final")) second Rational
   [gtZeroConstr,
   sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) (uncty 0.0 $ Just 0)
-  
+
+timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
+  ("The finite discretization of time used in the numerical method" ++
+    "for solving the computational model")
+  (sub (eqSymb time) (Atomic "step")) second Rational
+  [physc $ Bounded (Exc,0) (Exc, sy time_final)]
+  (dbl 0.01) (uncty 0.0 $ Just 0)
   
 -- Output Constraints
 swhsOutputs :: [ConstrConcept]

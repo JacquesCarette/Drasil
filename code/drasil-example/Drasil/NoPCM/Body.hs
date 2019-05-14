@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -32,7 +33,7 @@ import qualified Data.Drasil.Concepts.Math as M (ode, de, equation)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
@@ -97,7 +98,7 @@ checkSi = collectUnits nopcm_SymbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+nopcm_Symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -107,11 +108,8 @@ resourcePath = "../../../datafiles/NoPCM/"
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
-  (map qw [temp_W, w_E]) ++
-  (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
-  (map qw [surface]) ++ (map qw [uNormalVect, gradient, eta])
+nopcm_SymbolsAll = map qw nopcm_Symbols ++ (map qw specParamValList) ++ 
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta])
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,

@@ -5,6 +5,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
+import Theory.Drasil (GenDefn, gd)
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
@@ -49,25 +50,25 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, srfWtrFGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, srfWtrFGD :: GenDefn
-normForcEqGD = gd' normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
+normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
   [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
-bsShrFEqGD   = gd' bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
+bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
-resShrGD     = gd' resShr     (getUnit shrResI)       [resShr_deriv]   
+resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
   [makeCite chen2005]                      "resShr"      [resShr_desc]
-mobShrGD     = gd' mobShr     (getUnit mobShrI)       [mobShr_deriv]   
+mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
   [makeCite chen2005]                      "mobShr"      [mobShr_desc]
-effNormFGD   = gd' effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
+effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
   [makeCite chen2005]                      "effNormF"    [effNormF_desc]
-resShearWOGD = gd' resShearWO (getUnit shearRNoIntsl) []         
+resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
-mobShearWOGD = gd' mobShearWO (getUnit shearFNoIntsl) []
+mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
-normShrRGD   = gd' normShrR   (getUnit intShrForce)   [] 
+normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
-momentEqlGD  = gd' momentEql  (Just newton)           [momEql_deriv]  
+momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
-srfWtrFGD    = gd' srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
+srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
   [makeCite fredlund1977]               "srfWtrF"    [srfWtrFNotes]
 
 --

@@ -120,4 +120,4 @@ clean_build: clean_logs
 	- rm -r ./build
 
 clean_logs:
-	- rm *.log
+	- rm -r ./logs

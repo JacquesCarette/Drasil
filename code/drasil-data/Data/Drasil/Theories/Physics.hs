@@ -1,6 +1,7 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
+import Theory.Drasil (GenDefn, gd)
 import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, ofThe, sAnd, 
   sOf)
@@ -41,7 +42,7 @@ newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
 --
 
 weightGD :: GenDefn
-weightGD = gd' weightRC (getUnit QP.weight) weightDeriv [weightSrc] 
+weightGD = gd weightRC (getUnit QP.weight) weightDeriv [weightSrc] 
   "weight" [{-Notes-}]
 
 weightRC :: RelationConcept

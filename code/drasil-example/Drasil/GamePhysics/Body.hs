@@ -63,8 +63,7 @@ import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
-import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
-  t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
+import Drasil.GamePhysics.TMods (cpTModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
@@ -96,8 +95,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg [SSDSubVerb problemDescriptionSection
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields)
-            [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
+        , TMs [] (Label : stdFields) cpTModsNew
         , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)

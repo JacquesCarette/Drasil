@@ -20,7 +20,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, coll
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, fbd, linear, angular, tension, compression, stress, 
+  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure, cohesion, isotropy, kEnergy, chgMomentum, chgInVelocity]
 
@@ -31,7 +31,7 @@ rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, fbd, linear, angular, tension, compression, stress, 
+  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure,cohesion, isotropy, kEnergy, chgMomentum, chgInVelocity :: ConceptChunk
 
@@ -138,6 +138,9 @@ time   = dcc "time"   (cn' "time")
   "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
 torque = dcc "torque" (cn' "torque") 
   "A twisting force that tends to cause rotation"
+
+weight = dcc "weight" (cn' "weight") 
+  "The gravitational force acting on an object"
 
 fbd = dcc "FBD" (cn' "free body diagram")
   "A graphical illustration used to visualize the applied forces, movements, and resulting reactions on a body in a steady state condition"

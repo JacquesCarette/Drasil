@@ -9,6 +9,7 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
   _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 

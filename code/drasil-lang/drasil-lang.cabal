@@ -21,7 +21,6 @@ library
     , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity

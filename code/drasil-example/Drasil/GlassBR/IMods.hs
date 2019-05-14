@@ -28,7 +28,7 @@ glassBRsymb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 {--}
 
 calofDemandi :: InstanceModel
-calofDemandi = im' calofDemandRCi [qw demand, qw eqTNTWeight, qw standOffDist]
+calofDemandi = imNoDeriv calofDemandRCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
   [makeCite astm2009] "calOfDemand"
   [calofDemandDesc]

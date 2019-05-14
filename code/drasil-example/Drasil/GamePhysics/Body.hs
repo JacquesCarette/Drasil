@@ -7,55 +7,52 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, ccss, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
   _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (GenDefn)
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
   LCsSec(..), UCsSec(..), generateTraceMap',
   assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
+  mkEnumSimpleD, outDataConstTbl, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
+import Data.Drasil.Concepts.Documentation as Doc(assumption,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
-  environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
-  information, input_, interface, item, model, nonfunctionalRequirement,
-  object, organization, physical, physicalConstraint, physicalSim, physics,
-  priority, problem, problemDescription, product_, project, property, quantity,
+  environment, game, genDefn, goalStmt, guide, inModel,
+  information, input_, interface, item, model,
+  object, organization, physical, physicalSim, physics,
+  problem, problemDescription, product_, project, quantity,
   realtime, reference, requirement, section_, simulation, software, softwareSys,
   srs, srsDomains, system, systemConstraint, sysCont, task, template,
   termAndDef, thModel, traceyMatrix, user, userCharacteristic, doccon, doccon')
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
-import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness, softwarecon, reliability)
+import Data.Drasil.Concepts.Software (physLib, performance, softwarecon)
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
-  sOf, sOr)
+  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
-  makeListRef, bulletFlat, bulletNested, enumBullet)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, itemRefToSent,
+  makeListRef, makeTMatrix)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, physicCon)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
-  position, time, velocity)
+  cartesian, rightHand, physicCon)
+import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
+import qualified Data.Drasil.Quantities.Physics as QP (force, time)
+
 import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
@@ -64,6 +61,8 @@ import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
+    propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
@@ -105,11 +104,12 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
             [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+        , CorrSolnPpties propsDeriv
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub functionalRequirementsList,
-      NonFReqsSub [performance] gmpriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
+      FReqsSub funcReqsContent,
+      NonFReqsSub' [performance] nonfuncReqs
         (S "Games are resource intensive") (S "")],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
@@ -141,7 +141,7 @@ gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
 
 gameConcins :: [ConceptInstance]
 gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
-  functionalRequirementsList'
+  funcReqs
 
 gameSection :: [Section]
 gameSection = gameSec
@@ -208,10 +208,6 @@ chipCode = codeSpec chipmunkSysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
-
-gmpriorityNFReqs :: [ConceptChunk]
-gmpriorityNFReqs = [correctness, understandability, portability, reliability,
-  maintainability]
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -551,106 +547,15 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
 
-requirements :: Section
-requirements = reqF [functionalRequirements, nonfunctionalRequirements]
+-- in Requirements.hs
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-functionalRequirements :: Section
-functionalRequirementsList :: [Contents]
-
-functionalRequirements = SRS.funcReq functionalRequirementsList []
-
-functional_requirements_req1, functional_requirements_req2, 
-  functional_requirements_req3, functional_requirements_req4,
-  functional_requirements_req5, functional_requirements_req6,
-  functional_requirements_req7, functional_requirements_req8 :: Sentence
-
-  -- | template for requirements
-requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
-  S "over a period of", (phrase QP.time), S "of the", x, z]
-
-  -- | with added constraint
-requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-requirementS a b = requirementTemplate (plural a) (plural b) ((getAcc twoD)
-  +:+ (plural CP.rigidBody))
-
-  -- | without added constraint
-requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-requirementS' a b = requirementS a b EmptyS 
-
--- some requirements look like they could be parametrized
-functional_requirements_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
-  (plural CP.rigidBody), S "in the", (phrase physicalSim), 
-  S "to interact in"]
-
-functional_requirements_req2 = foldlSent [S "Input the initial", 
-  (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
-  (plural QM.orientation) `sC` (plural QP.angularVelocity), 
-  S "of" `sC` S "and", (plural QP.force), S "applied on", 
-  (plural CP.rigidBody)]
-
-functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface), 
-  (plural property), S "of the", plural body, S "such as",
-  (phrase CP.friction) `sOr` (phrase CP.elasticity)]
-
-functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
-  S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section]))]
-
-functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
-  (S "acted upon by a" +:+ (phrase QP.force))
-
-functional_requirements_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
-
-functional_requirements_req7 = foldlSent [S "Determine if any of the", 
-  (plural CP.rigidBody), S "in the", (phrase CP.space), 
-  S "have collided"]
-
-functional_requirements_req8 = requirementS (QP.position) (QP.velocity) 
-  (S "that have undergone a" +:+ (phrase CP.collision))
-
-reqSS, reqIIC, reqISP, reqVPC, reqCTOT, reqCROT, reqDC, reqDCROT :: ConceptInstance
-
-reqSS = cic "reqSS" functional_requirements_req1 "Simulation-Space" funcReqDom
-reqIIC = cic "reqIIC" functional_requirements_req2 "Input-Initial-Conditions" funcReqDom
-reqISP = cic "reqISP" functional_requirements_req3 "Input-Surface-Properties" funcReqDom
-reqVPC = cic "reqVPC" functional_requirements_req4 "Verify-Physical_Constraints" funcReqDom
-reqCTOT = cic "reqCTOT" functional_requirements_req5 "Calculate-Translation-Over-Time" funcReqDom
-reqCROT = cic "reqCROT" functional_requirements_req6 "Calculate-Rotation-Over-Time" funcReqDom
-reqDC = cic "reqDC" functional_requirements_req7 "Determine-Collisions" funcReqDom
-reqDCROT = cic "reqDCROT" functional_requirements_req8 "Determine-Collision-Response-Over-Time" funcReqDom
-
--- Currently need separate chunks for plurals like rigid bodies,
--- velocities, etc.
-functionalRequirementsList' :: [ConceptInstance]
-functionalRequirementsList' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
-  reqCROT, reqDC, reqDCROT]
-
-functionalRequirementsList = mkEnumSimpleD
-  functionalRequirementsList'
-
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
-
-nonfunctionalRequirements :: Section
-nonfunctionalRequirementsIntro :: Contents
-
-nonfunctionalRequirements = SRS.nonfuncReq [nonfunctionalRequirementsIntro] []
-
-chpmnkPriorityNFReqs :: [ConceptChunk]
-chpmnkPriorityNFReqs = [correctness, understandability, portability,
-  reliability, maintainability]
-
-nonfunctionalRequirementsIntro = foldlSP 
-  [(titleize' game), S "are resource intensive, so", phrase performance,
-  S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
-  S "that are a", phrase priority +: S "are",
-  foldlList Comma List (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --
@@ -734,7 +639,7 @@ traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRef2S assumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRef2S functionalRequirementsList'
+traceMatFuncReqRef = map makeRef2S funcReqs
 
 traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]

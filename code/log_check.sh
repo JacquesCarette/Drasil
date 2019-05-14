@@ -6,6 +6,7 @@ GLASS_PREF="GlassBR"
 GAME_PREF="Chipmunk"
 NoPCM_PREF="NoPCM"
 log="_log.log"
+logFolder="logs"
 #
 if [ $# -gt 0 ]; then
   printout="$1"
@@ -16,6 +17,7 @@ errors="no"
 exitval=0
 #
 
+mkdir -p $logFolder
 EXAMPLES="$SWHS_PREF $TINY_PREF $SSP_PREF $GLASS_PREF $GAME_PREF $NoPCM_PREF"
 
 for e in $EXAMPLES; do
@@ -33,6 +35,7 @@ for e in $EXAMPLES; do
       echo "-------------------------------------------"
     fi
   fi
+  mv $logfile $logFolder
 done
 
 

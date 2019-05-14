@@ -3825,6 +3825,16 @@ Output Data Constraints
 </div>
 </div>
 </div>
+<div id="Sec:CorSolProps">
+<div class="subsubsection">
+<h3>
+Properties of a Correct Solution
+</h3>
+<p class="paragraph">
+FIXME.
+</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3847,42 +3857,42 @@ This section provides the functional requirements, the tasks and behaviours that
 </p>
 <div class="list">
 <p>
-<div id="reqSS">
+<div id="simSpace">
 Simulation-Space: Create a space for all of the rigid bodies in the physical simulation to interact in.
 </div>
 </p>
 <p>
-<div id="reqIIC">
+<div id="inputInitialConds">
 Input-Initial-Conditions: Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
 </div>
 </p>
 <p>
-<div id="reqISP">
+<div id="inputSurfaceProps">
 Input-Surface-Properties: Input the surface properties of the bodies such as friction or elasticity.
 </div>
 </p>
 <p>
-<div id="reqVPC">
+<div id="verifyPhysCons">
 Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>.
 </div>
 </p>
 <p>
-<div id="reqCTOT">
+<div id="calcTransOverTime">
 Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
 </div>
 </p>
 <p>
-<div id="reqCROT">
+<div id="calcRotOverTime">
 Calculate-Rotation-Over-Time: Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
 </div>
 </p>
 <p>
-<div id="reqDC">
+<div id="deterColls">
 Determine-Collisions: Determine if any of the rigid bodies in the space have collided.
 </div>
 </p>
 <p>
-<div id="reqDCROT">
+<div id="deterCollRespOverTime">
 Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 </div>
 </p>
@@ -3895,8 +3905,43 @@ Determine-Collision-Response-Over-Time: Determine the positions and velocities o
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
+<p class="paragraph">
+Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are:
+</p>
+<div class="list">
+<p>
+<div id="correct">
+Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+</div>
+</p>
+<p>
+<div id="understandable">
+Understandable: The code is modularized with complete module guide and module interface specification.
+</div>
+</p>
+<p>
+<div id="portable">
+Portable: The code is able to be run in different environments.
+</div>
+</p>
+<p>
+<div id="reliable">
+Reliable: The code gives consistent outputs.
+</div>
+</p>
+<p>
+<div id="reusable">
+Reusable: The code is modularized.
+</div>
+</p>
+<p>
+<div id="maintainable">
+Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+</div>
+</p>
+</div>
 </div>
 </div>
 </div>
@@ -4012,7 +4057,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-<a href=#reqVPC>FR: Verify-Physical_Constraints</a>
+<a href=#verifyPhysCons>FR: Verify-Physical_Constraints</a>
 </th>
 <th>
 <a href=#IM:rotMot>IM: rotMot</a>
@@ -5120,13 +5165,13 @@ IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
 IM3 (<a href=#IM:col2D>IM: col2D</a>)
 </th>
 <th>
-R1 (<a href=#reqSS>FR: Simulation-Space</a>)
+R1 (<a href=#simSpace>FR: Simulation-Space</a>)
 </th>
 <th>
-R4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
+R4 (<a href=#inputInitialConds>FR: Input-Initial-Conditions</a>)
 </th>
 <th>
-R7 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
+R7 (<a href=#inputSurfaceProps>FR: Input-Surface-Properties</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
@@ -5186,7 +5231,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#reqSS>FR: Simulation-Space</a>)
+GS3 (<a href=#simSpace>FR: Simulation-Space</a>)
 </td>
 <td>
 
@@ -5212,7 +5257,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
+GS4 (<a href=#inputInitialConds>FR: Input-Initial-Conditions</a>)
 </td>
 <td>
 
@@ -5238,7 +5283,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
+R1 (<a href=#inputSurfaceProps>FR: Input-Surface-Properties</a>)
 </td>
 <td>
 
@@ -5264,7 +5309,7 @@ R1 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#reqVPC>FR: Verify-Physical_Constraints</a>)
+R2 (<a href=#verifyPhysCons>FR: Verify-Physical_Constraints</a>)
 </td>
 <td>
 X
@@ -5290,7 +5335,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#reqCTOT>FR: Calculate-Translation-Over-Time</a>)
+R3 (<a href=#calcTransOverTime>FR: Calculate-Translation-Over-Time</a>)
 </td>
 <td>
 
@@ -5316,7 +5361,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#reqCROT>FR: Calculate-Rotation-Over-Time</a>)
+R4 (<a href=#calcRotOverTime>FR: Calculate-Rotation-Over-Time</a>)
 </td>
 <td>
 
@@ -5342,7 +5387,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#reqDC>FR: Determine-Collisions</a>)
+R5 (<a href=#deterColls>FR: Determine-Collisions</a>)
 </td>
 <td>
 X
@@ -5368,7 +5413,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#reqDCROT>FR: Determine-Collision-Response-Over-Time</a>)
+R6 (<a href=#deterCollRespOverTime>FR: Determine-Collision-Response-Over-Time</a>)
 </td>
 <td>
 

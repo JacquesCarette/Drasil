@@ -23,7 +23,7 @@ title      = wrap "title" []
 -- | Paragraph tag wrapper
 paragraph  = wrap "p" ["paragraph"]
 -- | Code tag wrapper
-code       = oldWrap "code" ["code"]
+code       = wrap "code" ["code"]
 -- | Table row tag wrapper
 tr         = oldWrap "tr" []
 -- | Table header tag wrapper

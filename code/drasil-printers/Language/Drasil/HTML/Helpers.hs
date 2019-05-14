@@ -43,11 +43,11 @@ ba         = oldWrap "b" []
 
 ol, ul, table :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper
-ol a b       = wrap "ol" a b
+ol       = wrap "ol"
 -- | Unordered list tag wrapper
-ul a b       = wrap "ul" a b
+ul       = wrap "ul"
 -- | Table tag wrapper
-table a b    = wrap "table" a b
+table    = wrap "table"
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper
@@ -163,7 +163,7 @@ div_tag :: [String] -> Doc -> Doc
 div_tag = oldWrap "div"
 
 span_tag :: [String] -> Doc -> Doc
-span_tag t = wrap "span" t
+span_tag = wrap "span"
 
 indent :: Doc -> Doc
 indent = nest 4

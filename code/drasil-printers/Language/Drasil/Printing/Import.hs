@@ -149,7 +149,7 @@ expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (Operator o dd e)    sm = eop sm o dd e
+expr (Operator o d e)     sm = eop sm o d e
 expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 

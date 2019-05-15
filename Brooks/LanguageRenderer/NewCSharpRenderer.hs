@@ -13,7 +13,7 @@ import New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
     MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
     ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', 
+import NewLanguageRenderer (Terminator(..), fileDoc', 
     moduleDocD, classDocD, enumDocD,
     enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
     printFileDocD, boolTypeDocD, 
@@ -31,13 +31,12 @@ import NewLanguageRenderer (fileDoc',
     defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
     inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
     notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
-    listAccessDocD, objAccessDocD, 
-    castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-    publicDocD, dot, new, observerListName, doubleSlash, addCommentsDocD, 
-    callFuncParamList, getterName, setterName, setMain, statementsToStateVars)
+    listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+    staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+    observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
+    getterName, setterName, setMain, setEmpty, statementsToStateVars)
 import Helpers (oneTab, tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, 
-  liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  liftTripFst)
+  liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -132,9 +131,9 @@ instance StateTypeSym CSharpCode where
 instance ControlBlockSym CSharpCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
-                                                    Just b  -> liftA2 stratDocD b (state resultState)
+                                                   Just b  -> liftA2 stratDocD b (state resultState)
         where resultState = case av of Nothing    -> return (empty, Empty)
-                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
+                                       Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
 
     listSlice t vnew vold b e s = 
@@ -149,11 +148,11 @@ instance ControlBlockSym CSharpCode where
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
             (vnew &= v_temp)])
         where getB Nothing = litInt 0
-            getB (Just n) = n
-            getE Nothing = vold $. listSize
-            getE (Just n) = n
-            getS Nothing v = (&++) v
-            getS (Just n) v = v &+= n
+              getB (Just n) = n
+              getE Nothing = vold $. listSize
+              getE (Just n) = n
+              getS Nothing v = (&++) v
+              getS (Just n) v = v &+= n
 
 instance UnaryOpSym CSharpCode where
     type UnaryOp CSharpCode = Doc
@@ -225,7 +224,7 @@ instance ValueSym CSharpCode where
     argsList = return $ (text "args", Nothing)
 
     valName (CSC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
-                                    Just valstr -> valstr
+                                     Just valstr -> valstr
 
 instance NumericExpression CSharpCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -419,7 +418,7 @@ instance StatementSym CSharpCode where
     initObserverList = listDecDef observerListName
     addObserver t o = valState $ obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
-            lastelem = obsList $. listSize
+              lastelem = obsList $. listSize
 
     state = fmap statementDocD
     loopState = fmap (statementDocD . setEmpty)
@@ -445,9 +444,9 @@ instance ControlStatementSym CSharpCode where
 
     notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
         where obsList = observerListName `listOf` t
-            index = "observerIndex"
-            initv = varDecDef index int $ litInt 0
-            notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+              index = "observerIndex"
+              initv = varDecDef index int $ litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
     getFileInputAll f v = while ((?!) (objVar f (var "EndOfStream")))
         (oneLiner $ valState $ v $. (listAppend $ fmap csFileInput f))
@@ -509,7 +508,7 @@ instance ModuleSym CSharpCode where
     type Module CSharpCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
         case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unCSC) cs) 
-                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
+                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [any (snd . unCSC) ms, any (snd . unCSC) cs])
 

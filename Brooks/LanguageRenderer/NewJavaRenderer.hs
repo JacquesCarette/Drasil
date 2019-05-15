@@ -13,7 +13,7 @@ import New (Label,
     Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
     ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
     MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (packageDocD, 
+import NewLanguageRenderer (Terminator(..), packageDocD, 
     fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
     multiStateDocD, blockDocD, bodyDocD, outDocD, printFileDocD, boolTypeDocD,
     intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
@@ -32,9 +32,9 @@ import NewLanguageRenderer (packageDocD,
     castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
-    setMain, statementsToStateVars)
+    setMain, setEmpty, statementsToStateVars)
 import Helpers (angles, oneTab, tripFst, tripSnd, tripThird, liftA4, liftA5,
-    liftA6, liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair, 
+    liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
     liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -130,9 +130,9 @@ instance StateTypeSym JavaCode where
 instance ControlBlockSym JavaCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
-                                                    Just b  -> liftA2 stratDocD b (state resultState)
+                                                   Just b  -> liftA2 stratDocD b (state resultState)
         where resultState = case av of Nothing    -> return (empty, Empty)
-                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
+                                       Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
 
     listSlice t vnew vold b e s = 
@@ -147,11 +147,11 @@ instance ControlBlockSym JavaCode where
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
             (vnew &= v_temp)]])
         where getB Nothing = litInt 0
-                getB (Just n) = n
-                getE Nothing = vold $. listSize
-                getE (Just n) = n
-                getS Nothing v = (&++) v
-                getS (Just n) v = v &+= n
+              getB (Just n) = n
+              getE Nothing = vold $. listSize
+              getE (Just n) = n
+              getS Nothing v = (&++) v
+              getS (Just n) v = v &+= n
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
@@ -419,7 +419,7 @@ instance StatementSym JavaCode where
     initObserverList = listDecDef observerListName
     addObserver t o = valState $ obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
-                lastelem = obsList $. listSize
+              lastelem = obsList $. listSize
 
     state = fmap statementDocD
     loopState = fmap (statementDocD . setEmpty)
@@ -444,9 +444,9 @@ instance ControlStatementSym JavaCode where
     checkState l = switch (var l)
     notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
         where obsList = observerListName `listOf` t
-                index = "observerIndex"
-                initv = varDecDef index int $ litInt 0
-                notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+              index = "observerIndex"
+              initv = varDecDef index int $ litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
     getFileInputAll f v = while (f $. (func "hasNextLine" []))
         (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
@@ -508,7 +508,7 @@ instance ModuleSym JavaCode where
     type Module JavaCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
         case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unJC) cs) 
-                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
+                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [any (snd . unJC) ms, any (snd . unJC) cs])
 

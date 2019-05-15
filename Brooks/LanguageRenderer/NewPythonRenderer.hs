@@ -13,7 +13,7 @@ import New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
     ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
     StateVarSym(..), ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', 
+import NewLanguageRenderer (Terminator(..), fileDoc', 
     enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, intTypeDocD, 
     floatTypeDocD, typeDocD, voidDocD, constructDocD, paramListDocD, 
     methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
@@ -29,7 +29,7 @@ import NewLanguageRenderer (fileDoc',
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
 import Helpers (blank, oneTab, vibcat, tripFst, tripSnd, tripThird, liftA4, 
-    liftA5, liftA6, liftA7, liftList, lift1List, liftPair, lift3Pair, lift4Pair,
+    liftA5, liftList, lift1List, lift4Pair,
     liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -125,14 +125,14 @@ instance StateTypeSym PythonCode where
 instance ControlBlockSym PythonCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
-                                                    Just b  -> liftA2 stratDocD b (state resultState)
+                                                   Just b  -> liftA2 stratDocD b (state resultState)
         where resultState = case av of Nothing    -> return (empty, Empty)
-                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
+                                       Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
 
     listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
         where getVal Nothing = return (empty, Nothing)
-                getVal (Just v) = v                           
+              getVal (Just v) = v                           
 
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
@@ -399,7 +399,7 @@ instance StatementSym PythonCode where
     initObserverList = listDecDef observerListName
     addObserver t o = valState $ obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
-                lastelem = listSizeAccess obsList
+              lastelem = listSizeAccess obsList
 
     state = fmap statementDocD
     loopState = fmap statementDocD 
@@ -424,9 +424,9 @@ instance ControlStatementSym PythonCode where
     checkState l = switch (var l)
     notifyObservers fn t ps = forRange index initv ((listSizeAccess obsList)) (litInt 1) notify
         where obsList = observerListName `listOf` t
-                index = "observerIndex"
-                initv = litInt 0
-                notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+              index = "observerIndex"
+              initv = litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
     
     getFileInputAll f v = v &= (objMethodCall f "readlines" [])
 
@@ -534,7 +534,7 @@ pyListExtend (dftVal, _) = dot <> text "append" <> parens dftVal
 pyListExtendList :: Integer -> Doc
 pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
     where nestedList 0 = empty
-            nestedList n = brackets $ nestedList (n-1)
+          nestedList n = brackets $ nestedList (n-1)
 
 pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v
@@ -586,7 +586,7 @@ pyMethod n (slf, _) ps b = vcat [
     oneTab $ bodyD]
         where oneParam | isEmpty ps = empty
                         | otherwise  = text ", "
-                bodyD | isEmpty b = text "None"
+              bodyD | isEmpty b = text "None"
                     | otherwise = b
 
 pyFunction :: Label -> Doc -> Doc -> Doc
@@ -618,7 +618,7 @@ pyModule ls vs fs cs =
     cs
     where libs | isEmpty ls = empty
                 | otherwise  = ls $+$ blank
-            vars | isEmpty vs = empty
+          vars | isEmpty vs = empty
                 | otherwise  = vs $+$ blank
-            funcs | isEmpty fs = empty
+          funcs | isEmpty fs = empty
                 | otherwise  = fs $+$ blank

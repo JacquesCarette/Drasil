@@ -3,7 +3,7 @@ module NewLanguageRenderer (
     -- * Code Generation functions
     makeCode, createCodeFiles,
     -- * Common Syntax
-    classDec, dot, doubleSlash, forLabel, new, observerListName,
+    classDec, dot, doubleSlash, forLabel, new, observerListName, Terminator(..),
     
     -- * Default Functions available for use in renderers
     packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
@@ -30,7 +30,7 @@ module NewLanguageRenderer (
     castDocD, sizeDocD, listAccessDocD, listSetDocD, 
     objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
-    getterName, setterName, setMain, statementsToStateVars
+    getterName, setterName, setMain, setEmpty, statementsToStateVars
 ) where
 
 import New (Label, Library)
@@ -82,6 +82,8 @@ new = text "new"
 
 observerListName :: Label
 observerListName = "observerList"
+
+data Terminator = Semi | Empty
 
 ----------------------------------
 -- Functions for rendering code --

@@ -15,7 +15,7 @@ helloWorld = fileDoc (buildModule "HelloWorld" [] [] [] [helloWorldClass])
 
 helloWorldClass :: (RenderSym repr) => repr (Class repr)
 helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [doubleAndAdd,
-  mainMethod (body [ helloInitVariables, helloStringSplit, helloAfterSplit, helloListSlice,
+  mainMethod (body [ helloInitVariables, helloListSlice,
     block [ifCond [((var "b") ?>= (litInt 6), bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
       ((var "b") ?== (litInt 5), helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])]
@@ -34,18 +34,13 @@ helloInitVariables = block [ (comment "Initializing variables"),
   (varDec "e" float),
   ("e" &.= (objAccess (var "myOtherList") (listAccess (litInt 1)))),
   (valState (objAccess (var "myOtherList") (listSet (litInt 1) (litFloat 17.4)))),
-  (listDec "myName" 7 (listType static string))]
-
-helloAfterSplit :: (RenderSym repr) => repr (Block repr)
-helloAfterSplit = block [
+  (listDec "myName" 7 (listType static string)),
+  stringSplit ' ' (var "myName") (litString "Brooks Mac"),
   (printLnList (string) (var "myName")),
   (listDec "boringList" 5 boolListType),
   (valState $ listPopulateAccess (var "boringList") (listPopulateBool (litInt 5))),
   (printLnList bool (var "boringList")),
   (listDec "mySlicedList" 2 $ floatListType static)]
-
-helloStringSplit :: (RenderSym repr) => repr (Block repr)
-helloStringSplit = stringSplit ' ' (var "myName") (litString "Brooks Mac")
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
 helloListSlice = (listSlice (floatListType static) (var "mySlicedList") (var "myOtherList") (Just (litInt 1)) (Just (litInt 3)) Nothing)

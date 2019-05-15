@@ -19,13 +19,13 @@ GAMEPHYS_EXE  = chipmunkdocs
 
 EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
 
-BUILD_E_SUFFIX = _build
+GEN_E_SUFFIX = _gen
 TEST_E_SUFFIX = _diff
 MOVE_DF_E_SUFFIX = _prog
 TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 
-BUILD_EXAMPLES = $(addsuffix $(BUILD_E_SUFFIX), $(EXAMPLES))
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
 MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
@@ -56,7 +56,7 @@ all: test
 check_stack: FORCE
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
 
-test: $(BUILD_EXAMPLES) $(TEST_EXAMPLES)
+test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
@@ -73,21 +73,21 @@ debug: test
 $(filter build_%, $(BUILD_PACKAGES)): build_%: check_stack
 	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
-%$(BUILD_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(BUILD_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-%$(BUILD_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
-$(filter %$(BUILD_E_SUFFIX), $(BUILD_EXAMPLES)): %$(BUILD_E_SUFFIX): build_example
+%$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): build_example
 	mkdir -p build/$(EDIR)
 	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
 %$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(BUILD_E_SUFFIX)
+$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
 	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EDIR)$(LOG_SUFFIX) 2>&1
 
-$(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(BUILD_E_SUFFIX)
+$(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 
-$(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(BUILD_E_SUFFIX)
+$(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
 	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
 	test -d ./build/$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/java/
 	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
@@ -100,7 +100,7 @@ $(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-$(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(BUILD_E_SUFFIX)
+$(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
 	EDIR=$(EDIR) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
 
 tex: $(TEX_EXAMPLES)

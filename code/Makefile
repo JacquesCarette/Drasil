@@ -1,7 +1,10 @@
 PACKAGES = lang build code theory database printers gen data docLang example
-DPACKAGES = $(addprefix drasil-, $(PACKAGES))
-BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
-DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
+
+BUILD_P_SUFFIX = _build
+DOC_P_SUFFIX = _doc
+
+BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
+DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
@@ -70,13 +73,13 @@ debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-$(filter build_%, $(BUILD_PACKAGES)): build_%: check_stack
+$(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
 
 %$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
-$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): build_example
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
 	mkdir -p build/$(EDIR)
 	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
@@ -93,9 +96,9 @@ $(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
 	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
 	test -d ./build/$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/cpp/
 
-docs: $(DOCS_PACKAGES)
+docs: $(DOC_PACKAGES)
 
-$(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
+$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
 	stack haddock drasil-$* $(haddockArgs)
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)

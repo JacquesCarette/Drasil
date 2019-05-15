@@ -3,7 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (GenDefn, InstanceModel)
 import Data.List(transpose)
 
 egetDocDesc :: DocDesc -> [Expr]
@@ -149,7 +149,7 @@ egetGD :: GenDefn ->[Expr]
 egetGD gd = [gd ^. relat]
 
 egetDD :: DataDefinition -> [Expr]
-egetDD dd = [dd ^. defnExpr, sy dd]
+egetDD d = [d ^. defnExpr, sy d]
 
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc = concatMap getDocSec
@@ -337,7 +337,7 @@ getGD :: GenDefn -> [Sentence]
 getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getNotes)
 
 getDD :: DataDefinition -> [Sentence]
-getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
+getDD d = (d ^. derivations) ++ (d ^. getNotes)
 
 getTM :: TheoryModel -> [Sentence]
 getTM x = map (^. defn) (x ^. operations) ++ map (^. defn) (x ^. defined_quant)

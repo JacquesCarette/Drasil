@@ -5,6 +5,7 @@ module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF,
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
+import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 
 import Data.Drasil.Concepts.Documentation (assumption, constant)
 import Data.Drasil.Concepts.Math (equation)

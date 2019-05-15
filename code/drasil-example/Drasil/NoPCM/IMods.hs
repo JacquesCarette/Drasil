@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im)
+import Theory.Drasil (DataDefinition, InstanceModel, im)
 
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation, rOfChng)

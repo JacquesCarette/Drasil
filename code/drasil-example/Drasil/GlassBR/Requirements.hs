@@ -9,6 +9,7 @@ import Language.Drasil
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
+import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,

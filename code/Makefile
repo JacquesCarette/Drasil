@@ -24,8 +24,6 @@ PROGS =  $(addsuffix _prog, $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
-DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
-
 # make variables/configuration
 DIFF = diff --strip-trailing-cr --ignore-all-space -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log

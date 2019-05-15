@@ -3,6 +3,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
+import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)

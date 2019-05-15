@@ -18,6 +18,7 @@ module Drasil.Sections.SolutionCharacterSpec
   ) where
 
 import Language.Drasil
+import Theory.Drasil (DataDefinition)
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)

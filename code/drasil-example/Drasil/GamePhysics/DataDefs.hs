@@ -4,6 +4,7 @@ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
+import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 

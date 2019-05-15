@@ -9,7 +9,8 @@ library
   exposed-modules:
       Theory.Drasil
   other-modules:
-      Theory.Drasil.GenDefn
+      Theory.Drasil.DataDefinition
+    , Theory.Drasil.GenDefn
     , Theory.Drasil.InstanceModel
 
   Build-Depends:

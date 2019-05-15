@@ -29,7 +29,7 @@ tr         = wrap "tr" []
 -- | Table header tag wrapper
 th         = wrap "th" []
 -- | Table cell tag wrapper
-td         = oldWrap "td" []
+td         = wrap "td" []
 -- | Figure tag wrapper
 figure     = oldWrap "figure" []
 -- | Figcaption tag wrapper

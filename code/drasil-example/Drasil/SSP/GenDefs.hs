@@ -27,15 +27,15 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol,
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWISE)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (sliceWght, baseWtrF, intersliceWtrF,
+import Drasil.SSP.DataDefs (sliceWght, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation)
+  ratioVariation, baseWtrFRDD, baseWtrFLDD)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceL, baseHydroForceR, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
   inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
   shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
@@ -47,9 +47,10 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 ---------------------------
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
- effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, srfWtrFGD]
+ effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, 
+ baseWtrFGD, srfWtrFGD]
 
-normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, srfWtrFGD :: GenDefn
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, baseWtrFGD, srfWtrFGD :: GenDefn
 normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
   [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
@@ -68,8 +69,10 @@ normShrRGD   = gd normShrR   (getUnit intShrForce)   []
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
+baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) []
+  [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
 srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
-  [makeCite fredlund1977]               "srfWtrF"    [srfWtrFNotes]
+  [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
 
 --
 normForcEq :: RelationConcept
@@ -175,7 +178,7 @@ effNormF_rel :: Relation
 effNormF_rel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 
 effNormF_desc :: Sentence
-effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrF
+effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 
 effNormF_deriv :: Sentence
 effNormF_deriv = foldlSent [
@@ -221,7 +224,7 @@ resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in",
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch watrForce, S "is defined in",
   makeRef2S intersliceWtrF `sC` ch baseHydroForce, S "is defined in",
-  makeRef2S baseWtrF `sC` S "and", ch baseLngth, S "is defined in" +:+. 
+  makeRef2S baseWtrFGD `sC` S "and", ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
 --
@@ -266,6 +269,22 @@ momEql_deriv :: Sentence
 momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+
+-- 
+
+baseWtrF :: RelationConcept
+baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force") 
+  bsWtrFNotes bsWtrFEqn
+
+bsWtrFEqn :: Expr
+bsWtrFEqn = 0.5 * ((inxi baseHydroForceL) + (inxi baseHydroForceR))
+
+bsWtrFNotes :: Sentence
+bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
+  phrase assumption, S "that the base of a slice is a straight line" +:+.
+  sParen (makeRef2S assumpSBSBISL), ch baseHydroForceL, S "is defined in",
+  makeRef2S baseWtrFLDD `sAnd` ch baseHydroForceR, S "is defined in",
+  makeRef2S baseWtrFRDD]
 
 --
 

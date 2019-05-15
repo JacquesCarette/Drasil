@@ -19,8 +19,8 @@ GAMEPHYS_EXE  = chipmunkdocs
 
 EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
 BUILD_EXAMPLES = $(addsuffix _build, $(EXAMPLES))
-TESTS =  $(addsuffix _diff, $(EXAMPLES))
-PROGS =  $(addsuffix _prog, $(EXAMPLES))
+TEST_EXAMPLES =  $(addsuffix _diff, $(EXAMPLES))
+MOVE_DF_EXAMPLES =  $(addsuffix _prog, $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
@@ -49,13 +49,13 @@ all: test
 check_stack: FORCE
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
 
-test: $(PROGS) $(TESTS)
+test: $(BUILD_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
 	sh log_check.sh $(NOISY)
 
-prog: $(PROGS)
+prog: $(MOVE_DF_EXAMPLES)
 
 FORCE: ;
 
@@ -75,11 +75,10 @@ $(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
 
 %_diff: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_diff: EDIR=$($(EXAMPLE)_DIR)
-$(filter %_diff, $(TESTS)): %_diff: %_build
+$(filter %_diff, $(TEST_EXAMPLES)): %_diff: %_build
 	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EDIR)$(LOG_SUFFIX) 2>&1
 
-%_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
-$(filter %_prog, $(PROGS)): %_prog: %_build
+$(filter %_prog, $(MOVE_DF_EXAMPLES)): %_prog: %_build
 
 glassbr_prog: glassbr_build
 	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
@@ -101,7 +100,7 @@ tex: $(TEX_EXAMPLES)
 
 %_code: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_code: EDIR=$($(EXAMPLE)_DIR)
-$(filter %_code, $(CODE_EXAMPLES)): %_code: %_build
+$(filter %_code, $(CODE_EXAMPLES)): %_code: %_prog
 	EDIR=$(EDIR) MAKE=$(MAKE) sh ./code_build.sh
 
 code: $(CODE_EXAMPLES)

@@ -384,7 +384,7 @@ complexDoc' c (StringSplit vnew s d) =    let l_ss = "ss"
   
   
 ioDoc' :: Config -> IOSt -> Doc
-ioDoc' c (OpenFile f n m) = valueDoc c f <> dot <> text "open" <> (parens $ valueDoc c n <> text ", " <> modeType m) <> semi
+ioDoc' c (OpenFile f n m) = valueDoc c f <> dot <> text "open" <> parens (valueDoc c n <> text ", " <> modeType m) <> semi
   where modeType Read = text "std::fstream::in"
         modeType Write = text "std::fstream::out | std::fstream::app"
 ioDoc' c io = ioDocD c io

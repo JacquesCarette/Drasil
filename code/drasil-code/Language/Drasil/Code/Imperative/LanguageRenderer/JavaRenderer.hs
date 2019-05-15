@@ -232,7 +232,7 @@ complexDoc' :: Config -> Complex -> Doc
 complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "nextLine" []))
 complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "nextLine" []))
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop $
-  while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "nextLine" [])))    
+  while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v $. listAppend (f $.(Func "nextLine" [])))    
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp
                                                    l_i = "i_temp"

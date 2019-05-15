@@ -127,7 +127,8 @@ helpToRefField t si
     r = citeDB si
 
 helperSources :: [Reference] -> [Contents]
-helperSources x = [mkParagraph $ foldlList Comma List $ map Ref x]
+helperSources [] = [mkParagraph $ S "--"]
+helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow

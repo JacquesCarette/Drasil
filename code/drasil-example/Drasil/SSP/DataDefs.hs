@@ -1,7 +1,7 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
+module Drasil.SSP.DataDefs (dataDefns, baseWtrF, 
   intersliceWtrF, angleA, angleB, lengthB, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
-  watForceSumDD) where 
+  watForceSumDD, slcWghtLDD, slcWghtRDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -29,30 +29,10 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR,
 ------------------------
 
 dataDefns :: [DataDefinition]
-dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, lengthB, 
+dataDefns = [baseWtrF, intersliceWtrF, angleA, angleB, lengthB, 
   lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
   nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD,
   slcWghtLDD, baseWtrFRDD, baseWtrFLDD]
-
---DD1
-
-sliceWght :: DataDefinition
-sliceWght = dd sliceWghtQD [makeCite fredlund1977] [{-Derivation-}] "sliceWght" 
-  [sliceWghtNotes]
---FIXME: fill empty lists in
-
-sliceWghtQD :: QDefinition
-sliceWghtQD = mkQuantDef slcWght sliceWghtEqn
-
-sliceWghtEqn :: Expr
-sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
-
-sliceWghtNotes :: Sentence
-sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
-  phrase assumption, S "that the surface and the base of a", phrase slice, 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
-  S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
-  S "is defined in" +:+ makeRef2S slcWghtRDD]
 
 --DD2
 

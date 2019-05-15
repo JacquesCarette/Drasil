@@ -27,9 +27,9 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol,
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWISE)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
-import Drasil.SSP.DataDefs (sliceWght, baseWtrF, intersliceWtrF,
+import Drasil.SSP.DataDefs (baseWtrF, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation)
+  ratioVariation, slcWghtLDD, slcWghtRDD)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
@@ -39,7 +39,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
   inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
   shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
-  shrResI, slcWght, slopeHght, surfHydroForce,
+  shrResI, slcWght, slcWghtL, slcWghtR, slopeHght, surfHydroForce,
   surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
 
 ---------------------------
@@ -47,9 +47,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 ---------------------------
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
- effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, srfWtrFGD]
+ effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, sliceWghtGD, srfWtrFGD]
 
-normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, srfWtrFGD :: GenDefn
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, srfWtrFGD :: GenDefn
 normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
   [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
@@ -68,6 +68,8 @@ normShrRGD   = gd normShrR   (getUnit intShrForce)   []
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
+sliceWghtGD  = gd sliceWght  (getUnit slcWght)       []
+  [makeCite fredlund1977]               "sliceWght"   [sliceWghtNotes]
 srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
   [makeCite fredlund1977]               "srfWtrF"    [srfWtrFNotes]
 
@@ -83,7 +85,7 @@ nmFEq_rel = inxi totNrmForce $= eqlExprN cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the normal direction", ch slcWght, S "is defined in", 
-  makeRef2S sliceWght `sC` ch surfHydroForce,  S "is defined in", 
+  makeRef2S sliceWghtGD `sC` ch surfHydroForce,  S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
@@ -105,7 +107,7 @@ bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", ch slcWght, S "is defined in", 
-  makeRef2S sliceWght `sC` ch surfHydroForce, S "is defined in", 
+  makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
@@ -216,7 +218,7 @@ resShearWO_rel = inxi shearRNoIntsl $=
 
 resShearWO_desc :: Sentence
 resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
-  makeRef2S sliceWght `sC` ch surfHydroForce, S "is defined in", 
+  makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch watrForce, S "is defined in",
@@ -237,7 +239,7 @@ mobShearWO_rel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
 
 mobShearWO_desc :: Sentence
 mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
-  makeRef2S sliceWght `sC` ch surfHydroForce, S "is defined in", 
+  makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` S "and", ch watrForce, S "is defined in" +:+.
@@ -257,15 +259,32 @@ momEql_desc :: Sentence
 momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
   makeRef2S equilibrium, S "for the" +:+. phrase momntOfBdy, ch baseWthX,
   S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
-  makeRef2S angleA `sC` ch slcWght, S "is defined in", makeRef2S sliceWght `sC`
-  ch midpntHght, S "is defined in", makeRef2S slcHeight `sC` ch surfHydroForce,
-  S "is defined in", makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, 
-  S "is defined in", makeRef2S angleB]
+  makeRef2S angleA `sC` ch slcWght, S "is defined in", 
+  makeRef2S sliceWghtGD `sC` ch midpntHght, S "is defined in", 
+  makeRef2S slcHeight `sC` ch surfHydroForce, S "is defined in", 
+  makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, S "is defined in", 
+  makeRef2S angleB]
 
 momEql_deriv :: Sentence
 momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+
+--
+
+sliceWght :: RelationConcept
+sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes 
+  sliceWghtEqn
+
+sliceWghtEqn :: Expr
+sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
+
+sliceWghtNotes :: Sentence
+sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
+  phrase assumption, S "that the surface and the base of a", phrase slice, 
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
+  S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
+  S "is defined in" +:+ makeRef2S slcWghtRDD]
 
 --
 

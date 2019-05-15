@@ -2,6 +2,11 @@
 module Theory.Drasil (
   -- GenDefn
   GenDefn, gd, gdNoRefs
+  -- InstanceModel
+  , InstanceModel, Constraints
+  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , inCons, outCons, imOutput, imInputs
 ) where
 
 import Theory.Drasil.GenDefn
+import Theory.Drasil.InstanceModel

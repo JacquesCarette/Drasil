@@ -9,6 +9,11 @@ if [ -z "$LABEL_FILE" ]; then
 	exit 1
 fi
 
+if [ -z "$MANAGED_LABEL_FILE" ]; then
+	echo "Missing managed temp file location."
+	exit 1
+fi
+
 if [ -z "$TRAVIS_CMD" ]; then
 	echo "Expected script to be running under CI. Stopping."
 	exit 1
@@ -22,6 +27,7 @@ shift 1
 $SHELL -c "$*"
 RET=$?
 
+echo "$LABEL" >> "$MANAGED_LABEL_FILE"
 if [ $RET -ne "0" ]; then
 	echo "$LABEL" >> "$LABEL_FILE"
 fi

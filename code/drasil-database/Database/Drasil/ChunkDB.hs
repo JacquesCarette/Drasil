@@ -159,8 +159,8 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] ->
     [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
-cdb s t c u tc rfm dd ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
-  (conceptMap c) (unitMap u) tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm)
+cdb s t c u tc rfm d ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
+  (conceptMap c) (unitMap u) tc rfm (idMap d) (idMap ins) (idMap gd) (idMap tm)
   (idMap ci) (idMap sec) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

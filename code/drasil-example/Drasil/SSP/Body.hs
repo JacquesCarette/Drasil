@@ -8,7 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (GenDefn, InstanceModel)
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)

@@ -1,6 +1,7 @@
 module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
+import Theory.Drasil (InstanceModel, im, imNoDeriv)
 
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe,

@@ -85,7 +85,7 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
-tm c _ _ _ _ _ [] _         = error $ "Source field of" ++ c ^. uid ++ "is empty"
+tm c _ _ _ _ _ [] _         = error $ "Source field of " ++ c ^. uid ++ " is empty"
 tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
       (prependAbrv theoryMod lbe)

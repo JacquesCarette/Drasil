@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: May 13, 2019
+Last updated: May 14, 2019
 ----------------------------------------------------------
 
 **Concept**
@@ -27,9 +27,6 @@ DefinedQuantity.hs
 
 Eq.hs
   - Defines QDefinition data type (quantity with units and defining equations)
-
-InstanceModel.hs
-  - Instance model chunks *TODO: Move from drasil-lang to drasil-theory*
 
 NamedIdea.hs
   - NamedChunk and IdeaDict data types

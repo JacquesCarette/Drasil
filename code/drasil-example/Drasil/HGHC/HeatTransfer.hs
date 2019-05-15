@@ -38,7 +38,7 @@ htTransCladCool, htTransCladFuel :: QDefinition
 ---
 
 htTransCladCoolDD :: DataDefinition
-htTransCladCoolDD = mkDD htTransCladCool [{-References-}] [{-Derivation-}] "htTransCladCool"--Label
+htTransCladCoolDD = ddNoRefs htTransCladCool [{-Derivation-}] "htTransCladCool"--Label
   []--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
@@ -53,7 +53,7 @@ htTransCladCoolEq =
 ---
 
 htTransCladFuelDD :: DataDefinition
-htTransCladFuelDD = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTransCladFuel"--Label
+htTransCladFuelDD = ddNoRefs htTransCladFuel [{-Derivation-}] "htTransCladFuel"--Label
   []--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP

@@ -14,7 +14,7 @@ import Data.Maybe (mapMaybe)
 import Language.Drasil
 import Language.Drasil.Development (lnames')
 import Database.Drasil (TraceMap, traceMap)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (GenDefn, InstanceModel)
 
 import Drasil.DocumentLanguage
 
@@ -71,15 +71,15 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
   (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
-  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes imod),
+  (traceMap' extractSFromNotes ddef), (traceMap' extractSFromNotes imod),
   -- Theory models do not have derivations.
   (traceMap' extractSFromDeriv gd),
-  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv imod)]
+  (traceMap' extractSFromDeriv ddef), (traceMap' extractSFromDeriv imod)]
   where
     tt   = getTraceMapFromTM $ getSCSSub a
     gd   = getTraceMapFromGD $ getSCSSub a
     imod = getTraceMapFromIM $ getSCSSub a
-    dd   = getTraceMapFromDD $ getSCSSub a
+    ddef = getTraceMapFromDD $ getSCSSub a
     ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.

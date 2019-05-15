@@ -1,16 +1,14 @@
+PACKAGES = lang build code theory database printers gen data docLang example
+DPACKAGES = $(addprefix drasil-, $(PACKAGES))
+BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
+DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
+
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
-
-LOG_SUFFIX = _log.log
-
-PACKAGES = lang build code theory database printers gen data docLang example
-DPACKAGES = $(addprefix drasil-, $(PACKAGES))
-BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
-DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
 
 TINY_EXE  = tiny
 GLASSBR_EXE = glassbr
@@ -21,27 +19,32 @@ GAMEPHYS_EXE  = chipmunkdocs
 
 EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
 BUILD_EXAMPLES = $(addsuffix _build, $(EXAMPLES))
+TESTS =  $(addsuffix _diff, $(EXAMPLES))
+PROGS =  $(addsuffix _prog, $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
 DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
+
+# make variables/configuration
 DIFF = diff --strip-trailing-cr --ignore-all-space -r -X ../.gitignore -x '*.txt'
+LOG_SUFFIX = _log.log
+MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
+CACHED_MSV_FILE = .drasil-min-stack-ver
 
-TESTS =  $(addsuffix _diff, $(EXAMPLES))
-PROGS =  $(addsuffix _prog, $(EXAMPLES))
-
+# make command line options
+#  GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
+#  GHC build options
 GHCTHREADS += 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
+#  Output amount control
 NOISY=no
 SUMMARIZE_TEX=no
-
-MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
-CACHED_MSV_FILE = .drasil-min-stack-ver
 
 all: test
 

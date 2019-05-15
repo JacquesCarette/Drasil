@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Theory.Drasil (
   -- GenDefn
-  GenDefn, gd
+  GenDefn, gd, gdNoRefs
   -- InstanceModel
   , InstanceModel, Constraints
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs

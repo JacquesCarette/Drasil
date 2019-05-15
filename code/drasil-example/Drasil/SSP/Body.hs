@@ -19,7 +19,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
@@ -41,7 +41,7 @@ import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
   stress, time, twoD, physicCon)
-import Data.Drasil.Concepts.Software (accuracy, program, softwarecon, performance)
+import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
@@ -150,14 +150,13 @@ mkSRS = [RefSec $ RefProg intro
         ],
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub' [accuracy, performance] sspNFRequirements
-    (short ssp +:+ S "is intended to be an educational tool")
-    EmptyS]
-  , LCsSec $ LCsProg likelyChanges_SRS
-  , UCsSec $ UCsProg unlikelyChanges_SRS
-  , TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
-    [LlC traceyMatrix] []
-  , Verbatim aux_cons, Bibliography]
+    NonFReqsSub sspNFRequirements
+  ],
+  LCsSec $ LCsProg likelyChanges_SRS,
+  UCsSec $ UCsProg unlikelyChanges_SRS,
+  TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
+    [LlC traceyMatrix] [],
+  Verbatim aux_cons, Bibliography]
 
 ssp_label :: TraceMap
 ssp_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins

@@ -17,7 +17,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
@@ -39,7 +39,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
-import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness,
+import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
@@ -188,11 +188,8 @@ mkSRS = [RefSec $ RefProg intro [
       ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub' [performance] swhsNFRequirements
-      (S "This problem is small in size and relatively simple")
-      (S "Any reasonable implementation will be very quick and use minimal storage.")
+    NonFReqsSub swhsNFRequirements
   ],
-  --NonFReqsSub [performance] swhspriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $

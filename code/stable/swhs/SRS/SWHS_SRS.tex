@@ -523,7 +523,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
@@ -1133,7 +1133,6 @@ ${C_{tol}}$ & -- & relative tolerance for conservation of energy
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
-This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are:
 \begin{itemize}
 \item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
 \item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.

@@ -233,10 +233,15 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- Helper for formatting constraints
+foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none

@@ -20,11 +20,11 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
-  assumpSL, assumpWISE]
+  assumpSL, assumpWIBE, assumpWISE]
 
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
-  assumpSL, assumpWISE :: ConceptInstance
+  assumpSL, assumpWIBE, assumpWISE :: ConceptInstance
 
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
@@ -38,11 +38,14 @@ assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Inters
 assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
 assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
 assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
-assumpWISE = cic "assumpWISE" waterIntersect "Water-Intersects-Slice-Edge" 
+assumpWIBE = cic "assumpWISE" waterBIntersect "Water-Intersects-Base-Edge" 
+  assumpDom
+assumpWISE = cic "assumpWISE" waterSIntersect "Water-Intersects-Surface-Edge" 
   assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN, 
-  straightS, propertiesS, edgeS, seismicF, surfaceL, waterIntersect :: Sentence
+  straightS, propertiesS, edgeS, seismicF, surfaceL, waterBIntersect, 
+  waterSIntersect :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
@@ -90,5 +93,8 @@ seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", 
 surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
   S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]
 
-waterIntersect = foldlSent [S "The", phrase waterTable, S "only intersects the",
-  phrase slopeSrf, S "at the edge of a", phrase slice]
+waterBIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
+  S "the base of a", phrase slice, S "at an edge of the", phrase slice]
+
+waterSIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
+  S "the", phrase slopeSrf, S "at the edge of a", phrase slice]

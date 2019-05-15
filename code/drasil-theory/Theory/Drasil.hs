@@ -1,7 +1,12 @@
 {- re-export many things to simplify external use -}
 module Theory.Drasil (
   -- GenDefn
-  GenDefn, gd
+  GenDefn, gd, gdNoRefs
+  -- InstanceModel
+  , InstanceModel, Constraints
+  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , inCons, outCons, imOutput, imInputs
 ) where
 
 import Theory.Drasil.GenDefn
+import Theory.Drasil.InstanceModel

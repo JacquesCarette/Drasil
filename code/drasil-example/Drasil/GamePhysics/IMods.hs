@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.IMods (iModels, iModelsNew, im1_new, im2_new, im3_new, instModIntro) where
 
 import Language.Drasil
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
+
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)

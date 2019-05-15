@@ -119,7 +119,12 @@ nonfuncReqsSection :: Section
 nonfuncReqsSection = SRS.nonfuncReq (mkEnumSimpleD nonfuncReqs) []
 
 nonfuncReqs :: [ConceptInstance] 
-nonfuncReqs = [correct, understandable, portable, reliable, reusable, maintainable]
+nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]
+
+highPerformance :: ConceptInstance
+highPerformance = cic "highPerformance" (foldlSent [
+  S "The", phrase code, S "has a short reponse time when performing computation"
+  ]) "High-Performance" nonFuncReqDom
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

@@ -23,7 +23,7 @@ import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars, _sysinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (GenDefn, InstanceModel, inCons, outCons, imOutput, imInputs)
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
@@ -127,7 +127,8 @@ helpToRefField t si
     r = citeDB si
 
 helperSources :: [Reference] -> [Contents]
-helperSources x = [mkParagraph $ foldlList Comma List $ map Ref x]
+helperSources [] = [mkParagraph $ S "--"]
+helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow

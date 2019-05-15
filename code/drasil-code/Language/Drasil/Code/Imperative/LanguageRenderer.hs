@@ -207,7 +207,7 @@ bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
     where docOf = statementDoc c NoLoop
-          notNullStatement s = (not $ isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
+          notNullStatement s = not (isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
           statements = filter notNullStatement ss
     
 callFuncParamListD :: Config -> [Value] -> Doc

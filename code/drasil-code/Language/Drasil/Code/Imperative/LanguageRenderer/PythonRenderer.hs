@@ -119,17 +119,17 @@ pytop _ _ _ m =
     text "import math" 
   ] 
   $+$
-  (vcat $ map (\x -> text "import" <+> text x) (libs m))
+  vcat (map (\x -> text "import" <+> text x) (libs m))
       
 
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
 pybody c f p (Mod _ _ vs fs cs) = 
-  (vcat $ map (statementDoc c NoLoop . DeclState) vs)
+  vcat (map (statementDoc c NoLoop . DeclState) vs)
   $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
-  (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
+  vcat (intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -301,8 +301,8 @@ complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= objMethodCall 
 complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ objMethodCall f "readline" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
 complexDoc' c (ListSlice _ vnew vold b e s) = 
-  valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
-  getVal b <> colon <> getVal e <> colon <> getVal s)
+  valueDoc c vnew <+> equals <+> valueDoc c vold <> 
+  brackets (getVal b <> colon <> getVal e <> colon <> getVal s)
     where getVal Nothing  = empty
           getVal (Just v) = valueDoc c v
 complexDoc' c (StringSplit vnew s d) = 

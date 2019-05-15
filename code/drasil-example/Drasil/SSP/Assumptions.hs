@@ -38,7 +38,7 @@ assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Inters
 assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
 assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
 assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
-assumpWIBE = cic "assumpWISE" waterBIntersect "Water-Intersects-Base-Edge" 
+assumpWIBE = cic "assumpWIBE" waterBIntersect "Water-Intersects-Base-Edge" 
   assumpDom
 assumpWISE = cic "assumpWISE" waterSIntersect "Water-Intersects-Surface-Edge" 
   assumpDom

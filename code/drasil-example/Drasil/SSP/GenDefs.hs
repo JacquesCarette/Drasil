@@ -25,7 +25,7 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol,
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
-  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWISE)
+  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
@@ -69,7 +69,7 @@ normShrRGD   = gd normShrR   (getUnit intShrForce)   []
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
-baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) []
+baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) bsWtrFDeriv
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
 srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
   [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
@@ -290,7 +290,55 @@ bsWtrFNotes :: Sentence
 bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the base of a", phrase slice, 
   S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX,
-  S "is defined in" +:+. makeRef2S lengthB]
+  S "is defined in", makeRef2S lengthB]
+
+bsWtrFDeriv :: Derivation
+bsWtrFDeriv = weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++ 
+  bsWtrFDerivEndSentence
+
+bsWtrFDerivEqns :: [Sentence]
+bsWtrFDerivEqns = map E [bsWtrFDerivWeightEqn, bsWtrFDerivSliceEqn]
+
+bsWtrFDerivSentences :: [Sentence]
+bsWtrFDerivSentences = map foldlSentCol [bsWtrFDerivIntroSentence, bsWtrFDeriv2DSentence]
+
+bsWtrFDerivIntroSentence, bsWtrFDeriv2DSentence, bsWtrFDerivEndSentence :: [Sentence]
+
+bsWtrFDerivWeightEqn, bsWtrFDerivSliceEqn :: Expr
+
+bsWtrFDerivIntroSentence = [S "The", phrase baseHydroForce, S "come from", 
+  phrase weight `ofThe` S "water above the base of each" +:+. phrase slice, 
+  S "Substituting", plural value, S "for water into the",
+  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
+  S "yields"] 
+
+bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
+  S "only 2 dimensions are considered, so the", plural area `sOf` 
+  S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
+  phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
+  S "is below", S "height" `ofThe` phrase slpSrf, S "at one edge and above", 
+  S "height" `ofThe` phrase slpSrf, S "at the other edge is", 
+  S "assumed not to occur" +:+. sParen (makeRef2S assumpWIBE), 
+  S "In the case where", S "height" `ofThe` phrase waterTable,
+  S "is below" +:+. ((S "height" `ofThe` phrase slpSrf) `sC`
+  (phrase area `ofThe` S "water is zero")), S "In the case where", 
+  S "height" `ofThe` phrase waterTable, S "is above", S "height" `ofThe` 
+  phrase slpSrf `sC` S "the water forms a trapezoid on top of the" +:+. 
+  phrase slpSrf, S "The", phrase area, S "of a trapezoid is the average of",
+  plural len `ofThe` S "parallel sides multiplied by the", phrase len +:+.
+  S "between the parallel sides", S "The parallel sides in this case are the",
+  plural distance, S "between the", phrase waterTable `andThe` phrase slpSrf,
+  S "for the edges of the", phrase slice `sC` S "and the", phrase len, 
+  S "between them" `isThe` S "width of the" +:+. phrase slice, S "Thus" `sC`
+  S "the", phrase baseHydroForce, S "are defined as"]
+
+bsWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
+    S "a rearrangement of the non-zero case of" +:+. makeRef2S baseWtrFGD]
+
+bsWtrFDerivWeightEqn = inxi baseHydroForce $= inxi waterVol * sy waterWeight
+
+bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseWthX * 0.5 *
+  ((inxi waterHght - inxi slipHght) + (inxiM1 waterHght - inxiM1 slipHght)) * sy waterWeight
 
 --
 

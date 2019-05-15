@@ -186,7 +186,7 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
+  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
   totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, midpntHght, momntOfBdy, porePressure, sliceHght, 
@@ -196,7 +196,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
+  shearRNoIntsl,slcWght, watrForce, resistiveShear, shrResI,
   intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
   totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
   baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum,
@@ -267,15 +267,6 @@ shearRNoIntsl = uc' "R_i"
 slcWght = uc' "W_i" (cn $ "weights")
   ("downward force per meter in the z-direction on each slice caused by gravity")
   (vec cW) forcePerMeterU
-  
-slcWghtR = uc' "W^R" (cn $ "right weights of slices") 
-  ("weight of each slice per meter in the z-direction, assuming the entire " ++ "slice has the height of the right side of the slice") 
-  (sup (vec cW) cR) forcePerMeterU
-
-slcWghtL = uc' "W^L" (cn $ "left weights of slices") 
-  ("weight of each slice per meter in the z-direction, assuming the entire " ++
-  "slice has the height of the left side of the slice") 
-  (sup (vec cW) cL) forcePerMeterU
 
 watrForce = uc' "H_i" (cn $ "interslice normal water forces") 
   ("per meter in the z-direction exerted in the x-coordinate direction " ++

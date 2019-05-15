@@ -29,17 +29,17 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (baseWtrF, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation, slcWghtLDD, slcWghtRDD)
+  ratioVariation)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
-  inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
-  shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
-  shrResI, slcWght, slcWghtL, slcWghtR, slopeHght, surfHydroForce,
+  dryWeight, effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, 
+  index, inxi, inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat,
+  satWeight, scalFunc, shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, 
+  shearRNoIntsl, shrResI, slcWght, slipHght, slopeHght, surfHydroForce,
   surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
 
 ---------------------------
@@ -277,14 +277,31 @@ sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes
   sliceWghtEqn
 
 sliceWghtEqn :: Expr
-sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
+sliceWghtEqn = inxi slcWght $= inxi baseWthX * 0.5 * case_ [case1, case2, case3]
+  where case1 = (((inxi slopeHght - inxi slipHght) + 
+          (inxiM1 slopeHght - inxiM1 slipHght)) * sy satWeight,
+          (inxi waterHght $> inxi slopeHght) $|| 
+          (inxiM1 waterHght $> inxiM1 slopeHght))
+        case2 = (((inxi slopeHght - inxi waterHght) + 
+          (inxiM1 slopeHght - inxiM1 waterHght)) * (sy dryWeight) +
+          ((inxi waterHght - inxi slipHght) + 
+          (inxiM1 waterHght - inxiM1 slipHght)) * (sy satWeight),
+          (inxi slopeHght $>= inxi waterHght $>= inxi slipHght) $&& 
+          (inxiM1 slopeHght $>= inxiM1 waterHght $>= inxiM1 slipHght))
+        case3 = (((inxi slopeHght - inxi slipHght) + 
+          (inxiM1 slopeHght - inxiM1 slipHght)) * sy dryWeight,
+          (inxi waterHght $< inxi slipHght) $||
+          (inxiM1 waterHght $< inxiM1 slipHght))
 
 sliceWghtNotes :: Sentence
 sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
   phrase assumption, S "that the surface and the base of a", phrase slice, 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
-  S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
-  S "is defined in" +:+ makeRef2S slcWghtRDD]
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The", 
+  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
+  ch index, S "because the", phrase soil, S "is assumed to be homogeneous" `sC`
+  S "with", phrase constant, plural soilPrpty, S "throughout" +:+. 
+  sParen (makeRef2S assumpSLH), ch baseWthX +:+ S "is defined in",
+  makeRef2S lengthB]
 
 --
 

@@ -23,7 +23,7 @@ import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars, _sysinfodb)
-import Theory.Drasil (GenDefn, InstanceModel, inCons, outCons, imOutput, imInputs)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, inCons, outCons, imOutput, imInputs)
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)

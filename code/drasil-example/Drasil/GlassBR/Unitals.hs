@@ -2,6 +2,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Theory.Drasil (mkQuantDef)
 
 import Control.Lens ((^.))
 import Prelude hiding (log)

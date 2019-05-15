@@ -51,7 +51,7 @@ data Contents = UlC UnlabelledContent
 -- | Types of definitions
 data DType = General
            | Instance
-           | TM
+           | Theory
            | DD
 
 -- | Types of layout objects we deal with explicitly

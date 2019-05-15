@@ -10,6 +10,7 @@ library
       Theory.Drasil
   other-modules:
       Theory.Drasil.GenDefn
+    , Theory.Drasil.InstanceModel
 
   Build-Depends:
     base >= 4.7,

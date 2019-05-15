@@ -29,17 +29,17 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (sliceWght, intersliceWtrF,
   angleA, angleB, lengthB, lengthLb, slcHeight, stressDD, 
-  ratioVariation, baseWtrFRDD, baseWtrFLDD)
+  ratioVariation)
 import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
   waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceL, baseHydroForceR, baseLngth, baseWthX, 
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, index, inxi,
   inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat, scalFunc,
   shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, shearRNoIntsl, 
-  shrResI, slcWght, slopeHght, surfHydroForce,
+  shrResI, slcWght, slipHght, slopeHght, surfHydroForce,
   surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
 
 ---------------------------
@@ -277,14 +277,20 @@ baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force")
   bsWtrFNotes bsWtrFEqn
 
 bsWtrFEqn :: Expr
-bsWtrFEqn = 0.5 * ((inxi baseHydroForceL) + (inxi baseHydroForceR))
+bsWtrFEqn = inxi baseHydroForce $= inxi baseWthX * sy waterWeight * 0.5 * 
+  case_ [case1, case2]
+  where case1 = ((inxi waterHght - inxi slipHght) + 
+          (inxiM1 waterHght - inxiM1 slipHght), 
+          (inxi waterHght $>= inxi slipHght) $|| 
+          (inxiM1 waterHght $>= inxiM1 slipHght))
+        case2 = (0, (inxi waterHght $< inxi slipHght) $|| 
+          (inxiM1 waterHght $< inxiM1 slipHght))
 
 bsWtrFNotes :: Sentence
 bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the base of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch baseHydroForceL, S "is defined in",
-  makeRef2S baseWtrFLDD `sAnd` ch baseHydroForceR, S "is defined in",
-  makeRef2S baseWtrFRDD]
+  phrase assumption, S "that the base of a", phrase slice, 
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX,
+  S "is defined in" +:+. makeRef2S lengthB]
 
 --
 
@@ -304,9 +310,9 @@ srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 *
 
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the surface of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch baseWthX, S "is defined in",
-  makeRef2S lengthB]
+  phrase assumption, S "that the surface of a", phrase slice, 
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX, 
+  S "is defined in", makeRef2S lengthB]
 
 srfWtrFDeriv :: Derivation
 srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 

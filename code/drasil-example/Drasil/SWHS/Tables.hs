@@ -1,4 +1,4 @@
-module Drasil.SWHS.Tables where --all of this file is exorted
+module Drasil.SWHS.Tables where --all of this file is exported
 
 import Language.Drasil
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
@@ -8,23 +8,17 @@ import Data.Drasil.Concepts.Math (unit_)
 import Drasil.SWHS.Unitals (pcm_SA, pcm_HTC, 
   temp_C, coil_SA,coil_HTC, htCap_S_P, htCap_W,
   time_final, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tank_length)
-
+  temp_melt_P, pcm_vol, diam, tank_length, abs_tol, rel_tol, cons_tol)
 
 inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
-  [titleize symbol_, titleize unit_, titleize description]
-  (mkTable
-  [ch, --(\ch -> Sy (unit_symb ch)),
-  U.toSentence, phrase] (map qw inputConstraints))
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
+inputInitQuantsTbl = LlC inputInitQuantsTblabled
 
 inputInitQuantsTblabled :: LabelledContent
 inputInitQuantsTblabled = llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
-  U.toSentence, phrase] (map qw inputConstraints))
+  U.toSentence, phrase] ((map qw inputConstraints) ++ (map qw [abs_tol, rel_tol, cons_tol])))
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 inputConstraints :: [UncertQ]

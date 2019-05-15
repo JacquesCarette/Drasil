@@ -28,14 +28,15 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
   assumpt, inModel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content, dataConst,
-  dataDefn, definition, doccon, doccon', document, emphasis, environment,
+  dataDefn, datum, definition, doccon, doccon', document, emphasis, environment,
   figure, goal, information, inModel, input_, interface, item, likelyChg, model,
-  organization, output_, physicalSystem, physSyst, problem, product_, purpose,
-  reference, requirement, section_, software, softwareSys, srs, srsDomains,
-  standard, sysCont, system, template, term_, thModel, traceyMatrix, user, value)
+  organization, output_, physical, physicalSystem, physSyst, problem, product_,
+  purpose, reference, requirement, section_, software, softwareConstraint,
+  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
+  thModel,traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
@@ -362,19 +363,21 @@ sysCtxDesc = foldlSPCol
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
-    S "type ensuring no errors in the data entry",
-  S "Ensure that consistent units are used for input variables",
+sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
+  phrase glaSlab `sAnd` phrase blastTy `sC` S "ensuring no errors in the" +:+
+  plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
     (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "input to the" +:+ phrase software]
+    phrase problem +:+ S "input to the" +:+. phrase software]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters",
-    S "input instead of a floating point number",
-  S "Determine if the inputs satisfy the required physical and software constraints",
-  S "Predict whether the glass slab is safe or not."]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
+  phrase input_ +:+. S "instead of a floating point number",
+  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
+  (phrase physical `sAnd` plural softwareConstraint),
+  S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",

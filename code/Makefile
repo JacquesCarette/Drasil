@@ -6,6 +6,8 @@ DOC_P_SUFFIX = _doc
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 
+PACKAGE_GEN_TARGET = BUILD DOC
+
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
@@ -34,6 +36,10 @@ MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
+EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
+
+ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(foreach E, $(EXAMPLE_GEN_TARGET), $($(E)_EXAMPLES))
+
 # make variables/configuration
 DIFF = diff --strip-trailing-cr --ignore-all-space -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log
@@ -56,7 +62,7 @@ SUMMARIZE_TEX=no
 
 all: test
 
-check_stack: FORCE
+check_stack:
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
 
 test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
@@ -66,8 +72,6 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	sh log_check.sh $(NOISY)
 
 prog: $(MOVE_DF_EXAMPLES)
-
-FORCE: ;
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
@@ -124,3 +128,5 @@ clean_build: clean_logs
 
 clean_logs:
 	- rm -r ./logs
+
+.PHONY: clean_logs clean_build clean code tex doc debug prog test check_stack all $(ALL_EXPANDED_TARGETS)

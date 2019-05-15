@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: May 14, 2019
+Last updated: May 15, 2019
 ----------------------------------------------------------
 
 **Concept**
@@ -18,9 +18,6 @@ Concept.hs
 
 Constrained.hs
   - Defines ConstrainedChunk and ConstrConcept data types
-
-DataDefinition.hs
-  - Defines DataDefinition data type and constructors *TODO: Move from drasil-lang to drasil-theory*
 
 DefinedQuantity.hs
   - Defines DefinedQuantityDict data type and constructors

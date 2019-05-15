@@ -27,7 +27,7 @@ code       = wrap "code" ["code"]
 -- | Table row tag wrapper
 tr         = wrap "tr" []
 -- | Table header tag wrapper
-th         = oldWrap "th" []
+th         = wrap "th" []
 -- | Table cell tag wrapper
 td         = oldWrap "td" []
 -- | Figure tag wrapper

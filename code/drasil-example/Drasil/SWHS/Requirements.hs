@@ -1,6 +1,7 @@
 module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
+import Theory.Drasil (DataDefinition)
 
 import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
 import Drasil.DocLang.SRS (propCorSol) 

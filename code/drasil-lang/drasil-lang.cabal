@@ -18,7 +18,6 @@ library
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.Constrained
-    , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.NamedIdea

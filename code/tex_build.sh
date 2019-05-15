@@ -2,10 +2,6 @@ if [ -z "$EDIR" ]; then
 	echo "Missing EDIR.";
 	exit 1;
 fi;
-if [ -z "$EPREF" ]; then
-	echo "Missing EPREF.";
-	exit 1;
-fi;
 if [ -z "$MAKE" ]; then
 	echo "Missing MAKE.";
 	exit 1;
@@ -22,6 +18,8 @@ else
 	IMODE=nonstopmode;
 fi;
 
+GEN_NAME_SUFFIX=_SRS
+
 cd ./build/"$EDIR"/SRS/;
 $MAKE TEXFLAGS=--interaction="$IMODE" BIBTEXFLAGS="$BIFLAGS";
 RET=$?;
@@ -30,9 +28,9 @@ if [ "$SUMMARIZE_TEX" = "yes" ]; then
 	echo "\n\n\033[0;33m$EDIR TeX Summary\033[0m:";
 	if [ "$RET" -eq 0 ]; then
 		# Approximate error gathering from TeX logs.
-		cat "$EPREF"SRS.log | grep -E "erfull|Warning";
-		cat "$EPREF"SRS.blg | grep -B3 -E "Error";
-		BIBERRS=$(cat "$EPREF"SRS.blg | grep -E "Error" | wc -l);
+		cat "$EDIR$GEN_NAME_SUFFIX".log | grep -E "erfull|Warning";
+		cat "$EDIR$GEN_NAME_SUFFIX".blg | grep -B3 -E "Error";
+		BIBERRS=$(cat "$EDIR$GEN_NAME_SUFFIX".blg | grep -E "Error" | wc -l);
 		if [ "$BIBERRS" -gt 0 ]; then
 			# This conditional is due to the current way TeX makefiles are generated.
 			# BibTeX return value is ignored (specifically with Tiny having no
@@ -41,7 +39,7 @@ if [ "$SUMMARIZE_TEX" = "yes" ]; then
 		fi;
 	else
 		# Most "useful" output is the last run of lualatex. Only print that.
-		cat "$EPREF"SRS.log;
+		cat "$EDIR$GEN_NAME_SUFFIX".log;
 	fi;
 	echo "";
 fi;

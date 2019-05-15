@@ -1,16 +1,11 @@
-TINY_PREF  = Tiny_
-GLASSBR_PREF = GlassBR_
-NOPCM_PREF = NoPCM_
-SWHS_PREF  = SWHS_
-SSP_PREF   = SSP_
-GAMEPHYS_PREF  = Chipmunk_
-
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
+
+LOG_SUFFIX = _log.log
 
 PACKAGES = lang build code theory database printers gen data docLang example
 DPACKAGES = $(addprefix drasil-, $(PACKAGES))
@@ -79,9 +74,8 @@ $(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
 
 %_diff: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_diff: EDIR=$($(EXAMPLE)_DIR)
-%_diff: EPREF=$($(EXAMPLE)_PREF)
 $(filter %_diff, $(TESTS)): %_diff: %_build
-	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EPREF)log.log 2>&1
+	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EDIR)$(LOG_SUFFIX) 2>&1
 
 %_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
 $(filter %_prog, $(PROGS)): %_prog: %_build
@@ -99,9 +93,8 @@ $(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
 
 %_tex: EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %_tex: EDIR=$($(EXAMPLE)_DIR)
-%_tex: EPREF=$($(EXAMPLE)_PREF)
 $(filter %_tex, $(TEX_EXAMPLES)): %_tex: %_build
-	EDIR=$(EDIR) EPREF=$(EPREF) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
+	EDIR=$(EDIR) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 

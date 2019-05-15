@@ -60,11 +60,16 @@ instance Referable DataDefinition where
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d)
+dd :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
+dd q []   _   _     = error $ "Source field of " ++ q ^. uid ++ " is empty"
+dd q refs der short = DatDef q Global refs der (shortname' short) (prependAbrv dataDefn short)
+
+-- | Smart constructor for data definitions with no references
+ddNoRefs :: QDefinition -> Derivation -> String -> [Sentence] -> DataDefinition
+ddNoRefs q der short = DatDef q Global [] der (shortname' short) (prependAbrv dataDefn short)
 
 qdFromDD :: DataDefinition -> QDefinition
-qdFromDD dd = dd ^. qd
+qdFromDD d = d ^. qd
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition

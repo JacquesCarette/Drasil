@@ -177,7 +177,7 @@ funcQD :: QDefinition -> Func
 funcQD qd = FCD $ qtoc qd 
 
 funcData :: Name -> DataDesc -> Func
-funcData n dd = FData $ FuncData (toCodeName n) dd 
+funcData n d = FData $ FuncData (toCodeName n) d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
 funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map codevar i) (spaceToCodeType t) fs 
@@ -314,7 +314,7 @@ fname (FData (FuncData n _)) = n
 prefixFunctions :: [Mod] -> [Mod]
 prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
   where pfunc f@(FCD _) = f
-        pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
+        pfunc (FData (FuncData n d)) = FData (FuncData (funcPrefix ++ n) d)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->

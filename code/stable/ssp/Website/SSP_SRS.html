@@ -571,28 +571,6 @@ N/m
 </tr>
 <tr>
 <td>
-<em><b>U</b><sup>L</sup><sub>b</sub></em>
-</td>
-<td>
-Left Base Hydrostatic Forces on Slices: per meter in the z-direction from water pressure within each slice, assuming the entire slice has the height of the left side of the slice
-</td>
-<td>
-N/m
-</td>
-</tr>
-<tr>
-<td>
-<em><b>U</b><sup>R</sup><sub>b</sub></em>
-</td>
-<td>
-Right Base Hydrostatic Forces on Slices: per meter in the z-direction from water pressure within each slice, assuming the entire slice has the height of the right side of the slice
-</td>
-<td>
-N/m
-</td>
-</tr>
-<tr>
-<td>
 <em><b>U</b><sub>t</sub></em>
 </td>
 <td>
@@ -1542,7 +1520,7 @@ Factor-of-Safety: The factor of safety is assumed to be constant across the enti
 </p>
 <p>
 <div id="assumpSLH">
-Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
+Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. <a href=#GD:resShr>GD: resShr</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtLDD>DD: slcWghtLDD</a> <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.
 </div>
 </p>
 <p>
@@ -1562,7 +1540,7 @@ Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and
 </p>
 <p>
 <div id="assumpPSC">
-Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a>.
+Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:resShr>GD: resShr</a> <a href=#GD:effNormF>GD: effNormF</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
 </div>
 </p>
 <p>
@@ -1572,7 +1550,7 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 </p>
 <p>
 <div id="assumpSBSBISL">
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:sliceWght>DD: sliceWght</a> <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a> <a href=#DD:slcHeight>DD: slcHeight</a> <a href=#DD:angleB>DD: angleB</a> <a href=#GD:baseWtrF>GD: baseWtrF</a> <a href=#DD:angleA>DD: angleA</a> <a href=#DD:sliceWght>DD: sliceWght</a>.
 </div>
 </p>
 <p>
@@ -1591,8 +1569,13 @@ Surface-Load: There is no imposed surface load, and therefore no external forces
 </div>
 </p>
 <p>
+<div id="assumpWIBE">
+Water-Intersects-Base-Edge: The water table only intersects the base of a slice at an edge of the slice. <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+</div>
+</p>
+<p>
 <div id="assumpWISE">
-Water-Intersects-Slice-Edge: The water table only intersects the slope surface at the edge of a slice. <a href=#GD:srfWtrF>GD: srfWtrF</a>.
+Water-Intersects-Surface-Edge: The water table only intersects the slope surface at the edge of a slice. <a href=#GD:srfWtrF>GD: srfWtrF</a>.
 </div>
 </p>
 </div>
@@ -2467,7 +2450,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>.
+<em><b>U</b><sub>b</sub></em> is defined in <a href=#GD:baseWtrF>GD: baseWtrF</a>.
 </p>
 </td>
 </tr>
@@ -2576,7 +2559,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#DD:baseWtrF>DD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+<em><b>W</b></em> is defined in <a href=#DD:sliceWght>DD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#GD:baseWtrF>GD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -3010,7 +2993,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:srfWtrF>GD: srfWtrF</a>.
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
 </p>
 </td>
 </tr>
@@ -3043,6 +3026,140 @@ Substituting specific weight as the product of density and gravitational acceler
 <div class="equation">
 <em>W = V&#8239;γ</em>
 </div>
+<div id="GD:baseWtrF">
+<table class="gdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Base hydrostatic force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em><b>U</b><sub>b,i</sub> = <b>b</b><sub>i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub> , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slip,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+<b>y</b><sub>wt,i</sub>&thinsp;&lt;&thinsp;<b>y</b><sub>slip,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&lt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
+</span>
+</span>
+</div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
+</li>
+<li>
+<em>i</em> is the index (Unitless)
+</li>
+<li>
+<em><b>b</b></em> is the base width of slices (m)
+</li>
+<li>
+<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</li>
+<li>
+<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
+</li>
+<li>
+<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#fredlund1977>fredlund1977</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:effNormF>GD: effNormF</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="paragraph">
+The base hydrostatic forces come from the weight of the water above the base of each slice. Substituting values for water into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
+</p>
+<div class="equation">
+<em><b>U</b><sub>b,i</sub> = <b>V</b><sub>wat,i</sub>&#8239;γ<sub>w</sub></em>
+</div>
+<p class="paragraph">
+Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slip surface at one edge and above the height of the slip surface at the other edge is assumed not to occur (<a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a>). In the case where the height of the water table is below the height of the slip surface, the area of the water is zero. In the case where the height of the water table is above the height of the slip surface, the water forms a trapezoid on top of the slip surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slip surface for the edges of the slice, and the length between them is the width of the slice. Thus, the base hydrostatic forces are defined as:
+</p>
+<div class="equation">
+<em><b>U</b><sub>b,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub></em>
+</div>
+<p class="paragraph">
+This equation is a rearrangement of the non-zero case of <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+</p>
 <div id="GD:srfWtrF">
 <table class="gdefn">
 <tr>
@@ -3162,7 +3279,7 @@ The surface hydrostatic forces come from the weight of the water standing on top
 <em><b>U</b><sub>t,i</sub> = <b>V</b><sub>wat,i</sub>&#8239;γ<sub>w</sub></em>
 </div>
 <p class="paragraph">
-Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slope surface at one edge and above the height of the slope surface at the other edge is assumed not to occur (<a href=#assumpWISE>A: Water-Intersects-Slice-Edge</a>). In the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
+Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only 2 dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slope surface at one edge and above the height of the slope surface at the other edge is assumed not to occur (<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>). In the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
 </p>
 <div class="equation">
 <em><b>U</b><sub>t,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
@@ -3263,7 +3380,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>W</b><sup>L</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> and <em><b>W</b><sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
+This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>W</b><sup>L</sup></em> is defined in <a href=#DD:slcWghtLDD>DD: slcWghtLDD</a> and <em><b>W</b><sup>R</sup></em> is defined in <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
 </p>
 </td>
 </tr>
@@ -3284,108 +3401,6 @@ RefBy
 <td>
 <p class="paragraph">
 <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:baseWtrF">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Base hydrostatic forces
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>U</b><sub>b</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N/m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>U</b><sub>b</sub> = <div class="fraction">
-<span class="fup">
-1
-</span>
-<span class="fdn">
-2
-</span>
-</div>&#8239;(<b>U</b><sup>L</sup><sub>b,i</sub>&plus;<b>U</b><sup>R</sup><sub>b,i</sub>)</em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
-</li>
-<li>
-<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic forces on slices (N/m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic forces on slices (N/m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>U</b><sup>L</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a> and <em><b>U</b><sup>R</sup><sub>b</sub></em> is defined in <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:effNormF>GD: effNormF</a>.
 </p>
 </td>
 </tr>
@@ -3795,7 +3810,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>.
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#GD:baseWtrF>GD: baseWtrF</a> <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a> <a href=#DD:slcWghtLDD>DD: slcWghtLDD</a>.
 </p>
 </td>
 </tr>
@@ -3890,7 +3905,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a> <a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a>.
 </p>
 </td>
 </tr>
@@ -4877,7 +4892,7 @@ RefBy
 </tr>
 </table>
 </div>
-<div id="DD:slcWghtRDD">
+<div id="DD:slcWghtLDD">
 <table class="ddefn">
 <tr>
 <th>
@@ -4998,236 +5013,6 @@ RefBy
 <td>
 <p class="paragraph">
 <a href=#DD:sliceWght>DD: sliceWght</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:baseWtrFRDD">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Right base hydrostatic forces on slices
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>U</b><sup>R</sup><sub>b</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N/m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>U</b><sup>R</sup><sub>b</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
-{
-</span>
-<div class="cases">
-<span>
-(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-<b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub>
-</span>
-</span>
-<span>
-0 , <span class="case">
-<b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub>
-</span>
-</span>
-</div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>U</b><sup>R</sup><sub>b</sub></em> is the right base hydrostatic forces on slices (N/m)
-</li>
-<li>
-<em><b>b</b></em> is the base width of slices (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
-</li>
-<li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#DD:baseWtrF>DD: baseWtrF</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:baseWtrFLDD">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Left base hydrostatic forces on slices
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>U</b><sup>L</sup><sub>b</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N/m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div class="equation">
-<em><b>U</b><sup>L</sup><sub>b</sub> = <b>b</b><sub>i</sub>&#8239;<span class="casebr">
-{
-</span>
-<div class="cases">
-<span>
-(<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub> , <span class="case">
-<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
-</span>
-</span>
-<span>
-0 , <span class="case">
-<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
-</span>
-</span>
-</div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>U</b><sup>L</sup><sub>b</sub></em> is the left base hydrostatic forces on slices (N/m)
-</li>
-<li>
-<em><b>b</b></em> is the base width of slices (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
-</li>
-<li>
-<em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-<a href=#fredlund1977>fredlund1977</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-<a href=#DD:baseWtrF>DD: baseWtrF</a>.
 </p>
 </td>
 </tr>
@@ -7224,12 +7009,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#GD:momentEql>GD: momentEql</a>
 </th>
 <th>
-<a href=#DD:baseWtrF>DD: baseWtrF</a>
-</th>
-<th>
-<a href=#GD:effNormF>GD: effNormF</a>
-</th>
-<th>
 <a href=#DD:sliceWght>DD: sliceWght</a>
 </th>
 <th>
@@ -7263,6 +7042,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#GD:resShr>GD: resShr</a>
 </th>
 <th>
+<a href=#GD:effNormF>GD: effNormF</a>
+</th>
+<th>
+<a href=#GD:baseWtrF>GD: baseWtrF</a>
+</th>
+<th>
 <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>
 </th>
 <th>
@@ -7284,7 +7069,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
 </th>
 <th>
-<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
+<a href=#DD:slcWghtLDD>DD: slcWghtLDD</a>
 </th>
 <th>
 <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>
@@ -7317,12 +7102,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#displayInput>FR: Display-Input</a>
 </th>
 <th>
-<a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>
-</th>
-<th>
-<a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>
-</th>
-<th>
 <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
 </th>
 <th>
@@ -7338,12 +7117,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7629,12 +7402,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -7657,12 +7424,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -7933,12 +7694,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -7970,12 +7725,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8237,12 +7986,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -8286,12 +8029,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -8541,478 +8278,10 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
-<a href=#DD:baseWtrFLDD>DD: baseWtrFLDD</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#DD:baseWtrFRDD>DD: baseWtrFRDD</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#DD:baseWtrF>DD: baseWtrF</a>
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
-</td>
-<td>
-
-</td>
-<td>
-
+<a href=#DD:slcWghtLDD>DD: slcWghtLDD</a>
 </td>
 <td>
 
@@ -9159,12 +8428,6 @@ X
 <tr>
 <td>
 <a href=#DD:slcWghtRDD>DD: slcWghtRDD</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9453,12 +8716,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -9502,12 +8759,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9615,12 +8866,6 @@ X
 <tr>
 <td>
 <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -9823,12 +9068,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -9919,12 +9158,6 @@ X
 <tr>
 <td>
 <a href=#assumpFOS>A: Factor-of-Safety</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10127,12 +9360,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -10267,12 +9494,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -10303,10 +9524,10 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
 
@@ -10422,6 +9643,27 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -10429,33 +9671,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -10467,10 +9682,10 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-
+X
 </td>
 <td>
 
@@ -10583,12 +9798,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -10619,13 +9828,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10735,12 +9944,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -10774,13 +9977,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -10902,12 +10105,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -10929,19 +10126,19 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-<td>
 
 </td>
 <td>
 
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
 </td>
 <td>
 
@@ -10983,12 +10180,6 @@ X
 <tr>
 <td>
 <a href=#assumpSLI>A: Soil-Layers-Isotropic</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11135,12 +10326,6 @@ X
 <tr>
 <td>
 <a href=#assumpSP>A: Soil-Properties</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -11429,6 +10614,146 @@ X
 <td>
 
 </td>
+</tr>
+<tr>
+<td>
+<a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
 <td>
 
 </td>
@@ -11438,13 +10763,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#assumpWISE>A: Water-Intersects-Slice-Edge</a>
-</td>
-<td>
-
-</td>
-<td>
-
+<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>
 </td>
 <td>
 
@@ -11635,12 +10954,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -11674,6 +10987,12 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
+
+</td>
+<td>
 
 </td>
 <td>
@@ -11699,6 +11018,146 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#GD:baseWtrF>GD: baseWtrF</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -11885,12 +11344,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -11928,12 +11381,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12189,12 +11636,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12316,12 +11757,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12493,12 +11928,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12620,12 +12049,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -12797,12 +12220,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -12949,12 +12366,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13003,43 +12414,37 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13253,12 +12658,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -13310,12 +12709,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -13370,13 +12763,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13415,12 +12808,6 @@ X
 <tr>
 <td>
 <a href=#TM:factOfSafety>TM: factOfSafety</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13623,12 +13010,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -13680,6 +13061,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -13693,12 +13080,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -13803,12 +13184,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14013,12 +13388,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14062,12 +13431,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14317,12 +13680,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14469,12 +13826,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -14535,12 +13886,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -14592,6 +13937,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -14605,12 +13956,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -14690,12 +14035,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -14765,10 +14104,10 @@ X
 
 </td>
 <td>
-X
+
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -14783,12 +14122,6 @@ X
 <tr>
 <td>
 <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15077,12 +14410,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -15120,12 +14447,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15295,12 +14616,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -15389,12 +14704,6 @@ X
 </td>
 </tr>
 <tr>
-<td>
-
-</td>
-<td>
-
-</td>
 <td>
 
 </td>
@@ -15543,12 +14852,6 @@ X
 <tr>
 <td>
 <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15837,12 +15140,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -15880,12 +15177,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -15999,12 +15290,6 @@ X
 <tr>
 <td>
 <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16207,12 +15492,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -16359,12 +15638,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -16410,6 +15683,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -16429,12 +15708,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16597,22 +15870,10 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
 <a href=#GD:resShr>GD: resShr</a>
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -16803,12 +16064,6 @@ X
 
 </td>
 <td>
-X
-</td>
-<td>
-
-</td>
-<td>
 
 </td>
 <td>
@@ -16839,7 +16094,7 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
 
@@ -16950,12 +16205,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 
@@ -17131,12 +16380,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -17146,7 +16389,7 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
 

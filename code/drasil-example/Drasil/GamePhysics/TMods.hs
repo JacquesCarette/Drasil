@@ -4,6 +4,7 @@ t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew) where
 import Language.Drasil
 import Prelude hiding (id)
 import Control.Lens ((^.))
+import Theory.Drasil (TheoryModel, tmNoRefs)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,

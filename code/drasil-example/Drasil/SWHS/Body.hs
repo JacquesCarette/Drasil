@@ -8,7 +8,7 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
   getIdeaDict, rdb, refdb, _authors, _concepts, _constants, _constraints,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
   _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map

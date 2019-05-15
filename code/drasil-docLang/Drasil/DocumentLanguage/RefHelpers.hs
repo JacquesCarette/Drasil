@@ -2,7 +2,6 @@
 module Drasil.DocumentLanguage.RefHelpers (ModelDB, tmRefDB, gdRefDB, ddRefDB,
   imRefDB, mdb, modelsFromDB) where
 
-import Language.Drasil
 import Database.Drasil (RefMap, simpleMap)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 

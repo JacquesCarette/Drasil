@@ -9,7 +9,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(DD, TM, Instance, General), MaxWidthPercent,
+  DType(Data, Theory, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
@@ -260,8 +260,8 @@ makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
-        dtag (L.TM)       = "tdefn"
-        dtag (L.DD)       = "ddefn"
+        dtag (L.Theory)   = "tdefn"
+        dtag (L.Data)     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

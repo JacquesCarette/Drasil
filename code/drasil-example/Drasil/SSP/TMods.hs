@@ -3,6 +3,7 @@ module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStres
 
 import Prelude hiding (tan)
 import Language.Drasil
+import Theory.Drasil (TheoryModel, tm)
 
 import Data.Drasil.Quantities.Physics (distance, force)
 

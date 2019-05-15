@@ -14,7 +14,7 @@ import Data.Maybe (mapMaybe)
 import Language.Drasil
 import Language.Drasil.Development (lnames')
 import Database.Drasil (TraceMap, traceMap)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.DocumentLanguage
 

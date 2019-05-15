@@ -2,6 +2,7 @@ module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_template, late
 
 import Language.Drasil
 import Control.Lens ((^.))
+import Theory.Drasil (TheoryModel, tm)
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)

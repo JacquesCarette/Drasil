@@ -547,7 +547,7 @@ genFunc (FDef (FuncDef n i o s)) = do
           ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
         ++ stmts
     ])
-genFunc (FData (FuncData n dd)) = genDataFunc n dd
+genFunc (FData (FuncData n ddef)) = genDataFunc n ddef
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: FuncStmt -> Reader State Statement
@@ -585,9 +585,9 @@ convStmt (FAppend a b) = valStmt <$>
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
-genDataFunc nameTitle dd = do
-    parms <- getParams $ getInputs dd
-    inD <- mapM inData dd
+genDataFunc nameTitle ddef = do
+    parms <- getParams $ getInputs ddef
+    inD <- mapM inData ddef
     publicMethod methodTypeVoid nameTitle (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,

@@ -1,40 +1,73 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, year)
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of_'', of__)
+import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of_'', of__, theCustom,
+  ofN_, compoundNC, compoundNC', compoundNCP1)
+import Data.Drasil.IdeaDicts (softEng, documentc)
 
 import Control.Lens ((^.))
 
+doccon :: [NamedChunk]
+doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+  code, column, company, component, concept, condition, connection, constant,
+  constraint, consumer, content, context, coordinate, customer, datum, decision, 
+  definition, dependency, description, design, document, documentation, effect, 
+  element, emphasis, endUser, environment, failure, figure, first, form, full, 
+  functional, game, general, goal, guide, implementation, individual, information, 
+  interest, interface, input_, instance_, intReader, introduction, issue, item, 
+  loss, label, library, limitation, literacy, material_, message, method_, module_,
+  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  physics, physical, plan, practice, priority, problem, product_, project,
+  property, purpose, quantity, realtime, reference, requirement_, response, 
+  result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder,
+  standard, statement, symbol_, system, table_, task, template, term_,
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
+  useCase, validation, value, variable, video, verification, year,
+  orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
+  vav, designDoc, fullForm, generalSystemDescription, indPRCase,
+  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
+  specificsystemdescription, systemdescription, systemConstraint, sysCont,
+  userCharacteristic, datumConstraint, functionalRequirement,
+  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
+  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
+  solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
+  scpOfTheProjS]
+
+doccon' :: [CI]
+doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
+  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc]
+
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mis, mg, notApp, srs, typUnc :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc, sec :: CI
 
--------------------------------------------------------------------------------------------------
--- | CI       |           |    uid      |         term                        | abbreviation | --
--------------------------------------------------------------------------------------------------
-assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"
-dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"
-requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
-notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."
-
-srs = commonIdea "srs" 
+-----------------------------------------------------------------------------------------------------------------
+-- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
+-----------------------------------------------------------------------------------------------------------------
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
+genDefn     = commonIdeaWithDict "genDefn"     (cn' "general definition")                          "GD"        [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
+dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
+inModel     = commonIdeaWithDict "inModel"     (fterms compoundPhrase instance_ model)             "IM"        [softEng]
+likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
+unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
+requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
+thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")                           "T"         [softEng]
+mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"        [softEng]
+mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
+notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
+typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [documentc]
+srs = commonIdeaWithDict "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS"
-mis = commonIdea "mis"
-  (compoundPhrase (moduleInterface ^. term) (specification ^. term))
-  "MIS"
+  "SRS" [softEng]
 
 ---------------------------------------------------------------------
 
@@ -52,10 +85,10 @@ abbreviation, access, analysis, appendix, aspect, body, characteristic, class_, 
   output_, physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, reference, requirement_, response, 
   result, reviewer, routine, safety, scope, second_, section_, semantic, scenario, source,
-  simulation, software, solution, specific, specification, stakeholder,
+  simulation, software, solution, specific, specification, stakeholder, scpOfTheProjS,
   standard, state, statement, symbol_, syntax, system, table_, task, template, term_,
-  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, use, user,
-  useCase, validation, value, variable, video, verification, year :: NamedChunk
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, use, useCase, user,
+  validation, value, variable, verification, video, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 access          = nc "access"         (cn'    "access"             )
@@ -192,6 +225,7 @@ variable        = nc "variable"       (cn'    "variable"           )
 verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
+scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
@@ -214,19 +248,19 @@ misOfModule :: String -> NamedChunk
 misOfModule modName = nc ("misOf" ++ modName ++ "Module") (mis `of_''` module_' modName)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
 
 -- compounds
 
-accRoutSemantic, datumConstraint, designDoc, enviroVar, expConstant, expType, fullForm, 
-  functionalRequirement, generalSystemDescription, indPRCase, moduleHierarchy, 
-  moduleInterface, nonfunctionalRequirement, offShelfSolution, physicalConstraint, 
-  physicalProperty, physicalSim, physicalSystem, problemDescription, 
-  prodUCTable, productUC, routineSemantic, safetyReq, softwareConstraint, softwareDoc, 
-  softwareReq, softwareSys, softwareVAV, softwareVerif, solutionCharacteristic, 
-  solutionCharSpec, specificsystemdescription, stateVar, stateInvar, sysCont, 
-  systemConstraint, systemdescription, templateModule, uncertCol, useCaseTable, 
-  userCharacteristic, userInput, vavPlan :: NamedChunk
+accRoutSemantic, datumConstraint, designDoc, enviroVar, expConstant, expType,
+  fullForm, functionalRequirement, generalSystemDescription, indPRCase, moduleHierarchy,
+  moduleInterface, nonfunctionalRequirement, offShelfSolution, physicalConstraint,
+  physicalProperty, physicalSim, physicalSystem, problemDescription, prodUCTable,
+  productUC, routineSemantic, safetyReq, softwareConstraint, softwareDoc, softwareReq,
+  softwareSys, softwareVAV, softwareVerif, solutionCharSpec, solutionCharacteristic,
+  specificsystemdescription, stateInvar, stateVar, sysCont, systemConstraint,
+  systemdescription, templateModule, uncertCol, useCaseTable, userCharacteristic,
+  userInput, vavPlan :: NamedChunk
  
 accRoutSemantic              = compoundNC access routineSemantic
 datumConstraint              = compoundNC' datum constraint
@@ -274,6 +308,41 @@ vavPlan                      = compoundNC vav plan
 
 module_' :: String -> NamedChunk
 module_' md = compoundNC (nc md $ cn' md) module_
+-- Domains
+
+--Root SRS Domain
+srsDom :: CommonConcept
+srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
+
+goalStmtDom :: ConceptChunk
+goalStmtDom = ccs (mkIdea "goalStmtDom" (goalStmt ^. term) $ Just "GS") EmptyS
+  [srsDom]
+
+assumpDom :: ConceptChunk
+assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $ Just "A") EmptyS [srsDom]
+
+reqDom :: ConceptChunk
+reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") EmptyS [srsDom]
+
+funcReqDom :: ConceptChunk
+funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
+
+nonFuncReqDom :: ConceptChunk
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $
+  Just "NFR") EmptyS [reqDom]
+
+chgProbDom :: ConceptChunk
+chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
+
+likeChgDom :: ConceptChunk
+likeChgDom = ccs (mkIdea "likeChgDom" (likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
+
+unlikeChgDom :: ConceptChunk
+unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
+-- | List of domains for SRS
+srsDomains :: [ConceptChunk]
+srsDomains = [goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
+  likeChgDom, unlikeChgDom]
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 -- | The logic to render GOOL code from an 'AbstractCode' is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
     -- * GOOL Code Configuration -- defines syntax of all GOOL code
@@ -6,6 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (nativeBinary)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -19,19 +21,21 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), inputDocD,
   valueDocD, iterationDocD, fileCode, functionListDocD, statementDocD, 
   retDocD, patternDocD, includeD, fileNameD, complexDocD, 
-  conditionalDocD, functionDocD, hsModule)
+  conditionalDocD, functionDocD, hsModule, buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
 import Data.Char (toLower)
-import Prelude hiding (print)
+import Data.Maybe (fromMaybe)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, vcat, hcat, punctuate,
   brackets, int, char, quotes, double, integer, equals, empty)
 
 goolConfig :: Options -> Config -> Config
 goolConfig options c = 
-    let hsMod = case (hsModule options) of Nothing -> error "GOOLRenderer: The GOOLHsModule option must be specified in the Configuration file when generating GOOL code."
-                                           Just hsMod' -> hsMod'
+    let hsMod = fromMaybe (error "GOOLRenderer: The GOOLHsModule option must be " ++
+          "specified in the Configuration file when generating GOOL code.") $
+          hsModule options
     in Config {
         renderCode = renderCode' c,
         
@@ -42,15 +46,17 @@ goolConfig options c =
         enumsEqualInts   = False,
         ext              = ".hs",
         dir              = "gool",
+        buildConfig      = error "Generating buildConfig for GOOLRenderer not implemented",
+        runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "import",
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = text "extends",
         inputFunc        = text "Input",
         iterForEachLabel = text "ForEach",
         iterInLabel      = empty,
-        list             = \lt -> case lt of Static  -> text "List Static"
-                                             Dynamic -> text "List Dynamic",
+        list             = \case Static  -> text "List Static"
+                                 Dynamic -> text "List Dynamic",
         listObj          = empty,
         clsDec           = empty,
         package          = \p -> vcat [
@@ -67,7 +73,7 @@ goolConfig options c =
         
         top    = gooltop c hsMod,
         body   = goolbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDoc', bodyDoc = bodyDoc' c, blockDoc = blockDoc' c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDoc' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -79,7 +85,7 @@ goolConfig options c =
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         complexDoc = complexDocD c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined"
+        getEnv = const $ error "getEnv for GOOL is not defined"
     }
     
 -- for convenience
@@ -147,7 +153,7 @@ binOpDoc' Modulo = text "#%"
 binOpDoc' Power = text "#^"
 
 bodyDoc' :: Config -> Body -> Doc
-bodyDoc' c [Block (s:[])] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
+bodyDoc' c [Block [s]] = parens $ text "oneLiner $" <+> statementDoc c NoLoop s
 bodyDoc' c bs = hsVList (blockDoc c) bs
 
 blockDoc' :: Config -> Block -> Doc
@@ -173,7 +179,7 @@ declarationDoc' c (ObjDecDef n t v) = text "objDecDef" <+> lbl n <+> stateType c
 declarationDoc' c (ConstDecDef n l) = text "constDecDef" <+> lbl n <+> litDoc c l
 
 enumElementsDoc' :: Config -> [Label] -> Doc
-enumElementsDoc' _ es = hsList lbl es
+enumElementsDoc' _ = hsList lbl
 
 exceptionDoc' :: Config -> Exception -> Doc
 exceptionDoc' _ (Throw s) = text "throw" <+> lbl s
@@ -200,8 +206,8 @@ funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
-funcDoc' _ (IterBegin) = text "IterBegin"
-funcDoc' _ (IterEnd) = text "IterEnd"
+funcDoc' _ IterBegin = text "IterBegin"
+funcDoc' _ IterEnd = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
 funcDoc' c (ListExtend t) = text "ListExtend" <+> stateType c t Dec
@@ -338,7 +344,7 @@ methodDoc' c _ _ (GetMethod n t) = text "GetMethod" <+> lbl n <+> methodTypeDoc 
 methodDoc' c _ _ (SetMethod n p) = text "SetMethod" <+> lbl n <+> paramDoc c p
 
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDoc' c t m ms = hsVList (methodDoc c t m) ms
+methodListDoc' c t m = hsVList (methodDoc c t m)
 
 methodTypeDoc' :: Config -> MethodType -> Doc
 methodTypeDoc' c (MState t) = parens $ text "typ" <+> stateType c t Dec

@@ -4,7 +4,7 @@ module Drasil.Sections.GeneralSystDesc
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_)
-import Data.Drasil.SentenceStructures (sAnd, foldlSP)
+import Data.Drasil.SentenceStructures (andIts, foldlSP)
 import qualified Drasil.DocLang.SRS as SRS (genSysDes, userChar, sysCon, sysCont)
 
 -- wrapper for general system description
@@ -16,10 +16,11 @@ genSysF sCntxt userIntro cnstrnts systSubSec = SRS.genSysDes [genSysIntro]
 genSysIntro :: Contents
 genSysIntro = foldlSP
               [S "This", phrase section_, S "provides general",
-              phrase information, S "about the", phrase system, S "including identifying",
-              S "the", plural interface, S "between the", phrase system `sAnd` S "its",
-              phrase environment, S "(system context)" `sC` S "describing the", plural userCharacteristic 
-              `sAnd` S "listing the", plural systemConstraint]
+              phrase information, S "about the" +:+. phrase system, S "It",
+              S "identifies", S "the", plural interface, S "between the", 
+              phrase system `andIts` phrase environment `sC` S "describes the", 
+              plural userCharacteristic `sC` S "and lists the", 
+              plural systemConstraint]
 
 --User Characeristics
 usrCharsF :: [Contents] -> Section

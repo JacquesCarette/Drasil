@@ -2,79 +2,93 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
-  mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
-import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
-import Drasil.SSP.References (sspCitations)
-import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
+import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
+  soil, soilPrpty, intrslce, slice, waterTable)
+import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
+  normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
+  xi, zcoord)
+import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.Concepts.Documentation (condition)
-import Data.Drasil.Concepts.Physics (force, stress, strain)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
+
+import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
+  condition, constant, interface)
+import Data.Drasil.Concepts.Physics (force, position, stress, twoD)
 import Data.Drasil.Concepts.Math (surface, unit_)
-import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations []
--- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
+assumptions :: [ConceptInstance]
+assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
+  assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
+  assumpSL, assumpWISE]
 
-newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10 :: AssumpChunk
-newA1 = assump "Slip-Surface-Concave" monotonicF (mkLabelRAAssump' "Slip-Surface-Concave")
-newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG (mkLabelRAAssump' "Geo-Slope-Mat-Props-of-Soil-Inputs")
-newA3 = assump "Soil-Layer-Homogeneous" homogeneousL (mkLabelRAAssump' "Soil-Layer-Homogeneous")
-newA4 = assump "Soil-Layers-Isotropic" isotropicP (mkLabelRAAssump' "Soil-Layers-Isotropic")
-newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS (mkLabelRAAssump' "Interslice-Norm-Shear-Forces-Linear")
-newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF (mkLabelRAAssump' "Base-Norm-Shear-Forces-Linear-on-FS")
-newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC (mkLabelRAAssump' "Stress-Strain-Curve-interslice-Linear")
-newA8 = assump "Plane-Strain-Conditions" planeS (mkLabelRAAssump' "Plane-Strain-Conditions")
-newA9 = assump "Effective-Norm-Stress-Large" largeN (mkLabelRAAssump' "Effective-Norm-Stress-Large")
-newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS 
-           (mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines")
+assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
+  assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
+  assumpSL, assumpWISE :: ConceptInstance
 
-monotonicF, slopeG, homogeneousL, isotropicP, linearS,
-  linearF, stressC, planeS, largeN, straightS :: Sentence
+assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
+assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
+assumpSLH = cic "assumpSLH" homogeneousL "Soil-Layer-Homogeneous" assumpDom
+assumpSP = cic "assumpSP" propertiesS "Soil-Properties" assumpDom
+assumpSLI = cic "assumpSLI" isotropicP "Soil-Layers-Isotropic" assumpDom
+assumpINSFL = cic "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear" assumpDom
+assumpPSC = cic "assumpPSC" planeS "Plane-Strain-Conditions" assumpDom
+assumpENSL = cic "assumpENSL" largeN "Effective-Norm-Stress-Large" assumpDom
+assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines" assumpDom
+assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
+assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
+assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
+assumpWISE = cic "assumpWISE" waterIntersect "Water-Intersects-Slice-Edge" 
+  assumpDom
+
+monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN, 
+  straightS, propertiesS, edgeS, seismicF, surfaceL, waterIntersect :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave with respect to", S "the" +:+. phrase slopeSrf,
-  ((ch coords +:+ S "coordinates") `ofThe'` S "failure"),
-  phrase surface, S "follow a monotonic function"]
+  S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
+  sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
+  phrase slpSrf, S "follow a concave up function"]
 
-slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
-  plural mtrlPrpty `ofThe` plural soilLyr, S "are given as inputs"]
+slopeS = foldlSent [S "The factor of safety is assumed to be", phrase constant,
+  S "across the entire", phrase slpSrf]
 
-homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
-  S "are homogeneous" `sC` S "with consistent", plural soilPrpty,
-  S "throughout" `sC` S "and independent of dry or saturated",
+homogeneousL = foldlSent [S "The", phrase soil, S "mass is homogeneous" `sC`
+  S "with consistent", plural soilPrpty +:+ S "throughout"]
+
+propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or saturated",
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
-isotropicP = foldlSent [at_start' soilLyr, S "are treated as if they have",
-  S "isotropic properties"]
+isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
+  phrase effCohesion `sAnd` phrase fricAngle, S "are isotropic properties"]
 
-linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
-  S "have a linear relationship, proportional to a constant",
-  sParen (ch normToShear), S "and an", phrase intrslce, phrase force,
-  S "function", sParen (ch scalFunc), S "depending on x position"]
+linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
+  S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
+  phrase intNormForce `sAnd` phrase intShrForce,
+  S "have a proportional relationship, depending on a proportionality",
+  phrase constant, sParen (ch normToShear), S "and a function", 
+  sParen (ch scalFunc), S "describing variation depending on", ch xi, 
+  phrase position]
 
-linearF = foldlSent [at_start slice, S "to base normal and",
-  plural shearForce, S "have", S "a linear relationship, dependent on the",
-  getTandS fs `sC` S "and the Coulomb sliding law"]
-
-stressC = foldlSent [S "The", phrase stress `sDash` phrase strain,
-  S "curve for", phrase intrslce, S "relationships is",
-  S "linear with a constant", phrase slope]
-
-planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.
-  S "extends far into and out of the geometry (z coordinate)",
-  S "This implies plane", phrase strain, plural condition `sC`
-  S "making 2D analysis appropriate"]
+planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+
+  S "extends far into and out of the geometry" +:+. sParen (ch zcoord +:+ 
+  S "coordinate"), S "This implies", phrase plnStrn, plural condition `sC`
+  S "making", short twoD, phrase analysis, S "appropriate"]
 
 largeN = foldlSent [S "The effective normal", phrase stress,
-  S "is large enough that the resistive shear to effective normal",
-  phrase stress, S "relationship can be approximated as a",
-  S "linear relationship"]
+  S "is large enough that the", phrase shrStress, S "to effective normal",
+  phrase stress, S "relationship can be approximated as a linear relationship"]
 
 straightS = foldlSent [S "The", phrase surface, S "and base of a",
-  phrase slice, S "between", phrase intrslce,
-  S "nodes are approximated as straight lines"]
+  phrase slice, S "are approximated as straight lines"]
+
+edgeS = foldlSent [S "The", phrase intrslce, plural force, 
+  S "at the 0th" `sAnd` ch numbSlices :+: S "th", phrase intrslce,
+  plural interface, S "are zero"]
+
+seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
+
+surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
+  S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]
+
+waterIntersect = foldlSent [S "The", phrase waterTable, S "only intersects the",
+  phrase slopeSrf, S "at the edge of a", phrase slice]

@@ -3,67 +3,83 @@ module Drasil.SWHS.Body where
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
+  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
+  getIdeaDict, rdb, refdb, _authors, _concepts, _constants, _constraints,
+  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
+  _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+
 import Control.Lens ((^.))
+import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
-  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleCC,
-  outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceGIntro,
-  traceMGF, tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
-  likeChg, probDesc, sysCont, unlikeChg)
+  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
+  dataConstraintUncertainty, genSysF, intro, mkDoc,
+  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
+  traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
+  unlikeChg, inModel)
 
-import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
-  content, corSol, dataConst, dataDefn, datum, definition, description, document, 
-  environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
-  model, organization, output_, physical, physics, physSyst, problem, property, 
-  purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
-  user, value, variable)
-import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS, compPro)
+import Data.Drasil.Concepts.Thermodynamics (thermocon)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
+  content, dataConst, dataDefn, datum, definition, document, environment, genDefn, goalStmt,
+  information, inModel, input_, item, likelyChg, model, organization, output_, physical,
+  physics, physSyst, problem, property, purpose, quantity, reference, requirement, section_,
+  software, softwareSys, srs, srsDomains, sysCont, system, thModel, traceyGraph,
+  traceyMatrix, user, value, variable, doccon, doccon')
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
+import Data.Drasil.Concepts.Education (calculus, educon, engineering)
+import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
+import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
+  understandability, reusability, maintainability, verifiability)
+import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
-import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
+import Data.Drasil.Quantities.Physics (energy, time, physicscon)
+import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
+  foldlSent, foldlSent_, foldlSP, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
+  fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
+  thermalConduction, htFlux, heatCapSpec, thermalEnergy, htTransTheo,
+  thermalAnalysis, enerSrc)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
-  heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
-  ht_trans_theo, thermal_analysis, ener_src)
-
-import Drasil.SWHS.Assumptions (newA13, newAssumptions)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
-  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
+import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
+  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
+import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
-  heatEInWtr, heatEInPCM, swhsIMods)
+import Drasil.SWHS.Goals (swhsGoals)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
+  swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsLbl, nonFuncReqs, verifyEnergyOutput)
+import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
-import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
-  temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
-  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
-  out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
-  specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
-  swhsInputs, swhsSymbols, swhsSymbolsAll)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
+  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
+  pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
+  swhsOutputs, swhsSymbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
+  temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
 
@@ -72,8 +88,8 @@ this_si = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbT 
+checkSi :: [UnitDefn]
+checkSi = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -83,9 +99,8 @@ swhs_si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
-  _units = check_si,
   _quants = swhsSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = swhsQDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
@@ -94,16 +109,33 @@ swhs_si = SI {
   _constraints = (swhsConstrained),
   _constants = [],
   _sysinfodb = swhsSymMap,
-  _refdb = swhsRefDB
+  _usedinfodb = usedDB,
+   refdb = swhsRefDB
 }
 
+resourcePath :: String
+resourcePath = "../../../datafiles/SWHS/"
+
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
-  (map cw swhsSymbols ++ srsDomains) this_si
+swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+  (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
+  ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
+  ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
+  (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (this_si ++ [m_2, m_3]) swhs_label swhs_refby
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
+  swhs_section swhs_labcon
+
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
+ swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] swhsCitations (funcReqs ++
-  likelyChgs ++ unlikelyChgs)
+swhsRefDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration
@@ -112,63 +144,108 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+acronyms :: [CI]
+acronyms = ciGetDocDesc mkSRS
 
-symbT :: [DefinedQuantityDict]
-symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
+shortTT :: [IdeaDict]
+shortTT = concatMap (`getIdeaDict` swhsSymMap) $ getDocDesc mkSRS
+
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [
-    TUnits, 
+mkSRS = [RefSec $ RefProg intro [
+    TUnits,
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
-    TAandA]):
-  IntroSec (
-    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
-    progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
-    progName) 
-    [IPurpose (purpDoc swhs_pcm progName),
-     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
-       (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-     IOrgSec orgDocIntro inModel SRS.inModelLabel
-       (orgDocEnd swhs_pcm progName)]):
-  Verbatim genSystDesc:
-  SSDSec 
-    (SSDProg [SSDSubVerb probDescription
-      , SSDSolChSpec 
-        (SCSProg 
-          [ Assumptions
-          , TMs ([Label] ++ stdFields) [consThermE, sensHtE, latentHtE]
-          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty dataConTail
-           [dataConTable1, dataConTable3]
-          , CorrSolnPpties propsDeriv
-          ]
-        )
-      ]
-    ):  
-  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG]) ++
-    AuxConstntSec (AuxConsProg progName specParamValList) :
-    Bibliography : []
+    TAandA],
+  IntroSec $
+    IntroProg (introP1 CT.enerSrc energy swhs_pcm phsChgMtrl
+    progName CT.thermalEnergy latentHeat unit_) (introP2 swhs_pcm program
+    progName)
+    [IPurpose $ purpDoc swhs_pcm progName,
+     IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
+       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
+     IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
+     IOrgSec orgDocIntro inModel (SRS.inModel [] [])
+       $ orgDocEnd swhs_pcm progName],
+  Verbatim genSystDesc,
+  SSDSec $
+    SSDProg [SSDSubVerb probDescription
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
+        , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+         [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
+        , Constraints  EmptyS dataConstraintUncertainty dataConTail
+         [dataConTable1, dataConTable3]
+        , CorrSolnPpties propsDeriv
+        ]
+      ],
+  ReqrmntSec $ ReqsProg [
+    FReqsSub funcReqsList,
+    NonFReqsSub swhsNFRequirements
+  ],
+  LCsSec $ LCsProg likelyChgsList,
+  UCsSec $ UCsProg unlikelyChgsList,
+  TraceabilitySec $
+    TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++
+  [LlC traceFig1, LlC traceFig2]) [],
+    AuxConstntSec $ AuxConsProg progName specParamValList,
+    Bibliography]
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec swhs_si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
+  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
 
 --- The document starts here
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS for swhs_si
 
+swhs_label :: TraceMap
+swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
+ 
+swhs_refby :: RefbyMap
+swhs_refby = generateRefbyMap swhs_label 
+
+swhs_datadefn :: [DataDefinition]
+swhs_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+
+swhs_insmodel :: [InstanceModel]
+swhs_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+
+swhs_gendef :: [GenDefn]
+swhs_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+
+swhs_theory :: [TheoryModel]
+swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
+
+swhs_concins :: [ConceptInstance]
+swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+
+swhs_section :: [Section]
+swhs_section = swhs_sec
+
+swhs_labcon :: [LabelledContent]
+swhs_labcon = [dataConTable1, inputInitQuantsTblabled]
+
+swhs_sec :: [Section]
+swhs_sec = extractSection swhs_srs'
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+
+swhspriorityNFReqs :: [ConceptChunk]
+swhspriorityNFReqs = [correctness, verifiability, understandability, reusability,
+  maintainability]
 -- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --
@@ -272,8 +349,8 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
-  CT.thermal_conduction, transient]
+  [CT.htFlux, phase_change_material, CT.heatCapSpec,
+  CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
 tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
@@ -295,7 +372,7 @@ physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, 
 -- this paragraph can not be abstracted out as is.
 
 physSystDescList :: Contents
-physSystDescList = enumSimple 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -306,11 +383,10 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
 -----------------------------
 
 goalStates :: Section
-goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList] []
+goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
 
-goalStateList :: Contents
-goalStateList = enumSimple 1 (short goalStmt) $
-  map goalState outputConstraints
+goalStateList :: [Contents]
+goalStateList = mkEnumSimpleD swhsGoals
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -353,7 +429,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_5,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,
-  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heatCapSpec
     temp vol assumption assump3 assump4 assump5 assump6,
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
@@ -374,14 +450,6 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-dataConTable1 :: LabelledContent
-dataConTable1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-
 ------------------------------
 -- Data Constraint: Table 2 --
 ------------------------------
@@ -394,7 +462,7 @@ dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
-outputConstraints :: [UncertQ]
+outputConstraints :: [ConstrConcept]
 outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:
@@ -404,44 +472,12 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propsDeriv :: [Contents]
-propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
-    dd2HtFluxP surface CT.heat_trans,
-  propCorSolDeriv2,
-  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
-  propCorSolDeriv4,
-  propCorSolDeriv5 equation progName rightSide]
-
--- Remember to insert references in above derivation when available
-
 ------------------------------
 -- Section 5 : REQUIREMENTS --
 ------------------------------
-
-reqS :: Section
-reqS = reqF [funcReqsSect, nonFuncReqs]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsSect :: Section
-funcReqsSect = SRS.funcReq funcReqsList []
-
-funcReqsList :: [Contents]
-funcReqsList = reqs ++ [inputInitQuantsTbl]
-
-inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
-  [titleize symbol_, titleize unit_, titleize description]
-  (mkTable
-  [ch, --(\ch -> Sy (unit_symb ch)),
-  unitToSentence, phrase] (map qw inputConstraints))
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
-
-reqs :: [Contents]
-reqs = mkEnumSimpleCC funcReqs
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -454,7 +490,7 @@ likelyChgsSect :: Section
 likelyChgsSect = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleCC likelyChgs
+likelyChgsList = mkEnumSimpleD likelyChgs
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
@@ -464,20 +500,17 @@ unlikelyChgsSect :: Section
 unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleCC unlikelyChgs
+unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
-traceMAndG :: Section
-traceMAndG = traceMGF traceRefList traceTrailing
-  (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ 
-  [LlC traceFig1, LlC traceFig2]) []
-
 traceRefList :: [LabelledContent]
-traceRefList = [traceTable1, traceTable2, traceTable3]
+traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
+
+traceTableAll :: LabelledContent
+traceTableAll = generateTraceTable swhs_si
 
 traceTrailing :: [Sentence]
 traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]
@@ -489,30 +522,30 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef swhsIMods --FIXME: swhsIMods is a hack?
+traceInstaModelRef = map makeRef2S swhsIMods --FIXME: swhsIMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
-traceFuncReqRef = map makeRef funcReqs
+traceFuncReqRef = map makeRef2S funcReqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
+traceDataRef = [makeRef2S dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef newAssumptions 
+traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRef swhsTMods
+traceTheoriesRef = map makeRef2S swhsTMods
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef swhsGDs --FIXME: swhsGDs is a hack?
+traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
 
-traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map makeRef swhsDDefs
+traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6"]
+traceDataDefRef = map makeRef2S swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-traceLikelyChgRef = map makeRef likelyChgs
+traceLikelyChgRef = map makeRef2S likelyChgs
 
 {-Traceability Matrix 1-}
 
@@ -525,10 +558,11 @@ traceMRowHeader1 = zipWith itemRefToSent traceMRow1
 
 traceMColumns1 :: [[String]]
 traceMColumns1 = [trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1,
-  trace1DD2, trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
+  trace1DD2, trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
 
 trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1, trace1DD2,
-  trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4 :: [String]
+  trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3,
+  trace1IM4 :: [String]
 
 --list of each item that "X" item requires for traceability matrix
 trace1T1 = []
@@ -539,11 +573,13 @@ trace1GD2 = ["T1"]
 trace1DD1 = ["GD1"]
 trace1DD2 = ["GD1"]
 trace1DD3 = []
-trace1DD4 = ["DD3"]
+trace1DD4 = []
+trace1DD5 = []
+trace1DD6 = ["DD3"]
 trace1IM1 = ["GD2", "DD1", "DD2", "IM2"]
-trace1IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+trace1IM2 = ["GD2", "DD2", "DD3", "DD4", "DD6", "IM1", "IM4"]
 trace1IM3 = ["T2"]
-trace1IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+trace1IM4 = ["T2", "T3", "DD2", "DD4", "DD5", "IM2"]
 
 {-Traceability Matrix 2-}
 
@@ -587,7 +623,7 @@ trace2R10 = ["IM2"]
 trace2R11 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelSame "Tracey1" Tab) $
+traceTable2 = llcc (makeTabRef "Tracey1") $
   Table (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
@@ -608,11 +644,11 @@ traceMColHeader3 = zipWith itemRefToSent
 
 traceMColumns3 :: [[String]]
 traceMColumns3 = [trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1,
-  trace3DD2, trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
+  trace3DD2, trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
   trace3LC1, trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6]
 
 trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1, trace3DD2, 
-  trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
+  trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
   trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6 :: [String]
 
 trace3T1  = ["A1"]
@@ -624,6 +660,8 @@ trace3DD1 = ["A7", "A8", "A9"]
 trace3DD2 = ["A3", "A4", "A10"]
 trace3DD3 = []
 trace3DD4 = []
+trace3DD5 = []
+trace3DD6 = []
 trace3IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
 trace3IM2 = ["A12", "A13", "A16", "A17", "A18"]
 trace3IM3 = ["A14", "A19"]
@@ -747,14 +785,13 @@ scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-charReader1 :: ConceptChunk -> Sentence
-charReader1 htt = foldlSent_ [EmptyS +:+. phrase htt,
-  S "A third or fourth year Mechanical Engineering course on this topic",
-  S "is recommended"]
+charReader1 :: ConceptChunk -> [Sentence]
+charReader1 htt = [phrase htt +:+ S "from level 3 or 4" +:+
+  S "mechanical" +:+ phrase engineering]
 
-charReader2 :: CI -> Sentence
-charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
-  S "as typically covered in first and second year Calculus courses"]
+charReader2 :: CI -> [Sentence]
+charReader2 diffeq = [(plural diffeq) +:+
+  S "from level 1 and 2" +:+ phrase calculus]
 
 ------------------------------------
 -- 2.4 : Organization of Document --
@@ -763,13 +800,13 @@ charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by", makeRef parnas1972 `sAnd` 
-  makeRef parnasClements1984]
+  S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
+  makeCiteS parnasClements1984]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
-orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef SRS.inModelLabel), S "to be solved are referred to as" +:+. 
-  (foldlList Comma List $ map makeRef swhsIMods), S "The", plural inModel,
+orgDocEnd sp pro = foldlSent_ [S "The", plural inModel, 
+  S "to be solved are referred to as" +:+. 
+  (foldlList Comma List $ map makeRef2S swhsIMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]
@@ -799,7 +836,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase sysCont, 
+systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -808,9 +845,9 @@ systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase 
   S "its", phrase environment]
 
 sys_context_fig :: LabelledContent
-sys_context_fig = llcc (mkLabelRAFig "SysCon") $ fig (foldlSent_
-  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png"
+sys_context_fig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
+  $ resourcePath ++ "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents
 systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -853,7 +890,7 @@ swhsResp = Nested (short progName +: S "Responsibilities")
 userCharContents :: CI -> Contents
 userCharContents pro = foldlSP [S "The end", phrase user, S "of",
   short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize physics]
+  S "Level 1 Calculus and", titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.
@@ -906,27 +943,23 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- different
 
 fig_tank :: LabelledContent
-fig_tank = llcc (mkLabelRAFig "Tank") $ fig (
+fig_tank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
-  "Tank.png"
+  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStateIntro :: UncertQ -> UncertQ -> UncertQ -> Contents
-goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
-  S "initial", plural condition, S "for the", phrase temw
-  `sAnd` S "the", phrase tempcm `sC` S "and material",
-  plural property `sC` S "the", plural goalStmt, S "are"]
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
+goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
+  S "the" +:+ phrase tempcm,
+  S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalState :: NamedIdea varTerm => varTerm -> Sentence
-goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
-  S "over", phrase time]
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -960,13 +993,13 @@ genDefDeriv1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
   phrase roc, S "of", phrase tem]
 
 genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
-genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef t1ct,
+genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR' $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> Contents
@@ -979,7 +1012,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
 genDefDeriv5 = eqUnR' $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -989,14 +1022,14 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 genDefDeriv7 = eqUnR' $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
 genDefDeriv11 = eqUnR' $ 
-  ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
+  ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
@@ -1020,11 +1053,11 @@ iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
 iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
   ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
-  [makeRef eBalanceOnWtr, makeRef eBalanceOnPCM, makeRef heatEInWtr, makeRef heatEInPCM], 
-  S "The", plural sol, S "for", makeRef eBalanceOnWtr `sAnd` makeRef eBalanceOnPCM, 
+  [makeRef2S eBalanceOnWtr, makeRef2S eBalanceOnPCM, makeRef2S heatEInWtr, makeRef2S heatEInPCM], 
+  S "The", plural sol, S "for", makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM, 
   S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
-  makeRef heatEInWtr, S "can be solved once", makeRef eBalanceOnWtr, S "has been solved. The", 
-  phrase sol `sOf` makeRef eBalanceOnPCM `sAnd` makeRef heatEInPCM, S "are also coupled, since the", 
+  makeRef2S heatEInWtr, S "can be solved once", makeRef2S eBalanceOnWtr, S "has been solved. The", 
+  phrase sol `sOf` makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM, S "are also coupled, since the", 
   phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
 
 iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
@@ -1033,8 +1066,8 @@ iMod1Para en wa = [foldlSPCol [S "Derivation of the",
 
 iMod1Sent2 :: DataDefinition -> DataDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef d1hf) `sAnd`
-  (makeRef d2hf), S "for", ch hfc `sAnd`
+iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef2S d1hf) `sAnd`
+  (makeRef2S d2hf), S "for", ch hfc `sAnd`
   ch hfp, S "respectively, this can be written as"]
 
 iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1060,7 +1093,7 @@ iMod1Sent6 = [S "Setting",
 
 iMod1Sent7 :: [Sentence]
 iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
-  S "we are left with the governing", short ode, S "for", makeRef eBalanceOnWtr]
+  S "we are left with the governing", short ode, S "for", makeRef2S eBalanceOnWtr]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
@@ -1103,7 +1136,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Fractions in paragraph?
 
 iMod2Sent1 :: DataDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRef d2hfp, S "for", 
+iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
@@ -1160,9 +1193,9 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef newA13)],
+  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
 
-  [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
+  [sParen (S "++"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
   (S $ show (1 :: Integer)) `sAnd`
@@ -1190,54 +1223,6 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
-  S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
-  S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef d1hfc) `sAnd` (makeRef d2hfp) `sC`
-  S "multiplying each by their respective", phrase su,
-  S "area of", phrase ht `sC` S "and integrating each",
-  S "over the", phrase sim_time `sC` S "as follows"]
-
-propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' $ 
-  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
-  - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
-propCorSolDeriv3 epcm en pcmat wa =
-  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
-  phrase en, phrase input_, S "to the", short pcmat,
-  S "from the" +:+. phrase wa, S "This can be expressed as"]
-
-propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' $ 
-  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
-  (apply1 temp_PCM time)))))
-
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
-  S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
-  S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef verifyEnergyOutput]
-
--- Above section only occurs in this example (although maybe it SHOULD be in
--- the others).
-
--- Remember to insert references in above derivation when available
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -1272,14 +1257,14 @@ traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameLis
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table
+traceTable1 = llcc (makeTabRef "Tracey2") $ Table
   (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table
+traceTable3 = llcc (makeTabRef "Tracey3") $ Table
   (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
@@ -1300,12 +1285,12 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
   foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
 
 traceFig1 :: LabelledContent
-traceFig1 = llcc (mkLabelRAFig "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+traceFig1 = llcc (makeFigRef "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
+  S "of Different" +:+ titleize' section_)) $ resourcePath ++ "ATrace.png"
 
 traceFig2 :: LabelledContent
-traceFig2 = llcc (mkLabelRAFig "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
-  $ map titleize' renameList2)) "RTrace.png"
+traceFig2 = llcc (makeFigRef "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
+  $ map titleize' renameList2)) $ resourcePath ++ "RTrace.png"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

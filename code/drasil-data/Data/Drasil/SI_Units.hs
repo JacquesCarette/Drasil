@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
+
 import Language.Drasil
-import Language.Drasil.Development(derUC, derUC', scale, shift
-  , derCUC, derCUC', derCUC'')
+import Language.Drasil.ShortHands (cOmega)
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
@@ -11,8 +11,8 @@ derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, j
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
 
-si_units :: [UnitDefn]
-si_units = map unitWrapper fundamentals ++ map unitWrapper derived
+siUnits :: [UnitDefn]
+siUnits = map unitWrapper fundamentals ++ map unitWrapper derived
 
 ------------- Fundamental SI Units ---------------------------------------------
 
@@ -28,7 +28,8 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 ------------- Commonly defined units -------------------------------------------
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)]) Nothing Nothing []
+-- degree = UD (dcc "degree" (cn' "degree") "angle") (BaseSI (US [(Special Circle,1)])) ["degree"]
+degree = fund' "degree" "angle" (Special Circle)
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
@@ -136,8 +137,8 @@ specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") (joule /: kilogram)
 
-specific_weight :: UnitDefn
-specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
+specificWeight :: UnitDefn
+specificWeight = makeDerU (dcc "specificWeight" (cn' "specific weight")
   "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 

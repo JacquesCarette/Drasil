@@ -23,10 +23,14 @@ Main
 *.iml
 *.vrb
 .DS_Store
+Thumbs.db
+desktop.ini
 .stack-work
 /code/Docs
 /code/build
+/code/logs
 *.synctex.gz
 *.pyc
 __pycache__
 *.class
+.drasil-min-stack-ver

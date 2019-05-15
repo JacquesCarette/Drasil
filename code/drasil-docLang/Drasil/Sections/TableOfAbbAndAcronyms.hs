@@ -1,18 +1,18 @@
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfAbbAndAcronyms
-  (table_of_abb_and_acronyms) where
+  (tableOfAbbAndAcronyms) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (abbreviation, fullForm)
 
 import Data.List (sortBy)
 import Data.Function (on)
-
 -- | Creates a standard table of abbreviations and acronyms section from a
 -- given list of abbreviated chunks
-table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
-table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
-  [Con (LlC $ table ls)] (mkLabelRASec "TAbbAcc" "Abbreviations and Acronyms")
+tableOfAbbAndAcronyms :: (Idea s) => [s] -> Section
+tableOfAbbAndAcronyms ls = Section (S "Abbreviations and Acronyms")
+  [Con (LlC $ table ls)] (makeSecRef "TAbbAcc" "Abbreviations and Acronyms")
+
 
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
@@ -23,7 +23,7 @@ select (x:xs) = case getA x of
 -- | The actual table creation function.
 table :: (Idea s) => [s] -> LabelledContent
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  llcc (mkLabelSame "TAbbAcc" Tab) $ Table 
+  llcc (makeTabRef "TAbbAcc") $ Table
   (map (titleize) [abbreviation, fullForm]) (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]

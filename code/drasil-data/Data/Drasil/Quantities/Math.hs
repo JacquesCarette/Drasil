@@ -1,26 +1,29 @@
 module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Math as CM (diameter, euclidN, gradient, normalV,
-    orient, perpV, surArea, surface, unitV)
+import Language.Drasil.ShortHands
+
+import Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
+    normalV, orient, perpV, pi_, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
-diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: DefinedQuantityDict
+gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect, pi_, 
+  uNormalVect :: DefinedQuantityDict
 
-diameter    = dqdEL CM.diameter lD                      Real metre
-gradient    = dqd'  CM.gradient (const $ lNabla)        Real Nothing
-normalVect  = dqd'  CM.normalV  (const $ vec $ lN)      Real Nothing
-uNormalVect = dqd'  CM.normalV  (const $ vec $ hat lN)  Real Nothing
-unitVect    = dqd'  CM.unitV    (const $ vec $ hat lI)  Real Nothing
-perpVect    = dqd'  CM.perpV    (const $ vec $ lN)      Real Nothing
-surface     = dqdEL CM.surface  cS                      Real m_2
-euclidNorm  = dqd'  CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
+gradient    = dqd' CM.gradient (const $ lNabla)        Real Nothing
+normalVect  = dqd' CM.normalV  (const $ vec $ lN)      Real Nothing
+uNormalVect = dqd' CM.normalV  (const $ vec $ hat lN)  Real Nothing
+unitVect    = dqd' CM.unitV    (const $ vec $ hat lI)  Real Nothing
+unitVectj   = dqd' CM.unitV    (const $ vec $ hat lJ)  Real Nothing
+perpVect    = dqd' CM.perpV    (const $ vec $ lN)      Real Nothing
+pi_         = dqd' CM.pi_      (const $ lPi)           Real Nothing
+euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
                                                         Real Nothing  
 
-pi_ :: QuantityDict
-pi_         = mkQuant "pi"   (pn "pi") lPi              Real Nothing Nothing
+area, diameter, surface, surArea, orientation :: UnitalChunk
 
-surArea, orientation :: UnitalChunk
-
-surArea     = ucs' CM.surArea cA            m_2    Real
-orientation = ucs' CM.orient  lPhi radian Radians
+area        = ucs' CM.area     cA   Real    m_2
+diameter    = ucs' CM.diameter lD   Real    metre
+surface     = ucs' CM.surface  cS   Real    m_2
+surArea     = ucs' CM.surArea  cA   Real    m_2
+orientation = ucs' CM.orient   lPhi Radians radian

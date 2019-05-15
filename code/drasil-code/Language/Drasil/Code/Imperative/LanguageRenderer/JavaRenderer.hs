@@ -6,6 +6,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.Build.AST (buildSingle, includeExt, inCodePackage, interp, mainModule,
+  mainModuleFile, NameOpts(NameOpts), packSep, withExt)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -23,10 +25,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
   litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, includeD, fileNameD, new, exprDocD'', declarationDocD,
-  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
+  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist,
+  buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
-import Prelude hiding (break,print)
+import Prelude hiding (break,print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
@@ -48,6 +51,9 @@ javaConfig options c =
         enumsEqualInts   = False,
         ext              = ".java",
         dir              = "java",
+        buildConfig      = buildSingle (\i _ -> ["javac", unwords i]) $
+          inCodePackage $ mainModuleFile,
+        runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = (scopeDoc c),
@@ -55,7 +61,7 @@ javaConfig options c =
         inputFunc        = parens(text "new Scanner(System.in)"),
         iterForEachLabel = forLabel,
         iterInLabel      = colon,
-        list             = \_ -> text listType,
+        list             = const $ text listType,
         listObj          = new,
         clsDec           = classDec,
         package          = package',
@@ -70,7 +76,7 @@ javaConfig options c =
         
         top    = jtop c,
         body   = jbody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
@@ -82,10 +88,17 @@ javaConfig options c =
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "no environment has been set"
+        getEnv = const $ error "no environment has been set"
     }
 
 -- short names, packaged up above (and used below)
+
+jNameOpts :: NameOpts
+jNameOpts = NameOpts {
+  packSep = ".",
+  includeExt = False
+}
+
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
@@ -129,7 +142,7 @@ binOpDoc' Power = text "Math.pow"
 binOpDoc' op = binOpDocD op
 
 declarationDoc' :: Config -> Declaration -> Doc
-declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> new <+> stateType c (List lt t) Dec <> parens (listElements)
+declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> new <+> stateType c (List lt t) Dec <> parens listElements
     where listElements = if null vs then empty else text "Arrays.asList" <> parens (callFuncParamList c vs)
 declarationDoc' c (ConstDecDef n l) = text "final" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 declarationDoc' c d = declarationDocD c d
@@ -169,9 +182,9 @@ objAccessDoc' c v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _)) (Cast (Bas
 objAccessDoc' c v Floor = funcAppDoc c "Math.floor" [v]
 objAccessDoc' c v Ceiling = funcAppDoc c "Math.ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "Double.parseDouble" [v]
-objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens (dftVal)
+objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens dftVal
     where dftVal = case t of Base bt     -> valueDoc c (defaultValue bt)
-                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens (empty)
+                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens empty
                              _           -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 
@@ -195,7 +208,8 @@ methodDoc' c f m t = methodDocD c f m t
 unOpDoc' :: UnaryOp -> Doc
 unOpDoc' SquareRoot = text "Math.sqrt"
 unOpDoc' Abs = text "Math.abs"
-unOpDoc' Log = text "Math.log"
+unOpDoc' Ln = text "Math.log"
+unOpDoc' Log = text "Math.log10"
 unOpDoc' Exp = text "Math.exp"
 unOpDoc' op = unOpDocD op
 
@@ -218,7 +232,7 @@ complexDoc' :: Config -> Complex -> Doc
 complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "nextLine" []))
 complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "nextLine" []))
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop $
-  while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "nextLine" [])))    
+  while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v $. listAppend (f $.(Func "nextLine" [])))    
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp
                                                    l_i = "i_temp"

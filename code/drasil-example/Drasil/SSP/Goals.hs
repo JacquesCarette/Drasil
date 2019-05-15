@@ -1,26 +1,38 @@
-module Drasil.SSP.Goals (sspGoals) where
+module Drasil.SSP.Goals (sspGoals, identifyCritAndFSGS, determineNormalFGS,
+  determineShearFGS) where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slope, slpSrf)
+import Data.Drasil.Concepts.Documentation (goalStmtDom)
+import Data.Drasil.SentenceStructures (andThe)
 
-import Data.Drasil.SentenceStructures (ofThe)
+import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slice, slope)
+import Drasil.SSP.Unitals (intNormForce, intShrForce)
+
 -----------
 -- Goals --
 -----------
 
-sspGoals :: [Sentence]
-sspGoals = [locAndGlFS, lowestFS, displSlope]
+sspGoals :: [ConceptInstance]
+sspGoals = [identifyCritAndFSGS, determineNormalFGS, determineShearFGS]
 
-locAndGlFS, lowestFS, displSlope :: Sentence
+identifyCritAndFSGS :: ConceptInstance
+identifyCritAndFSGS = cic "identifyCritAndFS" identifyCritAndFS 
+  "Identify-Crit-and-FS" goalStmtDom
 
--- 1
-locAndGlFS = S "Evaluate local and global" +:+ plural fs_concept +:+
-  S "along a given" +:+. phrase slpSrf
+determineNormalFGS :: ConceptInstance
+determineNormalFGS = cic "determineNormalF" (determineF intNormForce) 
+  "Determine-Normal-Forces" goalStmtDom
+
+determineShearFGS :: ConceptInstance
+determineShearFGS = cic "determineShearF" (determineF intShrForce) 
+  "Determine-Shear-Forces" goalStmtDom
+
+identifyCritAndFS :: Sentence
+identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `andThe` 
+  S "corresponding" +:+. phrase fs_concept
   
--- 2
-lowestFS   = S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+
-  phrase slope `sC` S "with the lowest" +:+. phrase fs_concept
-  
--- 3
-displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
+determineF :: (NamedIdea a) => a -> Sentence
+determineF what = S "Determine the" +:+ phrase what +:+
+  S "between each pair of vertical" +:+ plural slice +:+ S "of the" +:+.
+  phrase slope

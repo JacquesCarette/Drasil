@@ -7,6 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,guard,update)
+import Language.Drasil.Code.Imperative.Build.AST (interpMM)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -24,11 +25,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, 
   litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
   classDec, fileNameD, forLabel, exprDocD, declarationDocD,
-  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD')
+  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD', buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
-import Prelude hiding (print)
+import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, semi, colon, parens, (<>), (<+>), empty, equals,
   brackets, vcat, doubleQuotes, render, char, int, ($+$))
 
@@ -44,21 +45,23 @@ pythonConfig _ c =
         enumsEqualInts   = True,
         ext              = ".py",
         dir              = "python",
+        buildConfig      = Nothing,
+        runnable         = interpMM "python",
         fileName         = fileNameD c,
         include          = include',
-        includeScope     = \_ -> empty,
+        includeScope     = const empty,
         inherit          = empty,
         inputFunc        = text "raw_input()",    --change to "input()" for Python 3.0+
         iterForEachLabel = forLabel,
         iterInLabel      = text "in",
-        list             = \_ -> empty,
+        list             = const empty,
         listObj          = empty,
         clsDec           = classDec,
-        package          = \_ -> empty,
+        package          = const empty,
         printFunc        = text "print",
         printLnFunc      = empty,
-        printFileFunc    = \_ -> empty,
-        printFileLnFunc  = \_ -> empty,
+        printFileFunc    = const empty,
+        printFileLnFunc  = const empty,
         stateType        = pystateType c,
         
         blockStart = colon, blockEnd = empty,
@@ -66,20 +69,20 @@ pythonConfig _ c =
         
         top    = pytop c,
         body   = pybody c,
-        bottom = \_ -> empty,
+        bottom = const empty,
         
         assignDoc = assignDocD' c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDoc' c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDoc',
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = \_ -> empty,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = const empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
-        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
+        unOpDoc = unOpDocD'', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
         inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
-        getEnv = \_ -> error "getEnv for pythong not yet implemented"
+        getEnv = const $ error "getEnv for pythong not yet implemented"
     }
 
 -- convenience
@@ -87,6 +90,11 @@ imp, incl, initName :: Label
 imp = "import*"
 incl = "from"
 initName = "__init__"
+
+unOpDocD'' :: UnaryOp -> Doc
+unOpDocD'' Ln = text "math.log"
+unOpDocD'' Log = text "math.log10"
+unOpDocD'' op = unOpDocD' op
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
@@ -96,7 +104,7 @@ include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
 
 pystateType :: Config -> StateType -> DecDef -> Doc
-pystateType _   (List _ _)     _ = brackets (empty)
+pystateType _   (List _ _)     _ = brackets empty
 pystateType c s@(Base Integer) d = stateTypeD c s d
 pystateType c s@(Base Float)   d = stateTypeD c s d
 pystateType _   (Base String)  _ = text "str"
@@ -111,17 +119,17 @@ pytop _ _ _ m =
     text "import math" 
   ] 
   $+$
-  (vcat $ map (\x -> text "import" <+> text x) (libs m))
+  vcat (map (\x -> text "import" <+> text x) (libs m))
       
 
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
 pybody c f p (Mod _ _ vs fs cs) = 
-  (vcat $ map (\x -> statementDoc c NoLoop $ DeclState x) vs)
+  vcat (map (statementDoc c NoLoop . DeclState) vs)
   $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
-  (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
+  vcat (intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -168,7 +176,7 @@ funcDoc' c (ListAdd i v) = dot <> funcAppDoc c "insert" [i, v]
 funcDoc' c (ListPopulate size t) = brackets (valueDoc c dftVal) <+> char '*' <+> valueDoc c size
     where dftVal = case t of Base bt   -> defaultValue bt
                              _         -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
-funcDoc' c (ListExtend t) = dot <> text "append" <> parens (dftVal)
+funcDoc' c (ListExtend t) = dot <> text "append" <> parens dftVal
     where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
                              List _ _  -> brackets empty   
                              _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
@@ -203,17 +211,17 @@ classDoc' c f _ m = vcat [
     oneTab $ modInnerDoc]
     where modInnerDoc = case m of (Class n _ _ _ fs) -> methodListDoc c f n fs
                                   (Enum _ _ es) -> enumElementsDoc c es
-                                  (MainClass _ _ _) -> error "unreachable"
+                                  MainClass{} -> error "unreachable"
           baseClass = case m of (Class _ p _ _ _) -> case p of Nothing -> empty
                                                                Just pn -> parens (text pn)
                                 _ -> empty
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
-objAccessDoc' c v@(Self) f = valueDoc c v <> funcDoc c f
-objAccessDoc' c v f@(ListSize) = funcDoc c f <> parens (valueDoc c v)
+objAccessDoc' c v@Self f = valueDoc c v <> funcDoc c f
+objAccessDoc' c v f@ListSize = funcDoc c f <> parens (valueDoc c v)
 objAccessDoc' c v f@(ListPopulate _ _) = valueDoc c v <+> equals <+> funcDoc c f
-objAccessDoc' c v   (Floor) = funcAppDoc c "math.floor" [v]
-objAccessDoc' c v   (Ceiling) = funcAppDoc c "math.ceil" [v]
+objAccessDoc' c v Floor = funcAppDoc c "math.floor" [v]
+objAccessDoc' c v Ceiling = funcAppDoc c "math.ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
 
 objVarDoc' :: Config -> Value -> Value -> Doc
@@ -233,12 +241,12 @@ methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ _ (Construct _) ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab $ bodyDoc c b]
-        where oneParam | length ps > 0 = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
 methodDoc' c _ _ (Method n _ _ _ ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab bodyD]
-        where oneParam | length ps > 0 = text ", "
+        where oneParam | not $ null ps = text ", "
                        | otherwise     = empty
               bodyD | null b    = text "None"
                     | otherwise = bodyDoc c b
@@ -246,13 +254,15 @@ methodDoc' c _ _ (MainMethod b) = bodyDoc c b
 methodDoc' _ _ _ _ = empty
 
 valueDoc' :: Config -> Value -> Doc
-valueDoc' _ (Self) = text "self"
+valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List _ _) _) = stateType c t Def
 valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (callFuncParamList c vs)
   where prefixLib Nothing = empty
         prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
+valueDoc' c (Condi cond te ee) = parens (valueDoc' c te <+> text "if" <+>
+          parens (valueDoc' c cond) <+> text "else" <+> valueDoc' c ee)
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc
@@ -291,8 +301,8 @@ complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= objMethodCall 
 complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ objMethodCall f "readline" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
 complexDoc' c (ListSlice _ vnew vold b e s) = 
-  valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
-  getVal b <> colon <> getVal e <> colon <> getVal s)
+  valueDoc c vnew <+> equals <+> valueDoc c vold <> 
+  brackets (getVal b <> colon <> getVal e <> colon <> getVal s)
     where getVal Nothing  = empty
           getVal (Just v) = valueDoc c v
 complexDoc' c (StringSplit vnew s d) = 

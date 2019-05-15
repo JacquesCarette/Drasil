@@ -4,10 +4,11 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
     goalStmt, inModel, likelyChg, requirement, srs, thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
-
+import Data.Drasil.Concepts.Physics (twoD)
+import Data.Drasil.IdeaDicts (physics)
 ----- Acronyms -----
 
-centreMass, twoD, chipmunk :: CI
+centreMass, chipmunk :: CI
 
 cpAcronyms :: [CI]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
@@ -15,11 +16,10 @@ cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     typUnc, unlikelyChg]
 
 --FIXME: Should use of' combinator.
-cent_mass :: NP --FIXME: Need to be able to cap plural.
-cent_mass = nounPhrase' "centre of mass" "centres of mass" 
+centMass :: NP --FIXME: Need to be able to cap plural.
+centMass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass    = commonIdea "centreMass" cent_mass              "CM"
-twoD          = commonIdea "twoD"       (pn "Two-Dimensional") "2D"
+centreMass    = commonIdeaWithDict "centreMass" centMass              "CM"   [physics]
 
-chipmunk = commonIdea "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"
+chipmunk = commonIdeaWithDict "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  [physics]

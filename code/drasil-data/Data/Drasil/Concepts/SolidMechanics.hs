@@ -1,10 +1,13 @@
 module Data.Drasil.Concepts.SolidMechanics where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Physics (force, friction, strain, stress)
+import Data.Drasil.Concepts.Physics (force, strain, stress)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
+solidcon :: [ConceptChunk]
+solidcon = [elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
+  shearRes, stffness]
 
 elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk
@@ -14,8 +17,8 @@ elastMod   = dccWDS "elastMod" (cn "elastic modulus")
   S "exerted on a body to the resulting" +:+. phrase strain)
 
 mobShear   = dccWDS "mobShear" (cn "mobilized shear force") 
-  (S "The amount of shear" +:+ (phrase force) +:+ S "resisted by the body" +:+
-  S "when shear" +:+ (phrase stress) +:+ S "is applied.")
+  (at_start shearForce +:+ S "in the direction of potential motion" `sC`
+  S "thus encouraging motion along the plane.")
 
 normForce  = dccWDS "normForce" (cn' "normal force")
   (S "A" +:+ phrase force +:+ S "applied perpendicular" +:+ 
@@ -29,9 +32,9 @@ poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio")
   (S "The ratio of perpendicular" +:+ phrase strain +:+ 
   S "to parallel" +:+. phrase strain)
   
-shearRes   = dccWDS "shearRes" (cn "shear resistance") 
-  (S "The resulting" +:+ phrase friction +:+ 
-  S "caused by a shear" +:+. phrase stress)
+shearRes   = dccWDS "shearRes" (cn "resistive shear force") 
+  (at_start shearForce +:+ S "in the direction opposite to the direction" +:+
+  S "of potential motion, thus hindering motion along the plane.")
   
 shearForce = dccWDS "shearForce" (cn' "shear force")
   (S "A" +:+ phrase force +:+ S "applied parallel to the plane of the material.")

@@ -23,13 +23,13 @@ accRoutSemantics, considerations, enviroVars, expAccPrograms,
   expConstants, expTypes, module_, tempMod_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
-modHier          cs ss = section' (titleize  Doc.moduleHierarchy)  cs ss "ModHierarchy"
-notation         cs ss = section' (titleize  Doc.notation)         cs ss "Notation"
+modHier          cs ss = section' (titleize  Doc.moduleHierarchy) cs ss "ModHierarchy"
+notation         cs ss = section' (titleize  Doc.notation)        cs ss "Notation"
 
-module_          cs ss = section' (titleize  Doc.module_)          cs ss "Module"
-tempMod_         cs ss = section' (titleize  Doc.templateModule)   cs ss "TemplateModule"
+module_          cs ss = section' (titleize  Doc.module_)         cs ss "Module"
+tempMod_         cs ss = section' (titleize  Doc.templateModule)  cs ss "TemplateModule"
 uses             cs ss = section' (titleize' Doc.use)             cs ss "Uses"
-syntax           cs ss = section' (titleize  Doc.syntax)           cs ss "Syntax"
+syntax           cs ss = section' (titleize  Doc.syntax)          cs ss "Syntax"
 semantics        cs ss = section' (titleize' Doc.semantic)        cs ss "Semantics"
 considerations   cs ss = section' (titleize' Doc.consideration)   cs ss "Considerations"
 
@@ -42,8 +42,8 @@ stateVars        cs ss = section' (titleize' Doc.stateVar)        cs ss "StateVa
 stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateInvars"
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
-misOfModule :: [Contents] -> [Section] -> String -> Label -> Section
-misOfModule cs ss modstr lbl = section (titleize $ Doc.misOfModule modstr) cs ss lbl
+misOfModule :: [Contents] -> [Section] -> String -> Reference -> Section
+misOfModule cs ss modstr = section (titleize $ Doc.misOfModule modstr) cs ss
 
 --FIXME: All these contents need variability to be implemented in other examples
 
@@ -116,8 +116,8 @@ inputModIntro = foldlSP [S "The secrets of this module are the data structure fo
 -- HELPFUL FUNCTIONS --
 -----------------------
 
-assignSttmts :: (HasUID c, HasSymbol c, DefiningExpr c) => c -> Sentence
-assignSttmts f = (ch f) :+: S ":=" :+: (E $ f ^. defnExpr) --FIXME: replace ":=" with actual symbol ":="
+assignSttmts :: (HasUID c, HasSymbol c) => c -> Sentence
+assignSttmts f = (ch f) :+: S ":=" :+: (P $ symbol f Implementation) --FIXME: replace ":=" with actual symbol ":="
 
 {-WIP : laying out the access routine semantics
 layAccRoutSemantics :: (HasUID c, HasSymbol c, ExprRelat c) => String -> [c] ->

@@ -8,7 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (<>), (%%))
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (%%))
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -93,25 +93,22 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref, snref :: String -> D -> D
+ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
-ref      t x = custRef (t ++ "~\\ref") x
+ref      t   = custRef (t ++ "~\\ref")
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
+  br empty <> br x
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
 href :: String -> String -> D
-href a0 a1 = command2 "href" a0 a1
+href = command2 "href"
 
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x
 
-mref, rref, aref, lcref, ucref, cite :: D -> D
-mref  x = custRef "M\\ref"  x
-rref  x = custRef "R\\ref"  x
-aref  x = custRef "A\\ref"  x
-lcref x = custRef "LC\\ref" x
-ucref x = custRef "UC\\ref" x
-cite  x = custRef "\\cite"  x
+cite :: D -> D
+cite = custRef "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
@@ -135,12 +132,12 @@ label           = commandD "label"
 title           = commandD "title"
 
 item' :: D -> D -> D
-item' bull s = command1oD "item" (Just bull) s
+item' bull = command1oD "item" (Just bull)
 
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "newline"
+newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 
@@ -153,7 +150,7 @@ description = mkEnv "description"
 figure      = mkEnv "figure"
 center      = mkEnv "center"
 document    = mkEnv "document"
-equation    = mkEnv "dmath" --displays math and wraps long lines
+equation    = mkEnv "displaymath" --displays math
 symbDescription = mkEnv "symbDescription"
 
 docclass, exdoc :: Maybe String -> String -> D
@@ -174,17 +171,12 @@ superscript a b = a <> (pure $ H.hat) <> br b
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum, reqcounter, reqnum, assumpcounter, assumpnum
- , lccounter, lcnum, uccounter, ucnum :: D
+ , modcounter, modnum :: D
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
 counter       = count "datadefnum"
 modcounter    = count "modnum"
-reqcounter    = count "reqnum"
-assumpcounter = count "assumpnum"
-lccounter     = count "lcnum"
-uccounter     = count "ucnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
@@ -193,10 +185,6 @@ colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
 
 modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
-reqnum    = comm "rthereqnum"        "R\\thereqnum"        Nothing
-assumpnum = comm "atheassumpnum"     "A\\theassumpnum"     Nothing
-lcnum     = comm "lcthelcnum"        "LC\\thelcnum"        Nothing
-ucnum     = comm "uctheucnum"        "UC\\theucnum"        Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 

@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-11.2
+resolver: lts-12.25
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -37,7 +37,10 @@ resolver: lts-11.2
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - drasil-lang/
+- drasil-build/
 - drasil-code/
+- drasil-theory/
+- drasil-database/
 - drasil-printers/
 - drasil-gen/
 - drasil-data/

@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website, MIS), DocSpec(DocSpec))
 
-import Drasil.GlassBR.Body (glassBR_code, glassBR_mis, glassBR_srs, printSetting)
+import Drasil.GlassBR.Body (glassBRCode, glassBRMis, glassBRSrs, printSetting)
 
 glassChoices :: Choices
 glassChoices = Choices {
@@ -21,7 +21,7 @@ glassChoices = Choices {
   
 main :: IO()
 main = do
-  gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs printSetting
-  gen (DocSpec Website "GlassBR_SRS") glassBR_srs printSetting
-  gen (DocSpec MIS "GlassBR_MIS")     glassBR_mis printSetting
-  genCode glassChoices glassBR_code
+  gen (DocSpec SRS "GlassBR_SRS")     glassBRSrs printSetting
+  gen (DocSpec Website "GlassBR_SRS") glassBRSrs printSetting
+  gen (DocSpec MIS "GlassBR_MIS")     glassBRMis printSetting
+  genCode glassChoices glassBRCode

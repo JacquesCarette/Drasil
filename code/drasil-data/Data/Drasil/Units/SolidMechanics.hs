@@ -1,6 +1,6 @@
 module Data.Drasil.Units.SolidMechanics where
 
-import Data.Drasil.SI_Units (metre, newton, pascal)
+import Data.Drasil.SI_Units (metre, newton, pascal) 
 import Language.Drasil (UnitDefn, new_unit, (/:))
 
 stiffnessU, stiffness3D :: UnitDefn

@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
     -- * Some Neccessary Data Types for Rendering
@@ -13,26 +14,28 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileNameD,assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
-    enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
-    clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
-    paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
-    inputDocD,complexDocD,
+    assignDocD, assignDocD', binOpDocD, blockDocD, bodyDocD, callFuncParamListD, classDocD,
+    clsDecDocD, clsDecListDocD, complexDocD, conditionalDocD, conditionalDocD', conditionalDocD'',
+    declarationDocD, enumElementsDocD, exceptionDocD, exprDocD, exprDocD', exprDocD'', fileNameD,
+    funcAppDocD, funcDocD, functionDocD, functionListDocD, includeD, inputDocD, ioDocD, iterationDocD,
+    litDocD, methodDocD, methodDocD', methodListDocD, methodTypeDocD, namespaceD, objAccessDocD, 
+    objVarDocD, paramDocD, paramListDocD, patternDocD, printDocD, retDocD, scopeDocD, stateDocD,
+    stateListDocD, stateTypeD, statementDocD, unOpDocD, unOpDocD', valueDocD, valueDocD',
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST
-  hiding (body,comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
-          update,strats)
-import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,oneTab,
-                            oneTabbed,himap,vibcat,vmap,vibmap)
+import Language.Drasil.Code.Imperative.AST hiding (body, comment, bool, int, float, char, string, cases, 
+                            tryBody, catchBody, guard, update, strats)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
+import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText, oneTab,
+                            oneTabbed, himap, vibcat, vmap, vibmap)
 
-import qualified Data.Map as Map (fromList,lookup)
 import Data.List (find)
-import Prelude hiding (break,print,return,last,mod)
+import qualified Data.Map as Map (fromList, lookup)
+import Prelude hiding (break,print,return,last,mod,(<>))
+
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
   isEmpty, rbrace, lbrace, vcat, space, char, double, quotes, integer, semi, equals, braces,
   int, comma, colon)
@@ -50,6 +53,7 @@ data StatementLocation = Loop | NoLoop
 data DecDef = Dec | Def
 data FileType = Header | Source
 
+
 -- | Configuration record (explicit dictionary) for a language
 data Config = Config {
     renderCode :: AbstractCode -> Code,
@@ -61,6 +65,8 @@ data Config = Config {
     enumsEqualInts :: Bool,     --whether Enum elements should explictly be set equal to their ordinal integers (in the default enumElementsDoc implementation)
     ext :: Label,
     dir :: Label,
+    buildConfig :: Maybe BuildConfig,
+    runnable :: Runnable,
     fileName :: Module -> String,
     include :: Label -> Doc,
     includeScope :: Scope -> Doc,
@@ -150,7 +156,7 @@ fileNameD _ = moduleName
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec,dot,doubleSlash,forLabel,new :: Doc
+classDec, dot, doubleSlash, forLabel, new :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
@@ -195,17 +201,17 @@ binOpDocD And = text "&&"
 binOpDocD Or = text "||"
 
 bodyDocD :: Config -> Body -> Doc
-bodyDocD c bs = vibmap (blockDoc c) blocks
-    where blocks = filter (\b -> not $ isEmpty $ blockDoc c b) bs
+bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
+    where bdc = blockDoc c
 
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
-    where docOf s = statementDoc c NoLoop s
-          notNullStatement s = (not $ isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
+    where docOf = statementDoc c NoLoop
+          notNullStatement s = not (isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
           statements = filter notNullStatement ss
     
 callFuncParamListD :: Config -> [Value] -> Doc
-callFuncParamListD c vs = himap (text ", ") (valueDoc c) vs
+callFuncParamListD c = himap (text ", ") (valueDoc c)
 
 conditionalDocD :: Config -> Conditional -> Doc
 conditionalDocD _ (If [] _) = error "If with no body encountered"
@@ -265,9 +271,6 @@ declarationDocD c (VarDecDef n t v) = stateType c t Dec <+> text n <+> equals <+
 declarationDocD c (ObjDecDef n t v) = declarationDoc c $ VarDecDef n t v
 declarationDocD c (ConstDecDef n l) = text "const" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 
-declarationDocD' :: Config -> Declaration -> Doc
-declarationDocD' c d = declarationDocD c d
-
 enumElementsDocD :: Config -> [Label] -> Doc
 enumElementsDocD c es = vcat $
     zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
@@ -324,8 +327,8 @@ funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Int
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
 funcDocD _ (ListExtend _) = empty
-funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
-funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
+funcDocD c IterBegin = dot <> funcAppDoc c "begin" []
+funcDocD c IterEnd = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $
   "funcDocD undefined for _ Floor pattern. See " ++
   "Language.Drasil.Code.Imperative.LanguageRenderer"
@@ -361,8 +364,8 @@ litDocD (LitStr v) = doubleQuotedText v
 
 clsDecDocD :: Config -> Class -> Doc
 clsDecDocD c (Class n _ _ _ _) = (clsDec c) <+> text n <> endStatement c
-clsDecDocD _ (Enum _ _ _) = empty
-clsDecDocD c m@(MainClass _ _ _) = clsDecDoc c $ convertToClass m
+clsDecDocD _ Enum{} = empty
+clsDecDocD c m@MainClass{} = clsDecDoc c $ convertToClass m
 
 clsDecListDocD :: Config -> [Class] -> Doc
 clsDecListDocD c = vmap $ clsDecDoc c
@@ -381,30 +384,30 @@ classDocD c ft _ (Class n p s vs fs) = vcat [
     rbrace]
     where baseClass = case p of Nothing -> empty
                                 Just pn -> inherit c <+> text pn
-classDocD c ft m mod@(MainClass _ _ _) = classDoc c ft m $ convertToClass mod
+classDocD c ft m mod@MainClass{} = classDoc c ft m $ convertToClass mod
 
 -- for 'packages' which are namespaces
 namespaceD :: Label -> Doc
 namespaceD n = text "namespace" <+> text n
 
 objAccessDocD :: Config -> Value -> Function -> Doc
-objAccessDocD c (Self) (Func n vs) = funcAppDoc c n vs
+objAccessDocD c Self (Func n vs) = funcAppDoc c n vs
 objAccessDocD _ _ (ListPopulate _ _) = empty
 objAccessDocD c v f@(Cast _ _) = funcDoc c f <> parens (valueDoc c v)
-objAccessDocD c v   (Floor) = funcAppDoc c "Math.Floor" [v]
-objAccessDocD c v   (Ceiling) = funcAppDoc c "Math.Ceiling" [v]
+objAccessDocD c v Floor = funcAppDoc c "Math.Floor" [v]
+objAccessDocD c v Ceiling = funcAppDoc c "Math.Ceiling" [v]
 objAccessDocD c v f = valueDoc c v <> funcDoc c f
 
 objVarDocD :: Config -> Value -> Value -> Doc
-objVarDocD c (Self) v = valueDoc c v
+objVarDocD c Self v = valueDoc c v
 objVarDocD c v1 v2 = valueDoc c v1 <> dot <> valueDoc c v2
 
 paramDocD :: Config -> Parameter -> Doc
 paramDocD c (StateParam n t) = stateType c t Dec <+> text n
-paramDocD _ (FuncParam _ _ _) = error "FuncParam not yet rendered"
+paramDocD _ FuncParam{} = error "FuncParam not yet rendered"
 
 paramListDocD :: Config -> [Parameter] -> Doc
-paramListDocD c ps = himap (text ", ") (paramDoc c) ps
+paramListDocD c = himap (text ", ") (paramDoc c)
 
 patternDocD :: Config -> Pattern -> Doc
 patternDocD c (State (InitState n s)) = declarationDoc c $ VarDecDef n (Base String) (litString s)
@@ -424,7 +427,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) ((&.++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) (index &.++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
@@ -528,15 +531,15 @@ methodDocD' c _ _ (MainMethod b) = vcat [
 methodDocD' c ft m f = methodDocD c ft m f
 
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
+methodListDocD c t m = (vibmap mdc) . filter (not . isEmpty . mdc)
+    where mdc = methodDoc c t m
 
 functionDocD :: Config -> FileType -> Label -> Method -> Doc
 functionDocD _ _ _ _ = error "Not implemented yet!"
 
 functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
-    where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms
+functionListDocD c t m = (vibmap fdc) . filter (not . isEmpty . fdc)
+    where fdc = functionDoc c t m
 
 methodTypeDocD :: Config -> MethodType -> Doc
 methodTypeDocD c (MState t) = stateType c t Dec
@@ -613,7 +616,7 @@ comment c (CommentDelimit cmt len) =
     in com <> text (dashes (render com) len)
 
 dashes :: String -> Int -> String
-dashes s l = take (l - length s) (repeat '-')
+dashes s l = replicate (l - length s)  '-'
 
 end :: Config -> StatementLocation -> Doc
 end _ Loop = empty

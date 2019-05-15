@@ -18,6 +18,7 @@ module Drasil.Sections.SolutionCharacterSpec
   ) where
 
 import Language.Drasil
+import Theory.Drasil (DataDefinition)
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
@@ -54,41 +55,41 @@ data SubSec where
   SectionModel :: NamedIdea c => c -> [SecItem] -> SubSec
 
 sSubSec :: (NamedIdea c) => c -> [SecItem] -> SubSec
-sSubSec sectionName xs = SectionModel sectionName xs
+sSubSec = SectionModel
 
 --------------------------
 -- SECITEM CONSTRUCTORS --
 --------------------------
 
 siCon :: [Contents] -> SecItem
-siCon xs = Cont xs
+siCon = Cont
 
 siSect :: [Section] -> SecItem
-siSect xs = Sect xs
+siSect = Sect
 
 siTMod :: [RelationConcept] -> SecItem
-siTMod xs = TMods xs
+siTMod = TMods
 
 siIMod :: [RelationConcept] -> SecItem
-siIMod xs = IMods xs
+siIMod = IMods
 
 siDDef :: [DataDefinition] -> SecItem
-siDDef xs = DataDef xs
+siDDef = DataDef
 
 siSent :: [Sentence] -> SecItem
-siSent xs = Sent xs
+siSent = Sent
 
 siSTitl :: SecItem
 siSTitl = SingularTitle
 
 siCC :: [ConceptChunk] -> SecItem
-siCC xs = ConChunk xs
+siCC = ConChunk
 
 siUQI :: [UncertQ] -> SecItem
-siUQI xs = UnQuantI xs
+siUQI = UnQuantI
 
 siUQO :: [UncertQ] -> SecItem
-siUQO xs = UnQuantO xs
+siUQO = UnQuantO
 ----------------------
 --  HELPER FUNCTION --
 ----------------------
@@ -101,7 +102,7 @@ compareID c1 c2 = (c1 ^. uid) == c2
 -----------------------
 
 hasTitle :: SecItem -> Bool
-hasTitle (SingularTitle) = True
+hasTitle SingularTitle = True
 hasTitle _               = False
 
 hasCont :: SecItem -> Bool
@@ -133,10 +134,10 @@ hasUQO _            = False
 -----------------
 
 getItem :: (a->Bool) -> [a] -> Maybe a
-getItem func ls = find (func) ls
+getItem = find
 
 getTitleize :: (Maybe SecItem) -> Bool
-getTitleize (Just (SingularTitle)) = True
+getTitleize (Just SingularTitle) = True
 getTitleize (Just _)               = False
 getTitleize Nothing                = False
 
@@ -212,7 +213,7 @@ pullUQO xs = pullFunc xs getUQO hasUQO
 -- Section Assembler --
 -----------------------
 
-assembler :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> [SubSec] -> Section
+assembler :: (Idea c) => c -> s -> SubSec -> [SubSec] -> Section
 assembler progName symMap thisSection subsecs = 
   (sectionMap progName thisSection) subsections
   where subsections = map (render progName symMap) subsecs 
@@ -233,7 +234,7 @@ sectionMap progName (SectionModel niname xs)
 -- Section Render --
 --------------------
 
-render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
+render :: c -> s -> SubSec -> Section
 render _ symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
@@ -252,8 +253,8 @@ render _ symMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (mkLabelRASec (niname ^. uid) (niname ^. uid)) --fixme
+genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
+  (pullContents xs) (pullSections xs) (makeSecRef (niname ^. uid) (niname ^. uid)) --FIXME
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -305,14 +306,11 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
         symMap          = Definition . Data'
         dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
 
-generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+generalDefinitionSect :: SubSec -> s -> Section
 generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
-
-
-
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon
@@ -371,7 +369,7 @@ problemDescriptionSent progName start end = foldlSP [start, (short progName),
 --------------------------
 
 termDefinitionIntro :: [Sentence] -> Contents
-termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) (EmptyS)
+termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) EmptyS
   [S "This subsection provides a list of terms",
   S "that are used in the subsequent", plural Doc.section_, S "and their",
   S "meaning, with the", phrase Doc.purpose, S "of reducing ambiguity",
@@ -414,7 +412,7 @@ assumpIntro = mkParagraph $ foldlSent
   S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 
   (phrase Doc.physicalSystem), S "The numbers given in the square brackets refer to the", 
   foldr1 sC (map refs itemsAndRefs) `sC` S "or", 
-  refs (Doc.likelyChg) `sC` S "in which the respective", 
+  refs Doc.likelyChg `sC` S "in which the respective", 
   (phrase Doc.assumption), S "is used"] --FIXME: use some clever "zipWith"
   where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
         itemsAndRefs = [Doc.thModel, Doc.genDefn, Doc.dataDefn, Doc.inModel] --FIXME ADD REFS BACK

@@ -1,13 +1,13 @@
+{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 module Language.Drasil.Expr.Math where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), RealInterval, Relation,
-  DerivType(..), ($^), BinOp(..), RTopology(..), DomainDesc(..),
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..), 
   ArithOper(..), UFunc(..))
-import Language.Drasil.Space (Space)
-import Language.Drasil.Classes (HasUID(uid), HasSymbol)
+import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -45,6 +45,18 @@ csc = UnaryOp Csc
 cot :: Expr -> Expr 
 cot = UnaryOp Cot
 
+-- | Smart constructor to apply arcsin to an expression
+arcsin :: Expr -> Expr 
+arcsin = UnaryOp Arcsin
+
+-- | Smart constructor to apply arccos to an expression
+arccos :: Expr -> Expr 
+arccos = UnaryOp Arccos
+
+-- | Smart constructor to apply arctan to an expression
+arctan :: Expr -> Expr 
+arctan = UnaryOp Arctan
+
 -- | Smart constructor for the exponential (base e) function
 exp :: Expr -> Expr
 exp = UnaryOp Exp
@@ -77,14 +89,14 @@ isin = IsIn
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 
-defint v low high e = Operator Add (BoundedDD v Continuous low high) e
-int_all v e = Operator Add (AllDD v Continuous) e
+defint v low high = Operator Add (BoundedDD v Continuous low high)
+int_all v = Operator Add (AllDD v Continuous)
 
-defsum v low high e = Operator Add (BoundedDD v Discrete low high) e
-sum_all v e = Operator Add (AllDD v Discrete) e
+defsum v low high = Operator Add (BoundedDD v Discrete low high)
+sum_all v = Operator Add (AllDD v Discrete)
 
-defprod v low high e = Operator Mul (BoundedDD v Discrete low high) e
-prod_all v e = Operator Mul (AllDD v Discrete) e
+defprod v low high = Operator Mul (BoundedDD v Discrete low high)
+prod_all v = Operator Mul (AllDD v Discrete)
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
@@ -94,9 +106,10 @@ real_interval c = RealI (c ^. uid)
 euclidean :: [Expr] -> Expr
 euclidean = sqrt . sum' . map square
 
+{-# ANN sum' "HLint: ignore Use sum" #-}
 -- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
 sum' :: (Num a, Foldable t) => t a -> a
-sum' x = foldr1 (+) x
+sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
@@ -117,7 +130,7 @@ vec2D :: Expr -> Expr -> Expr
 vec2D a b    = Matrix [[a],[b]]
 
 dgnl2x2 :: Expr -> Expr -> Expr
-dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d
+dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
 -- Some helper functions to do function application
 apply :: Expr -> [Expr] -> Expr
@@ -134,6 +147,7 @@ apply2 f a b = FCall (sy f) [sy a, sy b]
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 
+-- This also wants a symbol constraint.
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)

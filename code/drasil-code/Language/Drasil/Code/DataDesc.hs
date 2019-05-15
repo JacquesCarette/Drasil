@@ -28,16 +28,16 @@ data LinePattern = Straight [Entry]             -- line of data with no pattern
                  | Repeat [Entry] (Maybe Integer)   -- line of data with repeated pattern
                                                 -- (Maybe Int) = number of repetitions, Nothing = unknown so go to end of line          
 
-entry :: (Quantity c) => c -> Entry
+entry :: (Quantity c, MayHaveUnit c) => c -> Entry
 entry = Entry . codevar
 
-listEntry :: (Quantity c) => [Ind] -> c -> Entry
+listEntry :: (Quantity c, MayHaveUnit c) => [Ind] -> c -> Entry
 listEntry i c = ListEntry i $ codevar c
 
 junk :: Entry
 junk = JunkEntry
 
-singleton :: (Quantity c) => c -> Data
+singleton :: (Quantity c, MayHaveUnit c) => c -> Data
 singleton = Singleton . codevar
 
 junkLine :: Data
@@ -47,10 +47,10 @@ singleLine :: LinePattern -> Delim -> Data
 singleLine = Line 
 
 multiLine :: LinePattern -> Delim -> Data
-multiLine l d = Lines l Nothing d 
+multiLine l = Lines l Nothing
 
 multiLine' :: LinePattern -> Integer -> Delim -> Data
-multiLine' l i d = Lines l (Just i) d 
+multiLine' l i = Lines l (Just i)
 
 straight :: [Entry] -> LinePattern
 straight = Straight

@@ -1,13 +1,22 @@
 module Data.Drasil.Concepts.Math where
 
-import Language.Drasil
+import Language.Drasil hiding (number)
 import Control.Lens ((^.))
+import Data.Drasil.IdeaDicts
 
 import Data.Drasil.Phrase(of_)
+mathcon :: [ConceptChunk]
+mathcon = [angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
+  graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
+  perpV, pi_, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
+  change, rOfChng, constraint]
+
+mathcon' :: [CI]
+mathcon' = [pde, ode, de]
 
 angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
-  perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
+  perpV, pi_, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
   change, rOfChng, constraint :: ConceptChunk
 
 pde, ode, de :: CI
@@ -34,6 +43,7 @@ number       = dcc "number"       (cn' "number")                  "A mathematica
 parameter    = dcc "parameter"    (cn' "parameter")               "A quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
+pi_          = dcc "pi"           (cn' "circumference to diameter ratio")                                                                         "The ratio of a circle's circumference to its diameter"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
 shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
@@ -43,9 +53,9 @@ vector       = dcc "vector"       (cn' "vector")                  "Object with m
 orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
 
 --FIXME: use nounphrase instead of cn'
-de           = commonIdea "de"     (cn' "differential equation")          "DE"
-ode          = commonIdea "ode"    (cn' "Ordinary Differential Equation") "ODE"
-pde          = commonIdea "pde"    (cn' "partial differential equation")  "PDE"
+de           = commonIdeaWithDict "de"     (cn' "differential equation")          "DE"   [mathematics]
+ode          = commonIdeaWithDict "ode"    (cn' "Ordinary Differential Equation") "ODE"  [mathematics]
+pde          = commonIdeaWithDict "pde"    (cn' "partial differential equation")  "PDE"  [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)

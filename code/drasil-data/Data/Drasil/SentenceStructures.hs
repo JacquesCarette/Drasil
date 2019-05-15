@@ -8,7 +8,7 @@ module Data.Drasil.SentenceStructures
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
-  , followA
+  , follows
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
@@ -18,13 +18,14 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, addPercent)
+import Data.Drasil.Utils (addPercent, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
-import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -60,10 +61,10 @@ data FoldType = List | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Numb  wt len = map (wrap wt . S . show) [1..len]
     numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
     numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
@@ -81,7 +82,7 @@ foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:
 --Helper function to foldlList - not exported
 getSep :: SepType -> (Sentence -> Sentence -> Sentence)
 getSep Comma   = sC
-getSep SemiCol = semiCol
+getSep SemiCol = (\a b -> a :+: S ";" +:+ b)
 
 {--** Combinators **--}
 sAnd, andIts, andThe, sAre, sIn, sIs, inThe, isThe, sOf, sOr, sVersus, ofThe, 
@@ -106,13 +107,13 @@ toThe   p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (mkRefFrmLbl ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char] -> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (mkLabelRAFig rn) $
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> String -> String -> LabelledContent
+figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
   Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
 
@@ -129,25 +130,30 @@ underConsidertn chunk = S "The" +:+ (phrase chunk) +:+
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
-refineChain :: NamedIdea c => [c] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plural y
-refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+
+  S "are refined to the" +:+ plural (fst y)
+refineChain (x:y:xs) = refineChain [x,y] `sC` rc (y : xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain
-rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
-  (plural y)
-rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
+rc :: NamedIdea c => [(c, Section)] -> Sentence
+rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
+  +:+ S "to the" +:+ (plural $ fst y) +:+. sParen (makeRef2S $ snd y)
+rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
+  S "to the" +:+ plural (fst y) `sC` rc (y : xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
 -- | helper functions for making likely change statements
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
 likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
 maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOVerb a b = likelyFrame a EmptyS b
-maybeChanged a b = likelyFrame a (S "changed") b
-maybeExpanded a b = likelyFrame a (S "expanded") b
+maybeWOVerb a   = likelyFrame a EmptyS
+maybeChanged a  = likelyFrame a (S "changed")
+maybeExpanded a = likelyFrame a (S "expanded")
+
+sParenDash :: Sentence -> Sentence
+sParenDash x = S " (" :+: x :+: S ") - "
 
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
@@ -161,11 +167,11 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ makeRef assumpt
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
 
 -- | get term, definition, and symbol
@@ -174,7 +180,7 @@ getTDS a = phrase a +:+ (a ^. defn) +:+ ch a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
-eqN n = phrase equation +:+ sParen (S $ show n)
+eqN n = at_start equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
@@ -184,7 +190,7 @@ displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals
 
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
-  let l' = filter (\(_,b) -> not $ null $ filter (not . isEmpty) b) l in 
+  let l' = filter (any (not . isEmpty) . snd) l in 
   (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
   where
     isEmpty EmptyS = True
@@ -193,11 +199,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "--"
 
-found :: Double -> Sentence
-found x = (addPercent . realToFrac) (x*100)
-
-typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)
+found :: Double -> Maybe Int -> Sentence
+found x Nothing  = addPercent $ x * 100
+found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
+    
+typUncr :: (HasUncertainty c) => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri
@@ -206,11 +213,16 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- Helper for formatting constraints
+foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
-replaceEmptyS s@_ = s
+replaceEmptyS s = s

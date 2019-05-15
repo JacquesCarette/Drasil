@@ -1,7 +1,10 @@
 module Language.Drasil.Expr.Extract(dep, names, names') where
 
 import Data.List (nub)
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
+
+import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Space (RealInterval(..))
+
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
 names (AssocA _ l)   = concatMap names l
@@ -17,7 +20,7 @@ names (UnaryOp _ u) = names u
 names (BinaryOp _ a b)  = names a ++ names b
 names (Operator _ _ e)  = names e
 names (IsIn  a _)   = names a
-names (Matrix a)    = concatMap (concat . map names) a
+names (Matrix a)    = concatMap (concatMap names) a
 names (RealI c b)   = c : names_ri b
 
 names_ri :: RealInterval Expr Expr -> [String]
@@ -42,7 +45,7 @@ names' (UnaryOp _ u) = names' u
 names' (BinaryOp _ a b)  = names' a ++ names' b
 names' (Operator _ _ e)  = names' e
 names' (IsIn  a _)   = names' a
-names' (Matrix a)    = concatMap (concat . map names') a
+names' (Matrix a)    = concatMap (concatMap names') a
 names' (RealI c b)   = c : names'_ri b
 
 names'_ri :: RealInterval Expr Expr -> [String]

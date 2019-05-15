@@ -3,11 +3,10 @@ module Drasil.DocLang.SRS
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
-  appendix, propCorSol, offShelfSol, valsOfAuxCons,
+  appendix, propCorSol, offShelfSol, valsOfAuxCons, traceyMandG,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
-  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
+  inModelLabel, likeChgLabel, valsOfAuxConsLabel,
   indPRCaseLabel, unlikeChgLabel, funcReqLabel,
-  srsDom, chgProbDom, unlikeChgDom, likeChgDom, assumpDom,
   solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
@@ -22,9 +21,11 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
     propOfCorSol, prpsOfDoc, requirement, scpOfReq, scpOfTheProj,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel,  
+    systemConstraint, termAndDef, terminology, thModel, traceyMandG,
     userCharacteristic)
-import Data.Drasil.Phrase (for'')
+import Data.Drasil.Phrase (for'', the, the')
+
+import Drasil.DocLang.GenBuilders (section')
 
 import Control.Lens ((^.))
 
@@ -38,14 +39,14 @@ forTT' = for'' titleize' titleize'
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (Doc.srs `forTT` sys) authors secs
+doc  sys = Document (Doc.srs `forTT` sys)
 -- | Uses plural of system for title.
-doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
+doc' sys = Document (Doc.srs `forTT'` sys)
 
 -- | Standard SRS section builders
 prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, thModel,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, thModel, traceyMandG,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg,
   appendix, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
@@ -55,8 +56,8 @@ charOfIR     cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
 orgOfDoc     cs ss = section' (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
 stakeholder  cs ss = section' (titleize' Doc.stakeholder) cs ss "Stakeholder"
-theCustomer  cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
-theClient    cs ss = section' (titleize $ the Doc.client) cs ss "Client"
+theCustomer  cs ss = section' (titleize' Doc.customer)    cs ss "Customer"
+theClient    cs ss = section' (titleize' Doc.client)      cs ss "Client"
 
 genSysDes    cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont      cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"
@@ -83,14 +84,15 @@ datCon       cs ss = section (titleize' Doc.datumConstraint)   cs ss datConLabel
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
-nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
+nonfuncReq  cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss funcReqLabel
 
 likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss likeChgLabel
 unlikeChg   cs ss = section (titleize' Doc.unlikelyChg)      cs ss unlikeChgLabel
 
-valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss valsOfAuxConsLabel
-appendix      cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
+traceyMandG   cs ss = section' (titleize' Doc.traceyMandG)    cs ss "TraceMatrices"
+valsOfAuxCons cs ss = section  (titleize Doc.consVals)        cs ss valsOfAuxConsLabel
+appendix      cs ss = section' (titleize Doc.appendix)        cs ss "Appendix"
 
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
@@ -110,31 +112,22 @@ unlikeChgDom = ccs (mkIdea "unlikeChgDom" (Doc.unlikelyChg ^. term) $ Just "UC")
 assumpDom :: ConceptChunk
 assumpDom = ccs (mkIdea "assumpDom" (Doc.assumption ^. term) $ Just "A") EmptyS [srsDom]
 
---function that sets the shortname of each section to be the reference address
-section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (mkLabelRASec d (toString a))
-  where
-    toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
-    toString (S x) = x
-    toString ((:+:) s1 s2) = toString s1 ++ toString s2
-    toString _ = error "Term is not a string"
-
 --Labels--
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
-  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, funcReqLabel, solCharSpecLabel :: Label
-physSystLabel      = mkLabelRASec "PhysSyst" "Physical System Description"
-datConLabel        = mkLabelRASec "DataConstraints" "Data Constraints"
-genDefnLabel       = mkLabelRASec "GDs" "General Definitions"
-thModelLabel       = mkLabelRASec "TMs" "Theoretical Models"
-dataDefnLabel      = mkLabelRASec "DDs" "Data Definitions"
-inModelLabel       = mkLabelRASec "IMs" "Instance Models"
-likeChgLabel       = mkLabelRASec "LCs" "Likely Changes"
-unlikeChgLabel     = mkLabelRASec "UCs" "Unlikely Changes"
-tOfSymbLabel       = mkLabelRASec "ToS" "Table of Symbols"
-valsOfAuxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
-referenceLabel     = mkLabelRASec "References" "References" 
-indPRCaseLabel     = mkLabelRASec "IndividualProdUC" "Individual Product Use Cases"
-funcReqLabel       = mkLabelRASec "FRs" "Functional Requirements"
-solCharSpecLabel   = mkLabelRASec "SolCharSpec" "Solution Characteristics Specification"
+  inModelLabel, likeChgLabel, valsOfAuxConsLabel,
+  indPRCaseLabel, unlikeChgLabel, funcReqLabel, nonfuncReqLabel,
+  solCharSpecLabel :: Reference
+physSystLabel      = makeSecRef "PhysSyst" "Physical System Description"
+datConLabel        = makeSecRef "DataConstraints" "Data Constraints"
+genDefnLabel       = makeSecRef "GDs" "General Definitions"
+thModelLabel       = makeSecRef "TMs" "Theoretical Models"
+dataDefnLabel      = makeSecRef "DDs" "Data Definitions"
+inModelLabel       = makeSecRef "IMs" "Instance Models"
+likeChgLabel       = makeSecRef "LCs" "Likely Changes"
+unlikeChgLabel     = makeSecRef "UCs" "Unlikely Changes"
+valsOfAuxConsLabel = makeSecRef "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+indPRCaseLabel     = makeSecRef "IndividualProdUC" "Individual Product Use Cases"
+funcReqLabel       = makeSecRef "FRs" "Functional Requirements"
+nonfuncReqLabel    = makeSecRef "NFRs" "Nonfunctional Requirements"
+solCharSpecLabel   = makeSecRef "SolCharSpec" "Solution Characteristics Specification"

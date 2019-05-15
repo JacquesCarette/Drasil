@@ -1,10 +1,9 @@
 {-# Language Rank2Types #-}
-module Drasil.DocumentLanguage.RefHelpers
-  ( ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
-  , mdb, modelsFromDB
-  ) where
+module Drasil.DocumentLanguage.RefHelpers (ModelDB, tmRefDB, gdRefDB, ddRefDB,
+  imRefDB, mdb, modelsFromDB) where
 
-import Language.Drasil
+import Database.Drasil (RefMap, simpleMap)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Data.List (sortBy)
 import Data.Function (on)

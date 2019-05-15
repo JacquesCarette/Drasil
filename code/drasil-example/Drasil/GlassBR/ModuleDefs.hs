@@ -2,35 +2,36 @@
 -- when 'name' and 'nameCT' both appear, 'name' is the Haskell function and
 -- 'nameCT' is the "Code Template" that 'name' builds.
 
-module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
+module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
+import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
   fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
   repeated, singleLine, singleton)
 
-import Drasil.GlassBR.Unitals (char_weight, glass_type, nom_thick, pb_tol, 
-  plate_len, plate_width, sdx, sdy, sdz, tNT)
+import Drasil.GlassBR.Unitals (charWeight, glass_type, nomThick, pbTol, 
+  plateLen, plateWidth, sdx, sdy, sdz, tNT)
 
 allMods :: [Mod]
 allMods = [readTableMod, inputMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
-implVars :: [VarChunk]
+implVars :: [QuantityDict]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename,
+  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
 --from TSD.txt:
 
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [read_table]
+readTableMod = packmod "ReadTable" [readTable]
 
-read_table :: Func
-read_table = funcData "read_table" $
-  [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix,
-                         listEntry [WithLine, WithPattern] y_matrix]) ','
+readTable :: Func
+readTable = funcData "read_table" $
+  [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
+    multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
+                         listEntry [WithLine, WithPattern] yMatrix]) ','
   ]
 
 -----
@@ -43,17 +44,17 @@ inputMod = packmod "InputFormat" [glassInputData]
 glassInputData :: Func
 glassInputData = funcData "get_input" $
   [ junkLine,
-    singleton plate_len, singleton plate_width, singleton nom_thick,
+    singleton plateLen, singleton plateWidth, singleton nomThick,
     junkLine,
     singleton glass_type,
     junkLine,
-    singleton char_weight,
+    singleton charWeight,
     junkLine,
     singleton tNT,
     junkLine,
     singleton sdx, singleton sdy, singleton sdz,
     junkLine,
-    singleton pb_tol
+    singleton pbTol
   ]
 
 -----
@@ -63,10 +64,10 @@ one = Atomic "1"
 two = Atomic "2"
 
 -- No need to be too verbose
-var :: String -> Symbol -> Space -> VarChunk
-var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
+var :: String -> Symbol -> Space -> QuantityDict
+var nam = implVar nam (nounPhraseSP nam)
 
-y_2, y_1, x_2, x_1, x :: VarChunk
+y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1"          (sub lY one) Real
 y_2  = var "y2"          (sub lY two) Real
 x_1  = var "x1"          (sub lX one) Real
@@ -74,16 +75,16 @@ x_2  = var "x2"          (sub lX two) Real
 x    = var "x"            lX          Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename :: VarChunk
+  i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: QuantityDict
 v       = var "v"         lV                          Real
 i       = var "i"         lI                          Natural
 j       = var "j"         lJ                          Natural
-k       = var "k"         lK                          Natural
+k       = var "k"         (sub lK two)                Natural
 y       = var "y"         lY                          Real
 z       = var "z"         lZ                          Real
-z_vector = var "z_vector" (sub lZ (Atomic "vector")) (Vect Real)
-y_matrix = var "y_matrix" (sub lY (Atomic "matrix")) (Vect $ Vect Real)
-x_matrix = var "x_matrix" (sub lX (Atomic "matrix")) (Vect $ Vect Real)
+zVector = var "zVector" (sub lZ (Atomic "vector")) (Vect Real)
+yMatrix = var "yMatrix" (sub lY (Atomic "matrix")) (Vect $ Vect Real)
+xMatrix = var "xMatrix" (sub lX (Atomic "matrix")) (Vect $ Vect Real)
 arr     = var "arr"       (Atomic "arr")             (Vect Real)--FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"     (sub lX (sub lZ one))      (Vect Real)
 y_z_1   = var "y_z_1"     (sub lY (sub lZ one))      (Vect Real)
@@ -98,12 +99,12 @@ filename= var "filename"  (Atomic "filename")         String
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Num a, Fractional a) => (a, a) -> (a, a) -> a
+slope :: (Fractional a) => (a, a) -> (a, a) -> a
 slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
 onLine p1@(x1,y1) p2 x_ = 
   let m = slope p1 p2 in
   m * (x_ - x1) + y1
@@ -121,7 +122,7 @@ aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
 getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
 
-call :: Func -> [VarChunk] -> FuncStmt
+call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FProcCall f $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
@@ -169,42 +170,42 @@ interpY :: Func
 interpY = funcDef "interpY" [filename, x, z] Real
   [
   -- hack
-  fdec x_matrix,
-  fdec y_matrix,
-  fdec z_vector,
+  fdec xMatrix,
+  fdec yMatrix,
+  fdec zVector,
   --
-  call read_table [filename, z_vector, x_matrix, y_matrix],
+  call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    i     $:= find z_vector z,
-    x_z_1 $:= getCol x_matrix i 0,
-    y_z_1 $:= getCol y_matrix i 0,
-    x_z_2 $:= getCol x_matrix i 1,
-    y_z_2 $:= getCol y_matrix i 1,
+    i     $:= find zVector z,
+    x_z_1 $:= getCol xMatrix i 0,
+    y_z_1 $:= getCol yMatrix i 0,
+    x_z_2 $:= getCol xMatrix i 1,
+    y_z_2 $:= getCol yMatrix i 1,
     FTry
       [ j $:= find x_z_1 x,
         k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
     y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
     y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
-    FRet $ linInterp [ vLook z_vector i 0, sy y_1, vLook z_vector i 1, sy y_2, sy z ]
+    FRet $ linInterp [ vLook zVector i 0, sy y_1, vLook zVector i 1, sy y_2, sy z ]
   ]
 
 interpZ :: Func
 interpZ = funcDef "interpZ" [filename, x, y] Real
   [
     -- hack
-  fdec x_matrix,
-  fdec y_matrix,
-  fdec z_vector,
+  fdec xMatrix,
+  fdec yMatrix,
+  fdec zVector,
   --
-  call read_table [filename, z_vector, x_matrix, y_matrix],
+  call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    ffor i (sy i $< (dim (sy z_vector) - 1))
+    ffor i (sy i $< (dim (sy zVector) - 1))
       [
-        x_z_1 $:= getCol x_matrix i 0,
-        y_z_1 $:= getCol y_matrix i 0,
-        x_z_2 $:= getCol x_matrix i 1,
-        y_z_2 $:= getCol y_matrix i 1,
+        x_z_1 $:= getCol xMatrix i 0,
+        y_z_1 $:= getCol yMatrix i 0,
+        x_z_2 $:= getCol xMatrix i 1,
+        y_z_2 $:= getCol yMatrix i 1,
         FTry
           [ j $:= find x_z_1 x,
             k $:= find x_z_2 x ]
@@ -212,7 +213,7 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
         y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
         y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet $ linInterp [ sy y_1, vLook z_vector i 0, sy y_2, vLook z_vector i 1, sy y ]
+          [ FRet $ linInterp [ sy y_1, vLook zVector i 0, sy y_2, vLook zVector i 1, sy y ]
           ] []
       ],
     FThrow "Interpolation of z failed"

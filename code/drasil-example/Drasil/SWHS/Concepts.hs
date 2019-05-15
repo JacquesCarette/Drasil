@@ -8,6 +8,12 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
+import Data.Drasil.IdeaDicts (materialEng)
+
+swhscon :: [ConceptChunk]
+swhscon = [charging, coil, discharging, gauss_div,
+  perfect_insul, phase_change_material, tank,
+  tank_pcm, transient, water, sWHT, tank_para]
 
 ---Acronyms---
 acronyms :: [CI]
@@ -19,14 +25,14 @@ acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
 
 phsChgMtrl, rightSide, progName :: CI
 
-phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
-  "phase change materials") "PCM"
+phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"
+  "phase change materials") "PCM" [materialEng]
 
-rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side"
-  "right hand sides") "RHS"
+rightSide   = commonIdeaWithDict "rightSide"  (nounPhrase "right hand side"
+  "right hand sides") "RHS" [materialEng]
 
-progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS"
+progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
+  "solar water heating systems") "SWHS" [materialEng]
 
 swhsFull :: NamedChunk
 swhsFull    = nc "swhsFull" (progName `with` phsChgMtrl)
@@ -79,9 +85,10 @@ tank_pcm = dcc "tank_pcm" (nounPhrase''
 swhs_pcm :: CommonConcept
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings
+-- Another capitalization hack.
 swhs_pcm = dcc' "swhs_pcm" (nounPhrase''
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
+  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
+  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating systems incorporating phase change material"
   "SWHS"

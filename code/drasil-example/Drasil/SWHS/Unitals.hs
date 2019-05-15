@@ -379,14 +379,14 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) (uncty 0.0 $ Just 0)
+  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("The finite discretization of time used in the numerical method" ++
     "for solving the computational model")
   (sub (eqSymb time) (Atomic "step")) second Rational
   [physc $ Bounded (Exc,0) (Exc, sy time_final)]
-  (dbl 0.01) (uncty 0.0 $ Just 0)
+  (dbl 0.01) defaultUncrt
   
 -- Output Constraints
 swhsOutputs :: [ConstrConcept]

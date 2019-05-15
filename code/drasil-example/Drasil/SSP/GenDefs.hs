@@ -281,10 +281,10 @@ bsWtrFEqn = inxi baseHydroForce $= inxi baseWthX * sy waterWeight * 0.5 *
   case_ [case1, case2]
   where case1 = ((inxi waterHght - inxi slipHght) + 
           (inxiM1 waterHght - inxiM1 slipHght), 
-          (inxi waterHght $>= inxi slipHght) $|| 
-          (inxiM1 waterHght $>= inxiM1 slipHght))
-        case2 = (0, (inxi waterHght $< inxi slipHght) $|| 
-          (inxiM1 waterHght $< inxiM1 slipHght))
+          (inxi waterHght $> inxi slipHght) $|| 
+          (inxiM1 waterHght $> inxiM1 slipHght))
+        case2 = (0, (inxi waterHght $<= inxi slipHght) $&& 
+          (inxiM1 waterHght $<= inxiM1 slipHght))
 
 bsWtrFNotes :: Sentence
 bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
@@ -351,10 +351,10 @@ srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 *
   case_ [case1, case2]
   where case1 = ((inxi waterHght - inxi slopeHght) + 
           (inxiM1 waterHght - inxiM1 slopeHght), 
-          (inxi waterHght $>= inxi slopeHght) $|| 
-          (inxiM1 waterHght $>= inxiM1 slopeHght))
-        case2 = (0, (inxi waterHght $< inxi slopeHght) $|| 
-          (inxiM1 waterHght $< inxiM1 slopeHght))
+          (inxi waterHght $> inxi slopeHght) $|| 
+          (inxiM1 waterHght $> inxiM1 slopeHght))
+        case2 = (0, (inxi waterHght $<= inxi slopeHght) $&& 
+          (inxiM1 waterHght $<= inxiM1 slopeHght))
 
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",

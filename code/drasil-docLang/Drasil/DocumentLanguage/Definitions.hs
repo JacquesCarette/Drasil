@@ -23,7 +23,8 @@ import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars, _sysinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, inCons, outCons, imOutput, imInputs)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
+  TheoryModel, inCons, outCons, imOutput, imInputs)
 
 import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
@@ -57,12 +58,12 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (makeRef2 t)
+tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (makeRef2 d)
+ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'

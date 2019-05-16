@@ -5,7 +5,7 @@ import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import LanguageRenderer.NewPythonRenderer (PythonCode(..))
 import LanguageRenderer.NewCSharpRenderer (CSharpCode(..))
-import LanguageRenderer.NewCppRenderer (CppSrcCode(..))
+import LanguageRenderer.NewCppRenderer (CppSrcCode(..), CppHdrCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -32,6 +32,7 @@ main = do
   createDirectoryIfMissing False "cpp"
   setCurrentDirectory "cpp"
   genCode (classes unCPPSC) [".cpp"]
+  genCode (classes unCPPHC) [".hpp"]
   setCurrentDirectory workingDir
     
 genCode :: [(Doc, Label, Bool)] -> [Label] -> IO()

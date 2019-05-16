@@ -10,8 +10,10 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic,
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
   -- import ^ for section making
 
-import Data.Drasil.Concepts.Documentation (design, document, documentation, form, 
-  implementation, mg, mis, purpose, srs, statement, symbol_, templateModule)
+import Data.Drasil.Concepts.Computation (dataType)
+import Data.Drasil.Concepts.Documentation (description, design, document,
+  documentation, form, implementation, mg, mis, notation, purpose, srs, statement,
+  symbol_, templateModule)
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)
 
@@ -71,14 +73,20 @@ notationIntroMIS = foldlSP [S "structure" `ofThe'` getAcc mis, S "for", plural D
   S "have been adapted from Ghezzi et al. (2003). The mathematical", phrase Doc.notation, 
   S "comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the", phrase symbol_, 
   S ":= is used for a multiple assignment", phrase statement `sAnd` S "conditional rules",
-  S "follow the", phrase form, S "(c1 ⇒ r1 | c2 ⇒ r2 | ... | cn ⇒ rn)"] -- FIXME: Hardcoded expression
+  S "follow the", phrase form, S "(c1 => r1 | c2 => r2 | ... | cn => rn)"] -- FIXME: Hardcoded expression
 
 notTblIntro :: (Idea a) => a -> Contents
 notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+
-  S "data types used by" +:+ (short progName)
+  (plural dataType) +:+ S "used by" +:+ (short progName)
 
---notationTable :: LabelledContent
---notationTable 
+notationTable :: [DefinedQuantityDict] -> Contents
+notationTable n = LlC $ llcc (makeTabRef "ToN") $ Table
+  (map (at_start) [dataType, Doc.notation, description]) (mkTable
+  [phrase,
+   (\x -> P $ symbol x Implementation),
+   (\x -> (x ^. defn))
+  ] n)
+  (S "Table of Notation") False
 
 notationIntroContd :: (Idea a) => a -> Contents
 notationIntroContd progName = foldlSP [S "The specification of", short progName, 

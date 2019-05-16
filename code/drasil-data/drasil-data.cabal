@@ -24,6 +24,7 @@ library
     Data.Drasil.Concepts.Math
     Data.Drasil.Concepts.SolidMechanics
     Data.Drasil.Software.Products
+    Data.Drasil.Quantities.Computation
     Data.Drasil.Quantities.Thermodynamics
     Data.Drasil.Quantities.PhysicalProperties
     Data.Drasil.Quantities.Physics

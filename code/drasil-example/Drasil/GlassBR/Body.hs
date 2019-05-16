@@ -50,6 +50,7 @@ import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Quantities.Computation (char, integer, nat, real, string)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
@@ -91,7 +92,8 @@ gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw gla
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw [notation, templateModule])
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon
+  ++ map nw [notation, templateModule] ++ map nw glassDataTypes) -- move for MIS?
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBRLabel glassBRRefby
   glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
@@ -203,9 +205,12 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
 glassBRMis :: Document
 glassBRMis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
 
+glassDataTypes :: [DefinedQuantityDict]
+glassDataTypes = [char, integer, nat, real, string]
+
 mkMIS :: DocDesc
 mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
-  NotationSec (NotationProg []) : 
+  NotationSec (NotationProg [] glassDataTypes) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
   MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],

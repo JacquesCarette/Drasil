@@ -323,6 +323,7 @@ glassSystInfo' = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
+  _usedinfodb  = usedDB,
    refdb       = gbRefDBMIS
 }
 

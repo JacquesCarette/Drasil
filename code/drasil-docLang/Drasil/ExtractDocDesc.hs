@@ -26,6 +26,9 @@ egetDocSec (AuxConstntSec a)    = egetAux a
 egetDocSec  Bibliography        = []
 egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
+egetDocSec (NotationSec _)      = []
+egetDocSec (ModHierarchSec _)   = []
+egetDocSec (MISModSec m)        = egetMIS m
 
 egetSec :: Section -> [Expr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
@@ -85,6 +88,9 @@ egetApp (AppndxProg c) = concatMap egetCon' c
 egetExist :: ExistingSolnSec -> [Expr]
 egetExist (ExistSolnVerb s) = egetSec s
 egetExist (ExistSolnProg c) = concatMap egetCon' c
+
+egetMIS :: MISModSec -> [Expr]
+egetMIS (MISModProg _ _ _ _) = [] -- FIXME: Get Exprs
 
 egetRefProg :: RefTab -> [Expr]
 egetRefProg TUnits       = []
@@ -156,7 +162,7 @@ getDocDesc = concatMap getDocSec
 getDocSec :: DocSection -> [Sentence]
 getDocSec (Verbatim a)         = getSec a
 getDocSec (RefSec r)           = getRefSec r
-getDocSec (IntroSec i)         = getIntrosec i
+getDocSec (IntroSec i)         = getIntroSec i
 getDocSec (StkhldrSec s)       = getStk s
 getDocSec (GSDSec g)           = getGSD g
 getDocSec (ScpOfProjSec s)     = getScp s
@@ -170,6 +176,9 @@ getDocSec (AuxConstntSec a)    = getAux a
 getDocSec Bibliography         = []
 getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
+getDocSec (NotationSec _)      = [] -- FIXME: Fill in?
+getDocSec (ModHierarchSec _)   = [] -- FIXME: Fill in?
+getDocSec (MISModSec _)        = [] -- FIXME: Fill in?
 
 getSec :: Section -> [Sentence]
 getSec (Section t sc _ ) = t : concatMap getSecCon sc
@@ -274,8 +283,9 @@ getTConv :: TConvention -> [Sentence]
 getTConv Vector{} = []
 getTConv (Verb s) = [s]
 
-getIntrosec :: IntroSec -> [Sentence]
-getIntrosec (IntroProg s1 s2 is) = [s1] ++ [s2] ++ concatMap getIntroSub is
+getIntroSec :: IntroSec -> [Sentence]
+getIntroSec (IntroProg s1 s2 is) = [s1] ++ [s2] ++ concatMap getIntroSub is
+getIntroSec (IntroMIS s)         = [s]
 
 getIntroSub :: IntroSub -> [Sentence]
 getIntroSub (IPurpose s) = [s]
@@ -392,9 +402,13 @@ ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
 ciGetDocSec Bibliography            = []
 ciGetDocSec AppndxSec{}             = []
 ciGetDocSec ExistingSolnSec{}       = []
+ciGetDocSec NotationSec{}           = [] -- FIXME: Fill in?
+ciGetDocSec ModHierarchSec{}        = [] -- FIXME: Fill in?
+ciGetDocSec MISModSec{}             = [] -- FIXME: Fill in?
 
 ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
+ciGetIntro (IntroMIS _)          = []
 
 ciGetIntroSub :: IntroSub -> [CI]
 ciGetIntroSub IPurpose{}          = []

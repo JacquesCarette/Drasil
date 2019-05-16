@@ -132,5 +132,5 @@ cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"]
 makeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
 makeCases [] _ = empty
 makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) ++ " , " ++
-                            (render $ span_tag ["case"] (p_expr (snd p))))) $$
+                            render (span_tag ["case"] (p_expr (snd p))))) $$
                             makeCases ps p_expr)

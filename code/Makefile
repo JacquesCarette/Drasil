@@ -38,7 +38,7 @@ CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
 
-GENNED_FOLDERS = logs build
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) build
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -50,6 +50,8 @@ LOG_SUFFIX = _log.log
 MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
 CACHED_MSV_FILE = .drasil-min-stack-ver
 SCRIPT_FOLDER = scripts/
+LOG_FOLDER_NAME = logs
+LOG_FOLDER = $(LOG_FOLDER_NAME)
 
 # make command line options
 #  GHC debug options
@@ -89,13 +91,14 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_
 %$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
-	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EDIR)$(LOG_SUFFIX) 2>&1
+	@mkdir -p $(LOG_FOLDER)
+	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
 test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	$(SHELL) $(SCRIPT_FOLDER)log_check.sh $(NOISY)
+	LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) $(SHELL) $(SCRIPT_FOLDER)log_check.sh $(NOISY)
 
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 

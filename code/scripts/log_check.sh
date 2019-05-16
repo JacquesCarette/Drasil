@@ -1,13 +1,4 @@
 #!/bin/sh
-SWHS_PREF="SWHS"
-TINY_PREF="TINY"
-SSP_PREF="SSP"
-GLASS_PREF="GlassBR"
-GAME_PREF="Chipmunk"
-NoPCM_PREF="NoPCM"
-log="_log.log"
-logFolder="logs"
-#
 if [ $# -gt 0 ]; then
   printout="$1"
 else
@@ -15,13 +6,8 @@ else
 fi
 errors="no"
 exitval=0
-#
 
-mkdir -p $logFolder
-EXAMPLES="$SWHS_PREF $TINY_PREF $SSP_PREF $GLASS_PREF $GAME_PREF $NoPCM_PREF"
-
-for e in $EXAMPLES; do
-  logfile=$e$log
+for logfile in $LOG_FOLDER*$LOG_SUFFIX; do
   if [ -s $logfile ]; then
     echo "-------------------------------------------"
     echo "- $logfile IS NOT EMPTY -- DIFFERENCE"
@@ -35,7 +21,6 @@ for e in $EXAMPLES; do
       echo "-------------------------------------------"
     fi
   fi
-  mv $logfile $logFolder
 done
 
 

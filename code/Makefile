@@ -38,7 +38,7 @@ CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) build
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -49,9 +49,11 @@ DIFF = diff -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
 CACHED_MSV_FILE = .drasil-min-stack-ver
-SCRIPT_FOLDER = scripts/
+BUILD_FOLDER_NAME = build
+BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
 LOG_FOLDER_NAME = logs
-LOG_FOLDER = $(LOG_FOLDER_NAME)
+LOG_FOLDER = $(LOG_FOLDER_NAME)/
+SCRIPT_FOLDER = scripts/
 
 # make command line options
 #  GHC debug options
@@ -85,14 +87,14 @@ packages: $(BUILD_PACKAGES)
 %$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
-	mkdir -p build/$(EDIR)
-	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
+	@mkdir -p $(BUILD_FOLDER)$(EDIR)
+	cd $(BUILD_FOLDER)$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
 %$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@mkdir -p $(LOG_FOLDER)
-	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
+	- $(DIFF) ./stable/$*/ $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
 test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
@@ -103,10 +105,10 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 
 $(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
-	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
-	test -d ./build/$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/java/
-	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
-	test -d ./build/$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/cpp/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/src/python/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/src/java/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/src/csharp/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/src/cpp/
 
 prog: $(MOVE_DF_EXAMPLES)
 

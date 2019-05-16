@@ -965,7 +965,7 @@ instance ClassSym CppHdrCode where
     -- Bool is True if the class is a main class, False otherwise
     type Class CppHdrCode = (Doc, Bool)
     -- do this with a do? avoids liftA8...
-    buildClass n p _ vs fs = liftPairFst (liftA8 (cpphClass n p) (lift2Lists (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) inherit (fmap fst  public) (fmap fst private) blockStart blockEnd endStatement, any (tripSnd . unCPPHC) fs)
+    buildClass n p _ vs fs = liftPairFst (liftA8 (cpphClass n p) (lift2Lists (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) (fmap fst  public) (fmap fst private) inherit blockStart blockEnd endStatement, any (tripSnd . unCPPHC) fs)
     enum n es _ = liftPairFst (liftA4 (cpphEnum n) (return $ enumElementsDocD es enumsEqualInts) blockStart blockEnd endStatement, False)
     mainClass _ _ _ = return (empty, True)
     privClass n p = buildClass n p private

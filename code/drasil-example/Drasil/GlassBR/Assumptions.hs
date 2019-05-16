@@ -4,7 +4,6 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
-import Database.Drasil (ReferenceDB, rdb)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
@@ -16,7 +15,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR,
   lShareFac, plane, responseTy)
 
-import Drasil.GlassBR.References (astm2009, misCitations, srsCitations)
+import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, 
   constantLoadSF, constantM, constantModElas, explosion, lateral, lDurFac,
   loadDur)

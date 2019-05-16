@@ -12,7 +12,7 @@ import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
 
 import Data.Drasil.Concepts.Computation (dataType)
 import Data.Drasil.Concepts.Documentation (description, design, document,
-  documentation, form, implementation, mg, mis, notation, purpose, srs, statement,
+  documentation, form, implementation, mg, mis, purpose, srs, statement,
   symbol_, templateModule)
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)

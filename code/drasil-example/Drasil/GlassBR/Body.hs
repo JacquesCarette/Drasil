@@ -208,20 +208,20 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
-  MISModSec (MISModProg "Control" Nothing [MISUses [{-inputLabel, loadLabel, calcLabel, outputLabel-}],
+  MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],
     MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-ctrlLabel-} False) :
-  MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses [{-glTypeLabel, thicknessLabel, constantsLabel, hwLabel-}],
+  MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses ["GlassType", "Thickness", "Constants", "Hardware"],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [inputCons]]
     {-inputLabel-} False) :
-  MISModSec (MISModProg "LoadASTM" Nothing [MISUses [{-functLabel, contoursLabel-}],
+  MISModSec (MISModProg "LoadASTM" Nothing [MISUses ["Funct", "Contours"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-loadLabel-} False) :
-  MISModSec (MISModProg "Calc" Nothing [MISUses [{-inputLabel, contoursLabel, constantsLabel-}],
+  MISModSec (MISModProg "Calc" Nothing [MISUses ["Input", "Contours", "Constants"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-calcLabel-} False) :
@@ -235,12 +235,12 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-thicknessLabel-} True) :
-  MISModSec (MISModProg "Funct" Nothing [MISUses [{-seqServLabel-}],
+  MISModSec (MISModProg "Funct" Nothing [MISUses ["SeqServices"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [fxnCons]]
     {-functLabel-} True) :
-  MISModSec (MISModProg "Contours" Nothing [MISUses [{-functLabel-}],
+  MISModSec (MISModProg "Contours" Nothing [MISUses ["Funct"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-contoursLabel-} True) :
@@ -248,7 +248,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-seqServLabel-} False) :
-  MISModSec (MISModProg "Output" Nothing [MISUses [{-inputLabel, thicknessLabel, glTypeLabel, hwLabel-}],
+  MISModSec (MISModProg "Output" Nothing [MISUses ["Input", "Thickness", "GlassType", "Hardware"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-outputLabel-} False) :

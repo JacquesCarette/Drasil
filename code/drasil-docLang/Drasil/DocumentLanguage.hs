@@ -259,7 +259,7 @@ data ModHierarchSec = ModHierarchProg Sentence
 data MISModSec = MISModProg String (Maybe Contents) [MISModSub] Bool{-TemplateModule==True-}
 
 data MISModSub where
-  MISUses           :: [Reference] -> MISModSub
+  MISUses           :: [String] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub
@@ -609,17 +609,21 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 
 {--}
 
+-- | Helper for making a reference to a section for an ADT
+mkADTRef :: String -> Reference
+mkADTRef s = makeSecRef (s ++ "ADT") s
+
 mkMISModSec :: MISModSec -> Section
 mkMISModSec (MISModProg modName x mms True)  = MIS.misOfModule (maybeToList x) 
   ((MIS.tempMod_ [mkParagraph $ S (modName ++ "ADT")] []) :
    (MIS.expTypes [mkParagraph $ S (modName ++ "T = ?")] []) :
-   map subsections mms) (modName ++ "ADT") (makeSecRef (modName ++ "ADT") modName)
+   map subsections mms) (modName ++ "ADT") (mkADTRef modName)
 mkMISModSec (MISModProg modName x mms False) = MIS.misOfModule (maybeToList x) 
   ((MIS.module_ [mkParagraph $ S modName] []) : map subsections mms) modName (makeSecRef modName modName)
 
 subsections :: MISModSub -> Section
 subsections (MISUses [])       = MIS.uses    none  []
-subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map Ref useMods] []
+subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map (Ref . mkADTRef) useMods] []
 subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
 subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
 subsections (MISConsiderations _) = MIS.considerations [] [] --FIXME: needs to be filled out

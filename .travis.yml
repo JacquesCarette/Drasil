@@ -64,7 +64,7 @@ script:
      ci_fstep "CI: TeX" make tex SUMMARIZE_TEX=yes
  - >-
      ci_fstep "CI: Docs" make docs haddockArgs="--no-haddock-deps"
- - python3 pr_label_update.py
+ - python3 scripts/pr_label_update.py
 
 notifications:
   email:

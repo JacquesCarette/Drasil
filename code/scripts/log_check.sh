@@ -1,20 +1,28 @@
 #!/bin/sh
-if [ $# -gt 0 ]; then
-  printout="$1"
-else
-  printout="no"
+if [ -z "$LOG_FOLDER" ]; then
+  echo "Missing LOG_FOLDER."
+  exit 1
 fi
+if [ -z "$LOG_SUFFIX" ]; then
+  echo "Missing LOG_SUFFIX."
+  exit 1
+fi
+if [ -z "$NOISY" ]; then
+  echo "Missing NOISY."
+  exit 1
+fi
+
 errors="no"
 exitval=0
 
 for logfile in $LOG_FOLDER*$LOG_SUFFIX; do
-  if [ -s $logfile ]; then
+  if [ -s "$logfile" ]; then
     echo "-------------------------------------------"
     echo "- $logfile IS NOT EMPTY -- DIFFERENCE"
     echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
     echo "-------------------------------------------"
     errors="yes"
-    if [ "$printout" = "yes" ]; then
+    if [ "$NOISY" = "yes" ]; then
       echo "- $logfile"
       echo "-------------------------------------------"
       cat "$logfile"

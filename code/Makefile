@@ -100,7 +100,7 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) $(SHELL) $(SCRIPT_FOLDER)log_check.sh $(NOISY)
+	@LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) NOISY=$(NOISY) $(SHELL) $(SCRIPT_FOLDER)log_check.sh
 
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 

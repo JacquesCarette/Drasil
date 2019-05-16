@@ -1,4 +1,3 @@
-#!/bin/sh
 if [ -z "$LOG_FOLDER" ]; then
   echo "Missing LOG_FOLDER."
   exit 1

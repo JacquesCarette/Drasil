@@ -3,18 +3,13 @@ module Drasil.GlassBR.References where
 import Language.Drasil
 
 import Data.Drasil.Citations (campidelli, koothoor2013, smithLai2005, parnasClements1986)
-import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason,
-  carloGhezzi, mJazayeri, dMandrioli, hoffman, strooper)
+import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
 
-rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998, 
-  hoffmanAndStrooper1995, ghezziEtAl2003 :: Citation
+rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
 srsCitations :: BibRef
 srsCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
   astm2012, beasonEtAl1998, parnasClements1986]
-
-misCitations :: BibRef
-misCitations = [hoffmanAndStrooper1995, ghezziEtAl2003]
 
 rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
   "Volere requirements specification template edition 16",
@@ -52,21 +47,3 @@ beasonEtAl1998 = cMisc
   month Feb, year 1998,
   howPublishedU "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"
-
-ghezziEtAl2003 = cMisc
-  [author [carloGhezzi, mJazayeri, dMandrioli],
-  title "Fundamentals of Software Engineering",
-  year 2003,
-  publisher "Prentice Hall",
-  address "Upper Saddle River, NJ, USA",
-  edition 2]
-  "ghezziEtAl2003"
-
-hoffmanAndStrooper1995 = cMisc
-  [author [hoffman, strooper],
-  title "Software Design, Automated Testing, and Maintenance: A Practical Approach",
-  publisher "International Thoomson Computer Press",
-  address "New York, NY, USA",
-  year 1995,
-  howPublishedU "http://citeseer.ist.psu.edu/428727.html"]
-  "hoffmanAndStrooper1995"

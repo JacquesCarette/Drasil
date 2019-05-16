@@ -31,6 +31,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   NotationSec(NotationProg), IntroSec(IntroMIS))
 
 import qualified Drasil.DocLang.GenBuilders as GB (assumpt, reference)
+import qualified Drasil.DocLang.MIS as MIS (misCitations)
 import qualified Drasil.DocLang.SRS as SRS (datCon, inModel, valsOfAuxCons)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
@@ -73,7 +74,7 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, glaTyFac, hFromt)
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, misCitations, rbrtsn2012, srsCitations)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012, srsCitations)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
@@ -139,7 +140,7 @@ gbRefDBSRS :: ReferenceDB
 gbRefDBSRS = rdb srsCitations glassBRConcIns
 
 gbRefDBMIS :: ReferenceDB
-gbRefDBMIS = rdb misCitations glassBRConcIns
+gbRefDBMIS = rdb MIS.misCitations glassBRConcIns
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration

@@ -17,6 +17,7 @@ import Data.Drasil.Concepts.Documentation (description, design, document,
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)
 
+import Data.Drasil.People (carloGhezzi, mJazayeri, dMandrioli, hoffman, strooper)
 import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe', sAnd)
 
 import Control.Lens ((^.))
@@ -67,17 +68,40 @@ introMIS progName outerLink = foldlSP [S "The following", phrase document, S "de
 -- NOTATION --
 --------------
 
+misCitations :: BibRef
+misCitations = [hoffmanAndStrooper1995, ghezziEtAl2003]
+
+hoffmanAndStrooper1995, ghezziEtAl2003 :: Citation
+
+ghezziEtAl2003 = cMisc
+  [author [carloGhezzi, mJazayeri, dMandrioli],
+  title "Fundamentals of Software Engineering",
+  year 2003,
+  publisher "Prentice Hall",
+  address "Upper Saddle River, NJ, USA",
+  edition 2]
+  "ghezziEtAl2003"
+
+hoffmanAndStrooper1995 = cMisc
+  [author [hoffman, strooper],
+  title "Software Design, Automated Testing, and Maintenance: A Practical Approach",
+  publisher "International Thoomson Computer Press",
+  address "New York, NY, USA",
+  year 1995,
+  howPublishedU "http://citeseer.ist.psu.edu/428727.html"]
+  "hoffmanAndStrooper1995"
+
 notationIntroMIS :: Contents
 notationIntroMIS = foldlSP [S "structure" `ofThe'` getAcc mis, S "for", plural Doc.module_,
-  S "comes from Hoffman and Strooper (1995), with the addition that", plural templateModule, 
-  S "have been adapted from Ghezzi et al. (2003). The mathematical", phrase Doc.notation, 
-  S "comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the", phrase symbol_, 
+  S "comes from", makeRef2S hoffmanAndStrooper1995 `sC` S "with the addition that", plural templateModule, 
+  S "have been adapted from" +:+. makeRef2S ghezziEtAl2003, S"The mathematical", phrase Doc.notation, 
+  S "comes from Chapter 3 of" +:+. makeRef2S hoffmanAndStrooper1995, S "For instance, the", phrase symbol_, 
   S ":= is used for a multiple assignment", phrase statement `sAnd` S "conditional rules",
   S "follow the", phrase form, S "(c1 => r1 | c2 => r2 | ... | cn => rn)"] -- FIXME: Hardcoded expression
 
 notTblIntro :: (Idea a) => a -> Contents
 notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+
-  (plural dataType) +:+ S "used by" +:+ (short progName)
+  (plural dataType) +:+ S "used by" +: (short progName)
 
 notationTable :: [DefinedQuantityDict] -> Contents
 notationTable n = LlC $ llcc (makeTabRef "ToN") $ Table

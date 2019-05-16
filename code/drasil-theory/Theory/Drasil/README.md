@@ -14,3 +14,6 @@ InstanceModel.hs
 
 README.md
   - This file
+
+Theory.hs
+  - Theory class definition and TheoryModel data type

@@ -20,12 +20,12 @@ instance RuleTransformer CodeHarness where
     mkRule "build" (map (const $ renderBuildName c m nameOpts nm) $ maybeToList $
       buildConfig c) []
     ] ++
-    (maybe [] (\(BuildConfig comp bt) -> [
+    maybe [] (\(BuildConfig comp bt) -> [
     mkFile (renderBuildName c m nameOpts nm) (map fst code) [
       mkCheckedCommand $ unwords $ comp (getCompilerInput bt c m co) $
         renderBuildName c m nameOpts nm
       ]
-    ]) $ buildConfig c) ++ [
+    ]) (buildConfig c) ++ [
     mkRule "run" ["build"] [
       mkCheckedCommand $ (buildRunTarget (renderBuildName c m no nm) ty) ++ " $(RUNARGS)"
       ]

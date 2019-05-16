@@ -3,7 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..), TheoryModel)
 import Data.List(transpose)
 
 egetDocDesc :: DocDesc -> [Expr]

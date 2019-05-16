@@ -14,8 +14,8 @@ module Database.Drasil.ChunkDB
   , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList
   ) where
 
-import Language.Drasil hiding (tm, sec)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel)
+import Language.Drasil hiding (sec)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
 import Data.List (sortOn)

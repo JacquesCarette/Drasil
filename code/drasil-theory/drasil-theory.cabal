@@ -12,6 +12,7 @@ library
       Theory.Drasil.DataDefinition
     , Theory.Drasil.GenDefn
     , Theory.Drasil.InstanceModel
+    , Theory.Drasil.Theory
 
   Build-Depends:
     base >= 4.7,

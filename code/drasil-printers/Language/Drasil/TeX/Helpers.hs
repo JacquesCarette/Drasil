@@ -65,13 +65,13 @@ command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
 -- Encapsulate environments
 mkEnv :: String -> D -> D
 mkEnv nm d =
-  (pure $ text ("\\begin" ++ H.brace nm)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm)) $+$ 
   d $+$
-  (pure $ text ("\\end" ++ H.brace nm))
+  pure (text ("\\end" ++ H.brace nm))
 
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> (pure $ H.br ("\\" ++ b1) TP.<> 
+comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 
   maybe TP.empty H.sq s1 TP.<> H.br b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
@@ -96,7 +96,7 @@ genSec d
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
 ref      t   = custRef (t ++ "~\\ref")
-hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
@@ -105,7 +105,7 @@ href :: String -> String -> D
 href = command2 "href"
 
 custRef :: String -> D -> D
-custRef t x = (pure $ text t) <> br x
+custRef t x = pure (text t) <> br x
 
 cite :: D -> D
 cite = custRef "\\cite"
@@ -195,7 +195,7 @@ hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
 
 useTikz :: D
-useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
+useTikz = usepackage "luatex85" $+$ pure (text "\\def") <>
   command "pgfsysdriver" "pgfsys-pdftex.def" $+$
   -- the above is a workaround..  temporary until TeX packages have been fixed
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$

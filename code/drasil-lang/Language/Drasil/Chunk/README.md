@@ -39,10 +39,6 @@ README.md
 Relation.hs
   - Defines Relation chunks (Concepts with relations between other chunks).
 
-Theory.hs
-  - `Theory` class definition
-  - TheoryChunk and TheoryModel data types *TODO: Move from drasil-lang to drasil-theory*
-
 UncertainQuantity.hs
   - `UncertainQuantity` class definition
   - UncertQ and UncertainChunk data types

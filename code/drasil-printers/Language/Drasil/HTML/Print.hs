@@ -9,7 +9,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(DD, TM, Instance, General), MaxWidthPercent,
+  DType(Data, Theory, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
@@ -134,7 +134,7 @@ uSymb (L.US ls) = formatu t b
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String
     formatu [] l = line l
     formatu l [] = intercalate "&sdot;" $ map pow l
-    formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
+    formatu nu de = line nu ++ "/" ++ line (map (second negate) de)
     line :: [(L.Symbol,Integer)] -> String
     line []  = ""
     line [x] = pow x
@@ -263,8 +263,8 @@ makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt] (makeDRows ps)
   where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
-        dtag (L.TM)       = "tdefn"
-        dtag (L.DD)       = "ddefn"
+        dtag (L.Theory)   = "tdefn"
+        dtag (L.Data)     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
@@ -435,7 +435,7 @@ bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = p_spec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago p@(Pages  _) = bookAPA p
-bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> (text $ toPlural p " ed")
+bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings

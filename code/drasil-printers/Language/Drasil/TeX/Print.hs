@@ -186,7 +186,7 @@ p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases [p]    = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
+cases [p]    = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 -----------------------------------------------------------------
@@ -196,15 +196,15 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
   pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
-  %% (pure (text "\\toprule"))
+  %% pure (text "\\toprule")
   %% makeRows [head lls]
-  %% (pure (text "\\midrule"))
+  %% pure (text "\\midrule")
   %% pure (text "\\endhead")
   %% makeRows (tail lls)
-  %% (pure (text "\\bottomrule"))
+  %% pure (text "\\bottomrule")
   %% (if bool then caption t else caption empty)
   %% label r
-  %% (pure $ text ("\\end{" ++ ltab ++ "}"))
+  %% pure (text ("\\end{" ++ ltab ++ "}"))
   where ltab = tabType $ anyLong lls
         tabType True  = ltabu
         tabType False = ltable
@@ -333,18 +333,18 @@ makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text 
   $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
-  (pure $ text "\\phantomsection "), label l,
+  pure (text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> pure (text "}"), --shortname instead of refname?
+  pure (text "\\phantomsection "), label l,
   makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm [(f,d)]    = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (`lo` sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% ((pure $ text (f ++ " & ")) <>
-  (vcat $ map (`lo` sm) d))
+makeDRows sm [(f,d)]    = dBoilerplate %% pure (text (f ++ " & ")) <>
+  vcat (map (`lo` sm) d)
+makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <>
+  vcat (map (`lo` sm) d))
                        %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
@@ -378,7 +378,7 @@ lspec (S s) = pure $ text s
 lspec r = spec r
 
 mlref :: Maybe Label -> D
-mlref = maybe empty $ ((<>) $ pure $ text "\\phantomsection") . label . lspec
+mlref = maybe empty $ (<>) (pure $ text "\\phantomsection") . label . lspec
 
 p_item :: ItemType -> D
 p_item (Flat s) = item $ spec s
@@ -390,7 +390,7 @@ sim_item = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
         sp_item (Nested t s) = vcat [spec t, makeList s]
 
 def_item :: [(Spec, ItemType,Maybe Label)] -> [D]
-def_item = map (\(x,y,l) -> item $ mlref l <> (spec $ x :+: S " is the " :+: d_item y))
+def_item = map (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_item y))
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
@@ -437,15 +437,15 @@ makeGraph ps w h c l =
   vcat $ [ centering,
            pure $ text "\\begin{adjustbox}{max width=\\textwidth}",
            pure $ text "\\begin{tikzpicture}[>=latex,line join=bevel]",
-           (pure $ text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
-             w <> h <> (pure $ text "font=\\Large, align=center]"),
+           pure (text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
+             w <> h <> pure (text "font=\\Large, align=center]"),
            pure $ text "\\begin{dot2tex}[dot, codeonly, options=-t raw]",
            pure $ text "digraph G {",
            pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
            pure $ text "node [style = \"n\"];"
          ]
-     ++  map (\(a,b) -> (q a) <> (pure $ text " -> ") <> (q b) <>
-                (pure $ text ";")) ps
+     ++  map (\(a,b) -> (q a) <> pure (text " -> ") <> (q b) <>
+                pure (text ";")) ps
      ++  [ pure $ text "}",
            pure $ text "\\end{dot2tex}",
            pure $ text "\\end{tikzpicture}",
@@ -453,7 +453,7 @@ makeGraph ps w h c l =
            caption c,
            label l
          ]
-  where q x = (pure $ text "\"") <> x <> (pure $ text "\"")
+  where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
 -- Bibliography Printing --

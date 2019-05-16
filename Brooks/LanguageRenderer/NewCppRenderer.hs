@@ -580,18 +580,18 @@ instance KeywordSym CppHdrCode where
     blockStart = return lbrace
     blockEnd = return rbrace
 
-    ifBodyStart = blockStart
-    elseIf = return $ text "else if"
+    ifBodyStart = return empty
+    elseIf = return empty
     
     iterForEachLabel = return empty
     iterInLabel = return empty
 
-    commentStart = return doubleSlash
+    commentStart = return empty
     
-    printFunc = return $ text "std::cout"
-    printLnFunc = return $ text "std::cout"
-    printFileFunc = fmap fst -- is this right?
-    printFileLnFunc = fmap fst
+    printFunc = return empty
+    printLnFunc = return empty
+    printFileFunc _ = return empty
+    printFileLnFunc _ = return empty
 
 instance PermanenceSym CppHdrCode where
     type Permanence CppHdrCode = Doc
@@ -600,15 +600,15 @@ instance PermanenceSym CppHdrCode where
 
 instance BodySym CppHdrCode where
     type Body CppHdrCode = Doc
-    body = liftList bodyDocD
-    bodyStatements = block
-    oneLiner s = bodyStatements [s]
+    body _ = return empty
+    bodyStatements _ = return empty
+    oneLiner _ = return empty
 
-    addComments s = liftA2 (addCommentsDocD s) commentStart
+    addComments _ = return empty
 
 instance BlockSym CppHdrCode where
     type Block CppHdrCode = Doc
-    block sts = (lift1List blockDocD endStatement (map (fmap fst) (map state sts)))
+    block _ = return empty
 
 instance StateTypeSym CppHdrCode where
     type StateType CppHdrCode = Doc
@@ -628,343 +628,297 @@ instance StateTypeSym CppHdrCode where
     iterator t = fmap cppIterTypeDoc (listType dynamic t)
 
 instance ControlBlockSym CppHdrCode where
-    runStrategy l strats rv av = 
-        case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
-                                                   Just b  -> liftA2 stratDocD b (state resultState)
-        where resultState = case av of Nothing    -> return (empty, Empty)
-                                       Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
-                                                                Just res -> assign vari res
+    runStrategy _ _ _ _ = return empty
 
-    listSlice t vnew vold b e s = 
-        let l_temp = "temp"
-            v_temp = var l_temp
-            l_i = "i_temp"
-            v_i = var l_i
-        in
-        block [
-            (listDec l_temp 0 t),
-            for (varDecDef l_i int (getB b)) (v_i ?< getE e) (getS s v_i)
-                (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            (vnew &= v_temp)]
-        where getB Nothing = litInt 0
-              getB (Just n) = n
-              getE Nothing = vold $. listSize
-              getE (Just n) = n
-              getS Nothing v = (&++) v
-              getS (Just n) v = v &+= n
+    listSlice _ _ _ _ _ _ = return empty
 
 instance UnaryOpSym CppHdrCode where
     type UnaryOp CppHdrCode = Doc
-    notOp = return $ notOpDocD
-    negateOp = return $ negateOpDocD
-    sqrtOp = return $ sqrtOpDocD
-    absOp = return $ absOpDocD
-    logOp = return $ text "log10"
-    lnOp = return $ text "log"
-    expOp = return $ expOpDocD
-    sinOp = return $ sinOpDocD
-    cosOp = return $ cosOpDocD
-    tanOp = return $ tanOpDocD
-    asinOp = return $ asinOpDocD
-    acosOp = return $ acosOpDocD
-    atanOp = return $ atanOpDocD
-    floorOp = return $ text "floor"
-    ceilOp = return $ text "ceil"
+    notOp = return empty
+    negateOp = return empty
+    sqrtOp = return empty
+    absOp = return empty
+    logOp = return empty
+    lnOp = return empty
+    expOp = return empty
+    sinOp = return empty
+    cosOp = return empty
+    tanOp = return empty
+    asinOp = return empty
+    acosOp = return empty
+    atanOp = return empty
+    floorOp = return empty
+    ceilOp = return empty
 
 instance BinaryOpSym CppHdrCode where
     type BinaryOp CppHdrCode = Doc
-    equalOp = return $ equalOpDocD
-    notEqualOp = return $ notEqualOpDocD
-    greaterOp = return $ greaterOpDocD
-    greaterEqualOp = return $ greaterEqualOpDocD
-    lessOp = return $ lessOpDocD
-    lessEqualOp = return $ lessEqualOpDocD
-    plusOp = return $ plusOpDocD
-    minusOp = return $ minusOpDocD
-    multOp = return $ multOpDocD
-    divideOp = return $ divideOpDocD
-    powerOp = return $ powerOpDocD
-    moduloOp = return $ moduloOpDocD
-    andOp = return $ andOpDocD
-    orOp = return $ orOpDocD
+    equalOp = return empty
+    notEqualOp = return empty
+    greaterOp = return empty
+    greaterEqualOp = return empty
+    lessOp = return empty
+    lessEqualOp = return empty
+    plusOp = return empty
+    minusOp = return empty
+    multOp = return empty
+    divideOp = return empty
+    powerOp = return empty
+    moduloOp = return empty
+    andOp = return empty
+    orOp = return empty
 
 instance ValueSym CppHdrCode where
-    type Value CppHdrCode = (Doc, Maybe String)
-    litTrue = return $ (litTrueD, Just "true")
-    litFalse = return $ (litFalseD, Just "false")
-    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
-    litFloat v = return $ (litFloatD v, Just $ show v)
-    litInt v = return $ (litIntD v, Just $ show v)
-    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
+    type Value CppHdrCode = Doc
+    litTrue = return empty
+    litFalse = return empty
+    litChar _ = return empty
+    litFloat _ = return empty
+    litInt _ = return empty
+    litString _ = return empty
 
-    defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just "0.0")
-    defaultInt = return $ (defaultIntD, Just "0")
-    defaultString = return $ (defaultStringD, Just "empty string")
-    defaultBool = litFalse
+    defaultChar = return empty
+    defaultFloat = return empty
+    defaultInt = return empty
+    defaultString = return empty
+    defaultBool = return empty
 
-    ($->) = objVar
-    ($:) = enumElement
+    ($->) _ _ = return empty
+    ($:) _ _ = return empty
 
-    const = var
-    var n = return $ (varDocD n, Just n)
-    extVar _ = var
-    self = return $ (selfDocD, Just "this")
-    arg n = liftPairFst (liftA2 argDocD (litInt (n+1)) argsList, Nothing)
-    enumElement _ e = return $ (text e, Just e)
-    enumVar = var
-    objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
-    objVarSelf = var
-    listVar n _ = var n
-    n `listOf` t = listVar n t
-    iterVar l = return $ (text $ "(*" ++ l ++ ")", Nothing)
+    const _ = return empty
+    var n _ = return empty
+    extVar _ _ = return empty
+    self = return empty
+    arg _ = return empty
+    enumElement _ _ = return empty
+    enumVar _ = return empty
+    objVar _ _ = return empty
+    objVarSelf _ = return empty
+    listVar _ _ = return empty
+    liftOf _ _ = return empty
+    iterVar _ = return empty
     
-    inputFunc = return $ (text "std::cin", Nothing)
-    argsList = return $ (text "argv", Nothing)
+    inputFunc = return empty
+    argsList = return empty
 
-    valName (CPPHC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
-                                       Just valstr -> valstr
+    valName _ = return empty
 
 instance NumericExpression CppHdrCode where
-    (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
-    (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
-    (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
-    (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
-    (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
-    (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
-    (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
-    (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
-    (#^) v1 v2 = liftPairFst (liftA3 binOpDocD' powerOp v1 v2, Nothing)
+    (#~) _ = return empty
+    (#/^) _ = return empty
+    (#|) _ = return empty
+    (#+) _ _ = return empty
+    (#-) _ _ = return empty
+    (#*) _ _ = return empty
+    (#/) _ _ = return empty
+    (#%) _ _ = return empty
+    (#^) _ _ = return empty
 
-    log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
-    ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
-    exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
-    sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
-    cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
-    tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
-    csc v = (litFloat 1.0) #/ (sin v)
-    sec v = (litFloat 1.0) #/ (cos v)
-    cot v = (litFloat 1.0) #/ (tan v)
-    arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
-    arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
-    arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
-    floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
-    ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
+    log _ = return empty
+    ln _ = return empty
+    exp _ = return empty
+    sin _ = return empty
+    cos _ = return empty
+    tan _ = return empty
+    csc _ = return empty
+    sec _ = return empty
+    cot _ = return empty
+    arcsin _ = return empty
+    arccos _ = return empty
+    arctan _ = return empty
+    floor _ = return empty
+    ceil _ = return empty
 
 instance BooleanExpression CppHdrCode where
-    (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
-    (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
-    (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
+    (?!) _ = return empty
+    (?&&) _ _ = return empty
+    (?||) _ _ = return empty
 
-    (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
-    (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
-    (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
-    (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
-    (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
-    (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
+    (?<) _ _ = return empty
+    (?<=) _ _ = return empty
+    (?>) _ _ = return empty
+    (?>=) _ _ = return empty
+    (?==) _ _ = return empty
+    (?!=) _ _ = return empty
    
 instance ValueExpression CppHdrCode where
-    inlineIf b v1 v2 = liftPairFst (liftA3 inlineIfDocD b v1 v2, Nothing)
-    funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
-    selfFuncApp = funcApp
-    extFuncApp _ = funcApp
-    stateObj t vs = liftPairFst (liftA2 cppStateObjDoc t (liftList callFuncParamList vs), Nothing)
-    extStateObj _ = stateObj
-    listStateObj = stateObj
+    inlineIf _ _ _ = return empty
+    funcApp _ _ = return empty
+    selfFuncApp _ _ = return empty
+    extFuncApp _ _ _ = return empty
+    stateObj _ _ = return empty
+    extStateObj _ _ _ = return empty
+    listStateObj _ _ = return empty
 
-    exists = notNull
-    notNull v = v
+    exists _ = return empty
+    notNull _ = return empty
 
 instance Selector CppHdrCode where
-    objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
-    ($.) = objAccess
+    objAccess _ _ = return empty
+    ($.) _ _ = return empty
 
-    objMethodCall o f ps = objAccess o (func f ps)
-    objMethodCallVoid o f = objMethodCall o f []
+    objMethodCall _ _ _ = return empty
+    objMethodCallVoid _ _ = return empty
 
-    selfAccess = objAccess self
+    selfAccess _ = return empty
 
-    listPopulateAccess _ _ = return (empty, Nothing)
-    listSizeAccess v = objAccess v listSize
+    listPopulateAccess _ _ = return empty
+    listSizeAccess _ = return empty
 
-    listIndexExists v i = listSizeAccess v ?> i
-    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+    listIndexExists _ _ = return empty
+    argExists _ = return empty
     
-    indexOf l v = funcApp "find" [l $. iterBegin, l $. iterEnd, v] #- l $. iterBegin
+    indexOf _ _ = return empty
 
-    stringEqual v1 v2 = v1 ?== v2
+    stringEqual _ _ = return empty
 
-    castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
-    castStrToFloat v = funcApp "std::stod" [v]
+    castObj _ _ = return empty
+    castStrToFloat _ = return empty
 
 instance FunctionSym CppHdrCode where
     type Function CppHdrCode = Doc
-    func l vs = fmap funcDocD (funcApp l vs)
-    cast targT _ = fmap castDocD targT
-    castListToInt = cast (listType static int) int
-    get n = fmap funcDocD (funcApp (getterName n) [])
-    set n v = fmap funcDocD (funcApp (setterName n) [v])
+    func _ _ = return empty
+    cast _ _ = return empty
+    castListToInt = return empty
+    get _ = return empty
+    set _ _ = return empty
 
-    listSize = func "size" []
-    listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
+    listSize = return empty
+    listAdd _ _ = return empty
     listPopulateInt _ = return empty
     listPopulateFloat _ = return empty
     listPopulateChar _ = return empty
     listPopulateBool _ = return empty
     listPopulateString _ = return empty
-    listAppend v = fmap funcDocD (funcApp "push_back" [v])
-    listExtendInt = listAppend defaultInt 
-    listExtendFloat = listAppend defaultFloat 
-    listExtendChar = listAppend defaultChar 
-    listExtendBool = listAppend defaultBool
-    listExtendString = listAppend defaultString
-    listExtendList _ = fmap cppListExtendList
+    listAppend _ = return empty
+    listExtendInt = return empty
+    listExtendFloat = return empty
+    listExtendChar = return empty
+    listExtendBool = return empty
+    listExtendString = return empty
+    listExtendList _ _ = return empty
 
-    iterBegin = fmap funcDocD (funcApp "begin" [])
-    iterEnd = fmap funcDocD (funcApp "end" [])
+    iterBegin = return empty
+    iterEnd = return empty
 
 instance SelectorFunction CppHdrCode where
-    listAccess v = fmap funcDocD (funcApp "at" [v])
-    listSet = liftA2 cppListSetDoc
+    listAccess _ = return empty
+    listSet _ _ = return empty
 
-    listAccessEnum t v = listAccess (castObj (cast int t) v)
-    listSetEnum t i = listSet (castObj (cast int t) i)
+    listAccessEnum _ _ = return empty
+    listSetEnum _ _ _ = return empty
 
-    at l = listAccess (var l)
+    at _ = return empty
 
 instance StatementSym CppHdrCode where
-    type Statement CppHdrCode = (Doc, Terminator)
-    assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, Semi)
-    assignToListIndex lst index v = valState $ lst $. listSet index v
-    (&=) = assign
-    (&.=) l = assign (var l)
-    (&=.) v l = assign v (var l)
-    (&-=) v1 v2 = v1 &= (v1 #- v2)
-    (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = liftPairFst (liftA2 plusEqualsDocD v1 v2, Semi)
-    (&.+=) l v = (var l) &+= v
-    (&++) v = liftPairFst (fmap plusPlusDocD v, Semi)
-    (&.++) l = (&++) (var l)
-    (&~-) v = v &= (v #- (litInt 1))
-    (&.~-) l = (&~-) (var l)
+    type Statement CppHdrCode = Doc
+    assign _ _ = return empty
+    assignToListIndex _ _ _ = return empty
+    (&=) _ _ = return empty
+    (&.=) _ _ = return empty
+    (&=.) _ _ = return empty
+    (&-=) _ _ = return empty
+    (&.-=) _ _ = return empty
+    (&+=) _ _ = return empty
+    (&.+=) _ _ = return empty
+    (&++) _ = return empty
+    (&.++) _ = return empty
+    (&~-) _ = return empty
+    (&.~-) _ = return empty
 
-    varDec l t = liftPairFst (fmap (varDecDocD l) t, Semi)
-    varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, Semi)
-    listDec l n t = liftPairFst (liftA2 (cppListDecDoc l) (litInt n) t, Semi) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = liftPairFst (liftA2 (cppListDecDefDoc l) t (liftList callFuncParamList vs), Semi)
-    objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, Semi)
-    objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), Semi)
-    extObjDecNew l _ = objDecNew l
-    objDecNewVoid l t = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t []), Semi)
-    extObjDecNewVoid l _ = objDecNewVoid l
-    constDecDef l t v = liftPairFst (liftA2 (constDecDefDocD l) t v, Semi)
+    varDec _ _ = return empty
+    varDecDef _ _ _ = return empty
+    listDec _ _ _ = return empty
+    listDecDef _ _ _ = return empty
+    objDecDef _ _ _ = return empty
+    objDecNew _ _ _ = return empty
+    extObjDecNew _ _ _ _ = return empty
+    objDecNewVoid _ _ = return empty
+    extObjDecNewVoid _ _ _ = return empty
+    constDecDef _ _ _ = return empty
 
-    print _ v = liftPairFst (liftA2 (cppPrintDocD False) printFunc v, Semi)
-    printLn _ v = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc v, Semi)
-    printStr s = liftPairFst (liftA2 (cppPrintDocD False) printFunc (litString s), Semi)
-    printStrLn s = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc (litString s), Semi)
+    print _ _ = return empty
+    printLn _ _ = return empty
+    printStr _ = return empty
+    printStrLn _ = return empty
 
-    printFile f _ v = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) v, Semi)
-    printFileLn f _ v = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) v, Semi)
-    printFileStr f s = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) (litString s), Semi)
-    printFileStrLn f s = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) (litString s), Semi)
+    printFile _ _ _ = return empty
+    printFileLn _ _ _ = return empty
+    printFileStr _ _ = return empty
+    printFileStrLn _ _ = return empty
 
-    -- Keep this block as is for now, I think this should work. Consult CppRenderer.hs if not
-    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
-    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
-    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
-    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
+    printList _ _ = return empty
+    printLnList _ _ = return empty
+    printFileList _ _ _ = return empty
+    printFileLnList _ _ _ = return empty
 
-    getIntInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    getFloatInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    getBoolInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    getStringInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    getCharInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    discardInput = liftPairFst (fmap (cppDiscardInput " ") inputFunc, Semi)
+    getIntInput _ = return empty
+    getFloatInput _ = return empty
+    getBoolInput _ = return empty
+    getStringInput _ = return empty
+    getCharInput _ = return empty
+    discardInput = return empty
 
-    getIntFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
-    getFloatFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
-    getBoolFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
-    getStringFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
-    getCharFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
-    discardFileInput f = liftPairFst (fmap (cppDiscardInput " ") f, Semi)
+    getIntFileInput _ _ = return empty
+    getFloatFileInput _ _ = return empty
+    getBoolFileInput _ _ = return empty
+    getStringFileInput _ _ = return empty
+    getCharFileInput _ _ = return empty
+    discardFileInput _ = return empty
 
-    openFileR f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::in") f n, Semi)
-    openFileW f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::out") f n, Semi)
-    openFileA f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::app") f n, Semi)
-    closeFile f = valState $ objMethodCall f "close" []
+    openFileR _ _ = return empty
+    openFileW _ _ = return empty
+    openFileA _ _ = return empty
+    closeFile _ = return empty
 
-    getFileInputLine f v = valState $ funcApp "std::getLine" [f, v]
-    discardFileLine f = liftPairFst (fmap (cppDiscardInput "\\n") f, Semi)
-    stringSplit d vnew s = let l_ss = "ss"
-                               v_ss = var l_ss
-                               l_word = "word"
-                               v_word = var l_word
-                           in
-        multi [
-            valState $ vnew $. (func "clear" []),
-            varDec l_ss (obj "std::stringstream"),
-            valState $ objMethodCall v_ss "str" [s],
-            varDec l_word string,
-            while (funcApp "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valState $ vnew $. (listAppend v_word))
-        ]
+    getFileInputLine _ _ = return empty
+    discardFileLine _ = return empty
+    stringSplit _ _ _ = return empty
 
-    break = return (breakDocD, Semi)
-    continue = return (continueDocD, Semi)
+    break = return empty
+    continue = return empty
 
-    returnState v = liftPairFst (fmap returnDocD v, Semi)
-    returnVar l = liftPairFst (fmap returnDocD (var l), Semi)
+    returnState _ = return empty
+    returnVar _ = return empty
 
-    valState v = liftPairFst (fmap fst v, Semi)
+    valState _ = return empty
 
-    comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
+    comment _ = return empty
 
-    free v = liftPairFst (fmap freeDocD v, Semi)
+    free _ = return empty
 
-    throw errMsg = liftPairFst (fmap cppThrowDoc (litString errMsg), Semi)
+    throw _ = return empty
 
-    initState fsmName initialState = varDecDef fsmName string (litString initialState)
-    changeState fsmName toState = fsmName &.= (litString toState)
+    initState _ _ = return empty
+    changeState _ _ = return empty
 
-    initObserverList = listDecDef observerListName
-    addObserver t o = valState $ obsList $. listAdd lastelem o
-        where obsList = observerListName `listOf` t
-              lastelem = obsList $. listSize
+    initObserverList _ _ = return empty
+    addObserver _ _ = return empty
 
-    state = fmap statementDocD
-    loopState = fmap (statementDocD . setEmpty)
-    multi = lift1List multiStateDocD endStatement
+    state _ = return empty
+    loopState _ = return empty
+    multi _ = return empty
 
 instance ControlStatementSym CppHdrCode where
-    ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, Empty)
-    ifNoElse bs = ifCond bs $ body []
-    switch v cs c = liftPairFst (lift3Pair switchDocD (state break) v c cs, Empty)
-    switchAsIf v cs = ifCond cases
-        where cases = map (\(l, b) -> (v ?== l, b)) cs
+    ifCond _ _ = return empty
+    ifNoElse _ = return empty
+    switch _ _ _ = return empty
+    switchAsIf _ _ _ = return empty
 
-    ifExists _ ifBody _ = liftPairFst (ifBody, Empty) -- All variables are initialized in C++
+    ifExists _ _ _ = return empty
 
-    for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, Empty)
-    forRange i initv finalv stepv = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv)
-    forEach l t v = for (varDecDef l (iterator t) (v $. iterBegin)) (var l ?!= v $. iterEnd) ((&.++) l)
-    while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, Empty)
+    for _ _ _ _ = return empty
+    forRange _ _ _ _ _ = return empty
+    forEach _ _ _ _ = return empty
+    while _ _ = return empty
 
-    tryCatch tb cb = liftPairFst (liftA2 cppTryCatch tb cb, Empty)
+    tryCatch _ _ = return empty
 
-    checkState l = switch (var l) 
+    checkState _ _ _ = return empty
 
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
-        where obsList = observerListName `listOf` t
-              index = "observerIndex"
-              initv = varDecDef index int $ litInt 0
-              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
+    notifyObservers _ _ _ = return empty
 
-    getFileInputAll f v = let l_line = "nextLine"
-                              v_line = var l_line
-                          in
-        multi [varDec l_line string,
-            while ((?!) (funcApp "std::getline" [f, v_line]))
-                (oneLiner $ valState $ v $. (listAppend $ v_line))]
+    getFileInputAll _ _ = return empty
 
 instance ScopeSym CppHdrCode where
     type Scope CppHdrCode = (Doc, ScopeTag)

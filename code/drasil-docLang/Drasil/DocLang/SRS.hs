@@ -15,7 +15,7 @@ module Drasil.DocLang.SRS
 
 import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
-    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
     indPRCase, inModel, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
@@ -27,7 +27,6 @@ import Data.Drasil.Phrase (for'', the')
 
 import Drasil.DocLang.GenBuilders (section')
 
-import Control.Lens ((^.))
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -95,22 +94,6 @@ valsOfAuxCons cs ss = section  (titleize Doc.consVals)        cs ss valsOfAuxCon
 appendix      cs ss = section' (titleize Doc.appendix)        cs ss "Appendix"
 
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
-
---Root SRS Domain
-srsDom :: CommonConcept
-srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
-
-chgProbDom :: ConceptChunk
-chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
-
-likeChgDom :: ConceptChunk
-likeChgDom = ccs (mkIdea "likeChgDom" (Doc.likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
-
-unlikeChgDom :: ConceptChunk
-unlikeChgDom = ccs (mkIdea "unlikeChgDom" (Doc.unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
-
-assumpDom :: ConceptChunk
-assumpDom = ccs (mkIdea "assumpDom" (Doc.assumption ^. term) $ Just "A") EmptyS [srsDom]
 
 --Labels--
 --FIXME: create using section information somehow?

@@ -37,10 +37,10 @@ import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon,
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content, dataConst,
   dataDefn, datum, definition, doccon, doccon', document, emphasis, environment,
-  figure, goal, information, inModel, input_, interface, item, likelyChg, mis, model,
+  figure, goal, information, inModel, input_, interface, item, likelyChg, mis, model, notation,
   organization, output_, physical, physicalSystem, physSyst, problem, product_,
   purpose, reference, requirement, section_, software, softwareConstraint,
-  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
+  softwareSys, srs, srsDomains, standard, sysCont, system, template, templateModule, term_,
   thModel,traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
@@ -91,7 +91,7 @@ gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw gla
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw [notation, templateModule])
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBRLabel glassBRRefby
   glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns

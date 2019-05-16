@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="GlassBR_MIS.css">
+<title>
+Module Interface Specification for GlassBR
+</title>
+<meta charset="utf-8">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+</head>
+<body>
+<div class="title">
+<h1>
+Module Interface Specification for GlassBR
+</h1>
+</div>
+<div class="author">
+<h2>
+W. Spencer Smith
+</h2>
+</div>
+<div id="Sec:Intro">
+<div class="section">
+<h1>
+Introduction
+</h1>
+<p class="paragraph">
+The following document details the Module Interface Specification (MIS) for the implemented modules in the program GlassBR. It is intended to ease navigation through the program for design and maintenance purposes. Complementary documents include the Software Requirements Specification (SRS) and Module Guide (MG). The full documentation and implementation can be found at https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass.
+</p>
+</div>
+</div>
+<div id="Sec:Notation">
+<div class="section">
+<h1>
+Notation
+</h1>
+<p class="paragraph">
+The structure of the MIS for modules comes from Hoffman and Strooper (1995), with the addition that template modules have been adapted from Ghezzi et al. (2003). The mathematical notation comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the symbol := is used for a multiple assignment statement and conditional rules follow the form (c1 ) r1jc2 ) r2j:::jcn ) rn).
+</p>
+<p class="paragraph">
+The following table summarizes the primitive data types used by GlassBR
+</p>
+<p class="paragraph">
+The specification of GlassBR uses some derived data types: sequences, strings, and tuples.  Sequences are lists that represent a countable number  of ordered values of the same data type, where the same value may occur more than once.  Strings are sequences of characters. Tuples contain a list of values, potentially of  different types. In addition,  GlassBR uses functions, which are defined by the data types  of their inputs and outputs. Local functions are described by giving their type signature  followed by their specification.
+</p>
+</div>
+</div>
+<div id="Sec:ModHierarchy">
+<div class="section">
+<h1>
+Module Hierarchy
+</h1>
+<p class="paragraph">
+To view the Module Hierarchy, see section 3 of the MG (Link)
+</p>
+</div>
+</div>
+<div id="Sec:References">
+<div class="section">
+<h1>
+References
+</h1>
+<ul class="hide-list-style">
+<li>
+<div id="ghezziEtAl2003">
+[1]: Ghezzi, Carlo, Jazayeri, Mehdi, and Mandrioli, Dino. <em>Fundamentals of Software Engineering</em>. 2th. ed., Upper Saddle River, NJ, USA: Prentice Hall, 2003.
+</div>
+</li>
+<li>
+<div id="hoffmanAndStrooper1995">
+[2]: Hoffman, Daniel M. and Strooper, Paul A. <em>Software Design, Automated Testing, and Maintenance: A Practical Approach</em>. New York, NY, USA: International Thoomson Computer Press, 1995. http://citeseer.ist.psu.edu/428727.html.
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:Control">
+<div class="section">
+<h1>
+Module Interface Specification of Control Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Control
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Input">
+<div class="section">
+<h1>
+Module Interface Specification of Input Module
+</h1>
+<p class="paragraph">
+The secrets of this module are the data structure for input parameters, how the values are input and how the values are verified. The load and verify secrets are isolated to their own access programs. This module follows the singleton pattern; that is, there is only one instance of this module.
+</p>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Input
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:EnviroVars">
+<div class="subsubsection">
+<h3>
+Environment Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Considerations">
+<div class="subsection">
+<h2>
+Considerations
+</h2>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:LoadASTM">
+<div class="section">
+<h1>
+Module Interface Specification of LoadASTM Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+LoadASTM
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:EnviroVars">
+<div class="subsubsection">
+<h3>
+Environment Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Calc">
+<div class="section">
+<h1>
+Module Interface Specification of Calc Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Calc
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:GlassTypeADT">
+<div class="section">
+<h1>
+Module Interface Specification of GlassTypeADT Module
+</h1>
+<p class="paragraph">
+from <a href=#DD:gTF>DD: gTF</a>
+</p>
+<div id="Sec:TemplateModule">
+<div class="subsection">
+<h2>
+Template Module
+</h2>
+<p class="paragraph">
+GlassTypeADT
+</p>
+</div>
+</div>
+<div id="Sec:ExpTypes">
+<div class="subsection">
+<h2>
+Exported Types
+</h2>
+<p class="paragraph">
+GlassTypeT = ?
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:ThicknessADT">
+<div class="section">
+<h1>
+Module Interface Specification of ThicknessADT Module
+</h1>
+<p class="paragraph">
+following <a href=#DD:minThick>DD: minThick</a>
+</p>
+<div id="Sec:TemplateModule">
+<div class="subsection">
+<h2>
+Template Module
+</h2>
+<p class="paragraph">
+ThicknessADT
+</p>
+</div>
+</div>
+<div id="Sec:ExpTypes">
+<div class="subsection">
+<h2>
+Exported Types
+</h2>
+<p class="paragraph">
+ThicknessT = ?
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:FunctADT">
+<div class="section">
+<h1>
+Module Interface Specification of FunctADT Module
+</h1>
+<div id="Sec:TemplateModule">
+<div class="subsection">
+<h2>
+Template Module
+</h2>
+<p class="paragraph">
+FunctADT
+</p>
+</div>
+</div>
+<div id="Sec:ExpTypes">
+<div class="subsection">
+<h2>
+Exported Types
+</h2>
+<p class="paragraph">
+FunctT = ?
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<ul class="list">
+<li>
+<em>MAX_ORDER</em>:=<em>MAX_ORDER</em>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Considerations">
+<div class="subsection">
+<h2>
+Considerations
+</h2>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:ContoursADT">
+<div class="section">
+<h1>
+Module Interface Specification of ContoursADT Module
+</h1>
+<div id="Sec:TemplateModule">
+<div class="subsection">
+<h2>
+Template Module
+</h2>
+<p class="paragraph">
+ContoursADT
+</p>
+</div>
+</div>
+<div id="Sec:ExpTypes">
+<div class="subsection">
+<h2>
+Exported Types
+</h2>
+<p class="paragraph">
+ContoursT = ?
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<ul class="list">
+<li>
+<em>MAX_ORDER</em>:=<em>MAX_ORDER</em>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:SeqServices">
+<div class="section">
+<h1>
+Module Interface Specification of SeqServices Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+SeqServices
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Output">
+<div class="section">
+<h1>
+Module Interface Specification of Output Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Output
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:EnviroVars">
+<div class="subsubsection">
+<h3>
+Environment Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Assumps">
+<div class="subsubsection">
+<h3>
+Assumptions
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:AccRoutSemantics">
+<div class="subsubsection">
+<h3>
+Access Routine Semantics
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Constants">
+<div class="section">
+<h1>
+Module Interface Specification of Constants Module
+</h1>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Constants
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:Syntax">
+<div class="subsection">
+<h2>
+Syntax
+</h2>
+<div id="Sec:ExpConstants">
+<div class="subsubsection">
+<h3>
+Exported Constants
+</h3>
+<ul class="list">
+<li>
+<em>m</em>:=<em>m</em>
+</li>
+<li>
+<em>k</em>:=<em>k</em>
+</li>
+<li>
+<em>E</em>:=<em>E</em>
+</li>
+<li>
+<em>t<sub>d</sub></em>:=<em>t<sub>d</sub></em>
+</li>
+<li>
+<em>LSF</em>:=<em>LSF</em>
+</li>
+<li>
+<em>d<sub>max</sub></em>:=<em>d<sub>max</sub></em>
+</li>
+<li>
+<em>d<sub>min</sub></em>:=<em>d<sub>min</sub></em>
+</li>
+<li>
+<em>AR<sub>max</sub></em>:=<em>AR<sub>max</sub></em>
+</li>
+<li>
+<em>w<sub>max</sub></em>:=<em>w<sub>max</sub></em>
+</li>
+<li>
+<em>w<sub>min</sub></em>:=<em>w<sub>min</sub></em>
+</li>
+<li>
+<em>SD<sub>max</sub></em>:=<em>SD<sub>max</sub></em>
+</li>
+<li>
+<em>SD<sub>min</sub></em>:=<em>SD<sub>min</sub></em>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:ExpTypes">
+<div class="subsubsection">
+<h3>
+Exported Types
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:ExpAccPrograms">
+<div class="subsubsection">
+<h3>
+Exported Access Programs
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Semantics">
+<div class="subsection">
+<h2>
+Semantics
+</h2>
+<div id="Sec:StateVars">
+<div class="subsubsection">
+<h3>
+State Variables
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+<div id="Sec:StateInvars">
+<div class="subsubsection">
+<h3>
+State Invariants
+</h3>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Hardware">
+<div class="section">
+<h1>
+Module Interface Specification of Hardware Module
+</h1>
+<p class="paragraph">
+This module hides the underlying hardware for I/O (to the screen, or file, or other device). In general it will be provided by the selected programming language and operating system.
+</p>
+<div id="Sec:Module">
+<div class="subsection">
+<h2>
+Module
+</h2>
+<p class="paragraph">
+Hardware
+</p>
+</div>
+</div>
+<div id="Sec:Uses">
+<div class="subsection">
+<h2>
+Uses
+</h2>
+<p class="paragraph">
+None
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

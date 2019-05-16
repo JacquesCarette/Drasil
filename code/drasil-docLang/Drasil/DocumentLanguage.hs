@@ -259,7 +259,7 @@ data ModHierarchSec = ModHierarchProg Sentence
 data MISModSec = MISModProg String (Maybe Contents) [MISModSub] Bool{-TemplateModule==True-}
 
 data MISModSub where
-  MISUses           :: [String] -> MISModSub
+  MISUses           :: [String] -> MISModSub -- FIXME: Strings are probably not a good implementation for this
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub

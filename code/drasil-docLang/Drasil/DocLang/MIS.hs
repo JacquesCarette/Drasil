@@ -71,7 +71,7 @@ notationIntroMIS = foldlSP [S "structure" `ofThe'` getAcc mis, S "for", plural D
   S "have been adapted from Ghezzi et al. (2003). The mathematical", phrase Doc.notation, 
   S "comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the", phrase symbol_, 
   S ":= is used for a multiple assignment", phrase statement `sAnd` S "conditional rules",
-  S "follow the", phrase form, S "(c1 ) r1jc2 ) r2j:::jcn ) rn)"]
+  S "follow the", phrase form, S "(c1 ⇒ r1 | c2 ⇒ r2 | ... | cn ⇒ rn)"] -- FIXME: Hardcoded expression
 
 notTblIntro :: (Idea a) => a -> Contents
 notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+

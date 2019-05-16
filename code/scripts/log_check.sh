@@ -1,9 +1,5 @@
-if [ -z "$LOG_FOLDER" ]; then
-  echo "Missing LOG_FOLDER."
-  exit 1
-fi
-if [ -z "$LOG_SUFFIX" ]; then
-  echo "Missing LOG_SUFFIX."
+if [ -z "$LOG_FOLDER" ] && [ -z "$LOG_SUFFIX" ]; then
+  echo "At least one of LOG_FOLDER or LOG_SUFFIX must be defined."
   exit 1
 fi
 if [ -z "$NOISY" ]; then

@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
     systemConstraint, termAndDef, terminology, thModel, traceyMandG,
     userCharacteristic)
-import Data.Drasil.Phrase (for'', the, the')
+import Data.Drasil.Phrase (for'', the')
 
 import Drasil.DocLang.GenBuilders (section')
 
@@ -55,9 +55,9 @@ scpOfReq     cs ss = section' (titleize Doc.scpOfReq)  cs ss "ReqsScope"
 charOfIR     cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
 orgOfDoc     cs ss = section' (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
-stakeholder  cs ss = section' (titleize' Doc.stakeholder) cs ss "Stakeholder"
-theCustomer  cs ss = section' (titleize' Doc.customer)    cs ss "Customer"
-theClient    cs ss = section' (titleize' Doc.client)      cs ss "Client"
+stakeholder  cs ss = section' (titleize' Doc.stakeholder)   cs ss "Stakeholder"
+theCustomer  cs ss = section' (titleizeNP $ the' Doc.customer) cs ss "Customer"
+theClient    cs ss = section' (titleizeNP $ the' Doc.client)   cs ss "Client"
 
 genSysDes    cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont      cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"

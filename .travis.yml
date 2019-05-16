@@ -44,7 +44,7 @@ before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
-- travis_retry curl -sSL https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- travis_retry curl --max-time 60 -sSL https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 - source code/scripts/ci_functions.bash
 
 install:
@@ -55,7 +55,7 @@ script:
  - ci_export_funcs
  - cd code
  - >-
-     ci_fstep "CI: HLint" "curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ."
+     ci_fstep "CI: HLint" "curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ."
  - >-
      ci_fstep "CI: Build" make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
  - >-

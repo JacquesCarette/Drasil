@@ -33,7 +33,7 @@ prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
 prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
   where fmt SRS = TeX
         fmt MG  = TeX
-        fmt MIS = HTML--TeX
+        fmt MIS = TeX
         fmt Website = HTML
 
 prntDoc' :: Show a => a -> String -> Format -> Document -> PrintingInformation -> IO ()

@@ -21,7 +21,8 @@ glassChoices = Choices {
   
 main :: IO()
 main = do
-  gen (DocSpec SRS "GlassBR_SRS")     glassBRSrs printSetting
+  gen (DocSpec SRS     "GlassBR_SRS") glassBRSrs printSetting
   gen (DocSpec Website "GlassBR_SRS") glassBRSrs printSetting
-  gen (DocSpec MIS "GlassBR_MIS")     glassBRMis printSetting
+  gen (DocSpec MIS     "GlassBR_MIS") glassBRMis printSetting
+  gen (DocSpec Website "GlassBR_MIS") glassBRMis printSetting
   genCode glassChoices glassBRCode

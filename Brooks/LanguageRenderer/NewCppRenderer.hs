@@ -131,7 +131,6 @@ instance StateTypeSym CppSrcCode where
     enumType t = return $ typeDocD t
     iterator t = fmap cppIterTypeDoc (listType dynamic t)
 
--- ControlBlockSym Not translated yet
 instance ControlBlockSym CppSrcCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
@@ -335,7 +334,7 @@ instance SelectorFunction CppSrcCode where
     listAccessEnum t v = listAccess (castObj (cast int t) v)
     listSetEnum t i = listSet (castObj (cast int t) i)
 
-    at l = listAccess (var l) -- parameter should be an Integer?
+    at l = listAccess (var l) 
 
 instance StatementSym CppSrcCode where
     type Statement CppSrcCode = (Doc, Terminator)
@@ -369,7 +368,6 @@ instance StatementSym CppSrcCode where
     printStr s = liftPairFst (liftA2 (cppPrintDocD False) printFunc (litString s), Semi)
     printStrLn s = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc (litString s), Semi)
 
-    -- All below still needs to be translated
     printFile f _ v = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) v, Semi)
     printFileLn f _ v = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) v, Semi)
     printFileStr f s = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) (litString s), Semi)
@@ -629,7 +627,6 @@ instance StateTypeSym CppHdrCode where
     enumType t = return $ typeDocD t
     iterator t = fmap cppIterTypeDoc (listType dynamic t)
 
--- ControlBlockSym Not translated yet
 instance ControlBlockSym CppHdrCode where
     runStrategy l strats rv av = 
         case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
@@ -833,7 +830,7 @@ instance SelectorFunction CppHdrCode where
     listAccessEnum t v = listAccess (castObj (cast int t) v)
     listSetEnum t i = listSet (castObj (cast int t) i)
 
-    at l = listAccess (var l) -- parameter should be an Integer?
+    at l = listAccess (var l)
 
 instance StatementSym CppHdrCode where
     type Statement CppHdrCode = (Doc, Terminator)
@@ -867,7 +864,6 @@ instance StatementSym CppHdrCode where
     printStr s = liftPairFst (liftA2 (cppPrintDocD False) printFunc (litString s), Semi)
     printStrLn s = liftPairFst (liftA2 (cppPrintDocD True) printLnFunc (litString s), Semi)
 
-    -- All below still needs to be translated
     printFile f _ v = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) v, Semi)
     printFileLn f _ v = liftPairFst (liftA2 (cppPrintDocD True) (printFileLnFunc f) v, Semi)
     printFileStr f s = liftPairFst (liftA2 (cppPrintDocD False) (printFileFunc f) (litString s), Semi)

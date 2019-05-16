@@ -30,10 +30,10 @@ import NewLanguageRenderer (Terminator(..), fileDoc',
     defaultStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
     funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
     continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, 
-    observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
+    observerListName, classDec, doubleSlash, addCommentsDocD, callFuncParamList,
     getterName, setterName, setEmpty)
 import Helpers (angles, blank, doubleQuotedText, oneTab, tripFst, tripSnd, 
-    tripThird, vibcat, liftA4, liftA5, liftA6, liftList, lift1List,
+    tripThird, vibcat, liftA4, liftA5, liftA6, liftList, lift2Lists, lift1List,
     liftPair, lift3Pair, lift4Pair, liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -967,11 +967,11 @@ instance ControlStatementSym CppHdrCode where
                 (oneLiner $ valState $ v $. (listAppend $ v_line))]
 
 instance ScopeSym CppHdrCode where
-    type Scope CppHdrCode = Doc
-    private = return privateDocD
-    public = return publicDocD
+    type Scope CppHdrCode = (Doc, ScopeTag)
+    private = return (privateDocD, Priv)
+    public = return (publicDocD, Pub)
 
-    includeScope _ = return empty
+    includeScope _ = return (empty, Priv)
 
 instance MethodTypeSym CppHdrCode where
     type MethodType CppHdrCode = Doc
@@ -986,46 +986,33 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
     -- Bool is True if the method is a main method, False otherwise
-    type Method CppHdrCode = (Doc, Bool)
-    method n _ _ t ps b = liftPairFst (liftA5 (cppMethod n) t (liftList paramListDocD ps) b blockStart blockEnd, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
-        where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
-        where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = liftPairFst (liftA4 cppMainMethod int b blockStart blockEnd, True)
+    type Method CppHdrCode = (Doc, Bool, ScopeTag)
+    method n s _ t ps _ = liftPairFst (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement, False, snd $ unCPPHC s)
+    getMethod n t = method (getterName n) public dynamic t [] (return empty)
+    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] (return empty)
+    mainMethod b = return (empty, True, Pub)
     privMethod n = method n private dynamic
     pubMethod n = method n public dynamic
     constructor n = method n public dynamic (construct n)
-    destructor n vs = 
-        let i = "i"
-            deleteStatements = map (fmap snd) vs
-            loopIndexDec = varDec i int
-            dbody = bodyStatements $ loopIndexDec : deleteStatements
-        in pubMethod ('~':n) void [] dbody
+    destructor n vs = pubMethod ('~':n) void [] (return empty)
 
     function = method
 
 instance StateVarSym CppHdrCode where
-    -- (Doc, Bool) is the corresponding destructor code for the stateVar
-    type StateVar CppHdrCode = (Doc, (Doc, Terminator))
-    stateVar del l s p t = liftPair (liftA4 (stateVarDocD l) (includeScope s) p t endStatement, if del < alwaysDel then return (empty, Empty) else free $ var l)
+    type StateVar CppHdrCode = (Doc, ScopeTag)
+    stateVar del l s p t = liftPair (liftA4 (stateVarDocD l) (fmap fst (includeScope s)) p t endStatement, fmap snd s)
     privMVar del l = stateVar del l private dynamic
     pubMVar del l = stateVar del l public dynamic
     pubGVar del l = stateVar del l public static
-    listStateVar del l s p t = 
-        let i = "i"
-            guard = var i ?< (var l $. listSize)
-            loopBody = oneLiner $ free (var l $. at i)
-            initv = (i &.= litInt 0)
-            deleteLoop = for initv guard ((&.++) i) loopBody
-        in liftPair (fmap fst $ stateVar del l s p t, if del < alwaysDel then return (empty, Empty) else deleteLoop)
+    listStateVar = stateVar
 
 instance ClassSym CppHdrCode where
     -- Bool is True if the class is a main class, False otherwise
     type Class CppHdrCode = (Doc, Bool)
-    buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD (fs ++ [destructor n vs]), any (snd . unCPPHC) fs)
-    enum _ _ _ = return (empty, False)
-    mainClass _ vs fs = liftPairFst (liftA2 (cppMainClass (null vs)) (liftList stateVarListDocD (map (fmap fst) vs)) (liftList methodListDocD fs), True)
+    -- do this with a do? avoids liftA8...
+    buildClass n p _ vs fs = liftPairFst (liftA8 (cpphClass n p) (lift2Lists (cppVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists (cppVarsFuncsList Priv) vs (fs ++ [destructor n vs])) inherit public private blockStart blockEnd endStatement, any (snd . unCPPHC) fs)
+    enum n es s = liftPairFst (liftA4 (cpphEnum n) (return $ enumElementsDocD es enumsEqualInts) blockStart blockEnd endStatement, False)
+    mainClass _ _ _ = return (empty, True)
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -1034,7 +1021,8 @@ instance ModuleSym CppHdrCode where
     -- Bool is True if the method is a main method, False otherwise
     type Module CppHdrCode = (Doc, Label, Bool)
     buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD ms) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPHC) cs || any (snd . unCPPHC) ms)
-    -- Need to add libraries here
+
+data ScopeTag = Pub | Priv deriving Eq
 
 -- helpers
 isDtor :: Label -> Bool
@@ -1042,6 +1030,9 @@ isDtor ('~':_) = True
 isDtor _ = False
 
 -- convenience
+enumsEqualInts :: Bool
+enumsEqualInts = False
+
 cppHeaderExt :: Label
 cppHeaderExt = ".hpp"
 
@@ -1143,12 +1134,16 @@ cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0)
 cppPointerParamDoc :: Label -> Doc -> Doc
 cppPointerParamDoc n t = t <+> text "&" <> text n
 
-cppMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-cppMethod n t ps b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
+cppsMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsMethod n t ps b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
     oneTab b,
     bEnd]
     where ttype | isDtor n = empty
                 | otherwise = t
+
+cpphMethod :: Label -> Doc -> Doc -> Doc -> Doc
+cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
+                      | otherwise = t <+> text n <> parens ps <> end
 
 cppMainMethod :: Doc -> Doc -> Doc -> Doc -> Doc
 cppMainMethod t b bStart bEnd = vcat [
@@ -1158,11 +1153,37 @@ cppMainMethod t b bStart bEnd = vcat [
     text "return 0;",
     bEnd]
 
+cpphVarsFuncsList :: ScopeTag -> [(Doc, ScopeTag)] -> [(Doc, Bool, ScopeTag)] -> Doc
+cpphStateVarList st vs fs = 
+    let scopedVs = [fst v | v <- vs, snd v == st]
+        scopedFs = [tripFst f | f <- fs, tripThird f == st]
+    in vcat $ scopedVs ++ (if null scopedVs then empty else blank) : scopedFs
+
+cpphClass :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cpphClass n p pubs privs pub priv inhrt bStart bEnd end =
+    let baseClass = case p of Nothing -> empty
+                              Just pn -> inhrt <+> pub <+> text pn
+    in vcat [
+        classDec <+> text n <+> baseClass <+> bStart,
+        oneTabbed [
+            pub <> colon,
+            oneTab pubs,
+            blank,
+            priv <> colon,
+            oneTab privs],
+        bEnd <> end]
+
 cppMainClass :: Bool -> Doc -> Doc -> Doc
 cppMainClass b vs fs = vcat [
     vs,
     if b then empty else blank,
     fs]
+
+cpphEnum :: Label -> [Label] -> Doc -> Doc -> Doc -> Doc
+cpphEnum n es bStart bEnd end = vcat [
+    text "enum" <+> text n <+> bStart,
+    oneTab es,
+    bEnd <> end]
 
 cppModuleDoc :: Doc -> Doc -> Doc -> Doc
 cppModuleDoc ls fs cs = vcat [

@@ -5,8 +5,9 @@ module Helpers (
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
     hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs,
-    tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftList, 
-    lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, liftTripFst
+    tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftA8,
+    liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
+    liftPairFst, liftTripFst
 ) where
 
 import Prelude hiding ((<>))
@@ -122,8 +123,14 @@ liftA6 f a1 a2 a3 a4 a5 a6 = liftA5 f a1 a2 a3 a4 a5 <*> a6
 liftA7 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i
 liftA7 f a1 a2 a3 a4 a5 a6 a7 = liftA6 f a1 a2 a3 a4 a5 a6 <*> a7
 
+liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
+liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
+
 liftList :: Monad m => ([a] -> b) -> [m a] -> m b
 liftList f as = fmap f $ sequence as
+
+lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
+lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
 
 lift1List :: (Applicative m, Monad m) => (a -> [b] -> c) -> m a -> [m b] -> m c
 lift1List f a as = liftA2 f a (sequence as)

@@ -497,7 +497,7 @@ instance ClassSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Class JavaCode = (Doc, Bool)
     buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unJC) fs)
-    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
+    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es enumsEqualInts) s, False)
     mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
@@ -511,6 +511,9 @@ instance ModuleSym JavaCode where
                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [any (snd . unJC) ms, any (snd . unJC) cs])
+
+enumsEqualInts :: Bool
+enumsEqualInts = False
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

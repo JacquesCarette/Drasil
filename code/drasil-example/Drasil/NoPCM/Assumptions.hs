@@ -66,8 +66,8 @@ assumpS12 =
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
 
-assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+ (sParen $
-  (phrase water) +:+ S "in this case")) "Water-Always-Liquid" assumpDom
+assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+
+  sParen ((phrase water) +:+ S "in this case")) "Water-Always-Liquid" assumpDom
 
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+

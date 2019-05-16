@@ -264,8 +264,7 @@ momEql_desc = foldlSent [S "This", phrase equation, S "satisfies",
 
 momEql_deriv :: Sentence
 momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
-  S "body diagram of" +:+. 
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+  S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
 

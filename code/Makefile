@@ -72,7 +72,7 @@ debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
 check_stack:
-	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh $(SCRIPT_FOLDER)check_stack.sh
+	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) $(SHELL) $(SCRIPT_FOLDER)check_stack.sh
 
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
@@ -95,7 +95,7 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	sh $(SCRIPT_FOLDER)log_check.sh $(NOISY)
+	$(SHELL) $(SCRIPT_FOLDER)log_check.sh $(NOISY)
 
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 
@@ -115,14 +115,14 @@ docs: $(DOC_PACKAGES)
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
-	EDIR=$(EDIR) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh $(SCRIPT_FOLDER)tex_build.sh
+	EDIR=$(EDIR) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) $(SHELL) $(SCRIPT_FOLDER)tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
-	EDIR=$(EDIR) MAKE=$(MAKE) sh $(SCRIPT_FOLDER)code_build.sh
+	EDIR=$(EDIR) MAKE=$(MAKE) $(SHELL) $(SCRIPT_FOLDER)code_build.sh
 
 code: $(CODE_EXAMPLES)
 

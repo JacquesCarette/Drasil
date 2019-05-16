@@ -9,8 +9,8 @@ fi
 
 RET=0
 
-if [ -d "./build/$EDIR/src" ]; then
-  cd "./build/$EDIR/src"
+if [ -d "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER" ]; then
+  cd "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER"
   for d in */; do
     cd "$d"
     $MAKE

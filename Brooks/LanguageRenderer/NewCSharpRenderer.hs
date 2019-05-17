@@ -123,7 +123,7 @@ instance StateTypeSym CSharpCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
-    boolListType = return csBoolListTypeDoc
+    boolListType = listType dynamic bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
     iterator _ = error "Iterator-type variables do not exist in C#"
@@ -527,9 +527,6 @@ csInfileTypeDoc = text "StreamReader"
 
 csOutfileTypeDoc :: Doc
 csOutfileTypeDoc = text "StreamWriter"
-
-csBoolListTypeDoc :: Doc
-csBoolListTypeDoc = text "BitArray"
 
 csThrowDoc :: (Doc, Maybe String) -> Doc
 csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg

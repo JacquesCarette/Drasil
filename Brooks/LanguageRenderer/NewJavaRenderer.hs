@@ -122,7 +122,7 @@ instance StateTypeSym JavaCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = fmap jIntListTypeDoc (list p)
     floatListType p = fmap jFloatListTypeDoc (list p)
-    boolListType = return jBoolListTypeDocD
+    boolListType = listType dynamic bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
     iterator _ = error "Iterator-type variables do not exist in Java"
@@ -542,9 +542,6 @@ jIntListTypeDoc lst = lst <> angles (text "Integer")
 
 jFloatListTypeDoc :: Doc -> Doc
 jFloatListTypeDoc lst = lst <> angles (text "Double")
-
-jBoolListTypeDocD :: Doc
-jBoolListTypeDocD = text "BitSet"
 
 jListDecDef :: Label -> Doc -> Doc -> Doc
 jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens listElements

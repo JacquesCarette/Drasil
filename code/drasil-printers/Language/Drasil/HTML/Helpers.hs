@@ -166,10 +166,10 @@ span_tag :: [String] -> Doc -> Doc
 span_tag = wrap "span"
 
 indent :: Doc -> Doc
-indent = nest 4
+indent = nest 0
 
 indentl :: [Doc] -> [Doc]
-indentl = map $ nest 4
+indentl = map $ nest 0
 
 vvcat :: [Doc] -> Doc
 vvcat = foldr ($+$) empty

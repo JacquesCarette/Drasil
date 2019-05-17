@@ -129,7 +129,7 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro i bottom bottomSec trailingSentence = [foldlSP [
           i, S "The presentation follows the standard pattern of presenting",
-          (foldlsC $ map plural [Doc.goal, theory, definition]) `sC` S "and assumptions.",
+          foldlsC (map plural [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom,
           S "in", makeRef2S bottomSec +:+

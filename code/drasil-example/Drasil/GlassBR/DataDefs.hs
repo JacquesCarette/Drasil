@@ -46,7 +46,7 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 riskEq :: Expr
 riskEq = ((sy sflawParamK) / 
   ((sy plateLen) * (sy plateWidth)) $^ ((sy sflawParamM) - 1) *
-  (sy modElas * (square $ sy minThick)) $^ (sy sflawParamM) 
+  (sy modElas * square (sy minThick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!

@@ -139,7 +139,7 @@ refineChain _ = error "refineChain encountered an unexpected empty list"
 -- | Helper used by refineChain
 rc :: NamedIdea c => [(c, Section)] -> Sentence
 rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
-  +:+ S "to the" +:+ (plural $ fst y) +:+. sParen (makeRef2S $ snd y)
+  +:+ S "to the" +:+ plural (fst y) +:+. sParen (makeRef2S $ snd y)
 rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
   S "to the" +:+ plural (fst y) `sC` rc (y : xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"

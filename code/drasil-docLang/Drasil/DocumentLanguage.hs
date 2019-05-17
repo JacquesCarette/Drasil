@@ -244,15 +244,15 @@ data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
-data AppndxSec = AppndxProg [Contents]
+newtype AppndxSec = AppndxProg [Contents]
 
 {--}
 
-data NotationSec = NotationProg [Contents]
+newtype NotationSec = NotationProg [Contents]
 
 {--}
 
-data ModHierarchSec = ModHierarchProg Sentence
+newtype ModHierarchSec = ModHierarchProg Sentence
 
 {--}
 

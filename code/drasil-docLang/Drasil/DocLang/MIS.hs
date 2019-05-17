@@ -61,7 +61,7 @@ introMIS progName outerLink = foldlSP [S "The following", phrase document, S "de
   titleize mis, sParen (getAcc mis), S "for the implemented", plural Doc.module_ `inThe`
   phrase program, short progName :+: S ". It is intended to ease navigation through the",
   phrase program, S "for", phrase design, S "and maintenance" +:+. plural purpose,
-  S "Complementary", plural document, S "include the", titleize srs, (sParen $ getAcc srs)
+  S "Complementary", plural document, S "include the", titleize srs, sParen (getAcc srs)
   `sAnd` titleize mg +:+. sParen (getAcc mg), S "The full", phrase documentation `sAnd`
   phrase implementation, S "can be found at", outerLink]
 --FIXME: outerLink needs to work!

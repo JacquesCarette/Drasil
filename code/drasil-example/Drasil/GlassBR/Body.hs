@@ -12,8 +12,6 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   Theory(defined_fun, defined_quant), TheoryModel)
 
-import qualified Drasil.DocLang.MIS as MIS (hwModIntro, inputModIntro)
-
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
@@ -31,7 +29,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   NotationSec(NotationProg), IntroSec(IntroMIS))
 
 import qualified Drasil.DocLang.GenBuilders as GB (assumpt, reference)
-import qualified Drasil.DocLang.MIS as MIS (misCitations)
+import qualified Drasil.DocLang.MIS as MIS (hwModIntro, inputModIntro, misCitations)
 import qualified Drasil.DocLang.SRS as SRS (datCon, inModel, valsOfAuxCons)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
@@ -206,61 +204,60 @@ glassBRMis :: Document
 glassBRMis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
 
 mkMIS :: DocDesc
-mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
-  NotationSec (NotationProg []) : 
-  ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
-  Bibliography : 
+mkMIS = [IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")),
+  NotationSec (NotationProg []),
+  ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)"), --FIXME: hardcoded link
+  Bibliography,
   MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],
     MISSyntax [MISExportedCs controlConsts, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    {-ctrlLabel-} False) :
+    {-ctrlLabel-} False),
   MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses ["GlassType", "Thickness", "Constants", "Hardware"],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [inputCons]]
-    {-inputLabel-} False) :
+    {-inputLabel-} False),
   MISModSec (MISModProg "LoadASTM" Nothing [MISUses ["Funct", "Contours"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    {-loadLabel-} False) :
+    {-loadLabel-} False),
   MISModSec (MISModProg "Calc" Nothing [MISUses ["Input", "Contours", "Constants"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-calcLabel-} False) :
+    {-calcLabel-} False),
   MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef2S glaTyFac))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-glTypeLabel-} True) :
+    {-glTypeLabel-} True),
   MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef2S hFromt))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-thicknessLabel-} True) :
+    {-thicknessLabel-} True),
   MISModSec (MISModProg "Funct" Nothing [MISUses ["SeqServices"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [fxnCons]]
-    {-functLabel-} True) :
+    {-functLabel-} True),
   MISModSec (MISModProg "Contours" Nothing [MISUses ["Funct"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-contoursLabel-} True) :
+    {-contoursLabel-} True),
   MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    {-seqServLabel-} False) :
+    {-seqServLabel-} False),
   MISModSec (MISModProg "Output" Nothing [MISUses ["Input", "Thickness", "GlassType", "Hardware"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-outputLabel-} False) :
+    {-outputLabel-} False),
   MISModSec (MISModProg "Constants" Nothing [MISUses [], 
     MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
     MISSemantics [MISStateVars [], MISStateInvariant []]]
-    {-constantsLabel-} False) :
+    {-constantsLabel-} False),
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
-    {-hwLabel-} False) :
-  []
+    {-hwLabel-} False)]
 
 fxnCons :: Contents
 fxnCons = mkParagraph $ S "For simplicity the function evaluation is" +:+

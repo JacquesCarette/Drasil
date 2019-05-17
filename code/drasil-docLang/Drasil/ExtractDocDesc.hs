@@ -90,7 +90,7 @@ egetExist (ExistSolnVerb s) = egetSec s
 egetExist (ExistSolnProg c) = concatMap egetCon' c
 
 egetMIS :: MISModSec -> [Expr]
-egetMIS (MISModProg _ _ _ _) = [] -- FIXME: Get Exprs
+egetMIS MISModProg{} = [] -- FIXME: Get Exprs
 
 egetRefProg :: RefTab -> [Expr]
 egetRefProg TUnits       = []

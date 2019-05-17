@@ -323,7 +323,7 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
+   phrase softwareSys, S "itself" +:+. sParen (short ssp),
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    

@@ -185,8 +185,8 @@ interpY = funcDef "interpY" [filename, x, z] Real
       [ j $:= find x_z_1 x,
         k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
-    y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
-    y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
+    y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
+    y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
     FRet $ linInterp [ vLook zVector i 0, sy y_1, vLook zVector i 1, sy y_2, sy z ]
   ]
 
@@ -210,8 +210,8 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
           [ j $:= find x_z_1 x,
             k $:= find x_z_2 x ]
           [ FContinue ],
-        y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
-        y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
+        y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
+        y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
           [ FRet $ linInterp [ sy y_1, vLook zVector i 0, sy y_2, vLook zVector i 1, sy y ]
           ] []

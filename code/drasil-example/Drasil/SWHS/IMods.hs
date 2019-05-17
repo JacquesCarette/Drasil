@@ -401,7 +401,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   (ch temp_W) `sAnd` S "the", phrase temp_init `sC` ch temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
-  :+: (unwrap $ getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
+  :+: unwrap (getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
 
 ---------
 -- IM4 --
@@ -437,7 +437,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcm_E `isThe` phrase change,
   S "in", phrase thermalEnergy, S "of the", short phsChgMtrl, S "relative to the",
   phrase energy, S "at the", phrase temp_init, sParen (ch temp_init) +:+.
-  (unwrap $ getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
+  unwrap (getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
   short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat,
   S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
   ch htCap_S_P, sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",

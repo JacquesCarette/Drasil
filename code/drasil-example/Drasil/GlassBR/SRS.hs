@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Body where
+module Drasil.GlassBR.SRS (glassBRCode, glassBRSrs, printSetting) where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -24,30 +24,26 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, characteristicsLabel, physSystDescriptionLabel,
-  generateTraceMap', mkEnumSimpleD, MISModSub(..), MISModSec(..),
-  MISSemanticsSub(..), MISSyntaxSub(..), ModHierarchSec(ModHierarchProg),
-  NotationSec(NotationProg), IntroSec(IntroMIS))
+  generateTraceMap', mkEnumSimpleD)
 
 import qualified Drasil.DocLang.GenBuilders as GB (assumpt, reference)
-import qualified Drasil.DocLang.MIS as MIS (hwModIntro, inputModIntro, misCitations)
-import qualified Drasil.DocLang.SRS as SRS (datCon, inModel, valsOfAuxCons)
+import qualified Drasil.DocLang.SRS as SRS (datCon, valsOfAuxCons, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content, dataConst,
   dataDefn, datum, definition, doccon, doccon', document, emphasis, environment,
-  figure, goal, information, inModel, input_, interface, item, likelyChg, mis, model, notation,
+  figure, goal, information, inModel, input_, interface, item, likelyChg, model,
   organization, output_, physical, physicalSystem, physSyst, problem, product_,
   purpose, reference, requirement, section_, software, softwareConstraint,
-  softwareSys, srs, srsDomains, standard, sysCont, system, template, templateModule, term_,
+  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
   thModel,traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
-import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability, softwarecon)
+import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -67,19 +63,19 @@ import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, glaTyFac, hFromt)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012, srsCitations)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  controlConsts, controlStVars, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained,
-  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, maxOrderConst, pbTol, probBr, probBreak, sD, stressDistFac,
+  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
+  gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
+  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
@@ -90,8 +86,7 @@ gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw gla
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon
-  ++ map nw [notation, templateModule]) -- move for MIS?
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBRLabel glassBRRefby
   glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
@@ -133,11 +128,8 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ ma
   glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
 
-gbRefDBSRS :: ReferenceDB
-gbRefDBSRS = rdb srsCitations glassBRConcIns
-
-gbRefDBMIS :: ReferenceDB
-gbRefDBMIS = rdb MIS.misCitations glassBRConcIns
+gbRefDB :: ReferenceDB
+gbRefDB = rdb gbCitations glassBRConcIns
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
@@ -193,89 +185,12 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   TraceabilitySec $
     TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
-  AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants),
+  AuxConstntSec $ AuxConsProg gLassBR auxiliaryConstants,
   Bibliography,
-  AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]
-  ]
-
-{------}
-
-glassBRMis :: Document
-glassBRMis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
-
-mkMIS :: DocDesc
-mkMIS = [IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")),
-  NotationSec (NotationProg []),
-  ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)"), --FIXME: hardcoded link
-  Bibliography,
-  MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],
-    MISSyntax [MISExportedCs controlConsts, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars controlStVars, MISAccessRoutines [{-FILL IN-}]]]
-    {-ctrlLabel-} False),
-  MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses ["GlassType", "Thickness", "Constants", "Hardware"],
-    MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
-    MISConsiderations [inputCons]]
-    {-inputLabel-} False),
-  MISModSec (MISModProg "LoadASTM" Nothing [MISUses ["Funct", "Contours"],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    {-loadLabel-} False),
-  MISModSec (MISModProg "Calc" Nothing [MISUses ["Input", "Contours", "Constants"],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-calcLabel-} False),
-  MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef2S glaTyFac))) --FIXME: link is broken
-    [MISUses [],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-glTypeLabel-} True),
-  MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef2S hFromt))) --FIXME: link is broken
-    [MISUses [],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-thicknessLabel-} True),
-  MISModSec (MISModProg "Funct" Nothing [MISUses ["SeqServices"],
-    MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
-    MISConsiderations [fxnCons]]
-    {-functLabel-} True),
-  MISModSec (MISModProg "Contours" Nothing [MISUses ["Funct"],
-    MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-contoursLabel-} True),
-  MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    {-seqServLabel-} False),
-  MISModSec (MISModProg "Output" Nothing [MISUses ["Input", "Thickness", "GlassType", "Hardware"],
-    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    {-outputLabel-} False),
-  MISModSec (MISModProg "Constants" Nothing [MISUses [], 
-    MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
-    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant []]]
-    {-constantsLabel-} False),
-  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
-    {-hwLabel-} False)]
-
-fxnCons :: Contents
-fxnCons = mkParagraph $ S "For simplicity the function evaluation is" +:+
-  S "not defined within one step of the boundaries. By considering" +:+ 
-  S "the special cases it would be possible to get right to the edge."
-
-inputCons :: Contents
-inputCons = mkParagraph $ S "The value of each state variable can be accessed" +:+ 
-  S "through its name (getter). An access program is available for each state" +:+
-  S "variable. There are no setters for the state variables, since the values" +:+
-  S "will be set and checked by load params and will not be changed for the" +:+ 
-  S "life of the program."
-
-{-----}
-
+  AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
+ 
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, 
-  Notes, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
@@ -294,32 +209,10 @@ glassSystInfo = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
-  _usedinfodb  = usedDB,
-   refdb       = gbRefDBSRS
+  _usedinfodb = usedDB,
+   refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
-
---FIXME: modify SystemInformation to hold information for both MIS and SRS?
-glassSystInfo' :: SystemInformation
-glassSystInfo' = SI {
-  _sys         = gLassBR, --same
-  _kind        = mis,     --different
-  _authors     = [spencerSmith], --different
-  _quants      = symbolsForTable,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
-                 (concatMap (^. defined_quant) gbrTMods) ++
-                 (concatMap (^. defined_fun) gbrTMods),
-  _datadefs    = dataDefns,
-  _inputs      = map qw gbInputs,
-  _outputs     = map qw gbOutputs,
-  _defSequence = gbQDefns,
-  _constraints = gbConstrained,
-  _constants   = gbConstants,
-  _sysinfodb   = gbSymbMap,
-  _usedinfodb  = usedDB,
-   refdb       = gbRefDBMIS
-}
 
 glassBRCode :: CodeSpec
 glassBRCode = codeSpec glassSystInfo allMods
@@ -375,11 +268,6 @@ solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
-
---Used in "Non-Functional Requirements" Section--
-gBRpriorityNFReqs :: [ConceptChunk]
-gBRpriorityNFReqs = [correctness, verifiability, understandability,
-  reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
 

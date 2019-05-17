@@ -35,15 +35,16 @@ executable glassbr
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.GlassBR.Assumptions
-    , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Goals
+    , Drasil.GlassBR.MIS
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.References
     , Drasil.GlassBR.Requirements
+    , Drasil.GlassBR.SRS
     , Drasil.GlassBR.Symbols
     , Drasil.GlassBR.TMods
     , Drasil.GlassBR.Unitals

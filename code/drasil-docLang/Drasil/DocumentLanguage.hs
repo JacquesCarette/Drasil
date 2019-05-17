@@ -28,8 +28,8 @@ import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro, as
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, solCharSpec,
   stakeholder, thModel, userChar, propCorSol, offShelfSol)
-import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
-  notTblIntro, notationIntroMIS, notationTable, modHierarchyPointer, modHier, syntax,
+import qualified Drasil.DocLang.MIS as MIS (notation, introMIS,
+  notationIntroMIS, modHierarchyPointer, modHier, syntax,
   uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
   semantics, stateInvars, stateVars, syntax, uses, equalsSttmts)
@@ -248,7 +248,7 @@ data AppndxSec = AppndxProg [Contents]
 
 {--}
 
-data NotationSec = NotationProg [Contents] [DefinedQuantityDict]
+data NotationSec = NotationProg [Contents]
 
 {--}
 
@@ -598,8 +598,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the 'Notation' section
 mkNotationSec :: SystemInformation -> NotationSec -> Section
-mkNotationSec SI {_sys = sys} (NotationProg cs t) = MIS.notation (MIS.notationIntroMIS :
-  (MIS.notTblIntro sys) : (MIS.notationTable t) : cs ++ [MIS.notationIntroContd sys]) []
+mkNotationSec SI{} (NotationProg cs) = MIS.notation (MIS.notationIntroMIS : cs) []
 
 {--}
 

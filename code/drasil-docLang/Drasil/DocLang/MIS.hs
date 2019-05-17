@@ -17,8 +17,10 @@ import Data.Drasil.Concepts.Documentation (description, design, document,
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)
 
-import Data.Drasil.People (carloGhezzi, mJazayeri, dMandrioli, hoffman, strooper)
-import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe', sAnd)
+import Data.Drasil.Citations (ghezziEtAl2003, hoffmanAndStrooper1995)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList,
+  foldlSP, inThe, ofThe', sAnd)
+
 
 import Control.Lens ((^.))
 
@@ -71,56 +73,15 @@ introMIS progName outerLink = foldlSP [S "The following", phrase document, S "de
 misCitations :: BibRef
 misCitations = [hoffmanAndStrooper1995, ghezziEtAl2003]
 
-hoffmanAndStrooper1995, ghezziEtAl2003 :: Citation
-
-ghezziEtAl2003 = cMisc
-  [author [carloGhezzi, mJazayeri, dMandrioli],
-  title "Fundamentals of Software Engineering",
-  year 2003,
-  publisher "Prentice Hall",
-  address "Upper Saddle River, NJ, USA",
-  edition 2]
-  "ghezziEtAl2003"
-
-hoffmanAndStrooper1995 = cMisc
-  [author [hoffman, strooper],
-  title "Software Design, Automated Testing, and Maintenance: A Practical Approach",
-  publisher "International Thoomson Computer Press",
-  address "New York, NY, USA",
-  year 1995,
-  howPublishedU "http://citeseer.ist.psu.edu/428727.html"]
-  "hoffmanAndStrooper1995"
-
 notationIntroMIS :: Contents
 notationIntroMIS = foldlSP [S "structure" `ofThe'` getAcc mis, S "for", plural Doc.module_,
   S "comes from", makeRef2S hoffmanAndStrooper1995 `sC` S "with the addition that", plural templateModule, 
   S "have been adapted from" +:+. makeRef2S ghezziEtAl2003, S"The mathematical", phrase Doc.notation, 
   S "comes from Chapter 3 of" +:+. makeRef2S hoffmanAndStrooper1995, S "For instance, the", phrase symbol_, 
   S ":= is used for a multiple assignment", phrase statement `sAnd` S "conditional rules",
-  S "follow the", phrase form, S "(c1 => r1 | c2 => r2 | ... | cn => rn)"] -- FIXME: Hardcoded expression
-
-notTblIntro :: (Idea a) => a -> Contents
-notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+
-  (plural dataType) +:+ S "used by" +: (short progName)
-
-notationTable :: [DefinedQuantityDict] -> Contents
-notationTable n = LlC $ llcc (makeTabRef "ToN") $ Table
-  (map (at_start) [dataType, Doc.notation, description]) (mkTable
-  [phrase,
-   (\x -> P $ symbol x Implementation),
-   (\x -> (x ^. defn))
-  ] n)
-  (S "Table of Notation") False
-
-notationIntroContd :: (Idea a) => a -> Contents
-notationIntroContd progName = foldlSP [S "The specification of", short progName, 
-  S "uses some derived data types: sequences, strings, and tuples.", 
-  S " Sequences are lists that represent a countable number",
-  S " of ordered values of the same data type, where the same value may occur more than once.",
-  S " Strings are sequences of characters. Tuples contain a list of values, potentially of ", 
-  S "different types. In addition, ", short progName, S "uses functions, which are defined by the data types",
-  S " of their inputs and outputs. Local functions are described by giving their type signature",
-  S " followed by their specification"]
+  S "follow the", phrase form, S "(c1 => r1 | c2 => r2 | ... | cn => rn). See", -- FIXME: Hardcoded expression
+  foldlList Comma List $ map makeRef2S [ghezziEtAl2003, hoffmanAndStrooper1995], S "for definitions of",
+  plural dataType]
 
 ----------------------
 -- MODULE HIERARCHY --

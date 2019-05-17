@@ -14,13 +14,15 @@ compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
 
-algorithm, sequence, tuple :: ConceptChunk
-algorithm    = dcc "algorithm" (cn' "algorithm")
+algorithm, sequence, string, tuple :: ConceptChunk
+algorithm = dcc "algorithm" (cn' "algorithm")
   "A series of steps to be followed in calculations and problem-solving operations"
-sequence     = dcc "sequence"  (cn' "sequence") 
+sequence  = dcc "sequence"  (cn' "sequence") 
   ("A list that represents a countable number of ordered values of the same data type,"++
   " where the same value may occur more than once")
-tuple        = dcc "tuple"     (cn' "tuple")
+string  = dcc "string"      (cn' "string")
+  "A finite sequence of characters"
+tuple     = dcc "tuple"     (cn' "tuple")
   "A list of values, potentially of different types"
 
 application, computer, structure :: NamedChunk
@@ -50,11 +52,3 @@ inValue          = compoundNC input_ value
 inQty            = compoundNC input_ quantity
 computerLiteracy = compoundNC computer literacy
 computerApp      = compoundNC computer application
-
--- data types
-char, integer, nat, real, string :: ConceptChunk
-char    = dcc "character" (cn' "character")      "A single number or digit"
-integer = dcc "integer"   (cn' "integer")        "A number without a fractional component"
-nat     = dcc "natural"   (cn' "natural number") "An integer greater than zero" 
-real    = dcc "real"      (cn' "real number")    "A number in (neg inf, pos inf)"
-string  = dcc "string"    (cn' "string")         "A finite sequence of characters"

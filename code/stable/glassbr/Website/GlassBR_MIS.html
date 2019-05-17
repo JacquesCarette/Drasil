@@ -35,13 +35,7 @@ The following document details the Module Interface Specification (MIS) for the 
 Notation
 </h1>
 <p class="paragraph">
-The structure of the MIS for modules comes from Hoffman and Strooper (1995), with the addition that template modules have been adapted from Ghezzi et al. (2003). The mathematical notation comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the symbol := is used for a multiple assignment statement and conditional rules follow the form (c1 ) r1jc2 ) r2j:::jcn ) rn).
-</p>
-<p class="paragraph">
-The following table summarizes the primitive data types used by GlassBR
-</p>
-<p class="paragraph">
-The specification of GlassBR uses some derived data types: sequences, strings, and tuples.  Sequences are lists that represent a countable number  of ordered values of the same data type, where the same value may occur more than once.  Strings are sequences of characters. Tuples contain a list of values, potentially of  different types. In addition,  GlassBR uses functions, which are defined by the data types  of their inputs and outputs. Local functions are described by giving their type signature  followed by their specification.
+The structure of the MIS for modules comes from <a href=#hoffmanAndStrooper1995>hoffmanAndStrooper1995</a>, with the addition that template modules have been adapted from <a href=#ghezziEtAl2003>ghezziEtAl2003</a>. The mathematical notation comes from Chapter 3 of <a href=#hoffmanAndStrooper1995>hoffmanAndStrooper1995</a>. For instance, the symbol := is used for a multiple assignment statement and conditional rules follow the form (c1 => r1 | c2 => r2 | ... | cn => rn). See <a href=#ghezziEtAl2003>ghezziEtAl2003</a> and <a href=#hoffmanAndStrooper1995>hoffmanAndStrooper1995</a> for definitions of data types.
 </p>
 </div>
 </div>
@@ -95,7 +89,7 @@ Control
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:InputADT>Section: Input</a>, <a href=#Sec:LoadASTMADT>Section: LoadASTM</a>, <a href=#Sec:CalcADT>Section: Calc</a>, and <a href=#Sec:OutputADT>Section: Output</a>
 </p>
 </div>
 </div>
@@ -109,9 +103,20 @@ Syntax
 <h3>
 Exported Constants
 </h3>
-<p class="paragraph">
-None
-</p>
+<ul class="list">
+<li>
+<em>sTSD</em> = <em># String for path and filename for TSD file</em>
+</li>
+<li>
+<em>sSDF</em> = <em># String for path and filename for SDF file</em>
+</li>
+<li>
+<em>sIn</em> = <em># String for path and filename for Input file</em>
+</li>
+<li>
+<em>sOut</em> = <em># String for path and filename for Output file</em>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:ExpAccPrograms">
@@ -179,7 +184,7 @@ Input
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:GlassTypeADT>Section: GlassType</a>, <a href=#Sec:ThicknessADT>Section: Thickness</a>, <a href=#Sec:ConstantsADT>Section: Constants</a>, and <a href=#Sec:HardwareADT>Section: Hardware</a>
 </p>
 </div>
 </div>
@@ -267,7 +272,7 @@ LoadASTM
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:FunctADT>Section: Funct</a> and <a href=#Sec:ContoursADT>Section: Contours</a>
 </p>
 </div>
 </div>
@@ -378,7 +383,7 @@ Calc
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:InputADT>Section: Input</a>, <a href=#Sec:ContoursADT>Section: Contours</a>, and <a href=#Sec:ConstantsADT>Section: Constants</a>
 </p>
 </div>
 </div>
@@ -717,7 +722,7 @@ FunctT = ?
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:SeqServicesADT>Section: SeqServices</a>
 </p>
 </div>
 </div>
@@ -733,7 +738,7 @@ Exported Constants
 </h3>
 <ul class="list">
 <li>
-<em>MAX_ORDER</em>:=<em>MAX_ORDER</em>
+<em>MAX_ORDER</em> = <em>2</em>
 </li>
 </ul>
 </div>
@@ -837,7 +842,7 @@ ContoursT = ?
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:FunctADT>Section: Funct</a>
 </p>
 </div>
 </div>
@@ -853,7 +858,7 @@ Exported Constants
 </h3>
 <ul class="list">
 <li>
-<em>MAX_ORDER</em>:=<em>MAX_ORDER</em>
+<em>MAX_ORDER</em> = <em>2</em>
 </li>
 </ul>
 </div>
@@ -1041,7 +1046,7 @@ Output
 Uses
 </h2>
 <p class="paragraph">
-None
+<a href=#Sec:InputADT>Section: Input</a>, <a href=#Sec:ThicknessADT>Section: Thickness</a>, <a href=#Sec:GlassTypeADT>Section: GlassType</a>, and <a href=#Sec:HardwareADT>Section: Hardware</a>
 </p>
 </div>
 </div>
@@ -1168,40 +1173,40 @@ Exported Constants
 </h3>
 <ul class="list">
 <li>
-<em>m</em>:=<em>m</em>
+<em>m</em> = <em>7.0</em>
 </li>
 <li>
-<em>k</em>:=<em>k</em>
+<em>k</em> = <em>28.6&sdot;10<sup>-54</sup></em>
 </li>
 <li>
-<em>E</em>:=<em>E</em>
+<em>E</em> = <em>71.7&sdot;10<sup>9</sup></em>
 </li>
 <li>
-<em>t<sub>d</sub></em>:=<em>t<sub>d</sub></em>
+<em>t<sub>d</sub></em> = <em>3.0</em>
 </li>
 <li>
-<em>LSF</em>:=<em>LSF</em>
+<em>LSF</em> = <em>1</em>
 </li>
 <li>
-<em>d<sub>max</sub></em>:=<em>d<sub>max</sub></em>
+<em>d<sub>max</sub></em> = <em>5.0</em>
 </li>
 <li>
-<em>d<sub>min</sub></em>:=<em>d<sub>min</sub></em>
+<em>d<sub>min</sub></em> = <em>100.0&sdot;10<sup>-3</sup></em>
 </li>
 <li>
-<em>AR<sub>max</sub></em>:=<em>AR<sub>max</sub></em>
+<em>AR<sub>max</sub></em> = <em>5.0</em>
 </li>
 <li>
-<em>w<sub>max</sub></em>:=<em>w<sub>max</sub></em>
+<em>w<sub>max</sub></em> = <em>910.0</em>
 </li>
 <li>
-<em>w<sub>min</sub></em>:=<em>w<sub>min</sub></em>
+<em>w<sub>min</sub></em> = <em>4.5</em>
 </li>
 <li>
-<em>SD<sub>max</sub></em>:=<em>SD<sub>max</sub></em>
+<em>SD<sub>max</sub></em> = <em>130.0</em>
 </li>
 <li>
-<em>SD<sub>min</sub></em>:=<em>SD<sub>min</sub></em>
+<em>SD<sub>min</sub></em> = <em>6.0</em>
 </li>
 </ul>
 </div>

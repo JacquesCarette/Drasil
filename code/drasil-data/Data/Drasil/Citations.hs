@@ -1,19 +1,41 @@
-module Data.Drasil.Citations (campidelli, koothoor2013, parnas1972, parnasClements1986, 
+module Data.Drasil.Citations (campidelli, ghezziEtAl2003, hoffmanAndStrooper1995,
+  koothoor2013, parnas1972, parnasClements1986, 
   parnasClements1984, smithLai2005, jnlCGJ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
-  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess)
+
+import Data.Drasil.People (carloGhezzi, dMandrioli, dParnas, dmWiess, hoffman,
+  jRalyte, lLai, mCampidelli, mJazayeri, nKoothoor, nKraiem, 
+  pcClements, pjAgerfalk, spencerSmith, strooper)
 
 ---------------
 -- CITATIONS --
 ---------------
 
-campidelli, koothoor2013, parnas1972, parnasClements1984, parnasClements1986, smithLai2005 :: Citation
+campidelli, ghezziEtAl2003, hoffmanAndStrooper1995, koothoor2013, parnas1972,
+  parnasClements1984, parnasClements1986, smithLai2005 :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
   [author [mCampidelli]] "campidelli"
+
+ghezziEtAl2003 = cMisc
+  [author [carloGhezzi, mJazayeri, dMandrioli],
+  title "Fundamentals of Software Engineering",
+  year 2003,
+  publisher "Prentice Hall",
+  address "Upper Saddle River, NJ, USA",
+  edition 2]
+  "ghezziEtAl2003"
+
+hoffmanAndStrooper1995 = cMisc
+  [author [hoffman, strooper],
+  title "Software Design, Automated Testing, and Maintenance: A Practical Approach",
+  publisher "International Thoomson Computer Press",
+  address "New York, NY, USA",
+  year 1995,
+  howPublishedU "http://citeseer.ist.psu.edu/428727.html"]
+  "hoffmanAndStrooper1995"
 
 koothoor2013 = 
   cMThesis [nKoothoor] 

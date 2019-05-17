@@ -79,10 +79,10 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight, constantMaxOrder,
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, maxOrder, pbTol, probBr, probBreak, sD, stressDistFac,
+  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
@@ -380,8 +380,8 @@ solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 
 --Used in "Uses" Section--
-maxOrderConst :: [QuantityDict]
-maxOrderConst = [maxOrder]
+maxOrderConst :: [QDefinition]
+maxOrderConst = [constantMaxOrder]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]

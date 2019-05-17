@@ -402,12 +402,15 @@ gbConstants :: [QDefinition]
 gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ gBRSpecParamVals 
 
-constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
+constantM, constantK, constantModElas, constantLoadDur, constantLoadSF, constantMaxOrder :: QDefinition
 constantK       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM  $ dbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ dbl 3
 constantLoadSF  = mkQuantDef loadSF       $ 1
+
+constantMaxOrder = mkQuantDef maxOrder $ 2
+
 --Equations--
 
 sdVectorSent :: Sentence

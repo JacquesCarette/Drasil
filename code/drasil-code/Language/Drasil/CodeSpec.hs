@@ -8,6 +8,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
   _definitions, _inputs, _outputs,
   _quants, _sys, _sysinfodb)
 import Language.Drasil.Development (dep, names')
+import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
   codevar, codefunc, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,

@@ -2,6 +2,7 @@ module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Theory.Drasil (DataDefinition, ddNoRefs)
 
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 

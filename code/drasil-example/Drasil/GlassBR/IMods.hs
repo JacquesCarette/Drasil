@@ -4,6 +4,7 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asExpr')
+import Theory.Drasil (InstanceModel, imNoDeriv)
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.Goals (willBreakGS)

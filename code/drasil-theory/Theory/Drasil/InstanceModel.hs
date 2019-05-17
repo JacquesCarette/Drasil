@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.InstanceModel
+module Theory.Drasil.InstanceModel
   ( InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
@@ -7,23 +7,7 @@ module Language.Drasil.Chunk.InstanceModel
   ) where
 
 import Data.Drasil.IdeaDicts (instanceMod)
-import Language.Drasil.Chunk.CommonIdea (prependAbrv)
-import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Quantity, HasSpace(typ), HasReference(getReferences),
-  HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn),
-  Referable(refAdd, renderRef))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Label.Type (LblType(RP), prepend)
-import Language.Drasil.Expr (Relation)
-import Language.Drasil.RefProg (Reference)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil
 
 import Control.Lens ((^.), makeLenses, view)
 

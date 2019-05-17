@@ -626,6 +626,17 @@ Temperature of the phase change material
 </tr>
 <tr>
 <td>
+<em>t<sub>step</sub></em>
+</td>
+<td>
+Time step for simulation
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 <em>T<sub>W</sub></em>
 </td>
 <td>
@@ -1822,7 +1833,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3667,6 +3678,23 @@ h<sub>min</sub>
 </tr>
 <tr>
 <td>
+<em>t<sub>step</sub></em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>100.0&sdot;10<sup>-3</sup></em> s
+</td>
+<td>
+10<em>%</em>
+</td>
+</tr>
+<tr>
+<td>
 <em>T<sub>melt</sub><sup>P</sup></em>
 </td>
 <td>
@@ -4140,9 +4168,6 @@ Non-Functional Requirements
 </h2>
 <p class="paragraph">
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
-</p>
-<p class="paragraph">
-This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are:
 </p>
 <div class="list">
 <p>

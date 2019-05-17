@@ -64,12 +64,6 @@ module Language.Drasil (
   , cnstrw, cnstrw'
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec
-  -- Chunk.DataDefinition
-  , DataDefinition, mkQuantDef, dd, ddNoRefs, qdFromDD
-  -- Chunk.InstanceModel
-  , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , Constraints
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
   , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
@@ -138,8 +132,6 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
-  -- Chunk.Theory
-  , TheoryModel, tm, tmNoRefs, Theory(..)
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
@@ -239,12 +231,9 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, dd, ddNoRefs, qdFromDD)
-import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
-import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary

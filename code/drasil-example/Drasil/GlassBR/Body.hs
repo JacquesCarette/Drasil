@@ -9,13 +9,14 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
   _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
+  Theory(defined_fun, defined_quant), TheoryModel)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), SCSSub(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -30,21 +31,20 @@ import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, code, company, condition, content,
-  dataConst, dataDefn, datum, definition, document, emphasis, environment, figure, 
-  goal, implementation, information, inModel, input_, interface, item, 
-  likelyChg, model, organization, output_, physical, physicalSystem, physSyst, problem, 
-  product_, purpose, reference, requirement, section_, software, softwareConstraint, softwareSys,
-  srs, srsDomains, standard, sysCont, system, template, term_, thModel,
-  traceyMatrix, user, value, variable, doccon, doccon')
+  assumption, characteristic, code, company, condition, content, dataConst,
+  dataDefn, datum, definition, doccon, doccon', document, emphasis, environment,
+  figure, goal, information, inModel, input_, interface, item, likelyChg, model,
+  organization, output_, physical, physicalSystem, physSyst, problem, product_,
+  purpose, reference, requirement, section_, software, softwareConstraint,
+  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
+  thModel,traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability,
-  performance, softwarecon)
+  understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -179,10 +179,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub' [performance] nonfuncReqs
-    (S "This problem is small in size and relatively simple")
-    (S "Any reasonable" +:+ phrase implementation +:+.
-    (S "will be very quick" `sAnd` S "use minimal storage"))
+    NonFReqsSub nonfuncReqs
   ],
   LCsSec' $ LCsProg' likelyChgs,
   UCsSec $ UCsProg unlikelyChgsList,
@@ -249,9 +246,9 @@ termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
-  Bullet $ noRefs $ (map tAndDWAcc $ take 2 loadTypes)
+  Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
-  (map tAndDOnly $ drop 2 loadTypes)]
+  map tAndDOnly (drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
 
@@ -294,9 +291,9 @@ undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
 appStanddIR = [S "applicable" +:+ plural standard +:+
-  S "for constructions using glass from" +:+ (foldlList Comma List
-  $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
+  S "for constructions using glass from" +:+ foldlList Comma List
+  (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
 
 incScoR, endScoR :: Sentence
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
@@ -351,7 +348,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short gLassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
@@ -372,7 +369,7 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -423,7 +420,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 

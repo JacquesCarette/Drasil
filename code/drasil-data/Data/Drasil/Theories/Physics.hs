@@ -1,7 +1,7 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd)
+import Theory.Drasil (GenDefn, TheoryModel, gd, tmNoRefs)
 import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, ofThe, sAnd, 
   sOf)

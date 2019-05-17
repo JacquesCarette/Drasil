@@ -158,7 +158,7 @@ complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "
 complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "ReadLine" []))
 complexDoc' c (ReadAll f v) = 
   bodyDoc c $ oneLiner $
-    while ((?!) f$->(var "EndOfStream")) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "ReadLine" [])))
+    while ((?!) f$->(var "EndOfStream")) (oneLiner $ valStmt $ v $. listAppend (f $.(Func "ReadLine" [])))
 
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp

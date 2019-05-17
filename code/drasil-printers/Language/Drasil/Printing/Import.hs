@@ -327,7 +327,7 @@ createLayout sm = map (sec sm 0)
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
-  T.HDiv [(concat $ replicate depth "sub") ++ "section"]
+  T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
 

@@ -6,6 +6,7 @@ import Data.Function (on)
 import Data.List (sortBy)
 
 import Language.Drasil
+import Language.Drasil.Utils (sortBySymbol)
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
@@ -78,7 +79,7 @@ inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, U.toSentence] requiredInputs)
+   at_start, U.toSentence] $ sortBySymbol requiredInputs)
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]

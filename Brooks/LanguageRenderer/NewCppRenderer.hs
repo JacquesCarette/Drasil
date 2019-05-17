@@ -385,7 +385,7 @@ instance StatementSym CppSrcCode where
     getBoolInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
     getStringInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
     getCharInput v = liftPairFst (liftA3 cppInput v inputFunc endStatement, Semi)
-    discardInput = liftPairFst (fmap (cppDiscardInput " ") inputFunc, Semi)
+    discardInput = liftPairFst (fmap (cppDiscardInput "\\n") inputFunc, Semi)
 
     getIntFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)
     getFloatFileInput f v = liftPairFst (liftA3 cppInput v f endStatement, Semi)

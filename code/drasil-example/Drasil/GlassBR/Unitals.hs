@@ -478,6 +478,11 @@ glassThickness =
   (19.0, 18.26),
   (22.0, 21.44)]
 
+--MIS State Variables--
+controlStVars :: [QuantityDict]
+controlStVars = qw demand : [dimlessLoad, sdfTol, stressDistFac, tolLoad, riskFun] ++
+                [qw probBr] ++ map qw [nonFactorL, lRe] ++ [isSafePb, isSafeLR]
+
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load

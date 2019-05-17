@@ -32,7 +32,7 @@ import qualified Drasil.DocLang.MIS as MIS (notation, introMIS,
   notationIntroMIS, modHierarchyPointer, modHier, syntax,
   uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
-  semantics, stateInvars, stateVars, syntax, uses, equalsSttmts)
+  semantics, stateInvars, stateVars, syntax, uses, equalsSttmts, typeSttmts)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -270,7 +270,7 @@ data MISSyntaxSub where
   MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automated to generate with Template Module; correct step?
 
 data MISSemanticsSub where
-  MISStateVars        :: [Contents] -> MISSemanticsSub
+  MISStateVars        :: (HasUID v, HasSpace v, HasSymbol v) => [v] -> MISSemanticsSub
   MISAccessRoutines   :: [Contents] -> MISSemanticsSub
   MISEnvVars          :: [Contents] -> MISSemanticsSub
   MISAssumptions      :: [Contents] -> MISSemanticsSub
@@ -642,7 +642,8 @@ semanticSubs (MISAccessRoutines [])  = MIS.accRoutSemantics none []
 semanticSubs (MISEnvVars [])         = MIS.enviroVars       none []
 semanticSubs (MISAssumptions [])     = GB.assumpt           none []
 semanticSubs (MISStateInvariant [])  = MIS.stateInvars      none []
-semanticSubs (MISStateVars cs)       = MIS.stateVars        cs []
+semanticSubs (MISStateVars vs)       = MIS.stateVars
+  [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.typeSttmts vs)] []
 semanticSubs (MISAccessRoutines cs)  = MIS.accRoutSemantics cs []
 semanticSubs (MISEnvVars cs)         = MIS.enviroVars       cs []
 semanticSubs (MISAssumptions cs)     = GB.assumpt           cs []

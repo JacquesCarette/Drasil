@@ -77,7 +77,7 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  controlConsts, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained,
+  controlConsts, controlStVars, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained,
   gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, maxOrderConst, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
@@ -210,51 +210,51 @@ mkMIS = [IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/maste
   Bibliography,
   MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],
     MISSyntax [MISExportedCs controlConsts, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars controlStVars, MISAccessRoutines [{-FILL IN-}]]]
     {-ctrlLabel-} False),
   MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses ["GlassType", "Thickness", "Constants", "Hardware"],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [inputCons]]
     {-inputLabel-} False),
   MISModSec (MISModProg "LoadASTM" Nothing [MISUses ["Funct", "Contours"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-loadLabel-} False),
   MISModSec (MISModProg "Calc" Nothing [MISUses ["Input", "Contours", "Constants"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-calcLabel-} False),
   MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef2S glaTyFac))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-glTypeLabel-} True),
   MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef2S hFromt))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-thicknessLabel-} True),
   MISModSec (MISModProg "Funct" Nothing [MISUses ["SeqServices"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [fxnCons]]
     {-functLabel-} True),
   MISModSec (MISModProg "Contours" Nothing [MISUses ["Funct"],
     MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-contoursLabel-} True),
   MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
-    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-seqServLabel-} False),
   MISModSec (MISModProg "Output" Nothing [MISUses ["Input", "Thickness", "GlassType", "Hardware"],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
-    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars ([] :: [QDefinition]), MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     {-outputLabel-} False),
   MISModSec (MISModProg "Constants" Nothing [MISUses [], 
     MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
-    MISSemantics [MISStateVars [], MISStateInvariant []]]
+    MISSemantics [MISStateVars ([] :: [QDefinition]), MISStateInvariant []]]
     {-constantsLabel-} False),
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
     {-hwLabel-} False)]

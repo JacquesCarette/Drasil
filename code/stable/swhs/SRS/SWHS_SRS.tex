@@ -156,6 +156,8 @@ ${T_{melt}}$ & Melting point temperature & ${}^{\circ}$C
 \\
 ${T_{P}}$ & Temperature of the phase change material & ${}^{\circ}$C
 \\
+${t_{step}}$ & Time step for simulation & s
+\\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
 \\
 ${{t_{melt}}^{final}}$ & Time at which melting of PCM ends & s
@@ -521,7 +523,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
@@ -1014,6 +1016,8 @@ ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50.0\cdot
 \\
 ${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
+${t_{step}}$ & $0<{t_{step}}<{t_{final}}$ & -- & $100.0\cdot{}10^{-3}$ s & 10$\%$
+\\
 ${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10$\%$
 \\
 ${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & ${V_{P}}\geq{}MINFRACT {V_{tank}}$ & $500.0\cdot{}10^{-3}$ $\text{m}^{3}$ & 10$\%$
@@ -1127,7 +1131,6 @@ ${C_{tol}}$ & -- & relative tolerance for conservation of energy
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
-This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are:
 \begin{itemize}
 \item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
 \item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.

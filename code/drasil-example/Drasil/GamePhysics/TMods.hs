@@ -4,6 +4,7 @@ t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew) where
 import Language.Drasil
 import Prelude hiding (id)
 import Control.Lens ((^.))
+import Theory.Drasil (TheoryModel, tmNoRefs)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
@@ -88,7 +89,7 @@ newtonLUGDesc = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
   (ch QP.force), (sParen $ Sy $ unit_symb QP.force),
   S "that is directly proportional to the product of their",
   (plural QPP.mass) `sC` (ch mass_1), S "and",
-  (ch mass_2), (sParen $ Sy $ unit_symb QPP.mass) `sC` S "and",
+  (ch mass_2), sParen (Sy $ unit_symb QPP.mass) `sC` S "and",
   S "inversely proportional to the", (phrase $ sqrDist),
   (ch sqrDist), (sParen $ Sy $ unit_symb sqrDist),
   S "between them. The vector", (ch QP.displacement), 
@@ -158,7 +159,7 @@ newtonSLRDesc = foldlSent [S "The net", (phrase QP.torque),
   (ch QP.torque),
   (sParen $ Sy $ unit_symb  QP.torque), S "on a", (phrase CP.rigidBody),
   S "is proportional to its", (phrase QP.angularAccel),
-  (ch QP.angularAccel) +:+. (sParen $ Sy $ unit_symb QP.angularAccel),
+  (ch QP.angularAccel) +:+. sParen (Sy $ unit_symb QP.angularAccel),
   S "Here" `sC` (ch QP.momentOfInertia),
   (sParen $ Sy $ unit_symb QP.momentOfInertia),
   S "denotes the", (phrase QP.momentOfInertia), S "of the" +:+.

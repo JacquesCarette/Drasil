@@ -60,5 +60,5 @@ instance HasShortName  ConceptInstance where shortname = shnm
 instance HasRefAddress ConceptInstance where getRefAdd = ra
 instance Referable     ConceptInstance where
   refAdd      = ra
-  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (ra l)
+  renderRef l = RP (defer (sDom $ cdom l) +::+ raw ": " +::+ name) (ra l)
 

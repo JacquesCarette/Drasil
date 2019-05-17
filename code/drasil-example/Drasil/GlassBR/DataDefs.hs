@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asExpr')
 import Prelude hiding (log, exp, sqrt)
+import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Database.Drasil (Block(Parallel))
 
 import Data.Drasil.Concepts.Documentation (datum, user)
@@ -44,7 +45,7 @@ gbQDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated 
 riskEq :: Expr
 riskEq = ((sy sflawParamK) / 
   ((sy plateLen) * (sy plateWidth)) $^ ((sy sflawParamM) - 1) *
-  (sy modElas * (square $ sy minThick)) $^ (sy sflawParamM) 
+  (sy modElas * square (sy minThick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!

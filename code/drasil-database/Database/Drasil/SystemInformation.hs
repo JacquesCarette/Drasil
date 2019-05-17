@@ -5,7 +5,7 @@ module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
   ) where
 
 import Language.Drasil
-
+import Theory.Drasil (DataDefinition)
 import Database.Drasil.ChunkDB (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)

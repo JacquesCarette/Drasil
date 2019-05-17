@@ -1,21 +1,7 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Theory (TheoryModel, tm, tmNoRefs, Theory(..)) where
+module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity, Concept,
-  Definition(defn), ConceptDomain(cdom), HasReference(getReferences),
-  HasAdditionalNotes(getNotes), CommonIdea(abrv), Referable(refAdd, renderRef))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit)
-import Language.Drasil.Expr (Relation)
-import Language.Drasil.Label.Type (LblType(RP), prepend)
-import Language.Drasil.RefProg (Reference)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.ShortName (ShortName, shortname')
-import Language.Drasil.Chunk.CommonIdea (prependAbrv)
+import Language.Drasil
 import Data.Drasil.IdeaDicts (theoryMod)
 
 import Control.Lens (Lens', view, makeLenses, (^.))

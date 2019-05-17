@@ -6,9 +6,11 @@ import Data.Function (on)
 import Data.List (sortBy)
 
 import Language.Drasil
+import Language.Drasil.Utils (sortBySymbol)
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
+import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
@@ -37,8 +39,8 @@ import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type,
 {--Functional Requirements--}
 
 funcReqsList :: [Contents]
-funcReqsList = (mkEnumSimple (uncurry $ flip mkReqCI) $ zip funcReqs
-  funcReqsDetails) ++ [LlC inputGlassPropsTable]
+funcReqsList = mkEnumSimple (uncurry $ flip mkReqCI) 
+  (zip funcReqs funcReqsDetails) ++ [LlC inputGlassPropsTable]
 
 mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
 mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
@@ -77,7 +79,7 @@ inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, U.toSentence] requiredInputs)
+   at_start, U.toSentence] $ sortBySymbol requiredInputs)
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
@@ -103,7 +105,7 @@ sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptio
 
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. (makeRef2S $ datCon ([]::[Contents]) ([]::[Section])), 
+  plural datumConstraint, S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any" `sOf` S "the", plural inParam, S "are out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 

@@ -4,7 +4,7 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd)
+import Theory.Drasil (GenDefn, gd, gdNoRefs)
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
@@ -44,7 +44,7 @@ nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
   [makeCite incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
 
-rocTempSimp = gd rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
                  "rocTempSimp" [rocTempSimp_desc]
 
 --

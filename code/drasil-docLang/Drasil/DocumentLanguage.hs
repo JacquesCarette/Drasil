@@ -32,7 +32,7 @@ import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroCon
   notTblIntro, notationIntroMIS, notationTable, modHierarchyPointer, modHier, syntax,
   uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
-  semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
+  semantics, stateInvars, stateVars, syntax, uses, equalsSttmts)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -634,7 +634,7 @@ syntaxSubs (MISExportedAPs [])     = MIS.expAccPrograms none []
 syntaxSubs (MISExportedTyps [])    = MIS.expTypes none []
 syntaxSubs (MISExportedAPs cs)     = MIS.expAccPrograms cs []
 syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants 
-  [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []
+  [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.equalsSttmts cnstnts)] []
 syntaxSubs (MISExportedTyps tps)   = MIS.expTypes tps []
 
 semanticSubs :: MISSemanticsSub -> Section

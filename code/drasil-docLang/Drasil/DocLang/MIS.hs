@@ -149,7 +149,10 @@ inputModIntro = foldlSP [S "The secrets of this module are the data structure fo
 -----------------------
 
 assignSttmts :: (HasUID c, HasSymbol c, DefiningExpr c) => c -> Sentence
-assignSttmts f = (ch f) :+: S ":=" :+: E (f ^. defnExpr) --FIXME: replace ":=" with actual symbol ":="
+assignSttmts f = (ch f) +:+ S ":=" +:+ E (f ^. defnExpr) --FIXME: replace ":=" with actual symbol ":="
+
+equalsSttmts :: (HasUID c, HasSymbol c, DefiningExpr c) => c -> Sentence
+equalsSttmts f = (ch f) +:+ S "=" +:+ E (f ^. defnExpr)
 
 {-WIP : laying out the access routine semantics
 layAccRoutSemantics :: (HasUID c, HasSymbol c, ExprRelat c) => String -> [c] ->

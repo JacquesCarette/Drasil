@@ -19,5 +19,5 @@ symbolsForTable = gbInputs ++ gbOutputs ++ gbTMSymbols ++ (map qw gBRSpecParamVa
 thisSymbols :: [QuantityDict]
 thisSymbols = (map qw gbrIMods) 
   -- include all module functions as symbols
-  ++ ((map asVC $ concatMap (\(Mod _ l) -> l) allMods) \\ symbolsForTable)
+  ++ (map asVC (concatMap (\(Mod _ l) -> l) allMods) \\ symbolsForTable)
   ++ map qw implVars ++ symbolsForTable

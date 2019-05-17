@@ -186,22 +186,22 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, midpntHght, momntOfBdy, porePressure, sliceHght, 
-  sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, waterVol]
+  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
+  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
+  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
+  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
+  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl,slcWght, watrForce, resistiveShear, shrResI,
-  intShrForce, baseHydroForce, baseHydroForceR, baseHydroForceL, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum,
-  sliceHghtRight, sliceHghtLeft, porePressure, intNormForce, shrStress, 
-  totStress, effectiveStress, effNormStress, waterVol :: UnitalChunk
+  shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
+  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
+  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
+  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, 
+  waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -280,16 +280,6 @@ intShrForce = uc' "X_i" (cn $ "interslice shear forces")
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic forces")
   ("per meter in the z-direction from water pressure within each slice")
   (sub (vec cU) lB) forcePerMeterU
-
-baseHydroForceR = uc' "U^R_b,i" (cn $ "right base hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure within each slice, " ++
-  "assuming the entire slice has the height of the right side of the slice")
-  (sub (sup (vec cU) cR) lB) forcePerMeterU
-
-baseHydroForceL = uc' "U^L_b,i" (cn $ "left base hydrostatic forces on slices")
-  ("per meter in the z-direction from water pressure within each slice, " ++
-  "assuming the entire slice has the height of the left side of the slice")
-  (sub (sup (vec cU) cL) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic forces")
   ("per meter in the z-direction from water pressure acting into each slice " ++

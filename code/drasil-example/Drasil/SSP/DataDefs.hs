@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
+module Drasil.SSP.DataDefs (dataDefns, sliceWght, 
   intersliceWtrF, angleA, angleB, lengthB, lengthLb, slcHeight, 
   stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
   watForceSumDD) where 
@@ -16,23 +16,22 @@ import Drasil.SSP.Defs (slice, soil, soilPrpty)
 import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, baseLngth, baseWthX, constF, dryWeight, fricAngle, fs, 
-  genericF, genericA, index, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, 
-  slcWghtL, slipDist, slipHght, slopeDist, slopeHght, surfAngle, totStress, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, 
-  waterWeight, watrForce)
+import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, dryWeight, 
+  fricAngle, fs, genericF, genericA, index, intNormForce, indxn, inx, inxi, 
+  inxiM1, midpntHght, mobShrC, normToShear, satWeight, scalFunc, shrResC, 
+  slcWght, slcWghtR, slcWghtL, slipDist, slipHght, slopeDist, slopeHght, 
+  surfAngle, totStress, nrmForceSum, watForceSum, sliceHghtRight, 
+  sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
 ------------------------
 
 dataDefns :: [DataDefinition]
-dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, lengthB, 
+dataDefns = [sliceWght, intersliceWtrF, angleA, angleB, lengthB, 
   lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
   nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD,
-  slcWghtLDD, baseWtrFRDD, baseWtrFLDD]
+  slcWghtLDD]
 
 --DD1
 
@@ -53,26 +52,6 @@ sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the",
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
   S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
   S "is defined in" +:+ makeRef2S slcWghtRDD]
-
---DD2
-
-baseWtrF :: DataDefinition
-baseWtrF = dd baseWtrFQD [makeCite fredlund1977] [{-Derivation-}] "baseWtrF"
-  [bsWtrFNotes]
---FIXME: fill empty lists in
-
-baseWtrFQD :: QDefinition
-baseWtrFQD = mkQuantDef baseHydroForce bsWtrFEqn 
-
-bsWtrFEqn :: Expr
-bsWtrFEqn = 0.5 * ((inxi baseHydroForceL) + (inxi baseHydroForceR))
-
-bsWtrFNotes :: Sentence
-bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the base of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch baseHydroForceL, S "is defined in",
-  makeRef2S baseWtrFLDD `sAnd` ch baseHydroForceR, S "is defined in",
-  makeRef2S baseWtrFRDD]
 
 --DD4
 
@@ -296,7 +275,7 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -----------------
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD,
-  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD :: DataDefinition
+  slcWghtRDD, slcWghtLDD :: DataDefinition
 nrmForceSumDD = dd nrmForceSumQD [makeCite fredlund1977] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
 watForceSumDD = dd watForceSumQD [makeCite fredlund1977] [{-Derivation-}] 
@@ -308,11 +287,7 @@ sliceHghtLeftDD = dd sliceHghtLeftQD [makeCite fredlund1977] [{-Derivation-}]
 slcWghtRDD = dd slcWghtRQD [makeCite fredlund1977] [{-Derivation-}] 
   "slcWghtRDD" [slcWghtNotes]
 slcWghtLDD = dd slcWghtLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "slcWghtRDD" [slcWghtNotes]
-baseWtrFRDD = dd baseWtrFRQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFRDD" [baseWtrFNotes]
-baseWtrFLDD = dd baseWtrFLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFLDD" [baseWtrFNotes]
+  "slcWghtLDD" [slcWghtNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -362,29 +337,6 @@ slcWghtNotes = foldlSent [S "The", getTandS dryWeight `andThe`
   phrase soil, S "is assumed to be homogeneous, with", phrase constant, 
   plural soilPrpty, S "throughout" +:+. sParen (makeRef2S assumpSLH), 
   ch baseWthX +:+ S "is defined in", makeRef2S lengthB]
-
-baseWtrFRQD :: QDefinition
-baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn
-
-baseWtrFREqn :: Expr
-baseWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
-  where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
-          (inxi waterHght) $> (inxi slipHght))
-
-        case2 = (0, (inxi waterHght) $<= (inxi slipHght))
-
-baseWtrFLQD :: QDefinition
-baseWtrFLQD = mkQuantDef baseHydroForceL baseWtrFLEqn
-
-baseWtrFLEqn :: Expr
-baseWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
-  where case1 = (((inxiM1 waterHght)-(inxiM1 slipHght))*(sy waterWeight),
-          (inxiM1 waterHght) $> (inxiM1 slipHght))
-
-        case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slipHght))
-
-baseWtrFNotes :: Sentence
-baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
 
 --------------------------
 -- Derivation Sentences --

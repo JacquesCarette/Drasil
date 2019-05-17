@@ -10,7 +10,7 @@ fi
 errors="no"
 exitval=0
 
-for logfile in $LOG_FOLDER*$LOG_SUFFIX; do
+for logfile in "$LOG_FOLDER"*"$LOG_SUFFIX"; do
   if [ -s "$logfile" ]; then
     echo "-------------------------------------------"
     echo "- $logfile IS NOT EMPTY -- DIFFERENCE"

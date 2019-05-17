@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, ($$), (<>), vcat, hcat, nest,
-  ($+$), cat, hsep)
+  ($+$), cat, hcat)
 import Data.List (intersperse, foldl1)
 
 import Language.Drasil hiding (Expr)
@@ -79,7 +79,7 @@ wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrap_gen Class a empty
 
 wrapAux :: String -> [String] -> Doc -> Doc
-wrapAux a = wrap_genAux hsep Class a empty
+wrapAux a = wrap_genAux hcat Class a empty
 
 -- | Helper for wrapping HTML tags.
 -- The forth argument provides class names for the CSS.

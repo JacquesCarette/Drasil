@@ -11,7 +11,7 @@ import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
   -- import ^ for section making
 
 import Data.Drasil.Concepts.Computation (dataType)
-import Data.Drasil.Concepts.Documentation (description, design, document,
+import Data.Drasil.Concepts.Documentation (design, document,
   documentation, form, implementation, mg, mis, purpose, srs, statement,
   symbol_, templateModule)
 import Data.Drasil.Concepts.Software (program)

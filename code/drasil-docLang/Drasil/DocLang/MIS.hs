@@ -115,7 +115,7 @@ assignSttmts f = (ch f) +:+ S ":=" +:+ E (f ^. defnExpr) --FIXME: replace ":=" w
 equalsSttmts :: (HasUID c, HasSymbol c, DefiningExpr c) => c -> Sentence
 equalsSttmts f = (ch f) +:+ S "=" +:+ E (f ^. defnExpr) -- FIXME: Better way to do =?
 
-typeSttmts :: (HasUID v, HasSymbol v, HasSpace v) => v -> Sentence
+typeSttmts :: (HasUID v, HasSymbol v{-, HasSpace v-}) => v -> Sentence
 typeSttmts v = (ch v) +:+ S ":" -- +:+ (v ^. typ) -- FIXME: Better way to do :?
 
 {-WIP : laying out the access routine semantics

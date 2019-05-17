@@ -79,10 +79,10 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (gbrTMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight, constantMaxOrder,
-  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
-  gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
+  controlConsts, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained,
+  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
+  lateralLoad, load, loadTypes, maxOrderConst, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
@@ -215,7 +215,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
   MISModSec (MISModProg "Control" Nothing [MISUses ["Input", "LoadASTM", "Calc", "Output"],
-    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs controlConsts, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     {-ctrlLabel-} False) :
   MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses ["GlassType", "Thickness", "Constants", "Hardware"],
@@ -378,10 +378,6 @@ traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
-
---Used in "Uses" Section--
-maxOrderConst :: [QDefinition]
-maxOrderConst = [constantMaxOrder]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]

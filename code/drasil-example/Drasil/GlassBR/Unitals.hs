@@ -233,10 +233,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [QuantityDict]
 glassBRUnitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
-  dimlessLoad, tolLoad, loadSF, gTF, lDurFac, maxOrder]
+  dimlessLoad, tolLoad, loadSF, gTF, lDurFac, maxOrder, strTSD, strSDF, strIn, strOut]
 
 riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
-  dimlessLoad, tolLoad, loadSF, gTF, lDurFac, maxOrder :: QuantityDict
+  dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -275,9 +275,6 @@ stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution"
 
 tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) (Atomic "tol")) Real
-
-maxOrder      = vc "maxOrder"      (nounPhraseSP "maximum order") 
-  (Atomic "MAX_ORDER") Natural
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
@@ -402,14 +399,31 @@ gbConstants :: [QDefinition]
 gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ gBRSpecParamVals 
 
-constantM, constantK, constantModElas, constantLoadDur, constantLoadSF, constantMaxOrder :: QDefinition
+constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
 constantK       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM  $ dbl 7
-constantModElas = mkQuantDef modElas     $ dbl 7.17e10
-constantLoadDur = mkQuantDef loadDur     $ dbl 3
+constantModElas = mkQuantDef modElas      $ dbl 7.17e10
+constantLoadDur = mkQuantDef loadDur      $ dbl 3
 constantLoadSF  = mkQuantDef loadSF       $ 1
 
-constantMaxOrder = mkQuantDef maxOrder $ 2
+--MIS Exported Constants--
+
+maxOrder, strTSD, strSDF, strIn, strOut :: QuantityDict
+maxOrder = vc "maxOrder" (nounPhraseSP "maximum order")          (Atomic "MAX_ORDER") Natural
+strTSD   = vc "strTSD"   (nounPhraseSP "string for TSD file")    (Atomic "sTSD")      String
+strSDF   = vc "strSDF"   (nounPhraseSP "string for SDF file")    (Atomic "sSDF")      String
+strIn    = vc "strIn"    (nounPhraseSP "string for Input file")  (Atomic "sIn")       String
+strOut   = vc "strOut"   (nounPhraseSP "string for Output file") (Atomic "sOut")      String
+
+maxOrderConst :: [QDefinition]
+maxOrderConst = [mkQuantDef maxOrder $ 2]
+
+controlConsts :: [QDefinition]
+controlConsts = [mkQuantDef strTSD $ Str "# String for path and filename for TSD file",
+                 mkQuantDef strSDF $ Str "# String for path and filename for SDF file",
+                 mkQuantDef strIn  $ Str "# String for path and filename for Input file",
+                 mkQuantDef strOut $ Str "# String for path and filename for Output file"
+                ]
 
 --Equations--
 

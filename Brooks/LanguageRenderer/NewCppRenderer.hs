@@ -42,7 +42,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon, 
-  render)
+  render, isEmpty)
 
 -----------------
 -- Source File --
@@ -76,7 +76,7 @@ instance KeywordSym CppSrcCode where
     endStatement = return semi
     endStatementLoop = return empty
 
-    include n = return $ text "#include" <+> doubleQuotedText n
+    include n = return $ text "#include" <+> doubleQuotedText (n ++ cppHeaderExt)
     inherit = return colon
 
     list _ = return $ text "vector"
@@ -492,23 +492,23 @@ instance ParameterSym CppSrcCode where
 instance MethodSym CppSrcCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method CppSrcCode = (Doc, Bool)
-    method n _ _ t ps b = liftPairFst (liftA5 (cppsMethod n) t (liftList paramListDocD ps) b blockStart blockEnd, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
+    method n c _ _ t ps b = liftPairFst (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd, False)
+    getMethod n c t = method (getterName n) c public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = liftPairFst (liftA4 cppMainMethod int b blockStart blockEnd, True)
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method n public dynamic (construct n)
+    mainMethod _ b = liftPairFst (liftA4 cppMainMethod int b blockStart blockEnd, True)
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method n n public dynamic (construct n)
     destructor n vs = 
         let i = "i"
             deleteStatements = map (fmap snd) vs
             loopIndexDec = varDec i int
-            dbody = bodyStatements $ loopIndexDec : deleteStatements
-        in pubMethod ('~':n) void [] dbody
+            dbody = if all (isEmpty . fst . unCPPSC) deleteStatements then return empty else bodyStatements $ loopIndexDec : deleteStatements
+        in pubMethod ('~':n) n void [] dbody
 
-    function = method
+    function n _ _ t ps b = liftPairFst (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd, False)
 
 instance StateVarSym CppSrcCode where
     -- (Doc, Bool) is the corresponding destructor code for the stateVar
@@ -538,7 +538,7 @@ instance ModuleSym CppSrcCode where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
     type Module CppSrcCode = (Doc, Label, Bool)
-    buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD ms) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPSC) cs || any (snd . unCPPSC) ms)
+    buildModule n l _ ms cs = liftTripFst (liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then return blank else return empty) (liftList methodListDocD ms) (if ((any (not . isEmpty . fst . unCPPSC) cs) || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && any (not . isEmpty . fst . unCPPSC) ms then return blank else return empty) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPSC) cs || any (snd . unCPPSC) ms)
 
 -----------------
 -- Header File --
@@ -559,11 +559,12 @@ instance Monad CppHdrCode where
 
 instance PackageSym CppHdrCode where
     type Package CppHdrCode = ([(Doc, Label, Bool)], Label)
-    packMods n ms = liftPairFst (sequence ms, n)
+    packMods n ms = liftPairFst (sequence mods, n)
+        where mods = filter (not . isEmpty . tripFst . unCPPHC) ms
 
 instance RenderSym CppHdrCode where
     type RenderFile CppHdrCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPHC code, tripThird $ unCPPHC code)
+    fileDoc code = liftTripFst (if isEmpty (tripFst (unCPPHC code)) then return empty else liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPHC code, tripThird $ unCPPHC code)
     top m = liftA3 cpphtop m (list dynamic) endStatement
     bottom = return $ text "#endif"
 
@@ -572,7 +573,7 @@ instance KeywordSym CppHdrCode where
     endStatement = return semi
     endStatementLoop = return empty
 
-    include n = return $ text "#include" <+> doubleQuotedText n
+    include n = return $ text "#include" <+> doubleQuotedText (n ++ cppHeaderExt)
     inherit = return colon
 
     list _ = return $ text "vector"
@@ -942,16 +943,16 @@ instance ParameterSym CppHdrCode where
 instance MethodSym CppHdrCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method CppHdrCode = (Doc, Bool, ScopeTag)
-    method n s _ t ps _ = liftTripFst (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement, False, snd $ unCPPHC s)
-    getMethod n t = method (getterName n) public dynamic t [] (return empty)
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] (return empty)
-    mainMethod _ = return (empty, True, Pub)
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method n public dynamic (construct n)
-    destructor n _ = pubMethod ('~':n) void [] (return empty)
+    method n _ s _ t ps _ = liftTripFst (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement, False, snd $ unCPPHC s)
+    getMethod n c t = method (getterName n) c public dynamic t [] (return empty)
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] (return empty)
+    mainMethod _ _ = return (empty, True, Pub)
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method n n public dynamic (construct n)
+    destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
-    function = method
+    function n = method n ""
 
 instance StateVarSym CppHdrCode where
     type StateVar CppHdrCode = (Doc, ScopeTag)
@@ -975,7 +976,7 @@ instance ModuleSym CppHdrCode where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
     type Module CppHdrCode = (Doc, Label, Bool)
-    buildModule n l _ ms cs = liftTripFst (liftA3 cppModuleDoc (liftList vcat (map include l)) (liftList methodListDocD methods) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPHC) cs || any (snd . unCPPHC) methods)
+    buildModule n l _ ms cs = liftTripFst (if all (isEmpty . fst . unCPPHC) cs && all (isEmpty . tripFst . unCPPHC) ms then return empty else liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPHC) cs then return blank else return empty) (liftList methodListDocD methods) (if ((any (not . isEmpty . fst . unCPPHC) cs) || (all (isEmpty . fst . unCPPHC) cs && not (null l))) && any (not . isEmpty . tripFst . unCPPHC) ms then return blank else return empty)  (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPHC) cs || any (snd . unCPPHC) methods)
         where methods = map (fmap (\(d, m, _) -> (d, m))) ms
 
 data ScopeTag = Pub | Priv deriving Eq
@@ -995,7 +996,7 @@ cppHeaderExt = ".hpp"
 cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc
 cppstop (_, n, b) lst end = vcat [
     if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
-    blank,
+    if b then empty else blank,
     inc <+> angles (text "algorithm"),
     inc <+> angles (text "iostream"),
     inc <+> angles (text "fstream"),
@@ -1090,12 +1091,17 @@ cppListExtendList t = dot <> text "push_back" <> parens (t <> parens (integer 0)
 cppPointerParamDoc :: Label -> Doc -> Doc
 cppPointerParamDoc n t = t <+> text "&" <> text n
 
-cppsMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-cppsMethod n t ps b bStart bEnd = vcat [ttype <+> text n <> parens ps <+> bStart,
+cppsMethod :: Label -> Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> text n <> parens ps <+> bStart,
     oneTab b,
     bEnd]
     where ttype | isDtor n = empty
                 | otherwise = t
+
+cppsFunction :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsFunction n t ps b bStart bEnd = vcat [t <+> text n <> parens ps <+> bStart,
+    oneTab b,
+    bEnd]
 
 cpphMethod :: Label -> Doc -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
@@ -1141,10 +1147,10 @@ cpphEnum n es bStart bEnd end = vcat [
     oneTab es,
     bEnd <> end]
 
-cppModuleDoc :: Doc -> Doc -> Doc -> Doc
-cppModuleDoc ls fs cs = vcat [
+cppModuleDoc :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
     ls,
-    blank,
+    blnk1,
     cs,
-    blank,
+    blnk2,
     fs]

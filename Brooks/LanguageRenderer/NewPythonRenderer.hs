@@ -450,15 +450,15 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
     type Method PythonCode = (Doc, Bool)
-    method n _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList paramListDocD ps) b, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
+    method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList paramListDocD ps) b, False)
+    getMethod n c t = method (getterName n) c public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = liftPairFst (b, True)
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method initName public dynamic (construct n)
+    mainMethod _ b = liftPairFst (b, True)
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method initName n public dynamic (construct n)
     destructor _ _ = error "Destructors not allowed in Python"
 
 

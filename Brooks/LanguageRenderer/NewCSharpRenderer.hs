@@ -472,18 +472,18 @@ instance ParameterSym CSharpCode where
 instance MethodSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method CSharpCode = (Doc, Bool)
-    method n s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
+    method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
+    getMethod n c t = method (getterName n) c public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = fmap setMain $ method "Main" public static void [return $ text "string[] args"] b
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method n public dynamic (construct n)
+    mainMethod c b = fmap setMain $ method "Main" c public static void [return $ text "string[] args"] b
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method n n public dynamic (construct n)
     destructor _ _ = error "Destructors not allowed in C#"
 
-    function = method
+    function n = method n ""
 
 instance StateVarSym CSharpCode where
     type StateVar CSharpCode = Doc

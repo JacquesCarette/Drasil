@@ -10,6 +10,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Example.HelloWorld (helloWorld)
+import Example.Helper (helper)
 import Example.PatternTest (patternTest)
 import Example.FileTests (fileTests)
 import Example.Observer (observer)
@@ -39,4 +40,4 @@ genCode :: [(Doc, Label, Bool)] -> [Label] -> IO()
 genCode files exts = createCodeFiles $ makeCode files exts
 
 classes :: (RenderSym repr) => (repr (RenderFile repr) -> (Doc, Label, Bool)) -> [(Doc, Label, Bool)]
-classes unRepr = map unRepr [helloWorld, patternTest, fileTests, observer]
+classes unRepr = map unRepr [helloWorld, helper, patternTest, fileTests, observer]

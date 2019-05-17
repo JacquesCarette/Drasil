@@ -14,7 +14,7 @@ patternTestClass :: (RenderSym repr) => repr (Class repr)
 patternTestClass = mainClass "PatternTest" [] [patternTestMainMethod]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
-patternTestMainMethod = mainMethod (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On"),
+patternTestMainMethod = mainMethod "PatternTest" (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On"),
     (checkState "myFSM" 
     [((litString "Off"), oneLiner (printStrLn "Off")), ((litString "On"), oneLiner (printStrLn "On"))] 
     (oneLiner (printStrLn "In")))]),

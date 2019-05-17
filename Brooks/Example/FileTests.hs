@@ -1,7 +1,7 @@
 module Example.FileTests (fileTests) where
 
 import New (RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
+  BodySym(..), BlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -11,7 +11,7 @@ fileTests = fileDoc (buildModule "FileTests" [] [] [] [fileTestClass])
 
 fileTestClass :: (RenderSym repr) => repr (Class repr)
 fileTestClass = pubClass "FileTests" Nothing [privMVar 1 "dummy" int] 
-  [mainMethod (body [writeStory, block [readStory], goodBye])]
+  [mainMethod "FileTests" (body [writeStory, block [readStory], goodBye])]
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [

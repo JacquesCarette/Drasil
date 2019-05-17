@@ -6,19 +6,18 @@ import New (
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc (buildModule "HelloWorld" [] [] [] [helloWorldClass])
+helloWorld = fileDoc (buildModule "HelloWorld" ["Helper"] [] [helloWorldMain] [])
 
-helloWorldClass :: (RenderSym repr) => repr (Class repr)
-helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [doubleAndAdd,
-  mainMethod (body [ helloInitVariables, helloListSlice,
+helloWorldMain :: (RenderSym repr) => repr (Method repr)
+helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
+    helloListSlice,
     block [ifCond [((var "b") ?>= (litInt 6), bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
       ((var "b") ?== (litInt 5), helloIfBody)] helloElseBody, helloIfExists,
-    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])]
+    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [ (comment "Initializing variables"),
@@ -143,13 +142,8 @@ helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hel
 
 helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
 helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) 
-  (oneLiner (printLn (float) (funcApp "doubleAndAdd" [(iterVar "num"), (litFloat 1.0)])))
+  (oneLiner (printLn (float) (extFuncApp "Helper" "doubleAndAdd" [(iterVar "num"), (litFloat 1.0)])))
 
 helloTryCatch :: (RenderSym repr) => repr (Statement repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
-
-doubleAndAdd :: (RenderSym repr) => repr (Method repr)
-doubleAndAdd = function "doubleAndAdd" public static (mState float) [(stateParam "num1" float), (stateParam "num2" float)]
-  (bodyStatements [(varDec "doubledSum" float), ("doubledSum" &.= (((litFloat 2.0) #* (var "num1")) #+ ((litFloat 2.0) #* (var "num2")))),
-    (returnVar "doubledSum")])

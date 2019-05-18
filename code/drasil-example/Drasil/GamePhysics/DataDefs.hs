@@ -8,15 +8,16 @@ import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
-  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP)
+  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, timeT)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  impulseV, force, torque, kEnergy, energy, chgInVelocity, chgMomentum)
+  impulseV, force, torque, kEnergy, energy, chgInVelocity, chgMomentum, acceleration)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
+import Data.Drasil.Utils (weave)
 
 ----- Data Definitions -----
 
@@ -244,8 +245,8 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 
 -----------------DD10 Impulse--------------------------------------
 impulseVDD :: DataDefinition
-impulseVDD = ddNoRefs impulseV [{-- Derivation --}] "impulseV"
- [impulseVThmDesc, makeRef2S assumpOT]
+impulseVDD = ddNoRefs impulseV impulseVDeriv "impulseV"
+ [impulseVDesc, makeRef2S assumpOT]
 
 impulseV :: QDefinition
 impulseV = mkQuantDef QP.impulseV impulseVEqn
@@ -253,9 +254,52 @@ impulseV = mkQuantDef QP.impulseV impulseVEqn
 impulseVEqn :: Expr
 impulseVEqn =   (sy QPP.mass) * (sy QP.chgInVelocity)
 
-impulseVThmDesc :: Sentence
-impulseVThmDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV), S "occurs when a", 
-  (phrase QP.force), (ch QP.force), S "acts over a body over an interval of",(phrase QP.time)]
+impulseVDesc :: Sentence
+impulseVDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV), S "occurs when a", 
+  (phrase QP.force), (ch QP.force), S "acts over a body over an interval of",(phrase QP.time),
+  S "Derivation of", (phrase QP.impulseV)]
+
+impulseVDeriv :: Derivation
+impulseVDeriv = (weave [impulseVDerivSentences, map E impulseVDerivEqns]) 
+
+impulseVDerivSentences :: [Sentence]
+impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1, 
+ impulseVDerivSentence2, impulseVDerivSentence3]  
+
+impulseVDerivSentence1 :: [Sentence]
+impulseVDerivSentence1 = [S " Derivation of", (phrase QP.impulseV), S "-", 
+  S "Newton's second law of motion states"]
+
+impulseVDerivSentence2 :: [Sentence]
+impulseVDerivSentence2 = [S "Rearranging "] 
+
+impulseVDerivSentence3 :: [Sentence]
+impulseVDerivSentence3 = [S "Integrating the right hand side "] 
+
+impulseVDerivEqn1 :: Expr
+impulseVDerivEqn1 = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration) 
+                    $= (sy QPP.mass) * (deriv(sy QP.velocity) QP.time) 
+
+impulseVDerivEqn2 :: Expr
+impulseVDerivEqn2 = (defint (eqSymb timeT)(sy QP.force)(sy QP.time))
+                    $= sy QPP.mass * (int_all (eqSymb QP.time) (sy QP.velocity))
+
+                    {- impulseVDerivEqn2 :: Expr
+impulseVDerivEqn2 = (int_all (sy QP.time)(sy QP.force))
+                    $= sy QPP.mass * (int_all (eqSymb QP.time) (sy QP.velocity))  -}
+
+{- impulseVDerivEqn3 :: Expr
+impulseVDerivEqn3 = (defint(codeSymb QP.force)) * deriv (apply1 QP.velocity QP.time)
+                    $= (sy QPP.mass)*(sy QP.velocity) $ - (sy QPP.mass) * (sy QP.velocity)
+                    $= (sy QPP.mass)*(sy QP.chgInVelocity) -}
+ 
+                    
+impulseVDerivEqns :: [Expr]
+impulseVDerivEqns = [impulseVDerivEqn1, impulseVDerivEqn2]
+
+--impulseVDerivEqn2, impulseVDerivEqn3]
+                    
+
 
 --defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 --propCorSolDeriv4 :: Contents

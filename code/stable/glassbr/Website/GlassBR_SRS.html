@@ -1283,7 +1283,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:isSafeLR>TM: isSafeLR</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
 </p>
 </td>
 </tr>
@@ -1355,7 +1355,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:isSafePb>TM: isSafePb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
 </p>
 </td>
 </tr>
@@ -2547,7 +2547,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:calofDemand>DD: calofDemand</a> <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+<a href=#DD:calofDemand>DD: calofDemand</a>.
 </p>
 </td>
 </tr>
@@ -2728,7 +2728,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#DD:calofDemand>DD: calofDemand</a> <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+<a href=#DD:calofDemand>DD: calofDemand</a>.
 </p>
 </td>
 </tr>
@@ -2817,7 +2817,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:isSafePb>TM: isSafePb</a>.
+<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a>.
 </p>
 </td>
 </tr>
@@ -2921,7 +2921,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:isSafeLR>TM: isSafeLR</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a>.
 </p>
 </td>
 </tr>
@@ -3016,7 +3016,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#TM:isSafeLR>TM: isSafeLR</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
 </p>
 </td>
 </tr>
@@ -3033,9 +3033,9 @@ Instance Models
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
 <p class="paragraph">
-The goal <a href=#willBreakGS>GS: Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+The goal <a href=#willBreakGS>GS: Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:isSafePb>IM: isSafePb</a>.
 </p>
-<div id="IM:calOfDemand">
+<div id="IM:isSafePb">
 <table class="idefn">
 <tr>
 <th>
@@ -3043,7 +3043,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Calculation of Demand
+Safety Req-Pb
 </p>
 </td>
 </tr>
@@ -3053,7 +3053,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>q</em>, <em>w<sub>TNT</sub></em>, <em>SD</em>
+<em>P<sub>b</sub></em>, <em>P<sub>btol</sub></em>
 </p>
 </td>
 </tr>
@@ -3063,7 +3063,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>q</em>
+<em>is-safePb</em>
 </p>
 </td>
 </tr>
@@ -3073,13 +3073,10 @@ Input Constraints
 </th>
 <td>
 <div class="equation">
-<em>q&thinsp;&gt;&thinsp;0</em>
+<em>P<sub>b</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation">
-<em>w<sub>TNT</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-<div class="equation">
-<em>SD&thinsp;&gt;&thinsp;0</em>
+<em>P<sub>btol</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 </td>
 </tr>
@@ -3096,7 +3093,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+<em>is-safePb = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
 </div>
 </td>
 </tr>
@@ -3107,16 +3104,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>q</em> is the applied load (demand) (Pa)
+<em>is-safePb</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
 </li>
 <li>
-<em>interpY</em> is the interpY (Unitless)
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
 </li>
 <li>
-<em>SD</em> is the stand off distance (m)
-</li>
-<li>
-<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
 </li>
 </ul>
 </td>
@@ -3127,7 +3121,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
+If <em>is-safePb</em>, the glass is considered safe. <em>is-safePb</em> and <em>is-safePb</em> (from <a href=#IM:isSafeLR>IM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -3147,7 +3141,119 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IM:isSafeLR">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Safety Req-LR
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>is-safeLR</em>, <em>LR</em>, <em>q</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>is-safeLR</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div class="equation">
+<em>LR&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>q&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>is-safeLR = LR&thinsp;&gt;&thinsp;q</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
+</li>
+<li>
+<em>LR</em> is the load resistance (Pa)
+</li>
+<li>
+<em>q</em> is the applied load (demand) (Pa)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+<a href=#astm2009>astm2009</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
 </p>
 </td>
 </tr>
@@ -3427,6 +3533,12 @@ Output-Quantities: Output the following quantities:
                    Minimum thickness (<em>h</em>) (<a href=#DD:minThick>DD: minThick</a>)
                    </li>
                    <li>
+                   Safety Req-LR (<em>is-safeLR</em>) (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
+                   </li>
+                   <li>
+                   Safety Req-Pb (<em>is-safePb</em>) (<a href=#IM:isSafePb>IM: isSafePb</a>)
+                   </li>
+                   <li>
                    Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
                    </li>
                    <li>
@@ -3434,9 +3546,6 @@ Output-Quantities: Output the following quantities:
                    </li>
                    <li>
                    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
-                   </li>
-                   <li>
-                   Calculation of Demand (<em>q</em>) (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
                    </li>
                    <li>
                    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
@@ -3744,13 +3853,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#assumpGC>A: glassCondition</a>
 </th>
 <th>
-<a href=#TM:isSafeLR>TM: isSafeLR</a>
+<a href=#IM:isSafeLR>IM: isSafeLR</a>
 </th>
 <th>
 <a href=#DD:calofDemand>DD: calofDemand</a>
-</th>
-<th>
-<a href=#IM:calOfDemand>IM: calOfDemand</a>
 </th>
 <th>
 <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
@@ -3759,7 +3865,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#DD:riskFun>DD: riskFun</a>
 </th>
 <th>
-<a href=#TM:isSafePb>TM: isSafePb</a>
+<a href=#IM:isSafePb>IM: isSafePb</a>
 </th>
 <th>
 <a href=#DD:probOfBreak>DD: probOfBreak</a>
@@ -3774,9 +3880,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3930,9 +4033,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -3946,9 +4046,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4096,9 +4193,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4121,9 +4215,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4262,9 +4353,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4293,9 +4381,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4428,9 +4513,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4474,9 +4556,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4594,9 +4673,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4677,9 +4753,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4738,9 +4811,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4843,9 +4913,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -4865,9 +4932,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -4995,9 +5059,6 @@ X
 X
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -5092,16 +5153,10 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
 <a href=#inputGlassProps>FR: Input-Glass-Props</a>
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5258,9 +5313,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
@@ -5310,9 +5362,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5396,9 +5445,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5507,16 +5553,10 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 <tr>
 <td>
 <a href=#DD:probOfBreak>DD: probOfBreak</a>
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5668,9 +5708,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -5679,10 +5716,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#TM:isSafeLR>TM: isSafeLR</a>
-</td>
-<td>
-
+<a href=#IM:isSafeLR>IM: isSafeLR</a>
 </td>
 <td>
 
@@ -5762,7 +5796,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#TM:isSafePb>TM: isSafePb</a>
+<a href=#IM:isSafePb>IM: isSafePb</a>
 </td>
 <td>
 
@@ -5820,9 +5854,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5858,9 +5889,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -5991,9 +6019,6 @@ X
 X
 </td>
 <td>
-X
-</td>
-<td>
 
 </td>
 <td>
@@ -6077,9 +6102,6 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
 X
 </td>
 <td>
@@ -6095,9 +6117,6 @@ X
 <tr>
 <td>
 <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>
-</td>
-<td>
-
 </td>
 <td>
 
@@ -6254,9 +6273,6 @@ X
 <td>
 
 </td>
-<td>
-
-</td>
 </tr>
 </table>
 <p class="caption">
@@ -6276,37 +6292,37 @@ T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
 T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
 </th>
 <th>
-IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
+IM2 (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
 </th>
 <th>
-IM3 (<a href=#DD:minThick>DD: minThick</a>)
+IM3 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD1 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
-DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD3 (<a href=#DD:nFL>DD: nFL</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:gTF>DD: gTF</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
+DD8 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 </tr>
 <tr>
@@ -6399,7 +6415,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
 </td>
 <td>
 
@@ -6443,7 +6459,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
+IM2 (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
 </td>
 <td>
 
@@ -6487,7 +6503,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:minThick>DD: minThick</a>)
+IM3 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 
@@ -6531,7 +6547,7 @@ IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD1 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -6575,7 +6591,7 @@ DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </td>
 <td>
 
@@ -6619,7 +6635,7 @@ DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:nFL>DD: nFL</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </td>
 <td>
 
@@ -6663,7 +6679,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:gTF>DD: gTF</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </td>
 <td>
 
@@ -6707,7 +6723,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </td>
 <td>
 
@@ -6751,7 +6767,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </td>
 <td>
 
@@ -6795,7 +6811,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </td>
 <td>
 
@@ -6839,7 +6855,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
+DD8 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 
@@ -6899,37 +6915,37 @@ T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
 T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
 </th>
 <th>
-IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
+IM2 (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
 </th>
 <th>
-IM3 (<a href=#DD:minThick>DD: minThick</a>)
+IM3 (<a href=#DD:riskFun>DD: riskFun</a>)
 </th>
 <th>
-DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD1 (<a href=#DD:minThick>DD: minThick</a>)
 </th>
 <th>
-DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD3 (<a href=#DD:nFL>DD: nFL</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:gTF>DD: gTF</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
+DD8 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>)
@@ -7439,7 +7455,7 @@ T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
 </td>
 <td>
 
@@ -7468,7 +7484,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#DD:riskFun>DD: riskFun</a>)
+IM2 (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
 </td>
 <td>
 X
@@ -7497,7 +7513,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#DD:minThick>DD: minThick</a>)
+IM3 (<a href=#DD:riskFun>DD: riskFun</a>)
 </td>
 <td>
 
@@ -7526,7 +7542,7 @@ IM3 (<a href=#DD:minThick>DD: minThick</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD1 (<a href=#DD:minThick>DD: minThick</a>)
 </td>
 <td>
 
@@ -7555,7 +7571,7 @@ DD1 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </td>
 <td>
 
@@ -7584,7 +7600,7 @@ DD2 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:nFL>DD: nFL</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </td>
 <td>
 
@@ -7613,7 +7629,7 @@ DD3 (<a href=#DD:nFL>DD: nFL</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:gTF>DD: gTF</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </td>
 <td>
 
@@ -7642,7 +7658,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </td>
 <td>
 
@@ -7671,7 +7687,7 @@ DD5 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </td>
 <td>
 
@@ -7700,7 +7716,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </td>
 <td>
 
@@ -7729,7 +7745,7 @@ DD7 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
+DD8 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </td>
 <td>
 

@@ -4,11 +4,7 @@ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   reVelInCollDD, impulseVDD) where
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
-<<<<<<< HEAD
-=======
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
-
->>>>>>> master
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
@@ -248,7 +244,7 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 
 -----------------DD10 Impulse--------------------------------------
 impulseVDD :: DataDefinition
-impulseVDD = mkDD impulseV [{-- References --}] [{-- Derivation --}] "impulseV"
+impulseVDD = ddNoRefs impulseV [{-- Derivation --}] "impulseV"
  [impulseVThmDesc, makeRef2S assumpOT]
 
 impulseV :: QDefinition

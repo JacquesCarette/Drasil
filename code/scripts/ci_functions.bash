@@ -31,11 +31,11 @@ ci_fstep() {
 
   shift 1
 
-  local fold_id=$(echo $label | sed "s/[^A-Za-z_]/_/g")
+  local fold_id=$(echo "$label" | sed "s/[^A-Za-z_]/_/g")
 
   travis_fold "start" $fold_id
   echo -e "$ANSI_YELLOW$label$ANSI_RESET"
-  $SHELL $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") -c "source $ALL_FUNCTIONS_FILE; $*"
+  "$SHELL" $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") -c "source \"$ALL_FUNCTIONS_FILE\"; $*"
   local ret=$?
   travis_fold "end" $fold_id
   echo -e "$ANSI_CLEAR"

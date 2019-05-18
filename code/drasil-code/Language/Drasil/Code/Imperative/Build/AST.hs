@@ -61,7 +61,7 @@ withExt :: BuildName -> String -> BuildName
 withExt b = BWithExt b . OtherExt
 
 cCompiler :: String
-cCompiler = "$(CC)"
+cCompiler = "\"$(CC)\""
 
 cppCompiler :: String
-cppCompiler = "$(CXX)"
+cppCompiler = "\"$(CXX)\""

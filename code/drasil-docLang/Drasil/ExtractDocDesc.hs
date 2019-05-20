@@ -15,7 +15,6 @@ egetDocSec (RefSec r)           = egetRefSec r
 egetDocSec IntroSec{}           = []
 egetDocSec (StkhldrSec s)       = egetStk s
 egetDocSec (GSDSec g)           = egetGSD g
-egetDocSec (ScpOfProjSec s)     = egetScp s
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec (ReqrmntSec r)       = egetReq r
 egetDocSec (LCsSec l)           = egetLcs l
@@ -53,9 +52,6 @@ egetGSD :: GSDSec -> [Expr]
 egetGSD (GSDProg s1 c1 c2 s2) = concatMap egetSec s1 ++ egetCon' c1
   ++ concatMap egetCon' c2 ++ concatMap egetSec s2
 egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
-
-egetScp :: ScpOfProjSec -> [Expr]
-egetScp (ScpOfProjProg _ c1 c2) = egetCon' c1 ++ egetCon' c2
 
 egetSSD :: SSDSec -> [Expr]
 egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
@@ -159,7 +155,6 @@ getDocSec (RefSec r)           = getRefSec r
 getDocSec (IntroSec i)         = getIntrosec i
 getDocSec (StkhldrSec s)       = getStk s
 getDocSec (GSDSec g)           = getGSD g
-getDocSec (ScpOfProjSec s)     = getScp s
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
@@ -301,9 +296,6 @@ getGSDSub (SysCntxt c) = concatMap getCon' c
 getGSDSub (UsrChars c) = concatMap getCon' c
 getGSDSub (SystCons c s) = concatMap getCon' c ++ concatMap getSec s
 
-getScp :: ScpOfProjSec -> [Sentence]
-getScp (ScpOfProjProg s c1 c2) = [s] ++ (getCon' c1) ++ (getCon' c2)
-
 getSSD :: SSDSec -> [Sentence]
 getSSD (SSDProg ssd) = concatMap getSSDSub ssd
 
@@ -381,7 +373,6 @@ ciGetDocSec RefSec{}                = []
 ciGetDocSec (IntroSec        intro) = ciGetIntro intro
 ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
 ciGetDocSec GSDSec{}                = []
-ciGetDocSec ScpOfProjSec{}          = []
 ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
 ciGetDocSec ReqrmntSec{}            = []
 ciGetDocSec LCsSec{}                = []

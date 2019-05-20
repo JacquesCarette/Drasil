@@ -85,7 +85,7 @@ NOISY=no
 SUMMARIZE_TEX=no
 
 # actual targets
-all: test
+all: test graphs
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
@@ -95,10 +95,11 @@ debug: test
 check_stack:
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
 
+packages: $(BUILD_PACKAGES)
+
+# Actually build all the packages
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install -j3 $(stackArgs) "drasil-$*" --dump-logs --interleaved-output
-
-packages: $(BUILD_PACKAGES)
 
 %$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
@@ -119,6 +120,17 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo Make complete, checking logs
 	@echo ----------------------------
 	@LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) NOISY=$(NOISY) "$(SHELL)" $(SCRIPT_FOLDER)log_check.sh
+
+# generate pretty dot graphs too
+graphmod: check_stack
+	stack install dotgen graphmod
+
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack graphmod
+	@mkdir -p $(GRAPH_FOLDER)
+	cd "drasil-$*" && find . -name '*.hs' -print | grep -v stack | xargs graphmod -q -p --no-cluster | dot -Tpdf > ../$(GRAPH_FOLDER)drasil-$*.pdf
+
+graphs: $(GRAPH_PACKAGES)
+###
 
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 

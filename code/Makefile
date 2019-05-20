@@ -1,13 +1,23 @@
+# List of all known packages
 PACKAGES = lang build code theory database printers gen data docLang example
 
+# and associated package-level suffixes
 BUILD_P_SUFFIX = _build
 DOC_P_SUFFIX = _doc
+GRAPH_P_SUFFIX = _graph
 
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
+GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
 
-PACKAGE_GEN_TARGET = BUILD DOC
+PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
+#####
+
+# Current list of examples
+EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
+
+# where they live
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
@@ -15,6 +25,7 @@ SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
 
+# and the name of their executables
 TINY_EXE  = tiny
 GLASSBR_EXE = glassbr
 NOPCM_EXE = nopcm
@@ -22,8 +33,7 @@ SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAMEPHYS_EXE  = chipmunkdocs
 
-EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
-
+# and the associated per-example information generated
 GEN_E_SUFFIX = _gen
 TEST_E_SUFFIX = _diff
 MOVE_DF_E_SUFFIX = _prog
@@ -43,6 +53,8 @@ CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
 ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(foreach E, $(EXAMPLE_GEN_TARGET), $($(E)_EXAMPLES)) $(CLEAN_FOLDERS)
+
+#####
 
 # make variables/configuration
 DIFF = diff -r -X ../.gitignore -x '*.txt'
@@ -70,12 +82,14 @@ override stackArgs += --ghc-options="$(GHCFLAGS)"
 NOISY=no
 SUMMARIZE_TEX=no
 
+# actual targets
 all: test
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
+# sanity check -- are we using the right stack version?
 check_stack:
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
 
@@ -97,6 +111,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFI
 	@mkdir -p $(LOG_FOLDER)
 	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
+# actually run the tests
 test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
@@ -105,6 +120,7 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 
+# GlassBR is odd, so it needs some special rules just for itself
 $(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
 	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
 	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
@@ -113,6 +129,7 @@ $(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
 
 prog: $(MOVE_DF_EXAMPLES)
 
+# use stack to build the documentation too
 $(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
 	stack haddock "drasil-$*" $(haddockArgs)
 
@@ -132,6 +149,7 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_S
 
 code: $(CODE_EXAMPLES)
 
+# follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -r "./$*"
 

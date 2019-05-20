@@ -6,9 +6,9 @@ import Language.Drasil
 import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
-import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
-  momtInertA, momtInertB, mTot, normalLen, normalVect,
-  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, timeT)
+import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI, momtInertA,
+  momtInertB, mTot, normalLen, normalVect, perpLenA, perpLenB, posCM, posI,
+  velB, velO, rOB, finRelVel, velAP, velBP, timeT, time_1, time_2, velo_1, velo_2, force_1, force_2)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
@@ -281,25 +281,18 @@ impulseVDerivEqn1 = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
                     $= (sy QPP.mass) * (deriv(sy QP.velocity) QP.time) 
 
 impulseVDerivEqn2 :: Expr
-impulseVDerivEqn2 = (defint (eqSymb timeT)(sy QP.force)(sy QP.time))
-                    $= sy QPP.mass * (int_all (eqSymb QP.time) (sy QP.velocity))
+impulseVDerivEqn2 = (defint (eqSymb timeT)(sy time_1)(sy time_2)(sy QP.force))
+                     $= sy QPP.mass * (defint (eqSymb QP.velocity)(sy velo_1)(sy velo_2)0)
 
-                    {- impulseVDerivEqn2 :: Expr
-impulseVDerivEqn2 = (int_all (sy QP.time)(sy QP.force))
-                    $= sy QPP.mass * (int_all (eqSymb QP.time) (sy QP.velocity))  -}
 
-{- impulseVDerivEqn3 :: Expr
-impulseVDerivEqn3 = (defint(codeSymb QP.force)) * deriv (apply1 QP.velocity QP.time)
-                    $= (sy QPP.mass)*(sy QP.velocity) $ - (sy QPP.mass) * (sy QP.velocity)
-                    $= (sy QPP.mass)*(sy QP.chgInVelocity) -}
- 
+impulseVDerivEqn3 :: Expr
+impulseVDerivEqn3 = (defint (eqSymb timeT)(sy time_1)(sy time_2)(sy QP.force))
+                    $= (sy QPP.mass)*(sy velo_2) - (sy QPP.mass)*(sy velo_1) 
+                    $= (sy QPP.mass) * (sy QP.chgInVelocity)
+                    
                     
 impulseVDerivEqns :: [Expr]
-impulseVDerivEqns = [impulseVDerivEqn1, impulseVDerivEqn2]
-
---impulseVDerivEqn2, impulseVDerivEqn3]
-                    
-
+impulseVDerivEqns = [impulseVDerivEqn1, impulseVDerivEqn2, impulseVDerivEqn3]
 
 --defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 --propCorSolDeriv4 :: Contents
@@ -307,7 +300,6 @@ impulseVDerivEqns = [impulseVDerivEqn1, impulseVDerivEqn2]
   --((sy impulseV) $= (defint (eqSymb time) 0 (sy time)
   --((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   --(apply1 temp_PCM time))))) 
-
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition
 reVelInCollDD = ddNoRefs reVelInColl [{-- Derivation --}] "reVeInColl"

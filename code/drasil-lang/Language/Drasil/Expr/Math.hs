@@ -96,7 +96,7 @@ defsum v low high = Operator Add (BoundedDD v Discrete low high)
 sum_all v = Operator Add (AllDD v Discrete)
 
 defprod v low high = Operator Mul (BoundedDD v Discrete low high)
-prod_all v = Operator Mul (AllDD v Discrete)
+prod_all v = Operator Mul (AllDD v Discrete)               
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
@@ -135,6 +135,7 @@ dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 -- Some helper functions to do function application
 apply :: Expr -> [Expr] -> Expr
 apply = FCall
+
 
 apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
 apply1 f a = FCall (sy f) [sy a]

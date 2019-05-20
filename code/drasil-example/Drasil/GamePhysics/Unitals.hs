@@ -30,7 +30,8 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
+  momtInertK, pointOfCollision, contDispK, collisionImpulse,
+  velAP, velBP, time_1, time_2, velo_1, velo_2]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -62,13 +63,13 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, QP.chgMomentum,
-  QP.chgInVelocity]
+  QP.chgInVelocity, time_1, time_2, velo_1, velo_2]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
-forceParam, massParam, momtParam, contParam :: String -> String -> UnitalChunk
+forceParam, massParam, momtParam, contParam, timeParam, velbodyParam :: String -> String -> UnitalChunk
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
@@ -77,6 +78,10 @@ forceParam n w = ucs'
 massParam n w = ucs'
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
   (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Atomic n)) Real kilogram
+
+timeParam n w = ucs'
+ (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
+  (phrase QP.time)) (sub (eqSymb QP.time) (Atomic n)) Real second
 
 momtParam n w = ucs'
  (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
@@ -92,12 +97,16 @@ contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
 
-perpParam, rigidParam, velParam, 
-  angParam :: String -> Symbol -> UnitalChunk
+perpParam, rigidParam, velParam, angParam :: String -> Symbol -> UnitalChunk
 
 velParam n w = ucs'
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+
+velbodyParam n w = ucs'
+ (dccWDS ("velocity" ++ n) (cn $ "velocity of the " ++ w ++ " body") 
+  (phrase QP.velocity)) (sub (eqSymb QP.velocity) (Atomic n)) Real velU
+
 
 angParam n w = ucs'
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
@@ -124,7 +133,8 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
+  velAP, velBP, time_1, time_2, velo_1, velo_2 :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -252,7 +262,10 @@ contDispB  = contParam "B" "B"
 contDispK  = contParam "k" "k"
 massA      = rigidParam "A" cA
 massB      = rigidParam "B" cB
-
+time_1     = timeParam "1" "first"
+time_2     = timeParam "2" "second"
+velo_1      = velbodyParam  "1" "first"
+velo_2      = velbodyParam  "2" "second"
 --------------------------
 -- CHUNKS WITHOUT UNITS --
 --------------------------

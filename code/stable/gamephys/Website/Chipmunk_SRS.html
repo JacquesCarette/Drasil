@@ -593,6 +593,28 @@ m/s
 </tr>
 <tr>
 <td>
+<em><b>v</b><sub>1</sub></em>
+</td>
+<td>
+Velocity of the first body
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+<em><b>v</b><sub>2</sub></em>
+</td>
+<td>
+Velocity of the second body
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
 <em>Δ<b>v</b></em>
 </td>
 <td>
@@ -1205,7 +1227,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1274,7 +1296,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1379,7 +1401,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1454,7 +1476,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1526,7 +1548,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1651,7 +1673,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1756,7 +1778,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1861,7 +1883,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -1966,7 +1988,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2071,7 +2093,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2176,7 +2198,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2281,7 +2303,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2441,7 +2463,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2545,7 +2567,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2637,7 +2659,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2745,7 +2767,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2847,7 +2869,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -2939,7 +2961,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3034,7 +3056,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3067,11 +3089,14 @@ d&#8239;t
 Rearranging :
 </p>
 <div class="equation">
-<em>&int;<sub>t</sub><b>F</b>&#8239;dt = m&#8239;(&int;<sub>t</sub><b>v</b>&#8239;dt)</em>
+<em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>0&#8239;d<b>v</b>)</em>
 </div>
 <p class="paragraph">
 Integrating the right hand side :
 </p>
+<div class="equation">
+<em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -3213,7 +3238,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3354,7 +3379,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3494,7 +3519,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+--
 </p>
 </td>
 </tr>
@@ -3818,10 +3843,12 @@ Non-Functional Requirements
 <p class="paragraph">
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<p class="paragraph">
-Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are:
-</p>
 <div class="list">
+<p>
+<div id="highPerformance">
+High-Performance: The code has a short reponse time when performing computation.
+</div>
+</p>
 <p>
 <div id="correct">
 Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.

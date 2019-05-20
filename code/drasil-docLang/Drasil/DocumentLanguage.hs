@@ -32,7 +32,6 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
-import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
   specSysDescr, thModF)
@@ -60,7 +59,6 @@ data DocSection = Verbatim Section
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
-                | ScpOfProjSec ScpOfProjSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
@@ -163,10 +161,6 @@ data GSDSub where
 
 {--}
 
-data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
-
-{--}
-
 -- | Specific System Description section . Contains a list of subsections.
 newtype SSDSec = SSDProg [SSDSub]
 
@@ -251,7 +245,6 @@ mkSections si = map doit
     doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
     doit (LCsSec' lc)        = mkLCsSec' lc
@@ -417,11 +410,6 @@ mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
-
--- | Helper for making the 'Scope of the Project' section
-mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
-  SotP.scopeOfTheProjF kWrd uCTCntnts indCases
 
 -- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section

@@ -10,8 +10,8 @@ fi
 RET=0
 
 if [ -d "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER" ]; then
-  $OLD_DIR=$(pwd)
   cd "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER"
+  OLD_DIR=$(pwd)
   for d in */; do
     cd "$d"
     "$MAKE"

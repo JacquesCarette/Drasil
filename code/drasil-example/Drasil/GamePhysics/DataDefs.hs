@@ -236,7 +236,7 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch velB), (sParen $ Sy $ unit_symb velB), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
   (phrase QP.velocity), (ch velO),
-  (sParen $ Sy $ unit_symb velO), S "of the", (phrase $ CP.rigidBody),
+  (sParen $ Sy $ unit_symb velO), S "of the", (phrase CP.rigidBody),
   S "at the origin (axis of rotation) and the",
   S "resultant vector from the cross product of the",
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
@@ -258,7 +258,7 @@ reVelInCollEqn = (sy velAP) - (sy velBP)
 
 reVelInCollDesc :: Sentence
 reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
-  S "of a", (phrase $ CP.rigidBody),makeRef2S assumpOT, 
+  S "of a", (phrase CP.rigidBody),makeRef2S assumpOT, 
   S "A colliding with another", (phrase CP.rigidBody),
   S "B relative to that body", (ch initRelVel),
   S "is the difference between the", (plural QP.velocity),

@@ -81,7 +81,7 @@ iIQConstruct x = cic "inputInitQuants" ( foldlSent [
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
             (foldlList Comma List $ map makeRef2S swhsIMods)
-            (foldlList Comma List $ [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
+            (foldlList Comma List [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
             (ch w_vol `isThe` phrase w_vol `sAnd` ch tank_vol `isThe` phrase tank_vol)
 
 findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
@@ -233,7 +233,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' $ 
+propCorSolDeriv2 = eqUnR'
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
@@ -247,7 +247,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' $ 
+propCorSolDeriv4 = eqUnR'
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))

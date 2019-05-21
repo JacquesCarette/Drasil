@@ -23,30 +23,30 @@ traceMap' :: HasUID l => (l -> [Sentence]) -> [l] -> TraceMap
 traceMap' f = traceMap $ lnames' . f
 
 getTraceMapFromDocSec :: [DocSection] -> SSDSec
-getTraceMapFromDocSec ((SSDSec ssd):_)  = ssd
-getTraceMapFromDocSec  (_:tl)          = getTraceMapFromDocSec tl
-getTraceMapFromDocSec []                = error "No SSDSec found."
+getTraceMapFromDocSec (SSDSec ssd:_) = ssd
+getTraceMapFromDocSec (_:tl)         = getTraceMapFromDocSec tl
+getTraceMapFromDocSec []             = error "No SSDSec found."
 
 getTraceMapFromSSDSec :: SSDSec -> [SSDSub]
-getTraceMapFromSSDSec (SSDProg s)       = s
+getTraceMapFromSSDSec (SSDProg s) = s
 
 getTraceMapFromSSDSub :: [SSDSub] -> SolChSpec
-getTraceMapFromSSDSub ((SSDSolChSpec s):_) = s
-getTraceMapFromSSDSub (_:tl)              = getTraceMapFromSSDSub tl
-getTraceMapFromSSDSub []                    = error "No SolChSpec found."
+getTraceMapFromSSDSub (SSDSolChSpec s:_) = s
+getTraceMapFromSSDSub (_:tl)             = getTraceMapFromSSDSub tl
+getTraceMapFromSSDSub []                 = error "No SolChSpec found."
 
 getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ _ t):_)     = t
-getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
-getTraceMapFromTM []                = error "No TM found."
+getTraceMapFromTM (TMs _ _ t:_) = t
+getTraceMapFromTM (_:tl)        = getTraceMapFromTM tl
+getTraceMapFromTM []            = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ _ gd _):_)  = gd
-getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
-getTraceMapFromGD []                = []
+getTraceMapFromGD (GDs _ _ gd _:_) = gd
+getTraceMapFromGD (_:tl)           = getTraceMapFromGD tl
+getTraceMapFromGD []               = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
 getTraceMapFromDD l = concat $ mapMaybe getDD l
@@ -54,9 +54,9 @@ getTraceMapFromDD l = concat $ mapMaybe getDD l
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ _ imod _):_) = imod
-getTraceMapFromIM  (_:tl)              = getTraceMapFromIM tl
-getTraceMapFromIM []                   = []
+getTraceMapFromIM (IMs _ _ imod _:_) = imod
+getTraceMapFromIM (_:tl)             = getTraceMapFromIM tl
+getTraceMapFromIM []                 = []
 
 extractSFromNotes :: HasAdditionalNotes l => l -> [Sentence]
 extractSFromNotes c = c ^. getNotes
@@ -70,11 +70,11 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
-  (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
-  (traceMap' extractSFromNotes ddef), (traceMap' extractSFromNotes imod),
+  traceMap' extractSFromNotes tt, traceMap' extractSFromNotes gd,
+  traceMap' extractSFromNotes ddef, traceMap' extractSFromNotes imod,
   -- Theory models do not have derivations.
-  (traceMap' extractSFromDeriv gd),
-  (traceMap' extractSFromDeriv ddef), (traceMap' extractSFromDeriv imod)]
+  traceMap' extractSFromDeriv gd,
+  traceMap' extractSFromDeriv ddef, traceMap' extractSFromDeriv imod]
   where
     tt   = getTraceMapFromTM $ getSCSSub a
     gd   = getTraceMapFromGD $ getSCSSub a

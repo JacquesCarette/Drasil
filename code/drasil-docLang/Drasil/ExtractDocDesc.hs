@@ -305,7 +305,7 @@ getSSDSub (SSDProblem pd)    = getProblem pd
 getSSDSub (SSDSolChSpec sss) = getSol sss
 
 getProblem :: ProblemDescription -> [Sentence]
-getProblem (PDProg s1 _ s2 x) = [s1]++[s2]++(concatMap getSec x)
+getProblem (PDProg s1 _ s2 x) = [s1] ++ [s2] ++ concatMap getSec x
 
 getSol :: SolChSpec -> [Sentence]
 getSol (SCSProg x) = concatMap getSCSSub x
@@ -351,7 +351,7 @@ getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = concatMap getCon' c
 
 getTrace :: TraceabilitySec -> [Sentence]
-getTrace (TraceabilityProg lc s c x) = (concatMap (getCon . (^. accessContents)) lc)
+getTrace (TraceabilityProg lc s c x) = concatMap (getCon . (^. accessContents)) lc
   ++ s ++ concatMap getCon' c ++ concatMap getSec x
 
 getAux :: AuxConstntSec -> [Sentence]

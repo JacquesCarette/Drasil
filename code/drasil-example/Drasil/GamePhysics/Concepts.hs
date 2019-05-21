@@ -16,10 +16,10 @@ cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     typUnc, unlikelyChg]
 
 --FIXME: Should use of' combinator.
-cent_mass :: NP --FIXME: Need to be able to cap plural.
-cent_mass = nounPhrase' "centre of mass" "centres of mass" 
+centMass :: NP --FIXME: Need to be able to cap plural.
+centMass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass    = commonIdeaWithDict "centreMass" cent_mass              "CM"   [physics]
+centreMass    = commonIdeaWithDict "centreMass" centMass              "CM"   [physics]
 
 chipmunk = commonIdeaWithDict "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  [physics]

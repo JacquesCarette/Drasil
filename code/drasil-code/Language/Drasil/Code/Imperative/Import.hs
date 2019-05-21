@@ -2,6 +2,8 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
+import Database.Drasil(ChunkDB, symbLookup, symbolTable)
+
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
   Float, Object, String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
@@ -368,8 +370,8 @@ variable s' = do
       doit :: String -> Reader State Value
       doit s | member s mm =
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-             | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
-             | otherwise                        = return $ var s
+             | s `elem` map codeName (inputs cs) = return $ (var "inParams")$->(var s)
+             | otherwise                         = return $ var s
   doit s'
   
 fApp :: String -> [Value] -> Reader State Value
@@ -459,7 +461,7 @@ convExpr  (FCall (C c) x)  = do
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
-  return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+  return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
 convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
@@ -545,7 +547,7 @@ genFunc (FDef (FuncDef n i o s)) = do
           ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
         ++ stmts
     ])
-genFunc (FData (FuncData n dd)) = genDataFunc n dd
+genFunc (FData (FuncData n ddef)) = genDataFunc n ddef
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: FuncStmt -> Reader State Statement
@@ -583,9 +585,9 @@ convStmt (FAppend a b) = valStmt <$>
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
-genDataFunc nameTitle dd = do
-    parms <- getParams $ getInputs dd
-    inD <- mapM inData dd
+genDataFunc nameTitle ddef = do
+    parms <- getParams $ getInputs ddef
+    inD <- mapM inData ddef
     publicMethod methodTypeVoid nameTitle (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,
@@ -624,7 +626,7 @@ genDataFunc nameTitle dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) (v_j &++)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ litInt (toInteger $ length p))I.$.(cast int float)) (v_j &++)
               ( body pat )
             ]
         lineData (Repeat p (Just numPat)) lineNo = do
@@ -662,13 +664,13 @@ genDataFunc nameTitle dd = do
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          ( while (v I.$.listSize ?<= (litInt i)) $ body [ valStmt $ v I.$.(listExtend $ listType' s n) ] )
-          : checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
+            while (v I.$.listSize ?<= (litInt i)) (body [ valStmt $ v I.$. listExtend (listType' s n) ])
+          : checkIndex' is (n-1) l p (v I.$. listAccess (litInt i)) s
         checkIndex' (WithLine:is) n l p v s =
-          ( while (v I.$.listSize ?<= l) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+            while (v I.$.listSize ?<= l)          (body [ valStmt $ v I.$. listExtend (listType' s n) ])
           : checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
         checkIndex' (WithPattern:is) n l p v s =
-          ( while (v I.$.listSize ?<= p) $ body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] )
+            while (v I.$.listSize ?<= p)          (body [ valStmt $ v I.$. listExtend (listType' s n) ])
           : checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
         listType :: C.CodeType -> Integer -> I.StateType

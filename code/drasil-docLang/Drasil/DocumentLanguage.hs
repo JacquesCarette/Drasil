@@ -13,13 +13,16 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 import Language.Drasil.Utils (sortBySymbol)
+import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
+  termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table)
-import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.Sections.TableOfUnits (tableOfUnits)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
@@ -28,8 +31,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF)
-import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
   specSysDescr, thModF)
@@ -57,7 +59,6 @@ data DocSection = Verbatim Section
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
-                | ScpOfProjSec ScpOfProjSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
@@ -160,10 +161,6 @@ data GSDSub where
 
 {--}
 
-data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
-
-{--}
-
 -- | Specific System Description section . Contains a list of subsections.
 newtype SSDSec = SSDProg [SSDSub]
 
@@ -199,8 +196,7 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub --FIXME: Remove this in favour of NonFReqsSub' when all examples have migrated over to using NonFReqsSub'
-  NonFReqsSub' :: [ConceptChunk] -> [ConceptInstance] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
 {--}
 
@@ -249,7 +245,6 @@ mkSections si = map doit
     doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
     doit (LCsSec' lc)        = mkLCsSec' lc
@@ -266,9 +261,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_usedinfodb = db}  TUnits =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
     mkSubRef SI {_usedinfodb = db} (TUnits' con) =
-        table_of_units (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
+        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,
@@ -278,7 +273,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      table_of_abb_and_acronyms $ nub $ map fst $ Map.elems $ termTable db
+      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -416,11 +411,6 @@ mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
--- | Helper for making the 'Scope of the Project' section
-mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
-  SotP.scopeOfTheProjF kWrd uCTCntnts indCases
-
 -- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
@@ -465,12 +455,13 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ (_sysinfodb si') ^. conceptinsTable
-      where
+      {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
+        -- Commented out since its imported from drasil-database now
         sDom :: [UID] -> UID
         sDom [u] = u
         sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
-          show (length u) ++ " instead."
+          show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -499,8 +490,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
-    mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
-    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (length nfrs) rsn explain (mkEnumSimpleD nfrs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}
 

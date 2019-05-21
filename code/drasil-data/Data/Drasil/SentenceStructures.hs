@@ -15,17 +15,17 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
-  , getSource'
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, addPercent)
+import Data.Drasil.Utils (addPercent, foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (intersperse, transpose)
 import Data.Monoid (mconcat)
-import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -159,7 +159,7 @@ refineChain _ = error "refineChain encountered an unexpected empty list"
 -- | Helper used by refineChain
 rc :: NamedIdea c => [(c, Section)] -> Sentence
 rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
-  +:+ S "to the" +:+ (plural $ fst y) +:+. sParen (makeRef2S $ snd y)
+  +:+ S "to the" +:+ plural (fst y) +:+. sParen (makeRef2S $ snd y)
 rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
   S "to the" +:+ plural (fst y) `sC` rc (y : xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
@@ -219,11 +219,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "--"
 
-found :: Double -> Sentence
-found x = (addPercent . realToFrac) (x*100)
-
-typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none found (x ^. uncert)
+found :: Double -> Maybe Int -> Sentence
+found x Nothing  = addPercent $ x * 100
+found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
+    
+typUncr :: (HasUncertainty c) => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri
@@ -232,15 +233,16 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- Helper for formatting constraints
+foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s = s
-
--- | Get the source citations (if any)
-getSource' :: HasCitation c => c -> Sentence
-getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations

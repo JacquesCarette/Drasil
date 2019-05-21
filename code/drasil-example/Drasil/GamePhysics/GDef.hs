@@ -43,7 +43,7 @@ conservationOfMomentGDef = makeRC "conservOfMoment" (nounPhraseSP "Conservation 
 
 conservationOfMomentRel :: Relation
 conservationOfMomentRel = UnaryOp $ Summation Nothing
-  C mass_i
+  C massI
 
 conservationOfMomentDesc :: Sentence
 conservationOfMomentDesc = foldlSent [S "In an isolated system,",
@@ -181,7 +181,7 @@ momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent []
 
 
---[momentOfInertia, numOfParticles, mass_i, distanceBtwParticleI]
+--[momentOfInertia, numOfParticles, massI, distanceBtwParticleI]
 
 momentOfInertiaRel :: Relation
 momentOfInertiaRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*

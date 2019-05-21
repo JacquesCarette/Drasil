@@ -3,12 +3,14 @@ module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
   angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD) where
 
 import Language.Drasil
+import Database.Drasil (Block(Parallel))
+import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
-import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
-  momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB, finRelVel, velA_P, velB_P)
+import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
+  momtInertA, momtInertB, mTot, normalLen, normalVect,
+  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -38,15 +40,15 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
-ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}] "ctrOfMass" 
+ctrOfMassDD = ddNoRefs ctrOfMass [{-- Derivation --}] "ctrOfMass" 
   [makeRef2S assumpOT, makeRef2S assumpOD]
 
 ctrOfMass :: QDefinition
-ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
+ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (sum_all (Atomic "i") ((sy mass_i) * (sy pos_i))) / (sy mTot)
+ctrOfMassEqn = (sum_all (Atomic "i") ((sy massI) * (sy posI))) / (sy mTot)
 
 -- DD2 : Linear displacement --
 
@@ -67,7 +69,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 -}
 
 linDispDD :: DataDefinition
-linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp" 
+linDispDD = ddNoRefs linDisp [{-- Derivation --}] "linDisp" 
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linDisp :: QDefinition
@@ -97,7 +99,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 linVelDD :: DataDefinition
-linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel"
+linVelDD = ddNoRefs linVel [{-- Derivation --}] "linVel"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linVel :: QDefinition
@@ -116,7 +118,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 linAccDD :: DataDefinition
-linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc"
+linAccDD = ddNoRefs linAcc [{-- Derivation --}] "linAcc"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 linAcc :: QDefinition
@@ -135,7 +137,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 angDispDD :: DataDefinition
-angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp"
+angDispDD = ddNoRefs angDisp [{-- Derivation --}] "angDisp"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angDisp :: QDefinition
@@ -154,7 +156,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -- DD6 : Angular velocity --
 
 angVelDD :: DataDefinition
-angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel"
+angVelDD = ddNoRefs angVel [{-- Derivation --}] "angVel"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angVel :: QDefinition
@@ -173,7 +175,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -- DD7 : Angular acceleration --
 -----------------------------------DD8 Angular Acceleration-------------------
 angAccelDD :: DataDefinition
-angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
+angAccelDD = ddNoRefs angAccel [{-- Derivation --}] "angAccel"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 angAccel :: QDefinition
@@ -197,7 +199,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -------------------------DD8 Impulse for Collision-------------------------------
 
 impulseDD :: DataDefinition
-impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
+impulseDD = ddNoRefs impulse [{-- Derivation --}] "impulse"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpAD, makeRef2S assumpCT]
 
 impulse :: QDefinition
@@ -206,10 +208,10 @@ impulse = mkQuantDef QP.impulseS impulseEqn
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
 impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
-  (sy normalVect)) / ((((1 / (sy mass_A))) + (1 / (sy mass_B))) *
+  (sy normalVect)) / ((((1 / (sy massA))) + (1 / (sy massB))) *
   ((sy normalLen) $^ 2) +
-  (((sy perpLen_A) $^ 2) / (sy momtInert_A)) +
-  (((sy perpLen_B) $^ 2)/ (sy momtInert_B)))
+  (((sy perpLenA) $^ 2) / (sy momtInertA)) +
+  (((sy perpLenB) $^ 2)/ (sy momtInertB)))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence
@@ -219,40 +221,40 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "chalses"
+chaslesDD = ddNoRefs chasles [{-- Derivation --}] "chalses"
   [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition
-chasles = mkQuantDef vel_B chaslesEqn
+chasles = mkQuantDef velB chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
+chaslesEqn = (sy velO) + (cross (sy  QP.angularVelocity) (sy rOB))
 
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
-  (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
+  (ch velB), (sParen $ Sy $ unit_symb velB), S "of any point B in a",
   (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
-  (phrase QP.velocity), (ch vel_O),
-  (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
+  (phrase QP.velocity), (ch velO),
+  (sParen $ Sy $ unit_symb velO), S "of the", (phrase $ CP.rigidBody),
   S "at the origin (axis of rotation) and the",
   S "resultant vector from the cross product of the",
   (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
   (ch QP.angularVelocity), 
   (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
-  (phrase r_OB) `sC` (ch r_OB), 
-  (sParen $ Sy $ unit_symb r_OB)]
+  (phrase rOB) `sC` (ch rOB), 
+  (sParen $ Sy $ unit_symb rOB)]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition
-reVelInCollDD = mkDD reVelInColl [{-- References --}] [{-- Derivation --}] "reVeInColl"
+reVelInCollDD = ddNoRefs reVelInColl [{-- Derivation --}] "reVeInColl"
   [reVelInCollDesc]
 
 reVelInColl :: QDefinition
 reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
 reVelInCollEqn :: Expr
-reVelInCollEqn = (sy velA_P) - (sy velB_P)
+reVelInCollEqn = (sy velAP) - (sy velBP)
 
 reVelInCollDesc :: Sentence
 reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
@@ -264,7 +266,7 @@ reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity),
 -----------------DD13 Torque-------------------------------------------------------------------------------
 
 torqueDD :: DataDefinition
-torqueDD = mkDD torque [{-- References --}] [{-- Derivation --}] "torque"
+torqueDD = ddNoRefs torque [{-- Derivation --}] "torque"
  [torqueDesc] 
 
 torque :: QDefinition
@@ -280,7 +282,7 @@ torqueDesc = foldlSent [S "The", (phrase torque),
 
 ----------------------DD14 Coefficient of Restitution--------------------------
 coeffRestitutionDD :: DataDefinition
-coeffRestitutionDD = mkDD coeffRestitution [{-- References --}] [{-- Derivation --}] "coeffRestitution"
+coeffRestitutionDD = ddNoRefs coeffRestitution [{-- Derivation --}] "coeffRestitution"
  [coeffRestitutionDesc]
 
 coeffRestitution :: QDefinition
@@ -300,7 +302,7 @@ coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.r
   S "and", (E $ sy QP.restitutionCoef $= 0), S "results in a totally inelastic collision"]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
-kEnergyDD = mkDD kEnergy [{-- References --}] [{-- Derivation --}] "kEnergy"
+kEnergyDD = ddNoRefs kEnergy [{-- Derivation --}] "kEnergy"
  [kEnergyDesc,makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI] 
 
 kEnergy :: QDefinition
@@ -313,4 +315,3 @@ kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
  S "of an object is the", (phrase QP.energy),
  S "it possess due to its motion"]
-  

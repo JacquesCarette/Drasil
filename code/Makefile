@@ -1,9 +1,12 @@
-TINY_PREF  = Tiny_
-GLASSBR_PREF = GlassBR_
-NOPCM_PREF = NoPCM_
-SWHS_PREF  = SWHS_
-SSP_PREF   = SSP_
-GAMEPHYS_PREF  = Chipmunk_
+PACKAGES = lang build code theory database printers gen data docLang example
+
+BUILD_P_SUFFIX = _build
+DOC_P_SUFFIX = _doc
+
+BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
+DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
+
+PACKAGE_GEN_TARGET = BUILD DOC
 
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
@@ -11,11 +14,6 @@ NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
-
-PACKAGES = lang build code printers gen data docLang example
-DPACKAGES = $(addprefix drasil-, $(PACKAGES))
-BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
-DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
 
 TINY_EXE  = tiny
 GLASSBR_EXE = glassbr
@@ -25,99 +23,120 @@ SSP_EXE   = ssp
 GAMEPHYS_EXE  = chipmunkdocs
 
 EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
-BUILD_EXAMPLES = $(addsuffix _build, $(EXAMPLES))
-TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
-CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
 
-DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
-DIFF = diff --strip-trailing-cr --ignore-all-space -r -X ../.gitignore -x '*.txt'
+GEN_E_SUFFIX = _gen
+TEST_E_SUFFIX = _diff
+MOVE_DF_E_SUFFIX = _prog
+TEX_E_SUFFIX = _tex
+CODE_E_SUFFIX = _code
 
-TESTS =  $(addsuffix _diff, $(EXAMPLES))
-PROGS =  $(addsuffix _prog, $(EXAMPLES))
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
+TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
+MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
+TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
+CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
+EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
+
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME)
+CLEAN_GF_PREFIX = clean_
+CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
+
+ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(foreach E, $(EXAMPLE_GEN_TARGET), $($(E)_EXAMPLES)) $(CLEAN_FOLDERS)
+
+# make variables/configuration
+DIFF = diff -r -X ../.gitignore -x '*.txt'
+LOG_SUFFIX = _log.log
+MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
+CACHED_MSV_FILE = .drasil-min-stack-ver
+BUILD_FOLDER_NAME = build
+BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
+EXAMPLE_CODE_SUBFOLDER = src/
+LOG_FOLDER_NAME = logs
+LOG_FOLDER = $(LOG_FOLDER_NAME)/
+SCRIPT_FOLDER = scripts/
+
+# make command line options
+#  GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
+#  GHC build options
 GHCTHREADS += 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
+#  Output amount control
 NOISY=no
 SUMMARIZE_TEX=no
 
-MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
-CACHED_MSV_FILE = .drasil-min-stack-ver
-
 all: test
-
-check_stack: FORCE
-	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
-
-test: $(PROGS) $(TESTS)
-	@echo ----------------------------
-	@echo Make complete, checking logs
-	@echo ----------------------------
-	sh log_check.sh $(NOISY)
-
-prog: $(PROGS)
-
-FORCE: ;
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-$(filter build_%, $(BUILD_PACKAGES)): build_%: check_stack
-	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
+check_stack:
+	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
 
-%_build: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_build: EDIR=$($(EXAMPLE)_DIR)
-%_build: EEXE=$($(EXAMPLE)_EXE)
-$(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
-	mkdir -p build/$(EDIR)
-	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
+$(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
+	stack install -j3 $(stackArgs) "drasil-$*" --dump-logs --interleaved-output
 
-%_diff: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_diff: EDIR=$($(EXAMPLE)_DIR)
-%_diff: EPREF=$($(EXAMPLE)_PREF)
-$(filter %_diff, $(TESTS)): %_diff: %_build
-	- $(DIFF) ./stable/$*/ ./build/$(EDIR)/ > $(EPREF)log.log 2>&1
+packages: $(BUILD_PACKAGES)
 
-%_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
-$(filter %_prog, $(PROGS)): %_prog: %_build
+%$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
+	@mkdir -p $(BUILD_FOLDER)$(EDIR)
+	cd $(BUILD_FOLDER)$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
-glassbr_prog: glassbr_build
-	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
-	test -d ./build/$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/java/
-	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
-	test -d ./build/$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/cpp/
+%$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
+	@mkdir -p $(LOG_FOLDER)
+	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
-docs: $(DOCS_PACKAGES)
+test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
+	@echo ----------------------------
+	@echo Make complete, checking logs
+	@echo ----------------------------
+	@LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) NOISY=$(NOISY) "$(SHELL)" $(SCRIPT_FOLDER)log_check.sh
 
-$(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
-	stack haddock drasil-$* $(haddockArgs)
+$(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
 
-%_tex: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_tex: EDIR=$($(EXAMPLE)_DIR)
-%_tex: EPREF=$($(EXAMPLE)_PREF)
-$(filter %_tex, $(TEX_EXAMPLES)): %_tex: %_build
-	EDIR=$(EDIR) EPREF=$(EPREF) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
+$(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp/
+
+prog: $(MOVE_DF_EXAMPLES)
+
+$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
+	stack haddock "drasil-$*" $(haddockArgs)
+
+docs: $(DOC_PACKAGES)
+
+%$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
+	EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 
-%_code: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_code: EDIR=$($(EXAMPLE)_DIR)
-$(filter %_code, $(CODE_EXAMPLES)): %_code: %_build
-	EDIR=$(EDIR) MAKE=$(MAKE) sh ./code_build.sh
+%$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
+	EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh
 
 code: $(CODE_EXAMPLES)
 
-clean: clean_build
+$(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
+	- rm -r "./$*"
+
+clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-clean_build: clean_logs
-	- rm -r ./build
-
-clean_logs:
-	- rm *.log
+.PHONY: clean code tex doc debug prog test check_stack all $(ALL_EXPANDED_TARGETS)

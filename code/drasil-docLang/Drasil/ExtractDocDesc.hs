@@ -3,6 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..), TheoryModel)
 import Data.List(transpose)
 
 egetDocDesc :: DocDesc -> [Expr]
@@ -14,7 +15,6 @@ egetDocSec (RefSec r)           = egetRefSec r
 egetDocSec IntroSec{}           = []
 egetDocSec (StkhldrSec s)       = egetStk s
 egetDocSec (GSDSec g)           = egetGSD g
-egetDocSec (ScpOfProjSec s)     = egetScp s
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec (ReqrmntSec r)       = egetReq r
 egetDocSec (LCsSec l)           = egetLcs l
@@ -52,9 +52,6 @@ egetGSD :: GSDSec -> [Expr]
 egetGSD (GSDProg s1 c1 c2 s2) = concatMap egetSec s1 ++ egetCon' c1
   ++ concatMap egetCon' c2 ++ concatMap egetSec s2
 egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
-
-egetScp :: ScpOfProjSec -> [Expr]
-egetScp (ScpOfProjProg _ c1 c2) = egetCon' c1 ++ egetCon' c2
 
 egetSSD :: SSDSec -> [Expr]
 egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
@@ -112,7 +109,6 @@ egetSSDSub (SSDSolChSpec s) = egetSol s
 egetReqSub :: ReqsSub -> [Expr]
 egetReqSub (FReqsSub c) = concatMap egetCon' c
 egetReqSub NonFReqsSub{} = []
-egetReqSub NonFReqsSub'{} = []
 
 egetFunc :: LFunc -> [Expr]
 egetFunc Term         = []
@@ -148,7 +144,7 @@ egetGD :: GenDefn ->[Expr]
 egetGD gd = [gd ^. relat]
 
 egetDD :: DataDefinition -> [Expr]
-egetDD dd = [dd ^. defnExpr, sy dd]
+egetDD d = [d ^. defnExpr, sy d]
 
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc = concatMap getDocSec
@@ -159,7 +155,6 @@ getDocSec (RefSec r)           = getRefSec r
 getDocSec (IntroSec i)         = getIntrosec i
 getDocSec (StkhldrSec s)       = getStk s
 getDocSec (GSDSec g)           = getGSD g
-getDocSec (ScpOfProjSec s)     = getScp s
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
@@ -301,9 +296,6 @@ getGSDSub (SysCntxt c) = concatMap getCon' c
 getGSDSub (UsrChars c) = concatMap getCon' c
 getGSDSub (SystCons c s) = concatMap getCon' c ++ concatMap getSec s
 
-getScp :: ScpOfProjSec -> [Sentence]
-getScp (ScpOfProjProg s c1 c2) = [s] ++ (getCon' c1) ++ (getCon' c2)
-
 getSSD :: SSDSec -> [Sentence]
 getSSD (SSDProg ssd) = concatMap getSSDSub ssd
 
@@ -336,7 +328,7 @@ getGD :: GenDefn -> [Sentence]
 getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getNotes)
 
 getDD :: DataDefinition -> [Sentence]
-getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
+getDD d = (d ^. derivations) ++ (d ^. getNotes)
 
 getTM :: TheoryModel -> [Sentence]
 getTM x = map (^. defn) (x ^. operations) ++ map (^. defn) (x ^. defined_quant)
@@ -347,10 +339,7 @@ getReq (ReqsProg rs) = concatMap getReqSub rs
 
 getReqSub :: ReqsSub -> [Sentence]
 getReqSub (FReqsSub c) = concatMap getCon' c
-getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)
-  ++ [s1, s2]
-getReqSub (NonFReqsSub' cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)
-  ++ [s1, s2]
+getReqSub (NonFReqsSub c) = map (^. defn) c
 
 getLcs :: LCsSec -> [Sentence]
 getLcs (LCsProg c) = concatMap getCon' c
@@ -384,7 +373,6 @@ ciGetDocSec RefSec{}                = []
 ciGetDocSec (IntroSec        intro) = ciGetIntro intro
 ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
 ciGetDocSec GSDSec{}                = []
-ciGetDocSec ScpOfProjSec{}          = []
 ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
 ciGetDocSec ReqrmntSec{}            = []
 ciGetDocSec LCsSec{}                = []

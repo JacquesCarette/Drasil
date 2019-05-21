@@ -3,6 +3,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
+import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
@@ -13,7 +14,7 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Thermodynamics (latent_heat)
+import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 swhsRefMDB :: ModelDB
 swhsRefMDB = mdb [] [] swhsDDefs []
@@ -37,7 +38,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDD dd1HtFluxCQD [koothoor2013] [] "ht_flux_C"
+dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "ht_flux_C"
   [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT, makeRef2S assumpTHCCoL]
 
 --Can't include info in description beyond definition of variables?
@@ -50,7 +51,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDD dd2HtFluxPQD [koothoor2013] [] "ht_flux_P"
+dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "ht_flux_P"
   [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV, makeRef2S assumpLCCWP]
 
 ----
@@ -63,7 +64,7 @@ balanceSolidPCMEqn = ((sy pcm_mass) * (sy htCap_S_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))
 
 ddBalanceSolidPCM :: DataDefinition
-ddBalanceSolidPCM = mkDD ddBalanceSolidPCMQD [lightstone2012] []
+ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012] []
   "balanceSolidPCM" []
 
 ----
@@ -76,7 +77,7 @@ balanceLiquidPCMEqn = ((sy pcm_mass) * (sy htCap_L_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))
 
 ddBalanceLiquidPCM :: DataDefinition
-ddBalanceLiquidPCM = mkDD ddBalanceLiquidPCMQD [lightstone2012] []
+ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012] []
   "balanceLiquidPCM" []
 
 ----
@@ -85,11 +86,11 @@ dd3HtFusionQD :: QDefinition
 dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (sy latent_heat) / (sy mass)
+htFusionEqn = (sy latentHeat) / (sy mass)
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDD dd3HtFusionQD [bueche1986 {- +:+ sParen (S "pg. 282") -} ]
+dd3HtFusion = dd dd3HtFusionQD [makeCite bueche1986 {- +:+ sParen (S "pg. 282") -} ]
   [] "htFusion" []
 
 ----
@@ -107,7 +108,7 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDD dd4MeltFracQD [koothoor2013] [] "melt_frac"
+dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "melt_frac"
  [makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions

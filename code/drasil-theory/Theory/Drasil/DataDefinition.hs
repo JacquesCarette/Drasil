@@ -1,26 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.DataDefinition where
+module Theory.Drasil.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
+import Language.Drasil
 import Data.Drasil.IdeaDicts (dataDefn)
-import Language.Drasil.Chunk.Citation (Citation)
-import Language.Drasil.Chunk.CommonIdea (prependAbrv)
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd), HasSymbol(symbol))
-import Language.Drasil.Classes.Document (HasCitation(getCitations))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  DefiningExpr(defnExpr), Quantity, HasSpace(typ), HasDerivation(derivations),
-  HasAdditionalNotes(getNotes), ConceptDomain(cdom), CommonIdea(abrv),
-  Referable(refAdd, renderRef))
-import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Type (LblType(RP), prepend)
-import Language.Drasil.Sentence (Sentence(EmptyS))
-import Language.Drasil.ShortName (ShortName, shortname')
-import Language.Drasil.Symbol.Helpers (eqSymb)
-import Language.Drasil.UID (UID)
 
 newtype Scope = Scp { _spec :: UID } {-indirect reference-}
 
@@ -32,7 +15,7 @@ data ScopeType =
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
-                             , _cit :: [Citation]
+                             , _ref :: [Reference]
                              , _deri :: Derivation
                              , lbl :: ShortName
                              , ra :: String
@@ -47,7 +30,7 @@ instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e = symbol (e^.qd)
 instance Quantity           DataDefinition where 
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
-instance HasCitation        DataDefinition where getCitations = cit
+instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
@@ -61,11 +44,16 @@ instance Referable DataDefinition where
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d)
+dd :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
+dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
+dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn)
+
+-- | Smart constructor for data definitions with no references
+ddNoRefs :: QDefinition -> Derivation -> String -> [Sentence] -> DataDefinition
+ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn)
 
 qdFromDD :: DataDefinition -> QDefinition
-qdFromDD dd = dd ^. qd
+qdFromDD d = d ^. qd
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition

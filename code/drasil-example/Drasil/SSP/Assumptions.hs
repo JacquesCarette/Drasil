@@ -3,7 +3,7 @@ module Drasil.SSP.Assumptions where
 import Language.Drasil
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
-  soil, soilPrpty, intrslce, slice)
+  soil, soilPrpty, intrslce, slice, waterTable)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
   normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
   xi, zcoord)
@@ -20,11 +20,11 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
-  assumpSL]
+  assumpSL, assumpWIBE, assumpWISE]
 
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
-  assumpSL :: ConceptInstance
+  assumpSL, assumpWIBE, assumpWISE :: ConceptInstance
 
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
@@ -38,9 +38,14 @@ assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Inters
 assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
 assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
 assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
+assumpWIBE = cic "assumpWIBE" waterBIntersect "Water-Intersects-Base-Edge" 
+  assumpDom
+assumpWISE = cic "assumpWISE" waterSIntersect "Water-Intersects-Surface-Edge" 
+  assumpDom
 
-monotonicF, slopeS, homogeneousL, isotropicP, linearS,
-  planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
+monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN, 
+  straightS, propertiesS, edgeS, seismicF, surfaceL, waterBIntersect, 
+  waterSIntersect :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
@@ -87,3 +92,9 @@ seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", 
 
 surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
   S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]
+
+waterBIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
+  S "the base of a", phrase slice, S "at an edge of the", phrase slice]
+
+waterSIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
+  S "the", phrase slopeSrf, S "at the edge of a", phrase slice]

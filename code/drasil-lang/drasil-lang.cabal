@@ -18,22 +18,16 @@ library
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.Constrained
-    , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.GenDefn
-    , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
-    , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.UnitDefn
-    , Language.Drasil.ChunkDB
-    , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
     , Language.Drasil.Classes.Citations
@@ -61,8 +55,9 @@ library
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SystemInformation
     , Language.Drasil.UID
+    , Language.Drasil.Uncertainty
+    , Language.Drasil.Uncertainty.Core
     , Language.Drasil.Unicode
     , Language.Drasil.UnitLang
     , Language.Drasil.Derivation

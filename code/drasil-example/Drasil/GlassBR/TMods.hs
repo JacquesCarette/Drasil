@@ -2,6 +2,8 @@ module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
+import Database.Drasil (cdb)
+import Theory.Drasil (TheoryModel, tm)
 
 import Control.Lens ((^.))
 
@@ -24,7 +26,7 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
--- this is the new function but it still uses the lrIsSafe_RC,
+-- this is the new function but it still uses the lrIsSafeRC,
 -- so basically we have to combine the old function with the new function
 -- glass_concept :: [ConceptInstance]
 -- glass_concept = []

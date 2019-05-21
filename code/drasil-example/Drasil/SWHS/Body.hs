@@ -3,6 +3,12 @@ module Drasil.SWHS.Body where
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
+  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
+  getIdeaDict, rdb, refdb, _authors, _concepts, _constants, _constraints,
+  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
+  _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -11,30 +17,29 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc,
+  dataConstraintUncertainty, genSysF, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
-  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont, unlikeChg, inModel)
+  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
+  unlikeChg, inModel)
 
-import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, dataConst, dataDefn, datum, definition, description, document, 
-  environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
-  model, organization, output_, physical, physics, physSyst, problem, property, 
-  purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  content, dataConst, dataDefn, datum, definition, document, environment, genDefn, goalStmt,
+  information, inModel, input_, item, likelyChg, model, organization, output_, physical,
+  physics, physSyst, problem, property, purpose, quantity, reference, requirement, section_,
+  software, softwareSys, srs, srsDomains, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
-import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness,
+import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
@@ -42,7 +47,7 @@ import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
-import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latent_heat, temp)
+import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
@@ -52,9 +57,9 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
-
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, thermal_conduction,
-  ht_flux, heatCapSpec, thermal_energy, ht_trans_theo, thermal_analysis, ener_src)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
+  thermalConduction, htFlux, heatCapSpec, thermalEnergy, htTransTheo,
+  thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -67,17 +72,14 @@ import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, propsDeriv, swhsNFRequirements)
+import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
-  htCap_W, htFusion, ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA,
-  out_SA, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
-  specParamValList, swhsConstrained, swhsInputs, swhsOutputs, swhsSymbols,
-  swhsSymbolsAll, swhsUC, tank_length, tau_S_P, tau_W, temp_C, temp_PCM, temp_W,
-  temp_init, temp_melt_P, thFluxVect, thickness, time_final, vol_ht_gen, w_E,
-  w_density, w_mass)
-import Drasil.SWHS.Labels (inputInitQuantsLbl)
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
+  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
+  pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
+  swhsOutputs, swhsSymbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
+  temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
 
@@ -86,8 +88,8 @@ this_si = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbTT
+checkSi :: [UnitDefn]
+checkSi = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -117,7 +119,7 @@ resourcePath = "../../../datafiles/SWHS/"
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
+  ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
@@ -128,8 +130,8 @@ swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
- ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
+usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
  swhs_theory swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
@@ -160,13 +162,13 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
-    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl
-    progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
+    IntroProg (introP1 CT.enerSrc energy swhs_pcm phsChgMtrl
+    progName CT.thermalEnergy latentHeat unit_) (introP2 swhs_pcm program
     progName)
     [IPurpose $ purpDoc swhs_pcm progName,
-     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) $
-       scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT,
-     IChar [] ((charReader1 CT.ht_trans_theo) ++ (charReader2 de)) [],
+     IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
+       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
+     IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhs_pcm progName],
   Verbatim genSystDesc,
@@ -186,11 +188,8 @@ mkSRS = [RefSec $ RefProg intro [
       ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub' [performance] swhsNFRequirements
-      (S "This problem is small in size and relatively simple")
-      (S "Any reasonable implementation will be very quick and use minimal storage.")
+    NonFReqsSub swhsNFRequirements
   ],
-  --NonFReqsSub [performance] swhspriorityNFReqs -- The way to render the NonFReqsSub is right for here, fixme.
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
@@ -350,8 +349,8 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.ht_flux, phase_change_material, CT.heatCapSpec,
-  CT.thermal_conduction, transient]
+  [CT.htFlux, phase_change_material, CT.heatCapSpec,
+  CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
 tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
@@ -373,7 +372,7 @@ physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, 
 -- this paragraph can not be abstracted out as is.
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -451,14 +450,6 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-dataConTable1 :: LabelledContent
-dataConTable1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-
 ------------------------------
 -- Data Constraint: Table 2 --
 ------------------------------
@@ -487,20 +478,6 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsList :: [Contents]
-funcReqsList = reqs ++ [inputInitQuantsTbl]
-
-inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
-  [titleize symbol_, titleize unit_, titleize description]
-  (mkTable
-  [ch, --(\ch -> Sy (unit_symb ch)),
-  U.toSentence, phrase] (map qw inputConstraints))
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
-
-reqs :: [Contents]
-reqs = mkEnumSimpleD funcReqs
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -829,7 +806,7 @@ orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel, 
   S "to be solved are referred to as" +:+. 
-  (foldlList Comma List $ map makeRef2S swhsIMods), S "The", plural inModel,
+  foldlList Comma List (map makeRef2S swhsIMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]

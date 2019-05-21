@@ -51,8 +51,8 @@ data Contents = UlC UnlabelledContent
 -- | Types of definitions
 data DType = General
            | Instance
-           | TM
-           | DD
+           | Theory
+           | Data
 
 -- | Types of layout objects we deal with explicitly
 data RawContent = Table [Sentence] [[Sentence]] Title Bool

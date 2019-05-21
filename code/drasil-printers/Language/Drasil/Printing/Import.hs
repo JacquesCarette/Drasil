@@ -4,6 +4,7 @@ import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
+import Database.Drasil
 
 import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P
@@ -148,7 +149,7 @@ expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (Operator o dd e)    sm = eop sm o dd e
+expr (Operator o d e)     sm = eop sm o d e
 expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 
@@ -326,7 +327,7 @@ createLayout sm = map (sec sm 0)
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
-  T.HDiv [(concat $ replicate depth "sub") ++ "section"]
+  T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
 

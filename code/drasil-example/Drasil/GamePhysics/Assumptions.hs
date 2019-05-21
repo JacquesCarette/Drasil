@@ -58,6 +58,6 @@ assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
   [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7]-}
 
-assumptions_list_a :: [[Sentence]]
-assumptions_list_a = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
+assumptionsListA :: [[Sentence]]
+assumptionsListA = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
   assumptions_assum5, assumptions_assum6, assumptions_assum7]

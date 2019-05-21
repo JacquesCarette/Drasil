@@ -28,6 +28,7 @@ desktop.ini
 .stack-work
 /code/Docs
 /code/build
+/code/logs
 *.synctex.gz
 *.pyc
 __pycache__

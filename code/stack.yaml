@@ -39,6 +39,8 @@ packages:
 - drasil-lang/
 - drasil-build/
 - drasil-code/
+- drasil-theory/
+- drasil-database/
 - drasil-printers/
 - drasil-gen/
 - drasil-data/

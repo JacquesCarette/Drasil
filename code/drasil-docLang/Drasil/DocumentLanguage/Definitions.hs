@@ -1,7 +1,7 @@
 {-# Language GADTs #-}
 
-module Drasil.DocumentLanguage.Definitions
-  ( Fields
+module Drasil.DocumentLanguage.Definitions (
+    Fields
   , Field(..)
   , Verbosity(..)
   , tmodel
@@ -11,16 +11,23 @@ module Drasil.DocumentLanguage.Definitions
   , InclUnits(..)
   , helperRefs
   , helpToRefField
-  )where
+) where
 
 import Data.Map (keys)
 import Data.List (elem)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
+  conceptinsTable, datadefnLookup, dataDefnTable, gendefLookup, gendefTable,
+  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
+  refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
+  theoryModelTable, vars, _sysinfodb)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
+  TheoryModel, inCons, outCons, imOutput, imInputs)
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (getSource', foldlSent)
+import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -51,12 +58,12 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (makeRef2 t)
+tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (makeRef2 d)
+ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
@@ -96,7 +103,7 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkTMField t _ l@Source fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
+mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -107,18 +114,22 @@ helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | t `elem` (keys $ s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  | t `elem` (keys $ s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-  | t `elem` (keys $ s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
-  | t `elem` (keys $ s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` (keys $ s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-  | t `elem` (keys $ s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
-  | t `elem` (keys $ s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+  | t `elem` keys (s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
+  | t `elem` keys (s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
+  | t `elem` keys (s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
+  | t `elem` keys (s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` keys (s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
+  | t `elem` keys (s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
+  | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` (map (^. uid) r) = EmptyS
   | otherwise = error $ t ++ "Caught."
   where
     s = _sysinfodb si
     r = citeDB si
+
+helperSources :: [Reference] -> [Contents]
+helperSources [] = [mkParagraph $ S "--"]
+helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
@@ -129,7 +140,7 @@ mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr])
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkDDField d _ l@Source fs = (show l, [mkParagraph $ getSource' d]) : fs
+mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
@@ -159,7 +170,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
-mkGDField g _ l@Source fs = (show l, [mkParagraph $ getSource' g]) : fs
+mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
@@ -170,7 +181,7 @@ mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
-mkIMField i _ l@Source fs = (show l, [mkParagraph $ getSource' i]) : fs
+mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@Input fs = 
@@ -191,14 +202,14 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
-firstPair' IncludeUnits d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  toSentenceUnitless d), Nothing)
+firstPair' IncludeUnits d =
+  (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

@@ -14,8 +14,8 @@ import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
 --import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeProb, is_safeLR, is_safeLoad, lRe, pb_tol, pb_tolfail, prob_br, prob_fail)
-import Drasil.GlassBR.Unitals (tm_demand, demandq, is_safeProb, is_safeLoad, tm_lRe, pb_tolfail, prob_fail)
-import Drasil.GlassBR.Symbols (this_symbols)
+import Drasil.GlassBR.Unitals (tm_demand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
+import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
 
@@ -37,7 +37,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLoad, qw tm_lRe, qw tm_demand] ([] :: [ConceptChunk])
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
-   where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
+   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
@@ -57,24 +57,24 @@ lrIsSafeDesc = tModDesc (is_safeLoad) s ending
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
-  [qw is_safeProb, qw prob_fail, qw pb_tolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safeProb) $= (sy prob_fail) $< (sy pb_tolfail)] [] [makeCite astm2009]
+  [qw is_safeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
+  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
-  where locSymbMap = cdb (this_symbols) ([] :: [IdeaDict]) glassBRsymb
+  where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 
 pbIsSafe_RC :: RelationConcept
 pbIsSafe_RC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
-  pbIsSafeDesc ((sy is_safeProb) $= (sy prob_fail) $< (sy pb_tolfail))
+  pbIsSafeDesc ((sy is_safeProb) $= (sy probFail) $< (sy pbTolfail))
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safeProb) s ending
   where 
     s = (ch is_safeProb) `sAnd` (ch is_safeLoad) +:+ sParen (S "from" +:+
       (makeRef2S lrIsSafe))
-    ending = ((ch prob_fail) `isThe` (phrase prob_fail)) `sC` S "as calculated in" +:+.
-      (makeRef2S probOfBreak) +:+ (ch pb_tolfail) `isThe` (phrase pb_tolfail) +:+ S "entered by the user"
+    ending = ((ch probFail) `isThe` (phrase probFail)) `sC` S "as calculated in" +:+.
+      (makeRef2S probOfBreak) +:+ (ch pbTolfail) `isThe` (phrase pbTolfail) +:+ S "entered by the user"
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

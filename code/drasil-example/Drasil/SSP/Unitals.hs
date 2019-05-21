@@ -191,7 +191,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, waterVol]
+  effectiveStress, effNormStress, dryVol, satVol, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
@@ -200,8 +200,8 @@ accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght,
   baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, 
-  waterVol :: UnitalChunk
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
+  satVol, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -382,6 +382,10 @@ totStress = uc' "sigma" (cn' $ "total stress") "on the soil mass" lSigma pascal
 effectiveStress = uc' "sigma'" (cn' $ "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
+
+dryVol = uc' "V_dry" (cn "volumes of dry soil") "amount of space occupied by dry soil for each slice" (sub (vec cV) (Atomic "dry")) m_3
+
+satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied by saturated soil for each slice" (sub (vec cV) (Atomic "sat")) m_3
 
 waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
 

@@ -6,21 +6,19 @@ import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 
-import Data.Drasil.Concepts.Documentation (assumption, constant)
+import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, 
-  getTandS)
-import Drasil.SSP.Defs (slice, soil, soilPrpty)
-import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
+import Drasil.SSP.Defs (slice)
+import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
-import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, dryWeight, 
-  fricAngle, fs, genericF, genericA, index, intNormForce, indxn, inx, inxi, 
-  inxiM1, midpntHght, mobShrC, normToShear, satWeight, scalFunc, shrResC, 
-  slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, totStress, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, 
-  waterWeight, watrForce)
+import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
+  fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
+  mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
+  slopeHght, surfAngle, totStress, nrmForceSum, watForceSum, sliceHghtRight,
+  sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --

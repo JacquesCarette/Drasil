@@ -13,11 +13,11 @@ import Data.Drasil.Utils (weave)
 
 import Data.Drasil.SI_Units (metre, newton)
 
-import Data.Drasil.Concepts.Documentation (assumption, constant, definition, 
-  method_, value)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, constant, 
+  definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.Concepts.Physics (distance, weight)
+import Data.Drasil.Concepts.Physics (distance, twoD, weight)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Theories.Physics (weightGD)
 
@@ -29,8 +29,8 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
   slcHeight, stressDD, ratioVariation)
-import Drasil.SSP.Defs (slice, slope, slopeSrf, slpSrf, soil, soilPrpty,
-  waterTable)
+import Drasil.SSP.Defs (intrslce, slice, slope, slopeSrf, slpSrf, soil, 
+  soilPrpty, waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
@@ -39,7 +39,8 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   index, inxi, inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat,
   satWeight, scalFunc, shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, 
   shearRNoIntsl, shrResI, slcWght, slipHght, slopeHght, surfHydroForce,
-  surfAngle, watrForce, waterHght, waterWeight, waterVol, zcoord)
+  surfAngle, watrForce, waterHght, waterWeight, dryVol, satVol, waterVol, 
+  zcoord)
 
 ---------------------------
 --  General Definitions  --
@@ -70,7 +71,7 @@ normShrRGD   = gd normShrR   (getUnit intShrForce)   []
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
-sliceWghtGD  = gd sliceWght  (getUnit slcWght)       []
+sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
 baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) bsWtrFDeriv
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
@@ -273,6 +274,140 @@ momEql_deriv :: Sentence
 momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
+--
+
+sliceWght :: RelationConcept
+sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes 
+  sliceWghtEqn
+
+sliceWghtEqn :: Expr
+sliceWghtEqn = inxi slcWght $= inxi baseWthX * 0.5 * case_ [case1, case2, case3]
+  where case1 = (((inxi slopeHght - inxi slipHght) + 
+          (inxiM1 slopeHght - inxiM1 slipHght)) * sy satWeight,
+          (inxi waterHght $> inxi slopeHght) $|| 
+          (inxiM1 waterHght $> inxiM1 slopeHght))
+        case2 = (((inxi slopeHght - inxi waterHght) + 
+          (inxiM1 slopeHght - inxiM1 waterHght)) * sy dryWeight +
+          ((inxi waterHght - inxi slipHght) + 
+          (inxiM1 waterHght - inxiM1 slipHght)) * sy satWeight,
+          (inxi slopeHght $>= inxi waterHght $>= inxi slipHght) $&& 
+          (inxiM1 slopeHght $>= inxiM1 waterHght $>= inxiM1 slipHght))
+        case3 = (((inxi slopeHght - inxi slipHght) + 
+          (inxiM1 slopeHght - inxiM1 slipHght)) * sy dryWeight,
+          (inxi waterHght $< inxi slipHght) $||
+          (inxiM1 waterHght $< inxiM1 slipHght))
+
+sliceWghtNotes :: Sentence
+sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
+  phrase assumption, S "that the surface and the base of a", phrase slice, 
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The", 
+  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
+  ch index, S "because the", phrase soil, S "is assumed to be homogeneous" `sC`
+  S "with", phrase constant, plural soilPrpty, S "throughout" +:+. 
+  sParen (makeRef2S assumpSLH), ch baseWthX +:+ S "is defined in",
+  makeRef2S lengthB]
+
+sliceWghtDeriv :: Derivation
+sliceWghtDeriv = weave [sliceWghtDerivSentences, sliceWghtDerivEqns]
+
+sliceWghtDerivEqns :: [Sentence]
+sliceWghtDerivEqns = map E [sliceWghtDerivSatCaseWeightEqn, 
+  sliceWghtDerivSatCaseSliceEqn, sliceWghtDerivDryCaseWeightEqn, 
+  sliceWghtDerivDryCaseSliceEqn, sliceWghtDerivMixCaseWeightEqn, 
+  sliceWghtDerivMixCaseSliceEqn]
+
+sliceWghtDerivSentences :: [Sentence]
+sliceWghtDerivSentences = map foldlSentCol [sliceWghtDerivSatCaseIntroSentence, 
+  sliceWghtDerivSatCase2DSentence, sliceWghtDerivDryCaseIntroSentence, 
+  sliceWghtDerivDryCase2DSentence, sliceWghtDerivMixCaseIntroSentence, 
+  sliceWghtDerivMixCase2DSentence]
+
+sliceWghtDerivSatCaseIntroSentence, sliceWghtDerivSatCase2DSentence, 
+  sliceWghtDerivDryCaseIntroSentence, sliceWghtDerivDryCase2DSentence, 
+  sliceWghtDerivMixCaseIntroSentence, 
+  sliceWghtDerivMixCase2DSentence :: [Sentence]
+
+sliceWghtDerivSatCaseWeightEqn, sliceWghtDerivSatCaseSliceEqn,
+  sliceWghtDerivDryCaseWeightEqn, sliceWghtDerivDryCaseSliceEqn,
+  sliceWghtDerivMixCaseWeightEqn, sliceWghtDerivMixCaseSliceEqn :: Expr
+
+sliceWghtDerivSatCaseIntroSentence = [S "For the case where the", 
+  phrase waterTable, S "is above the", phrase slopeSrf `sC` S "the", 
+  phrase slcWght, S "come from", phrase weight `ofThe` S "saturated" +:+. 
+  phrase soil,
+  S "Substituting", plural value, S "for saturated", phrase soil, S "into the",
+  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
+  S "yields"] 
+
+sliceWghtDerivSatCase2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
+  S "only two dimensions are considered, so the", plural area `sOf` 
+  S "saturated", phrase soil, S "are considered instead of the" +:+. 
+  phrase satVol, 
+  S "Any given", phrase slice +:+. S "has a trapezoidal shape", S "The", 
+  phrase area, S "of a trapezoid is the average of",
+  plural len `ofThe` S "parallel sides multiplied by the", phrase len +:+.
+  S "between the parallel sides", S "The parallel sides in this case are the",
+  phrase intrslce, S "edges and the", phrase len, S "between them" `isThe` 
+  S "width of the" +:+. phrase slice, S "Thus" `sC` S "the", phrase slcWght, 
+  S "are defined as"]
+
+sliceWghtDerivSatCaseWeightEqn = inxi slcWght $= inxi satVol * sy satWeight
+
+sliceWghtDerivSatCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
+  ((inxi slopeHght - inxi slipHght) + (inxiM1 slopeHght - inxiM1 slipHght)) * sy satWeight
+
+sliceWghtDerivDryCaseIntroSentence = [S "For the case where the", 
+  phrase waterTable, S "is below the", phrase slpSrf `sC` S "the", 
+  phrase slcWght, S "come from", phrase weight `ofThe` S "dry" +:+. phrase soil,
+  S "Substituting", plural value, S "for dry", phrase soil, S "into the",
+  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
+  S "yields"] 
+
+sliceWghtDerivDryCase2DSentence = [makeRef2S assumpPSC, S "again allows for",
+  phrase twoD, phrase analysis, S "so the", plural area `sOf` S "dry", 
+  phrase soil, S "are considered instead of the" +:+. phrase dryVol, 
+  S "The trapezoidal", phrase slice, 
+  S "shape is the same as in the previous case" `sC` S "so the", phrase slcWght,
+  S "are defined as"]
+
+sliceWghtDerivDryCaseWeightEqn = inxi slcWght $= inxi dryVol * sy dryWeight
+
+sliceWghtDerivDryCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
+  ((inxi slopeHght - inxi slipHght) + (inxiM1 slopeHght - inxiM1 slipHght)) * sy dryWeight
+
+sliceWghtDerivMixCaseIntroSentence = [S "For the case where the", 
+  phrase waterTable, S "is between the", phrase slopeSrf `sAnd` 
+  phrase slpSrf `sC` S "the", phrase slcWght, S "are the sums of", 
+  plural weight `ofThe` S "dry portions"  `sAnd` plural weight `ofThe`
+  S "saturated portions of the" +:+. phrase soil,
+  S "Substituting", plural value, S "for dry and saturated", phrase soil, 
+  S "into the", phrase equation, S "for", phrase weight, S "from", 
+  makeRef2S weightGD, S "and adding them together yields"] 
+
+sliceWghtDerivMixCase2DSentence = [makeRef2S assumpPSC, S "again allows for",
+  phrase twoD, phrase analysis, S "so the", plural area `sOf` S "dry", 
+  phrase soil `sAnd` plural area `sOf` S "saturated", phrase soil, 
+  S "are considered instead of the" +:+. (phrase dryVol `sAnd` phrase satVol), 
+  S "The", phrase waterTable, S "is assumed to only intersect a", phrase slice,
+  S "surface or base at a", phrase slice, S "edge", 
+  sParen (makeRef2S assumpWISE `sC` makeRef2S assumpWIBE) `sC` S "so the" +:+. 
+  S "dry and saturated portions each have trapezoidal shape", S "For the dry",
+  S "portion, the parallel sides of the trapezoid are the", plural len,
+  S "between the", phrase slopeSrf `sAnd` phrase waterTable, S "at the",
+  phrase slice +:+. S "edges", S "For the saturated portion, the parallel",
+  S "sides of the trapezoid are the", plural len, S "between the", 
+  phrase waterTable `sAnd` phrase slpSrf, S "at the", phrase slice +:+. 
+  S "edges", S "Thus" `sC` S "the", phrase slcWght,  S "are defined as"]
+
+sliceWghtDerivMixCaseWeightEqn = inxi slcWght $= inxi dryVol * sy dryWeight + 
+  inxi satVol * sy satWeight
+
+sliceWghtDerivMixCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
+  (((inxi slopeHght - inxi waterHght) + 
+  (inxiM1 slopeHght - inxiM1 waterHght)) * sy dryWeight +
+  ((inxi waterHght - inxi slipHght) + 
+  (inxiM1 waterHght - inxiM1 slipHght)) * sy satWeight)
+
 -- 
 
 baseWtrF :: RelationConcept
@@ -316,7 +451,7 @@ bsWtrFDerivIntroSentence = [S "The", phrase baseHydroForce, S "come from",
   S "yields"] 
 
 bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only 2 dimensions are considered, so the", plural area `sOf` 
+  S "only two dimensions are considered, so the", plural area `sOf` 
   S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
   phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
   S "is below", S "height" `ofThe` phrase slpSrf, S "at one edge and above", 
@@ -342,39 +477,6 @@ bsWtrFDerivWeightEqn = inxi baseHydroForce $= inxi waterVol * sy waterWeight
 
 bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseWthX * 0.5 *
   ((inxi waterHght - inxi slipHght) + (inxiM1 waterHght - inxiM1 slipHght)) * sy waterWeight
-
---
-
-sliceWght :: RelationConcept
-sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes 
-  sliceWghtEqn
-
-sliceWghtEqn :: Expr
-sliceWghtEqn = inxi slcWght $= inxi baseWthX * 0.5 * case_ [case1, case2, case3]
-  where case1 = (((inxi slopeHght - inxi slipHght) + 
-          (inxiM1 slopeHght - inxiM1 slipHght)) * sy satWeight,
-          (inxi waterHght $> inxi slopeHght) $|| 
-          (inxiM1 waterHght $> inxiM1 slopeHght))
-        case2 = (((inxi slopeHght - inxi waterHght) + 
-          (inxiM1 slopeHght - inxiM1 waterHght)) * (sy dryWeight) +
-          ((inxi waterHght - inxi slipHght) + 
-          (inxiM1 waterHght - inxiM1 slipHght)) * (sy satWeight),
-          (inxi slopeHght $>= inxi waterHght $>= inxi slipHght) $&& 
-          (inxiM1 slopeHght $>= inxiM1 waterHght $>= inxiM1 slipHght))
-        case3 = (((inxi slopeHght - inxi slipHght) + 
-          (inxiM1 slopeHght - inxiM1 slipHght)) * sy dryWeight,
-          (inxi waterHght $< inxi slipHght) $||
-          (inxiM1 waterHght $< inxiM1 slipHght))
-
-sliceWghtNotes :: Sentence
-sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
-  phrase assumption, S "that the surface and the base of a", phrase slice, 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The", 
-  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
-  ch index, S "because the", phrase soil, S "is assumed to be homogeneous" `sC`
-  S "with", phrase constant, plural soilPrpty, S "throughout" +:+. 
-  sParen (makeRef2S assumpSLH), ch baseWthX +:+ S "is defined in",
-  makeRef2S lengthB]
 
 --
 
@@ -419,7 +521,7 @@ srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from",
   S "yields"] 
 
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only 2 dimensions are considered, so the", plural area `sOf` 
+  S "only two dimensions are considered, so the", plural area `sOf` 
   S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
   phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
   S "is below", S "height" `ofThe` phrase slopeSrf, S "at one edge and above", 

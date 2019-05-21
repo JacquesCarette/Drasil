@@ -471,7 +471,7 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
+helperCI a c = over defn (\x -> foldlSent_ [x, helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing

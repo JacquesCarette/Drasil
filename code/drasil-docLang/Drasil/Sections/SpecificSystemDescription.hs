@@ -135,7 +135,7 @@ dataDefnF endingSent otherContents = SRS.dataDefn
 
 
 dataDefinitionIntro :: Sentence -> Contents
-dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase section_, 
+dataDefinitionIntro closingSent = mkParagraph (foldlSent [S "This", phrase section_, 
     S "collects and defines all the", plural datum, 
     S "needed to build the", plural inModel] +:+ closingSent)
 

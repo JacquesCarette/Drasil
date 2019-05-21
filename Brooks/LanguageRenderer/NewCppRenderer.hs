@@ -456,7 +456,7 @@ instance ControlStatementSym CppSrcCode where
 
     tryCatch tb cb = liftPairFst (liftA2 cppTryCatch tb cb, Empty)
 
-    checkState l = switch (var l) 
+    checkState l = switchAsIf (var l) 
 
     notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
         where obsList = observerListName `listOf` t

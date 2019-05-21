@@ -40,7 +40,7 @@ import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,oneTabbed,hicat,
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
     brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
     integer, semi, equals, braces, int, comma, colon, hcat)

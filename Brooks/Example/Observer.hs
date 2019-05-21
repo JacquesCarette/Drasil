@@ -13,7 +13,7 @@ helperClass :: (RenderSym repr) => repr (Class repr)
 helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic int] [observerConstructor, printNumMethod]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
-observerConstructor = constructor "Observer" [] (oneLiner (assign (self $-> var "x") (litInt 5)))
+observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "x") (litInt 5)))
 
 printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic void [] (oneLiner (printLn int (self $-> (var "x"))))
+printNumMethod = method "printNum" "Observer" public dynamic void [] (oneLiner (printLn int (objVarSelf "x")))

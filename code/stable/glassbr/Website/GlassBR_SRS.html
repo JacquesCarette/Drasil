@@ -1217,7 +1217,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that GlassBR is based on.
 </p>
-<div id="TM:isSafePb">
+<div id="TM:isSafeProb">
 <table class="tdefn">
 <tr>
 <th>
@@ -1225,7 +1225,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Safety Req-Pb
+Safety Probability
 </p>
 </td>
 </tr>
@@ -1235,7 +1235,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>is-safePb = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
+<em>is-safeProb = P<sub>f</sub>&thinsp;&lt;&thinsp;P<sub>ftol</sub></em>
 </div>
 </td>
 </tr>
@@ -1246,13 +1246,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is-safePb</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
+<em>is-safeProb</em> is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)
 </li>
 <li>
-<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+<em>P<sub>f</sub></em> is the probability of failure (Unitless)
 </li>
 <li>
-<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
+<em>P<sub>ftol</sub></em> is the tolerable probability of failure (Unitless)
 </li>
 </ul>
 </td>
@@ -1263,7 +1263,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is-safePb</em>, the glass is considered safe. <em>is-safePb</em> and <em>is-safeLR</em> (from <a href=#TM:isSafeLR>TM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is-safeProb</em>, the glass is considered safe. <em>is-safeProb</em> and <em>is-safeLoad</em> (from <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are either both True or both False. <em>P<sub>f</sub></em> is the probability of failure, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>ftol</sub></em> is the tolerable probability of failure entered by the user.
 </p>
 </td>
 </tr>
@@ -1283,13 +1283,13 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#TM:isSafeLoad>TM: isSafeLoad</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="TM:isSafeLR">
+<div id="TM:isSafeLoad">
 <table class="tdefn">
 <tr>
 <th>
@@ -1297,7 +1297,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Safety Req-LR
+Safety Load
 </p>
 </td>
 </tr>
@@ -1307,7 +1307,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>is-safeLR = LR&thinsp;&gt;&thinsp;q</em>
+<em>is-safeLoad = capacity&thinsp;&gt;&thinsp;Load</em>
 </div>
 </td>
 </tr>
@@ -1318,13 +1318,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
+<em>is-safeLoad</em> is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)
 </li>
 <li>
-<em>LR</em> is the load resistance (Pa)
+<em>capacity</em> is the capacity or load resistance (Pa)
 </li>
 <li>
-<em>q</em> is the applied load (demand) (Pa)
+<em>Load</em> is the applied load (demand) or pressure (Pa)
 </li>
 </ul>
 </td>
@@ -1335,7 +1335,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#TM:isSafePb>TM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+If <em>is-safeLoad</em>, the glass is considered safe. <em>is-safeProb</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a>) and <em>is-safeLoad</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>Load</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
 </p>
 </td>
 </tr>
@@ -1355,7 +1355,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#TM:isSafeProb>TM: isSafeProb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
 </p>
 </td>
 </tr>
@@ -2817,7 +2817,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a>.
+<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#TM:isSafeProb>TM: isSafeProb</a>.
 </p>
 </td>
 </tr>
@@ -2921,7 +2921,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#TM:isSafeLoad>TM: isSafeLoad</a>.
 </p>
 </td>
 </tr>
@@ -3016,7 +3016,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#TM:isSafeLoad>TM: isSafeLoad</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
 </p>
 </td>
 </tr>
@@ -3141,7 +3141,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a>.
 </p>
 </td>
 </tr>
@@ -3253,7 +3253,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#IM:isSafePb>IM: isSafePb</a> <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>.
+<a href=#IM:isSafePb>IM: isSafePb</a>.
 </p>
 </td>
 </tr>
@@ -3513,7 +3513,7 @@ Output-Values-and-Known-Quantities: Output the input quantities from <a href=#in
 </p>
 <p>
 <div id="checkGlassSafety">
-Check-Glass-Safety: If <em>is-safePb</em> ∧ <em>is-safeLR</em> (from <a href=#TM:isSafePb>TM: isSafePb</a> and <a href=#TM:isSafeLR>TM: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is-safePb</em> ∧ <em>is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </p>
 <p>
@@ -3856,6 +3856,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:isSafeLR>IM: isSafeLR</a>
 </th>
 <th>
+<a href=#TM:isSafeLoad>TM: isSafeLoad</a>
+</th>
+<th>
 <a href=#DD:calofDemand>DD: calofDemand</a>
 </th>
 <th>
@@ -3866,6 +3869,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 </th>
 <th>
 <a href=#IM:isSafePb>IM: isSafePb</a>
+</th>
+<th>
+<a href=#TM:isSafeProb>TM: isSafeProb</a>
 </th>
 <th>
 <a href=#DD:probOfBreak>DD: probOfBreak</a>
@@ -3880,6 +3886,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4033,6 +4045,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4046,6 +4064,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4193,6 +4217,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4215,6 +4245,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4353,6 +4389,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4381,6 +4423,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4513,6 +4561,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4556,6 +4610,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4673,6 +4733,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4753,6 +4819,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 <tr>
 <td>
@@ -4811,6 +4883,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -4896,6 +4974,12 @@ X
 X
 </td>
 <td>
+X
+</td>
+<td>
+
+</td>
+<td>
 
 </td>
 <td>
@@ -4932,6 +5016,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5056,7 +5146,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5107,6 +5203,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5219,7 +5321,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5294,6 +5402,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5382,7 +5496,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5462,7 +5582,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5504,6 +5630,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5625,6 +5757,12 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+X
+</td>
+<td>
 X
 </td>
 <td>
@@ -5708,10 +5846,188 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
 
+</td>
+</tr>
+<tr>
+<td>
+<a href=#TM:isSafeLoad>TM: isSafeLoad</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+<a href=#TM:isSafeProb>TM: isSafeProb</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
 </td>
 </tr>
 <tr>
@@ -5785,13 +6101,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 
 </td>
 <td>
-X
+
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -5871,7 +6193,13 @@ X
 
 </td>
 <td>
-X
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -5889,6 +6217,12 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -6016,7 +6350,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -6102,7 +6442,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -6179,7 +6525,13 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -6273,6 +6625,12 @@ X
 <td>
 
 </td>
+<td>
+
+</td>
+<td>
+
+</td>
 </tr>
 </table>
 <p class="caption">
@@ -6286,10 +6644,10 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
+T1 (<a href=#TM:isSafeProb>TM: isSafeProb</a>)
 </th>
 <th>
-T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
+T2 (<a href=#TM:isSafeLoad>TM: isSafeLoad</a>)
 </th>
 <th>
 IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
@@ -6327,7 +6685,7 @@ DD8 (<a href=#DD:sdfTol>DD: sdfTol</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
+T1 (<a href=#TM:isSafeProb>TM: isSafeProb</a>)
 </td>
 <td>
 
@@ -6371,7 +6729,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
+T2 (<a href=#TM:isSafeLoad>TM: isSafeLoad</a>)
 </td>
 <td>
 X
@@ -6909,10 +7267,10 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
+T1 (<a href=#TM:isSafeProb>TM: isSafeProb</a>)
 </th>
 <th>
-T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
+T2 (<a href=#TM:isSafeLoad>TM: isSafeLoad</a>)
 </th>
 <th>
 IM1 (<a href=#IM:isSafePb>IM: isSafePb</a>)
@@ -7397,7 +7755,7 @@ A8 (<a href=#assumpLDFC>A: ldfConstant</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
+T1 (<a href=#TM:isSafeProb>TM: isSafeProb</a>)
 </td>
 <td>
 
@@ -7426,7 +7784,7 @@ T1 (<a href=#TM:isSafePb>TM: isSafePb</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#TM:isSafeLR>TM: isSafeLR</a>)
+T2 (<a href=#TM:isSafeLoad>TM: isSafeLoad</a>)
 </td>
 <td>
 

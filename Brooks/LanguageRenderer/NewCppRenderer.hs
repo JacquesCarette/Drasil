@@ -399,7 +399,7 @@ instance StatementSym CppSrcCode where
     openFileA f n = liftPairFst (liftA2 (cppOpenFile "std::fstream::app") f n, Semi)
     closeFile f = valState $ objMethodCall f "close" []
 
-    getFileInputLine f v = valState $ funcApp "std::getLine" [f, v]
+    getFileInputLine f v = valState $ funcApp "std::getline" [f, v]
     discardFileLine f = liftPairFst (fmap (cppDiscardInput "\\n") f, Semi)
     stringSplit d vnew s = let l_ss = "ss"
                                v_ss = var l_ss
@@ -468,7 +468,7 @@ instance ControlStatementSym CppSrcCode where
                               v_line = var l_line
                           in
         multi [varDec l_line string,
-            while ((?!) (funcApp "std::getline" [f, v_line]))
+            while (funcApp "std::getline" [f, v_line])
                 (oneLiner $ valState $ v $. (listAppend $ v_line))]
 
 instance ScopeSym CppSrcCode where

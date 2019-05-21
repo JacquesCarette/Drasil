@@ -1,3 +1,4 @@
+# For documentation on how to add to this, see Issue #1371
 # List of all known packages
 PACKAGES = lang build code theory database printers gen data docLang example
 

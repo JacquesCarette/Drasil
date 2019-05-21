@@ -49,7 +49,7 @@ CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER)
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -126,9 +126,9 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack graphmod
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod
 	@mkdir -p $(GRAPH_FOLDER)
-	cd "drasil-$*" && find . -name '*.hs' -print | grep -v stack | xargs graphmod -q -p --no-cluster | dot -Tpdf > ../$(GRAPH_FOLDER)drasil-$*.pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###
@@ -172,4 +172,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-.PHONY: clean code tex doc debug prog test check_stack all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs check_stack all $(ALL_EXPANDED_TARGETS)

@@ -246,9 +246,9 @@ termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
-  Bullet $ noRefs $ (map tAndDWAcc $ take 2 loadTypes)
+  Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
-  (map tAndDOnly $ drop 2 loadTypes)]
+  map tAndDOnly (drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
 
@@ -291,9 +291,9 @@ undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
 appStanddIR = [S "applicable" +:+ plural standard +:+
-  S "for constructions using glass from" +:+ (foldlList Comma List
-  $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
+  S "for constructions using glass from" +:+ foldlList Comma List
+  (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
 
 incScoR, endScoR :: Sentence
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
@@ -348,7 +348,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short gLassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
@@ -369,7 +369,7 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -420,7 +420,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 

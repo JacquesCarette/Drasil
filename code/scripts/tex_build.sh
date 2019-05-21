@@ -21,7 +21,7 @@ fi
 GEN_NAME_SUFFIX=_SRS
 
 cd "$BUILD_FOLDER$EDIR"/SRS/
-$MAKE TEXFLAGS=--interaction="$IMODE" BIBTEXFLAGS="$BIFLAGS"
+"$MAKE" TEXFLAGS=--interaction="$IMODE" BIBTEXFLAGS="$BIFLAGS"
 RET=$?
 
 if [ "$SUMMARIZE_TEX" = "yes" ]; then

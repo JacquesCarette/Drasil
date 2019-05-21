@@ -114,13 +114,13 @@ helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | t `elem` (keys $ s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  | t `elem` (keys $ s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-  | t `elem` (keys $ s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
-  | t `elem` (keys $ s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` (keys $ s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-  | t `elem` (keys $ s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
-  | t `elem` (keys $ s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+  | t `elem` keys (s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
+  | t `elem` keys (s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
+  | t `elem` keys (s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
+  | t `elem` keys (s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` keys (s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
+  | t `elem` keys (s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
+  | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` (map (^. uid) r) = EmptyS
   | otherwise = error $ t ++ "Caught."
   where
@@ -202,14 +202,14 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
-firstPair' IncludeUnits d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  toSentenceUnitless d), Nothing)
+firstPair' IncludeUnits d =
+  (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.23
+Version:	0.1.24
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -23,7 +23,6 @@ library
     , Drasil.Sections.Introduction
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.Requirements
-    , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Stakeholders

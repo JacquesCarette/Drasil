@@ -44,7 +44,7 @@ renderExt _ (OtherExt e) = e
 getMainModule :: [Module] -> Label
 getMainModule c = mainName $ filter (not . notMainModule) c
   where mainName [(Mod a _ _ _ _)] = a
-        mainName _ = error $ "Expected a single main module."
+        mainName _ = error "Expected a single main module."
 
 getCompilerInput :: BuildDependencies -> Config -> Package -> Code -> [String]
 getCompilerInput BcAll _ _ a = map fst $ unCode a

@@ -36,8 +36,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
     setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (angles,oneTab,tripFst,tripSnd,
-    tripThird)
+import Language.Drasil.Code.Imperative.Helpers (angles, oneTab, tripFst, 
+  tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  lift3Pair, lift4Pair, liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -63,39 +64,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
     return = JC
     JC x >>= f = f x
-
-liftA4 :: (a -> b -> c -> d -> e) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e
-liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
-
-liftA5 :: (a -> b -> c -> d -> e -> f) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f
-liftA5 f a1 a2 a3 a4 a5 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5)
-
-liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f -> JavaCode g
-liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
-
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> JavaCode e -> JavaCode f -> JavaCode g -> JavaCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6) (unJC a7)
-
-liftList :: ([a] -> b) -> [JavaCode a] -> JavaCode b
-liftList f as = JC $ f (map unJC as)
-
-lift1List :: (a -> [b] -> c) -> JavaCode a -> [JavaCode b] -> JavaCode c
-lift1List f a as = JC $ f (unJC a) (map unJC as)
-
-unJCPair :: (JavaCode a, JavaCode b) -> (a, b)
-unJCPair (a1, a2) = (unJC a1, unJC a2) 
-
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> JavaCode a -> JavaCode b -> JavaCode c -> JavaCode d -> [(JavaCode e, JavaCode f)] -> JavaCode g
-lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
-
-lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> JavaCode a -> JavaCode b -> JavaCode c -> [(JavaCode d, JavaCode e)] -> JavaCode f
-lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
-
-liftPairFst :: (JavaCode a, b) -> JavaCode (a, b)
-liftPairFst (c, n) = JC $ (unJC c, n)
-
-liftTripFst :: (JavaCode a, b, c) -> JavaCode (a, b, c)
-liftTripFst (c, n, b) = JC $ (unJC c, n, b)
 
 instance PackageSym JavaCode where
     type Package JavaCode = ([(Doc, Label, Bool)], Label)
@@ -163,7 +131,7 @@ instance StateTypeSym JavaCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = fmap jIntListTypeDoc (list p)
     floatListType p = fmap jFloatListTypeDoc (list p)
-    boolListType = return jBoolListTypeDocD
+    boolListType = listType dynamic bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
     iterator _ = error "Iterator-type variables do not exist in Java"
@@ -513,18 +481,18 @@ instance ParameterSym JavaCode where
 instance MethodSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method JavaCode = (Doc, Bool)
-    method n s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
+    method n _ s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b, False)
+    getMethod n c t = method (getterName n) c public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = fmap setMain $ method "main" public static void [return $ text "String[] args"] b
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method n public dynamic (construct n)
+    mainMethod c b = fmap setMain $ method "main" c public static void [return $ text "String[] args"] b
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method n n public dynamic (construct n)
     destructor _ _ = error "Destructors not allowed in Java"
 
-    function = method
+    function n = method n ""
 
 instance StateVarSym JavaCode where
     type StateVar JavaCode = Doc
@@ -538,7 +506,7 @@ instance ClassSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Class JavaCode = (Doc, Bool)
     buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unJC) fs)
-    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
+    enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es enumsEqualInts) s, False)
     mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
@@ -552,6 +520,9 @@ instance ModuleSym JavaCode where
                                    _  -> liftTripFst (liftList moduleDocD ((pubClass n 
                                         Nothing (map (liftA4 statementsToStateVars
                                         public static endStatement) vs) ms):cs), n, or [any (snd . unJC) ms, any (snd . unJC) cs])
+
+enumsEqualInts :: Bool
+enumsEqualInts = False
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -580,9 +551,6 @@ jIntListTypeDoc lst = lst <> angles (text "Integer")
 
 jFloatListTypeDoc :: Doc -> Doc
 jFloatListTypeDoc lst = lst <> angles (text "Double")
-
-jBoolListTypeDocD :: Doc
-jBoolListTypeDocD = text "BitSet"
 
 jListDecDef :: Label -> Doc -> Doc -> Doc
 jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens listElements

@@ -1,18 +1,23 @@
+{-# LANGUAGE TupleSections #-}
+
 module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
     hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs,
-    tripFst, tripSnd, tripThird
+    tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftA8,
+    liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
+    liftPairFst, liftTripFst
 ) where
 
 import Prelude hiding ((<>))
 import Control.Monad (filterM)
+import Control.Applicative (liftA2, liftA3)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)
 import Data.List (nub,intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-    (<>), ($+$), comma, punctuate, nest)
+  (<>), ($+$), comma, punctuate, nest)
 
 blank :: Doc
 blank = text ""
@@ -106,6 +111,45 @@ tripSnd (_, n, _) = n
 tripThird :: (a, b, c) -> c
 tripThird (_, _, b) = b
 
+liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> f d -> f e
+liftA4 f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
+
+liftA5 :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> f c -> f d -> f e -> f g
+liftA5 f a1 a2 a3 a4 a5 = liftA4 f a1 a2 a3 a4 <*> a5
+
+liftA6 :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f b -> f c -> f d -> f e -> f g -> f h
+liftA6 f a1 a2 a3 a4 a5 a6 = liftA5 f a1 a2 a3 a4 a5 <*> a6
+
+liftA7 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i
+liftA7 f a1 a2 a3 a4 a5 a6 a7 = liftA6 f a1 a2 a3 a4 a5 a6 <*> a7
+
+liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
+liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
+
+liftList :: Monad m => ([a] -> b) -> [m a] -> m b
+liftList f as = fmap f $ sequence as
+
+lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
+lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
+
+lift1List :: (Applicative m, Monad m) => (a -> [b] -> c) -> m a -> [m b] -> m c
+lift1List f a as = liftA2 f a (sequence as)
+
+lift4Pair :: (Applicative m, Monad m) => (a -> b -> c -> d -> [(e, f)] -> g) -> m a -> m b -> m c -> m d -> [(m e, m f)] -> m g
+lift4Pair f a1 a2 a3 a4 as = liftA5 f a1 a2 a3 a4 (mapM liftPair as)
+
+lift3Pair :: (Applicative m, Monad m) => (a -> b -> c -> [(d, e)] -> f) -> m a -> m b -> m c -> [(m d, m e)] -> m f
+lift3Pair f a1 a2 a3 as = liftA4 f a1 a2 a3 (mapM liftPair as)
+
+liftPair :: Applicative f => (f a, f b) -> f (a, b)
+liftPair (a, b) = liftA2 (,) a b
+
+liftPairFst :: Functor f => (f a, b) -> f (a, b)
+liftPairFst (c, n) = fmap (, n) c
+
+liftTripFst :: Functor f => (f a, b, c) -> f (a, b, c)
+liftTripFst (c, n, b) = fmap (flip (flip (,,) n) b) c
+
 --private
 myLiteralNameReplace :: String -> String -> String
 myLiteralNameReplace l old = replace old ("\\" ++ old) l
@@ -113,4 +157,3 @@ myLiteralNameReplace l old = replace old ("\\" ++ old) l
 myVarNameReplace :: String -> String -> String
 myVarNameReplace l old = replace old "_" l
 ----------
-    

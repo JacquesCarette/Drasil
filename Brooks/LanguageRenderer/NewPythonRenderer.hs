@@ -29,8 +29,7 @@ import NewLanguageRenderer (Terminator(..), fileDoc',
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
 import Helpers (blank, oneTab, vibcat, tripFst, tripSnd, tripThird, liftA4, 
-    liftA5, liftList, lift1List, lift4Pair,
-    liftPairFst, liftTripFst)
+    liftA5, liftList, lift1List, lift4Pair, liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

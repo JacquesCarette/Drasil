@@ -36,7 +36,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
   setterName, setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (oneTab, tripFst, tripSnd, tripThird)
+import Language.Drasil.Code.Imperative.Helpers (oneTab, tripFst, tripSnd, 
+  tripThird, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
+  lift4Pair, liftPairFst, liftTripFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -56,39 +58,6 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
     return = CSC
     CSC x >>= f = f x
-
-liftA4 :: (a -> b -> c -> d -> e) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e
-liftA4 f a1 a2 a3 a4 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4)
-
-liftA5 :: (a -> b -> c -> d -> e -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f
-liftA5 f a1 a2 a3 a4 a5 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5)
-
-liftA6 :: (a -> b -> c -> d -> e -> f -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g
-liftA6 f a1 a2 a3 a4 a5 a6 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6)
-
-liftA7 :: (a -> b -> c -> d -> e -> f -> g -> h) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> CSharpCode e -> CSharpCode f -> CSharpCode g -> CSharpCode h
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (unCSC a5) (unCSC a6) (unCSC a7)
-
-liftList :: ([a] -> b) -> [CSharpCode a] -> CSharpCode b
-liftList f as = CSC $ f (map unCSC as)
-
-lift1List :: (a -> [b] -> c) -> CSharpCode a -> [CSharpCode b] -> CSharpCode c
-lift1List f a as = CSC $ f (unCSC a) (map unCSC as)
-
-unCSCPair :: (CSharpCode a, CSharpCode b) -> (a, b)
-unCSCPair (a1, a2) = (unCSC a1, unCSC a2) 
-
-lift4Pair :: (a -> b -> c -> d -> [(e, f)] -> g) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> CSharpCode d -> [(CSharpCode e, CSharpCode f)] -> CSharpCode g
-lift4Pair f a1 a2 a3 a4 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (unCSC a4) (map unCSCPair as)
-
-lift3Pair :: (a -> b -> c -> [(d, e)] -> f) -> CSharpCode a -> CSharpCode b -> CSharpCode c -> [(CSharpCode d, CSharpCode e)] -> CSharpCode f
-lift3Pair f a1 a2 a3 as = CSC $ f (unCSC a1) (unCSC a2) (unCSC a3) (map unCSCPair as)
-
-liftPairFst :: (CSharpCode a, b) -> CSharpCode (a, b)
-liftPairFst (c, n) = CSC $ (unCSC c, n)
-
-liftTripFst :: (CSharpCode a, b, c) -> CSharpCode (a, b, c)
-liftTripFst (c, n, b) = CSC $ (unCSC c, n, b)
 
 instance PackageSym CSharpCode where
     type Package CSharpCode = ([(Doc, Label, Bool)], Label)
@@ -156,7 +125,7 @@ instance StateTypeSym CSharpCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
-    boolListType = return csBoolListTypeDoc
+    boolListType = listType dynamic bool
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
     iterator _ = error "Iterator-type variables do not exist in C#"
@@ -505,18 +474,18 @@ instance ParameterSym CSharpCode where
 instance MethodSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise
     type Method CSharpCode = (Doc, Bool)
-    method n s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
-    getMethod n t = method (getterName n) public dynamic t [] getBody
+    method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
+    getMethod n c t = method (getterName n) c public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = fmap setMain $ method "Main" public static void [return $ text "string[] args"] b
-    privMethod n = method n private dynamic
-    pubMethod n = method n public dynamic
-    constructor n = method n public dynamic (construct n)
+    mainMethod c b = fmap setMain $ method "Main" c public static void [return $ text "string[] args"] b
+    privMethod n c = method n c private dynamic
+    pubMethod n c = method n c public dynamic
+    constructor n = method n n public dynamic (construct n)
     destructor _ _ = error "Destructors not allowed in C#"
 
-    function = method
+    function n = method n ""
 
 instance StateVarSym CSharpCode where
     type StateVar CSharpCode = Doc
@@ -560,9 +529,6 @@ csInfileTypeDoc = text "StreamReader"
 
 csOutfileTypeDoc :: Doc
 csOutfileTypeDoc = text "StreamWriter"
-
-csBoolListTypeDoc :: Doc
-csBoolListTypeDoc = text "BitArray"
 
 csThrowDoc :: (Doc, Maybe String) -> Doc
 csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg

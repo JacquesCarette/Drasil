@@ -451,16 +451,17 @@ class ParameterSym repr where
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr, BodySym repr) => MethodSym repr where
     type Method repr
-    method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-    getMethod   :: Label -> repr (MethodType repr) -> repr (Method repr)
-    setMethod   :: Label -> Label -> repr (StateType repr) -> repr (Method repr) 
-    mainMethod  :: repr (Body repr) -> repr (Method repr)
-    privMethod  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-    pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    -- Second label is class name
+    method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    getMethod   :: Label -> Label -> repr (MethodType repr) -> repr (Method repr)
+    setMethod   :: Label -> Label -> Label -> repr (StateType repr) -> repr (Method repr) 
+    mainMethod  :: Label -> repr (Body repr) -> repr (Method repr)
+    privMethod  :: Label -> Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    pubMethod   :: Label -> Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     destructor :: Label -> [repr (StateVar repr)] -> repr (Method repr)
 
-    function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods not parameterized by self in python
+    function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr) 
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr where
     type StateVar repr

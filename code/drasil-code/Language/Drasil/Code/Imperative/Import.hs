@@ -7,7 +7,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
   Float, Object, String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.New (Label,
+import Language.Drasil.Code.Imperative.New (Label, FileType(..),
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
@@ -109,16 +109,16 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (PackageSym repr) => Lang -> ((repr (Package repr)) -> 
+generateCode :: (PackageSym repr) => Lang -> FileType -> ((repr (Package repr)) -> 
   ([(Doc, Label, Bool)], Label)) -> (State repr) -> IO ()
-generateCode l unRepr g =
+generateCode l ft unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
+     createCodeFiles $ makeBuild (unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l ft) $ C.Code $
             map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode (fst $ unRepr pckg) (getExt l)
+            C.unCode $ makeCode (fst $ unRepr pckg) (getExt l ft)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g
@@ -150,11 +150,12 @@ getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
 
-getExt :: Lang -> [Label]
-getExt Java = [".java"]
-getExt Python = [".py"]
-getExt CSharp = [".cs"]
-getExt Cpp = [".cpp"]
+getExt :: Lang -> FileType ->  Label
+getExt Java _ = ".java"
+getExt Python _ = ".py"
+getExt CSharp _ = ".cs"
+getExt Cpp Src = ".cpp"
+getExt Cpp Hdr = ".hpp"
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
@@ -410,7 +411,7 @@ genMainFunc =
       return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs)
         (execOrder $ codeSpec g)
     wo <- fApp "write_output" args2
-    return $ mainMethod $ bodyStatements $ [
+    return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi,

@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Imperative.New (
     -- Types
-    Label, Library, 
+    Label, Library, FileType(..),
     -- Typeclasses
     PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
@@ -15,6 +15,7 @@ module Language.Drasil.Code.Imperative.New (
 
 type Label = String
 type Library = String
+data FileType = Src | Hdr
 
 class (RenderSym repr) => PackageSym repr where
     type Package repr 

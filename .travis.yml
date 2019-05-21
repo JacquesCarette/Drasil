@@ -39,6 +39,7 @@ addons:
       - texlive-xetex
       - texlive-luatex
       - python3
+      - graphviz
 
 before_install:
 # Download and unpack the stack executable

@@ -3,7 +3,6 @@ module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, pbIsSafe, lrIsSafe, instModI
 import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
-import Language.Drasil.Code (asExpr')
 import Theory.Drasil (InstanceModel, imNoDeriv)
 
 --import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
@@ -12,15 +11,11 @@ import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (charWeight, demand, 
-  demandq, eqTNTWeight, plateLen, plateWidth, 
+  demandq, plateLen, plateWidth, 
   standOffDist, isSafePb, isSafeLR, lRe, pbTol, probBr)
 --import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, isSafeLR, lRe, pb_tol, prob_br)
-
-import Drasil.GlassBR.ModuleDefs (interpY)
-
 import Data.Drasil.Concepts.Documentation (goal)
-import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 gbrIMods :: [InstanceModel]
 gbrIMods = [pbIsSafe, lrIsSafe]

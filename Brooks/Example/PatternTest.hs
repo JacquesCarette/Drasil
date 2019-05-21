@@ -1,17 +1,14 @@
 module Example.PatternTest (patternTest) where
 
 import New (
-  RenderSym(..), PermanenceSym(..),
+  PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), ValueExpression(..), 
-  MethodSym(..), ClassSym(..), ModuleSym(..))
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc (buildModule "PatternTest" ["Observer"] [] [] [patternTestClass])
-
-patternTestClass :: (RenderSym repr) => repr (Class repr)
-patternTestClass = mainClass "PatternTest" [] [patternTestMainMethod]
+patternTest :: (PackageSym repr) => repr (Package repr)
+patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [] [patternTestMainMethod] [])]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On"),

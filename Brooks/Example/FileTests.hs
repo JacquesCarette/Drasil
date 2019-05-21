@@ -1,17 +1,17 @@
 module Example.FileTests (fileTests) where
 
-import New (RenderSym(..), PermanenceSym(..),
+import New (PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), Selector(..),
-  FunctionSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-fileTests :: (RenderSym repr) => repr (RenderFile repr)
-fileTests = fileDoc (buildModule "FileTests" [] [] [] [fileTestClass])
+fileTests :: (PackageSym repr) => repr (Package repr)
+fileTests = packMods "FileTests" [fileDoc (buildModule "FileTests" [] [] [fileTestMethod] [])]
 
-fileTestClass :: (RenderSym repr) => repr (Class repr)
-fileTestClass = pubClass "FileTests" Nothing [privMVar 1 "dummy" int] 
-  [mainMethod "FileTests" (body [writeStory, block [readStory], goodBye])]
+fileTestMethod :: (RenderSym repr) => repr (Method repr)
+fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 
+  goodBye])
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [

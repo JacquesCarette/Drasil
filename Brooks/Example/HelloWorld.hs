@@ -1,7 +1,7 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (
-  RenderSym(..), PermanenceSym(..),
+  PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), 
@@ -9,8 +9,9 @@ import New (
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc (buildModule "HelloWorld" ["Helper"] [] [helloWorldMain] [])
+helloWorld :: (PackageSym repr) => repr (Package repr)
+helloWorld = packMods "HelloWorld" [fileDoc (buildModule "HelloWorld" 
+  ["Helper"] [] [helloWorldMain] [])]
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 

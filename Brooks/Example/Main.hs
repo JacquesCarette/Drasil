@@ -1,6 +1,6 @@
 module Example.Main (main) where
 
-import New (Label, RenderSym(..))
+import New (Label, PackageSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import LanguageRenderer.NewPythonRenderer (PythonCode(..))
@@ -36,8 +36,8 @@ main = do
   genCode (classes unCPPHC) [".hpp"]
   setCurrentDirectory workingDir
     
-genCode :: [(Doc, Label, Bool)] -> [Label] -> IO()
-genCode files exts = createCodeFiles $ makeCode files exts
+genCode :: [([(Doc, Label, Bool)], Label)] -> [Label] -> IO()
+genCode files exts = createCodeFiles $ makeCode (concatMap fst files) exts
 
-classes :: (RenderSym repr) => (repr (RenderFile repr) -> (Doc, Label, Bool)) -> [(Doc, Label, Bool)]
+classes :: (PackageSym repr) => (repr (Package repr) -> ([(Doc, Label, Bool)], Label)) -> [([(Doc, Label, Bool)], Label)]
 classes unRepr = map unRepr [helloWorld, helper, patternTest, fileTests, observer]

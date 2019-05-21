@@ -8,10 +8,11 @@ import New (
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
+import Example.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
 helloWorld = packMods "HelloWorld" [fileDoc (buildModule "HelloWorld" 
-  ["Helper"] [] [helloWorldMain] [])]
+  ["Helper"] [] [helloWorldMain] []), helper]
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 

@@ -6,9 +6,10 @@ import New (
   StatementSym(..), ControlStatementSym(..), ValueSym(..), ValueExpression(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
+import Example.Observer (observer)
 
 patternTest :: (PackageSym repr) => repr (Package repr)
-patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [] [patternTestMainMethod] [])]
+patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [] [patternTestMainMethod] []), observer]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On"),

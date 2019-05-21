@@ -40,6 +40,7 @@ import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,oneTabbed,hicat,
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
     brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
     integer, semi, equals, braces, int, comma, colon, hcat)
@@ -60,14 +61,17 @@ repeatListElems n (x:xs) = (take n (repeat x)) ++ repeatListElems n xs
 ------------------
 
 -- | Creates the requested 'Code' by producing files
-createCodeFiles :: [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
-createCodeFiles cs = mapM_ createCodeFile cs
+createCodeFiles :: [Label] -> [(FilePath, Doc)] -> IO () -- [(FilePath, Doc)] -> IO ()
+createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
 
-createCodeFile :: (FilePath, Doc) -> IO ()
-createCodeFile (path, code) = do
+createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
+createCodeFile (n, (path, code)) = do
+    createDirectoryIfMissing False n
+    setCurrentDirectory n
     h <- openFile path WriteMode
     hPutStrLn h (render code)
     hClose h
+    setCurrentDirectory ".."
 
 ----------------------------------------
 -- Syntax common to several renderers --

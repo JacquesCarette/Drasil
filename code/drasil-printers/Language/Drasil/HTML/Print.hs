@@ -14,7 +14,7 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (oldRefwrap, caption, image,
+import Language.Drasil.HTML.Helpers (caption, image,
   div_tag, td, th, tr,
   bold, sub, sup, cases, fraction, em, refwrap,
   reflink, reflinkURI, paragraph, h, html, body,
@@ -66,7 +66,7 @@ build fn (Document t a c) =
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = oldRefwrap (p_spec l) $
+printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
                                  div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ p_spec contents
 printLO (EqnBlock contents)    = p_spec contents

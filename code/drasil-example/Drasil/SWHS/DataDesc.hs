@@ -11,7 +11,7 @@ swhsInputMod :: Mod
 swhsInputMod = Mod "InputFormat" [swhsInputData]
 
 swhsInputData :: Func
-swhsInputData = funcData "get_inputs" $
+swhsInputData = funcData "get_inputs"
   [ junkLine, -- 1
     singleton tank_length,
     junkLine, -- 3

@@ -8,7 +8,7 @@ inputMod :: Mod
 inputMod = Mod "InputFormat" [nopcmInputData]
 
 nopcmInputData :: Func
-nopcmInputData = funcData "get_inputs" $
+nopcmInputData = funcData "get_inputs"
   [ junkLine,
     singleton tank_length,
     junkLine,

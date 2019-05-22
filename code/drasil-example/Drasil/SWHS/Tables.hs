@@ -14,7 +14,7 @@ inputInitQuantsTbl :: Contents
 inputInitQuantsTbl = LlC inputInitQuantsTblabled
 
 inputInitQuantsTblabled :: LabelledContent
-inputInitQuantsTblabled = llcc inputInitQuantsLbl $ (Table
+inputInitQuantsTblabled = llcc inputInitQuantsLbl (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),

@@ -40,7 +40,7 @@ command :: String -> (String -> D)
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
 
 commandD :: String -> (D -> D)
-commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
+commandD s c = (pure (H.bslash TP.<> text s)) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
@@ -48,7 +48,7 @@ command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> (maybe TP.empty H.sq o) T
 
 -- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
+command1oD s o c = (pure (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -120,7 +120,7 @@ count           = command "newcounter"
 
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics 100 = command1o "includegraphics" 
-  (Just $ "width=\\textwidth")
+  (Just "width=\\textwidth")
 includegraphics wp = command1o "includegraphics" 
   (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
 
@@ -161,8 +161,8 @@ sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> (pure $ H.unders) <> br b
-superscript a b = a <> (pure $ H.hat) <> br b
+subscript a b = a <> (pure H.unders) <> br b
+superscript a b = a <> (pure H.hat) <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")

@@ -407,7 +407,7 @@ problem_desc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt
 termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
-  map (\x -> (titleize $ x, Flat $ x ^. defn))
+  map (\x -> (titleize x, Flat $ x ^. defn))
   [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
   plnStrn]

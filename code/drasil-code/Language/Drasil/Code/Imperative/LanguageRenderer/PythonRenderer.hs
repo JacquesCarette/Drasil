@@ -208,7 +208,7 @@ classDoc' :: Config -> FileType -> Label -> Class -> Doc
 classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 classDoc' c f _ m = vcat [
     clsDec c <+> text (className m) <> baseClass <> colon,
-    oneTab $ modInnerDoc]
+    oneTab modInnerDoc]
     where modInnerDoc = case m of (Class n _ _ _ fs) -> methodListDoc c f n fs
                                   (Enum _ _ es) -> enumElementsDoc c es
                                   MainClass{} -> error "unreachable"

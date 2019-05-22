@@ -8,7 +8,6 @@
 
 # Warnings currently triggered by your code
 - ignore: {name: "Redundant bracket"}
-- ignore: {name: "Redundant $"}
 - ignore: {name: "Use camelCase"}
 
 

@@ -1263,7 +1263,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is-safeProb</em>, the glass is considered safe. <em>is-safeProb</em> and <em>is-safeLoad</em> (from <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are either both True or both False. <em>P<sub>f</sub></em> is the probability of failure, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>ftol</sub></em> is the tolerable probability of failure entered by the user.
+If <em>is-safeProb</em>, the glass is considered safe. <em>is-safeProb</em> and <em>is-safeLoad</em> (from <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are either both True or both False. <em>P<sub>f</sub></em> is the probability of failure, <em>P<sub>ftol</sub></em> is the tolerable probability of failure.
 </p>
 </td>
 </tr>
@@ -1335,7 +1335,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is-safeLoad</em>, the glass is considered safe. <em>is-safeProb</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a>) and <em>is-safeLoad</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>Load</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+If <em>is-safeLoad</em>, the glass is considered safe. <em>is-safeProb</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a>) and <em>is-safeLoad</em> are either both True or both False. LR is the load resistance (also called capacity), <em>Load</em> (also referred as the Demand) is the 3 second duration equivalent pressure.
 </p>
 </td>
 </tr>
@@ -2817,7 +2817,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafePb>IM: isSafePb</a> <a href=#TM:isSafeProb>TM: isSafeProb</a>.
+<a href=#IM:isSafePb>IM: isSafePb</a>.
 </p>
 </td>
 </tr>
@@ -2921,7 +2921,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#TM:isSafeLoad>TM: isSafeLoad</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a>.
 </p>
 </td>
 </tr>
@@ -3016,7 +3016,7 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#TM:isSafeLoad>TM: isSafeLoad</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+<a href=#IM:isSafeLR>IM: isSafeLR</a> <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
 </p>
 </td>
 </tr>
@@ -3856,9 +3856,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:isSafeLR>IM: isSafeLR</a>
 </th>
 <th>
-<a href=#TM:isSafeLoad>TM: isSafeLoad</a>
-</th>
-<th>
 <a href=#DD:calofDemand>DD: calofDemand</a>
 </th>
 <th>
@@ -3871,13 +3868,16 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:isSafePb>IM: isSafePb</a>
 </th>
 <th>
-<a href=#TM:isSafeProb>TM: isSafeProb</a>
-</th>
-<th>
 <a href=#DD:probOfBreak>DD: probOfBreak</a>
 </th>
 <th>
+<a href=#TM:isSafeProb>TM: isSafeProb</a>
+</th>
+<th>
 <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
+</th>
+<th>
+<a href=#TM:isSafeLoad>TM: isSafeLoad</a>
 </th>
 </tr>
 <tr>
@@ -4974,7 +4974,7 @@ X
 X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5146,10 +5146,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5321,10 +5321,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5404,7 +5404,7 @@ X
 X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5496,10 +5496,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5582,10 +5582,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -5757,13 +5757,13 @@ X
 
 </td>
 <td>
+X
+</td>
+<td>
 
 </td>
 <td>
-X
-</td>
-<td>
-X
+
 </td>
 <td>
 
@@ -5846,13 +5846,13 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -5938,10 +5938,10 @@ X
 X
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 </tr>
 <tr>
@@ -6006,25 +6006,25 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
 </td>
 <td>
 X
@@ -6101,10 +6101,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -6350,10 +6350,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -6442,10 +6442,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -6525,10 +6525,10 @@ X
 
 </td>
 <td>
-
+X
 </td>
 <td>
-X
+
 </td>
 <td>
 

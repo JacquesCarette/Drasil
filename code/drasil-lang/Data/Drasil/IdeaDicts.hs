@@ -20,10 +20,9 @@ materialEng  = mkIdea  "materialEng"    (cn' "Material Engineering")  Nothing
 documentc    = mkIdea  "documentc"      (cn' "Document")              (Just "Doc")
 knowledgemng = mkIdea  "knowledgemng"   (cn' "Knowledge Management")  Nothing
 
-gendef, theoryMod, instanceMod, dataDefn :: CI
+genDefn, theoryMod, instanceMod, dataDefn :: CI
 
-gendef      = commonIdeaWithDict "gendef"      (cn' "General Definition") "GD"   [softEng]
-theoryMod   = commonIdeaWithDict "theoryMod"   (cn' "Theory Model")       "TM"   [softEng]
-instanceMod = commonIdeaWithDict "instanceMod" (cn' "Instance Model")     "IM"   [softEng]
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")    "DD"   [softEng]
-
+genDefn     = commonIdeaWithDict "genDefn"     (cn' "General Definition") "GD"  [softEng]
+theoryMod   = commonIdeaWithDict "theoryMod"   (cn' "Theory Model")       "TM"  [softEng]
+instanceMod = commonIdeaWithDict "instanceMod" (cn' "Instance Model")     "IM"  [softEng]
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "Data Definition")    "DD"  [softEng]

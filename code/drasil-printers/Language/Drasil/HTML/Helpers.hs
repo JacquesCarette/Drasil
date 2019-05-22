@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, ($$), (<>), vcat, hcat, nest,
-  ($+$), cat, hcat)
+  cat, hcat)
 import Data.List (intersperse, foldl1)
 
 import Language.Drasil hiding (Expr)
@@ -166,12 +166,6 @@ span_tag = wrap "span"
 
 indent :: Doc -> Doc
 indent = nest 0
-
-indentl :: [Doc] -> [Doc]
-indentl = map $ nest 0
-
-vvcat :: [Doc] -> Doc
-vvcat = foldr ($+$) empty
 
 -- | Create and markup fractions
 fraction :: Doc -> Doc -> Doc

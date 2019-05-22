@@ -292,7 +292,7 @@ spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
 spec sm (Ref (Reference _ (RP rp ra) sn _)) = 
   P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
 spec sm (Ref (Reference _ (Citation ra) sn r)) = 
-  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn r
+  P.Ref P.Cite2    ra (spec sm (renderCitInfo r))
 spec sm (Ref (Reference _ (URI ra) sn _)) = 
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
@@ -309,9 +309,15 @@ renderShortName _ Name sn = S $ getStringSN sn
 renderURI :: ctx -> ShortName -> Sentence
 renderURI _ sn = S $ getStringSN sn
 
+renderCitInfo :: RefInfo -> Sentence
+renderCitInfo None     = EmptyS
+renderCitInfo (RI t i) = sParen ((renderInfoType t (length i)) +:+ foldNums i)
+
+{-}
 renderCitation :: ctx -> ShortName -> RefInfo -> Sentence
 renderCitation _ sn None     = S (getStringSN sn)
 renderCitation _ sn (RI t i) = S (getStringSN sn) +:+ sParen ((renderInfoType t (length i)) +:+ foldNums i)
+-}
 
 -- | Helper for rendering InfoType of a Reference
 renderInfoType :: InfoType -> Int -> Sentence

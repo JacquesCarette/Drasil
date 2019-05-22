@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
+import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), (<+>), vcat, hcat)
 import Data.List (intersperse, foldl1)
 
 import Language.Drasil hiding (Expr)
@@ -74,6 +74,10 @@ refwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
 reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
+
+-- | Helper for setting up links to references with additional information
+reflinkInfo :: String -> Doc -> Doc -> Doc
+reflinkInfo ref txt info = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>" <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc

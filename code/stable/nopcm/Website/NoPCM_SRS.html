@@ -431,9 +431,7 @@ Detect data type mismatch, such as a string of characters instead of a floating 
 <li>
 Determine if the inputs satisfy the required physical and software constraints
 </li>
-<li>
-Calculate the required outputs
-</li>
+<li>Calculate the required outputs</li>
 </ul>
 </li>
 </ul>
@@ -483,9 +481,7 @@ Specific heat capacity: The amount of energy required to raise the temperature o
 <li>
 Thermal conduction: The transfer of heat energy through a substance
 </li>
-<li>
-Transient: Changing with time
-</li>
+<li>Transient: Changing with time</li>
 </ul>
 </div>
 </div>
@@ -643,27 +639,19 @@ This section focuses on the general equations and laws that SWHS is based on.
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>∇</em> is the gradient (Unitless)
-</li>
+<li><em>∇</em> is the gradient (Unitless)</li>
 <li>
 <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>)
 </li>
 <li>
 <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>)
 </li>
-<li>
-<em>ρ</em> is the density (kg/m<sup>3</sup>)
-</li>
+<li><em>ρ</em> is the density (kg/m<sup>3</sup>)</li>
 <li>
 <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
 </li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>T</em> is the temperature (&deg;C)
-</li>
+<li><em>t</em> is the time (s)</li>
+<li><em>T</em> is the temperature (&deg;C)</li>
 </ul>
 </td>
 </tr>
@@ -713,18 +701,12 @@ The above equation gives the law of conservation of energy for transient heat tr
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>E</em> is the sensible heat (J)
-</li>
+<li><em>E</em> is the sensible heat (J)</li>
 <li>
 <em>C<sup>L</sup></em> is the specific heat capacity of a liquid (J/(kg&sdot;&deg;C))
 </li>
-<li>
-<em>m</em> is the mass (kg)
-</li>
-<li>
-<em>ΔT</em> is the change in temperature (&deg;C)
-</li>
+<li><em>m</em> is the mass (kg)</li>
+<li><em>ΔT</em> is the change in temperature (&deg;C)</li>
 </ul>
 </td>
 </tr>
@@ -782,18 +764,12 @@ This section collects the laws and equations that will be used to build the inst
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>q</em> is the heat flux (W/m<sup>2</sup>)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
+<li><em>q</em> is the heat flux (W/m<sup>2</sup>)</li>
+<li><em>t</em> is the time (s)</li>
 <li>
 <em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
 </li>
-<li>
-<em>ΔT</em> is the change in temperature (&deg;C)
-</li>
+<li><em>ΔT</em> is the change in temperature (&deg;C)</li>
 </ul>
 </td>
 </tr>
@@ -842,18 +818,12 @@ Newton's law of cooling describes convective cooling from a surface. The law is 
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>m</em> is the mass (kg)
-</li>
+<li><em>m</em> is the mass (kg)</li>
 <li>
 <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
 </li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>T</em> is the temperature (&deg;C)
-</li>
+<li><em>t</em> is the time (s)</li>
+<li><em>T</em> is the temperature (&deg;C)</li>
 <li>
 <em>q<sub>in</sub></em> is the heat flux input (W/m<sup>2</sup>)
 </li>
@@ -869,9 +839,7 @@ Newton's law of cooling describes convective cooling from a surface. The law is 
 <li>
 <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>)
 </li>
-<li>
-<em>V</em> is the volume (m<sup>3</sup>)
-</li>
+<li><em>V</em> is the volume (m<sup>3</sup>)</li>
 </ul>
 </td>
 </tr>
@@ -1005,9 +973,7 @@ This section collects and defines all the data needed to build the instance mode
 <li>
 <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
 </li>
-<li>
-<em>t</em> is the time (s)
-</li>
+<li><em>t</em> is the time (s)</li>
 </ul>
 </td>
 </tr>
@@ -1108,15 +1074,11 @@ Energy balance on water to find the temperature of the water
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>t</em> is the time (s)
-</li>
+<li><em>t</em> is the time (s)</li>
 <li>
 <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
 </li>
-<li>
-<em>τ<sub>W</sub></em> is the ODE parameter for water (s)
-</li>
+<li><em>τ<sub>W</sub></em> is the ODE parameter for water (s)</li>
 <li>
 <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
 </li>
@@ -1242,15 +1204,11 @@ Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> 
 <li>
 <em>E<sub>W</sub></em> is the change in heat energy in the water (J)
 </li>
-<li>
-<em>t</em> is the time (s)
-</li>
+<li><em>t</em> is the time (s)</li>
 <li>
 <em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
 </li>
-<li>
-<em>m<sub>W</sub></em> is the mass of water (kg)
-</li>
+<li><em>m<sub>W</sub></em> is the mass of water (kg)</li>
 <li>
 <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
 </li>

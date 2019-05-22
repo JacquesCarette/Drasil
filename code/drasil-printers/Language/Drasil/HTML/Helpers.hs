@@ -35,7 +35,7 @@ figure     = wrap "figure" []
 -- | Figcaption tag wrapper
 figcaption = wrap "figcaption" []
 -- | List tag wrapper
-li         = oldWrap "li" []
+li         = wrap "li" []
 -- | Paragraph in list tag wrapper
 pa         = oldWrap "p" []
 

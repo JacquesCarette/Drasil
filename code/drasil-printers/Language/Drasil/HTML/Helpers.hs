@@ -112,13 +112,6 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
--- OLD FUNCTIONS
---------------------------------------------------
--- | Helper for setting up references
-oldRefwrap :: Doc -> Doc -> Doc
-oldRefwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
---------------------------------------------------
-
 refwrap :: Doc -> Doc -> Doc
 refwrap = flip (wrap_gen Id "div") [""]
 

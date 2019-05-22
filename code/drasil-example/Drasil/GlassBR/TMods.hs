@@ -4,16 +4,11 @@ import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Database.Drasil (cdb)
 import Theory.Drasil (TheoryModel, tm)
-
 import Control.Lens ((^.))
-
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
-
 import Drasil.GlassBR.Concepts (lResistance)
-import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.IMods (glassBRsymb)
 import Drasil.GlassBR.References (astm2009)
---import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeProb, is_safeLR, is_safeLoad, lRe, pb_tol, pb_tolfail, prob_br, prob_fail)
 import Drasil.GlassBR.Unitals (tm_demand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
@@ -50,10 +45,8 @@ lrIsSafeDesc = tModDesc (is_safeLoad) s ending
   where 
     s = ((ch is_safeProb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLoad))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
-      sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (makeRef2S calofCapacity) +:+ (ch tm_demand) +:+ sParen (S "also referred as the" +:+ 
-      (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRef2S calofDemand
+      sParen (S "also called capacity") `sC` (ch tm_demand) +:+ sParen (S "also referred as the" +:+ 
+      (titleize demandq)) `isThe` (demandq ^. defn)
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
@@ -73,8 +66,7 @@ pbIsSafeDesc = tModDesc (is_safeProb) s ending
   where 
     s = (ch is_safeProb) `sAnd` (ch is_safeLoad) +:+ sParen (S "from" +:+
       (makeRef2S lrIsSafe))
-    ending = ((ch probFail) `isThe` (phrase probFail)) `sC` S "as calculated in" +:+.
-      (makeRef2S probOfBreak) +:+ (ch pbTolfail) `isThe` (phrase pbTolfail) +:+ S "entered by the user"
+    ending = ((ch probFail) `isThe` (phrase probFail)) `sC` (ch pbTolfail) `isThe` (phrase pbTolfail) 
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

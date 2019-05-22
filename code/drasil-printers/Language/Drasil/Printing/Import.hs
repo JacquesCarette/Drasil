@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
 
-import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
@@ -13,9 +12,13 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb)
 
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList)
+
+import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
+import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
-import Data.Tuple(fst, snd)
+
 -- | Render a Space
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
@@ -288,8 +291,8 @@ spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
 spec sm (Ref (Reference _ (RP rp ra) sn _)) = 
   P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
-spec sm (Ref (Reference _ (Citation ra) sn _)) = 
-  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
+spec sm (Ref (Reference _ (Citation ra) sn r)) = 
+  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn r
 spec sm (Ref (Reference _ (URI ra) sn _)) = 
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
@@ -306,8 +309,45 @@ renderShortName _ Name sn = S $ getStringSN sn
 renderURI :: ctx -> ShortName -> Sentence
 renderURI _ sn = S $ getStringSN sn
 
-renderCitation :: ctx -> ShortName -> Sentence
-renderCitation _ sn = S $ getStringSN sn
+renderCitation :: ctx -> ShortName -> RefInfo -> Sentence
+renderCitation _ sn None     = S (getStringSN sn)
+renderCitation _ sn (RI t i) = S (getStringSN sn) +:+ sParen ((renderInfoType t (length i)) +:+ foldNums i)
+
+-- | Helper for rendering InfoType of a Reference
+renderInfoType :: InfoType -> Int -> Sentence
+renderInfoType Equation 1 = S "Eq."
+renderInfoType Equation _ = S "Eqs."
+renderInfoType Page     1 = S "pg."
+renderInfoType Page     _ = S "pp."
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, 13")
+foldNums :: [Int] -> Sentence
+foldNums x = foldlList Comma List $ map S (numbers x)
+
+-- | Helper for foldNums
+numbers :: [Int] -> [String]
+numbers []  = [""]
+numbers [x] = [show x]
+numbers [x, y]
+  | y == x + 1 = [hyp x y]
+  | otherwise  = map show [x, y]
+numbers (x:y:xs)
+  | y == x + 1 = range x y xs
+  | otherwise  = show x : numbers (y:xs)
+
+-- | Helper for foldNums
+range :: Int -> Int -> [Int] -> [String]
+range a b []   = [hyp a b]
+range a b [x]
+  | x == b + 1 = [hyp a x]
+  | otherwise  = [hyp a b, show x]
+range a b (x:xs)
+  | x == b + 1 = range a x xs
+  | otherwise  = hyp a b : numbers (x:xs)
+
+-- | Helper for foldNums
+hyp :: Int -> Int -> String
+hyp a b = show a ++ "-" ++ show b
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document

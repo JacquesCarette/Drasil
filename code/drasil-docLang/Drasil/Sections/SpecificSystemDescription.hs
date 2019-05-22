@@ -19,11 +19,12 @@ module Drasil.Sections.SpecificSystemDescription
 import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol)
 
-import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
-  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
-  output_, symbol_, limitation, problem, datum, datumConstraint, section_,
-  general, assumption, physicalSystem, problemDescription, solutionCharacteristic,
-  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element, specification)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  datum, datumConstraint, element, general, goalStmt, information, input_,
+  likelyChg, limitation, model, output_, physical, physicalConstraint,
+  physicalSystem, problem, problemDescription, purpose, quantity, requirement,
+  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  typUnc, uncertainty, unlikelyChg, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 

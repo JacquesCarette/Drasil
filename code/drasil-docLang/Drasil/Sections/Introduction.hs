@@ -5,10 +5,11 @@ import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (goal, organization, goalStmt,
-  documentation, user, theory, definition, scope, requirement, section_, document, purpose,
-  system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
-  vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
+import Data.Drasil.Concepts.Documentation as Doc (characteristic, decision,
+  definition, desSpec, design, designDoc, document, documentation, environment,
+  goal, goalStmt, implementation, intReader, model, organization, purpose,
+  requirement, scope, section_, softwareDoc, softwareVAV, srs, system, theory,
+  user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),

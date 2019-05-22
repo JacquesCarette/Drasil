@@ -633,9 +633,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 <td>
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
-<span class="fup">&part;&#8239;T</span>
-<span class="fdn">&part;&#8239;t</span>
-</div></em>
+                                                    <span class="fup">&part;&#8239;T</span>
+                                                    <span class="fdn">&part;&#8239;t</span>
+                                                    </div></em>
 </div>
 </td>
 </tr>
@@ -832,9 +832,9 @@ Newton's law of cooling describes convective cooling from a surface. The law is 
 <td>
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
-<span class="fup">d&#8239;T</span>
-<span class="fdn">d&#8239;t</span>
-</div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                    <span class="fup">d&#8239;T</span>
+                    <span class="fdn">d&#8239;t</span>
+                    </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
 </td>
 </tr>
@@ -905,57 +905,57 @@ Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>)
 </p>
 <div class="equation">
 <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-<span class="fup">
-&part;&#8239;T
-</span>
-<span class="fdn">
-&part;&#8239;t
-</span>
-</div>&#8239;dV</em>
+                                                                                                                         <span class="fup">
+                                                                                                                         &part;&#8239;T
+                                                                                                                         </span>
+                                                                                                                         <span class="fdn">
+                                                                                                                         &part;&#8239;t
+                                                                                                                         </span>
+                                                                                                                         </div>&#8239;dV</em>
 </div>
 <p class="paragraph">
 Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
 </p>
 <div class="equation">
 <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-<span class="fup">
-&part;&#8239;T
-</span>
-<span class="fdn">
-&part;&#8239;t
-</span>
-</div>&#8239;dV</em>
+                                                                                                                                      <span class="fup">
+                                                                                                                                      &part;&#8239;T
+                                                                                                                                      </span>
+                                                                                                                                      <span class="fdn">
+                                                                                                                                      &part;&#8239;t
+                                                                                                                                      </span>
+                                                                                                                                      </div>&#8239;dV</em>
 </div>
 <p class="paragraph">
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 </p>
 <div class="equation">
 <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-<span class="fup">
-&part;&#8239;T
-</span>
-<span class="fdn">
-&part;&#8239;t
-</span>
-</div>&#8239;dV</em>
+                                                                                                                                      <span class="fup">
+                                                                                                                                      &part;&#8239;T
+                                                                                                                                      </span>
+                                                                                                                                      <span class="fdn">
+                                                                                                                                      &part;&#8239;t
+                                                                                                                                      </span>
+                                                                                                                                      </div>&#8239;dV</em>
 </div>
 <p class="paragraph">
 Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
 </p>
 <div class="equation">
 <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
-<span class="fup">d&#8239;T</span>
-<span class="fdn">d&#8239;t</span>
-</div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                            <span class="fup">d&#8239;T</span>
+                            <span class="fdn">d&#8239;t</span>
+                            </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
 <p class="paragraph">
 Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
-<span class="fup">d&#8239;T</span>
-<span class="fdn">d&#8239;t</span>
-</div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                    <span class="fup">d&#8239;T</span>
+                    <span class="fdn">d&#8239;t</span>
+                    </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
 </div>
 </div>
@@ -975,11 +975,11 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 <tr>
 <th>Symbol</th>
-<td><p class="paragraph"><em> q<sub> C </sub> </em></p></td>
+<td><p class="paragraph"><em>q<sub>C</sub></em></p></td>
 </tr>
 <tr>
 <th>Units</th>
-<td><p class="paragraph">W/m<sup> 2 </sup></p></td>
+<td><p class="paragraph">W/m<sup>2</sup></p></td>
 </tr>
 <tr>
 <th>Equation</th>
@@ -1095,12 +1095,12 @@ Energy balance on water to find the temperature of the water
 <td>
 <div class="equation">
 <em><div class="fraction">
-<span class="fup">d&#8239;T<sub> W </sub></span>
-<span class="fdn">d&#8239;t</span>
-</div> = <div class="fraction">
-<span class="fup">1</span>
-<span class="fdn">τ<sub> W </sub></span>
-</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
+    <span class="fup">d&#8239;T<sub>W</sub></span>
+    <span class="fdn">d&#8239;t</span>
+    </div> = <div class="fraction">
+             <span class="fup">1</span>
+             <span class="fdn">τ<sub>W</sub></span>
+             </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </div>
 </td>
 </tr>
@@ -1128,13 +1128,13 @@ Energy balance on water to find the temperature of the water
 <td>
 <p class="paragraph">
 <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
-<span class="fup">
-m<sub>W</sub>&#8239;C<sub>W</sub>
-</span>
-<span class="fdn">
-h<sub>C</sub>&#8239;A<sub>C</sub>
-</span>
-</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
+                                                                                                                                                             <span class="fup">
+                                                                                                                                                             m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                                                                                                                             </span>
+                                                                                                                                                             <span class="fdn">
+                                                                                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                                                                                             </span>
+                                                                                                                                                             </div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
 </p>
 </td>
 </tr>
@@ -1160,42 +1160,42 @@ To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy bala
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-<span class="fup">d&#8239;T<sub>W</sub></span>
-<span class="fdn">d&#8239;t</span>
-</div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
+                                            <span class="fup">d&#8239;T<sub>W</sub></span>
+                                            <span class="fdn">d&#8239;t</span>
+                                            </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
 </div>
 <p class="paragraph">
 Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> , this can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-<span class="fup">d&#8239;T<sub>W</sub></span>
-<span class="fdn">d&#8239;t</span>
-</div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+                                            <span class="fup">d&#8239;T<sub>W</sub></span>
+                                            <span class="fdn">d&#8239;t</span>
+                                            </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 <p class="paragraph">
 Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
 </p>
 <div class="equation">
 <em><div class="fraction">
-<span class="fup">d&#8239;T<sub> W </sub></span>
-<span class="fdn">d&#8239;t</span>
-</div> = <div class="fraction">
-<span class="fup">h<sub> C </sub>&#8239;A<sub> C </sub></span>
-<span class="fdn">m<sub> W </sub>&#8239;C<sub> W </sub></span>
-</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+    <span class="fup">d&#8239;T<sub>W</sub></span>
+    <span class="fdn">d&#8239;t</span>
+    </div> = <div class="fraction">
+             <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+             <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
+             </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 <p class="paragraph">
 Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
 </p>
 <div class="equation">
 <em><div class="fraction">
-<span class="fup">d&#8239;T<sub> W </sub></span>
-<span class="fdn">d&#8239;t</span>
-</div> = <div class="fraction">
-<span class="fup">1</span>
-<span class="fdn">τ<sub> W </sub></span>
-</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+    <span class="fup">d&#8239;T<sub>W</sub></span>
+    <span class="fdn">d&#8239;t</span>
+    </div> = <div class="fraction">
+             <span class="fup">1</span>
+             <span class="fdn">τ<sub>W</sub></span>
+             </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 <div id="IM:heatEInWtr">
 <table class="idefn">
@@ -1307,7 +1307,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<s
 <td>
 <em>A<sub>C</sub>&thinsp;&le;&thinsp;A<sub>C</sub><sup>max</sup></em>
 </td>
-<td><em>120.0&sdot;10<sup>-3</sup></em>m<sup>2</sup></td>
+<td><em>120.0&sdot;10<sup>-3</sup></em> m<sup>2</sup></td>
 <td>10<em>%</em></td>
 </tr>
 <tr>
@@ -1361,7 +1361,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<s
 <td>
 <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
 </td>
-<td><em>50.0&sdot;10<sup>3</sup></em>s</td>
+<td><em>50.0&sdot;10<sup>3</sup></em> s</td>
 <td>10<em>%</em></td>
 </tr>
 <tr>
@@ -1379,7 +1379,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<s
 <td>
 <em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
-<td><em>1.0&sdot;10<sup>3</sup></em>kg/m<sup>3</sup></td>
+<td><em>1.0&sdot;10<sup>3</sup></em> kg/m<sup>3</sup></td>
 <td>10<em>%</em></td>
 </tr>
 </table>
@@ -1437,13 +1437,13 @@ Input-Initial-Quantities: Input the following quantities described in <a href=#T
 <p>
 <div id="findMass">
 Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = π&#8239;(<div class="fraction">
-<span class="fup">
-D
-</span>
-<span class="fdn">
-2
-</span>
-</div>)<sup>2</sup>&#8239;L&#8239;ρ<sub>W</sub></em>, where <em>V<sub>W</sub></em> is the volume of water.
+                                                                                                                                                                                                                                           <span class="fup">
+                                                                                                                                                                                                                                           D
+                                                                                                                                                                                                                                           </span>
+                                                                                                                                                                                                                                           <span class="fdn">
+                                                                                                                                                                                                                                           2
+                                                                                                                                                                                                                                           </span>
+                                                                                                                                                                                                                                           </div>)<sup>2</sup>&#8239;L&#8239;ρ<sub>W</sub></em>, where <em>V<sub>W</sub></em> is the volume of water.
 </div>
 </p>
 <p>

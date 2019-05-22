@@ -9,7 +9,7 @@ import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.NounPhrase (cn')
-import Language.Drasil.RefProg (Reference(Reference))
+import Language.Drasil.RefProg (Reference(Reference), RefInfo(None))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
@@ -95,19 +95,19 @@ figWithWidth = Figure
 -- FIXME: horrible hacks.
 -- These should eventually either disappear, or at least move out to docLang
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs)
+makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs) None
 
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs)
+makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs) None
 
 makeSecRef :: String -> String -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ repUnd r))
-  (shortname' s)
+  (shortname' s) None
 
 makeLstRef :: String -> String -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
-  (shortname' s)
+  (shortname' s) None
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r = Reference u (URI r)
+makeURI u r s = Reference u (URI r) s None

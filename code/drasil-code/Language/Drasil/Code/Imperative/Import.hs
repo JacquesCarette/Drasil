@@ -205,7 +205,7 @@ genInputClass = do
   let ins          = inputs $ codeSpec g
       inputVars    =
           map (\x -> pubMVar 0 (codeName x) (convType $ codeType x)) ins
-      varsList     = map (\x -> self $-> var (codeName x)) ins
+      varsList     = map (\x -> objVarSelf (codeName x)) ins
       vals         = map (getDefaultValue . codeType) ins
   asgs <- zipWithM assign' varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
@@ -476,11 +476,13 @@ getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      ps = map (\y -> stateParam (codeName y) (convType $ codeType y))
+      ps = map (\y -> (paramFunc $ codeType y) (codeName y) (convType $ codeType y))
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
               csSubIns)
+      paramFunc (C.List _) = pointerParam
+      paramFunc _ = stateParam
   return $ if length csSubIns < length cs
-           then (stateParam "inParams" (obj "InputParameters")):ps  -- todo:  make general
+           then (pointerParam "inParams" (obj "InputParameters")):ps  -- todo:  make general
            else ps
 
 getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 

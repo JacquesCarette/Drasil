@@ -1064,7 +1064,7 @@ cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
     where end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: (Doc, Maybe String) -> Doc
-cppThrowDoc (errMsg, _) = text "throw" <> parens errMsg
+cppThrowDoc (errMsg, _) = text "throw" <+> errMsg
 
 cppTryCatch :: Doc -> Doc -> Doc
 cppTryCatch tb cb= vcat [

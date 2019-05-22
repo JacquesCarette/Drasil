@@ -66,7 +66,7 @@ import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLas
   ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, pbIsSafe, lrIsSafe, instModIntro)
+import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,

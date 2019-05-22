@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.RefProg (InfoType(..), Reference(Reference, refInfo), RefInfo(..)) where
+module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
@@ -9,10 +9,10 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses)
 
-data InfoType = Equation | Page
-
-data RefInfo = None | RI { infoType :: InfoType, infoNums :: [Int] }
-makeLenses ''RefInfo
+data RefInfo = None
+             | Equation [Int]
+             | Page [Int]
+             | RefNote String
 
 data Reference = Reference
   { _ui :: UID

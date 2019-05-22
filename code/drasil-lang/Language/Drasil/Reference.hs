@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (Referable(renderRef))
-import Language.Drasil.RefProg (Reference(..), RefInfo(..), InfoType)
+import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Sentence (Sentence(Ref))
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
@@ -22,9 +22,8 @@ makeCiteS :: Citation -> Sentence
 makeCiteS = Ref . makeCite
 
 -- Makes a Reference from a Citation with additional information
-makeCiteInfo :: Citation -> InfoType -> [Int] -> Reference
-makeCiteInfo _ _ [ ] = error "List of integers is empty for makeCiteInfo"
-makeCiteInfo l i lst = Reference (l ^. uid) (renderRef l) (shortname l) (RI i lst)
+makeCiteInfo :: Citation -> RefInfo -> Reference
+makeCiteInfo l = Reference (l ^. uid) (renderRef l) (shortname l)
 
-makeCiteInfoS :: Citation -> InfoType -> [Int] -> Sentence
-makeCiteInfoS c i lst = Ref $ makeCiteInfo c i lst
+makeCiteInfoS :: Citation -> RefInfo -> Sentence
+makeCiteInfoS c ri = Ref $ makeCiteInfo c ri

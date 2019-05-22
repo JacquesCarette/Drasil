@@ -310,23 +310,20 @@ renderURI :: ctx -> ShortName -> Sentence
 renderURI _ sn = S $ getStringSN sn
 
 renderCitInfo :: RefInfo -> Sentence
-renderCitInfo None     = EmptyS
-renderCitInfo (RI t i) = sParen ((renderInfoType t (length i)) +:+ foldNums i)
+renderCitInfo  None          = EmptyS
+renderCitInfo (RefNote   rn) = sParen (S rn)
+renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
+renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
+renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
+renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
 
--- | Helper for rendering InfoType of a Reference
-renderInfoType :: InfoType -> Int -> Sentence
-renderInfoType Equation 1 = S "Eq."
-renderInfoType Equation _ = S "Eqs."
-renderInfoType Page     1 = S "pg."
-renderInfoType Page     _ = S "pp."
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, 13")
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
 foldNums :: [Int] -> Sentence
 foldNums x = foldlList Comma List $ map S (numbers x)
 
 -- | Helper for foldNums
 numbers :: [Int] -> [String]
-numbers []  = [""]
+numbers []  = error "Empty list when making reference with additional information"
 numbers [x] = [show x]
 numbers [x, y]
   | y == x + 1 = [hyp x y]

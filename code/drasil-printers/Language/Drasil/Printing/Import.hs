@@ -286,11 +286,11 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref (Reference _ (RP rp ra) sn)) = 
+spec sm (Ref (Reference _ (RP rp ra) sn _)) = 
   P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
-spec sm (Ref (Reference _ (Citation ra) sn)) = 
+spec sm (Ref (Reference _ (Citation ra) sn _)) = 
   P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
-spec sm (Ref (Reference _ (URI ra) sn)) = 
+spec sm (Ref (Reference _ (URI ra) sn _)) = 
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS

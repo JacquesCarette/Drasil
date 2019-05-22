@@ -23,7 +23,8 @@ makeCiteS = Ref . makeCite
 
 -- Makes a Reference from a Citation with additional information
 makeCiteInfo :: Citation -> InfoType -> [Int] -> Reference
+makeCiteInfo _ _ [ ] = error "List of integers is empty for makeCiteInfo"
 makeCiteInfo l i lst = Reference (l ^. uid) (renderRef l) (shortname l) (RI i lst)
 
--- makeCiteS :: Citation -> Sentence
--- makeCiteS = Ref . makeCite
+makeCiteInfoS :: Citation -> InfoType -> [Int] -> Sentence
+makeCiteInfoS c i lst = Ref $ makeCiteInfo c i lst

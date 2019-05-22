@@ -1,4 +1,4 @@
-module Drasil.Sections.Requirements (fReqF, reqF, nfReqF) where
+module Drasil.Sections.Requirements (fReqF, reqF, reqIntro, nfReqF,) where
 
 import Language.Drasil
 
@@ -20,17 +20,17 @@ nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []
 
 --helpers for requirements intros
 reqIntroStart :: Sentence
-reqIntroStart = foldlSent_ [S "This", (phrase section_), S "provides"]
+reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 frReqIntroBody :: Sentence
 frReqIntroBody = foldlSent_
-        [S "the", (plural functionalRequirement) `sC` S "the tasks and behaviours that the",
-        (phrase software), S "is expected to complete"]
+        [S "the", plural functionalRequirement `sC` S "the tasks and behaviours that the",
+        phrase software, S "is expected to complete"]
 
 nfrReqIntroBody :: Sentence
 nfrReqIntroBody = foldlSent_
-        [S "the", (plural nonfunctionalRequirement) `sC` S "the qualities that the",
-        (phrase software), S "is expected to exhibit"]
+        [S "the", plural nonfunctionalRequirement `sC` S "the qualities that the",
+        phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
 reqIntroS :: Sentence

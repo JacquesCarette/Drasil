@@ -132,10 +132,10 @@ liftS = fmap (: [])
 
 genInputModClass :: Reader State [Module]
 genInputModClass =
-  sequence $ [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
-               genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
-               genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
-             ]
+  sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
+             genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
+             genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
+           ]
 
 genInputModNoClass :: Reader State [Module]
 genInputModNoClass = do
@@ -143,11 +143,11 @@ genInputModNoClass = do
   let ins = inputs $ codeSpec g
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
-  return $ [ buildModule "InputParameters" []
-             (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
-             [inpDer , inpConstr]
-             []
-           ]
+  return [ buildModule "InputParameters" []
+           (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
+           [inpDer , inpConstr]
+           []
+         ]
 
 genInputClass :: Reader State Class
 genInputClass = do
@@ -172,7 +172,7 @@ genInputConstraints = do
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
   publicMethod methodTypeVoid "input_constraints" parms
-      (return $ [ block $ sf ++ hw ])
+      (return [ block $ sf ++ hw ])
 
 genInputDerived :: Reader State Method
 genInputDerived = do
@@ -312,7 +312,7 @@ genModule n maybeMs maybeCs = do
 
 
 genMain :: Reader State Module
-genMain = genModule "Control" (Just $ liftS $ genMainFunc) Nothing
+genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: Reader State FunctionDecl
 genMainFunc =
@@ -607,16 +607,16 @@ genDataFunc nameTitle ddef = do
           return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ lnI
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
-          return $ [ getFileInputAll v_infile v_lines,
+          return [getFileInputAll v_infile v_lines,
               for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) (v_i &++)
-                ( body ( (stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d) : lnV))
+                (body ((stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d) : lnV))
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) (v_i &++)
+          return [for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) (v_i &++)
               ( body
-                ( [ getFileInputLine v_infile v_line,
-                    stringSplit v_linetokens v_line d
+                ( [getFileInputLine v_infile v_line,
+                   stringSplit v_linetokens v_line d
                   ] ++ lnV
                 )
               )

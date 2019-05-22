@@ -28,7 +28,7 @@ readTableMod :: Mod
 readTableMod = packmod "ReadTable" [readTable]
 
 readTable :: Func
-readTable = funcData "read_table" $
+readTable = funcData "read_table"
   [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
                          listEntry [WithLine, WithPattern] yMatrix]) ','
@@ -42,7 +42,7 @@ inputMod :: Mod
 inputMod = packmod "InputFormat" [glassInputData]
 
 glassInputData :: Func
-glassInputData = funcData "get_input" $
+glassInputData = funcData "get_input"
   [ junkLine,
     singleton plateLen, singleton plateWidth, singleton nomThick,
     junkLine,

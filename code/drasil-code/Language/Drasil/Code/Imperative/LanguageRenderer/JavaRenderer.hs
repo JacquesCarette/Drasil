@@ -51,8 +51,7 @@ javaConfig options c =
         enumsEqualInts   = False,
         ext              = ".java",
         dir              = "java",
-        buildConfig      = buildSingle (\i _ -> ["javac", unwords i]) $
-          inCodePackage $ mainModuleFile,
+        buildConfig      = buildSingle (\i _ -> ["javac", unwords i]) $ inCodePackage mainModuleFile,
         runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",

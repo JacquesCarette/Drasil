@@ -65,8 +65,8 @@ foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length 
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  wt len = map (wrap wt . S . show) [1..len]
-    numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
-    numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
+    numList Upper wt len = map (\x -> wrap wt $ S [x]) (take len ['A'..'Z'])
+    numList Lower wt len = map (\x -> wrap wt $ S [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
@@ -178,7 +178,7 @@ sParenDash x = S " (" :+: x :+: S ") - "
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
+tAndDWAcc temp = Flat $ (at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: 
@@ -221,15 +221,15 @@ none = S "--"
 
 found :: Double -> Maybe Int -> Sentence
 found x Nothing  = addPercent $ x * 100
-found x (Just p) = addPercent $ (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
+found x (Just p) = addPercent (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
     
 typUncr :: (HasUncertainty c) => c -> Sentence
 typUncr x = found (uncVal x) (uncPrec x)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
-constraintToExpr c (Range _ ri) = real_interval c ri
+constraintToExpr c (Range _ ri)         = real_interval c ri
 constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
-constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
+constraintToExpr c (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
@@ -245,4 +245,4 @@ foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
-replaceEmptyS s = s
+replaceEmptyS s      = s

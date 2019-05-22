@@ -29,6 +29,7 @@ desktop.ini
 /code/Docs
 /code/build
 /code/logs
+/code/graphs
 *.synctex.gz
 *.pyc
 __pycache__

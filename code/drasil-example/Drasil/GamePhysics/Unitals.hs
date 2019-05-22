@@ -84,7 +84,7 @@ momtParam n w = ucs'
 contParam n w = ucs'
  (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
   (phrase QP.displacement)) (sub (eqSymb QP.displacement)
-  (Concat $ [Atomic w, cP])) Real metre
+  (Concat [Atomic w, cP])) Real metre
 
 contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
@@ -152,7 +152,7 @@ rOB    = uc' "rOB"
   (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
   
-posCM = ucs "p_CM" (nounPhraseSP $ "Center of Mass")
+posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
@@ -210,7 +210,7 @@ inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time")
 
 momtInertK = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertia ^. term) 
-               (cn $ "of the k-th rigid body"))
+               (cn "of the k-th rigid body"))
                (phrase QP.momentOfInertia)) 
                (sub (eqSymb QP.momentOfInertia) lK) Real momtInertU
 
@@ -218,7 +218,7 @@ pointOfCollision = ucs' (dccWDS "point_c" (cn "point of collision")
                  (S "point")) cP Real metre
 
 collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase' 
-                (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
+                (cn "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
 forceI = ucs' (dccWDS "forceI" (compoundPhrase' 
@@ -232,22 +232,22 @@ velBP = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
               (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cB, cP])) Real velU
 
-force_1     = forceParam "1" "first"
-force_2     = forceParam "2" "second"
-mass_1      = massParam "1" "first"
-mass_2      = massParam "2" "second"
-velA       = velParam "A" cA
-velB       = velParam "B" cB
-velO       = velParam "origin" cO
-angVelA    = angParam "A" cA
-angVelB    = angParam "B" cB
-perpLenA   = perpParam "A" $ eqSymb contDispA
-perpLenB   = perpParam "B" $ eqSymb contDispB
-momtInertA = momtParam "A" "A"
-momtInertB = momtParam "B" "B"
-contDispA  = contParam "A" "A"
-contDispB  = contParam "B" "B"
-contDispK  = contParam "k" "k"
+force_1    = forceParam "1" "first"
+force_2    = forceParam "2" "second"
+mass_1     = massParam  "1" "first"
+mass_2     = massParam  "2" "second"
+velA       = velParam   "A" cA
+velB       = velParam   "B" cB
+velO       = velParam   "origin" cO
+angVelA    = angParam   "A" cA
+angVelB    = angParam   "B" cB
+perpLenA   = perpParam  "A" $ eqSymb contDispA
+perpLenB   = perpParam  "B" $ eqSymb contDispB
+momtInertA = momtParam  "A" "A"
+momtInertB = momtParam  "B" "B"
+contDispA  = contParam  "A" "A"
+contDispB  = contParam  "B" "B"
+contDispK  = contParam  "k" "k"
 massA      = rigidParam "A" cA
 massB      = rigidParam "B" cB
 

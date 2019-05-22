@@ -1,11 +1,11 @@
 module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, cpAcronyms) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (assumption, genDefn, 
-    goalStmt, inModel, likelyChg, requirement, srs, thModel, typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
+  requirement, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.IdeaDicts (dataDefn, physics)
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 ----- Acronyms -----
 
 centreMass, chipmunk :: CI

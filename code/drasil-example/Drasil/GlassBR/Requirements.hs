@@ -14,15 +14,15 @@ import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
-  condition, datumConstraint, description, environment, failure,
-  funcReqDom, genDefn, inModel, input_, likelyChg, message, mg, mis, module_,
-  nonFuncReqDom, output_, property, quantity, requirement, srs, symbol_, system,
-  thModel, traceyMatrix, unlikelyChg, value, vavPlan)
+  condition, datumConstraint, description, environment, failure, funcReqDom,
+  input_, likelyChg, message, mg, mis, module_, nonFuncReqDom, output_,
+  property, quantity, requirement, srs, symbol_, system, traceyMatrix,
+  unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
-import Data.Drasil.IdeaDicts (dataDefn)
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
   foldlList, foldlSent, foldlSent_, foldlSP, follows, ofThe, ofThe', sAnd, sOf)
 import Data.Drasil.Utils (bulletFlat)

@@ -14,16 +14,15 @@ module Drasil.DocLang.SRS
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
-import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
-    assumption, charOfIR, client, customer, consVals, datumConstraint, 
-    functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
-    offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
-    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
-    solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
-    userCharacteristic)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
+import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+  charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
+  generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
+  unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
+  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
+  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
+  stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
+  tOfSymb, userCharacteristic)
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Phrase (for'', the')
 
 -- Local function to keep things looking clean, not exported.

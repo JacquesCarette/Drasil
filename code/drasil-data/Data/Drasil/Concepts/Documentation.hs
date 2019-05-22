@@ -5,7 +5,7 @@ import Language.Drasil hiding (organization, year)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
   ofN_, compoundNC, compoundNC', compoundNCP1)
-import Data.Drasil.IdeaDicts (softEng, documentc)
+import Data.Drasil.IdeaDicts (dataDefn, documentc, softEng)
 
 import Control.Lens ((^.))
 
@@ -42,14 +42,13 @@ doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc]
 
-assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
+assumption, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc, sec :: CI
 
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
 -----------------------------------------------------------------------------------------------------------------
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
 desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
 genDefn     = commonIdeaWithDict "genDefn"     (cn' "general definition")                          "GD"        [softEng]
 goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]

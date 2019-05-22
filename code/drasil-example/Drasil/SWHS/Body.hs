@@ -31,11 +31,12 @@ import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, dataConst, dataDefn, datum, definition, document, environment, genDefn, goalStmt,
+  content, dataConst, datum, definition, document, environment, genDefn, goalStmt,
   information, inModel, input_, item, likelyChg, model, organization, output_, physical,
   physics, physSyst, problem, property, purpose, quantity, reference, requirement, section_,
   software, softwareSys, srs, srsDomains, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
+import Data.Drasil.IdeaDicts as Doc (dataDefn)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')

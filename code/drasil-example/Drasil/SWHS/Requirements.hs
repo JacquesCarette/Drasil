@@ -7,7 +7,7 @@ import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
-  dataDefn, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
+  funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
   nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
   simulation, solution, srs, thModel, traceyMatrix, unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
@@ -17,6 +17,7 @@ import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
+import Data.Drasil.IdeaDicts (dataDefn)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
 import Data.Drasil.Utils (eqUnR')

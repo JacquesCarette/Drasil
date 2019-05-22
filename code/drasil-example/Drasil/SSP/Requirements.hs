@@ -6,12 +6,13 @@ import Language.Drasil
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (assumption, code, dataDefn,
+import Data.Drasil.Concepts.Documentation (assumption, code,
   datum, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
   name_, nonFuncReqDom, output_, physicalConstraint, property, requirement,
   srs, symbol_, thModel, traceyMatrix, unlikelyChg, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
 
+import Data.Drasil.IdeaDicts (dataDefn)
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
   foldlList, foldlSent, foldlSP, ofThe, ofThe', sAnd)
 import Data.Drasil.Utils (mkInputDatTb)

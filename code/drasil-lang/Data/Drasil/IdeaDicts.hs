@@ -25,4 +25,4 @@ genDefn, theoryMod, instanceMod, dataDefn :: CI
 genDefn     = commonIdeaWithDict "genDefn"     (cn' "General Definition") "GD"  [softEng]
 theoryMod   = commonIdeaWithDict "theoryMod"   (cn' "Theory Model")       "TM"  [softEng]
 instanceMod = commonIdeaWithDict "instanceMod" (cn' "Instance Model")     "IM"  [softEng]
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "Data Definition")    "DD"  [softEng]
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")    "DD"  [softEng]

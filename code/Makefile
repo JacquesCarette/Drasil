@@ -172,4 +172,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-.PHONY: clean code tex doc debug prog test graphs check_stack all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack all $(ALL_EXPANDED_TARGETS)

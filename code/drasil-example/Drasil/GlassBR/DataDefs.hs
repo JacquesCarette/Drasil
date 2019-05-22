@@ -138,7 +138,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = dd dimLLQD (map makeCite [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}]) [{-derivation-}] "dimlessLoad"
+dimLL = dd dimLLQD ([makeCite astm2009, makeCiteInfo campidelli Equation [7]]) [{-derivation-}] "dimlessLoad"
   [qRef , aGrtrThanB , hRef, gtfRef, glassLiteRef, makeRef2S assumpSV]
 
 --DD8--

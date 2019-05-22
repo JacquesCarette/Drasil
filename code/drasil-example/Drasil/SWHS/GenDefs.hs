@@ -42,7 +42,7 @@ swhsGDs = [nwtnCooling, rocTempSimp]
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
-  [makeCite incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+  [makeCiteInfo incroperaEtAl2007 Page [8]] "nwtnCooling" [nwtnCooling_desc]
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
                  "rocTempSimp" [rocTempSimp_desc]

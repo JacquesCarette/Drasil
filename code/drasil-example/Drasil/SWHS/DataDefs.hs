@@ -90,7 +90,7 @@ htFusionEqn = (sy latentHeat) / (sy mass)
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = dd dd3HtFusionQD [makeCite bueche1986 {- +:+ sParen (S "pg. 282") -} ]
+dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 Page [282]]
   [] "htFusion" []
 
 ----

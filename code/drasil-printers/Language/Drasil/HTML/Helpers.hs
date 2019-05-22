@@ -17,7 +17,7 @@ html       = wrap "html" []
 -- | Head tag wrapper
 head_tag   = wrap "head" []
 -- | Body tag wrapper
-body       = oldWrap "body" []
+body       = wrap "body" []
 -- | Title tag wrapper
 title      = wrap "title" []
 -- | Paragraph tag wrapper

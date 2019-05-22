@@ -82,14 +82,13 @@ reflinkURI ref txt = text ("<a href=\"" ++ ref ++ "\">") <> txt <> text "</a>"
 -- | Helper for setting up figures
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
-  figure $ vcat[
-  img $ [("src", f), ("alt", c)],
+  figure $ vcat [
+  img [("src", f), ("alt", c)],
   figcaption c]
 image f c wp =
-  figure $ vcat[
-  img $ [("src", f), ("alt", c), ("width", text $ show (wp) ++ "%")],
-  figcaption c
-  ]
+  figure $ vcat [
+  img [("src", f), ("alt", c), ("width", text $ show (wp) ++ "%")],
+  figcaption c]
 
 em :: Doc -> Doc
 -- | Emphasis (italics) tag
@@ -125,7 +124,7 @@ fraction a b =
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> String) -> String
-cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
+cases ps p_expr = render (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
                   (makeCases ps p_expr))
 
 -- | Build case expressions

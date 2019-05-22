@@ -109,16 +109,16 @@ publicMethod mt l pl st v u = do
   g <- ask
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: (PackageSym repr) => Lang -> FileType -> ((repr (Package repr)) -> 
-  ([(Doc, Label, Bool)], Label)) -> (State repr) -> IO ()
-generateCode l ft unRepr g =
+generateCode :: (PackageSym repr) => Lang -> [((repr (Package repr)) -> 
+  ([(Doc, Label, Bool)], Label))] -> (State repr) -> IO ()
+generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l ft) $ C.Code $
+     createCodeFiles $ makeBuild (head unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
             map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode (fst $ unRepr pckg) (getExt l ft)
+            C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g
@@ -150,12 +150,11 @@ getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
 
-getExt :: Lang -> FileType ->  Label
-getExt Java _ = ".java"
-getExt Python _ = ".py"
-getExt CSharp _ = ".cs"
-getExt Cpp Src = ".cpp"
-getExt Cpp Hdr = ".hpp"
+getExt :: Lang -> [Label]
+getExt Java = [".java"]
+getExt Python = [".py"]
+getExt CSharp = [".cs"]
+getExt Cpp = [".cpp", ".hpp"]
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"

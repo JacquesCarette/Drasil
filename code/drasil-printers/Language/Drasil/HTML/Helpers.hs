@@ -31,7 +31,7 @@ th         = wrap "th" []
 -- | Table cell tag wrapper
 td         = wrap "td" []
 -- | Figure tag wrapper
-figure     = oldWrap "figure" []
+figure     = wrap "figure" []
 -- | Figcaption tag wrapper
 figcaption = oldWrap "figcaption" []
 -- | List tag wrapper

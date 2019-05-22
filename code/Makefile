@@ -126,9 +126,9 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack graphmod
 	@mkdir -p $(GRAPH_FOLDER)
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###

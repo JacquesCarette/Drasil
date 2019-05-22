@@ -364,7 +364,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = ((S . getStringSN $ shortname x), f x, Just $ refAdd x)
+mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -436,25 +436,25 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (siSys si') $ (map mkParagraph intro) ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
     mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ map (LlC . ddefn fields si') dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
-      SSD.genDefnF $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
+      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs intro fields gs' _) =
-      SSD.genDefnF $ (map mkParagraph intro) ++ map (LlC . gdefn fields si') gs'
+      SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
-      asOrderedList $ (_sysinfodb si') ^. conceptinsTable
+      asOrderedList $ _sysinfodb si' ^. conceptinsTable
       {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
         -- Commented out since its imported from drasil-database now

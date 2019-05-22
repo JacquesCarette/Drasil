@@ -33,7 +33,7 @@ td         = wrap "td" []
 -- | Figure tag wrapper
 figure     = wrap "figure" []
 -- | Figcaption tag wrapper
-figcaption = oldWrap "figcaption" []
+figcaption = wrap "figcaption" []
 -- | List tag wrapper
 li         = oldWrap "li" []
 -- | Paragraph in list tag wrapper

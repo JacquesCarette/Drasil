@@ -186,22 +186,22 @@ sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, slcWghtR, slcWghtL, watrForce,
-  intShrForce, baseHydroForce, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, midpntHght, momntOfBdy, porePressure, sliceHght, 
-  sliceHghtW, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, waterVol]
+  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
+  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
+  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
+  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
+  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
+  effectiveStress, effNormStress, dryVol, satVol, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl,slcWght, slcWghtR, slcWghtL, watrForce, resistiveShear, shrResI,
-  intShrForce, baseHydroForce, surfHydroForce,
-  totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, 
-  baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum,
-  sliceHghtRight, sliceHghtLeft, porePressure, intNormForce, shrStress, 
-  totStress, effectiveStress, effNormStress, waterVol :: UnitalChunk
+  shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
+  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
+  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
+  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
+  satVol, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -267,15 +267,6 @@ shearRNoIntsl = uc' "R_i"
 slcWght = uc' "W_i" (cn "weights")
   ("downward force per meter in the z-direction on each slice caused by gravity")
   (vec cW) forcePerMeterU
-  
-slcWghtR = uc' "W^R" (cn "right weights of slices") 
-  ("weight of each slice per meter in the z-direction, assuming the entire " ++ "slice has the height of the right side of the slice") 
-  (sup (vec cW) cR) forcePerMeterU
-
-slcWghtL = uc' "W^L" (cn "left weights of slices") 
-  ("weight of each slice per meter in the z-direction, assuming the entire " ++
-  "slice has the height of the left side of the slice") 
-  (sup (vec cW) cL) forcePerMeterU
 
 watrForce = uc' "H_i" (cn "interslice normal water forces") 
   ("per meter in the z-direction exerted in the x-coordinate direction " ++
@@ -391,6 +382,10 @@ totStress = uc' "sigma" (cn' "total stress") "on the soil mass" lSigma pascal
 effectiveStress = uc' "sigma'" (cn' "effective stress") "provided by the soil skeleton" (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lSigma cN) pascal
+
+dryVol = uc' "V_dry" (cn "volumes of dry soil") "amount of space occupied by dry soil for each slice" (sub (vec cV) (Atomic "dry")) m_3
+
+satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied by saturated soil for each slice" (sub (vec cV) (Atomic "sat")) m_3
 
 waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
 

@@ -9,7 +9,7 @@ def input_constraints(inParams):
         raise Exception("InputError")
     if (not((0 < inParams.theta) and (inParams.theta < 90))):
         raise Exception("InputError")
-    if (not(0 < inParams.d)):
+    if (not(0 < inParams.d_aim)):
         raise Exception("InputError")
 
 

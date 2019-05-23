@@ -3,14 +3,18 @@ import sys
 import math
 
 
-def write_output(is_safePb, is_safeLR, P_b):
+def write_output(hit, short, offset):
     outfile = open("output.txt", "w")
-    print("is_safePb = ", end='', file=outfile)
-    print(is_safePb, file=outfile)
-    print("is_safeLR = ", end='', file=outfile)
-    print(is_safeLR, file=outfile)
-    print("P_b = ", end='', file=outfile)
-    print(P_b, file=outfile)
+    if hit:
+        print("The target was hit.", file=outfile)
+    elif short:
+        print("The shot came up short by ", end='', file=outfile)
+        print(offset, end='', file=outfile)
+        print(" metres.", file=outfile)
+    else short:
+        print("The shot went long by ", end='', file=outfile)
+        print(offset, end='', file=outfile)
+        print(" metres.", file=outfile)
     outfile.close()
 
 

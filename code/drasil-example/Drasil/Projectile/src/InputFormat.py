@@ -9,9 +9,9 @@ def func_get_input(filename, inParams):
     infile.readline()
     inParams.v = float(infile.readline())
     infile.readline()
-    inParams.theta = infile.readline().rstrip()
+    inParams.theta = float(infile.readline())
     infile.readline()
-    inParams.d = float(infile.readline())
+    inParams.d_aim = float(infile.readline())
     infile.close()
 
 

@@ -26,6 +26,7 @@ import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, 
   SepType(Comma), FoldType(List), sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.List (find)
 import Control.Lens ((^.))
 

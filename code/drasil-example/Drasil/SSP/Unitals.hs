@@ -323,7 +323,7 @@ baseLngth = uc' "l_b,i" (cn "total base lengths of slices")
   "in the direction parallel to the slope of the base of each slice"
   (sub (vec lEll) lB) metre
 
-surfLngth = uc' "l_s,i" (cn $ "surface lengths of slices")
+surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   "in the direction parallel to the slope of the surface of each slice"
   (sub (vec lEll) lS) metre
 

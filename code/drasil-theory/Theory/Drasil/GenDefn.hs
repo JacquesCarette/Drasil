@@ -2,7 +2,7 @@
 module Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs) where
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts (gendef)
+import Data.Drasil.IdeaDicts (genDefn)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -29,7 +29,7 @@ instance HasShortName       GenDefn where shortname = view sn
 instance HasRefAddress      GenDefn where getRefAdd = view ra
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
-instance CommonIdea         GenDefn where abrv _ = abrv gendef
+instance CommonIdea         GenDefn where abrv _ = abrv genDefn
 instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
@@ -38,9 +38,9 @@ gd :: (IsUnit u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd r _   _     []   _  = error $ "Source field of " ++ r ^. uid ++ " is empty"
 gd r u derivs refs sn_ = 
-  GD r (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv gendef sn_)
+  GD r (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
 
 gdNoRefs :: (IsUnit u) => RelationConcept -> Maybe u ->
   Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs r u derivs sn_ = 
-  GD r (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv gendef sn_)
+  GD r (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)

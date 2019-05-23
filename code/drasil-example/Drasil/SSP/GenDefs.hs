@@ -29,7 +29,7 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpHFSM)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
-  slcHeight, stressDD, ratioVariation)
+  lengthLs, slcHeight, stressDD, ratioVariation)
 import Drasil.SSP.Defs (intrslce, slice, slope, slopeSrf, slpSrf, soil, 
   soilPrpty, waterTable)
 import Drasil.SSP.Figures (fig_forceacting)
@@ -428,8 +428,8 @@ bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth * sy waterWeight * 0.5 *
 bsWtrFNotes :: Sentence
 bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the base of a", phrase slice, 
-  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX,
-  S "is defined in", makeRef2S lengthB]
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseLngth,
+  S "is defined in", makeRef2S lengthLb]
 
 bsWtrFDeriv :: Derivation
 bsWtrFDeriv = weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++ 
@@ -511,8 +511,8 @@ srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 *
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the surface of a", phrase slice, 
-  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX, 
-  S "is defined in", makeRef2S lengthB]
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch surfLngth, 
+  S "is defined in", makeRef2S lengthLs]
 
 srfWtrFDeriv :: Derivation
 srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 

@@ -222,7 +222,7 @@ Factor of Safety: The global stability metric of a slip surface of a slope, defi
 <em>F<sub>x</sub></em>
 </td>
 <td>
-X-Component of the Net Force: 
+X-Component of the Force: 
 </td>
 <td>
 N
@@ -233,7 +233,7 @@ N
 <em>F<sub>y</sub></em>
 </td>
 <td>
-Y-Component of the Net Force: 
+Y-Component of the Force: 
 </td>
 <td>
 N
@@ -365,7 +365,7 @@ m
 <em><b>h</b><sub>z</sub></em>
 </td>
 <td>
-Heights of Centers of Slices: the heights in the y-direction from the base of each slice to the center of the slice
+Heights of Interslice Normal Forces: the heights in the y-direction of the interslice normal forces on each slice
 </td>
 <td>
 m
@@ -376,7 +376,7 @@ m
 <em><b>h</b><sub>z,w</sub></em>
 </td>
 <td>
-Heights Halfway to Water Table: the heights in the y-direction from the base of each slice halfway to the water table
+Heights of the Water Table: the heights in the y-direction from the base of each slice to the watertable
 </td>
 <td>
 m
@@ -420,7 +420,7 @@ Seismic Coefficient: proportionality factor of force that weight pushes outwards
 <em>M</em>
 </td>
 <td>
-Net Moment: a measure of the tendency of a body to rotate about a specific point or axis
+Moment: a measure of the tendency of a body to rotate about a specific point or axis
 </td>
 <td>
 N&sdot;m
@@ -512,6 +512,17 @@ Resistive Shear Forces Without the Influence of Interslice Forces: per meter in 
 </td>
 <td>
 N/m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>r</b></em>
+</td>
+<td>
+Displacement: The change in An object's location relative to a reference point
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -985,6 +996,17 @@ Shear Strength:
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>τ</em>
+</td>
+<td>
+Torque: A twisting force that tends to cause rotation
+</td>
+<td>
+N&sdot;m
 </td>
 </tr>
 <tr>
@@ -1687,13 +1709,13 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F<sub>x</sub></em> is the x-component of the net force (N)
+<em>F<sub>x</sub></em> is the x-component of the force (N)
 </li>
 <li>
-<em>F<sub>y</sub></em> is the y-component of the net force (N)
+<em>F<sub>y</sub></em> is the y-component of the force (N)
 </li>
 <li>
-<em>M</em> is the net moment (N&sdot;m)
+<em>M</em> is the moment (N&sdot;m)
 </li>
 </ul>
 </td>
@@ -1704,7 +1726,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#assumpENSL>A: Effective-Norm-Stress-Large</a>), the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
+For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (<a href=#assumpENSL>A: Effective-Norm-Stress-Large</a>), the x-component of the force <em>F<sub>x</sub></em> and y-component of the force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
 </p>
 </td>
 </tr>
@@ -2792,35 +2814,35 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
+<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
@@ -2829,12 +2851,12 @@ Equation
 </span>
 </div>&#8239;(<b>X</b><sub>i</sub>&plus;<b>X</b><sub>i&minus;1</sub>)&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
+&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+</div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
 </div>
 </td>
 </tr>
@@ -2851,7 +2873,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em><b>h</b><sub>z</sub></em> is the heights of centers of slices (m)
+<em><b>h</b><sub>z</sub></em> is the heights of interslice normal forces (m)
 </li>
 <li>
 <em><b>b</b></em> is the base width of slices (m)
@@ -2863,7 +2885,7 @@ Description
 <em><b>H</b></em> is the interslice normal water forces (N/m)
 </li>
 <li>
-<em><b>h</b><sub>z,w</sub></em> is the heights halfway to water table (m)
+<em><b>h</b><sub>z,w</sub></em> is the heights of the water table (m)
 </li>
 <li>
 <em><b>X</b></em> is the interslice shear forces (N/m)
@@ -2925,8 +2947,11 @@ RefBy
 </table>
 </div>
 <p class="paragraph">
-Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+Moment is equal to torque, so the equation from <a href=#DD:torque>DD: torque</a> will be used to calculate moments:
 </p>
+<div class="equation">
+<em>τ = <b>r</b>&#10799;<b>F</b></em>
+</div>
 <div id="GD:weight">
 <table class="gdefn">
 <tr>
@@ -4180,6 +4205,98 @@ RefBy
 </tr>
 </table>
 </div>
+<div id="DD:torque">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Torque
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>τ</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N&sdot;m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div class="equation">
+<em>τ = <b>r</b>&#10799;<b>F</b></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>τ</em> is the torque (N&sdot;m)
+</li>
+<li>
+<em><b>r</b></em> is the displacement (m)
+</li>
+<li>
+<em><b>F</b></em> is the force (N)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+--
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+<a href=#GD:momentEql>GD: momentEql</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
 <div id="DD:ratioVariation">
 <table class="ddefn">
 <tr>
@@ -5303,28 +5420,28 @@ RefBy
 From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a>, Equation (14) can be derived:
 </p>
 <div class="equation">
-<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
+<em>0 = &minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
@@ -5340,12 +5457,12 @@ From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the 
 </span>
 </div>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
+&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+</div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
 </div>
 <p class="paragraph">
 Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
@@ -5353,28 +5470,28 @@ Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
 <div class="equation">
 <em>λ = <div class="fraction">
 <span class="fup">
-&minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&minus;<div class="fraction">
+&minus;<b>G</b><sub>i</sub>&#8239;(<b>h</b><sub>z,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>G</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&minus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&minus;<b>H</b><sub>i</sub>&#8239;(<b>h</b><sub>z,w,i</sub>&plus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&plus;<div class="fraction">
+</div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>H</b><sub>i&minus;1</sub>&#8239;(<b>h</b><sub>z,w,i&minus;1</sub>&minus;<div class="fraction">
 <span class="fup">
 <b>b</b><sub>i</sub>
 </span>
@@ -5383,12 +5500,12 @@ Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
 </span>
 </div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<div class="fraction">
 <span class="fup">
-K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
+&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 2
 </span>
-</div>&minus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&minus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
+</div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
 </span>
 <span class="fdn">
 <div class="fraction">
@@ -7812,7 +7929,7 @@ X
 
 </td>
 <td>
-X
+
 </td>
 <td>
 
@@ -15400,6 +15517,146 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:torque>DD: torque</a>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 

@@ -18,8 +18,8 @@ import Data.Drasil.Concepts.Documentation (analysis, assumption, constant,
 import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (distance, twoD, weight)
-import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Theories.Physics (weightGD)
+import Data.Drasil.Quantities.Physics (displacement, force, torque)
+import Data.Drasil.Theories.Physics (weightGD, torqueDD)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, 
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
@@ -69,7 +69,7 @@ mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
-momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
+momentEqlGD  = gd momentEql  (Just newton)           momEqlDeriv
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
@@ -257,12 +257,12 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel -- genDef6Label
 
 momEql_rel :: Relation
-momEql_rel = 0 $= momExpr (\ x y -> x -
+momEql_rel = 0 $= momExpr (\ x y -> x +
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
-  makeRef2S equilibrium, S "for the" +:+. phrase momntOfBdy, ch baseWthX,
+  makeRef2S equilibrium, S "for the net" +:+. phrase momntOfBdy, ch baseWthX,
   S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch midpntHght, S "is defined in", 
@@ -270,9 +270,24 @@ momEql_desc = foldlSent [S "This", phrase equation, S "satisfies",
   makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, S "is defined in", 
   makeRef2S angleB]
 
-momEql_deriv :: Sentence
-momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
-  S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+momEqlDeriv :: Derivation
+momEqlDeriv = weave [momEqlDerivSentences, momEqlDerivEqns]
+
+momEqlDerivSentences :: [Sentence]
+momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence]
+
+momEqlDerivEqns :: [Sentence]
+momEqlDerivEqns = map E [momEqlDerivTorqueEqn]
+
+momEqlDerivTorqueSentence :: [Sentence]
+
+momEqlDerivTorqueSentence = [at_start momntOfBdy, S "is equal to", 
+  phrase torque `sC` S "so the", phrase equation, S "from", makeRef2S torqueDD,
+  S "will be used to calculate", plural momntOfBdy]
+
+momEqlDerivTorqueEqn :: Expr
+
+momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
 
 --
 

@@ -110,7 +110,7 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = cross (sy QP.displacement) (sy  QP.force)
+torqueEqn = cross (sy QP.displacement) (sy QP.force)
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 

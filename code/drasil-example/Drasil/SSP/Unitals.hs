@@ -355,10 +355,10 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) (Atomic "den")) newton
 
-fx = uc' "fx" (cn "x-component of force") ""
+fx = uc' "fx" (cn "x-component of the force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of force") ""
+fy = uc' "fy" (cn "y-component of the force") ""
   (sub cF lY) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 

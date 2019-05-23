@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
-  weight)
+  height, pressure, weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -39,6 +39,8 @@ accel = acceleration
 genericMass = mass
 gravAccel = gravitationalAccel
 dens = density
+genericH = height
+genericP = pressure
 
 -------------
 -- HELPERS --
@@ -184,24 +186,25 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
-  zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
-  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol]
+  genericSpWght, gravAccel, dens, genericH, genericP, nrmShearNum, nrmShearDen, 
+  slipHght, xi, yi, zcoord, critCoords, slipDist, mobilizedShear, 
+  resistiveShear, mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, 
+  watrForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, 
+  nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth,
+  midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, fy, 
+  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
+  shrStress, totStress, effectiveStress, effNormStress, dryVol, satVol, 
+  waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
-  critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
-  satVol, waterVol :: UnitalChunk
+  gravAccel, dens, genericH, genericP, nrmShearNum, nrmShearDen, slipDist, 
+  slipHght, xi, yi, zcoord, critCoords, mobilizedShear, mobShrI, sliceHght, 
+  sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, resistiveShear, 
+  shrResI, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
+  surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght,
+  momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, 
+  porePressure, intNormForce, shrStress, totStress, effectiveStress, 
+  effNormStress, dryVol, satVol, waterVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}

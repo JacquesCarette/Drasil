@@ -19,7 +19,7 @@ import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (distance, twoD, weight)
 import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Theories.Physics (weightGD)
+import Data.Drasil.Theories.Physics (weightGD, hsPressureGD)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, 
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
@@ -48,7 +48,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, 
- sliceWghtGD, baseWtrFGD, srfWtrFGD]
+ sliceWghtGD, hsPressureGD, baseWtrFGD, srfWtrFGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, 
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 

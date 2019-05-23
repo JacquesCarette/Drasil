@@ -16,12 +16,9 @@ if [ -f "$CACHED_MSV_FILE" ]; then
   fi
 fi
 
-command -v stack > /dev/null
-
-RET=$?  # "which" returns 1 if binary not found
-if [ $RET -eq 1 ]; then
-  echo "Couldn't find \`stack\`."
-  echo "Stack can be installed from https://www.haskellstack.org/"
+BIN=stack DOWNLOAD_LOCATION=https://www.haskellstack.org/ "$SHELL" scripts/check_binary.sh
+RET=$?
+if [ $RET -ne 0 ]; then
   exit 1
 fi
 

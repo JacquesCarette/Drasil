@@ -1,14 +1,12 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
-import Data.Drasil.IdeaDicts (documentc)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd)
 import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
 import Language.Drasil.Misc (repUnd)
-import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.RefProg (Reference(Reference), RefInfo(None))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -35,9 +33,6 @@ instance HasShortName  Section where shortname = shortname . view lab
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
-
-sectionci :: CI
-sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                   "DD"        [documentc]
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document

@@ -1,9 +1,8 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (analysis, assumption, dataDefn, 
-  genDefn, goalStmt, inModel, likelyChg, physSyst, property, requirement, 
-  safety, srs, thModel, typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
+  likelyChg, physSyst, property, requirement, safety, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
@@ -13,7 +12,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,
 
 import Data.Drasil.Phrase(of_'', compoundNC)
 import Data.Drasil.SentenceStructures (andThe, sOr)
-import Data.Drasil.IdeaDicts hiding (dataDefn)
+import Data.Drasil.IdeaDicts
 
 ----Acronyms-----
 acronyms :: [CI]

@@ -17,9 +17,10 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
-  definition, doccon, doccon', document, goal, inModel, information, item,
+  definition, doccon, doccon', document, goal, information, item,
   material_, model, physSyst, problem, property, purpose, reference,
-  requirement, srs, srsDomains, thModel, traceyMatrix)
+  requirement, srs, srsDomains, traceyMatrix)
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)

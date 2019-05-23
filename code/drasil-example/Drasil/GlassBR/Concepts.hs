@@ -2,11 +2,10 @@ module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inModel, 
-    likelyChg, notApp, physSyst, response, requirement, srs, thModel, type_, typUnc, 
-    unlikelyChg)
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
+  notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)
 import Data.Drasil.Phrase (compoundNC)
-import Data.Drasil.IdeaDicts hiding (dataDefn)
+import Data.Drasil.IdeaDicts
 
 {--}
 glasscon :: [CI]

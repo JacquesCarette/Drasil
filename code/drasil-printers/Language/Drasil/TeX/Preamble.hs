@@ -82,7 +82,7 @@ parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
    nub (concatMap fst res)
-  , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ nub (concatMap snd res))
+  , SetMathFont:nub (concatMap snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
@@ -96,7 +96,7 @@ parseDoc los' =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
-      (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
+      (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
     parseDoc' Figure{}       = ([Graphics,Caption],[])
     parseDoc' Graph{}        = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}          = ([FileContents,BibLaTeX,URL],[Bibliography])

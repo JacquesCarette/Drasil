@@ -335,15 +335,13 @@ porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
   
 shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
-sliceHght = uc' "h_z,i" (cn "heights of centers of slices")
-  ("the heights in the y-direction from the base of each slice to the " ++
-  "center of the slice")
+sliceHght = uc' "h_z,i" (cn "heights of interslice normal forces")
+  "the heights in the y-direction of the interslice normal forces on each slice"
   (sub (vec lH) lZ) metre
 
-sliceHghtW = uc' "h_z,w,i" (cn "heights halfway to water table")
-  ("the heights in the y-direction from the base of each slice halfway to " ++
-  "the water table")
-  (sub (vec lH) (Atomic "z,w")) metre
+sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
+  ("the heights in the y-direction from the base of each slice to the water" ++
+  "table") (sub (vec lH) (Atomic "z,w")) metre
 
 nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
   ("values for each slice that sum together to form the numerator of the " ++

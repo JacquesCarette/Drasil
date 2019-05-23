@@ -328,7 +328,7 @@ midpntHght = uc' "h_i" (cn "y-direction heights of slices")
   "surface, at the x-direction midpoint of the slice")
   (vec lH) metre
 
-momntOfBdy = uc' "M" (cn' "net moment") ("a measure of the tendency of " ++
+momntOfBdy = uc' "M" (cn' "moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
@@ -355,10 +355,10 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) (Atomic "den")) newton
 
-fx = uc' "fx" (cn "x-component of the net force") ""
+fx = uc' "fx" (cn "x-component of force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") ""
+fy = uc' "fy" (cn "y-component of force") ""
   (sub cF lY) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 

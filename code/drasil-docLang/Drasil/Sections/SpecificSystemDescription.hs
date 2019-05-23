@@ -19,16 +19,19 @@ module Drasil.Sections.SpecificSystemDescription
 import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol)
 
-import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
-  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
-  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, assumption, thModel, physicalSystem, problemDescription, solutionCharacteristic,
-  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element, specification)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  datum, datumConstraint, element, general, goalStmt, information, input_,
+  likelyChg, limitation, model, output_, physical, physicalConstraint,
+  physicalSystem, problem, problemDescription, purpose, quantity, requirement,
+  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  typUnc, uncertainty, unlikelyChg, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, fmtU, getRVal)
+
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), fmtPhys, fmtSfwr, foldlList,
   foldlSP, foldlSent, mkTableFromColumns, ofThe, sAnd, typUncr)
+import Data.Drasil.Utils (foldle, fmtU, getRVal)
 
 import qualified Drasil.DocLang.SRS as SRS
 

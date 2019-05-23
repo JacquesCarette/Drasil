@@ -96,6 +96,9 @@ debug: test
 check_stack:
 	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
 
+check_dot:
+	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" $(SCRIPT_FOLDER)check_binary.sh
+
 packages: $(BUILD_PACKAGES)
 
 # Actually build all the packages
@@ -126,9 +129,9 @@ test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
 	@mkdir -p $(GRAPH_FOLDER)
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###

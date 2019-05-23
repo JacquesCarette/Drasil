@@ -4,8 +4,6 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv)
-
---import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.Goals (willBreakGS)
@@ -13,7 +11,6 @@ import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (charWeight, demand, 
   demandq, plateLen, plateWidth, 
   standOffDist, isSafePb, isSafeLR, lRe, pbTol, probBr)
---import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, isSafeLR, lRe, pb_tol, prob_br)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
@@ -75,4 +72,4 @@ iModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
 
 instModIntro :: Sentence
 instModIntro = foldlSent [S "The", phrase goal, makeRef2S willBreakGS, 
-  S "is met by", makeRef2S pbIsSafe]
+  S "is met by", makeRef2S pbIsSafe `sC` makeRef2S lrIsSafe]

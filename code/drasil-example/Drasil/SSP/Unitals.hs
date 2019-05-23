@@ -193,8 +193,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   nrmFSubWat, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth,
   surfLngth, midpntHght, momntOfBdy, porePressure, sliceHght, sliceHghtW, fx, 
   fy, nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, intNormForce, 
-  shrStress, totStress, effectiveStress, effNormStress, dryVol, satVol, 
-  waterVol]
+  shrStress, totStress, effectiveStress, effNormStress, dryVol, satVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, genericH, genericP, nrmShearNum, nrmShearDen, slipDist, 
@@ -204,7 +203,7 @@ accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght,
   surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth,
   midpntHght, momntOfBdy, fx, fy, nrmForceSum, watForceSum, sliceHghtRight, 
   sliceHghtLeft, porePressure, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol :: UnitalChunk
+  effectiveStress, effNormStress, dryVol, satVol :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -394,9 +393,6 @@ dryVol = uc' "V_dry" (cn "volumes of dry soil") "amount of space occupied by dry
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied by saturated soil for each slice" (sub (vec cV) (Atomic "sat")) m_3
 
-waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
-
-  
 ----------------------
 -- Unitless Symbols --
 ----------------------

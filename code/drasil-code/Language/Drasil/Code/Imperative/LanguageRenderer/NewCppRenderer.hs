@@ -49,7 +49,11 @@ data CppCode a = CPPC {unSrc :: a, unHdr :: a}
 
 instance PackageSym CppCode where
     type Package CppCode = ([(Doc, Label, Bool)], Label)
-    packMods n ms = CPPC (unCPPSC $ (packMods :: Label -> [CppSrcCode (RenderFile CppSrcCode)] -> CppSrcCode (Package CppSrcCode)) n (map (CPPSC . unSrc) ms)) (unCPPHC $ (packMods :: Label -> [CppHdrCode (RenderFile CppHdrCode)] -> CppHdrCode (Package CppHdrCode)) n (map (CPPHC . unHdr) ms))
+    packMods n ms = CPPC (unCPPSC $ 
+        (packMods :: Label -> [CppSrcCode (RenderFile CppSrcCode)] ->
+            CppSrcCode (Package CppSrcCode)) n (map (CPPSC . unSrc) ms)) 
+        (unCPPHC $ (packMods :: Label -> [CppHdrCode (RenderFile CppHdrCode)] 
+            -> CppHdrCode (Package CppHdrCode)) n (map (CPPHC . unHdr) ms))
 
 instance RenderSym CppCode where
     type RenderFile CppCode = (Doc, Label, Bool)

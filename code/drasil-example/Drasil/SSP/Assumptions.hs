@@ -4,12 +4,12 @@ import Language.Drasil
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
   soil, soilPrpty, intrslce, slice, waterTable)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, intNormForce, intShrForce,
-  normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght, surfLoad,
-  xi, zcoord)
+import Drasil.SSP.Unitals (baseHydroForce, effCohesion, fricAngle, intNormForce,
+  intShrForce, normToShear, numbSlices, scalFunc, shrStress, slipDist, slipHght,
+  surfHydroForce, surfLoad, xi, zcoord)
 import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.SentenceStructures (foldlSent, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd, andThe)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
   condition, constant, interface)
@@ -20,11 +20,11 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 assumptions :: [ConceptInstance]
 assumptions = [assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF,
-  assumpSL, assumpWIBE, assumpWISE]
+  assumpSL, assumpWIBE, assumpWISE, assumpHFSM]
 
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
-  assumpSL, assumpWIBE, assumpWISE :: ConceptInstance
+  assumpSL, assumpWIBE, assumpWISE, assumpHFSM :: ConceptInstance
 
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
@@ -42,10 +42,12 @@ assumpWIBE = cic "assumpWIBE" waterBIntersect "Water-Intersects-Base-Edge"
   assumpDom
 assumpWISE = cic "assumpWISE" waterSIntersect "Water-Intersects-Surface-Edge" 
   assumpDom
+assumpHFSM = cic "assumpHFSM" hydrostaticFMidpoint 
+  "Hydrostatic-Force-Slice-Midpoint" assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN, 
   straightS, propertiesS, edgeS, seismicF, surfaceL, waterBIntersect, 
-  waterSIntersect :: Sentence
+  waterSIntersect, hydrostaticFMidpoint :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
@@ -98,3 +100,8 @@ waterBIntersect = foldlSent [S "The", phrase waterTable, S "only intersects",
 
 waterSIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
   S "the", phrase slopeSrf, S "at the edge of a", phrase slice]
+
+hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
+  S "act into the midpoint of each", phrase slice, S "surface" `andThe`
+  S "resultant", phrase baseHydroForce, S "act into the midpoint of each",
+  phrase slice, S "base"]

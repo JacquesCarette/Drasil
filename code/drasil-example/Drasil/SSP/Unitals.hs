@@ -13,8 +13,8 @@ import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
-import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
-  weight)
+import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
+  gravitationalAccel, torque, weight)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -39,6 +39,8 @@ accel = acceleration
 genericMass = mass
 gravAccel = gravitationalAccel
 dens = density
+genericR = displacement
+genericT = torque
 
 -------------
 -- HELPERS --
@@ -184,7 +186,7 @@ coords = cuc' "(x,y)"
 
 sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
+  genericSpWght, gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
   baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
@@ -194,7 +196,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   effectiveStress, effNormStress, dryVol, satVol, waterVol]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
+  gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
   shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
   baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 

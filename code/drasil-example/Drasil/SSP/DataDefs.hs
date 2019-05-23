@@ -9,6 +9,7 @@ import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
+import Data.Drasil.Theories.Physics (torqueDD)
 import Data.Drasil.SentenceStructures (foldlSent, sAnd)
 import Drasil.SSP.Defs (slice)
 import Drasil.SSP.Assumptions (assumpSBSBISL)
@@ -26,8 +27,8 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 
 dataDefns :: [DataDefinition]
 dataDefns = [intersliceWtrF, angleA, angleB, lengthB, 
-  lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
-  nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
+  lengthLb, slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
+  convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
 

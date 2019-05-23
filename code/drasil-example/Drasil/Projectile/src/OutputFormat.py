@@ -11,7 +11,7 @@ def write_output(hit, short, offset):
         print("The shot came up short by ", end='', file=outfile)
         print(offset, end='', file=outfile)
         print(" metres.", file=outfile)
-    else short:
+    else:
         print("The shot went long by ", end='', file=outfile)
         print(offset, end='', file=outfile)
         print(" metres.", file=outfile)

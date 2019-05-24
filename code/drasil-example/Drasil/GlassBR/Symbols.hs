@@ -6,13 +6,13 @@ import Language.Drasil.Code (Mod(Mod), asVC, asVC')
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ)
 import Drasil.GlassBR.Unitals (inputDataConstraints, inputs, outputs,
-    specParamVals, glassBRSymbols, symbolsWithDefns, glassBRUnitless, tmSymbols)
+    specParamVals, symbols, symbolsWithDefns, glassBRUnitless, tmSymbols)
 
 import Data.List ((\\))
 
 symbolsForTable :: [QuantityDict]
 symbolsForTable = inputs ++ outputs ++ tmSymbols ++ (map qw specParamVals) ++ 
-  (map qw symbolsWithDefns) ++ (map qw glassBRSymbols) ++
+  (map qw symbolsWithDefns) ++ (map qw symbols) ++
   (map qw glassBRUnitless) ++ (map qw inputDataConstraints) ++
   (map asVC' [interpY, interpZ]) 
 

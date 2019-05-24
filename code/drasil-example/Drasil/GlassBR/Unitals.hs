@@ -180,8 +180,8 @@ sdMin     = mkQuantDef (unitary "sdMin"
 
 {--}
 
-glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
+symbols :: [UnitaryChunk]
+symbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight]
 
 minThick, sflawParamK, sflawParamM, demand, tm_demand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,

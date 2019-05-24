@@ -22,15 +22,18 @@ Theoretical Models
 General Definitions
 1) v_f = v_i + a*t
 2) d = v_i_x*t + a_x*(t^2)/2
-3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A3, IM1, GD2)
+3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A4, GD2)
+	- v at max height = 0
+	- t at max height = t_total/2
 
 Data Definitions
 1) v_x = v*cos(θ)
 2) v_y = v*sin(θ)
 
 Instance Models
-1) 0 = v_i_y + a*t/2 (from GD3) - v at max height = 0
-                                - t at max height = t_total/2
+1) short = d_aim > d
+2) offset = |d_aim - d|
+3) hit = offset < 0.02 * d_aim
 
 Data Constraints
 Input

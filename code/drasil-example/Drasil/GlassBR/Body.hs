@@ -145,7 +145,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
+srs = mkDoc mkSRS (for'' titleize phrase) systInfo
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
@@ -196,8 +196,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-glassSystInfo :: SystemInformation
-glassSystInfo = SI {
+systInfo :: SystemInformation
+systInfo = SI {
   _sys         = gLassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
@@ -219,7 +219,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 code :: CodeSpec
-code = codeSpec glassSystInfo allMods
+code = codeSpec systInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 
@@ -485,7 +485,7 @@ outputDataConstraints = outDataConstTbl [probBr]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable glassSystInfo
+traceTable1 = generateTraceTable systInfo
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

@@ -24,8 +24,8 @@ Theoretical Models
 
 General Definitions
 1) v_f = v_i + a*t
-2) d = v_i_x*t + a_x*(t^2)/2
-3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A4, GD2)
+2) d = v_i_x*t + a_x*(t^2)/2 (from A5)
+3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A4, A5, and GD2)
 	- v at max height = 0
 	- t at max height = t_total/2
 

@@ -69,7 +69,7 @@ import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (inputMod)
-import Drasil.SWHS.GenDefs (swhsGDs)
+import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   swhsIMods, instModIntro)
@@ -179,7 +179,7 @@ mkSRS = [RefSec $ RefProg intro [
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
-        , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+        , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
@@ -541,7 +541,7 @@ traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map makeRef2S swhsTMods
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
+traceGenDefRef = map makeRef2S genDefs --FIXME: genDefs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6"]
 traceDataDefRef = map makeRef2S dataDefs

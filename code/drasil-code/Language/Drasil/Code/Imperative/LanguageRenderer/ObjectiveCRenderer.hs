@@ -111,8 +111,8 @@ str = text "NSString"
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p@(Pack l ms)) =
-  Code $ (fileCode c (Pack l (ignoreMain ms)) Header  objcHeaderExt) ++
-    (fileCode c p Source (ext c))
+  Code $ fileCode c (Pack l (ignoreMain ms)) Header  objcHeaderExt ++
+         fileCode c p Source (ext c)
 
 objcstateType :: Config -> StateType -> DecDef -> Doc
 objcstateType c (List lt _) Dec    = list c lt <> ptr

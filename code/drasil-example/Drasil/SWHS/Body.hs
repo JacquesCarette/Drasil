@@ -111,7 +111,7 @@ si = SI {
   _constants = [],
   _sysinfodb = symMap,
   _usedinfodb = usedDB,
-   refdb = swhsRefDB
+   refdb = refDB
 }
 
 resourcePath :: String
@@ -135,8 +135,8 @@ usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map n
  ([] :: [ConceptChunk]) checkSi swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
  swhs_theory swhs_concins swhs_section swhs_labcon
 
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb swhsCitations swhs_concins
+refDB :: ReferenceDB
+refDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration

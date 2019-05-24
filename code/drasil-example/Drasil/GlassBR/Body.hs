@@ -2,7 +2,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
@@ -94,7 +94,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glass
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) label refBy
   dataDefn insModel genDef theory concIns
-  glassBRSection glassBRLabelledCon
+  section glassBRLabelledCon
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -117,8 +117,8 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-glassBRSection :: [Section]
-glassBRSection = glassBRSec
+section :: [Section]
+section = glassBRSec
 
 glassBRLabelledCon :: [LabelledContent]
 glassBRLabelledCon = [inputGlassPropsTable]
@@ -130,7 +130,7 @@ usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
   dataDefn insModel genDef theory concIns
-  glassBRSection glassBRLabelledCon
+  section glassBRLabelledCon
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb gbCitations concIns

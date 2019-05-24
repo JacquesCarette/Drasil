@@ -132,8 +132,8 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ ma
   dataDefn insModel genDef theory concIns
   section labelledCon
 
-gbRefDB :: ReferenceDB
-gbRefDB = rdb gbCitations concIns
+refDB :: ReferenceDB
+refDB = rdb gbCitations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
@@ -214,7 +214,7 @@ glassSystInfo = SI {
   _constants   = gbConstants,
   _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
-   refdb       = gbRefDB
+   refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
 

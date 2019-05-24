@@ -1,5 +1,7 @@
-﻿Physical System Description
+﻿Coordinate System
+The coordinate system used is set up so that the positive x-direction is the direction from the launcher to the target and the positive y-direction is the direction opposite to gravity.
 
+Physical System Description
 Elements:
 	1) The object
 	2) The launcher

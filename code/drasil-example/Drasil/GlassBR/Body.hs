@@ -67,7 +67,7 @@ import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, stdOffDist, con, con')
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
+import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -209,7 +209,7 @@ systInfo = SI {
   _datadefs    = dataDefns,
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
-  _defSequence = gbQDefns,
+  _defSequence = qDefns,
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = symbMap,

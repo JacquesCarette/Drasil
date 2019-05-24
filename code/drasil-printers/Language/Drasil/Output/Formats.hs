@@ -2,7 +2,7 @@
 module Language.Drasil.Output.Formats where
 
 import Data.Char (toLower)
-import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand,
+import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
 
 -- | When choosing your document, you must specify the filename for
@@ -20,8 +20,8 @@ instance RuleTransformer DocSpec where
     mkFile pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
         lualatex, bibtex :: String -> Command
-        lualatex = mkCheckedCommand . (+:+) (makeS "lualatex $(TEXFLAGS)") . makeS
-        bibtex = mkCommand . (+:+) (makeS "bibtex $(BIBTEXFLAGS)") . makeS
+        lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS
+        bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
         pdfName = makeS $ fn ++ ".pdf"
 
 instance Show DocType where

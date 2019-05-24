@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Build.AST where
-import Build.Drasil (makeS, MakeString)
+import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar)
 
 type CommandFragment = MakeString
 
@@ -39,6 +39,9 @@ type InterpreterCommand = String
 asFragment :: String -> CommandFragment
 asFragment = makeS
 
+osClassDefault :: String -> String -> String -> CommandFragment
+osClassDefault = mkWindowsVar
+
 buildAll :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> Maybe BuildConfig
 buildAll = Just . flip BuildConfig BcSource
 
@@ -46,7 +49,8 @@ buildSingle :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> BuildNa
 buildSingle f = Just . BuildConfig f . BcSingle
 
 nativeBinary :: Runnable
-nativeBinary = Runnable (BWithExt BPackName $ OtherExt $ makeS "$(TARGET_EXTENSION)") nameOpts Standalone
+nativeBinary = Runnable (BWithExt BPackName $ OtherExt $
+  osClassDefault "TARGET_EXTENSION" ".exe" "") nameOpts Standalone
 
 interp :: BuildName -> NameOpts -> InterpreterCommand -> Runnable
 interp b n = Runnable b n . Interpreter . makeS
@@ -67,7 +71,7 @@ withExt :: BuildName -> String -> BuildName
 withExt b = BWithExt b . OtherExt . makeS
 
 cCompiler :: CommandFragment
-cCompiler = makeS "\"$(CC)\""
+cCompiler = mkImplicitVar "CC"
 
 cppCompiler :: CommandFragment
-cppCompiler = makeS "\"$(CXX)\""
+cppCompiler = mkImplicitVar "CXX"

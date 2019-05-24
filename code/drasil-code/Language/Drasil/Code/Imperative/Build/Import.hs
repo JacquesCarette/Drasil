@@ -12,7 +12,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config, buildConfig,
   ext, runnable)
 
 import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
-  mkCheckedCommand, RuleTransformer(makeRule))
+  mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Data.List.Utils (endswith)
 import Data.Maybe (maybe, maybeToList)
@@ -31,7 +31,7 @@ instance RuleTransformer CodeHarness where
       ]
     ]) (buildConfig c) ++ [
     mkRule (makeS "run") [buildTarget] [
-      mkCheckedCommand $ buildRunTarget (renderBuildName c m no nm) ty +:+ makeS "$(RUNARGS)"
+      mkCheckedCommand $ buildRunTarget (renderBuildName c m no nm) ty +:+ mkFreeVar "RUNARGS"
       ]
     ] where
       (Runnable nm no ty) = runnable c

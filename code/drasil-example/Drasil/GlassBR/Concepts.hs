@@ -8,12 +8,12 @@ import Data.Drasil.Phrase (compoundNC)
 import Data.Drasil.IdeaDicts
 
 {--}
-glasscon :: [CI]
-glasscon = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, gLassBR, stdOffDist, nFL]
+con :: [CI]
+con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+  lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
-glasscon' :: [NamedChunk]
-glasscon' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+con' :: [NamedChunk]
+con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
 {-glassBRProg :: CommonConcept
@@ -28,7 +28,7 @@ acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt,
   stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, gLassBR, stdOffDist, nFL :: CI
+  lResistance, lShareFac, glassBR, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
@@ -41,7 +41,7 @@ iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating gla
 lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
 lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
 lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
-gLassBR       = commonIdeaWithDict "gLassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
+glassBR       = commonIdeaWithDict "glassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
 stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
 loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
 nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]

@@ -126,13 +126,13 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (this_si ++ [m_2, m_3]) swhs_label swhs_refby
+  (this_si ++ [m_2, m_3]) label swhs_refby
   swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
+ ([] :: [ConceptChunk]) checkSi label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
  swhs_theory swhs_concins swhs_section swhs_labcon
 
 refDB :: ReferenceDB
@@ -211,11 +211,11 @@ tsymb_intro = [TSPurpose, SymbConvention
 srs' :: Document
 srs' = mkDoc mkSRS for si
 
-swhs_label :: TraceMap
-swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
  
 swhs_refby :: RefbyMap
-swhs_refby = generateRefbyMap swhs_label 
+swhs_refby = generateRefbyMap label 
 
 swhs_datadefn :: [DataDefinition]
 swhs_datadefn = getTraceMapFromDD $ getSCSSub mkSRS

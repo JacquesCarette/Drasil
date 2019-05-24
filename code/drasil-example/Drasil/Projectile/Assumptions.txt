@@ -1,4 +1,0 @@
-1) The projectile motion is in 2D.
-2) The object is a point mass.
-3) The effects of drag, wind, and the Earth's curvature are ignored.
-4) The flight is free; there are no collisions during the trajectory of the object.

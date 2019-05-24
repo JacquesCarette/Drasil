@@ -3,9 +3,14 @@
 Elements:
 	1) The object.
 
+Assumptions
+1) The projectile motion is in 2D.
+2) The object is a point mass.
+3) The effects of drag, wind, and the Earth's curvature are ignored.
+4) The flight is free; there are no collisions during the trajectory of the object.
+
 Goal Statments
 1) Check if the final position from user input is reached by the object with initial conditions.
-
 2) If the final position is not reached, provide the offset and if the object went long or short.
 
 Theoretical Models

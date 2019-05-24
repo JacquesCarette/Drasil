@@ -75,7 +75,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, nfRequirements)
-import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
+import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
@@ -538,7 +538,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRef2S swhsTMods
+traceTheoriesRef = map makeRef2S tMods
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S genDefs --FIXME: genDefs is a hack?

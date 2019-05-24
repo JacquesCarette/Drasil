@@ -39,7 +39,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   softwareSys, srsDomains, standard, sysCont, system, template, term_,
   traceyMatrix, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
@@ -92,7 +93,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glass
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) label refBy
-  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  dataDefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
 
 label :: TraceMap
@@ -101,8 +102,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBRConcIns
 refBy :: RefbyMap
 refBy = generateRefbyMap label 
 
-glassBRDatadefn :: [DataDefinition]
-glassBRDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
 glassBRInsModel :: [InstanceModel]
 glassBRInsModel = getTraceMapFromIM $ getSCSSub mkSRS
@@ -128,7 +129,7 @@ glassBRSec = extractSection srs
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
-  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  dataDefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
 
 gbRefDB :: ReferenceDB
@@ -154,7 +155,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
      IScope incScoR endScoR,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg2
       [Client gLassBR $ S "a" +:+ phrase company
@@ -266,7 +267,7 @@ traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
-solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
+solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
@@ -332,7 +333,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the Doc.dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 

@@ -73,7 +73,7 @@ import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
+import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
@@ -137,7 +137,7 @@ usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map n
  theory concIns section labCon
 
 refDB :: ReferenceDB
-refDB = rdb swhsCitations concIns
+refDB = rdb citations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration

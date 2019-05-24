@@ -33,7 +33,6 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-
 constrained = (map cnstrw gbInputsWUncrtn) ++ 
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
@@ -43,8 +42,8 @@ glass_type, nomThick :: ConstrainedChunk
 
 {--}
 
-gbInputs :: [QuantityDict]
-gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
+inputs :: [QuantityDict]
+inputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
   (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties

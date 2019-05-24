@@ -9,8 +9,8 @@ import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 
-swhscon :: [ConceptChunk]
-swhscon = [charging, coil, discharging, gauss_div,
+con :: [ConceptChunk]
+con = [charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, tank,
   tank_pcm, transient, water, sWHT, tank_para]
 

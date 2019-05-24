@@ -66,7 +66,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
+  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, con)
 import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
@@ -122,7 +122,7 @@ symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)

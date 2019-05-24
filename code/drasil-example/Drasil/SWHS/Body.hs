@@ -93,13 +93,13 @@ checkSi :: [UnitDefn]
 checkSi = collectUnits symMap symbTT
 
 authors :: Sentence
-authors = S $ manyNames swhsPeople
+authors = S $ manyNames people
 
 si :: SystemInformation
 si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
-  _authors = swhsPeople,
+  _authors = people,
   _quants = swhsSymbols,
   _concepts = symbTT,
   _definitions = swhsQDefs,
@@ -154,8 +154,8 @@ shortTT = concatMap (`getIdeaDict` symMap) $ getDocDesc mkSRS
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 
-swhsPeople :: [Person]
-swhsPeople = [thulasi, brooks, spencerSmith]
+people :: [Person]
+people = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [

@@ -16,8 +16,8 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
-swhsRefMDB :: ModelDB
-swhsRefMDB = mdb [] [] swhsDDefs []
+refMDB :: ModelDB
+refMDB = mdb [] [] swhsDDefs []
 
 swhsQDefs :: [QDefinition]
 swhsQDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,

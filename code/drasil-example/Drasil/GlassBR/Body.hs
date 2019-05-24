@@ -274,8 +274,8 @@ auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Non-Functional Requirements" Section--
-gBRpriorityNFReqs :: [ConceptChunk]
-gBRpriorityNFReqs = [correctness, verifiability, understandability,
+priorityNFReqs :: [ConceptChunk]
+priorityNFReqs = [correctness, verifiability, understandability,
   reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------

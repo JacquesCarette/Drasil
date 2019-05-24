@@ -69,7 +69,7 @@ import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glas
   ptOfExplsn, stdOffDist, con, con')
 import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, gbrIMods, calofDemandi, instModIntro)
+import Drasil.GlassBR.IMods (symb, iMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
@@ -203,7 +203,7 @@ systInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD symbMap) gbrIMods) ++ 
+  _definitions = (map (relToQD symbMap) iMods) ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
                  (concatMap (^. defined_fun) gbrTMods),
   _datadefs    = dataDefns,
@@ -510,7 +510,7 @@ traceMatsAndGraphsT = ["T1", "T2"]
 traceMatsAndGraphsTRef = map makeRef2S gbrTMods
 
 traceMatsAndGraphsIM = ["IM1", "IM2", "IM3"]
-traceMatsAndGraphsIMRef = map makeRef2S gbrIMods
+traceMatsAndGraphsIMRef = map makeRef2S iMods
 
 traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 traceMatsAndGraphsDDRef = map makeRef2S dataDefns

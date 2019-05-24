@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
@@ -234,13 +234,13 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
-section = swhs_sec
+section = sec
 
 labCon :: [LabelledContent]
 labCon = [dataConTable1, inputInitQuantsTblabled]
 
-swhs_sec :: [Section]
-swhs_sec = extractSection srs'
+sec :: [Section]
+sec = extractSection srs'
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

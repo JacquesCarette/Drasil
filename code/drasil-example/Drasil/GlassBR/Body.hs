@@ -36,8 +36,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   figure, goal, information, input_, interface, item, likelyChg, model,
   organization, output_, physical, physicalSystem, physSyst, problem, product_,
   purpose, reference, requirement, section_, software, softwareConstraint,
-  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
+  softwareSys, srsDomains, standard, sysCont, system, template, term_,
   traceyMatrix, user, value, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
@@ -122,7 +123,7 @@ glassBRLabelledCon :: [LabelledContent]
 glassBRLabelledCon = [inputGlassPropsTable]
 
 glassBRSec :: [Section]
-glassBRSec = extractSection glassBRSrs
+glassBRSec = extractSection srs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
@@ -142,8 +143,8 @@ checkSi = collectUnits gbSymbMap thisSymbols
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
-glassBRSrs :: Document
-glassBRSrs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
@@ -197,7 +198,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
   _sys         = gLassBR,
-  _kind        = srs,
+  _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -315,7 +316,7 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   plural definition, S "This", phrase typeOf, S "is intended to be used as a",
   phrase reference, S "to provide all", phrase information,
   S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
-  S "The", short srs, S "is abstract because the", plural content, S "say what",
+  S "The", short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved" `sC` S "but not how to solve it"]
   --FIXME: Last sentence is also present in SSP, SWHS and NoPCM... pull out?
 
@@ -325,7 +326,7 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short srs,
+  phrase document, S "follows the", phrase template, S "for an", short Doc.srs,
   S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
   `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,

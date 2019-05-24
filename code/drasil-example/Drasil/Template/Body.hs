@@ -13,7 +13,6 @@ import Drasil.DocLang (DocDesc, generateTraceMap, generateTraceMap', mkDoc)
 
 import Data.Drasil.Concepts.Documentation as Doc (srs)
 
-import Data.Drasil.IdeaDicts (physics)
 import Data.Drasil.Phrase (for'')
 
 import qualified Data.Map as Map
@@ -67,7 +66,7 @@ printSetting = PI symbMap defaultConfiguration
 
 -- MOVE TO CONCEPTS
 example :: CI -- name of example
-example = commonIdeaWithDict "example" (pn "Template") "Template" [physics]
+example = commonIdeaWithDict "example" (pn "Template") "Template" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

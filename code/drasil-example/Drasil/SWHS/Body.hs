@@ -129,12 +129,12 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
-  section swhs_labcon
+  section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
- theory concIns section swhs_labcon
+ theory concIns section labCon
 
 refDB :: ReferenceDB
 refDB = rdb swhsCitations concIns
@@ -236,8 +236,8 @@ concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 section :: [Section]
 section = swhs_sec
 
-swhs_labcon :: [LabelledContent]
-swhs_labcon = [dataConTable1, inputInitQuantsTblabled]
+labCon :: [LabelledContent]
+labCon = [dataConTable1, inputInitQuantsTblabled]
 
 swhs_sec :: [Section]
 swhs_sec = extractSection srs'

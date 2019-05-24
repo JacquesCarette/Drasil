@@ -2,12 +2,13 @@
 
 Elements:
 	1) The object
-	2) The ground
+	2) The launcher
+	3) The target
 
 Assumptions
 1) The projectile motion is in 2D.
 2) The object is a point mass.
-3) The object's path starts and ends at ground level.
+3) The heights of the launcher and target are equal.
 4) Acceleration is zero in the x-direction.
 5) Acceleration in the y-direction is only caused by gravity.
 6) The effects of the Earth's curvature are ignored.
@@ -27,7 +28,7 @@ General Definitions
 2) d = v_i_x*t + a_x*(t^2)/2 (from A5)
 3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A4, A5, and GD2)
 	- v at max height = 0
-	- t at max height = t_total/2
+	- t at max height = t_total/2 (from A3)
 
 Data Definitions
 1) v_x = v*cos(θ)

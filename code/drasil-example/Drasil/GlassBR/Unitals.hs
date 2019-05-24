@@ -396,8 +396,8 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 --Constants--
 
-gbConstants :: [QDefinition]
-gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
+constants :: [QDefinition]
+constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
                 ++ specParamVals 
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition

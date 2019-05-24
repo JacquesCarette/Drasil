@@ -162,20 +162,16 @@ maybeWOVerb a   = likelyFrame a EmptyS
 maybeChanged a  = likelyFrame a (S "changed")
 maybeExpanded a = likelyFrame a (S "expanded")
 
-sParenDash :: Sentence -> Sentence
-sParenDash x = S " (" :+: x :+: S ") - "
-
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ (at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)
+tAndDWAcc temp = Flat $ (at_start temp) +:+ (sParen (short temp) `sDash` (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ ((at_start tD) :+: 
-  sParenDash (ch sym)) :+: (tD ^. defn)
+tAndDWSym tD sym = Flat $ (at_start tD) +:+ (sParen (ch sym) `sDash` (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
+tAndDOnly chunk  = Flat $ (at_start chunk) `sDash` (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)

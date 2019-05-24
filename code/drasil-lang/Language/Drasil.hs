@@ -96,7 +96,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), sParen, (+:+), (+:+.), sC, (+:), ch
+  , Sentence(..), sParen, sDash, (+:+), (+:+.), sC, (+:), ch
   , SentenceStyle(..)
   -- Sentence.Extract
   , sdep, shortdep
@@ -253,7 +253,7 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
-import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), ch
+import Language.Drasil.Sentence (Sentence(..), sParen, sDash, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S)

@@ -1,8 +1,9 @@
 {-# Language TypeFamilies #-}
-module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSentList,
-  makeTMatrix, itemRefToSent, noRefs, noRefsLT, makeListRef, bulletFlat, bulletNested,
-  enumSimple, enumBullet, enumSimpleU, enumBulletU, mkInputDatTb, getRVal, addPercent,
-  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR', mkTableFromColumns, typUncr ) where
+module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
+  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
+  foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
+  mkEnumAbbrevList, mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT,
+  prodUCTbl, typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
 
@@ -52,6 +53,23 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 -- u - unit we want to attach to amount
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ unwrap (getUnit u)
+
+-- | formats physical constraints
+fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
+
+-- | formats software constraints
+fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- | helper for formatting constraints
+foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
+  where
+    constraintToExpr c (Range _ ri)         = real_interval c ri
+    constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
+    constraintToExpr c (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr

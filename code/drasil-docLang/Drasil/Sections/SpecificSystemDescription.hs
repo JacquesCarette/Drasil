@@ -29,9 +29,9 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), fmtPhys, fmtSfwr, foldlList,
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList,
   foldlSP, foldlSent, ofThe, sAnd)
-import Data.Drasil.Utils (foldle, fmtU, getRVal, mkTableFromColumns, typUncr)
+import Data.Drasil.Utils (foldle, fmtPhys, fmtSfwr, fmtU, getRVal, mkTableFromColumns, typUncr)
 
 import qualified Drasil.DocLang.SRS as SRS
 

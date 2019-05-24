@@ -12,7 +12,6 @@ module Data.Drasil.SentenceStructures
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
-  , fmtPhys, fmtSfwr
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -203,22 +202,3 @@ eqN n = at_start equation +:+ sParen (S $ show n)
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
-
-{-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
-
-constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
-constraintToExpr c (Range _ ri)         = real_interval c ri
-constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
-constraintToExpr c (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
-
---Formatters for the constraints
-fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
-
-fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
-
--- Helper for formatting constraints
-foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
-foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e

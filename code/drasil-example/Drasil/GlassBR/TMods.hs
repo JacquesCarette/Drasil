@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
@@ -20,8 +20,8 @@ import qualified Data.Map as Map
 
 {--}
 
-gbrTMods :: [TheoryModel]
-gbrTMods = [pbIsSafe, lrIsSafe]
+tMods :: [TheoryModel]
+tMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.

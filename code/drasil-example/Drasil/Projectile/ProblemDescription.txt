@@ -8,10 +8,12 @@ Assumptions
 1) The projectile motion is in 2D.
 2) The object is a point mass.
 3) The object's path starts and ends at ground level.
-4) The effects of drag, wind, and the Earth's curvature are ignored.
-5) The flight is free; there are no collisions during the trajectory of the object.
-6) The positive x-direction is the direction from start to the end of the object's path.
-7) The positive y-direction is the direction away from the ground.
+4) Acceleration is zero in the x-direction.
+5) Acceleration in the y-direction is only caused by gravity.
+6) The effects of the Earth's curvature are ignored.
+7) The flight is free; there are no collisions during the trajectory of the object.
+8) The positive x-direction is the direction from start to the end of the object's path.
+9) The positive y-direction is the direction away from the ground.
 
 Goal Statments
 1) Calculate the landing position of the projectile.

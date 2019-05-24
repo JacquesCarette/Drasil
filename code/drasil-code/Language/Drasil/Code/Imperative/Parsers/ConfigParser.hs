@@ -22,7 +22,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 
 -- | Data type that defines a configuration for generating code
 -- Parameters: Language, optional parameters
-data Configuration = Config {genLang :: String, exImp :: (Maybe String), opts :: Options}
+data Configuration = Config {genLang :: String, exImp :: Maybe String, opts :: Options}
     deriving Show
 
 cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel,
@@ -74,9 +74,9 @@ whiteSpace  = P.whiteSpace configLexer
 parseConfig :: Parser Configuration
 parseConfig = do
     whiteSpace
-    config <- permute $ Config <$$> (try parseLang)
+    config <- permute $ Config <$$> try parseLang
                                <|?> (Nothing, Just `liftM` try (parseOption "ExampleImplementation"))
-                               <||> (try parseOptions)
+                               <||> try parseOptions
     -- parsing the options above always fails (puts Nothing in all Options fields, even if they have been specified), for some reason. Fix it by trying again:
     permute $ Config (genLang config) (exImp config) <$$> try parseOptions
 

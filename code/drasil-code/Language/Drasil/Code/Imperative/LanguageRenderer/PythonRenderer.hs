@@ -185,17 +185,17 @@ funcDoc' c f = funcDocD c f
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusPlus _)) b) = 
     vcat [
-        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv) <> colon,
+        forLabel <+> text i <+> iterInLabel c <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv) <> colon,
         oneTab $ bodyDoc c b]
 iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusEquals _ stepv)) b) = 
     vcat [
-        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv <> text ", " <> valueDoc c stepv) <> colon,
+        forLabel <+> text i <+> iterInLabel c <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv <> text ", " <> valueDoc c stepv) <> colon,
         oneTab $ bodyDoc c b]
 iterationDoc' c (For initv guard update b) = vcat [
     forLabel <+> statementDoc c Loop initv <> semi <+> valueDoc c guard <> semi <+> statementDoc c Loop update,
     oneTab $ bodyDoc c b]
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
-    (iterForEachLabel c) <+> valueDoc c (var i) <+> (iterInLabel c) <+> valueDoc c listVar <> colon,
+    iterForEachLabel c <+> valueDoc c (var i) <+> iterInLabel c <+> valueDoc c listVar <> colon,
     oneTab $ bodyDoc c b]
 iterationDoc' c i = iterationDocD c i
 

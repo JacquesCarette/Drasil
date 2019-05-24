@@ -176,8 +176,8 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
 
-swhsNFRequirements :: [ConceptInstance]
-swhsNFRequirements = [correct, verifiable, understandable, reusable, maintainable]
+nfRequirements :: [ConceptInstance]
+nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

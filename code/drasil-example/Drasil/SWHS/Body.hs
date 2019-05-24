@@ -245,8 +245,8 @@ sec = extractSection srs'
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-swhspriorityNFReqs :: [ConceptChunk]
-swhspriorityNFReqs = [correctness, verifiability, understandability, reusability,
+priorityNFReqs :: [ConceptChunk]
+priorityNFReqs = [correctness, verifiability, understandability, reusability,
   maintainability]
 -- It is sometimes hard to remember to add new sections both here and above.
 

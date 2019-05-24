@@ -92,8 +92,8 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 checkSi :: [UnitDefn]
 checkSi = collectUnits swhsSymMap symbTT
 
-swhsAuthors :: Sentence
-swhsAuthors = S $ manyNames swhsPeople
+authors :: Sentence
+authors = S $ manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI {

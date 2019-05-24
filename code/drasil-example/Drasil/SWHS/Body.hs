@@ -70,7 +70,7 @@ import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
-import Drasil.SWHS.Goals (swhsGoals)
+import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   swhsIMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
@@ -388,7 +388,7 @@ goalStates :: Section
 goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
 
 goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD swhsGoals
+goalStateList = mkEnumSimpleD goals
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in

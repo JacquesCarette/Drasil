@@ -1,4 +1,4 @@
-module Drasil.SWHS.Goals (swhsGoals, waterTempGS, pcmTempGS, waterEnergyGS, 
+module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS, 
   pcmEnergyGS) where
 
 import Language.Drasil
@@ -9,8 +9,8 @@ import Data.Drasil.SentenceStructures (foldlSent)
 
 import Drasil.SWHS.Unitals (temp_W, temp_PCM, w_E, pcm_E)
 
-swhsGoals :: [ConceptInstance]
-swhsGoals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
+goals :: [ConceptInstance]
+goals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
 
 waterTempGS :: ConceptInstance
 waterTempGS = cic "waterTempGS" (goalState temp_W) "Predict-Water-Temperature"

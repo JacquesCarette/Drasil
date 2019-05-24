@@ -76,10 +76,10 @@ momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght +
   inxi surfLoad * sin (inxi impLoadAngle) * inxi midpntHght)
 
 momExprNoKQ :: (Expr -> Expr -> Expr) -> Expr
-momExprNoKQ _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
+momExprNoKQ _e_ = (negate (inxi intNormForce) * (inxi sliceHght +
   inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *
-  (inxiM1 sliceHght + inxi baseWthX / 2 * tan (inxi baseAngle)) -
-  inxi watrForce * (inxi sliceHghtW - inxi baseWthX / 2 *
-  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHghtW +
+  (inxiM1 sliceHght - inxi baseWthX / 2 * tan (inxi baseAngle)) -
+  inxi watrForce * (inxi sliceHghtW + inxi baseWthX / 2 *
+  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHghtW -
   inxi baseWthX / 2 * tan (inxi baseAngle))) `_e_`
   (inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght)

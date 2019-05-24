@@ -431,19 +431,19 @@ nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3,
 
 nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, nrmShrDerivEqn4 :: Expr
 nrmShrDerivEqn1 = 0 $=
-  momExpr (\ x y -> x - (sy normToShear * (inxi baseWthX / 2) * 
+  momExpr (\ x y -> x + (sy normToShear * (inxi baseWthX / 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) + y)
 
 nrmShrDerivEqn2 = sy normToShear $= momExpr (+)
-  / ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
+  / negate ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
 
-nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ (-)
-  / ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
+nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ (+)
+  / negate ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc))
 
-nrmShrDerivEqn4 = inxi normToShear $= sum1toN
+nrmShrDerivEqn4 = sy normToShear $= sum1toN
   (inxi baseWthX * (sy nrmForceSum + sy watForceSum) * tan(inxi baseAngle) +
   inxi midpntHght * (negate (2 * inxi surfHydroForce * sin(inxi surfAngle)))) 
   / sum1toN

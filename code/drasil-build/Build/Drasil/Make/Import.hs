@@ -7,7 +7,7 @@ class RuleTransformer c where
 
 -- | Creates a Makefile (calls 'makeRules')
 toMake :: RuleTransformer c => [c] -> Makefile
-toMake rl = M $ makeRules rl
+toMake = M . makeRules
 
 -- | Helper for creating make rules for different document types
 makeRules :: RuleTransformer c => [c] -> [Rule]

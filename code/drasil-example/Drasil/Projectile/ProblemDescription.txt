@@ -14,8 +14,7 @@ Assumptions
 7) The positive y-direction is the direction away from the ground.
 
 Goal Statments
-1) Check if the final position from user input is reached by the object with initial conditions.
-2) If the final position is not reached, provide the offset and if the object went long or short.
+1) Calculate the landing position of the projectile.
 
 Theoretical Models
 1) v = ds/dt

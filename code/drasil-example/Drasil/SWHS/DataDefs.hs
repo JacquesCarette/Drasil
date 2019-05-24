@@ -19,8 +19,8 @@ import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 refMDB :: ModelDB
 refMDB = mdb [] [] swhsDDefs []
 
-swhsQDefs :: [QDefinition]
-swhsQDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
+qDefs :: [QDefinition]
+qDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 swhsDDefs :: [DataDefinition] 

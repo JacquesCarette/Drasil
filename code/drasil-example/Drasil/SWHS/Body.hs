@@ -67,7 +67,7 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
-import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
+import Drasil.SWHS.DataDefs (swhsDDefs, qDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
@@ -103,7 +103,7 @@ si = SI {
   _authors = people,
   _quants = swhsSymbols,
   _concepts = symbTT,
-  _definitions = swhsQDefs,
+  _definitions = qDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,

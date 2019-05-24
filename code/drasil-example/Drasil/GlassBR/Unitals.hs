@@ -58,8 +58,8 @@ inputsWUncrtn = [aspect_ratio, pbTol, tNT]
 inputsNoUncrtn :: [ConstrainedChunk]
 inputsNoUncrtn = [glass_type, nomThick]
 
-gbInputDataConstraints :: [UncertainChunk]
-gbInputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
+inputDataConstraints :: [UncertainChunk]
+inputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
   (map uncrtnw inputsWUncrtn)
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")

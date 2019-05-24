@@ -77,10 +77,11 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  demand, demandq, dimlessLoad, explosion, gbConstants, constrained, gbInputDataConstraints,
+  demand, demandq, dimlessLoad, explosion, gbConstants, constrained,
   inputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
+import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
 
 {--}
 
@@ -470,7 +471,7 @@ goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase gla
 
 {-input and output tables-}
 
-inputDataConstraints = inDataConstTbl gbInputDataConstraints
+inputDataConstraints = inDataConstTbl GB.inputDataConstraints
 outputDataConstraints = outDataConstTbl [probBr]
 
 {--REQUIREMENTS--}

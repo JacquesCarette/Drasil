@@ -1,4 +1,4 @@
-Physical System Description
+﻿Physical System Description
 
 Elements:
 	1) The object.
@@ -6,4 +6,22 @@ Elements:
 Goal Statments
 1) Check if the final position from user input is reached by the object with initial conditions.
 
-2) If the final position if not reached, provide the offset and if the object went long or short.
+2) If the final position is not reached, provide the offset and if the object went long or short.
+
+Theoretical Models
+
+General Definitions
+1) v_x = v*cos(θ)
+2) v_y = v*sin(θ)
+3) v_f = v_i + a*t
+4) d = v_i_x*t + a_x*(t^2)/2
+
+Data Definitions
+1) v - input
+2) θ - input
+3) d_aim - input
+4) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) - output (from A3, IM1)
+
+Instance Models
+1) 0 = v_i_y + a*t/2 (from GD3) - v at max height = 0
+                                - t at max height = t_total/2

@@ -23,8 +23,8 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 {--}
 
-glassBRSymbolsWithDefns :: [UnitalChunk]
-glassBRSymbolsWithDefns = [modElas]
+symbolsWithDefns :: [UnitalChunk]
+symbolsWithDefns = [modElas]
 
 modElas :: UnitalChunk
 modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")

@@ -2,7 +2,7 @@
 module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSentList,
   makeTMatrix, itemRefToSent, noRefs, noRefsLT, makeListRef, bulletFlat, bulletNested,
   enumSimple, enumBullet, enumSimpleU, enumBulletU, mkInputDatTb, getRVal, addPercent,
-  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR' ) where
+  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR', mkTableFromColumns ) where
 
 import Language.Drasil
 
@@ -77,6 +77,16 @@ zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [Emp
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
 
+-- | Helper for making a table from a columns
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+mkTableFromColumns l = 
+  let l' = filter (any (not . isEmpty) . snd) l in 
+  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
+  where
+    isEmpty       EmptyS = True
+    isEmpty       _      = False
+    replaceEmptyS EmptyS = S "--"
+    replaceEmptyS s      = s
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent

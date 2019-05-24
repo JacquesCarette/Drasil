@@ -13,7 +13,6 @@ module Data.Drasil.SentenceStructures
   , eqN
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
-  , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -24,7 +23,7 @@ import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.List (intersperse, transpose)
+import Data.List (intersperse)
 import Data.Monoid (mconcat)
 
 {--** Sentence Folding **--}
@@ -208,17 +207,6 @@ displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 
-mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-mkTableFromColumns l = 
-  let l' = filter (any (not . isEmpty) . snd) l in 
-  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
-  where
-    isEmpty EmptyS = True
-    isEmpty _      = False
-
-none :: Sentence
-none = S "--"
-
 found :: Double -> Maybe Int -> Sentence
 found x Nothing  = addPercent $ x * 100
 found x (Just p) = addPercent (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
@@ -242,7 +230,3 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
 foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
-
-replaceEmptyS :: Sentence -> Sentence
-replaceEmptyS EmptyS = none
-replaceEmptyS s      = s

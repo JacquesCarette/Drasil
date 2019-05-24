@@ -65,7 +65,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
-import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.Goals (goals)
@@ -150,22 +150,22 @@ srs = mkDoc mkSRS (for'' titleize phrase) systInfo
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
-      (short gLassBR)
-    [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
+    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
+      (short glassBR)
+    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
      IScope incScoR endScoR,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg2
-      [Client gLassBR $ S "a" +:+ phrase company
+      [Client glassBR $ S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
-      Cstmr gLassBR],
+      Cstmr glassBR],
   GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg probStart glassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) gbrTMods
@@ -189,7 +189,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   TraceabilitySec $
     TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
-  AuxConstntSec $ AuxConsProg gLassBR auxiliaryConstants,
+  AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
  
@@ -198,7 +198,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 systInfo :: SystemInformation
 systInfo = SI {
-  _sys         = gLassBR,
+  _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
@@ -351,7 +351,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short gLassBR) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short glassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
@@ -385,7 +385,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short gLassBR +:+ S "Responsibilities"]
+  short glassBR +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -427,7 +427,7 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short gLassBR) figGlassbr 
+physSystDescription = physSystDesc (short glassBR) figGlassbr 
   [physSystDescriptionList, LlC figGlassbr]
 
 figGlassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 

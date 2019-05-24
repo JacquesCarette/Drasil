@@ -16,6 +16,8 @@ Goal Statments
 2) If the final position is not reached, provide the offset and if the object went long or short.
 
 Theoretical Models
+1) v = ds/dt
+2) a = dv/dt
 
 General Definitions
 1) v_x = v*cos(θ)

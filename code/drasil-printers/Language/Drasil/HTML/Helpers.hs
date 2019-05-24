@@ -39,7 +39,7 @@ li         = wrap "li" []
 -- | Paragraph in list tag wrapper
 pa         = wrap "p" []
 
-ba         = oldWrap "b" []
+ba         = wrap "b" []
 
 ol, ul, table :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper

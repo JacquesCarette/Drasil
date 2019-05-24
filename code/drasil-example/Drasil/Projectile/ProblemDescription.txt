@@ -20,16 +20,13 @@ Theoretical Models
 2) a = dv/dt
 
 General Definitions
-1) v_x = v*cos(θ)
-2) v_y = v*sin(θ)
-3) v_f = v_i + a*t
-4) d = v_i_x*t + a_x*(t^2)/2
+1) v_f = v_i + a*t
+2) d = v_i_x*t + a_x*(t^2)/2
+3) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) (from A3, IM1, GD2)
 
 Data Definitions
-1) v - input
-2) θ - input
-3) d_aim - input
-4) d = 2*(v_i^2)*sin(θ)*cos(θ)/(|a|) - output (from A3, IM1)
+1) v_x = v*cos(θ)
+2) v_y = v*sin(θ)
 
 Instance Models
 1) 0 = v_i_y + a*t/2 (from GD3) - v at max height = 0

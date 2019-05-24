@@ -31,11 +31,12 @@ import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, dataConst, dataDefn, datum, definition, document, environment, genDefn, goalStmt,
-  information, inModel, input_, item, likelyChg, model, organization, output_, physical,
-  physics, physSyst, problem, property, purpose, quantity, reference, requirement, section_,
-  software, softwareSys, srs, srsDomains, sysCont, system, thModel, traceyGraph,
-  traceyMatrix, user, value, variable, doccon, doccon')
+  content, dataConst, datum, definition, document, environment, goalStmt, information, 
+  input_, item, likelyChg, model, organization, output_, physical, physics, physSyst,
+  problem, property, purpose, quantity, reference, requirement, section_, software,
+  softwareSys, srs, srsDomains, sysCont, system, traceyGraph, traceyMatrix, user, value,
+  variable, doccon, doccon')
+import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
@@ -996,7 +997,7 @@ genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
 genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDeriv3 = eqUnR' $ 
+genDefDeriv3 = eqUnR'
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
@@ -1009,7 +1010,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   phrase surface `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-genDefDeriv5 = eqUnR' $ 
+genDefDeriv5 = eqUnR'
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
@@ -1019,7 +1020,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-genDefDeriv7 = eqUnR' $ 
+genDefDeriv7 = eqUnR'
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
@@ -1028,7 +1029,7 @@ genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
-genDefDeriv11 = eqUnR' $ 
+genDefDeriv11 = eqUnR'
   ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))

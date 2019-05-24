@@ -26,12 +26,14 @@ import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, 
   SepType(Comma), FoldType(List), sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.List (find)
 import Control.Lens ((^.))
 
-import Drasil.Sections.GeneralSystDesc(genSysIntro)
+import Drasil.Sections.GeneralSystDesc (genSysIntro)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
   listofTablesToRefs)
+import Drasil.Sections.Requirements (reqIntro)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -135,37 +137,37 @@ hasUQO _            = False
 getItem :: (a->Bool) -> [a] -> Maybe a
 getItem = find
 
-getTitleize :: (Maybe SecItem) -> Bool
+getTitleize :: Maybe SecItem -> Bool
 getTitleize (Just SingularTitle) = True
 getTitleize (Just _)               = False
 getTitleize Nothing                = False
 
-getSection :: (Maybe SecItem) -> [Section]
+getSection :: Maybe SecItem -> [Section]
 getSection (Just (Sect xs)) = xs
 getSection (Just _) = []
 getSection Nothing = []
 
-getSecContents :: (Maybe SecItem) -> [Contents]
+getSecContents :: Maybe SecItem -> [Contents]
 getSecContents (Just (Cont xs)) = xs
 getSecContents (Just _) = []
 getSecContents Nothing = []
 
-getSecLC :: (Maybe SecItem) -> [LabelledContent]
+getSecLC :: Maybe SecItem -> [LabelledContent]
 getSecLC (Just (LC xs)) = xs
 getSecLC (Just _) = []
 getSecLC Nothing = []
 
-getSent :: (Maybe SecItem) -> [Sentence]
+getSent :: Maybe SecItem -> [Sentence]
 getSent (Just (Sent xs)) = xs
 getSent (Just _)         = []
 getSent Nothing          = []
 
-getUQO :: (Maybe SecItem) -> [UncertQ]
+getUQO :: Maybe SecItem -> [UncertQ]
 getUQO (Just (UnQuantO xs)) = xs
 getUQO (Just _)             = []
 getUQO Nothing              = []
 
-getUQI :: (Maybe SecItem) -> [UncertQ]
+getUQI :: Maybe SecItem -> [UncertQ]
 getUQI (Just (UnQuantI xs)) = xs
 getUQI (Just _)             = []
 getUQI Nothing              = []
@@ -214,7 +216,7 @@ pullUQO xs = pullFunc xs getUQO hasUQO
 
 assembler :: (Idea c) => c -> s -> SubSec -> [SubSec] -> Section
 assembler progName symMap thisSection subsecs = 
-  (sectionMap progName thisSection) subsections
+  sectionMap progName thisSection subsections
   where subsections = map (render progName symMap) subsecs 
 
 sectionMap :: Idea c => c -> SubSec -> [Section] -> Section
@@ -226,7 +228,7 @@ sectionMap progName (SectionModel niname xs)
   | compareID niname  (Doc.generalSystemDescription ^. uid) = SRS.genSysDes
     [genSysIntro]
   | compareID niname  (Doc.requirement ^. uid)              = SRS.require
-    [requirementsIntro]
+    [reqIntro]
   | otherwise                                              = error "no matches on section name"
 
 --------------------
@@ -261,7 +263,7 @@ genericSect (SectionModel niname xs) = section (pullTitle xs niname)
 
 systemConstraintSect :: SubSec -> Section
 systemConstraintSect (SectionModel _ xs) = SRS.sysCon
-  ((systemConstraintIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+  (systemConstraintIntro (pullSents xs) : pullContents xs) (pullSections xs)
 
 -------------------------------------------------
 -- Specific System Description SECTION BUILDER --
@@ -269,11 +271,11 @@ systemConstraintSect (SectionModel _ xs) = SRS.sysCon
 
 termDefinitionSect :: SubSec -> Section
 termDefinitionSect (SectionModel _ xs) = SRS.termAndDefn
-  ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+  (termDefinitionIntro (pullSents xs) : pullContents xs) (pullSections xs)
 
 goalStatementSect :: SubSec -> Section
 goalStatementSect (SectionModel _ xs) = SRS.goalStmt
-  ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+  (goalStatementIntro (pullSents xs) : pullContents xs) (pullSections xs)
 
 -----------------------------------------------------------
 -- Solution Characteristic Specification SECTION BUILDER --
@@ -281,7 +283,7 @@ goalStatementSect (SectionModel _ xs) = SRS.goalStmt
 
 assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel _ xs) = SRS.assumpt
-  (assumpIntro:(pullContents xs)) (pullSections xs)
+  (assumpIntro : pullContents xs) (pullSections xs)
 
 
 {-theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
@@ -309,14 +311,14 @@ generalDefinitionSect :: SubSec -> s -> Section
 generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
-        contents         = (pullContents xs)
+        contents         = pullContents xs
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon
-  ([dataConIntro, LlC inputTable, LlC outputTable] ++ (pullContents xs)) (pullSections xs)
+  ([dataConIntro, LlC inputTable, LlC outputTable] ++ pullContents xs) (pullSections xs)
   where dataConIntro = dataConstraintmkParagraph (pullLC xs) (pullSents xs)
-        inputTable  = inDataConstTbl $ pullUQI xs
-        outputTable = outDataConstTbl $ pullUQO xs
+        inputTable   = inDataConstTbl  $ pullUQI xs
+        outputTable  = outDataConstTbl $ pullUQO xs
 
 --FIXME generate tables here
 --
@@ -360,8 +362,8 @@ problemDescriptionIntro _ [x]      = mkParagraph x
 problemDescriptionIntro progName (x:y:_) = problemDescriptionSent progName x y
 
 problemDescriptionSent :: Idea c => c -> Sentence -> Sentence -> Contents
-problemDescriptionSent progName start end = foldlSP [start, (short progName), 
-  S "is a", (phrase computer), (phrase program), S "developed to", end]
+problemDescriptionSent progName start end = foldlSP [start, short progName,
+  S "is a", phrase computer, phrase program, S "developed to", end]
 
 --------------------------
 -- TERM AND DEFINITIONS --
@@ -381,9 +383,9 @@ termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) EmptyS
 
 goalStatementIntro :: [Sentence] -> Contents
 goalStatementIntro inputs = mkParagraph $ foldl (+:+) EmptyS [S "Given", 
-  (inputToSystem inputs), plural Doc.goalStmt +: S "are"]
+  inputToSystem inputs, plural Doc.goalStmt +: S "are"]
   where inputToSystem [] = S "the inputs" `sC` S "the" --FIXME add ref input variables if none are given?
-        inputToSystem listInputs = (foldlList Comma List listInputs) `sC` S "the"
+        inputToSystem listInputs = foldlList Comma List listInputs `sC` S "the"
 
 
 -------------------------------------------
@@ -393,8 +395,8 @@ goalStatementIntro inputs = mkParagraph $ foldl (+:+) EmptyS [S "Given",
 scsIntro :: (Idea c) => c -> Contents
 scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
-  (S "meaning" `ofThe` plural Doc.inModel), 
+  S "FIXME REF to IModSection", S "The", phrase Doc.information,
+  S "to understand", S "meaning" `ofThe` plural Doc.inModel,
   S "and their derivation is also presented, so that the", plural Doc.inModel, 
   S "can be verified"]
 
@@ -406,14 +408,14 @@ scsIntro progName = foldlSP [S "The", plural Doc.inModel,
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: Contents
 assumpIntro = mkParagraph $ foldlSent 
-  [S "This", (phrase Doc.section_), S "simplifies the original", 
-  (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
-  S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 
-  (phrase Doc.physicalSystem), S "The numbers given in the square brackets refer to the", 
+  [S "This", phrase Doc.section_, S "simplifies the original", 
+  phrase Doc.problem, S "and helps in developing the", phrase Doc.thModel,
+  S "by filling in the missing", phrase Doc.information, S "for the" +:+. 
+  phrase Doc.physicalSystem, S "The numbers given in the square brackets refer to the", 
   foldr1 sC (map refs itemsAndRefs) `sC` S "or", 
   refs Doc.likelyChg `sC` S "in which the respective", 
-  (phrase Doc.assumption), S "is used"] --FIXME: use some clever "zipWith"
-  where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
+  phrase Doc.assumption, S "is used"] --FIXME: use some clever "zipWith"
+  where refs         = titleize' {--+:+ sSqBr (makeRef ref)--} 
         itemsAndRefs = [Doc.thModel, Doc.genDefn, Doc.dataDefn, Doc.inModel] --FIXME ADD REFS BACK
 
 ------------------------
@@ -427,7 +429,7 @@ assumpIntro = mkParagraph $ foldlSent
 generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
-  S "collects the", (plural law) `sAnd` (plural equation), 
+  S "collects the", plural law `sAnd` plural equation,
   S "that will be used in deriving the", 
   plural Doc.dataDefn `sC` S "which in turn are used to build the", 
   plural Doc.inModel]
@@ -448,13 +450,13 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_,
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
 dataConstraintmkParagraph :: [LabelledContent] -> [Sentence] -> Contents
 dataConstraintmkParagraph tableRef [] = mkParagraph $ 
-  (dataConstraintIntroSent tableRef) +:+ (dataConstraintClosingSent [EmptyS])
+  dataConstraintIntroSent tableRef +:+ dataConstraintClosingSent [EmptyS]
 dataConstraintmkParagraph tableRef (mid:xs) = mkParagraph $
-  (dataConstraintIntroSent tableRef) +:+ mid +:+ 
-  (dataConstraintClosingSent xs)
+  dataConstraintIntroSent tableRef +:+ mid +:+ 
+  dataConstraintClosingSent xs
 
 dataConstraintIntroSent :: [LabelledContent] -> Sentence
-dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), 
+dataConstraintIntroSent tableRef = foldlSent [listofTablesToRefs tableRef, 
   S "the", plural Doc.datumConstraint, S "on the", phrase Doc.input_
   `sAnd` phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), 
   S "The", phrase Doc.column, S "for", phrase Doc.physical, 
@@ -464,13 +466,13 @@ dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef),
 
 
 dataConstraintClosingSent :: [Sentence] -> Sentence
-dataConstraintClosingSent trailing = (foldlSent
+dataConstraintClosingSent trailing = foldlSent
   [S "The", plural Doc.constraint, S "are conservative, to give", 
-  (phrase Doc.user `ofThe` phrase Doc.model), S "the flexibility to", 
+  phrase Doc.user `ofThe` phrase Doc.model, S "the flexibility to", 
   S "experiment with unusual situations. The", phrase Doc.column, 
   S "of typical", plural Doc.value, 
-  S "is intended to provide a feel for a common scenario"])
-  +:+ dataConstraintUncertainty +:+ S "FIXME" +:+ (foldl (+:+) EmptyS trailing) 
+  S "is intended to provide a feel for a common scenario"]
+  +:+ dataConstraintUncertainty +:+ S "FIXME" +:+ foldl (+:+) EmptyS trailing
   --FIXME make uncertainty specificiable 
 
 dataConstraintUncertainty :: Sentence
@@ -483,14 +485,6 @@ dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty,
 ------------------
 -- REQUIREMENTS --
 ------------------
-
-requirementsIntro :: Contents
-requirementsIntro = foldlSP
-  [S "This", (phrase Doc.section_), S "provides the",
-  (plural Doc.functionalRequirement) `sC` S "the business tasks that the",
-  (phrase Doc.software), S "is expected to complete, and the", 
-  (plural Doc.nonfunctionalRequirement) `sC` S "the qualities that the",
-  (phrase Doc.software), S "is expected to exhibit"]
 
 ---------------------------------
 -- NON-FUNCTIONAL REQUIREMENTS --

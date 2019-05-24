@@ -27,7 +27,7 @@ instance RuleTransformer CodeHarness where
       ]
     ]) (buildConfig c) ++ [
     mkRule "run" ["build"] [
-      mkCheckedCommand $ (buildRunTarget (renderBuildName c m no nm) ty) ++ " $(RUNARGS)"
+      mkCheckedCommand $ buildRunTarget (renderBuildName c m no nm) ty ++ " $(RUNARGS)"
       ]
     ] where (Runnable nm no ty) = runnable c
 
@@ -43,8 +43,8 @@ renderExt _ (OtherExt e) = e
 
 getMainModule :: [Module] -> Label
 getMainModule c = mainName $ filter (not . notMainModule) c
-  where mainName [(Mod a _ _ _ _)] = a
-        mainName _ = error $ "Expected a single main module."
+  where mainName [Mod a _ _ _ _] = a
+        mainName _ = error "Expected a single main module."
 
 getCompilerInput :: BuildDependencies -> Config -> Package -> Code -> [String]
 getCompilerInput BcAll _ _ a = map fst $ unCode a

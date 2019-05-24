@@ -10,7 +10,7 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
-  hJosephs, nrMorgenstern, vePrice :: Person
+  hJosephs, nrMorgenstern, vePrice, samCrawford :: Person
   
 pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
@@ -23,6 +23,7 @@ grChen        = personWM' "G"         ["R"]           "Chen"
 ymChen        = person'   "Yun-Min"                   "Chen"
 pjCleall      = personWM  "Peter"     ["John"]        "Cleall"
 pcClements    = personWM  "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
+samCrawford   = personWM  "Samuel"    ["J"]           "Crawford"
 mDavis        = person    "Matt"                      "Davis"
 dDewitt       = personWM  "D"         ["P"]           "Dewitt"
 henryFrankis  = person    "Henry"                     "Frankis"

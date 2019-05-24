@@ -56,7 +56,7 @@ objcConfig options c =
         runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "#import",
-        includeScope     = const $ empty,
+        includeScope     = const empty,
         inherit          = colon,
         inputFunc        = text "scanf",
         iterForEachLabel = empty,
@@ -65,11 +65,11 @@ objcConfig options c =
                                  Dynamic -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
-        package          = const $ empty,
+        package          = const empty,
         printFunc        = text "printf",
         printLnFunc      = text "printf",
-        printFileFunc    = const $ empty,
-        printFileLnFunc  = const $ empty,
+        printFileFunc    = const empty,
+        printFileLnFunc  = const empty,
         stateType        = objcstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -77,7 +77,7 @@ objcConfig options c =
         
         top    = objctop c,
         body   = objcbody c,
-        bottom = const $ empty,
+        bottom = const empty,
         
         assignDoc = assignDoc' c, binOpDoc = binOpDocD, bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamList' c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDoc' c,
@@ -111,8 +111,8 @@ str = text "NSString"
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p@(Pack l ms)) =
-  Code $ (fileCode c (Pack l (ignoreMain ms)) Header  objcHeaderExt) ++
-    (fileCode c p Source (ext c))
+  Code $ fileCode c (Pack l (ignoreMain ms)) Header  objcHeaderExt ++
+         fileCode c p Source (ext c)
 
 objcstateType :: Config -> StateType -> DecDef -> Doc
 objcstateType c (List lt _) Dec    = list c lt <> ptr
@@ -300,7 +300,7 @@ methodDoc' c Header _ f@(Method n _ _ _ _ _) | isDtor n  = empty
                                            | otherwise = transDecLine c f <> endStatement c 
 methodDoc' c Source _ f@(Method _ _ _ (Construct _) _ b) = vcat [
     transDecLine c f <+> lbrace,
-    oneTab $ bodyDoc c $ [
+    oneTab $ bodyDoc c [
         Block $ AssignState (Assign Self $ ObjAccess super $ Func defaultInit []) :
                 ctorPoolDec,
         Block ctorIfState,
@@ -370,7 +370,7 @@ destructor _ vs =
     let checkDelPriority s@(StateVar _ _ _ _ del) | del < 2   = []
                                                   | otherwise = [s]
         releaseVars = concatMap checkDelPriority vs
-        releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (var lbl $. Func release [])]) releaseVars
+        releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState (var lbl $. Func release [])]) releaseVars
         releaseBlock = if null releaseVars then [] else [Block releaseStatements]
         deallocBody = releaseBlock ++ oneLiner (ValState (super $. Func dealloc []))
     in Method dealloc Public Dynamic Void [] deallocBody

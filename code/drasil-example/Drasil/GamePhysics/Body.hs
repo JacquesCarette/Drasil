@@ -25,15 +25,15 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc(assumption,
-  concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
-  environment, game, genDefn, goalStmt, guide, inModel,
-  information, input_, interface, item, model,
-  object, organization, physical, physicalSim, physics,
-  problem, problemDescription, product_, project, quantity,
-  realtime, reference, requirement, section_, simulation, software, softwareSys,
-  srs, srsDomains, system, systemConstraint, sysCont, task, template,
-  termAndDef, thModel, traceyMatrix, user, userCharacteristic, doccon, doccon')
+import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
+  condition, consumer, datumConstraint, document, endUser, environment, game,
+  goalStmt, guide, information, input_, interface, item, model, object,
+  organization, physical, physicalSim, physics, problem, problemDescription,
+  product_, project, quantity, realtime, reference, requirement, section_,
+  simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
+  sysCont, task, template, termAndDef, traceyMatrix, user, userCharacteristic,
+  doccon, doccon')
+import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)

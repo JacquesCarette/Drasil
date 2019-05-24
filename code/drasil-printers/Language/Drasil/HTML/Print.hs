@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print, (<>))
 import Data.List (intercalate, partition, sortBy)
-import Text.PrettyPrint hiding (render, Str)
+import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
 
@@ -14,9 +14,12 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
-  td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, head_tag)
+import Language.Drasil.HTML.Helpers (caption, image,
+  div_tag, td, th, tr,
+  bold, sub, sup, cases, fraction, em, refwrap,
+  reflink, reflinkURI, paragraph, h, html, body,
+  author, article_title, title, head_tag,
+  table, ol, ul, li, pa, ba)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 
@@ -93,7 +96,7 @@ title_spec s         = p_spec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: Spec -> Doc
-p_spec (E e)             = em $ text $ p_expr e
+p_spec (E e)             = em $ p_expr e
 p_spec (a :+: b)         = p_spec a <> p_spec b
 p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
@@ -114,8 +117,8 @@ symbol (L.Special s) = unPH $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
-symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
+symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ (render . sup . text) (symbol x)
+symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ (render . sub . text) (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of L.Corners (general)"
@@ -138,32 +141,33 @@ uSymb (L.US ls) = formatu t b
     line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
     pow :: (L.Symbol,Integer) -> String
     pow (x,1) = symbol x
-    pow (x,p) = symbol x ++ sup (show p)
+    pow (x,p) = symbol x ++ (render . sup . text) (show p)
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
+
 -- | Renders expressions in the HTML (called by multiple functions)
-p_expr :: Expr -> String
-p_expr (Dbl d)        = showEFloat Nothing d ""
-p_expr (Int i)        = show i
-p_expr (Str s)        = s
+p_expr :: Expr -> Doc
+p_expr (Dbl d)        = text $ showEFloat Nothing d ""
+p_expr (Int i)        = text $ show i
+p_expr (Str s)        = text s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
 p_expr (Case ps)      = cases ps p_expr
-p_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Row l)        = concatMap p_expr l
-p_expr (Ident s)      = s
-p_expr (Spec s)       = unPH $ L.special s
+p_expr (Mtx a)        = text ("<table class=\"matrix\">\n") <> p_matrix a <> text ("</table>")
+p_expr (Row l)        = hcat $ map p_expr l
+p_expr (Ident s)      = text s
+p_expr (Spec s)       = text $ unPH $ L.special s
 --p_expr (Gr g)         = unPH $ greek g
 p_expr (Sub e)        = sub $ p_expr e
 p_expr (Sup e)        = sup $ p_expr e
-p_expr (Over Hat s)   = p_expr s ++ "&#770;"
-p_expr (MO o)         = p_ops o
-p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
+p_expr (Over Hat s)   = p_expr s <> text ("&#770;")
+p_expr (MO o)         = text $ p_ops o
+p_expr (Fenced l r e) = text (fence Open l) <> p_expr e <> text (fence Close r)
 p_expr (Font Bold e)  = bold $ p_expr e
-p_expr (Font Emph e)  = "<em>" ++ p_expr e ++ "</em>" -- FIXME
-p_expr (Spc Thin)     = "&#8239;"
-p_expr (Sqrt e)       = "&radic;(" ++ p_expr e ++")"
+p_expr (Font Emph e)  = text ("<em>") <> p_expr e <> text ("</em>") -- FIXME
+p_expr (Spc Thin)     = text ("&#8239;")
+p_expr (Sqrt e)       = text ("&radic;(") <> p_expr e <> text (")")
 
 p_ops :: Ops -> String
 p_ops IsIn     = "&thinsp;&isin;&thinsp;"
@@ -218,16 +222,15 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
--- | For printing Matrix
-p_matrix :: [[Expr]] -> String
-p_matrix [] = ""
-p_matrix [x] = "<tr>" ++ p_in x ++ "</tr>\n"
-p_matrix (x:xs) = p_matrix [x] ++ p_matrix xs
+p_matrix :: [[Expr]] -> Doc
+p_matrix [] = text ""
+p_matrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
+p_matrix (x:xs) = p_matrix [x] <> p_matrix xs
 
-p_in :: [Expr] -> String
-p_in [] = ""
-p_in [x] = "<td>" ++ p_expr x ++ "</td>"
-p_in (x:xs) = p_in [x] ++ p_in xs
+p_in :: [Expr] -> Doc
+p_in [] = text ""
+p_in [x] = text "<td>" <> p_expr x <> text "</td>"
+p_in (x:xs) = p_in [x] <> p_in xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
@@ -236,7 +239,7 @@ p_in (x:xs) = p_in [x] ++ p_in xs
 -- | Renders HTML table, called by 'printLO'
 makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
+makeTable ts (l:lls) r b t = refwrap r (table ts (
     tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
 -- | Helper for creating table rows
@@ -257,7 +260,7 @@ makeColumns = vcat . map (td . p_spec)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
+makeDefn dt ps l = refwrap l $ table [dtag dt] (makeDRows ps)
   where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
         dtag (L.Theory)   = "tdefn"
@@ -276,18 +279,18 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ p_spec b <> text ": "
-   <> p_item e) items
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ p_spec b <> text ": "
+  <> p_item e) items
 makeList (Desc items)   = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ wrap "b" [] $ p_spec b
-   <> text ": " <> p_item e) items
-makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
-  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
-  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
-makeList (Definitions items) = wrap "ul" ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> wrap "li" [] $ mlref l $ p_spec b <> text " is the"
-   <+> p_item e) items
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ p_spec b
+  <> text ": " <> p_item e) items
+makeList (Ordered items) = ol ["list"] (vcat $ map
+  (li . \(i,l) -> mlref l $ p_item i) items)
+makeList (Unordered items) = ul ["list"] (vcat $ map
+  (li . \(i,l) -> mlref l $ p_item i) items)
+makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
+  vcat $ map (\(b,e,l) -> li $ mlref l $ p_spec b <> text " is the"
+  <+> p_item e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
@@ -307,7 +310,7 @@ makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = wrap "li" [] (refwrap l (i <> text ": " <> a))
+makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
 ---------------------
 --HTML bibliography--
@@ -315,7 +318,7 @@ makeRefList a l i = wrap "li" [] (refwrap l (i <> text ": " <> a))
 -- **THE MAIN FUNCTION**
 
 makeBib :: BibRef -> Doc
-makeBib = wrap "ul" ["hide-list-style"] . vcat .
+makeBib = ul ["hide-list-style"] . vcat .
   map (\(x,(y,z)) -> makeRefList z y x) .
   zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
 
@@ -389,24 +392,24 @@ useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: CiteField -> Doc
-bookMLA (Address s)     = p_spec s <> text ":"
-bookMLA (Edition    s)  = comm $ text $ show s ++ sufxer s ++ " ed."
-bookMLA (Series     s)  = dot $ em $ p_spec s
-bookMLA (Title      s)  = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume     s)  = comm $ text $ "vol. " ++ show s
-bookMLA (Publisher  s)  = comm $ p_spec s
-bookMLA (Author     p)  = dot $ p_spec (rendPeople' p)
-bookMLA (Year       y)  = dot $ text $ show y
+bookMLA (Address   s) = p_spec s <> text ":"
+bookMLA (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
+bookMLA (Series    s) = dot $ em $ p_spec s
+bookMLA (Title     s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Volume    s) = comm $ text $ "vol. " ++ show s
+bookMLA (Publisher s) = comm $ p_spec s
+bookMLA (Author    p) = dot $ p_spec (rendPeople' p)
+bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (BookTitle s)   = dot $ em $ p_spec s
-bookMLA (Journal    s)  = comm $ em $ p_spec s
-bookMLA (Pages      [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages  [a,b])   = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
-bookMLA (Pages _) = error "Page range specified is empty or has more than two items"
-bookMLA (Note       s)    = p_spec s
-bookMLA (Number      n)   = comm $ text $ ("no. " ++ show n)
-bookMLA (School     s)    = comm $ p_spec s
+bookMLA (BookTitle s) = dot $ em $ p_spec s
+bookMLA (Journal   s) = comm $ em $ p_spec s
+bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
+bookMLA (Pages [a,b]) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages     _) = error "Page range specified is empty or has more than two items"
+bookMLA (Note      s) = p_spec s
+bookMLA (Number    n) = comm $ text ("no. " ++ show n)
+bookMLA (School    s) = comm $ p_spec s
 --bookMLA (Thesis     t)  = comm $ show t
 --bookMLA (URL        s)  = dot $ p_spec s
 bookMLA (HowPublished (Verb s)) = comm $ p_spec s

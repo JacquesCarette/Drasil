@@ -71,7 +71,7 @@ import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
@@ -133,7 +133,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ ma
   section labelledCon
 
 refDB :: ReferenceDB
-refDB = rdb gbCitations concIns
+refDB = rdb citations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration

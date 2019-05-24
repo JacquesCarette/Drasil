@@ -1,0 +1,9 @@
+Physical System Description
+
+Elements:
+	1) The object.
+
+Goal Statments
+1) Check if the final position from user input is reached by the object with initial conditions.
+
+2) If the final position if not reached, provide the offset and if the object went long or short.

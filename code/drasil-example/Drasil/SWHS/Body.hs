@@ -95,8 +95,8 @@ checkSi = collectUnits swhsSymMap symbTT
 authors :: Sentence
 authors = S $ manyNames swhsPeople
 
-swhs_si :: SystemInformation
-swhs_si = SI {
+si :: SystemInformation
+si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
@@ -201,7 +201,7 @@ mkSRS = [RefSec $ RefProg intro [
     Bibliography]
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec swhs_si [swhsInputMod]
+swhsCode = codeSpec si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -209,7 +209,7 @@ tsymb_intro = [TSPurpose, SymbConvention
 
 --- The document starts here
 swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS for swhs_si
+swhs_srs' = mkDoc mkSRS for si
 
 swhs_label :: TraceMap
 swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
@@ -511,7 +511,7 @@ traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
 
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable swhs_si
+traceTableAll = generateTraceTable si
 
 traceTrailing :: [Sentence]
 traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]

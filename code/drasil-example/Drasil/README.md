@@ -2,7 +2,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 22, 2019
+Last updated: May 24, 2019
 --------------------------------------------------
 
 **GamePhysics**
@@ -25,6 +25,9 @@ Last updated: May 22, 2019
   
 **SWHS**
   - Contains the current state of the solar water heating system incorporating phase change material case study implemented in Drasil
+
+**Template**
+  - An empty example for implementing future examples in Drasil
 
 README.md
   - This file

@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (glassBRCode, srs, printSetting)
+import Drasil.GlassBR.Body (code, srs, printSetting)
 
 choices :: Choices
 choices = Choices {
@@ -23,4 +23,4 @@ main :: IO()
 main = do
   gen (DocSpec SRS "GlassBR_SRS")     srs printSetting
   gen (DocSpec Website "GlassBR_SRS") srs printSetting
-  genCode choices glassBRCode
+  genCode choices code

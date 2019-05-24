@@ -31,14 +31,14 @@ import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, code, company, condition, content, dataConst,
+  assumption, characteristic, company, condition, content, dataConst,
   datum, definition, doccon, doccon', document, emphasis, environment,
   figure, goal, information, input_, interface, item, likelyChg, model,
   organization, output_, physical, physicalSystem, physSyst, problem, product_,
   purpose, reference, requirement, section_, software, softwareConstraint,
   softwareSys, srsDomains, standard, sysCont, system, template, term_,
   traceyMatrix, user, value, variable)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
@@ -217,8 +217,8 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-glassBRCode :: CodeSpec
-glassBRCode = codeSpec glassSystInfo allMods
+code :: CodeSpec
+code = codeSpec glassSystInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 
@@ -310,7 +310,7 @@ purpOfDocIntro :: NamedChunk -> CI -> NamedChunk -> Sentence
 purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
-  `sAnd` plural thModel, S "used in the", short progName, phrase code,
+  `sAnd` plural thModel, S "used in the", short progName, phrase Doc.code,
   S "are provided" `sC` S "with an", phrase emphasis,
   S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase typeOf, S "is intended to be used as a",

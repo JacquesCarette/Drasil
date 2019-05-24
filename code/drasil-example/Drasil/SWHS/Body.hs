@@ -90,7 +90,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits swhsSymMap symbTT
+checkSi = collectUnits symMap symbTT
 
 authors :: Sentence
 authors = S $ manyNames swhsPeople
@@ -109,7 +109,7 @@ si = SI {
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
   _constants = [],
-  _sysinfodb = swhsSymMap,
+  _sysinfodb = symMap,
   _usedinfodb = usedDB,
    refdb = swhsRefDB
 }
@@ -117,8 +117,8 @@ si = SI {
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
-swhsSymMap :: ChunkDB
-swhsSymMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+symMap :: ChunkDB
+symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
@@ -139,7 +139,7 @@ swhsRefDB :: ReferenceDB
 swhsRefDB = rdb swhsCitations swhs_concins
 
 printSetting :: PrintingInformation
-printSetting = PI swhsSymMap defaultConfiguration
+printSetting = PI symMap defaultConfiguration
 
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
@@ -149,10 +149,10 @@ acronyms :: [CI]
 acronyms = ciGetDocDesc mkSRS
 
 shortTT :: [IdeaDict]
-shortTT = concatMap (`getIdeaDict` swhsSymMap) $ getDocDesc mkSRS
+shortTT = concatMap (`getIdeaDict` symMap) $ getDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

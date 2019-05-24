@@ -3,7 +3,7 @@ module Data.Drasil.SentenceStructures
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
-  , toThe, tableShows, figureLabel
+  , toThe, tableShows
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
@@ -126,13 +126,6 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
-
--- | Function that creates (a label for) a figure
---FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> String -> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
-  Figure (titleize figure +: 
-  (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+

@@ -32,12 +32,12 @@ import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content, dataConst,
-  datum, definition, doccon, doccon', document, emphasis, environment,
-  figure, goal, information, input_, interface, item, likelyChg, model,
-  organization, output_, physical, physicalSystem, physSyst, problem, product_,
-  purpose, reference, requirement, section_, software, softwareConstraint,
-  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
-  traceyMatrix, user, value, variable)
+  datum, definition, doccon, doccon', document, emphasis, environment, goal,
+  information, input_, interface, item, likelyChg, model, organization, output_,
+  physical, physicalSystem, physSyst, problem, product_, purpose, reference,
+  requirement, section_, software, softwareConstraint, softwareSys, srs,
+  srsDomains, standard, sysCont, system, template, term_, traceyMatrix, user,
+  value, variable)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
@@ -54,9 +54,8 @@ import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
-  isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
-  underConsidertn)
+  foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, isThe, ofThe, sAnd, showingCxnBw,
+  sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs)
   
@@ -659,17 +658,17 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel 2 traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)
-  (resourcePath ++ "Trace.png") "TraceyItemSecs"
+fig_2 = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
+  titleize' item +:+ S "of Different" +:+ titleize' section_)
+  (resourcePath ++ "Trace.png")
 
-fig_3 = figureLabel 3 traceyMatrix
-  (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "RTrace.png") "TraceyReqsItems"
+fig_3 = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
+  titleize' requirement `sAnd` S "Other" +:+ titleize' item)
+  (resourcePath ++ "RTrace.png")
 
-fig_4 = figureLabel 4 traceyMatrix
-  (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
+fig_4 = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
+  titleize' assumption `sAnd` S "Other" +:+ titleize' item)
+  (resourcePath ++ "ATrace.png")
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
@@ -682,12 +681,12 @@ appdxIntro = foldlSP [
   sParen ((makeRef2S fig_5) `sAnd` (makeRef2S fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = llcc (makeFigRef "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
+fig_5 = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
-fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
+fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))

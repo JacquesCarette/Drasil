@@ -65,11 +65,11 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 -- | helper for formatting constraints
 foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
+foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
   where
-    constraintToExpr c (Range _ ri)         = real_interval c ri
-    constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
-    constraintToExpr c (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
+    constraintToExpr (Range _ ri)         = real_interval c ri
+    constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
+    constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr

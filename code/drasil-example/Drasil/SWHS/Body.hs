@@ -36,7 +36,8 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   problem, property, purpose, quantity, reference, requirement, section_, software,
   softwareSys, srs, srsDomains, sysCont, system, traceyGraph, traceyMatrix, user, value,
   variable, doccon, doccon')
-import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (genDefn, inModel, thModel)
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
@@ -127,12 +128,12 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
+  dataDefn swhs_insmodel swhs_gendef swhs_theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy swhs_datadefn swhs_insmodel swhs_gendef
+ ([] :: [ConceptChunk]) checkSi label refBy dataDefn swhs_insmodel swhs_gendef
  swhs_theory swhs_concins swhs_section swhs_labcon
 
 refDB :: ReferenceDB
@@ -217,8 +218,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
 refBy :: RefbyMap
 refBy = generateRefbyMap label 
 
-swhs_datadefn :: [DataDefinition]
-swhs_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
 swhs_insmodel :: [InstanceModel]
 swhs_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
@@ -1243,7 +1244,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 --------------------------------------------------
 
 renameList1, renameList2 :: [CI]
-renameList1  = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
+renameList1  = [thModel, genDefn, Doc.dataDefn, inModel, likelyChg, assumption]
 renameList2  = [inModel, requirement, dataConst]
 
 traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence

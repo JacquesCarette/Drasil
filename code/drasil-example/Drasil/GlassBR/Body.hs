@@ -93,11 +93,11 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glass
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) label refBy
-  dataDefn insModel genDef theory glassBRConcIns
+  dataDefn insModel genDef theory concIns
   glassBRSection glassBRLabelledCon
 
 label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBRConcIns
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label 
@@ -114,8 +114,8 @@ genDef = getTraceMapFromGD $ getSCSSub mkSRS
 theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBRConcIns :: [ConceptInstance]
-glassBRConcIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns :: [ConceptInstance]
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 glassBRSection :: [Section]
 glassBRSection = glassBRSec
@@ -129,11 +129,11 @@ glassBRSec = extractSection srs
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
-  dataDefn insModel genDef theory glassBRConcIns
+  dataDefn insModel genDef theory concIns
   glassBRSection glassBRLabelledCon
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb gbCitations glassBRConcIns
+gbRefDB = rdb gbCitations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration

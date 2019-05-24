@@ -116,8 +116,8 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 
 {--}
 
-gbOutputs :: [QuantityDict]
-gbOutputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
+outputs :: [QuantityDict]
+outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
 
 probBr :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")

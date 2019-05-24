@@ -67,7 +67,7 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
-import Drasil.SWHS.DataDefs (swhsDDefs, qDefs)
+import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
@@ -104,7 +104,7 @@ si = SI {
   _quants = swhsSymbols,
   _concepts = symbTT,
   _definitions = qDefs,
-  _datadefs = swhsDDefs,
+  _datadefs = dataDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -180,7 +180,7 @@ mkSRS = [RefSec $ RefProg intro [
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
         , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
         , Constraints  EmptyS dataConstraintUncertainty dataConTail
@@ -544,7 +544,7 @@ traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6"]
-traceDataDefRef = map makeRef2S swhsDDefs
+traceDataDefRef = map makeRef2S dataDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 traceLikelyChgRef = map makeRef2S likelyChgs

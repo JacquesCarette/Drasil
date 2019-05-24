@@ -17,14 +17,14 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 refMDB :: ModelDB
-refMDB = mdb [] [] swhsDDefs []
+refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
 qDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
-swhsDDefs :: [DataDefinition] 
-swhsDDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
+dataDefs :: [DataDefinition] 
+dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
   ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using

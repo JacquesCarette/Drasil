@@ -66,7 +66,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, con)
+  coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
 import Drasil.SWHS.DataDefs (swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
@@ -98,7 +98,7 @@ authors = S $ manyNames people
 
 si :: SystemInformation
 si = SI {
-  _sys = swhs_pcm,
+  _sys = swhsPCM,
   _kind = srs, 
   _authors = people,
   _quants = swhsSymbols,
@@ -125,7 +125,7 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
-  ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
+  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon)
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
@@ -164,15 +164,15 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
-    IntroProg (introP1 CT.enerSrc energy swhs_pcm phsChgMtrl
-    progName CT.thermalEnergy latentHeat unit_) (introP2 swhs_pcm program
+    IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
+    progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
     progName)
-    [IPurpose $ purpDoc swhs_pcm progName,
+    [IPurpose $ purpDoc swhsPCM progName,
      IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
      IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
-       $ orgDocEnd swhs_pcm progName],
+       $ orgDocEnd swhsPCM progName],
   Verbatim genSystDesc,
   SSDSec $
     SSDProg [SSDSubVerb probDescription
@@ -258,7 +258,7 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- Section 2 : INTRODUCTION --
 ------------------------------
 
--- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
+-- In Concepts.hs "swhsPCM" gives "s for program name, and there is a
 -- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
@@ -722,7 +722,7 @@ introP2 sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
   phrase pr, S "will be referred to as", titleize pro,
   sParen (short pro)] -- SSP has same style sentence here
 
--- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
+-- In Concepts.hs "swhsPCM" gives "s for program name, and there is a
 -- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
@@ -908,7 +908,7 @@ userCharContents pro = foldlSP [S "The end", phrase user, S "of",
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
 
--- The swhs_pcm reference at the end would be better if singular, but concept
+-- The swhsPCM reference at the end would be better if singular, but concept
 -- is plural.
 
 -------------------------------

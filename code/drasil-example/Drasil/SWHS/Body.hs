@@ -208,8 +208,8 @@ tsymb_intro = [TSPurpose, SymbConvention
   [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
 
 --- The document starts here
-swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS for si
+srs' :: Document
+srs' = mkDoc mkSRS for si
 
 swhs_label :: TraceMap
 swhs_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' swhs_concins
@@ -239,7 +239,7 @@ swhs_labcon :: [LabelledContent]
 swhs_labcon = [dataConTable1, inputInitQuantsTblabled]
 
 swhs_sec :: [Section]
-swhs_sec = extractSection swhs_srs'
+swhs_sec = extractSection srs'
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

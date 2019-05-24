@@ -316,7 +316,7 @@ systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro
 
 systContRespBullets :: Contents
 systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
-  swhsResp]
+  resp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -871,8 +871,8 @@ userResp inp dat = Nested (titleize user +: S "Responsibilities")
   ]
 
 -- SWHS Responsibilities --
-swhsResp :: ItemType
-swhsResp = Nested (short progName +: S "Responsibilities")
+resp :: ItemType
+resp = Nested (short progName +: S "Responsibilities")
   $ Bullet $ noRefs $ map Flat [
 
   foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",

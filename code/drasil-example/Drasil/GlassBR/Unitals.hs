@@ -44,7 +44,7 @@ glass_type, nomThick :: ConstrainedChunk
 
 inputs :: [QuantityDict]
 inputs = (map qw inputsWUnitsUncrtn) ++ (map qw inputsWUncrtn) ++ 
-  (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
+  (map qw inputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: [UncertQ]
@@ -55,8 +55,8 @@ inputsWUncrtn :: [UncertainChunk]
 inputsWUncrtn = [aspect_ratio, pbTol, tNT]
 
 --inputs with no uncertainties
-gbInputsNoUncrtn :: [ConstrainedChunk]
-gbInputsNoUncrtn = [glass_type, nomThick]
+inputsNoUncrtn :: [ConstrainedChunk]
+inputsNoUncrtn = [glass_type, nomThick]
 
 gbInputDataConstraints :: [UncertainChunk]
 gbInputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 

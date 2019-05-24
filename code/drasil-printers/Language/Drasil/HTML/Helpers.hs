@@ -152,7 +152,7 @@ author a        = div_tag ["author"] (h 2 a)
 
 -- | Div tag wrapper
 div_tag :: [String] -> Doc -> Doc
-div_tag = oldWrap "div"
+div_tag = wrap "div"
 
 span_tag :: [String] -> Doc -> Doc
 span_tag = wrap "span"

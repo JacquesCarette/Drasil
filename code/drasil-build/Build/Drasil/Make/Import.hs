@@ -1,6 +1,6 @@
 module Build.Drasil.Make.Import where
 
-import Build.Drasil.Make.AST (Rule, Makefile(M))
+import Build.Drasil.Make.AST (Makefile(M), Rule)
 
 class RuleTransformer c where
   makeRule :: c -> [Rule]

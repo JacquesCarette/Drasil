@@ -16,7 +16,7 @@ genMake = build . toMake
 
 -- | Renders the makefile rules
 build :: Makefile -> Doc
-build (M rules) = addCommonFeatures $
+build (M rules) = addCommonFeatures rules $
   vcat (map (\x -> printRule x $+$ text "") rules) $$ printPhony rules
 
 -- | Renders specific makefile rules. Called by 'build'

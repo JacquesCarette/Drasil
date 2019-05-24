@@ -25,7 +25,7 @@ import Data.Drasil.Utils (eqUnR')
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, swhsIMods)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
@@ -81,7 +81,7 @@ iIQConstruct x = cic "inputInitQuants" ( foldlSent [
   plural condition]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
-            (foldlList Comma List $ map makeRef2S swhsIMods)
+            (foldlList Comma List $ map makeRef2S iMods)
             (foldlList Comma List [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
             (ch w_vol `isThe` phrase w_vol `sAnd` ch tank_vol `isThe` phrase tank_vol)
 

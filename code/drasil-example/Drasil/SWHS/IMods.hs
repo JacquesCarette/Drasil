@@ -1,4 +1,4 @@
-module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
+module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
@@ -28,8 +28,8 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_
   temp_melt_P, temp_PCM, temp_W, time_final, vol_ht_gen, w_E, w_mass, w_vol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
-swhsIMods :: [InstanceModel]
-swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+iMods :: [InstanceModel]
+iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --

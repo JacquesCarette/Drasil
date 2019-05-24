@@ -72,7 +72,7 @@ import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
-  swhsIMods, instModIntro)
+  iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, swhsNFRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
@@ -524,7 +524,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef2S swhsIMods --FIXME: swhsIMods is a hack?
+traceInstaModelRef = map makeRef2S iMods --FIXME: iMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -808,7 +808,7 @@ orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel, 
   S "to be solved are referred to as" +:+. 
-  foldlList Comma List (map makeRef2S swhsIMods), S "The", plural inModel,
+  foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]

@@ -124,8 +124,8 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-gbTMSymbols :: [QuantityDict]
-gbTMSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
+tmSymbols :: [QuantityDict]
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")

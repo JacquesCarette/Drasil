@@ -1,4 +1,7 @@
 module Language.Drasil.Code.Imperative.Build.AST where
+import Build.Drasil (makeS, MakeString)
+
+type CommandFragment = MakeString
 
 data BuildName = BMain
                | BPackName
@@ -6,16 +9,16 @@ data BuildName = BMain
                | BWithExt BuildName Ext
 
 data Ext = CodeExt
-         | OtherExt String
+         | OtherExt MakeString
 
 
-data BuildDependencies = BcAll
+data BuildDependencies = BcSource
                        | BcSingle BuildName
 
-data BuildConfig = BuildConfig ([String] -> String -> BuildCommand) BuildDependencies
+data BuildConfig = BuildConfig ([CommandFragment] -> CommandFragment -> BuildCommand) BuildDependencies
 
 data RunType = Standalone
-             | Interpreter String
+             | Interpreter CommandFragment
 
 data Runnable = Runnable BuildName NameOpts RunType
 
@@ -30,23 +33,26 @@ nameOpts = NameOpts {
   includeExt = True
 }
 
-type BuildCommand = [String]
+type BuildCommand = [CommandFragment]
 type InterpreterCommand = String
 
-buildAll :: ([String] -> String -> BuildCommand) -> Maybe BuildConfig
-buildAll = Just . flip BuildConfig BcAll
+asFragment :: String -> CommandFragment
+asFragment = makeS
 
-buildSingle :: ([String] -> String -> BuildCommand) -> BuildName -> Maybe BuildConfig
+buildAll :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> Maybe BuildConfig
+buildAll = Just . flip BuildConfig BcSource
+
+buildSingle :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> BuildName -> Maybe BuildConfig
 buildSingle f = Just . BuildConfig f . BcSingle
 
 nativeBinary :: Runnable
-nativeBinary = Runnable (BWithExt BPackName $ OtherExt "$(TARGET_EXTENSION)") nameOpts Standalone
+nativeBinary = Runnable (BWithExt BPackName $ OtherExt $ makeS "$(TARGET_EXTENSION)") nameOpts Standalone
 
 interp :: BuildName -> NameOpts -> InterpreterCommand -> Runnable
-interp b n i = Runnable b n $ Interpreter i
+interp b n = Runnable b n . Interpreter . makeS
 
 interpMM :: InterpreterCommand -> Runnable
-interpMM = Runnable mainModuleFile nameOpts . Interpreter
+interpMM = Runnable mainModuleFile nameOpts . Interpreter . makeS
 
 mainModule :: BuildName
 mainModule = BMain
@@ -58,10 +64,10 @@ inCodePackage :: BuildName -> BuildName
 inCodePackage = BPack
 
 withExt :: BuildName -> String -> BuildName
-withExt b = BWithExt b . OtherExt
+withExt b = BWithExt b . OtherExt . makeS
 
-cCompiler :: String
-cCompiler = "\"$(CC)\""
+cCompiler :: CommandFragment
+cCompiler = makeS "\"$(CC)\""
 
-cppCompiler :: String
-cppCompiler = "\"$(CXX)\""
+cppCompiler :: CommandFragment
+cppCompiler = makeS "\"$(CXX)\""

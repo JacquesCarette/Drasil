@@ -193,7 +193,7 @@ sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol]
+  effectiveStress, effNormStress, dryVol, satVol, waterVol, rotForce, momntArm]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
   gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
@@ -203,7 +203,7 @@ accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght,
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
-  satVol, waterVol :: UnitalChunk
+  satVol, waterVol, rotForce, momntArm :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -389,7 +389,13 @@ satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied 
 
 waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
 
+rotForce = uc' "F_rot" (cn "force causing rotation") 
+  "a force in the direction of rotation" (sub cF (Atomic "rot")) newton
   
+momntArm = uc' "r" (cn' "length of the moment arm") 
+  "distance between a force causing rotation and the axis of rotation"
+  lR metre
+
 ----------------------
 -- Unitless Symbols --
 ----------------------

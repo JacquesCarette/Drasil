@@ -30,11 +30,12 @@ import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, information, inModel, input_, interest, 
-  issue, loss, method_, model, organization, physical, physics, problem,
-  purpose, requirement, section_, software, softwareSys, srs, srsDomains, 
-  symbol_, sysCont, system, systemConstraint, template, thModel, type_, user, 
-  value, variable, physSyst, doccon, doccon')
+  environment, goal, information, input_, interest, issue, loss, method_,
+  model, organization, physical, physics, problem, purpose, requirement,
+  section_, software, softwareSys, srs, srsDomains, symbol_, sysCont,
+  system, systemConstraint, template, type_, user, value, variable,
+  physSyst, doccon, doccon')
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)

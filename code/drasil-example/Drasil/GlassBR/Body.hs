@@ -32,13 +32,14 @@ import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, code, company, condition, content, dataConst,
-  dataDefn, datum, definition, doccon, doccon', document, emphasis, environment,
-  figure, goal, information, inModel, input_, interface, item, likelyChg, model,
+  datum, definition, doccon, doccon', document, emphasis, environment,
+  figure, goal, information, input_, interface, item, likelyChg, model,
   organization, output_, physical, physicalSystem, physSyst, problem, product_,
   purpose, reference, requirement, section_, software, softwareConstraint,
   softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
-  thModel,traceyMatrix, user, value, variable)
-import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
+  traceyMatrix, user, value, variable)
+import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
+import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)

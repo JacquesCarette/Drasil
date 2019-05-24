@@ -4,7 +4,7 @@ import Build.Drasil.Make.AST (Command(C), Rule(R))
 import Build.Drasil.Make.MakeString (MakeString(Mc, Mr, Mv), MVar(Free, Implicit, Os))
 
 import Data.List (nubBy)
-import Text.PrettyPrint (Doc, nest, text, vcat, ($+$))
+import Text.PrettyPrint (Doc, empty, nest, text, vcat, ($+$))
 
 ($=) :: MVar -> String -> Doc
 a $= b = text $ varName a ++ "=" ++ b
@@ -26,21 +26,16 @@ defineOsVars f m = msIndent $ vcat $ map (\x -> x $= f x) m
 
 -- | Helper for rendering OS-specific variables
 osDefinitions :: [MVar] -> Doc
+osDefinitions [] = empty
 osDefinitions m =
   text "ifeq \"$(OS)\" \"Windows_NT\"" $+$
-  msIndent (text "TARGET_EXTENSION=.exe") $+$
-  msIndent (text "RM=del") $+$
   defineOsVars win m $+$
   text "else" $+$
   msIndent (vcat [text "UNAME_S := $(shell uname -s)",
     text "ifeq ($(UNAME_S), Linux)",
-    msIndent $ text "TARGET_EXTENSION=",
-    msIndent $ text "RM=rm",
     defineOsVars linux m,
     text "endif",
     text "ifeq ($(UNAME_S), Darwin)",
-    msIndent $ text "TARGET_EXTENSION=",
-    msIndent $ text "RM=rm",
     defineOsVars mac m,
     text "endif"]) $+$
   text "endif" $+$

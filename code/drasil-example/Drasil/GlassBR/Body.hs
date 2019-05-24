@@ -93,7 +93,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glass
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) label refBy
-  dataDefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  dataDefn insModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
 
 label :: TraceMap
@@ -105,8 +105,8 @@ refBy = generateRefbyMap label
 dataDefn :: [DataDefinition]
 dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-glassBRInsModel :: [InstanceModel]
-glassBRInsModel = getTraceMapFromIM $ getSCSSub mkSRS
+insModel :: [InstanceModel]
+insModel = getTraceMapFromIM $ getSCSSub mkSRS
 
 glassBRGenDef :: [GenDefn]
 glassBRGenDef = getTraceMapFromGD $ getSCSSub mkSRS
@@ -129,7 +129,7 @@ glassBRSec = extractSection srs
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
-  dataDefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
+  dataDefn insModel glassBRGenDef glassBRTheory glassBRConcIns
   glassBRSection glassBRLabelledCon
 
 gbRefDB :: ReferenceDB

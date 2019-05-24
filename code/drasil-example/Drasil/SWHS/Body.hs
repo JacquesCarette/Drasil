@@ -200,8 +200,8 @@ mkSRS = [RefSec $ RefProg intro [
     AuxConstntSec $ AuxConsProg progName specParamValList,
     Bibliography]
 
-swhsCode :: CodeSpec
-swhsCode = codeSpec si [swhsInputMod]
+code :: CodeSpec
+code = codeSpec si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

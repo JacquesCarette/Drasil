@@ -30,3 +30,9 @@ Data Definitions
 Instance Models
 1) 0 = v_i_y + a*t/2 (from GD3) - v at max height = 0
                                 - t at max height = t_total/2
+
+Data Constraints
+Input
+v > 0
+0 < θ < 90
+d > 0

@@ -2,15 +2,16 @@
 module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSentList,
   makeTMatrix, itemRefToSent, noRefs, noRefsLT, makeListRef, bulletFlat, bulletNested,
   enumSimple, enumBullet, enumSimpleU, enumBulletU, mkInputDatTb, getRVal, addPercent,
-  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR', mkTableFromColumns ) where
+  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR', mkTableFromColumns, typUncr ) where
 
 import Language.Drasil
 
-import Control.Lens ((^.))
-import Data.List (elem, transpose)
-
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
+
+import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (elem, transpose)
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
@@ -58,8 +59,15 @@ getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
+-- | extracts the typical uncertainty to be displayed from something that has an uncertainty
+typUncr :: HasUncertainty c => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
+  where
+    found u Nothing  = addPercent $ u * 100
+    found u (Just p) = addPercent (realFracToDecimal (fromIntegral p) (u * 100) :: DecimalRaw Integer)
+
 -- | outputs sentence with % attached to it
-addPercent :: (Show a) => a -> Sentence -- commented out to suppress type default warning
+addPercent :: Show a => a -> Sentence
 addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences

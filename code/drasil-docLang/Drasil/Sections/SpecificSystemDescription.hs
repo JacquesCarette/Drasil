@@ -30,8 +30,8 @@ import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), fmtPhys, fmtSfwr, foldlList,
-  foldlSP, foldlSent, ofThe, sAnd, typUncr)
-import Data.Drasil.Utils (foldle, fmtU, getRVal, mkTableFromColumns)
+  foldlSP, foldlSent, ofThe, sAnd)
+import Data.Drasil.Utils (foldle, fmtU, getRVal, mkTableFromColumns, typUncr)
 
 import qualified Drasil.DocLang.SRS as SRS
 

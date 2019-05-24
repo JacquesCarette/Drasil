@@ -10,6 +10,8 @@ Assumptions
 3) The object's path starts and ends at ground level.
 4) The effects of drag, wind, and the Earth's curvature are ignored.
 5) The flight is free; there are no collisions during the trajectory of the object.
+6) The positive x-direction is the direction from start to the end of the object's path.
+7) The positive y-direction is the direction away from the ground.
 
 Goal Statments
 1) Check if the final position from user input is reached by the object with initial conditions.

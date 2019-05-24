@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
@@ -129,12 +129,12 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
-  swhs_section swhs_labcon
+  section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
- theory concIns swhs_section swhs_labcon
+ theory concIns section swhs_labcon
 
 refDB :: ReferenceDB
 refDB = rdb swhsCitations concIns
@@ -233,8 +233,8 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-swhs_section :: [Section]
-swhs_section = swhs_sec
+section :: [Section]
+section = swhs_sec
 
 swhs_labcon :: [LabelledContent]
 swhs_labcon = [dataConTable1, inputInitQuantsTblabled]

@@ -8,8 +8,8 @@ import Data.Drasil.Phrase (compoundNC)
 import Data.Drasil.IdeaDicts
 
 {--}
-glasscon :: [CI]
-glasscon = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+con :: [CI]
+con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
 glasscon' :: [NamedChunk]

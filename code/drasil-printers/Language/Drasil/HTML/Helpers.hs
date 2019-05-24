@@ -59,20 +59,6 @@ h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h"++show n) []
 
--- OLD FUNCTIONS
---------------------------------------------------
--- | Helper for wrapping HTML tags.
--- The second argument provides class names for the CSS.
-oldWrap :: String -> [String] -> Doc -> Doc
-oldWrap s [] = \x -> 
-  let tb c = text $ "<" ++ c ++ ">"
-  in vcat [tb s, x, tb $ '/':s]
-oldWrap s ts = \x ->
-  let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
-  in let te c = text $ "</" ++ c ++ ">"
-  in vcat [tb s, x, te s]
---------------------------------------------------
-
 data Variation = Class | Id
 
 wrap :: String -> [String] -> Doc -> Doc

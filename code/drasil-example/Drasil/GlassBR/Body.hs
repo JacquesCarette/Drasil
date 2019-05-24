@@ -31,7 +31,7 @@ import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, code, company, condition, content, dataConst,
+  assumption, characteristic, company, condition, content, dataConst,
   datum, definition, doccon, doccon', document, emphasis, environment, goal,
   information, input_, interface, item, likelyChg, model, organization, output_,
   physical, physicalSystem, physSyst, problem, product_, purpose, reference,
@@ -247,7 +247,7 @@ termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (at_start load `sDash` (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]

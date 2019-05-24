@@ -78,7 +78,7 @@ import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
   demand, demandq, dimlessLoad, explosion, gbConstants, constrained,
-  inputs, outputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
+  inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
 import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
@@ -272,7 +272,7 @@ solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
-auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
+auxiliaryConstants = assumptionConstants ++ specParamVals
 
 --Used in "Non-Functional Requirements" Section--
 priorityNFReqs :: [ConceptChunk]

@@ -142,8 +142,8 @@ pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
 
 {--}
 
-gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
+specParamVals :: [QDefinition]
+specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin]
 
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
@@ -398,7 +398,7 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 gbConstants :: [QDefinition]
 gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
-                ++ gBRSpecParamVals 
+                ++ specParamVals 
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
 constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53

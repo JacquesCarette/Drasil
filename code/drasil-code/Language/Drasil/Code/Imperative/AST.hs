@@ -386,11 +386,11 @@ a &=. b = assign a (var b)
 
 (&-=) :: Value -> Value -> Statement
 infixl 1 &-=
-n &-= v = (n &= (n #- v))
+n &-= v = n &= (n #- v)
 
 (&.-=) :: Label -> Value -> Statement
 infixl 1 &.-=
-n &.-= v = (n &.= (var n #- v))
+n &.-= v = n &.= (var n #- v)
 
 (&+=) :: Value -> Value -> Statement
 infixl 1 &+=
@@ -410,11 +410,11 @@ infixl 8 &.++
 
 (&~-) :: Value -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
 infixl 8 &~-
-(&~-) v = (v &-= litInt 1)
+(&~-) v = v &-= litInt 1
 
 (&.~-) :: Label -> Statement
 infixl 8 &.~-
-(&.~-) l = (l &.-= litInt 1)
+(&.~-) l = l &.-= litInt 1
 
 --other operators ($)
 ($->) :: Value -> Value -> Value
@@ -448,13 +448,13 @@ tan :: Value -> Value
 tan = unExpr Tan
 
 csc :: Value -> Value
-csc v = (litFloat 1.0) #/ (sin v)
+csc v = litFloat 1.0 #/ sin v
 
 sec :: Value -> Value
-sec v = (litFloat 1.0) #/ (cos v)
+sec v = litFloat 1.0 #/ cos v
 
 cot :: Value -> Value
-cot v = (litFloat 1.0) #/ (tan v)
+cot v = litFloat 1.0 #/ tan v
 
 alwaysDel :: Int
 alwaysDel = 4
@@ -565,7 +565,7 @@ listAppend = ListAppend
 listExtend :: StateType -> Function
 listExtend = ListExtend
 
-listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
+listSlice :: StateType -> Value -> Value -> Maybe Value -> Maybe Value -> Maybe Value -> Statement
 listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s
 
 stringSplit :: Value -> Value -> Char -> Statement
@@ -723,11 +723,11 @@ addComments c [Block ss] =
     let cStart = commentDelimit c
         cEnd = endCommentDelimit c
     in [Block $ cStart : ss ++ [cEnd]]
-addComments c ((Block ss1):bs) =
+addComments c (Block ss1 : bs) =
     let cStart = commentDelimit c
         cEnd = endCommentDelimit c
         (Block ssn) = last bs
-    in Block(cStart : ss1) : (init bs) ++ [Block $ ssn ++ [cEnd]]
+    in Block(cStart : ss1) : init bs ++ [Block $ ssn ++ [cEnd]]
 addComments _ [] = error "addComments on an empty Block"
 
 comment :: Label -> Statement
@@ -740,7 +740,7 @@ endCommentDelimit :: Label -> Statement
 endCommentDelimit s = CommentState $ CommentDelimit (endCommentLabel ++ " " ++ s) commentLength
 
 prefixFirstBlock :: Statement -> [Block] -> [Block]
-prefixFirstBlock s ((Block ss):bs) = Block(s : ss) : bs
+prefixFirstBlock s (Block ss : bs) = Block (s : ss) : bs
 prefixFirstBlock _ [] = error "prefixFirstBlock called without a block"
 
 -----------------------
@@ -759,9 +759,9 @@ convertToClass c = c
 
 convertToMethod :: Method -> Method
 convertToMethod (GetMethod n t) = Method (getterName n) Public Dynamic t [] getBody
-    where getBody = oneLiner $ return (Self$->(var n))
+    where getBody = oneLiner $ return (Self $-> var n)
 convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Dynamic Void [p] setBody
-    where setBody = oneLiner $ Self$->(var n) &=. pn
+    where setBody = oneLiner $ Self $-> var n &=. pn
 convertToMethod (MainMethod b) = Method "main" Public Static Void [] b
 convertToMethod t = t
 
@@ -875,10 +875,10 @@ convToClass (Mod n l vs fs cs) = Mod n l [] [] (replaceClass n cs vs fs)
 replaceClass :: String -> [Class] -> [Declaration] -> [Method] -> [Class]
 replaceClass n [] vs fs = [addToClass (pubClass n Nothing [] []) vs fs]
 replaceClass n cs vs fs =   
-  case find (\x -> className x == n) cs of Nothing -> (addToClass (pubClass n Nothing [] []) vs fs):cs
-                                           Just c  -> (addToClass c vs fs):(removeClass cs)
+  case find (\x -> className x == n) cs of Nothing -> addToClass (pubClass n Nothing [] []) vs fs : cs
+                                           Just c  -> addToClass c vs fs : removeClass cs
   where removeClass [] = []
-        removeClass (ch:ct) = if (className ch == n) 
+        removeClass (ch:ct) = if className ch == n
                                 then removeClass ct
                                 else ch:removeClass ct
                                                        
@@ -894,14 +894,14 @@ addToClass (MainClass n v m) ds fs = MainClass n (addToSV ds v) (addToMethod fs 
 addToClass _ _ _ = error "Unsupported class for Java imperative to OO conversion"
 
 addToMethod :: [Method] -> [Method] -> [Method]
-addToMethod f = (++ (map fToM f))
+addToMethod f = (++ map fToM f)
 
 fToM :: Method -> Method
 fToM (Method l _ _ t ps b) = Method l Public Static t ps b
 fToM m = m
 
 addToSV :: [Declaration] -> [StateVar] -> [StateVar]
-addToSV d sv = sv ++ (map dToSV d)
+addToSV d sv = sv ++ map dToSV d
 
 dToSV :: Declaration -> StateVar
 dToSV (VarDec l s) = StateVar l Public Static s 0

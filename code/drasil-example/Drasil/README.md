@@ -2,8 +2,9 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: May 22, 2019
 --------------------------------------------------
+
 **GamePhysics**
   - Contains the current state of the Chipmunk2D case study implemented in Drasil
 
@@ -13,9 +14,12 @@ Last updated: July 19, 2018
 **HGHC**
   - Contains the current state of the tiny (fuel pin) example implemented in Drasil
   
-**PCM**
+**NoPCM**
   - Contains the current state of the solar water heating system case study implemented in Drasil
-  
+
+**Projectile**
+  - Contains the current work on implementing the projectile example in Drasil
+
 **SSP**
   - Contains the current state of the slope stability analysis case study implemented in Drasil
   

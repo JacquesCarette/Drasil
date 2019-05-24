@@ -118,7 +118,7 @@ luatop c ft _ _ = vcat [
           valParam = param val (Type "Value")
           tableFindBody = [Block [forEach v (ListVar "t" (Type "Value")) forBody], Block [return $ litInt (-1)]]
           forBody = oneLiner $ ifCond [(condExpr, oneLiner $ returnVar $ keyLabel v)] noElse
-          condExpr = (var v) ?== (var val)
+          condExpr = var v ?== var val
           --Lua inheritance code from http://lua-users.org/wiki/InheritanceTutorial
           --TODO only include the inheritance function definition if it's used in the body of the code?
           inheritanceFunc = "function " ++ render (inherit c) ++"(baseClass)\n\        

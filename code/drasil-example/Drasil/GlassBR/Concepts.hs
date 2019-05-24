@@ -12,8 +12,8 @@ con :: [CI]
 con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
-glasscon' :: [NamedChunk]
-glasscon' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+con' :: [NamedChunk]
+con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
 {-glassBRProg :: CommonConcept

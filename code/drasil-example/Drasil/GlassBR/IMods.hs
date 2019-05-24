@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro) where
+module Drasil.GlassBR.IMods (symb, gbrIMods, calofDemandi, instModIntro) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -21,8 +21,8 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 gbrIMods :: [InstanceModel]
 gbrIMods = [calofDemandi]
 
-glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
+symb :: [DefinedQuantityDict]
+symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
 
 

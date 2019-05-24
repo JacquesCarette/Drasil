@@ -33,7 +33,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = (map cnstrw gbInputsWUncrtn) ++ 
+constrained = (map cnstrw inputsWUncrtn) ++ 
   (map cnstrw inputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
@@ -43,7 +43,7 @@ glass_type, nomThick :: ConstrainedChunk
 {--}
 
 inputs :: [QuantityDict]
-inputs = (map qw inputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
+inputs = (map qw inputsWUnitsUncrtn) ++ (map qw inputsWUncrtn) ++ 
   (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties
@@ -51,8 +51,8 @@ inputsWUnitsUncrtn :: [UncertQ]
 inputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
 
 --inputs with uncertainties and no units
-gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pbTol, tNT]
+inputsWUncrtn :: [UncertainChunk]
+inputsWUncrtn = [aspect_ratio, pbTol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -60,7 +60,7 @@ gbInputsNoUncrtn = [glass_type, nomThick]
 
 gbInputDataConstraints :: [UncertainChunk]
 gbInputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
-  (map uncrtnw gbInputsWUncrtn)
+  (map uncrtnw inputsWUncrtn)
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 

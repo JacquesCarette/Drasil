@@ -128,13 +128,13 @@ symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
-  dataDefn insModel genDef swhs_theory swhs_concins
+  dataDefn insModel genDef theory swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
- swhs_theory swhs_concins swhs_section swhs_labcon
+ theory swhs_concins swhs_section swhs_labcon
 
 refDB :: ReferenceDB
 refDB = rdb swhsCitations swhs_concins
@@ -227,8 +227,8 @@ insModel = getTraceMapFromIM $ getSCSSub mkSRS
 genDef :: [GenDefn]
 genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-swhs_theory :: [TheoryModel]
-swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 swhs_concins :: [ConceptInstance]
 swhs_concins = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs

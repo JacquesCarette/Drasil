@@ -83,8 +83,8 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
 
 {--}
 
-gbSymbMap :: ChunkDB
-gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glasscon
+symbMap :: ChunkDB
+symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glasscon
   ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
@@ -135,10 +135,10 @@ gbRefDB :: ReferenceDB
 gbRefDB = rdb gbCitations glassBRConcIns
 
 printSetting :: PrintingInformation
-printSetting = PI gbSymbMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits gbSymbMap thisSymbols 
+checkSi = collectUnits symbMap thisSymbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
@@ -202,7 +202,7 @@ glassSystInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
+  _definitions = (map (relToQD symbMap) gbrIMods) ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
                  (concatMap (^. defined_fun) gbrTMods),
   _datadefs    = dataDefns,
@@ -211,7 +211,7 @@ glassSystInfo = SI {
   _defSequence = gbQDefns,
   _constraints = gbConstrained,
   _constants   = gbConstants,
-  _sysinfodb   = gbSymbMap,
+  _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
    refdb       = gbRefDB
 }

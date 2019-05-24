@@ -1,4 +1,4 @@
-module Drasil.Projectile.Body where
+module Drasil.Template.Body where
 
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -14,7 +14,6 @@ import Drasil.DocLang (DocDesc, generateTraceMap, generateTraceMap', mkDoc)
 import Data.Drasil.Concepts.Documentation as Doc (srs)
 
 import Data.Drasil.IdeaDicts (physics)
-import Data.Drasil.People (samCrawford)
 import Data.Drasil.Phrase (for'')
 
 import qualified Data.Map as Map
@@ -27,9 +26,9 @@ mkSRS = []
 
 systInfo :: SystemInformation
 systInfo = SI {
-  _sys         = projectile,
+  _sys         = example,
   _kind        = Doc.srs,
-  _authors     = [samCrawford],
+  _authors     = [authorName],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
@@ -45,7 +44,7 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ([nw projectile]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
+symbMap = cdb ([] :: [QuantityDict]) ([nw example]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
   ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 
@@ -67,5 +66,9 @@ printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
 -- MOVE TO CONCEPTS
-projectile :: CI -- Title
-projectile = commonIdeaWithDict "projectile" (pn "Projectile") "Projectile" [physics]
+example :: CI -- name of example
+example = commonIdeaWithDict "example" (pn "Template") "Template" [physics]
+
+-- MOVE TO DATA.PEOPLE
+authorName :: Person
+authorName = person "Author" "Name"

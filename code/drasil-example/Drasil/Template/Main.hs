@@ -3,7 +3,7 @@ module Main (main) where
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.Projectile.Body (srsDoc, printSetting)
+import Drasil.Template.Body (srsDoc, printSetting)
 
 main :: IO()
 main = do

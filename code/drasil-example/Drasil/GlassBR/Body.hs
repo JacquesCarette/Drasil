@@ -77,7 +77,7 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
+  demand, demandq, dimlessLoad, explosion, gbConstants, constrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
@@ -210,7 +210,7 @@ systInfo = SI {
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
   _defSequence = qDefns,
-  _constraints = gbConstrained,
+  _constraints = constrained,
   _constants   = gbConstants,
   _sysinfodb   = symbMap,
   _usedinfodb = usedDB,

@@ -1,4 +1,4 @@
-module Drasil.SWHS.DataDesc (swhsInputMod) where
+module Drasil.SWHS.DataDesc (inputMod) where
 
 import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 
@@ -7,8 +7,8 @@ import Drasil.SWHS.Unitals (tank_length, diam, pcm_vol, pcm_SA, pcm_density,
     w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, tau, time_final,
     abs_tol, rel_tol, cons_tol)
 
-swhsInputMod :: Mod
-swhsInputMod = Mod "InputFormat" [swhsInputData]
+inputMod :: Mod
+inputMod = Mod "InputFormat" [swhsInputData]
 
 swhsInputData :: Func
 swhsInputData = funcData "get_inputs"

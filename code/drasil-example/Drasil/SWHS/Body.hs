@@ -68,7 +68,7 @@ import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
-import Drasil.SWHS.DataDesc (swhsInputMod)
+import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.Goals (swhsGoals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
@@ -202,7 +202,7 @@ mkSRS = [RefSec $ RefProg intro [
     Bibliography]
 
 code :: CodeSpec
-code = codeSpec si [swhsInputMod]
+code = codeSpec si [inputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

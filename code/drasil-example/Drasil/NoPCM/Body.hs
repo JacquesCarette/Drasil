@@ -175,11 +175,11 @@ mkSRS = [RefSec $ RefProg intro
   (map UlC traceIntro2)) []] ++
   map Verbatim [specParamVal] ++ [Bibliography]
 
-nopcm_label :: TraceMap
-nopcm_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
  
 nopcm_refby :: RefbyMap
-nopcm_refby = generateRefbyMap nopcm_label
+nopcm_refby = generateRefbyMap label
 
 nopcm_datadefn :: [DataDefinition]
 nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
@@ -247,12 +247,12 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
-  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
+  this_si label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi nopcm_label nopcm_refby
+ ([] :: [ConceptChunk]) checkSi label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 

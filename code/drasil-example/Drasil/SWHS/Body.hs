@@ -80,7 +80,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
-  swhsOutputs, swhsSymbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
+  swhsOutputs, symbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ si = SI {
   _sys = swhsPCM,
   _kind = srs, 
   _authors = people,
-  _quants = swhsSymbols,
+  _quants = symbols,
   _concepts = symbTT,
   _definitions = qDefs,
   _datadefs = dataDefs,
@@ -120,19 +120,19 @@ resourcePath = "../../../datafiles/SWHS/"
 
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
-  (nw heatEInPCM : map nw swhsSymbols ++ map nw acronymsFull
+  (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon)
-  (cw heatEInPCM : map cw swhsSymbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
   section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw checkSi)
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
  theory concIns section labCon
 
@@ -142,7 +142,7 @@ refDB = rdb citations concIns
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration
 
-  --Note: The second swhsSymbols here is
+  --Note: The second symbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.

@@ -121,7 +121,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
 
 refBy :: RefbyMap
 refBy = generateRefbyMap label
@@ -138,8 +138,8 @@ genDef = getTraceMapFromGD $ getSCSSub mkSRS
 theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-gameConcins :: [ConceptInstance]
-gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
+concIns :: [ConceptInstance]
+concIns = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   funcReqs
 
 gameSection :: [Section]
@@ -176,7 +176,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb cpCitations gameConcins
+cpRefDB = rdb cpCitations concIns
 
 --FIXME: All named ideas, not just acronyms.
 
@@ -191,12 +191,12 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
   label refBy dataDefs iMods genDef theory
-  gameConcins gameSection []
+  concIns gameSection []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
  ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDef theory gameConcins gameSection
+ dataDefs iMods genDef theory concIns gameSection
  []
 
 printSetting :: PrintingInformation

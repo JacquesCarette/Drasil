@@ -202,8 +202,8 @@ concIns =
 section :: [Section]
 section = nopcm_sec
 
-nopcm_labcon :: [LabelledContent]
-nopcm_labcon = [inputInitQuantsTblabled, dataConstTable1]
+labCon :: [LabelledContent]
+labCon = [inputInitQuantsTblabled, dataConstTable1]
 
 nopcm_sec :: [Section]
 nopcm_sec = extractSection nopcm_srs
@@ -249,13 +249,13 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory
-  concIns section nopcm_labcon
+  concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
  dataDefn iMods genDef theory concIns
- section nopcm_labcon
+ section labCon
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

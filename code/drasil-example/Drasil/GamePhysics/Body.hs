@@ -66,7 +66,7 @@ import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
+  inputSymbols, outputSymbols, cpInputConstraints, symbols)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -189,7 +189,7 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) units
+  (map cw symbols ++ srsDomains ++ map cw iModelsNew) units
   label refBy dataDefs iMods genDef theory
   concIns section []
 

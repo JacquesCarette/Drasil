@@ -18,8 +18,8 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 
 import Control.Lens((^.))
 
-gamephySymbols :: [DefinedQuantityDict]
-gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) ++
+symbols :: [DefinedQuantityDict]
+symbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) ++
   (map dqdWr cpOutputConstraints)
 
 gamephyUnitSymbs :: [UnitaryConceptDict]

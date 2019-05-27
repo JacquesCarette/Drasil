@@ -126,8 +126,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
 refBy :: RefbyMap
 refBy = generateRefbyMap label
 
-gameDatadefn :: [DataDefinition]
-gameDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefs :: [DataDefinition]
+dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
 
 gameInsmodel :: [InstanceModel]
 gameInsmodel = getTraceMapFromIM $ getSCSSub mkSRS
@@ -190,13 +190,13 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
-  label refBy gameDatadefn gameInsmodel gameGendef gameTheory
+  label refBy dataDefs gameInsmodel gameGendef gameTheory
   gameConcins gameSection []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
  ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- gameDatadefn gameInsmodel gameGendef gameTheory gameConcins gameSection
+ dataDefs gameInsmodel gameGendef gameTheory gameConcins gameSection
  []
 
 printSetting :: PrintingInformation

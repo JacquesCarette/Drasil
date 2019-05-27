@@ -5,7 +5,7 @@ module Drasil.SWHS.Generate (generate) where
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SWHS.Body (swhs_srs', printSetting)
+import Drasil.SWHS.Body (srs', printSetting)
 
 {- When ready to generate code from SWHS, re-enable
 swhsChoices :: Choices
@@ -22,6 +22,6 @@ swhsChoices = Choices {
 
 generate :: IO ()
 generate = do
-  gen (DocSpec SRS "SWHS_SRS")     swhs_srs' printSetting
-  gen (DocSpec Website "SWHS_SRS") swhs_srs' printSetting
+  gen (DocSpec SRS "SWHS_SRS")     srs' printSetting
+  gen (DocSpec Website "SWHS_SRS") srs' printSetting
        

@@ -180,8 +180,8 @@ refDB = rdb cpCitations concIns
 
 --FIXME: All named ideas, not just acronyms.
 
-chipUnits :: [UnitDefn] -- FIXME
-chipUnits = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
+units :: [UnitDefn] -- FIXME
+units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
 everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
@@ -189,7 +189,7 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
+  (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) units
   label refBy dataDefs iMods genDef theory
   concIns section []
 

@@ -161,7 +161,7 @@ mkSRS = [RefSec $ RefProg intro
   Verbatim aux_cons, Bibliography]
 
 label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label
@@ -178,8 +178,8 @@ genDefs = getTraceMapFromGD $ getSCSSub mkSRS
 theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-ssp_concins :: [ConceptInstance]
-ssp_concins = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
+concIns :: [ConceptInstance]
+concIns = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
 ssp_section :: [Section]
 ssp_section = ssp_sec
@@ -215,17 +215,17 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
-  refBy dataDefs iMods genDefs theory ssp_concins
+  refBy dataDefs iMods genDefs theory concIns
   ssp_section ssp_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDefs theory ssp_concins ssp_section 
+ dataDefs iMods genDefs theory concIns ssp_section 
  ssp_labcon
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb sspCitations ssp_concins
+sspRefDB = rdb sspCitations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration

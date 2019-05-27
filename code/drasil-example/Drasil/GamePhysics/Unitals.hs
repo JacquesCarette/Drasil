@@ -19,11 +19,11 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 import Control.Lens((^.))
 
 symbols :: [DefinedQuantityDict]
-symbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) ++
+symbols = (map dqdWr unitSymbs) ++ (map dqdWr cpInputConstraints) ++
   (map dqdWr cpOutputConstraints)
 
-gamephyUnitSymbs :: [UnitaryConceptDict]
-gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
+unitSymbs :: [UnitaryConceptDict]
+unitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 

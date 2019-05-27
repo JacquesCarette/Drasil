@@ -227,11 +227,11 @@ si = SI {
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
   _usedinfodb = usedDB,
-   refdb = nopcmRefDB
+   refdb = refDB
 }
 
-nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb referencesRefList concIns
+refDB :: ReferenceDB
+refDB = rdb referencesRefList concIns
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec si [inputMod]

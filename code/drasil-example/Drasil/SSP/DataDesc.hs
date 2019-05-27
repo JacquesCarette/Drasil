@@ -5,10 +5,10 @@ import Language.Drasil.Code (Func, Mod(Mod), funcData)
   --poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight)
 
 inputMod :: Mod
-inputMod = Mod "InputFormat" [sspInputData]
+inputMod = Mod "InputFormat" [inputData]
 
-sspInputData :: Func
-sspInputData = funcData "get_inputs" [
+inputData :: Func
+inputData = funcData "get_inputs" [
 {- --FIXME: unfinished. Needs more inputs? 
     --Needs way to think of (x,y) as two seperate things
     --number of layers, layer direction

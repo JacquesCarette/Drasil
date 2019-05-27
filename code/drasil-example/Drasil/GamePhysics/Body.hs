@@ -30,9 +30,10 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   goalStmt, guide, information, input_, interface, item, model, object,
   organization, physical, physicalSim, physics, problem, problemDescription,
   product_, project, quantity, realtime, reference, requirement, section_,
-  simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
+  simulation, software, softwareSys, srsDomains, system, systemConstraint,
   sysCont, task, template, termAndDef, traceyMatrix, user, userCharacteristic,
   doccon, doccon')
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
@@ -76,8 +77,8 @@ authors = [alex, luthfi]
 auths :: Sentence
 auths = S $ manyNames authors
 
-chipmunkSRS' :: Document
-chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
+srs :: Document
+srs = mkDoc mkSRS for' chipmunkSysInfo
 
 checkSi :: [UnitDefn] -- FIXME
 checkSi = collectUnits everything symbTT 
@@ -145,7 +146,7 @@ gameSection :: [Section]
 gameSection = gameSec
 
 gameSec :: [Section]
-gameSec = extractSection chipmunkSRS'
+gameSec = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -155,7 +156,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI {
   _sys = chipmunk,
-  _kind = srs,
+  _kind = Doc.srs,
   _authors = authors,
   _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
@@ -280,7 +281,7 @@ organizationOfDocumentsIntro :: Sentence
 
 organizationOfDocumentsIntro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
-  S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
+  S "follows the", phrase template, S "for an", (getAcc Doc.srs), S "for", 
   (phrase sciCompS), S "proposed by", makeCiteS parnas1972 `sAnd` 
   makeCiteS parnasClements1984]
 

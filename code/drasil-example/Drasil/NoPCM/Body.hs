@@ -233,8 +233,8 @@ si = SI {
 refDB :: ReferenceDB
 refDB = rdb referencesRefList concIns
 
-nopcm_code :: CodeSpec
-nopcm_code = codeSpec si [inputMod]
+code :: CodeSpec
+code = codeSpec si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document

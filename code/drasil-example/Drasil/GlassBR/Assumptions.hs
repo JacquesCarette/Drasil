@@ -12,7 +12,7 @@ import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..)
   WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
-import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
+import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, 
@@ -70,7 +70,7 @@ standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
   S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR]
+  plural calculation `sIn` short glassBR]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
@@ -79,10 +79,10 @@ boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"]
+  short glassBR, S "is flexural"]
 
 ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   makeRef2S assumpSV `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR]
+  S "in", short glassBR]

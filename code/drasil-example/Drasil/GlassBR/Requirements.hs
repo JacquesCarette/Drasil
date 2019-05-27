@@ -31,7 +31,7 @@ import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass, lShareFac)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
-import Drasil.GlassBR.IMods (gbrIMods)
+import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
 import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
   isSafeLR, isSafePb, nomThick, notSafe, pbTol, plateLen, plateWidth, 
@@ -129,7 +129,7 @@ chunksToSent :: [(Sentence, Symbol, Sentence)] -> [Sentence]
 chunksToSent = map (\(a, b, c) -> a +:+ sParen (P b) +:+ c)
 
 outputQuantsList :: [(Sentence, Symbol, Sentence)]
-outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqList r6DDs)
+outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList iMods) ++ (mkReqList r6DDs)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]

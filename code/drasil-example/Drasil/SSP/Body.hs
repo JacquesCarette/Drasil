@@ -96,8 +96,8 @@ this_si = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [
 checkSi :: [UnitDefn]
 checkSi = collectUnits sspSymMap symbTT
 
-ssp_si :: SystemInformation
-ssp_si = SI {
+si :: SystemInformation
+si = SI {
   _sys = ssp, 
   _kind = srs, 
   _authors = [henryFrankis, brooks],
@@ -119,7 +119,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
 ssp_srs :: Document
-ssp_srs = mkDoc mkSRS for ssp_si
+ssp_srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
@@ -195,10 +195,10 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec ssp_si [sspInputMod]
+ssp_code = codeSpec si [sspInputMod]
 
 traceyMatrix :: LabelledContent
-traceyMatrix = generateTraceTable ssp_si
+traceyMatrix = generateTraceTable si
 
 traceTrailing :: [Sentence]
 traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other"]

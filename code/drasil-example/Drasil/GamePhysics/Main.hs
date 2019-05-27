@@ -7,8 +7,8 @@ import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.GamePhysics.Body (srs, printSetting)
 
-chipChoices :: Choices
-chipChoices = Choices {
+choices :: Choices
+choices = Choices {
   lang             = [Python, Cpp, CSharp, Java],
   impType          = Library,
   logFile          = "log.txt",

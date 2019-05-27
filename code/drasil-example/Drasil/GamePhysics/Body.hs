@@ -58,7 +58,7 @@ import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, twoD)
-import Drasil.GamePhysics.DataDefs (qDefs, cpQDefs, dataDefns)
+import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
@@ -164,7 +164,7 @@ sysInfo = SI {
   _datadefs = dataDefns,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
-  _defSequence = cpQDefs,
+  _defSequence = blockQDefs,
   _constraints = cpInputConstraints,
   _constants = [],
   _sysinfodb = everything,

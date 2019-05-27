@@ -98,7 +98,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits nopcm_SymbMap symbTT 
+checkSi = collectUnits symbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -226,7 +226,7 @@ si = SI {
   _defSequence = [Parallel dd1HtFluxCQD []],
   _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
-  _sysinfodb = nopcm_SymbMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
@@ -241,8 +241,8 @@ code = codeSpec si [inputMod]
 srs :: Document
 srs = mkDoc mkSRS (for) si
 
-nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
+symbMap :: ChunkDB
+symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
@@ -259,10 +259,10 @@ usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkS
  section labCon
 
 printSetting :: PrintingInformation
-printSetting = PI nopcm_SymbMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 --------------------------
 --Section 2 : INTRODUCTION

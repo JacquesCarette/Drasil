@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (srs, ssp_code, sspSymMap, printSetting) where
 
-import Language.Drasil hiding (number, organization, Verb)
+import Language.Drasil hiding (number, organization, Verb, section)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
@@ -181,8 +181,8 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
-ssp_section :: [Section]
-ssp_section = ssp_sec
+section :: [Section]
+section = ssp_sec
 
 ssp_sec :: [Section]
 ssp_sec = extractSection srs
@@ -216,12 +216,12 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
   refBy dataDefs iMods genDefs theory concIns
-  ssp_section ssp_labcon
+  section ssp_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDefs theory concIns ssp_section 
+ dataDefs iMods genDefs theory concIns section 
  ssp_labcon
 
 sspRefDB :: ReferenceDB

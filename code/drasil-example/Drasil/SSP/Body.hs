@@ -187,8 +187,8 @@ section = sec
 sec :: [Section]
 sec = extractSection srs
 
-ssp_labcon :: [LabelledContent]
-ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
+labCon :: [LabelledContent]
+labCon = [fig_physsyst, fig_indexconv, fig_forceacting, 
   data_constraint_Table2, data_constraint_Table3, sspInputDataTable, 
   sspInputsToOutputTable]
 
@@ -216,13 +216,13 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
   refBy dataDefs iMods genDefs theory concIns
-  section ssp_labcon
+  section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
  dataDefs iMods genDefs theory concIns section 
- ssp_labcon
+ labCon
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb sspCitations concIns

@@ -3,6 +3,8 @@ module Drasil.Projectile.Assumptions (assumptions) where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (acceleration, collision, twoD)
 
 assumptions :: [ConceptInstance]
 assumptions = [twoDMotion, pointMass, equalHeights, accelZeroX, accelGravityY,
@@ -19,22 +21,23 @@ ignoreCurvature = cic "ignoreCurvature" ignoreCurvatureDesc "ignoreCurvature" as
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = EmptyS
+twoDMotionDesc = S "The projectile motion is in" +:+. getAcc twoD
 
 pointMassDesc :: Sentence
-pointMassDesc = EmptyS
+pointMassDesc = S "The object is a point" +:+. phrase mass
 
 equalHeightsDesc :: Sentence
-equalHeightsDesc = EmptyS
+equalHeightsDesc = S "The heights of the launcher and target are equal."
 
 accelZeroXDesc :: Sentence
-accelZeroXDesc = EmptyS
+accelZeroXDesc = at_start acceleration +:+. S "is zero in the x-direction"
 
 accelGravityYDesc :: Sentence
-accelGravityYDesc = EmptyS
+accelGravityYDesc = at_start acceleration +:+. S "in the y-direction is only caused by gravity"
 
 ignoreCurvatureDesc :: Sentence
-ignoreCurvatureDesc = EmptyS
+ignoreCurvatureDesc = S "The effects of the Earth's curvature are ignored."
 
 freeFlightDesc :: Sentence
-freeFlightDesc = EmptyS
+freeFlightDesc = S "The flight is free; there are no" +:+ plural collision +:+.
+                 S "during the trajectory of the object"

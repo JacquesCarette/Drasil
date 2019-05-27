@@ -13,9 +13,12 @@ import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code and extensions
-makeCode :: [(Doc, Label, Bool)] -> Label -> Code
-makeCode files ext = Code
-    [(name ++ ext, file) | (file, name, _) <- files]
+makeCode :: [[(Doc, Label, Bool)]] -> [Label] -> Code
+makeCode files exts = Code
+    [(name, contents) | (contents, name, _) <- concat [map (applyExt ext) files' | (files', ext) <- zip files exts]]
+
+applyExt :: Label -> (Doc, Label, Bool) -> (Doc, Label, Bool)
+applyExt ext (d, n, b) = (d, n ++ ext, b)
 
 ------------------
 -- IO Functions --

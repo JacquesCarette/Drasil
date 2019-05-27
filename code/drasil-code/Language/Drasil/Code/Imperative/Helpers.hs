@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.Helpers (
     hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs,
     tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftA8,
     liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
-    liftPairFst, liftTripFst
+    liftPairFst, liftTripFst, liftTrip
 ) where
 
 import Prelude hiding ((<>))
@@ -149,6 +149,9 @@ liftPairFst (c, n) = fmap (, n) c
 
 liftTripFst :: Functor f => (f a, b, c) -> f (a, b, c)
 liftTripFst (c, n, b) = fmap (flip (flip (,,) n) b) c
+
+liftTrip :: Applicative f => (f a, f b, f c) -> f (a, b, c)
+liftTrip (c, n, b) = liftA3 (,,) c n b
 
 --private
 myLiteralNameReplace :: String -> String -> String

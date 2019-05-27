@@ -120,11 +120,11 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
-gameLabel :: TraceMap
-gameLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
 
 gameRefby :: RefbyMap
-gameRefby = generateRefbyMap gameLabel
+gameRefby = generateRefbyMap label
 
 gameDatadefn :: [DataDefinition]
 gameDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
@@ -190,12 +190,12 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
-  gameLabel gameRefby gameDatadefn gameInsmodel gameGendef gameTheory
+  label gameRefby gameDatadefn gameInsmodel gameGendef gameTheory
   gameConcins gameSection []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi gameLabel gameRefby
+ ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label gameRefby
  gameDatadefn gameInsmodel gameGendef gameTheory gameConcins gameSection
  []
 

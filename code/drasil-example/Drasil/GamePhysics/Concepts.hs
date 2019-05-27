@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, cpAcronyms) where
+module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, acronyms) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
@@ -10,8 +10,8 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 
 centreMass, chipmunk :: CI
 
-cpAcronyms :: [CI]
-cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
+acronyms :: [CI]
+acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     inModel, likelyChg, ode, requirement, srs, thModel, twoD, chipmunk,
     typUnc, unlikelyChg]
 

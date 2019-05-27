@@ -1,6 +1,7 @@
-module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
+module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
+import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe,
@@ -27,8 +28,8 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_
   temp_melt_P, temp_PCM, temp_W, time_final, vol_ht_gen, w_E, w_mass, w_vol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
-swhsIMods :: [InstanceModel]
-swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+iMods :: [InstanceModel]
+iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --
@@ -237,22 +238,22 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 balPCMDesc_note :: Sentence
 balPCMDesc_note = foldlSent [
-  (E $ (sy temp_melt_P)) `sC` (E $ (sy time_final)) `sC` (E $ (sy temp_init)) `sC`
-  (E $ (sy pcm_HTC)) `sC` (E $ (sy pcm_mass)) `sC` (E $ (sy htCap_S_P)) `sC`
-  (E $ (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
-  S "The input is constrained so that", (E $ (sy temp_init $< sy temp_melt_P)),
+  (E (sy temp_melt_P)) `sC` (E (sy time_final)) `sC` (E (sy temp_init)) `sC`
+  (E (sy pcm_HTC)) `sC` (E (sy pcm_mass)) `sC` (E (sy htCap_S_P)) `sC`
+  (E (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
+  S "The input is constrained so that", (E (sy temp_init $< sy temp_melt_P)),
   sParen (makeRef2S assumpPIS),
-  (E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC`
+  (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy time_final)) `sC`
   (S "with initial conditions")
-  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC`
+  `sC` (E (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC`
   (S "FIXME t_w(0) = t_p(0)") `sC`
-  makeRef2S assumpSITWP `sC` (S "and"), (E $ (sy temp_W)),
+  makeRef2S assumpSITWP `sC` (S "and"), (E (sy temp_W)),
   S "from", (makeRef2S eBalanceOnWtr) `sC`
   S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
-  (E $ (sy temp_melt_P)) `sC`
+  (E (sy temp_melt_P)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
+  (E (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
   S ") is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
@@ -400,7 +401,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   (ch temp_W) `sAnd` S "the", phrase temp_init `sC` ch temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
-  :+: (unwrap $ getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
+  :+: unwrap (getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
 
 ---------
 -- IM4 --
@@ -436,7 +437,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcm_E `isThe` phrase change,
   S "in", phrase thermalEnergy, S "of the", short phsChgMtrl, S "relative to the",
   phrase energy, S "at the", phrase temp_init, sParen (ch temp_init) +:+.
-  (unwrap $ getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
+  unwrap (getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
   short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat,
   S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
   ch htCap_S_P, sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",

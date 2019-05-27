@@ -3,6 +3,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
+import Theory.Drasil (InstanceModel, im, imNoDeriv)
 
 import Data.Drasil.Utils (weave)
 

@@ -15,7 +15,7 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
 import Language.Drasil.Utils (sortBySymbol)
 import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
   termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -31,8 +31,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF, nonFuncReqF)
-import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
   specSysDescr, thModF)
@@ -60,7 +59,6 @@ data DocSection = Verbatim Section
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
-                | ScpOfProjSec ScpOfProjSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
@@ -163,10 +161,6 @@ data GSDSub where
 
 {--}
 
-data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
-
-{--}
-
 -- | Specific System Description section . Contains a list of subsections.
 newtype SSDSec = SSDProg [SSDSub]
 
@@ -202,8 +196,7 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub --FIXME: Remove this in favour of NonFReqsSub' when all examples have migrated over to using NonFReqsSub'
-  NonFReqsSub' :: [ConceptChunk] -> [ConceptInstance] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
 {--}
 
@@ -252,7 +245,6 @@ mkSections si = map doit
     doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
     doit (LCsSec' lc)        = mkLCsSec' lc
@@ -372,7 +364,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = ((S . getStringSN $ shortname x), f x, Just $ refAdd x)
+mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -419,11 +411,6 @@ mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
--- | Helper for making the 'Scope of the Project' section
-mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
-  SotP.scopeOfTheProjF kWrd uCTCntnts indCases
-
 -- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
@@ -449,25 +436,25 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (siSys si') $ (map mkParagraph intro) ++ map (LlC . tmodel fields si') ts
+      SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> (LlC $ ddefn fields si' x) : derivation x) dds
     mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ (map mkParagraph intro) ++ map (LlC . ddefn fields si') dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
-      SSD.genDefnF $ (map mkParagraph intro) ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
+      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> (LlC $ gdefn fields si' x) : derivation x) gs'
     mkSubSCS si' (GDs intro fields gs' _) =
-      SSD.genDefnF $ (map mkParagraph intro) ++ map (LlC . gdefn fields si') gs'
+      SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       concatMap (\x -> LlC (instanceModel fields si' x) : derivation x) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ (map mkParagraph intro) ++
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
       map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
-      asOrderedList $ (_sysinfodb si') ^. conceptinsTable
+      asOrderedList $ _sysinfodb si' ^. conceptinsTable
       {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
         -- Commented out since its imported from drasil-database now
@@ -484,7 +471,7 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-helperCI a c = over defn (\x -> foldlSent_ $ [x, helperRefs a c]) a
+helperCI a c = over defn (\x -> foldlSent_ [x, helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing
@@ -503,8 +490,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
-    mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
-    mkSubs (NonFReqsSub' noPrrty nfrs rsn explain) = R.nfReqF noPrrty (length nfrs) rsn explain (mkEnumSimpleD nfrs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}
 

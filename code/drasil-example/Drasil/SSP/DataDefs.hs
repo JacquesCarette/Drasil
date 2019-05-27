@@ -1,82 +1,38 @@
-module Drasil.SSP.DataDefs (dataDefns, sliceWght, baseWtrF, 
-  intersliceWtrF, angleA, angleB, lengthB, lengthLb, slcHeight, 
-  stressDD, ratioVariation, convertFunc1, convertFunc2, nrmForceSumDD, 
-  watForceSumDD) where 
+module Drasil.SSP.DataDefs (dataDefns, intersliceWtrF, angleA, angleB, lengthB,
+  lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
+  nrmForceSumDD, watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
+import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 
-import Data.Drasil.Concepts.Documentation (assumption, constant)
+import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (foldlSent, andThe, sAnd, 
-  getTandS)
-import Drasil.SSP.Defs (slice, soil, soilPrpty)
-import Drasil.SSP.Assumptions (assumpSBSBISL, assumpSLH)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
+import Drasil.SSP.Defs (slice)
+import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
   huston2008)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseHydroForceR, 
-  baseHydroForceL, baseLngth, baseWthX, constF, dryWeight, fricAngle, fs, 
-  genericF, genericA, index, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
-  mobShrC, normToShear, satWeight, scalFunc, shrResC, slcWght, slcWghtR, 
-  slcWghtL, slipDist, slipHght, slopeDist, slopeHght, surfAngle, totStress, 
-  nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, 
-  waterWeight, watrForce)
+import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
+  fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
+  mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
+  slopeHght, surfAngle, totStress, nrmForceSum, watForceSum, sliceHghtRight,
+  sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
 ------------------------
 
 dataDefns :: [DataDefinition]
-dataDefns = [sliceWght, baseWtrF, intersliceWtrF, angleA, angleB, lengthB, 
+dataDefns = [intersliceWtrF, angleA, angleB, lengthB, 
   lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
-  nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD, slcWghtRDD,
-  slcWghtLDD, baseWtrFRDD, baseWtrFLDD]
-
---DD1
-
-sliceWght :: DataDefinition
-sliceWght = mkDD sliceWghtQD [makeCite fredlund1977] [{-Derivation-}] "sliceWght" 
-  [sliceWghtNotes]
---FIXME: fill empty lists in
-
-sliceWghtQD :: QDefinition
-sliceWghtQD = mkQuantDef slcWght sliceWghtEqn
-
-sliceWghtEqn :: Expr
-sliceWghtEqn = 0.5 * (inxi slcWghtL + inxi slcWghtR)
-
-sliceWghtNotes :: Sentence
-sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
-  phrase assumption, S "that the surface and the base of a", phrase slice, 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), ch slcWghtL, 
-  S "is defined in", makeRef2S slcWghtLDD `sAnd` ch slcWghtR, 
-  S "is defined in" +:+ makeRef2S slcWghtRDD]
-
---DD2
-
-baseWtrF :: DataDefinition
-baseWtrF = mkDD baseWtrFQD [makeCite fredlund1977] [{-Derivation-}] "baseWtrF"
-  [bsWtrFNotes]
---FIXME: fill empty lists in
-
-baseWtrFQD :: QDefinition
-baseWtrFQD = mkQuantDef baseHydroForce bsWtrFEqn 
-
-bsWtrFEqn :: Expr
-bsWtrFEqn = 0.5 * ((inxi baseHydroForceL) + (inxi baseHydroForceR))
-
-bsWtrFNotes :: Sentence
-bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the base of a slice is a straight line" +:+.
-  sParen (makeRef2S assumpSBSBISL), ch baseHydroForceL, S "is defined in",
-  makeRef2S baseWtrFLDD `sAnd` ch baseHydroForceR, S "is defined in",
-  makeRef2S baseWtrFRDD]
+  nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDD intersliceWtrFQD [makeCite fredlund1977] [{-Derivation-}] "intersliceWtrF"
+intersliceWtrF = dd intersliceWtrFQD [makeCite fredlund1977] [{-Derivation-}] "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
@@ -97,7 +53,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDD angleAQD [makeCite fredlund1977] [{-Derivation-}] "angleA" 
+angleA = dd angleAQD [makeCite fredlund1977] [{-Derivation-}] "angleA" 
   [angleANotes]
 --FIXME: fill empty lists in
 
@@ -116,7 +72,7 @@ angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD6
 
 angleB :: DataDefinition
-angleB = mkDD angleBQD [makeCite fredlund1977] [{-Derivation-}] "angleB"
+angleB = dd angleBQD [makeCite fredlund1977] [{-Derivation-}] "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -135,7 +91,7 @@ angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
 --DD7
 
 lengthB :: DataDefinition
-lengthB = mkDD lengthBQD [makeCite fredlund1977] [{-Derivation-}] "lengthB" []--Notes
+lengthB = dd lengthBQD [makeCite fredlund1977] [{-Derivation-}] "lengthB" []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -147,7 +103,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD8
 
 lengthLb :: DataDefinition
-lengthLb = mkDD lengthLbQD [makeCite fredlund1977] [{-Derivation-}] "lengthLb"
+lengthLb = dd lengthLbQD [makeCite fredlund1977] [{-Derivation-}] "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -164,7 +120,7 @@ lengthLbNotes = foldlSent [ch baseWthX, S "is defined in",
 --DD9
 
 slcHeight :: DataDefinition
-slcHeight = mkDD slcHeightQD [makeCite fredlund1977] [{-Derivation-}] "slcHeight"
+slcHeight = dd slcHeightQD [makeCite fredlund1977] [{-Derivation-}] "slcHeight"
   slcHeightNotes
 
 slcHeightQD :: QDefinition
@@ -184,7 +140,7 @@ slcHeightNotes = [S "This" +:+ (phrase equation) +:+ S "is based on the" +:+
 --DD10
 
 stressDD :: DataDefinition
-stressDD = mkDD stressQD [makeCite huston2008] [{-Derivation-}] "stress" []
+stressDD = dd stressQD [makeCite huston2008] [{-Derivation-}] "stress" []
 
 stressQD :: QDefinition
 stressQD = mkQuantDef totStress stressEqn
@@ -195,7 +151,7 @@ stressEqn = (sy genericF) / (sy genericA)
 --DD11
 
 ratioVariation :: DataDefinition
-ratioVariation = mkDD ratioVarQD [makeCite fredlund1977] [{-Derivation-}] 
+ratioVariation = dd ratioVarQD [makeCite fredlund1977] [{-Derivation-}] 
   "ratioVariation" []
 
 ratioVarQD :: QDefinition
@@ -211,7 +167,7 @@ ratioVarEqn = case_ [case1, case2]
 --DD12
 
 convertFunc1 :: DataDefinition
-convertFunc1 = mkDD convertFunc1QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
+convertFunc1 = dd convertFunc1QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
   "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: QDefinition
@@ -229,7 +185,7 @@ convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVa
 --DD13
 
 convertFunc2 :: DataDefinition
-convertFunc2 = mkDD convertFunc2QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
+convertFunc2 = dd convertFunc2QD (map makeCite [chen2005, karchewski2012]) [{-Derivation-}]
   "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: QDefinition
@@ -251,7 +207,7 @@ convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in",
 {--DD10
 
 resShearWO :: DataDefinition
-resShearWO = mkDD resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
+resShearWO = dd resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -273,7 +229,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 --DD11
 
 mobShearWO :: DataDefinition
-mobShearWO = mkDD mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
+mobShearWO = dd mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -294,24 +250,16 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD,
-  slcWghtRDD, slcWghtLDD, baseWtrFRDD, baseWtrFLDD :: DataDefinition
-nrmForceSumDD = mkDD nrmForceSumQD [{-References-}] [{-Derivation-}] 
+nrmForceSumDD, watForceSumDD, sliceHghtRightDD, 
+  sliceHghtLeftDD :: DataDefinition
+nrmForceSumDD = dd nrmForceSumQD [makeCite fredlund1977] [{-Derivation-}] 
   "nrmForceSumDD" []--Notes
-watForceSumDD = mkDD watForceSumQD [{-References-}] [{-Derivation-}] 
+watForceSumDD = dd watForceSumQD [makeCite fredlund1977] [{-Derivation-}] 
   "watForceSumDD" []--Notes
-sliceHghtRightDD = mkDD sliceHghtRightQD [{-References-}] [{-Derivation-}] 
+sliceHghtRightDD = dd sliceHghtRightQD [makeCite fredlund1977] [{-Derivation-}] 
   "sliceHghtRightDD" []--Notes
-sliceHghtLeftDD = mkDD sliceHghtLeftQD [{-References-}] [{-Derivation-}] 
+sliceHghtLeftDD = dd sliceHghtLeftQD [makeCite fredlund1977] [{-Derivation-}] 
   "sliceHghtLeftDD" []--Notes
-slcWghtRDD = mkDD slcWghtRQD [makeCite fredlund1977] [{-Derivation-}] 
-  "slcWghtRDD" [slcWghtNotes]
-slcWghtLDD = mkDD slcWghtLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "slcWghtRDD" [slcWghtNotes]
-baseWtrFRDD = mkDD baseWtrFRQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFRDD" [baseWtrFNotes]
-baseWtrFLDD = mkDD baseWtrFLQD [makeCite fredlund1977] [{-Derivation-}] 
-  "baseWtrFLDD" [baseWtrFNotes]
 
 nrmForceSumQD :: QDefinition
 nrmForceSumQD = ec nrmForceSum (inxi intNormForce + inxiM1 intNormForce)
@@ -324,66 +272,6 @@ sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght - inxi slipHght)
 
 sliceHghtLeftQD :: QDefinition
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght - inxiM1 slipHght)
-
-slcWghtRQD :: QDefinition
-slcWghtRQD = mkQuantDef slcWghtR slcWghtREqn
-
-slcWghtREqn :: Expr
-slcWghtREqn = (inxi baseWthX) * (case_ [case1,case2,case3])
-  where case1 = (((inxi slopeHght)-(inxi slipHght ))*(sy satWeight),
-          (inxi waterHght) $>= (inxi slopeHght))
-
-        case2 = (((inxi slopeHght)-(inxi waterHght))*(sy dryWeight) +
-          ((inxi waterHght)-(inxi slipHght))*(sy satWeight),
-          (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
-
-        case3 = (((inxi slopeHght)-(inxi slipHght ))*(sy dryWeight),
-          (inxi waterHght) $<= (inxi slipHght))
-
-slcWghtLQD :: QDefinition
-slcWghtLQD = mkQuantDef slcWghtL slcWghtLEqn
-  
-slcWghtLEqn :: Expr
-slcWghtLEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
-  where case1 = (((inxiM1 slopeHght)-(inxiM1 slipHght ))*(sy satWeight),
-          (inxiM1 waterHght) $>= (inxiM1 slopeHght))
-
-        case2 = (((inxiM1 slopeHght)-(inxiM1 waterHght))*(sy dryWeight) +
-          ((inxiM1 waterHght)-(inxiM1 slipHght))*(sy satWeight),
-          (inxiM1 slopeHght) $> (inxiM1 waterHght) $> (inxiM1 slipHght))
-
-        case3 = (((inxiM1 slopeHght)-(inxiM1 slipHght ))*(sy dryWeight),
-          (inxiM1 waterHght) $<= (inxiM1 slipHght))
-
-slcWghtNotes :: Sentence
-slcWghtNotes = foldlSent [S "The", getTandS dryWeight `andThe` 
-  getTandS satWeight, S "are not indexed by", ch index, S "because the", 
-  phrase soil, S "is assumed to be homogeneous, with", phrase constant, 
-  plural soilPrpty, S "throughout" +:+. sParen (makeRef2S assumpSLH), 
-  ch baseWthX +:+ S "is defined in", makeRef2S lengthB]
-
-baseWtrFRQD :: QDefinition
-baseWtrFRQD = mkQuantDef baseHydroForceR baseWtrFREqn
-
-baseWtrFREqn :: Expr
-baseWtrFREqn = (inxi baseWthX)*(case_ [case1,case2])
-  where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
-          (inxi waterHght) $> (inxi slipHght))
-
-        case2 = (0, (inxi waterHght) $<= (inxi slipHght))
-
-baseWtrFLQD :: QDefinition
-baseWtrFLQD = mkQuantDef baseHydroForceL baseWtrFLEqn
-
-baseWtrFLEqn :: Expr
-baseWtrFLEqn = (inxi baseWthX)*(case_ [case1,case2])
-  where case1 = (((inxiM1 waterHght)-(inxiM1 slipHght))*(sy waterWeight),
-          (inxiM1 waterHght) $> (inxiM1 slipHght))
-
-        case2 = (0, (inxiM1 waterHght) $<= (inxiM1 slipHght))
-
-baseWtrFNotes :: Sentence
-baseWtrFNotes = ch baseLngth +:+ S "is defined in" +:+. makeRef2S lengthLb
 
 --------------------------
 -- Derivation Sentences --

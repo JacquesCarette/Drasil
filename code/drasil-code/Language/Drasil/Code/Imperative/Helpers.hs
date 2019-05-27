@@ -51,7 +51,7 @@ doubleQuoted labeller = doubleQuotedText . labeller
 
 capitalize :: String -> String
 capitalize [] = error "capitalize called on an emptry String"
-capitalize (c:cs) = (toUpper c):cs
+capitalize (c:cs) = toUpper c : cs
 
 containsAll :: Eq a => [a] -> [a] -> Bool
 containsAll = all . flip elem

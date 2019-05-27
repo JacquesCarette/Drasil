@@ -24,8 +24,8 @@ select (x:xs) = case getA x of
 table :: (Idea s) => [s] -> LabelledContent
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc (makeTabRef "TAbbAcc") $ Table
-  (map (titleize) [abbreviation, fullForm]) (mkTable
-  [(\(a,_) -> S a),
-   (\(_,b) -> titleize b)]
+  (map titleize [abbreviation, fullForm]) (mkTable
+  [\(a,_) -> S a,
+   \(_,b) -> titleize b]
   chunks)
   (S "Abbreviations and Acronyms") False

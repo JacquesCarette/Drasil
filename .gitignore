@@ -29,8 +29,10 @@ desktop.ini
 /code/Docs
 /code/build
 /code/logs
+/code/graphs
 *.synctex.gz
 *.pyc
 __pycache__
 *.class
 .drasil-min-stack-ver
+*/Projectile/output.txt

@@ -6,20 +6,23 @@ import Data.Function (on)
 import Data.List (sortBy)
 
 import Language.Drasil
+import Language.Drasil.Utils (sortBySymbol)
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
+import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
-  condition, dataDefn, datumConstraint, description, environment, failure,
-  funcReqDom, genDefn, inModel, input_, likelyChg, message, mg, mis, module_,
-  nonFuncReqDom, output_, property, quantity, requirement, srs, symbol_, system,
-  thModel, traceyMatrix, unlikelyChg, value, vavPlan)
+  condition, datumConstraint, description, environment, failure, funcReqDom,
+  input_, likelyChg, message, mg, mis, module_, nonFuncReqDom, output_,
+  property, quantity, requirement, srs, symbol_, system, traceyMatrix,
+  unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
   foldlList, foldlSent, foldlSent_, foldlSP, follows, ofThe, ofThe', sAnd, sOf)
 import Data.Drasil.Utils (bulletFlat)
@@ -28,7 +31,7 @@ import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass, lShareFac)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
-import Drasil.GlassBR.IMods (gbrIMods)
+import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
 import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
   isSafeLR, isSafePb, nomThick, notSafe, pbTol, plateLen, plateWidth, 
@@ -37,8 +40,8 @@ import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type,
 {--Functional Requirements--}
 
 funcReqsList :: [Contents]
-funcReqsList = (mkEnumSimple (uncurry $ flip mkReqCI) $ zip funcReqs
-  funcReqsDetails) ++ [LlC inputGlassPropsTable]
+funcReqsList = mkEnumSimple (uncurry $ flip mkReqCI) 
+  (zip funcReqs funcReqsDetails) ++ [LlC inputGlassPropsTable]
 
 mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
 mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
@@ -77,7 +80,7 @@ inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, U.toSentence] requiredInputs)
+   at_start, U.toSentence] $ sortBySymbol requiredInputs)
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
@@ -103,7 +106,7 @@ sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptio
 
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. (makeRef2S $ datCon ([]::[Contents]) ([]::[Section])), 
+  plural datumConstraint, S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any" `sOf` S "the", plural inParam, S "are out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
@@ -126,7 +129,7 @@ chunksToSent :: [(Sentence, Symbol, Sentence)] -> [Sentence]
 chunksToSent = map (\(a, b, c) -> a +:+ sParen (P b) +:+ c)
 
 outputQuantsList :: [(Sentence, Symbol, Sentence)]
-outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqList r6DDs)
+outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList iMods) ++ (mkReqList r6DDs)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]

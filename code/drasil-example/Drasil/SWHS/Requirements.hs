@@ -1,14 +1,15 @@
 module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
+import Theory.Drasil (DataDefinition)
 
-import Drasil.DocLang (inDataConstTbl)
+import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
-  dataDefn, funcReqDom, genDefn, inModel, input_, likelyChg, mg, mis, module_,
-  nonFuncReqDom, output_, physicalConstraint, property, quantity, requirement, 
-  simulation, solution, srs, thModel, traceyMatrix, unlikelyChg, vavPlan)
+  funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
+  physicalConstraint, property, quantity, requirement, simulation, solution,
+  srs, traceyMatrix, unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, lawConsEnergy, melting)
 
@@ -16,6 +17,7 @@ import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
 import Data.Drasil.Utils (eqUnR')
@@ -23,12 +25,12 @@ import Data.Drasil.Utils (eqUnR')
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, swhsIMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
   sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
-  tau_W, temp_C, temp_PCM, temp_W, temp_init, temp_melt_P, time_final, w_E,
+  tau_W, temp_C, temp_PCM, temp_W, temp_init, temp_melt_P, timeStep, time_final, w_E,
   w_density, w_mass, w_vol)
 
 ------------------------------
@@ -42,7 +44,7 @@ dataConTable1 = inDataConstTbl inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -50,6 +52,12 @@ inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
+
+funcReqsList :: [Contents]
+funcReqsList = reqs ++ [inputInitQuantsTbl]
+
+reqs :: [Contents]
+reqs = mkEnumSimpleD funcReqs
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
@@ -73,8 +81,8 @@ iIQConstruct x = cic "inputInitQuants" ( foldlSent [
   plural condition]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
-            (foldlList Comma List $ map makeRef2S swhsIMods)
-            (foldlList Comma List $ [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
+            (foldlList Comma List $ map makeRef2S iMods)
+            (foldlList Comma List [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
             (ch w_vol `isThe` phrase w_vol `sAnd` ch tank_vol `isThe` phrase tank_vol)
 
 findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
@@ -168,8 +176,8 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
 
-swhsNFRequirements :: [ConceptInstance]
-swhsNFRequirements = [correct, verifiable, understandable, reusable, maintainable]
+nfRequirements :: [ConceptInstance]
+nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
@@ -226,7 +234,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' $ 
+propCorSolDeriv2 = eqUnR'
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
@@ -240,7 +248,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' $ 
+propCorSolDeriv4 = eqUnR'
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))

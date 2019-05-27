@@ -28,7 +28,7 @@ readTableMod :: Mod
 readTableMod = packmod "ReadTable" [readTable]
 
 readTable :: Func
-readTable = funcData "read_table" $
+readTable = funcData "read_table"
   [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
                          listEntry [WithLine, WithPattern] yMatrix]) ','
@@ -39,10 +39,10 @@ readTable = funcData "read_table" $
 --from defaultInput.txt:
 
 inputMod :: Mod
-inputMod = packmod "InputFormat" [glassInputData]
+inputMod = packmod "InputFormat" [inputData]
 
-glassInputData :: Func
-glassInputData = funcData "get_input" $
+inputData :: Func
+inputData = funcData "get_input"
   [ junkLine,
     singleton plateLen, singleton plateWidth, singleton nomThick,
     junkLine,
@@ -185,8 +185,8 @@ interpY = funcDef "interpY" [filename, x, z] Real
       [ j $:= find x_z_1 x,
         k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
-    y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
-    y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
+    y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
+    y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
     FRet $ linInterp [ vLook zVector i 0, sy y_1, vLook zVector i 1, sy y_2, sy z ]
   ]
 
@@ -210,8 +210,8 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
           [ j $:= find x_z_1 x,
             k $:= find x_z_2 x ]
           [ FContinue ],
-        y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
-        y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
+        y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
+        y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
           [ FRet $ linInterp [ sy y_1, vLook zVector i 0, sy y_2, vLook zVector i 1, sy y ]
           ] []

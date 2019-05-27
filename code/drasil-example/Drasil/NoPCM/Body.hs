@@ -8,7 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -17,14 +17,15 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
-  definition, doccon, doccon', document, goal, inModel, information, item,
+  definition, doccon, doccon', document, goal, information, item,
   material_, model, physSyst, problem, property, purpose, reference,
-  requirement, srs, srsDomains, thModel, traceyMatrix)
+  requirement, srs, srsDomains, traceyMatrix)
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Software (program, softwarecon, performance)
+import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
   thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
   phaseChange)
@@ -49,7 +50,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
@@ -64,12 +65,12 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, swhscon)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -77,7 +78,8 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
+  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
+  abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -109,7 +111,8 @@ nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
 nopcm_SymbolsAll = map qw nopcm_Symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta])
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
+  (map qw [abs_tol, rel_tol, cons_tol])
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
@@ -163,9 +166,7 @@ mkSRS = [RefSec $ RefProg intro
     ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub' [performance] swhsNFRequirements
-      (S "This problem is small in size and relatively simple")
-      (S "Any reasonable implementation will be very quick and use minimal storage.")
+    NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
@@ -240,13 +241,12 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' 
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
-  nw ht_trans] ++ map nw checkSi)
- (map cw nopcm_Symbols ++ srsDomains)
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
+  ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
+  ++ map nw [abs_tol, rel_tol, cons_tol])
+  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 

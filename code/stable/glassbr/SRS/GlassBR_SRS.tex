@@ -16,10 +16,10 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -206,7 +206,7 @@ SD & Stand Off Distance
 \\
 SRS & Software Requirements Specification
 \\
-T & Theoretical Model
+TM & Theoretical Model
 \\
 UC & Unlikely Change
 \\
@@ -260,16 +260,14 @@ The interaction between the product and the user is through a user interface. Th
 \begin{itemize}
 \item{User Responsibilities}
 \begin{itemize}
-\item{Provide the input data related to the glass slab and blast}
-\item{type ensuring no errors in the data entry}
-\item{Ensure that consistent units are used for input variables}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem input to the software}
+\item{Provide the input data related to the glass slab and blast type, ensuring no errors in the data entry.}
+\item{Ensure that consistent units are used for input variables.}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem input to the software.}
 \end{itemize}
 \item{GlassBR Responsibilities}
 \begin{itemize}
-\item{Detect data type mismatch, such as a string of characters}
-\item{input instead of a floating point number}
-\item{Determine if the inputs satisfy the required physical and software constraints}
+\item{Detect data type mismatch, such as a string of characters input instead of a floating point number.}
+\item{Determine if the inputs satisfy the required physical and software constraints.}
 \item{Predict whether the glass slab is safe or not.}
 \end{itemize}
 \end{itemize}
@@ -999,7 +997,7 @@ Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
 \endhead
-$a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ & $1.5$ m & 10$\%$
+$a$ & $a>0\land{}a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ & $1.5$ m & 10$\%$
 \\
 $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{max}}$ & $1.5$ & 10$\%$
 \\
@@ -1077,11 +1075,9 @@ $a$ & Plate length (long dimension) & m
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$w$ & Charge weight & kg
+$g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 \\
 ${P_{btol}}$ & Tolerable probability of breakage & --
-\\
-$TNT$ & TNT equivalent factor & --
 \\
 ${SD_{x}}$ & Stand off distance (x-component) & m
 \\
@@ -1089,9 +1085,11 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
-\\
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
+\\
+$TNT$ & TNT equivalent factor & --
+\\
+$w$ & Charge weight & kg
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputGlassProps]{FR: Input-Glass-Props}}
@@ -1100,7 +1098,6 @@ $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
-This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are:
 \begin{itemize}
 \item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
 \item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.

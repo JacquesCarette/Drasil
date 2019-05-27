@@ -154,11 +154,11 @@ inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "ReadLine" []))
-complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "ReadLine" []))
+complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ f $. Func "ReadLine" [])
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &=      f $. Func "ReadLine" [])
 complexDoc' c (ReadAll f v) = 
   bodyDoc c $ oneLiner $
-    while ((?!) f$->(var "EndOfStream")) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "ReadLine" [])))
+    while ((?!) f $-> var "EndOfStream") (oneLiner $ valStmt $ v $. listAppend (f $. Func "ReadLine" []))
 
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp
@@ -171,7 +171,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
       block [
         listDec' l_temp st 0,
         for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
-          (oneLiner $ valStmt $ v_temp$.(listAppend (vold$.(listAccess v_i)))),
+          (oneLiner $ valStmt $ v_temp $. listAppend (vold $. listAccess v_i)),
         vnew &= v_temp
       ] 
     ],

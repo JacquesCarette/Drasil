@@ -2,6 +2,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Theory.Drasil (mkQuantDef)
 
 import Control.Lens ((^.))
 import Prelude hiding (log)
@@ -22,8 +23,8 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 {--}
 
-glassBRSymbolsWithDefns :: [UnitalChunk]
-glassBRSymbolsWithDefns = [modElas]
+symbolsWithDefns :: [UnitalChunk]
+symbolsWithDefns = [modElas]
 
 modElas :: UnitalChunk
 modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
@@ -31,10 +32,9 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 
 {--}
 
-gbConstrained :: [ConstrainedChunk]
-
-gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
+constrained :: [ConstrainedChunk]
+constrained = (map cnstrw inputsWUncrtn) ++ 
+  (map cnstrw inputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspect_ratio, pbTol, tNT :: UncertainChunk
@@ -42,25 +42,25 @@ glass_type, nomThick :: ConstrainedChunk
 
 {--}
 
-gbInputs :: [QuantityDict]
-gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
-  (map qw gbInputsNoUncrtn) ++ (map qw sdVector)
+inputs :: [QuantityDict]
+inputs = (map qw inputsWUnitsUncrtn) ++ (map qw inputsWUncrtn) ++ 
+  (map qw inputsNoUncrtn) ++ (map qw sdVector)
 
 --inputs with units and uncertainties
-gbInputsWUnitsUncrtn :: [UncertQ]
-gbInputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
+inputsWUnitsUncrtn :: [UncertQ]
+inputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
 
 --inputs with uncertainties and no units
-gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [aspect_ratio, pbTol, tNT]
+inputsWUncrtn :: [UncertainChunk]
+inputsWUncrtn = [aspect_ratio, pbTol, tNT]
 
 --inputs with no uncertainties
-gbInputsNoUncrtn :: [ConstrainedChunk]
-gbInputsNoUncrtn = [glass_type, nomThick]
+inputsNoUncrtn :: [ConstrainedChunk]
+inputsNoUncrtn = [glass_type, nomThick]
 
-gbInputDataConstraints :: [UncertainChunk]
-gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ 
-  (map uncrtnw gbInputsWUncrtn)
+inputDataConstraints :: [UncertainChunk]
+inputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
+  (map uncrtnw inputsWUncrtn)
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
@@ -116,16 +116,16 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+
 
 {--}
 
-gbOutputs :: [QuantityDict]
-gbOutputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
+outputs :: [QuantityDict]
+outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
 
 probBr :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-gbTMSymbols :: [QuantityDict]
-gbTMSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
+tmSymbols :: [QuantityDict]
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
@@ -142,8 +142,8 @@ pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
 
 {--}
 
-gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
+specParamVals :: [QDefinition]
+specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
   sdMax, sdMin]
 
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
@@ -180,8 +180,8 @@ sdMin     = mkQuantDef (unitary "sdMin"
 
 {--}
 
-glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
+symbols :: [UnitaryChunk]
+symbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight]
 
 minThick, sflawParamK, sflawParamM, demand, tm_demand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,
@@ -230,8 +230,8 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 {-Quantities-}
 
-glassBRUnitless :: [QuantityDict]
-glassBRUnitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+unitless :: [QuantityDict]
+unitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
 riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
@@ -396,16 +396,16 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 --Constants--
 
-gbConstants :: [QDefinition]
-gbConstants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
-                ++ gBRSpecParamVals 
+constants :: [QDefinition]
+constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
+                ++ specParamVals 
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
-constantK       = mkQuantDef sflawParamK  $ dbl 2.86e-53
-constantM       = mkQuantDef sflawParamM  $ dbl 7
+constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
+constantM       = mkQuantDef sflawParamM $ dbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ dbl 3
-constantLoadSF  = mkQuantDef loadSF       $ 1
+constantLoadSF  = mkQuantDef loadSF      1
 --Equations--
 
 sdVectorSent :: Sentence

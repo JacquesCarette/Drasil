@@ -174,7 +174,7 @@ observerListName = "observerList"
 -----------------------------------------------
 
 assignDocD :: Config -> Assignment -> Doc
-assignDocD c (Assign (ObjAccess v (ListAccess n)) v2) = valueDoc c (v$.(ListSet n v2)) 
+assignDocD c (Assign (ObjAccess v (ListAccess n)) v2) = valueDoc c (v$. ListSet n v2)
 assignDocD c (Assign v1 v2) = valueDoc c v1 <+> equals <+> valueDoc c v2
 assignDocD c (PlusEquals v1 v2) = valueDoc c v1 <+> text "+=" <+> valueDoc c v2
 assignDocD c (PlusPlus v) = valueDoc c v  <> text "++"
@@ -185,29 +185,29 @@ assignDocD' c (PlusPlus v) = valueDoc c v <+> equals <+> valueDoc c v <+> text "
 assignDocD' c a = assignDocD c a
 
 binOpDocD :: BinaryOp -> Doc
-binOpDocD Equal = text "=="
-binOpDocD NotEqual = text "!="
-binOpDocD Greater = text ">"
+binOpDocD Equal        = text "=="
+binOpDocD NotEqual     = text "!="
+binOpDocD Greater      = text ">"
 binOpDocD GreaterEqual = text ">="
-binOpDocD Less = text "<"
-binOpDocD LessEqual = text "<="
-binOpDocD Plus = text "+"
-binOpDocD Minus = text "-"
-binOpDocD Divide = text "/"
-binOpDocD Multiply = text "*"
-binOpDocD Modulo = text "%"
-binOpDocD Power = text "pow"
-binOpDocD And = text "&&"
-binOpDocD Or = text "||"
+binOpDocD Less         = text "<"
+binOpDocD LessEqual    = text "<="
+binOpDocD Plus         = text "+"
+binOpDocD Minus        = text "-"
+binOpDocD Divide       = text "/"
+binOpDocD Multiply     = text "*"
+binOpDocD Modulo       = text "%"
+binOpDocD Power        = text "pow"
+binOpDocD And          = text "&&"
+binOpDocD Or           = text "||"
 
 bodyDocD :: Config -> Body -> Doc
-bodyDocD c = (vibmap bdc) . filter (not . isEmpty . bdc)
+bodyDocD c = vibmap bdc . filter (not . isEmpty . bdc)
     where bdc = blockDoc c
 
 blockDocD :: Config -> Block -> Doc
 blockDocD c (Block ss) = vmap (statementDoc c NoLoop) statements
     where docOf = statementDoc c NoLoop
-          notNullStatement s = (not $ isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
+          notNullStatement s = not (isEmpty $ docOf s) && (render (docOf s) /= render (end c NoLoop))
           statements = filter notNullStatement ss
     
 callFuncParamListD :: Config -> [Value] -> Doc
@@ -255,7 +255,7 @@ conditionalDocD c (Switch v cs defBody) =
 conditionalDocD' :: Config -> Conditional -> Doc
 conditionalDocD' c cnd@(Switch _ [] _) = conditionalDocD c cnd
 conditionalDocD' c (Switch v cs defBody) = conditionalDoc c $ If ifBranches defBody
-    where ifBranches = map (\(l,b) -> (v ?== (Lit l), b)) cs
+    where ifBranches = map (\(l,b) -> (v ?== Lit l, b)) cs
 conditionalDocD' c cnd = conditionalDocD c cnd
 
 conditionalDocD'' :: Config -> Conditional -> Doc
@@ -275,7 +275,7 @@ enumElementsDocD :: Config -> [Label] -> Doc
 enumElementsDocD c es = vcat $
     zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
     where nums = [0..length es - 1]
-          equalsInt i = if enumsEqualInts c then (equals <+> int i) else empty 
+          equalsInt i = if enumsEqualInts c then equals <+> int i else empty 
           interComma i = if i < length es - 1 then text "," else empty
 
 exceptionDocD :: Config -> Exception -> Doc
@@ -363,7 +363,7 @@ litDocD (LitChar v) = quotes $ char v
 litDocD (LitStr v) = doubleQuotedText v
 
 clsDecDocD :: Config -> Class -> Doc
-clsDecDocD c (Class n _ _ _ _) = (clsDec c) <+> text n <> endStatement c
+clsDecDocD c (Class n _ _ _ _) = clsDec c <+> text n <> endStatement c
 clsDecDocD _ Enum{} = empty
 clsDecDocD c m@MainClass{} = clsDecDoc c $ convertToClass m
 
@@ -531,14 +531,14 @@ methodDocD' c _ _ (MainMethod b) = vcat [
 methodDocD' c ft m f = methodDocD c ft m f
 
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-methodListDocD c t m = (vibmap mdc) . filter (not . isEmpty . mdc)
+methodListDocD c t m = vibmap mdc . filter (not . isEmpty . mdc)
     where mdc = methodDoc c t m
 
 functionDocD :: Config -> FileType -> Label -> Method -> Doc
 functionDocD _ _ _ _ = error "Not implemented yet!"
 
 functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
-functionListDocD c t m = (vibmap fdc) . filter (not . isEmpty . fdc)
+functionListDocD c t m = vibmap fdc . filter (not . isEmpty . fdc)
     where fdc = functionDoc c t m
 
 methodTypeDocD :: Config -> MethodType -> Doc
@@ -610,9 +610,9 @@ addDefaultCtor _ modName ctorName fs =
           ctor _ = False
 
 comment :: Config -> Comment -> Doc
-comment c (Comment cmt) = (commentStart c) <+> text cmt
+comment c (Comment cmt) = commentStart c <+> text cmt
 comment c (CommentDelimit cmt len) =
-    let com = (commentStart c) <> text (" " ++ cmt ++ " ")
+    let com = commentStart c <> text (" " ++ cmt ++ " ")
     in com <> text (dashes (render com) len)
 
 dashes :: String -> Int -> String

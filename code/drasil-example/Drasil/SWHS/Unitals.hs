@@ -2,6 +2,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Theory.Drasil (mkQuantDef)
 
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -21,17 +22,18 @@ import Drasil.SWHS.Concepts (water)
 
 import Control.Lens ((^.))
 
-swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = pi_ : (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
+symbols :: [DefinedQuantityDict]
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrained
 
-swhsSymbolsAll :: [QuantityDict]
-swhsSymbolsAll = (map qw swhsSymbols) ++ (map qw specParamValList) ++
-  (map qw [htFusion_min, htFusion_max, coil_SA_max])
+symbolsAll :: [QuantityDict]
+symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
+  (map qw [htFusion_min, htFusion_max, coil_SA_max]) ++
+  (map qw [abs_tol, rel_tol, cons_tol])
 
 -- Symbols with Units --
 
-swhsUnits :: [UnitaryConceptDict]
-swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
+units :: [UnitaryConceptDict]
+units = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   htCap_S, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -40,8 +42,8 @@ swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
-swhsUC :: [UnitalChunk]
-swhsUC = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+unitalChuncks :: [UnitalChunk]
+unitalChuncks = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -199,8 +201,8 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 ----------------------
 
 -- FIXME: this list should not be hand-constructed
-swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
+unitless :: [DefinedQuantityDict]
+unitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 
@@ -223,18 +225,18 @@ frac_min = dqd' (dcc "frac_min"
 -- Constraints --
 -----------------
 
-swhsConstrained ::[ConstrConcept]
-swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
+constrained ::[ConstrConcept]
+constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
-swhsInputs :: [UncertQ]
-swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputs :: [UncertQ]
+inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: UncertQ
+  htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
@@ -377,13 +379,19 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) defaultUncrt
-  
+  sfwrc $ UpTo (Exc, sy time_final_max)] (dbl 50000) defaultUncrt
+
+timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
+  ("The finite discretization of time used in the numerical method" ++
+    "for solving the computational model")
+  (sub (eqSymb time) (Atomic "step")) second Rational
+  [physc $ Bounded (Exc,0) (Exc, sy time_final)]
+  (dbl 0.01) defaultUncrt
   
 -- Output Constraints
-swhsOutputs :: [ConstrConcept]
+outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
+outputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
 temp_W = cuc' "temp_W"
@@ -423,12 +431,12 @@ abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance")
   [ physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
-rel_tol = uvc "pbTol" (nounPhraseSP "relative tolerance") 
+rel_tol = uvc "rel_tol" (nounPhraseSP "relative tolerance") 
   (sub cR (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
-cons_tol = uvc "pbTol"
+cons_tol = uvc "cons_tol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 

@@ -119,17 +119,17 @@ pytop _ _ _ m =
     text "import math" 
   ] 
   $+$
-  (vcat $ map (\x -> text "import" <+> text x) (libs m))
+  vcat (map (\x -> text "import" <+> text x) (libs m))
       
 
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
 pybody c f p (Mod _ _ vs fs cs) = 
-  (vcat $ map (statementDoc c NoLoop . DeclState) vs)
+  vcat (map (statementDoc c NoLoop . DeclState) vs)
   $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
-  (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
+  vcat (intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -185,17 +185,17 @@ funcDoc' c f = funcDocD c f
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusPlus _)) b) = 
     vcat [
-        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv) <> colon,
+        forLabel <+> text i <+> iterInLabel c <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv) <> colon,
         oneTab $ bodyDoc c b]
 iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusEquals _ stepv)) b) = 
     vcat [
-        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv <> text ", " <> valueDoc c stepv) <> colon,
+        forLabel <+> text i <+> iterInLabel c <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv <> text ", " <> valueDoc c stepv) <> colon,
         oneTab $ bodyDoc c b]
 iterationDoc' c (For initv guard update b) = vcat [
     forLabel <+> statementDoc c Loop initv <> semi <+> valueDoc c guard <> semi <+> statementDoc c Loop update,
     oneTab $ bodyDoc c b]
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
-    (iterForEachLabel c) <+> valueDoc c (var i) <+> (iterInLabel c) <+> valueDoc c listVar <> colon,
+    iterForEachLabel c <+> valueDoc c (var i) <+> iterInLabel c <+> valueDoc c listVar <> colon,
     oneTab $ bodyDoc c b]
 iterationDoc' c i = iterationDocD c i
 
@@ -208,7 +208,7 @@ classDoc' :: Config -> FileType -> Label -> Class -> Doc
 classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 classDoc' c f _ m = vcat [
     clsDec c <+> text (className m) <> baseClass <> colon,
-    oneTab $ modInnerDoc]
+    oneTab modInnerDoc]
     where modInnerDoc = case m of (Class n _ _ _ fs) -> methodListDoc c f n fs
                                   (Enum _ _ es) -> enumElementsDoc c es
                                   MainClass{} -> error "unreachable"
@@ -301,8 +301,8 @@ complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= objMethodCall 
 complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ objMethodCall f "readline" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
 complexDoc' c (ListSlice _ vnew vold b e s) = 
-  valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
-  getVal b <> colon <> getVal e <> colon <> getVal s)
+  valueDoc c vnew <+> equals <+> valueDoc c vold <> 
+  brackets (getVal b <> colon <> getVal e <> colon <> getVal s)
     where getVal Nothing  = empty
           getVal (Just v) = valueDoc c v
 complexDoc' c (StringSplit vnew s d) = 

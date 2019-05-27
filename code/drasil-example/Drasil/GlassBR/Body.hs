@@ -2,20 +2,21 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
   _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (GenDefn)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
+  Theory(defined_fun, defined_quant), TheoryModel)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub'), SCSSub(..),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -28,23 +29,25 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import qualified Drasil.DocLang.SRS as SRS (datCon, reference, valsOfAuxCons,
   assumpt, inModel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, code, company, condition, content,
-  dataConst, dataDefn, definition, document, emphasis, environment, figure, 
-  goal, implementation, information, inModel, input_, interface, item, 
-  likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
-  product_, purpose, reference, requirement, section_, software, softwareSys,
-  srs, srsDomains, standard, sysCont, system, template, term_, thModel,
-  traceyMatrix, user, value, doccon, doccon')
-import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
+  assumption, characteristic, company, condition, content, dataConst,
+  datum, definition, doccon, doccon', document, emphasis, environment,
+  figure, goal, information, input_, interface, item, likelyChg, model,
+  organization, output_, physical, physicalSystem, physSyst, problem, product_,
+  purpose, reference, requirement, section_, software, softwareConstraint,
+  softwareSys, srsDomains, standard, sysCont, system, template, term_,
+  traceyMatrix, user, value, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
+import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability,
-  performance, softwarecon)
+  understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
@@ -62,110 +65,111 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
-import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
-  ptOfExplsn, stdOffDist, glasscon, glasscon')
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glassBR, 
+  ptOfExplsn, stdOffDist, con, con')
+import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi, instModIntro)
+import Drasil.GlassBR.IMods (symb, iMods, calofDemandi, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (gbrTMods)
+import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
-  gbInputs, gbOutputs, gBRSpecParamVals, glassTy, glassTypes, glBreakage,
+  demand, demandq, dimlessLoad, explosion, constants, constrained,
+  inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
   termsWithAccDefn, termsWithDefsOnly, terms)
+import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
 
 {--}
 
-gbSymbMap :: ChunkDB
-gbSymbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw glasscon
-  ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+symbMap :: ChunkDB
+symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
+  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) glassBRLabel glassBRRefby
-  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
-  glassBRSection glassBRLabelledCon
+  (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) label refBy
+  dataDefn insModel genDef theory concIns
+  section labelledCon
 
-glassBRLabel :: TraceMap
-glassBRLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' glassBRConcIns
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
-glassBRRefby :: RefbyMap
-glassBRRefby = generateRefbyMap glassBRLabel 
+refBy :: RefbyMap
+refBy = generateRefbyMap label 
 
-glassBRDatadefn :: [DataDefinition]
-glassBRDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-glassBRInsModel :: [InstanceModel]
-glassBRInsModel = getTraceMapFromIM $ getSCSSub mkSRS
+insModel :: [InstanceModel]
+insModel = getTraceMapFromIM $ getSCSSub mkSRS
 
-glassBRGenDef :: [GenDefn]
-glassBRGenDef = getTraceMapFromGD $ getSCSSub mkSRS
+genDef :: [GenDefn]
+genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-glassBRTheory :: [TheoryModel]
-glassBRTheory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBRConcIns :: [ConceptInstance]
-glassBRConcIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns :: [ConceptInstance]
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-glassBRSection :: [Section]
-glassBRSection = glassBRSec
+section :: [Section]
+section = sec
 
-glassBRLabelledCon :: [LabelledContent]
-glassBRLabelledCon = [inputGlassPropsTable]
+labelledCon :: [LabelledContent]
+labelledCon = [inputGlassPropsTable]
 
-glassBRSec :: [Section]
-glassBRSec = extractSection glassBRSrs
+sec :: [Section]
+sec = extractSection srs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi glassBRLabel glassBRRefby
-  glassBRDatadefn glassBRInsModel glassBRGenDef glassBRTheory glassBRConcIns
-  glassBRSection glassBRLabelledCon
+ ([] :: [ConceptChunk]) checkSi label refBy
+  dataDefn insModel genDef theory concIns
+  section labelledCon
 
-gbRefDB :: ReferenceDB
-gbRefDB = rdb gbCitations glassBRConcIns
+refDB :: ReferenceDB
+refDB = rdb citations concIns
 
 printSetting :: PrintingInformation
-printSetting = PI gbSymbMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits gbSymbMap thisSymbols 
+checkSi = collectUnits symbMap thisSymbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
-glassBRSrs :: Document
-glassBRSrs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) systInfo
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
-      (short gLassBR)
-    [IPurpose $ purpOfDocIntro document gLassBR glaSlab,
+    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
+      (short glassBR)
+    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
      IScope incScoR endScoR,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg2
-      [Client gLassBR $ S "a" +:+ phrase company
+      [Client glassBR $ S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
-      Cstmr gLassBR],
+      Cstmr glassBR],
   GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg probStart gLassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg probStart glassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
        SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) gbrTMods
+        , TMs [] (Label : stdFields) tMods
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
@@ -179,47 +183,44 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub' [performance] nonfuncReqs
-    (S "This problem is small in size and relatively simple")
-    (S "Any reasonable" +:+ phrase implementation +:+.
-    (S "will be very quick" `sAnd` S "use minimal storage"))
+    NonFReqsSub nonfuncReqs
   ],
   LCsSec' $ LCsProg' likelyChgs,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
-  AuxConstntSec $ AuxConsProg gLassBR auxiliaryConstants,
+  AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-glassSystInfo :: SystemInformation
-glassSystInfo = SI {
-  _sys         = gLassBR,
-  _kind        = srs,
+systInfo :: SystemInformation
+systInfo = SI {
+  _sys         = glassBR,
+  _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
-                 (concatMap (^. defined_quant) gbrTMods) ++
-                 (concatMap (^. defined_fun) gbrTMods),
+  _definitions = (map (relToQD symbMap) iMods) ++ 
+                 (concatMap (^. defined_quant) tMods) ++
+                 (concatMap (^. defined_fun) tMods),
   _datadefs    = dataDefns,
-  _inputs      = map qw gbInputs,
-  _outputs     = map qw gbOutputs,
-  _defSequence = gbQDefns,
-  _constraints = gbConstrained,
-  _constants   = gbConstants,
-  _sysinfodb   = gbSymbMap,
+  _inputs      = map qw inputs,
+  _outputs     = map qw outputs,
+  _defSequence = qDefns,
+  _constraints = constrained,
+  _constants   = constants,
+  _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
-   refdb       = gbRefDB
+   refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
 
-glassBRCode :: CodeSpec
-glassBRCode = codeSpec glassSystInfo allMods
+code :: CodeSpec
+code = codeSpec systInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 
@@ -249,9 +250,9 @@ termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
 termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
-  Bullet $ noRefs $ (map tAndDWAcc $ take 2 loadTypes)
+  Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
-  (map tAndDOnly $ drop 2 loadTypes)]
+  map tAndDOnly (drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
 
@@ -267,15 +268,15 @@ traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
-solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
+solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
-auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
+auxiliaryConstants = assumptionConstants ++ specParamVals
 
 --Used in "Non-Functional Requirements" Section--
-gBRpriorityNFReqs :: [ConceptChunk]
-gBRpriorityNFReqs = [correctness, verifiability, understandability,
+priorityNFReqs :: [ConceptChunk]
+priorityNFReqs = [correctness, verifiability, understandability,
   reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
@@ -294,9 +295,9 @@ undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
 appStanddIR = [S "applicable" +:+ plural standard +:+
-  S "for constructions using glass from" +:+ (foldlList Comma List
-  $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
+  S "for constructions using glass from" +:+ foldlList Comma List
+  (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
 
 incScoR, endScoR :: Sentence
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
@@ -311,13 +312,13 @@ purpOfDocIntro :: NamedChunk -> CI -> NamedChunk -> Sentence
 purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
-  `sAnd` plural thModel, S "used in the", short progName, phrase code,
+  `sAnd` plural thModel, S "used in the", short progName, phrase Doc.code,
   S "are provided" `sC` S "with an", phrase emphasis,
   S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase typeOf, S "is intended to be used as a",
   phrase reference, S "to provide all", phrase information,
   S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
-  S "The", short srs, S "is abstract because the", plural content, S "say what",
+  S "The", short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved" `sC` S "but not how to solve it"]
   --FIXME: Last sentence is also present in SSP, SWHS and NoPCM... pull out?
 
@@ -327,13 +328,13 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short srs,
+  phrase document, S "follows the", phrase template, S "for an", short Doc.srs,
   S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
   `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the Doc.dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -351,7 +352,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short glassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
@@ -367,23 +368,25 @@ sysCtxDesc = foldlSPCol
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
-    S "type ensuring no errors in the data entry",
-  S "Ensure that consistent units are used for input variables",
+sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
+  phrase glaSlab `sAnd` phrase blastTy `sC` S "ensuring no errors in the" +:+
+  plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "input to the" +:+ phrase software]
+    phrase problem +:+ S "input to the" +:+. phrase software]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters",
-    S "input instead of a floating point number",
-  S "Determine if the inputs satisfy the required physical and software constraints",
-  S "Predict whether the glass slab is safe or not."]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
+  phrase input_ +:+. S "instead of a floating point number",
+  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
+  (phrase physical `sAnd` plural softwareConstraint),
+  S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short gLassBR +:+ S "Responsibilities"]
+  short glassBR +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -421,11 +424,11 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
+  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short gLassBR) figGlassbr 
+physSystDescription = physSystDesc (short glassBR) figGlassbr 
   [physSystDescriptionList, LlC figGlassbr]
 
 figGlassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
@@ -468,7 +471,7 @@ goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase gla
 
 {-input and output tables-}
 
-inputDataConstraints = inDataConstTbl gbInputDataConstraints
+inputDataConstraints = inDataConstTbl GB.inputDataConstraints
 outputDataConstraints = outDataConstTbl [probBr]
 
 {--REQUIREMENTS--}
@@ -483,7 +486,7 @@ outputDataConstraints = outDataConstTbl [probBr]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable glassSystInfo
+traceTable1 = generateTraceTable systInfo
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
@@ -505,10 +508,10 @@ traceMatsAndGraphsTRef, traceMatsAndGraphsIMRef, traceMatsAndGraphsDDRef, traceM
   traceMatsAndGraphsARef, traceMatsAndGraphsLCRef :: [Sentence]
 
 traceMatsAndGraphsT = ["T1", "T2"]
-traceMatsAndGraphsTRef = map makeRef2S gbrTMods
+traceMatsAndGraphsTRef = map makeRef2S tMods
 
 traceMatsAndGraphsIM = ["IM1", "IM2", "IM3"]
-traceMatsAndGraphsIMRef = map makeRef2S gbrIMods
+traceMatsAndGraphsIMRef = map makeRef2S iMods
 
 traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 traceMatsAndGraphsDDRef = map makeRef2S dataDefns

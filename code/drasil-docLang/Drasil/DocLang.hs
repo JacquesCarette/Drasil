@@ -4,11 +4,10 @@ module Drasil.DocLang (
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
     IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
     Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
-    ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub, NonFReqsSub'), ScpOfProjSec(ScpOfProjProg), 
-    SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
-    StkhldrSec(StkhldrProg2), LCsSec'(..),
-    StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc,
+    ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..), SSDSec(..),
+    SSDSub(..), SolChSpec(..), ExistingSolnSec(..), StkhldrSec(StkhldrProg2),
+    LCsSec'(..), StkhldrSub(Client, Cstmr), TConvention(..),
+    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc,
     tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
@@ -23,8 +22,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF,
-    -- Sections.ScopeOfTheProject
+    reqF,
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
     siUQI, siUQO,
@@ -51,11 +49,11 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 
     LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual), ProblemDescription(..), 
-    RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub, NonFReqsSub'), 
-    ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
-    StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),
-    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb, tsymb'',
-    mkEnumSimple, mkEnumSimpleD, mkListTuple)
+    RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), 
+    SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
+    StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),
+    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb,
+    tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
@@ -64,8 +62,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF)
---import Drasil.Sections.ScopeOfTheProject
+import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 

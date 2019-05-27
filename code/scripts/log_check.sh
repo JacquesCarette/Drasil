@@ -1,41 +1,29 @@
-#!/bin/sh
-SWHS_PREF="SWHS"
-TINY_PREF="TINY"
-SSP_PREF="SSP"
-GLASS_PREF="GlassBR"
-GAME_PREF="Chipmunk"
-NoPCM_PREF="NoPCM"
-log="_log.log"
-logFolder="logs"
-#
-if [ $# -gt 0 ]; then
-  printout="$1"
-else
-  printout="no"
+if [ -z "$LOG_FOLDER" ] && [ -z "$LOG_SUFFIX" ]; then
+  echo "At least one of LOG_FOLDER or LOG_SUFFIX must be defined."
+  exit 1
 fi
+if [ -z "$NOISY" ]; then
+  echo "Missing NOISY."
+  exit 1
+fi
+
 errors="no"
 exitval=0
-#
 
-mkdir -p $logFolder
-EXAMPLES="$SWHS_PREF $TINY_PREF $SSP_PREF $GLASS_PREF $GAME_PREF $NoPCM_PREF"
-
-for e in $EXAMPLES; do
-  logfile=$e$log
-  if [ -s $logfile ]; then
+for logfile in "$LOG_FOLDER"*"$LOG_SUFFIX"; do
+  if [ -s "$logfile" ]; then
     echo "-------------------------------------------"
     echo "- $logfile IS NOT EMPTY -- DIFFERENCE"
     echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
     echo "-------------------------------------------"
     errors="yes"
-    if [ "$printout" = "yes" ]; then
+    if [ "$NOISY" = "yes" ]; then
       echo "- $logfile"
       echo "-------------------------------------------"
       cat "$logfile"
       echo "-------------------------------------------"
     fi
   fi
-  mv $logfile $logFolder
 done
 
 

@@ -7,8 +7,8 @@ import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason
 
 rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
-gbCitations :: BibRef
-gbCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
+citations :: BibRef
+citations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
   astm2012, beasonEtAl1998, parnasClements1986]
 
 rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title

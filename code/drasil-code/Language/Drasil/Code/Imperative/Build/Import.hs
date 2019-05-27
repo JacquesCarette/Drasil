@@ -21,14 +21,14 @@ instance RuleTransformer CodeHarness where
     mkRule "build" (map (const $ renderBuildName e m nameOpts nm) $ maybeToList $
       b) []
     ] ++
-    (maybe [] (\(BuildConfig comp bt) -> [
+    maybe [] (\(BuildConfig comp bt) -> [
     mkFile (renderBuildName e m nameOpts nm) (map fst code) [
       mkCheckedCommand $ unwords $ comp (getCompilerInput bt e m co) $
         renderBuildName e m nameOpts nm
       ]
-    ]) $ b) ++ [
+    ]) b ++ [
     mkRule "run" ["build"] [
-      mkCheckedCommand $ (buildRunTarget (renderBuildName e m no nm) ty) ++ " $(RUNARGS)"
+      mkCheckedCommand $ buildRunTarget (renderBuildName e m no nm) ty ++ " $(RUNARGS)"
       ]
     ] where (Runnable nm no ty) = r
 
@@ -45,7 +45,7 @@ renderExt _ (OtherExt e) = e
 getMainModule :: [(Doc, Label, Bool)] -> Label
 getMainModule c = mainName $ filter (tripThird) c
   where mainName [(_, a, _)] = a
-        mainName _ = error $ "Expected a single main module."
+        mainName _ = error "Expected a single main module."
 
 getCompilerInput :: BuildDependencies -> [String] -> ([(Doc, Label, Bool)], Label) -> Code -> [String]
 getCompilerInput BcAll _ _ a = map fst $ unCode a

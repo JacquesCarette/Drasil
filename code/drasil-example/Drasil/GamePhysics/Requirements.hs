@@ -6,10 +6,12 @@ import Language.Drasil hiding (Vector, organization)
 import Drasil.DocLang (mkEnumSimpleD, reqF)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Concepts.Documentation as Doc(assumption, body, code,
-  dataDefn, environment, funcReqDom, genDefn, inModel, input_, likelyChg, mg,
-  mis, module_, nonFuncReqDom, output_, physicalConstraint, physicalSim,
-  property, requirement, srs, thModel, traceyMatrix, unlikelyChg)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
+  environment, funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom,
+  output_, physicalConstraint, physicalSim, property, requirement, srs,
+  traceyMatrix, unlikelyChg)
+import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSP, ofThe', sAnd, sOr)
 
@@ -119,7 +121,12 @@ nonfuncReqsSection :: Section
 nonfuncReqsSection = SRS.nonfuncReq (mkEnumSimpleD nonfuncReqs) []
 
 nonfuncReqs :: [ConceptInstance] 
-nonfuncReqs = [correct, understandable, portable, reliable, reusable, maintainable]
+nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]
+
+highPerformance :: ConceptInstance
+highPerformance = cic "highPerformance" (foldlSent [
+  S "The", phrase code, S "has a short reponse time when performing computation"
+  ]) "High-Performance" nonFuncReqDom
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

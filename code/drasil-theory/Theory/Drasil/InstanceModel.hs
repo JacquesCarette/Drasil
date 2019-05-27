@@ -1,29 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.InstanceModel
+module Theory.Drasil.InstanceModel
   ( InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
 
-import Data.Drasil.IdeaDicts (instanceMod)
-import Language.Drasil.Chunk.CommonIdea (prependAbrv)
-import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Quantity, HasSpace(typ), HasReference(getReferences),
-  HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  ConceptDomain(cdom), CommonIdea(abrv), Definition(defn),
-  Referable(refAdd, renderRef))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Label.Type (LblType(RP), prepend)
-import Language.Drasil.Expr (Relation)
-import Language.Drasil.RefProg (Reference)
-import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil
+import Data.Drasil.IdeaDicts (inModel)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -66,7 +50,7 @@ instance HasSymbol          InstanceModel where symbol = symbol . view imOutput 
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
-instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
+instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 instance Referable          InstanceModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
@@ -76,24 +60,24 @@ im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im rcon _ _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 im rcon i ic o oc r der sn = 
-  IM rcon i ic o oc r der (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc r der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivation
 imNoDeriv :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv rcon _ _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 imNoDeriv rcon i ic o oc r sn =
-  IM rcon i ic o oc r [] (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc r [] (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
 imNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs rcon i ic o oc der sn = 
-  IM rcon i ic o oc [] der (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc [] der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivations or references
 imNoDerivNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs rcon i ic o oc sn = 
-  IM rcon i ic o oc [] [] (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc [] [] (shortname' sn) (prependAbrv inModel sn)
 

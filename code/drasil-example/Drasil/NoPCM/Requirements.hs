@@ -16,13 +16,13 @@ import Data.Drasil.SentenceStructures (foldlSent_, isThe)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tank_length,
-  tau_W, temp_C, time_final, w_density, w_mass, w_vol)
+  tau_W, temp_C, time_final, w_density, w_mass, w_vol, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 
 inputVar :: [QuantityDict]
-inputVar = map qw dataConstListIn 
+inputVar = map qw dataConstListIn ++ map qw [abs_tol, rel_tol, cons_tol]
 
 dataConstListIn :: [UncertQ]
 dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,

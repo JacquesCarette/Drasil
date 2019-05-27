@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTModsNew) where
+t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew) where
 
 import Language.Drasil
 import Prelude hiding (id)
@@ -23,8 +23,8 @@ import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
 tMods :: [RelationConcept]
 tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
 
-cpTModsNew :: [TheoryModel]
-cpTModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
+tModsNew :: [TheoryModel]
+tModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
   t4ChaslesThm_new, t5NewtonSLR_new]
 
 -- T1 : Newton's second law of motion --

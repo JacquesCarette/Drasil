@@ -107,10 +107,10 @@ symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
   
-nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
+symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
+symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
@@ -240,7 +240,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
+nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 

@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 -- | The logic to render C++ code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (
@@ -45,431 +46,443 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon,
   isEmpty)
 
-data CppCode a = CPPC {unSrc :: a, unHdr :: a}
+data CppCode x y a = CPPC {src :: x a, hdr :: y a}
 
-instance PackageSym CppCode where
-    type Package CppCode = ([(Doc, Label, Bool)], Label)
-    packMods n ms = CPPC (unCPPSC $ 
-        (packMods :: Label -> [CppSrcCode (RenderFile CppSrcCode)] ->
-            CppSrcCode (Package CppSrcCode)) n (map (CPPSC . unSrc) ms)) 
-        (unCPPHC $ (packMods :: Label -> [CppHdrCode (RenderFile CppHdrCode)] 
-            -> CppHdrCode (Package CppHdrCode)) n (map (CPPHC . unHdr) ms))
+class Pair p where
+    pfst :: p x y a -> x a
+    psnd :: p x y b -> y b
+    pair :: x a -> y a -> p x y a
 
-instance RenderSym CppCode where
-    type RenderFile CppCode = (Doc, Label, Bool)
-    fileDoc code = CPPC (unCPPSC $ fileDoc code) (unCPPHC $ fileDoc code)
-    top m = CPPC (unCPPSC $ top m) (unCPPHC $ top m)
-    bottom = CPPC (unCPPSC bottom) (unCPPHC bottom)
+instance Pair CppCode where
+    pfst (CPPC xa yb) = xa
+    psnd (CPPC xa yb) = yb
+    pair = CPPC
 
-instance KeywordSym CppCode where
-    type Keyword CppCode = Doc
-    endStatement = CPPC (unCPPSC endStatement) (unCPPHC endStatement)
-    endStatementLoop = CPPC (unCPPSC endStatementLoop) (unCPPHC endStatementLoop)
+unSrc :: CppCode CppSrcCode CppHdrCode a -> a
+unSrc (CPPC (CPPSC a) _) = a
 
-    include n = CPPC (unCPPSC $ include n) (unCPPHC $ include n)
-    inherit = CPPC (unCPPSC inherit) (unCPPHC inherit)
+unHdr :: CppCode CppSrcCode CppHdrCode a -> a
+unHdr (CPPC _ (CPPHC a)) = a
 
-    list p = CPPC (unCPPSC $ list p) (unCPPHC $ list p)
-    listObj = CPPC (unCPPSC listObj) (unCPPHC listObj)
+instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
+    type Package (p CppSrcCode CppHdrCode) = ([(Doc, Label, Bool)], Label)
+    packMods n ms = pair (packMods n (map pfst ms)) (packMods n (map psnd ms))
 
-    blockStart = CPPC (unCPPSC blockStart) (unCPPHC blockStart)
-    blockEnd = CPPC (unCPPSC blockStart) (unCPPHC blockStart)
+instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
+    type RenderFile (p CppSrcCode CppHdrCode) = (Doc, Label, Bool)
+    fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
+    top m = pair (top $ pfst m) (top $ psnd m)
+    bottom = pair bottom bottom
 
-    ifBodyStart = CPPC (unCPPSC ifBodyStart) (unCPPHC ifBodyStart)
-    elseIf = CPPC (unCPPSC elseIf) (unCPPHC elseIf)
+instance (Pair p, KeywordSym x, KeywordSym y) => KeywordSym (p x y) where
+    type Keyword (p x y) = Doc
+    endStatement = pair endStatement endStatement
+    endStatementLoop = pair endStatementLoop
+
+    include n = pair (include n) (include n)
+    inherit = pair inherit inherit
+
+    list p = pair (list p) (list p)
+    listObj = pair listObj listObj
+
+    blockStart = pair blockStart blockStart
+    blockEnd = pair blockEnd blockEnd
+
+    ifBodyStart = pair ifBodyStart ifBodyStart
+    elseIf = pair elseIf elseIf
     
-    iterForEachLabel = CPPC (unCPPSC iterForEachLabel) (unCPPHC iterForEachLabel)
-    iterInLabel = CPPC (unCPPSC iterInLabel) (unCPPHC iterInLabel)
+    iterForEachLabel = pair iterForEachLabel iterForEachLabel
+    iterInLabel = pair iterInLabel iterInLabel
 
-    commentStart = CPPC (unCPPSC commentStart) (unCPPHC commentStart)
+    commentStart = pair commentStart commentStart
     
-    printFunc = CPPC (unCPPSC printFunc) (unCPPHC printFunc)
-    printLnFunc = CPPC (unCPPSC printLnFunc) (unCPPHC printLnFunc)
-    printFileFunc v = CPPC (unCPPSC $ printFileFunc v) (unCPPHC $ printFileFunc v)
-    printFileLnFunc v = CPPC (unCPPSC $ printFileLnFunc v) (unCPPHC $ printFileLnFunc v)
+    printFunc = pair printFunc printFunc
+    printLnFunc = pair printLnFunc printLnFunc
+    printFileFunc v = pair (printFileFunc v) (printFileFunc v)
+    printFileLnFunc v = pair (printFileLnFunc v) (printFileLnFunc v)
 
-instance PermanenceSym CppCode where
-    type Permanence CppCode = Doc
-    static = CPPC (unCPPSC static) (unCPPHC static)
-    dynamic = CPPC (unCPPSC dynamic) (unCPPHC dynamic)
+instance (Pair p, PermanenceSym x, PermanenceSym y) => PermanenceSym (p x y) where
+    type Permanence (p x y) = Doc
+    static = pair static static
+    dynamic = pair dynamic dynamic
 
-instance BodySym CppCode where
-    type Body CppCode = Doc
-    body bs = CPPC (unCPPSC $ body bs) (unCPPHC $ body bs)
-    bodyStatements sts = CPPC (unCPPSC $ bodyStatements sts) (unCPPHC $ bodyStatements sts)
-    oneLiner s = CPPC (unCPPSC $ oneLiner s) (unCPPHC $ oneLiner s)
+instance (Pair p, BodySym x, BodySym y) => BodySym (p x y) where
+    type Body (p x y) = Doc
+    body bs = pair (body bs) (body bs)
+    bodyStatements sts = pair (bodyStatements sts) (bodyStatements sts)
+    oneLiner s = pair (oneLiner s) (oneLiner s)
 
-    addComments s b = CPPC (unCPPSC $ addComments s b) (unCPPHC $ addComments s b)
+    addComments s b = pair (addComments s b) (addComments s b)
 
-instance BlockSym CppCode where
-    type Block CppCode = Doc
-    block sts = CPPC (unCPPSC $ block sts) (unCPPHC $ block sts)
+instance (Pair p, BlockSym x, BlockSym y) => BlockSym (p x y) where
+    type Block (p x y) = Doc
+    block sts = pair (block sts) (block sts)
 
-instance StateTypeSym CppCode where
-    type StateType CppCode = Doc
-    bool = CPPC (unCPPSC bool) (unCPPHC bool)
-    int = CPPC (unCPPSC int) (unCPPHC int)
-    float = CPPC (unCPPSC float) (unCPPHC float)
-    char = CPPC (unCPPSC char) (unCPPHC char)
-    string = CPPC (unCPPSC string) (unCPPHC string)
-    infile = CPPC (unCPPSC infile) (unCPPHC infile)
-    outfile = CPPC (unCPPSC outfile) (unCPPHC outfile)
-    listType p st = CPPC (unCPPSC $ listType p st) (unCPPHC $ listType p st)
-    intListType p = CPPC (unCPPSC $ intListType p) (unCPPHC $ intListType p)
-    floatListType p = CPPC (unCPPSC $ floatListType p) (unCPPHC $ floatListType p)
-    boolListType = CPPC (unCPPSC boolListType) (unCPPHC boolListType)
-    obj t = CPPC (unCPPSC $ obj t) (unCPPHC $ obj t)
-    enumType t = CPPC (unCPPSC $ enumType t) (unCPPHC $ enumType t)
-    iterator t = CPPC (unCPPSC $ iterator t) (unCPPHC $ iterator t)
+instance (Pair p, StateTypeSym x, StateTypeSym y) => StateTypeSym (p x y) where
+    type StateType (p x y) = Doc
+    bool = pair bool bool
+    int = pair int int
+    float = pair float float
+    char = pair char char
+    string = pair string string
+    infile = pair infile infile
+    outfile = pair outfile outfile
+    listType p st = pair (listType p st) (listType p st)
+    intListType p = pair (intListType p) (intListType p)
+    floatListType p = pair (floatListType p) (floatListType p)
+    boolListType = pair boolListType boolListType
+    obj t = pair (obj t) (obj t)
+    enumType t = pair (enumType t) (enumType t)
+    iterator t = pair (iterator t) (iterator t)
 
-instance ControlBlockSym CppCode where
-    runStrategy l strats rv av = CPPC (unCPPSC $ runStrategy l strats rv av) (unCPPHC $ runStrategy l strats rv av)
+instance (Pair p, ControlBlockSym x, ControlBlockSym y) => ControlBlockSym (p x y) where
+    runStrategy l strats rv av = pair (runStrategy l strats rv av) (runStrategy l strats rv av)
 
-    listSlice t vnew vold b e s = CPPC (unCPPSC $ listSlice t vnew vold b e s) (unCPPHC $ listSlice t vnew vold b e s)
+    listSlice t vnew vold b e s = pair (listSlice t vnew vold b e s) (listSlice t vnew vold b e s)
 
-instance UnaryOpSym CppCode where
-    type UnaryOp CppCode = Doc
-    notOp = CPPC (unCPPSC notOp) (unCPPHC notOp)
-    negateOp = CPPC (unCPPSC negateOp) (unCPPHC negateOp)
-    sqrtOp = CPPC (unCPPSC sqrtOp) (unCPPHC sqrtOp)
-    absOp = CPPC (unCPPSC absOp) (unCPPHC absOp)
-    logOp = CPPC (unCPPSC logOp) (unCPPHC logOp)
-    lnOp = CPPC (unCPPSC lnOp) (unCPPHC lnOp)
-    expOp = CPPC (unCPPSC expOp) (unCPPHC expOp)
-    sinOp = CPPC (unCPPSC sinOp) (unCPPHC sinOp)
-    cosOp = CPPC (unCPPSC cosOp) (unCPPHC cosOp)
-    tanOp = CPPC (unCPPSC tanOp) (unCPPHC tanOp)
-    asinOp = CPPC (unCPPSC asinOp) (unCPPHC asinOp)
-    acosOp = CPPC (unCPPSC acosOp) (unCPPHC acosOp)
-    atanOp = CPPC (unCPPSC atanOp) (unCPPHC atanOp)
-    floorOp = CPPC (unCPPSC floorOp) (unCPPHC floorOp)
-    ceilOp = CPPC (unCPPSC ceilOp) (unCPPHC ceilOp)
+instance (Pair p, UnaryOpSym x, UnaryOpSym y) => UnaryOpSym (p x y) where
+    type UnaryOp (p x y) = Doc
+    notOp = pair notOp notOp
+    negateOp = pair negateOp negateOp
+    sqrtOp = pair sqrtOp sqrtOp
+    absOp = pair absOp absOp
+    logOp = pair logOp logOp
+    lnOp = pair lnOp lnOp
+    expOp = pair expOp expOp
+    sinOp = pair sinOp sinOp
+    cosOp = pair cosOp cosOp
+    tanOp = pair tanOp tanOp
+    asinOp = pair asinOp asinOp
+    acosOp = pair acosOp acosOp
+    atanOp = pair atanOp atanOp
+    floorOp = pair floorOp floorOp
+    ceilOp = pair ceilOp ceilOp
 
-instance BinaryOpSym CppCode where
-    type BinaryOp CppCode = Doc
-    equalOp = CPPC (unCPPSC equalOp) (unCPPHC equalOp)
-    notEqualOp = CPPC (unCPPSC notEqualOp) (unCPPHC notEqualOp)
-    greaterOp = CPPC (unCPPSC greaterOp) (unCPPHC greaterOp)
-    greaterEqualOp = CPPC (unCPPSC greaterEqualOp) (unCPPHC greaterEqualOp)
-    lessOp = CPPC (unCPPSC lessOp) (unCPPHC lessOp)
-    lessEqualOp = CPPC (unCPPSC lessEqualOp) (unCPPHC lessEqualOp)
-    plusOp = CPPC (unCPPSC plusOp) (unCPPHC plusOp)
-    minusOp = CPPC (unCPPSC minusOp) (unCPPHC minusOp)
-    multOp = CPPC (unCPPSC multOp) (unCPPHC multOp)
-    divideOp = CPPC (unCPPSC divideOp) (unCPPHC divideOp)
-    powerOp = CPPC (unCPPSC powerOp) (unCPPHC powerOp)
-    moduloOp = CPPC (unCPPSC moduloOp) (unCPPHC moduloOp)
-    andOp = CPPC (unCPPSC andOp) (unCPPHC andOp)
-    orOp = CPPC (unCPPSC orOp) (unCPPHC orOp)
+instance (Pair p, BinaryOpSym x, BinaryOpSym y) => BinaryOpSym (p x y) where
+    type BinaryOp (p x y) = Doc
+    equalOp = pair equalOp equalOp
+    notEqualOp = pair notEqualOp notEqualOp
+    greaterOp = pair greaterOp greaterOp
+    greaterEqualOp = pair greaterEqualOp greaterEqualOp
+    lessOp = pair lessOp lessOp
+    lessEqualOp = pair lessEqualOp lessEqualOp
+    plusOp = pair plusOp plusOp
+    minusOp = pair minusOp minusOp
+    multOp = pair multOp multOp
+    divideOp = pair divideOp divideOp
+    powerOp = pair powerOp powerOp
+    moduloOp = pair moduloOp moduloOp
+    andOp = pair andOp andOp
+    orOp = pair orOp orOp
 
-instance ValueSym CppCode where
-    type Value CppCode = (Doc, Maybe String)
-    litTrue = CPPC (unCPPSC litTrue) (unCPPHC litTrue)
-    litFalse = CPPC (unCPPSC litFalse) (unCPPHC litFalse)
-    litChar c = CPPC (unCPPSC $ litChar c) (unCPPHC $ litChar c)
-    litFloat v = CPPC (unCPPSC $ litFloat v) (unCPPHC $ litFloat v)
-    litInt v = CPPC (unCPPSC $ litInt v) (unCPPHC $ litInt v)
-    litString s = CPPC (unCPPSC $ litString s) (unCPPHC $ litString s)
+instance (Pair p, ValueSym x, ValueSym y) => ValueSym (p x y) where
+    type Value (p x y) = (Doc, Maybe String)
+    litTrue = pair litTrue litTrue
+    litFalse = pair litFalse litFalse
+    litChar c = pair (litChar c) (litChar c)
+    litFloat v = pair (litFloat v) (litFloat v)
+    litInt v = pair (litInt v) (litInt v)
+    litString s = pair (litString s) (litString s)
 
-    defaultChar = CPPC (unCPPSC defaultChar) (unCPPHC defaultChar)
-    defaultFloat = CPPC (unCPPSC defaultFloat) (unCPPHC defaultFloat)
-    defaultInt = CPPC (unCPPSC defaultInt) (unCPPHC defaultInt)
-    defaultString = CPPC (unCPPSC defaultString) (unCPPHC defaultString)
-    defaultBool = CPPC (unCPPSC defaultBool) (unCPPHC defaultBool)
+    defaultChar = pair defaultChar defaultChar
+    defaultFloat = pair defaultFloat defaultFloat
+    defaultInt = pair defaultInt defaultInt
+    defaultString = pair defaultString defaultString
+    defaultBool = pair defaultBool defaultBool
 
-    ($->) v1 v2 = CPPC (unCPPSC $ ($->) v1 v2) (unCPPHC $ ($->) v1 v2)
-    ($:) l1 l2 = CPPC (unCPPSC $ ($:) l1 l2) (unCPPHC $ ($:) l1 l2)
+    ($->) v1 v2 = pair (($->) v1 v2) (($->) v1 v2)
+    ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
-    const n = CPPC (unCPPSC $ const n) (unCPPHC $ const n)
-    var n = CPPC (unCPPSC $ var n) (unCPPHC $ var n)
-    extVar l n = CPPC (unCPPSC $ extVar l n) (unCPPHC $ extVar l n)
-    self = CPPC (unCPPSC self) (unCPPHC self)
-    arg n = CPPC (unCPPSC $ litInt v) (unCPPHC $ litInt v)
-    enumElement en e = CPPC (unCPPSC $ enumElement en e) (unCPPHC $ enumElement en e)
-    enumVar n = CPPC (unCPPSC $ enumVar n) (unCPPHC $ enumVar n)
-    objVar o v = CPPC (unCPPSC $ objVar o v) (unCPPHC $ objVar o v)
-    objVarSelf n = CPPC (unCPPSC $ objVarSelf n) (unCPPHC $ objVarSelf n)
-    listVar n t = CPPC (unCPPSC $ listVar n t) (unCPPHC $ listVar n t)
-    n `listOf` t = CPPC (unCPPSC $ n `listOf` t) (unCPPHC $ n `listOf` t)
-    iterVar l = CPPC (unCPPSC $ iterVar l) (unCPPHC $ iterVar l)
+    const n = pair (const n) (const n)
+    var n = pair (var n) (var n)
+    extVar l n = pair (extVar l n) (extVar l n)
+    self = pair self self
+    arg n = pair (arg n) (arg n)
+    enumElement en e = pair (enumElement en e) (enumElement en e)
+    enumVar n = pair (enumVar n) (enumVar n)
+    objVar o v = pair (objVar o v) (objVar o v)
+    objVarSelf n = pair (objVarSelf n) (objVarSelf n)
+    listVar n t = pair (listVar n t) (listVar n t)
+    n `listOf` t = pair (n `listOf` t) (n `listOf` t)
+    iterVar l = pair (iterVar l) (iterVar l)
     
-    inputFunc = CPPC (unCPPSC inputFunc) (unCPPHC inputFunc)
-    argsList = CPPC (unCPPSC argsList) (unCPPHC argsList)
+    inputFunc = pair inputFunc inputFunc
+    argsList = pair argsList argsList
 
-    valName v = valName (v :: CppSrcCode (Value CppSrcCode))
+    valName v = pair (valName v) (valName v)
 
-instance NumericExpression CppCode where
-    (#~) v = CPPC (unCPPSC $ (#~) v) (unCPPHC $ (#~) v)
-    (#/^) v = CPPC (unCPPSC $ (#/^) v) (unCPPHC $ (#/^) v)
-    (#|) v = CPPC (unCPPSC $ (#|) v) (unCPPHC $ (#|) v)
-    (#+) v1 v2 = CPPC (unCPPSC $ (#+) v1 v2) (unCPPHC $ (#+) v1 v2)
-    (#-) v1 v2 = CPPC (unCPPSC $ (#-) v1 v2) (unCPPHC $ (#-) v1 v2)
-    (#*) v1 v2 = CPPC (unCPPSC $ (#*) v1 v2) (unCPPHC $ (#*) v1 v2)
-    (#/) v1 v2 = CPPC (unCPPSC $ (#/) v1 v2) (unCPPHC $ (#/) v1 v2)
-    (#%) v1 v2 = CPPC (unCPPSC $ (#%) v1 v2) (unCPPHC $ (#%) v1 v2)
-    (#^) v1 v2 = CPPC (unCPPSC $ (#^) v1 v2) (unCPPHC $ (#^) v1 v2)
+instance (Pair p, NumericExpression x, NumericExpression y) => NumericExpression (p x y) where
+    (#~) v = pair ((#-) v) ((#-) v)
+    (#/^) v = pair ((#/^) v) ((#/^) v)
+    (#|) v = pair ((#|) v) ((#|) v)
+    (#+) v1 v2 = pair ((#+) v1 v2) ((#+) v1 v2)
+    (#-) v1 v2 = pair ((#-) v1 v2) ((#-) v1 v2)
+    (#*) v1 v2 = pair ((#*) v1 v2) ((#*) v1 v2)
+    (#/) v1 v2 = pair ((#/) v1 v2) ((#/) v1 v2)
+    (#%) v1 v2 = pair ((#%) v1 v2) ((#%) v1 v2)
+    (#^) v1 v2 = pair ((#^) v1 v2) ((#^) v1 v2)
 
-    log v = CPPC (unCPPSC $ log v) (unCPPHC $ log v)
-    ln v = CPPC (unCPPSC $ ln v) (unCPPHC $ ln v)
-    exp v = CPPC (unCPPSC $ exp v) (unCPPHC $ exp v)
-    sin v = CPPC (unCPPSC $ sin v) (unCPPHC $ sin v)
-    cos v = CPPC (unCPPSC $ cos v) (unCPPHC $ cos v)
-    tan v = CPPC (unCPPSC $ tan v) (unCPPHC $ tan v)
-    csc v = CPPC (unCPPSC $ csc v) (unCPPHC $ csc v)
-    sec v = CPPC (unCPPSC $ sec v) (unCPPHC $ sec v)
-    cot v = CPPC (unCPPSC $ cot v) (unCPPHC $ cot v)
-    arcsin v = CPPC (unCPPSC $ arcsin v) (unCPPHC $ arcsin v)
-    arccos v = CPPC (unCPPSC $ arccos v) (unCPPHC $ arccos v)
-    arctan v = CPPC (unCPPSC $ arctan v) (unCPPHC $ arctan v)
-    floor v = CPPC (unCPPSC $ floor v) (unCPPHC $ floor v)
-    ceil v = CPPC (unCPPSC $ ceil v) (unCPPHC $ ceil v)
+    log v = pair (log v) (log v)
+    ln v = pair (ln v) (ln v)
+    exp v = pair (exp v) (exp v)
+    sin v = pair (sin v) (sin v)
+    cos v = pair (cos v) (cos v)
+    tan v = pair (tan v) (tan v)
+    csc v = pair (csc v) (csc v)
+    sec v = pair (sec v) (sec v)
+    cot v = pair (cot v) (cot v)
+    arcsin v = pair (arcsin v) (arcsin v)
+    arccos v = pair (arccos v) (arccos v)
+    arctan v = pair (arctan v) (arctan v)
+    floor v = pair (floor v) (floor v)
+    ceil v = pair (ceil v) (ceil v)
 
-instance BooleanExpression CppCode where
-    (?!) v = CPPC (unCPPSC $ (?!) v) (unCPPHC $ (?!) v)
-    (?&&) v1 v2 = CPPC (unCPPSC $ (?&&) v1 v2) (unCPPHC $ (?&&) v1 v2)
-    (?||) v1 v2 = CPPC (unCPPSC $ (?||) v1 v2) (unCPPHC $ (?||) v1 v2)
+instance (Pair p, BooleanExpression x, BooleanExpression y) => BooleanExpression (p x y) where
+    (?!) v = pair ((#|) v) ((#|) v)
+    (?&&) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?||) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
 
-    (?<) v1 v2 = CPPC (unCPPSC $ (?<) v1 v2) (unCPPHC $ (?<) v1 v2)
-    (?<=) v1 v2 = CPPC (unCPPSC $ (?<=) v1 v2) (unCPPHC $ (?<=) v1 v2)
-    (?>) v1 v2 = CPPC (unCPPSC $ (?>) v1 v2) (unCPPHC $ (?>) v1 v2)
-    (?>=) v1 v2 = CPPC (unCPPSC $ (?>=) v1 v2) (unCPPHC $ (?>=) v1 v2)
-    (?==) v1 v2 = CPPC (unCPPSC $ (?==) v1 v2) (unCPPHC $ (?==) v1 v2)
-    (?!=) v1 v2 = CPPC (unCPPSC $ (?!=) v1 v2) (unCPPHC $ (?!=) v1 v2)
+    (?<) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?<=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?>) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?>=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?==) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?!=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
     
-instance ValueExpression CppCode where
-    inlineIf b v1 v2 = CPPC (unCPPSC $ inlineIf b v1 v2) (unCPPHC $ inlineIf b v1 v2)
-    funcApp n vs = CPPC (unCPPSC $ funcApp n vs) (unCPPHC $ funcApp n vs)
-    selfFuncApp n vs = CPPC (unCPPSC $ selfFuncApp n vs) (unCPPHC $ selfFuncApp n vs)
-    extFuncApp l n vs = CPPC (unCPPSC $ extFuncApp l n vs) (unCPPHC $ extFuncApp l n vs)
-    stateObj t vs = CPPC (unCPPSC $ stateObj t vs) (unCPPHC $ stateObj t vs)
-    extStateObj l t vs = CPPC (unCPPSC $ extStateObj l t vs) (unCPPHC $ extStateObj l t vs)
-    listStateObj t vs = CPPC (unCPPSC $ listStateObj t vs) (unCPPHC $ listStateObj t vs)
+instance (Pair p, ValueExpression x, ValueExpression y) => ValueExpression (p x y) where
+    inlineIf b v1 v2 = pair (inlineIf b v1 v2) (inlineIf b v1 v2)
+    funcApp n vs = pair (funcApp n vs) (funcApp n vs)
+    selfFuncApp n vs = pair (selfFuncApp n vs) (selfFuncApp n vs)
+    extFuncApp l n vs = pair (extFuncApp l n vs) (extFuncApp l n vs)
+    stateObj t vs = pair (stateObj t vs) (stateObj t vs)
+    extStateObj l t vs = pair (extStateObj l t vs) (extStateObj l t vs)
+    listStateObj t vs = pair (listStateObj t vs) (listStateObj t vs)
 
-    exists v = CPPC (unCPPSC $ exists v) (unCPPHC $ exists v)
-    notNull v = CPPC (unCPPSC $ notNull v) (unCPPHC $ notNull v)
+    exists v = pair (exists v) (exists v)
+    notNull v = pair (notNull v) (notNull v)
 
-instance Selector CppCode where
-    objAccess v f = CPPC (unCPPSC $ objAccess v f) (unCPPHC $ objAccess v f)
-    ($.) v f = CPPC (unCPPSC $ ($.) v f) (unCPPHC $ ($.) v f)
+instance (Pair p, Selector x, Selector y) => Selector (p x y) where
+    objAccess v f = pair (objAccess v f) (objAccess v f)
+    ($.) v f = pair (($.) v f) (($.) v f)
 
-    objMethodCall o f ps = CPPC (unCPPSC $ objMethodCall o f ps) (unCPPHC $ objMethodCall o f ps)
-    objMethodCallVoid o f = CPPC (unCPPSC $ objMethodCallVoid o f) (unCPPHC $ objMethodCallVoid o f)
+    objMethodCall o f ps = pair (objMethodCall o f ps) (objMethodCall o f ps)
+    objMethodCallVoid o f = pair (objMethodCallVoid o f) (objMethodCallVoid o f)
 
-    selfAccess f = CPPC (unCPPSC $ selfAccess f) (unCPPHC $ selfAccess f)
+    selfAccess f = pair (selfAccess f) (selfAccess f)
 
-    listPopulateAccess v f = CPPC (unCPPSC $ listPopulateAccess v f) (unCPPHC $ listPopulateAccess v f)
-    listSizeAccess v = CPPC (unCPPSC $ listSizeAccess v) (unCPPHC $ listSizeAccess v)
+    listPopulateAccess v f = pair (listPopulateAccess v f) (listPopulateAccess v f)
+    listSizeAccess v = pair (listSizeAccess v) (listSizeAccess v)
 
-    listIndexExists v i = CPPC (unCPPSC $ listIndexExists v i) (unCPPHC $ listIndexExists v i)
-    argExists i = CPPC (unCPPSC $ argExists i) (unCPPHC $ argExists i)
+    listIndexExists v i = pair (listIndexExists v i) (listIndexExists v i)
+    argExists i = pair (argExists i) (argExists i)
     
-    indexOf l v = CPPC (unCPPSC $ indexOf l v) (unCPPHC $ indexOf l v)
+    indexOf l v = pair (indexOf l v) (indexOf l v)
 
-    stringEqual v1 v2 = CPPC (unCPPSC $ stringEqual v1 v2) (unCPPHC $ stringEqual v1 v2)
+    stringEqual v1 v2 = pair (stringEqual v1 v2)
 
-    castObj f v = CPPC (unCPPSC $ castObj f v) (unCPPHC $ castObj f v)
-    castStrToFloat v = CPPC (unCPPSC $ castStrToFloat v) (unCPPHC $ castStrToFloat v)
+    castObj f v = pair (castObj f v) (castObj f v)
+    castStrToFloat v = pair (castStrToFloat v) (castStrToFloat v)
 
-instance FunctionSym CppCode where
-    type Function CppCode = Doc
-    func l vs = CPPC (unCPPSC $ func l vs) (unCPPHC $ func l vs)
-    cast targT srcT = CPPC (unCPPSC $ cast targT srcT) (unCPPHC $ cast targT srcT)
-    castListToInt = CPPC (unCPPSC castListToInt) (unCPPHC castListToInt)
-    get n = CPPC (unCPPSC $ get n) (unCPPHC $ get n)
-    set n v = CPPC (unCPPSC $ set n v) (unCPPHC $ set n v)
+instance (Pair p, FunctionSym x, FunctionSym y) => FunctionSym (p x y) where
+    type Function (p x y) = Doc
+    func l vs = pair (func l vs) (func l vs)
+    cast targT srcT = pair (cast targT srcT) (cast targT srcT)
+    castListToInt = pair castListToInt castListToInt
+    get n = pair (get n) (get n)
+    set n v = pair (set n v) (set n v)
 
-    listSize = CPPC (unCPPSC listSize) (unCPPHC listSize)
-    listAdd i v = CPPC (unCPPSC $ listAdd i v) (unCPPHC $ listAdd i v)
-    listPopulateInt v = CPPC (unCPPSC $ listPopulateInt v) (unCPPHC $ listPopulateInt v)
-    listPopulateFloat v = CPPC (unCPPSC $ listPopulateFloat v) (unCPPHC $ listPopulateFloat v)
-    listPopulateChar v = CPPC (unCPPSC $ listPopulateChar v) (unCPPHC $ listPopulateChar v)
-    listPopulateBool v = CPPC (unCPPSC $ listPopulateBool v) (unCPPHC $ listPopulateBool v)
-    listPopulateString v = CPPC (unCPPSC $ listPopulateString v) (unCPPHC $ listPopulateString v)
-    listAppend v = CPPC (unCPPSC $ listAppend v) (unCPPHC $ listAppend v)
-    listExtendInt = CPPC (unCPPSC listExtendInt) (unCPPHC listExtendInt)
-    listExtendFloat = CPPC (unCPPSC listExtendFloat) (unCPPHC listExtendFloat)
-    listExtendChar = CPPC (unCPPSC listExtendChar) (unCPPHC listExtendChar)
-    listExtendBool = CPPC (unCPPSC listExtendBool) (unCPPHC listExtendBool)
-    listExtendString = CPPC (unCPPSC listExtendString) (unCPPHC listExtendString)
-    listExtendList i t = CPPC (unCPPSC $ listExtendList i t) (unCPPHC $ listExtendList i t)
+    listSize = pair listSize listSize
+    listAdd i v = pair (listAdd i v) (listAdd i v)
+    listPopulateInt v = pair (listPopulateInt v) (listPopulateInt v)
+    listPopulateFloat v = pair (listPopulateFloat v) (listPopulateFloat v)
+    listPopulateChar v = pair (listPopulateChar v) (listPopulateChar v)
+    listPopulateBool v = pair (listPopulateBool v) (listPopulateBool v)
+    listPopulateString v = pair (listPopulateString v) (listPopulateString v)
+    listAppend v = pair (listAppend v) (listAppend v)
+    listExtendInt = pair listExtendInt listExtendInt
+    listExtendFloat = pair listExtendFloat listExtendFloat
+    listExtendChar = pair listExtendChar listExtendChar
+    listExtendBool = pair listExtendBool listExtendBool
+    listExtendString = pair listExtendString listExtendString
+    listExtendList i t = pair (listExtendList i t) (listExtendList i t)
 
-    iterBegin = CPPC (unCPPSC iterBegin) (unCPPHC iterBegin)
-    iterEnd = CPPC (unCPPSC iterEnd) (unCPPHC iterEnd)
+    iterBegin = pair iterBegin iterBegin
+    iterEnd = pair iterEnd iterEnd
 
-instance SelectorFunction CppCode where
-    listAccess v = CPPC (unCPPSC $ listAccess v) (unCPPHC $ listAccess v)
-    listSet i v = CPPC (unCPPSC $ listSet i v) (unCPPHC $ listSet i v)
+instance (Pair p, SelectorFunction x, SelectorFunction y) => SelectorFunction (p x y) where
+    listAccess v = pair (listAccess v) (listAccess v)
+    listSet i v = pair (listSet i v) (listSet i v)
 
-    listAccessEnum t v = CPPC (unCPPSC $ listAccessEnum t v) (unCPPHC $ listAccessEnum t v)
-    listSetEnum t i v = CPPC (unCPPSC $ listSetEnum t i v) (unCPPHC $ listSetEnum t i v)
+    listAccessEnum t v = pair (listAccessEnum t v) (listAccessEnum t v)
+    listSetEnum t i v = pair (listSetEnum t i v) (listSetEnum t i v)
 
-    at l = CPPC (unCPPSC $ at l) (unCPPHC $ at l)
+    at l = pair (at l) (at l)
 
-instance StatementSym CppCode where
-    type Statement CppCode = (Doc, Terminator)
-    assign v1 v2 = CPPC (unCPPSC $ assign v1 v2) (unCPPHC $ assign v1 v2)
-    assignToListIndex lst index v = CPPC (unCPPSC $ assignToListIndex lst index v) (unCPPHC $ assignToListIndex lst index v)
-    (&=) v1 v2 = CPPC (unCPPSC $ (&=) v1 v2) (unCPPHC $ (&=) v1 v2)
-    (&.=) l v = CPPC (unCPPSC $ (&.=) l v) (unCPPHC $ (&.=) l v)
-    (&=.) v l = CPPC (unCPPSC $ (&=.) v l) (unCPPHC $ (&=.) v l)
-    (&-=) v1 v2 = CPPC (unCPPSC $ (&-=) v1 v2) (unCPPHC $ (&-=) v1 v2)
-    (&.-=) l v = CPPC (unCPPSC $ (&.-=) l v) (unCPPHC $ (&.-=) l v)
-    (&+=) v1 v2 = CPPC (unCPPSC $ (&+=) v1 v2) (unCPPHC $ (&+=) v1 v2)
-    (&.+=) l v = CPPC (unCPPSC $ (&.+=) l v) (unCPPHC $ (&.+=) l v)
-    (&++) v = CPPC (unCPPSC $ (&++) v) (unCPPHC $ (&++) v)
-    (&.++) l = CPPC (unCPPSC $ (&.++) l) (unCPPHC $ (&.++) l)
-    (&~-) v = CPPC (unCPPSC $ (&~-) v) (unCPPHC $ (&~-) v)
-    (&.~-) l = CPPC (unCPPSC $ (&.~-) l) (unCPPHC $ (&.~-) l)
+instance (Pair p, StatementSym x, StatementSym y) => StatementSym (p x y) where
+    type Statement (p x y) = (Doc, Terminator)
+    assign v1 v2 = pair (assign v1 v2) (assign v1 v2)
+    assignToListIndex lst index v = pair (assignToListIndex lst index v) (assignToListIndex lst index v)
+    (&=) v1 v2 = pair ((&=) v1 v2) ((&=) v1 v2)
+    (&.=) l v = pair ((&.=) l v) ((&.=) l v)
+    (&=.) v l = pair ((&=.) v l) ((&=.) v l)
+    (&-=) v1 v2 = pair ((&-=) v1 v2) ((&-=) v1 v2)
+    (&.-=) l v = pair ((&.-=) l v) ((&.-=) l v)
+    (&+=) v1 v2 = pair ((&+=) v1 v2) ((&+=) v1 v2)
+    (&.+=) l v = pair ((&.+=) l v) ((&.+=) l v)
+    (&++) v = pair ((&++) v) ((&++) v)
+    (&.++) l = pair ((&.++) l) ((&.++) l)
+    (&~-) v = pair ((&~-) v) ((&~-) v)
+    (&.~-) l = pair ((&.~-) l) ((&.~-) l)
 
-    varDec l t = CPPC (unCPPSC $ varDec l t) (unCPPHC $ varDec l t)
-    varDecDef l t v = CPPC (unCPPSC $ varDecDef l t v) (unCPPHC $ varDecDef l t v)
-    listDec l n t = CPPC (unCPPSC $ listDec l n t) (unCPPHC $ listDec l n t)
-    listDecDef l t vs = CPPC (unCPPSC $ listDecDef l t vs) (unCPPHC $ listDecDef l t vs)
-    objDecDef l t v = CPPC (unCPPSC $ objDecDef l t v) (unCPPHC $ objDecDef l t v)
-    objDecNew l t vs = CPPC (unCPPSC $ objDecNew l t vs) (unCPPHC $ objDecNew l t vs)
-    extObjDecNew l lib t vs = CPPC (unCPPSC $ extObjDecNew l lib t vs) (unCPPHC $ extObjDecNew l lib t vs)
-    objDecNewVoid l t = CPPC (unCPPSC $ objDecNewVoid l t) (unCPPHC $ objDecNewVoid l t)
-    extObjDecNewVoid l lib t = CPPC (unCPPSC $ extObjDecNewVoid l lib t) (unCPPHC $ extObjDecNewVoid l lib t)
-    constDecDef l t v = CPPC (unCPPSC $ constDecDef l t v) (unCPPHC $ constDecDef l t v)
+    varDec l t = pair (varDec l t) (varDec l t)
+    varDecDef l t v = pair (varDecDef l t v) (varDecDef l t v)
+    listDec l n t = pair (listDec l n t) (listDec l n t)
+    listDecDef l t vs = pair (listDecDef l t vs) (listDecDef l t vs)
+    objDecDef l t v = pair (objDecDef l t v) (objDecDef l t v)
+    objDecNew l t vs = pair (objDecNew l t vs) (objDecNew l t vs)
+    extObjDecNew l lib t vs = pair (extObjDecNew l lib t vs) (extObjDecNew l lib t vs)
+    objDecNewVoid l t = pair (objDecNewVoid l t) (objDecNewVoid l t)
+    extObjDecNewVoid l lib t = pair (extObjDecNewVoid l lib t) (extObjDecNewVoid l lib t)
+    constDecDef l t v = pair (constDecDef l t v) (constDecDef l t v)
 
-    print t v = CPPC (unCPPSC $ print t v) (unCPPHC $ print t v)
-    printLn t v = CPPC (unCPPSC $ printLn t v) (unCPPHC $ printLn t v)
-    printStr s = CPPC (unCPPSC $ printStr s) (unCPPHC $ printStr s)
-    printStrLn s = CPPC (unCPPSC $ printStrLn s) (unCPPHC $ printStrLn s)
+    print t v = pair (print t v) (print t v)
+    printLn t v = pair (printLn t v) (printLn t v)
+    printStr s = pair (printStr s) (printStr s)
+    printStrLn s = pair (printStrLn s) (printStrLn s)
 
-    printFile f t v = CPPC (unCPPSC $ printFile f t v) (unCPPHC $ printFile f t v)
-    printFileLn f t v = CPPC (unCPPSC $ printFileLn f t v) (unCPPHC $ printFileLn f t v)
-    printFileStr f s =CPPC (unCPPSC $ printFileStr f s) (unCPPHC $ printFileStr f s)
-    printFileStrLn f s = CPPC (unCPPSC $ printFileStrLn f s) (unCPPHC $ printFileStrLn f s)
+    printFile f t v = pair (printFile f t v) (printFile f t v)
+    printFileLn f t v = pair (printFileLn f t v) (printFileLn f t v)
+    printFileStr f s = pair (printFileStr f s) (printFileStr f s)
+    printFileStrLn f s = pair (printFileStrLn f s) (printFileStrLn f s)
 
-    printList t v = CPPC (unCPPSC $ printList t v) (unCPPHC $ printList t v)
-    printLnList t v = CPPC (unCPPSC $ printLnList t v) (unCPPHC $ printLnList t v)
-    printFileList f t v = CPPC (unCPPSC $ printFileList f t v) (unCPPHC $ printFileList f t v)
-    printFileLnList f t v = CPPC (unCPPSC $ printFileLnList f t v) (unCPPHC $ printFileLnList f t v)
+    printList t v = pair (printList t v) (printList t v)
+    printLnList t v = pair (printLnList t v) (printLnList t v)
+    printFileList f t v = pair (printFileList f t v) (printFileList f t v)
+    printFileLnList f t v = pair (printFileLnList f t v) (printFileLnList f t v)
 
-    getIntInput v = CPPC (unCPPSC $ getIntInput v) (unCPPHC $ getIntInput v)
-    getFloatInput v = CPPC (unCPPSC $ getFloatInput v) (unCPPHC $ getFloatInput v)
-    getBoolInput v = CPPC (unCPPSC $ getBoolInput v) (unCPPHC $ getBoolInput v)
-    getStringInput v = CPPC (unCPPSC $ getStringInput v) (unCPPHC $ getStringInput v)
-    getCharInput v = CPPC (unCPPSC $ getCharInput v) (unCPPHC $ getCharInput v)
-    discardInput = CPPC (unCPPSC discardInput) (unCPPHC discardInput)
+    getIntInput v = pair (getIntInput v) (getIntInput v)
+    getFloatInput v = pair (getFloatInput v) (getFloatInput v)
+    getBoolInput v = pair (getBoolInput v) (getBoolInput v)
+    getStringInput v = pair (getStringInput v) (getStringInput v)
+    getCharInput v = pair (getCharInput v) (getCharInput v)
+    discardInput = pair discardInput discardInput
 
-    getIntFileInput f v = CPPC (unCPPSC $ getIntFileInput f v) (unCPPHC $ getIntFileInput f v)
-    getFloatFileInput f v = CPPC (unCPPSC $ getFloatFileInput f v) (unCPPHC $ getFloatFileInput f v)
-    getBoolFileInput f v = CPPC (unCPPSC $ getBoolFileInput f v) (unCPPHC $ getBoolFileInput f v)
-    getStringFileInput f v = CPPC (unCPPSC $ getStringFileInput f v) (unCPPHC $ getStringFileInput f v)
-    getCharFileInput f v = CPPC (unCPPSC $ getCharFileInput f v) (unCPPHC $ getCharFileInput f v)
-    discardFileInput f = CPPC (unCPPSC $ discardFileInput f) (unCPPHC $ discardFileInput f)
+    getIntFileInput f v = pair (getIntFileInput f v) (getIntFileInput f v)
+    getFloatFileInput f v = pair (getFloatFileInput f v) (getFloatFileInput f v)
+    getBoolFileInput f v = pair (getBoolFileInput f v) (getBoolFileInput f v)
+    getStringFileInput f v = pair (getStringFileInput f v) (getStringFileInput f v)
+    getCharFileInput f v = pair (getCharFileInput f v) (getCharFileInput f v)
+    discardFileInput f = pair discardFileInput discardFileInput
 
-    openFileR f n = CPPC (unCPPSC $ openFileR f n) (unCPPHC $ openFileR f n)
-    openFileW f n = CPPC (unCPPSC $ openFileW f n) (unCPPHC $ openFileW f n)
-    openFileA f n = CPPC (unCPPSC $ openFileA f n) (unCPPHC $ openFileA f n)
-    closeFile f = CPPC (unCPPSC $ closeFile f) (unCPPHC $ closeFile f)
+    openFileR f n = pair (openFileR f n) (openFileR f n)
+    openFileW f n = pair (openFileW f n) (openFileW f n)
+    openFileA f n = pair (openFileA f n) (openFileA f n)
+    closeFile f = pair (closeFile f) (closeFile f)
 
-    getFileInputLine f v = CPPC (unCPPSC $ getFileInputLine f v) (unCPPHC $ getFileInputLine f v)
-    discardFileLine f = CPPC (unCPPSC $ discardFileLine f) (unCPPHC $ discardFileLine f)
-    stringSplit d vnew s = CPPC (unCPPSC $ stringSplit d vnew s) (unCPPHC $ stringSplit d vnew s)
+    getFileInputLine f v = pair (getFileInputLine f v) (getFileInputLine f v)
+    discardFileLine f = pair (discardFileLine f) (discardFileLine f)
+    stringSplit d vnew s = pair (stringSplit d vnew s) (stringSplit d vnew s)
 
-    break = CPPC (unCPPSC break) (unCPPHC break)
-    continue = CPPC (unCPPSC continue) (unCPPHC continue)
+    break = pair break break
+    continue = pair continue continue
 
-    returnState v = CPPC (unCPPSC $ returnState v) (unCPPHC $ returnState v)
-    returnVar l = CPPC (unCPPSC $ returnVar l) (unCPPHC $ returnVar l)
+    returnState v = pair (returnState v) (returnState v)
+    returnVar l = pair (returnVar l) (returnVar l)
 
-    valState v = CPPC (unCPPSC $ valState v) (unCPPHC $ valState v)
+    valState v = pair (valState v) (valState v)
 
-    comment cmt = CPPC (unCPPSC $ comment cmt) (unCPPHC $ comment cmt)
+    comment cmt = pair (comment cmt) (comment cmt)
 
-    free v = CPPC (unCPPSC $ free v) (unCPPHC $ free v)
+    free v = pair (free v) (free v)
 
-    throw errMsg = CPPC (unCPPSC $ throw errMsg) (unCPPHC $ throw errMsg)
+    throw errMsg = pair (throw errMsg) (throw errMsg)
 
-    initState fsmName initialState = CPPC (unCPPSC $ initState fsmName initialState) (unCPPHC $ initState fsmName initialState)
-    changeState fsmName toState = CPPC (unCPPSC $ changeState fsmName toState) (unCPPHC $ changeState fsmName toState)
+    initState fsmName initialState = pair (initState fsmName initialState) (initState fsmName initialState)
+    changeState fsmName toState = pair (changeState fsmName toState) (changeState fsmName toState)
 
-    initObserverList t vs = CPPC (unCPPSC $ initObserverList t vs) (unCPPHC $ initObserverList t vs)
-    addObserver t o = CPPC (unCPPSC $ addObserver t o) (unCPPHC $ addObserver t o)
+    initObserverList t vs = pair (initObserverList t vs) (initObserverList t vs)
+    addObserver t o = pair (addObserver t o) (addObserver t o)
 
-    state s = CPPC (unCPPSC $ state s) (unCPPHC $ state s)
-    loopState s = CPPC (unCPPSC $ loopState s) (unCPPHC $ loopState s)
-    multi ss = CPPC (unCPPSC $ multi ss) (unCPPHC $ multi ss)
+    state s = pair (state s) (state s)
+    loopState s = pair (loopState s) (loopState s)
+    multi ss = pair (multi ss) (multi ss)
 
-instance ControlStatementSym CppCode where
-    ifCond bs b = CPPC (unCPPSC $ ifCond bs b) (unCPPHC $ ifCond bs b)
-    ifNoElse bs = CPPC (unCPPSC $ ifNoElse bs) (unCPPHC $ ifNoElse bs)
-    switch v cs c = CPPC (unCPPSC $ switch v cs c) (unCPPHC $ switch v cs c)
-    switchAsIf v cs = CPPC (unCPPSC $ switchAsIf v cs) (unCPPHC $ switchAsIf v cs)
+instance (Pair p, ControlStatementSym x, ControlStatementSym y) => ControlStatementSym (p x y) where
+    ifCond bs b = pair (ifCond bs b) (ifCond bs b)
+    ifNoElse bs = pair (ifNoElse bs) (ifNoElse bs)
+    switch v cs c = pair (switch v cs c) (switch v cs c)
+    switchAsIf v cs = pair (switchAsIf v cs) (switchAsIf v cs)
 
-    ifExists cond ifBody elseBody = CPPC (unCPPSC $ ifExists cond ifBody elseBody) (unCPPHC $ ifExists cond ifBody elseBody)
+    ifExists cond ifBody elseBody = pair (ifExists cond ifBody elseBody) (ifExists cond ifBody elseBody)
 
-    for sInit vGuard sUpdate b = CPPC (unCPPSC $ for sInit vGuard sUpdate b) (unCPPHC $ for sInit vGuard sUpdate b)
-    forRange i initv finalv stepv b = CPPC (unCPPSC $ forRange i initv finalv stepv b) (unCPPHC $ forRange i initv finalv stepv b)
-    forEach l t v b = CPPC (unCPPSC $ forEach l t v b) (unCPPHC $ forEach l t v b)
-    while v b = CPPC (unCPPSC $ while v b) (unCPPHC $ while v b)
+    for sInit vGuard sUpdate b = pair (for sInit vGuard sUpdate b) (for sInit vGuard sUpdate b)
+    forRange i initv finalv stepv b = pair (forRange i initv finalv stepv b) (forRange i initv finalv stepv b)
+    forEach l t v b = pair (forEach l t v b) (forEach l t v b)
+    while v b = pair (while v b) (while v b)
 
-    tryCatch tb cb = CPPC (unCPPSC $ tryCatch tb cb) (unCPPHC $ tryCatch tb cb)
+    tryCatch tb cb = pair (tryCatch tb cb) (tryCatch tb cb)
 
-    checkState l vs b = CPPC (unCPPSC $ checkState l vs b) (unCPPHC $ checkState l vs b)
+    checkState l vs b = pair (checkState l vs b) (checkState l vs b)
 
-    notifyObservers fn t ps = CPPC (unCPPSC $ notifyObservers fn t ps) (unCPPHC $ notifyObservers fn t ps)
+    notifyObservers fn t ps = pair (notifyObservers fn t ps) (notifyObservers fn t ps)
 
-    getFileInputAll f v = CPPC (unCPPSC $ getFileInputAll f v) (unCPPHC $ getFileInputAll f v)
+    getFileInputAll f v = pair (getFileInputAll f v) (getFileInputAll f v)
 
-instance ScopeSym CppCode where
-    type Scope CppCode = Doc
-    private = CPPC (unCPPSC private) (unCPPHC private)
-    public = CPPC (unCPPSC public) (unCPPHC public)
+instance (Pair p, ScopeSym x, ScopeSym y) => ScopeSym (p x y) where
+    type Scope (p x y) = Doc
+    private = pair private private
+    public = pair public public
 
-    includeScope s = CPPC (unCPPSC $ includeScope s) (unCPPHC $ includeScope s)
+    includeScope s = pair (includeScope s) (includeScope s)
 
-instance MethodTypeSym CppCode where
-    type MethodType CppCode = Doc
-    mState t = CPPC (unCPPSC $ mState t) (unCPPHC $ mState t)
-    void = CPPC (unCPPSC void) (unCPPHC void)
-    construct n = CPPC (unCPPSC $ construct n) (unCPPHC $ construct n)
+instance (Pair p, MethodTypeSym x, MethodTypeSym y) => MethodTypeSym (p x y) where
+    type MethodType (p x y) = Doc
+    mState t = pair (mState t) (mState t)
+    void = pair void void
+    construct n = pair (construct n) (construct n)
 
-instance ParameterSym CppCode where
-    type Parameter CppCode = Doc
+instance (Pair p, ParameterSym x, ParameterSym y) => ParameterSym (p x y) where
+    type Parameter (p x y) = Doc
     stateParam n t = CPPC (unCPPSC $ stateParam n t) (unCPPHC $ stateParam n t)
     pointerParam n t = CPPC (unCPPSC $ pointerParam n t) (unCPPHC $ pointerParam n t)
 
-instance MethodSym CppCode where
+instance (Pair p, MethodSym x, MethodSym y) => MethodSym (p x y) where
     -- Bool is True if the method is a main method, False otherwise
-    type Method CppCode = (Doc, Bool)
-    method n c s p t ps b = CPPC (unCPPSC $ method n c s p t ps b) (unCPPHC $ method n c s p t ps b)
-    getMethod n c t = CPPC (unCPPSC $ getMethod n c t) (unCPPHC $ getMethod n c t)
-    setMethod setLbl c paramLbl t = CPPC (unCPPSC $ setMethod setLbl c paramLbl t) (unCPPHC $ setMethod setLbl c paramLbl t)
-    mainMethod l b = CPPC (unCPPSC $ mainMethod l b) (unCPPHC $ mainMethod l b)
-    privMethod n c t ps b = CPPC (unCPPSC $ privMethod n c t ps b) (unCPPHC $ privMethod n c t ps b)
-    pubMethod n c t ps b = CPPC (unCPPSC $ pubMethod n c t ps b) (unCPPHC $ pubMethod n c t ps b)
-    constructor n ps b = CPPC (unCPPSC $ constructor n ps b) (unCPPHC $ constructor n ps b)
-    destructor n vs = CPPC (unCPPSC $ destructor n vs) (unCPPHC $ destructor n vs)
+    type Method (p x y) = (Doc, Bool)
+    method n c s p t ps b = pair (method n c s p t ps b) (method n c s p t ps b)
+    getMethod n c t = pair (getMethod n c t) (getMethod n c t) 
+    setMethod setLbl c paramLbl t = pair (setMethod setLbl c paramLbl t) (setMethod setLbl c paramLbl t)
+    mainMethod l b = pair (mainMethod l b) (mainMethod l b)
+    privMethod n c t ps b = pair (privMethod n c t ps b) (privMethod n c t ps b)
+    pubMethod n c t ps b = pair (pubMethod n c t ps b) (pubMethod n c t ps b)
+    constructor n ps b = pair (constructor n ps b) (constructor n ps b)
+    destructor n vs = pair (destructor n vs) (destructor n vs)
 
-    function n s p t ps b = CPPC (unCPPSC $ function n s p t ps b) (unCPPHC $ function n s p t ps b)
+    function n s p t ps b = pair (function n s p t ps b) (function n s p t ps b)
 
-instance StateVarSym CppCode where
+instance (Pair p, StateVarSym x, StateVarSym y) => StateVarSym (p x y) where
     -- (Doc, Bool) is the corresponding destructor code for the stateVar
-    type StateVar CppCode = (Doc, (Doc, Terminator))
-    stateVar del l s p t = CPPC (unCPPSC $ stateVar del l s p t) (unCPPHC $ stateVar del l s p t)
-    privMVar del l t = CPPC (unCPPSC $ privMVar del l t) (unCPPHC $ privMVar del l t)
-    pubMVar del l t = CPPC (unCPPSC $ pubMVar del l t) (unCPPHC $ pubMVar del l t)
-    pubGVar del l t = CPPC (unCPPSC $ pubGVar del l t) (unCPPHC $ pubGVar del l t)
-    listStateVar del l s p t = CPPC (unCPPSC $ listStateVar del l s p t) (unCPPHC $ listStateVar del l s p t)
+    type StateVar (p x y) = (Doc, (Doc, Terminator))
+    stateVar del l s p t = pair (stateVar del l s p t) (stateVar del l s p t)
+    privMVar del l t = pair (privMVar del l t) (privMVar del l t)
+    pubMVar del l t = pair (pubMVar del l t) (pubMVar del l t)
+    pubGVar del l t = pair (pubGVar del l t) (pubGVar del l t)
+    listStateVar del l s p t = pair (listStateVar del l s p t) (listStateVar del l s p t)
 
-instance ClassSym CppCode where
+instance (Pair p, ClassSym x, ClassSym y) => ClassSym (p x y) where
     -- Bool is True if the class is a main class, False otherwise
-    type Class CppCode = (Doc, Bool)
-    buildClass n p s vs fs = CPPC (unCPPSC $ buildClass n p s vs fs) (unCPPHC $ buildClass n p s vs fs)
-    enum l ls s = CPPC (unCPPSC $ enum l ls s) (unCPPHC $ enum l ls s)
-    mainClass l vs fs = CPPC (unCPPSC $ mainClass l vs fs) (unCPPHC $ mainClass l vs fs)
-    privClass n p vs fs = CPPC (unCPPSC $ privClass n p vs fs) (unCPPHC $ privClass n p vs fs)
-    pubClass n p vs fs = CPPC (unCPPSC $ pubClass n p vs fs) (unCPPHC $ pubClass n p vs fs)
+    type Class (p x y) = (Doc, Bool)
+    buildClass n p s vs fs = pair (buildClass n p s vs fs) (buildClass n p s vs fs)
+    enum l ls s = pair (enum l ls s) (enum l ls s)
+    mainClass l vs fs = pair (mainClass l vs fs) (mainClass l vs fs)
+    privClass n p vs fs = pair (privClass n p vs fs) (privClass n p vs fs)
+    pubClass n p vs fs = pair (pubClass n p vs fs) (pubClass n p vs fs)
 
-instance ModuleSym CppCode where
+instance (Pair p, ModuleSym x, ModuleSym y) => ModuleSym (p x y) where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
-    type Module CppCode = (Doc, Label, Bool)
-    buildModule n l vs ms cs = CPPC (unCPPSC $ buildModule n l vs ms cs) (unCPPHC $ buildModule n l vs ms cs)
+    type Module (p x y) = (Doc, Label, Bool)
+    buildModule n l vs ms cs = pair (buildModule n l vs ms cs) (buildModule n l vs ms cs)
 
 -----------------
 -- Source File --

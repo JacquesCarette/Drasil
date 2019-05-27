@@ -9,13 +9,13 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.DocLang (DocDesc, DocSection(SSDSec), Field(..), Fields,
+import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc, DocSection(SSDSec), Field(..), Fields,
   InclUnits(IncludeUnits), ProblemDescription(PDProg),
-  SCSSub(Assumptions, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  SCSSub(Assumptions, DDs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   Verbosity(Verbose),
   generateTraceMap, generateTraceMap', getSCSSub, getTraceMapFromTM, goalStmtF, mkDoc, mkEnumSimpleD)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumption, general, goalStmt, information, input_, output_,
+import Data.Drasil.Concepts.Documentation as Doc (assumption, datum, general, goalStmt, information, input_, output_,
   physicalSystem, problemDescription, problem,  section_,
   solutionCharacteristic, specification, srs, system)
 import Data.Drasil.Concepts.Math (angle, equation)
@@ -33,8 +33,10 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, ofThe, sAnd)
 import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.TMods (tMods)
+import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -47,6 +49,7 @@ mkSRS = [
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         ]
       ]
   ]
@@ -74,17 +77,17 @@ theoryModels :: [TheoryModel]
 theoryModels = getTraceMapFromTM $ getSCSSub mkSRS
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw [acceleration, displacement, time, velocity])
-  (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++ map nw [general, information, input_, output_, physicalSystem, problemDescription,
+symbMap = cdb (map qw [acceleration, displacement, time, velocity] ++ unitalQuants)
+  (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++ map nw [datum, general, information, input_, output_, physicalSystem, problemDescription,
     problem, section_, solutionCharacteristic, specification, system] ++ map nw [acceleration, displacement, time, velocity] ++
-  map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel])
+  map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++ unitalIdeas)
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
+  dataDefns ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
+  dataDefns ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 stdFields :: Fields

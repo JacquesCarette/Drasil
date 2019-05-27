@@ -17,6 +17,29 @@
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 </p>
+<div id="Sec:ProbDesc">
+<div class="subsection">
+<h2>Problem Description</h2>
+<p class="paragraph">
+A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
+</p>
+<div id="Sec:GoalStmt">
+<div class="subsubsection">
+<h3>Goal Statements</h3>
+<p class="paragraph">
+Given the angle and velocity of the projectile, the goal statements are:
+</p>
+<div class="list">
+<p>
+<div id="calcPosition">
+calcLandingPosition: Calculate the landing position of the projectile.
+</div>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="Sec:SolCharSpec">
 <div class="subsection">
 <h2>Solution Characteristics Specification</h2>
@@ -133,6 +156,102 @@ This section focuses on the general equations and laws that Projectile is based 
 <li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
 <li><em>t</em> is the time (s)</li>
 <li><em><b>v</b></em> is the velocity (m/s)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div id="Sec:DDs">
+<div class="subsubsection">
+<h3>Data Definitions</h3>
+<p class="paragraph">
+This section collects and defines all the data needed to build the instance models.
+</p>
+<div id="DD:velX">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">X-component of velocity</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em>v<sub>x</sub></em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">m/s</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>v<sub>x</sub> = <b>v</b>&#8239;cos(θ)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>v<sub>x</sub></em> is the x-component of velocity (m/s)
+</li>
+<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>θ</em> is the angle of projectile (&deg;)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+<div id="DD:velY">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Y-component of velocity</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em>v<sub>y</sub></em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">m/s</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>v<sub>y</sub> = <b>v</b>&#8239;sin(θ)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>v<sub>y</sub></em> is the y-component of velocity (m/s)
+</li>
+<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>θ</em> is the angle of projectile (&deg;)</li>
 </ul>
 </td>
 </tr>

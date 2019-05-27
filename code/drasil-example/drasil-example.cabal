@@ -234,8 +234,10 @@ executable projectile
   other-modules:
       Drasil.Projectile.Assumptions
     , Drasil.Projectile.Body
+    , Drasil.Projectile.DataDefs
     , Drasil.Projectile.Goals
     , Drasil.Projectile.TMods
+    , Drasil.Projectile.Unitals
     
   Build-Depends:
     base >= 4.7,

@@ -24,6 +24,15 @@
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+\subsection{Problem Description}
+\label{Sec:ProbDesc}
+A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
+\subsubsection{Goal Statements}
+\label{Sec:GoalStmt}
+Given the angle and velocity of the projectile, the goal statements are:
+\begin{itemize}
+\item[calcLandingPosition:\phantomsection\label{calcPosition}]Calculate the landing position of the projectile.
+\end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -85,6 +94,67 @@ Description & \begin{symbDescription}
               \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:velX}
+\phantomsection 
+\label{DD:velX}
+\\ \midrule \\
+Label & X-component of velocity
+\\ \midrule \\
+Symbol & ${v_{x}}$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{x}}=\mathbf{v} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{x}}$ is the x-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:velY}
+\phantomsection 
+\label{DD:velY}
+\\ \midrule \\
+Label & Y-component of velocity
+\\ \midrule \\
+Symbol & ${v_{y}}$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{y}}=\mathbf{v} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{y}}$ is the y-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --

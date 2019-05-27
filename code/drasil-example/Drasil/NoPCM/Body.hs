@@ -87,7 +87,7 @@ import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, genDefs)
-import Drasil.NoPCM.Goals (nopcmGoals)
+import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
 import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
@@ -394,7 +394,7 @@ goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
   S "the material" +:+ plural property]
 
 goalStatesList :: [Contents]
-goalStatesList = mkEnumSimpleD nopcmGoals
+goalStatesList = mkEnumSimpleD goals
 
 
 ------------------------------------------------------

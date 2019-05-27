@@ -4,7 +4,7 @@
 -- | The logic to render C++ code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (
     -- * C++ Code Configuration -- defines syntax of all C++ code
-    CppSrcCode(..), CppHdrCode(..)
+    CppSrcCode(..), CppHdrCode(..), CppCode(..), unSrc, unHdr
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label,
@@ -35,9 +35,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     dot, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
     getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
-  oneTab, oneTabbed, mapPairFst, mapPairSnd, tripFst, tripSnd, tripThird, vibcat, liftA4, liftA5, 
-  liftA6, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, liftTripFst, liftTrip)
+  oneTab, oneTabbed, mapPairFst, mapPairSnd, tripFst, tripSnd, tripThird, 
+  vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, 
+  lift3Pair, lift4Pair, liftPairFst, liftTripFst, liftTrip)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -54,8 +54,8 @@ class Pair p where
     pair :: x a -> y a -> p x y a
 
 instance Pair CppCode where
-    pfst (CPPC xa yb) = xa
-    psnd (CPPC xa yb) = yb
+    pfst (CPPC xa _) = xa
+    psnd (CPPC _ yb) = yb
     pair = CPPC
 
 unSrc :: CppCode CppSrcCode CppHdrCode a -> a
@@ -238,16 +238,16 @@ instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
     ceil v = pair (ceil $ pfst v) (ceil $ psnd v)
 
 instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
-    (?!) v = pair ((#|) $ pfst v) ((#|) $ psnd v)
+    (?!) v = pair ((?!) $ pfst v) ((?!) $ psnd v)
     (?&&) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?||) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?||) v1 v2 = pair ((?||) (pfst v1) (pfst v2)) ((?||) (psnd v1) (psnd v2))
 
-    (?<) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?<=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?>) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?>=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?==) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
-    (?!=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?<) v1 v2 = pair ((?<) (pfst v1) (pfst v2)) ((?<) (psnd v1) (psnd v2))
+    (?<=) v1 v2 = pair ((?<=) (pfst v1) (pfst v2)) ((?<=) (psnd v1) (psnd v2))
+    (?>) v1 v2 = pair ((?>) (pfst v1) (pfst v2)) ((?>) (psnd v1) (psnd v2))
+    (?>=) v1 v2 = pair ((?>=) (pfst v1) (pfst v2)) ((?>=) (psnd v1) (psnd v2))
+    (?==) v1 v2 = pair ((?==) (pfst v1) (pfst v2)) ((?==) (psnd v1) (psnd v2))
+    (?!=) v1 v2 = pair ((?!=) (pfst v1) (pfst v2)) ((?!=) (psnd v1) (psnd v2))
     
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     inlineIf b v1 v2 = pair (inlineIf (pfst b) (pfst v1) (pfst v2)) (inlineIf (psnd b) (psnd v1) (psnd v2))

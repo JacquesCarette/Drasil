@@ -7,7 +7,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
   Float, Object, String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.New (Label, FileType(..),
+import Language.Drasil.Code.Imperative.New (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 

@@ -4,9 +4,9 @@ module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs, mapPairFst, mapPairSnd, 
-    tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftA8,
-    liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
+    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs, mapPairFst, 
+    mapPairSnd, tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, 
+    liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
     liftPairFst, liftTripFst, liftTrip
 ) where
 

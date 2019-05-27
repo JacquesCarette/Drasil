@@ -78,7 +78,7 @@ auths :: Sentence
 auths = S $ manyNames authors
 
 srs :: Document
-srs = mkDoc mkSRS for' chipmunkSysInfo
+srs = mkDoc mkSRS for' sysInfo
 
 checkSi :: [UnitDefn] -- FIXME
 checkSi = collectUnits everything symbTT 
@@ -153,8 +153,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
     --FIXME: Need to be able to print defn for gravitational constant.
 
-chipmunkSysInfo :: SystemInformation
-chipmunkSysInfo = SI {
+sysInfo :: SystemInformation
+sysInfo = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
   _authors = authors,
@@ -203,7 +203,7 @@ printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
 
 chipCode :: CodeSpec
-chipCode = codeSpec chipmunkSysInfo []
+chipCode = codeSpec sysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
@@ -594,7 +594,7 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable chipmunkSysInfo
+traceTable1 = generateTraceTable sysInfo
 
 traceabilityMatricesAndGraph :: Section
 traceabilityMatricesAndGraph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,

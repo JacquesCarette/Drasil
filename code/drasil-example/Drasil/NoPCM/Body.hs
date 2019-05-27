@@ -181,8 +181,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
 refBy :: RefbyMap
 refBy = generateRefbyMap label
 
-nopcm_datadefn :: [DataDefinition]
-nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
 nopcm_insmodel :: [InstanceModel]
 nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
@@ -247,13 +247,13 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
-  this_si label refBy nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
+  this_si label refBy dataDefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
- nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
+ dataDefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation

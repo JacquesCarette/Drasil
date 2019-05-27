@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs,
+    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs, mapPairFst, mapPairSnd, 
     tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftA8,
     liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
     liftPairFst, liftTripFst, liftTrip
@@ -101,6 +101,12 @@ vibmap = vimap blank
 
 reduceLibs :: [String] -> [String] -> [String]
 reduceLibs libs modules = nub $ filter (`notElem` modules) libs 
+
+mapPairFst :: (a -> b) -> (a, c) -> (b, c)
+mapPairFst f (a, c) = (f a, c)
+
+mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
+mapPairSnd f (c, b) = (c, f b)
 
 tripFst :: (a, b, c) -> a
 tripFst (c, _, _) = c

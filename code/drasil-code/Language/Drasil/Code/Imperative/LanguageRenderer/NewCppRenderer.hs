@@ -35,7 +35,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     dot, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
     getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
-  oneTab, oneTabbed, tripFst, tripSnd, tripThird, vibcat, liftA4, liftA5, 
+  oneTab, oneTabbed, mapPairFst, mapPairSnd, tripFst, tripSnd, tripThird, vibcat, liftA4, liftA5, 
   liftA6, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
   lift4Pair, liftPairFst, liftTripFst, liftTrip)
 
@@ -74,15 +74,15 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
     top m = pair (top $ pfst m) (top $ psnd m)
     bottom = pair bottom bottom
 
-instance (Pair p, KeywordSym x, KeywordSym y) => KeywordSym (p x y) where
-    type Keyword (p x y) = Doc
+instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
+    type Keyword (p CppSrcCode CppHdrCode) = Doc
     endStatement = pair endStatement endStatement
-    endStatementLoop = pair endStatementLoop
+    endStatementLoop = pair endStatementLoop endStatementLoop
 
     include n = pair (include n) (include n)
     inherit = pair inherit inherit
 
-    list p = pair (list p) (list p)
+    list p = pair (list $ pfst p) (list $ psnd p)
     listObj = pair listObj listObj
 
     blockStart = pair blockStart blockStart
@@ -98,28 +98,28 @@ instance (Pair p, KeywordSym x, KeywordSym y) => KeywordSym (p x y) where
     
     printFunc = pair printFunc printFunc
     printLnFunc = pair printLnFunc printLnFunc
-    printFileFunc v = pair (printFileFunc v) (printFileFunc v)
-    printFileLnFunc v = pair (printFileLnFunc v) (printFileLnFunc v)
+    printFileFunc v = pair (printFileFunc $ pfst v) (printFileFunc $ psnd v)
+    printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
 
-instance (Pair p, PermanenceSym x, PermanenceSym y) => PermanenceSym (p x y) where
-    type Permanence (p x y) = Doc
+instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
+    type Permanence (p CppSrcCode CppHdrCode) = Doc
     static = pair static static
     dynamic = pair dynamic dynamic
 
-instance (Pair p, BodySym x, BodySym y) => BodySym (p x y) where
-    type Body (p x y) = Doc
-    body bs = pair (body bs) (body bs)
-    bodyStatements sts = pair (bodyStatements sts) (bodyStatements sts)
-    oneLiner s = pair (oneLiner s) (oneLiner s)
+instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
+    type Body (p CppSrcCode CppHdrCode) = Doc
+    body bs = pair (body $ map pfst bs) (body $ map psnd bs)
+    bodyStatements sts = pair (bodyStatements $ map pfst sts) (bodyStatements $ map psnd sts)
+    oneLiner s = pair (oneLiner $ pfst s) (oneLiner $ psnd s)
 
-    addComments s b = pair (addComments s b) (addComments s b)
+    addComments s b = pair (addComments s $ pfst b) (addComments s $ psnd b)
 
-instance (Pair p, BlockSym x, BlockSym y) => BlockSym (p x y) where
-    type Block (p x y) = Doc
-    block sts = pair (block sts) (block sts)
+instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
+    type Block (p CppSrcCode CppHdrCode) = Doc
+    block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
-instance (Pair p, StateTypeSym x, StateTypeSym y) => StateTypeSym (p x y) where
-    type StateType (p x y) = Doc
+instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
+    type StateType (p CppSrcCode CppHdrCode) = Doc
     bool = pair bool bool
     int = pair int int
     float = pair float float
@@ -127,21 +127,21 @@ instance (Pair p, StateTypeSym x, StateTypeSym y) => StateTypeSym (p x y) where
     string = pair string string
     infile = pair infile infile
     outfile = pair outfile outfile
-    listType p st = pair (listType p st) (listType p st)
-    intListType p = pair (intListType p) (intListType p)
-    floatListType p = pair (floatListType p) (floatListType p)
+    listType p st = pair (listType (pfst p) (pfst st)) (listType (psnd p) (psnd st))
+    intListType p = pair (intListType $ pfst p) (intListType $ psnd p)
+    floatListType p = pair (floatListType $ pfst p) (floatListType $ psnd p)
     boolListType = pair boolListType boolListType
     obj t = pair (obj t) (obj t)
     enumType t = pair (enumType t) (enumType t)
-    iterator t = pair (iterator t) (iterator t)
+    iterator t = pair (iterator $ pfst t) (iterator $ psnd t)
 
-instance (Pair p, ControlBlockSym x, ControlBlockSym y) => ControlBlockSym (p x y) where
-    runStrategy l strats rv av = pair (runStrategy l strats rv av) (runStrategy l strats rv av)
+instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
+    runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) strats) (fmap pfst rv) (fmap pfst av)) (runStrategy l (map (mapPairSnd psnd) strats) (fmap psnd rv) (fmap psnd av))
 
-    listSlice t vnew vold b e s = pair (listSlice t vnew vold b e s) (listSlice t vnew vold b e s)
+    listSlice t vnew vold b e s = pair (listSlice (pfst t) (pfst vnew) (pfst vold) (fmap pfst b) (fmap pfst e) (fmap pfst s)) (listSlice (psnd t) (psnd vnew) (psnd vold) (fmap psnd b) (fmap psnd e) (fmap psnd s))
 
-instance (Pair p, UnaryOpSym x, UnaryOpSym y) => UnaryOpSym (p x y) where
-    type UnaryOp (p x y) = Doc
+instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
+    type UnaryOp (p CppSrcCode CppHdrCode) = Doc
     notOp = pair notOp notOp
     negateOp = pair negateOp negateOp
     sqrtOp = pair sqrtOp sqrtOp
@@ -158,8 +158,8 @@ instance (Pair p, UnaryOpSym x, UnaryOpSym y) => UnaryOpSym (p x y) where
     floorOp = pair floorOp floorOp
     ceilOp = pair ceilOp ceilOp
 
-instance (Pair p, BinaryOpSym x, BinaryOpSym y) => BinaryOpSym (p x y) where
-    type BinaryOp (p x y) = Doc
+instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
+    type BinaryOp (p CppSrcCode CppHdrCode) = Doc
     equalOp = pair equalOp equalOp
     notEqualOp = pair notEqualOp notEqualOp
     greaterOp = pair greaterOp greaterOp
@@ -175,8 +175,8 @@ instance (Pair p, BinaryOpSym x, BinaryOpSym y) => BinaryOpSym (p x y) where
     andOp = pair andOp andOp
     orOp = pair orOp orOp
 
-instance (Pair p, ValueSym x, ValueSym y) => ValueSym (p x y) where
-    type Value (p x y) = (Doc, Maybe String)
+instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
+    type Value (p CppSrcCode CppHdrCode) = (Doc, Maybe String)
     litTrue = pair litTrue litTrue
     litFalse = pair litFalse litFalse
     litChar c = pair (litChar c) (litChar c)
@@ -190,7 +190,7 @@ instance (Pair p, ValueSym x, ValueSym y) => ValueSym (p x y) where
     defaultString = pair defaultString defaultString
     defaultBool = pair defaultBool defaultBool
 
-    ($->) v1 v2 = pair (($->) v1 v2) (($->) v1 v2)
+    ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
     ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
     const n = pair (const n) (const n)
@@ -200,289 +200,289 @@ instance (Pair p, ValueSym x, ValueSym y) => ValueSym (p x y) where
     arg n = pair (arg n) (arg n)
     enumElement en e = pair (enumElement en e) (enumElement en e)
     enumVar n = pair (enumVar n) (enumVar n)
-    objVar o v = pair (objVar o v) (objVar o v)
+    objVar o v = pair (objVar (pfst o) (pfst v)) (objVar (psnd o) (psnd v))
     objVarSelf n = pair (objVarSelf n) (objVarSelf n)
-    listVar n t = pair (listVar n t) (listVar n t)
-    n `listOf` t = pair (n `listOf` t) (n `listOf` t)
+    listVar n t = pair (listVar n $ pfst t) (listVar n $ psnd t)
+    n `listOf` t = pair (n `listOf` (pfst t)) (n `listOf` (psnd t))
     iterVar l = pair (iterVar l) (iterVar l)
     
     inputFunc = pair inputFunc inputFunc
     argsList = pair argsList argsList
 
-    valName v = pair (valName v) (valName v)
+    valName v = valName $ pfst v
 
-instance (Pair p, NumericExpression x, NumericExpression y) => NumericExpression (p x y) where
-    (#~) v = pair ((#-) v) ((#-) v)
-    (#/^) v = pair ((#/^) v) ((#/^) v)
-    (#|) v = pair ((#|) v) ((#|) v)
-    (#+) v1 v2 = pair ((#+) v1 v2) ((#+) v1 v2)
-    (#-) v1 v2 = pair ((#-) v1 v2) ((#-) v1 v2)
-    (#*) v1 v2 = pair ((#*) v1 v2) ((#*) v1 v2)
-    (#/) v1 v2 = pair ((#/) v1 v2) ((#/) v1 v2)
-    (#%) v1 v2 = pair ((#%) v1 v2) ((#%) v1 v2)
-    (#^) v1 v2 = pair ((#^) v1 v2) ((#^) v1 v2)
+instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
+    (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
+    (#/^) v = pair ((#/^) $ pfst v) ((#/^) $ psnd v)
+    (#|) v = pair ((#|) $ pfst v) ((#|) $ psnd v)
+    (#+) v1 v2 = pair ((#+) (pfst v1) (pfst v2)) ((#+) (psnd v1) (psnd v2))
+    (#-) v1 v2 = pair ((#-) (pfst v1) (pfst v2)) ((#-) (psnd v1) (psnd v2))
+    (#*) v1 v2 = pair ((#*) (pfst v1) (pfst v2)) ((#*) (psnd v1) (psnd v2))
+    (#/) v1 v2 = pair ((#/) (pfst v1) (pfst v2)) ((#/) (psnd v1) (psnd v2))
+    (#%) v1 v2 = pair ((#%) (pfst v1) (pfst v2)) ((#%) (psnd v1) (psnd v2))
+    (#^) v1 v2 = pair ((#^) (pfst v1) (pfst v2)) ((#^) (psnd v1) (psnd v2))
 
-    log v = pair (log v) (log v)
-    ln v = pair (ln v) (ln v)
-    exp v = pair (exp v) (exp v)
-    sin v = pair (sin v) (sin v)
-    cos v = pair (cos v) (cos v)
-    tan v = pair (tan v) (tan v)
-    csc v = pair (csc v) (csc v)
-    sec v = pair (sec v) (sec v)
-    cot v = pair (cot v) (cot v)
-    arcsin v = pair (arcsin v) (arcsin v)
-    arccos v = pair (arccos v) (arccos v)
-    arctan v = pair (arctan v) (arctan v)
-    floor v = pair (floor v) (floor v)
-    ceil v = pair (ceil v) (ceil v)
+    log v = pair (log $ pfst v) (log $ psnd v)
+    ln v = pair (ln $ pfst v) (ln $ psnd v)
+    exp v = pair (exp $ pfst v) (exp $ psnd v)
+    sin v = pair (sin $ pfst v) (sin $ psnd v)
+    cos v = pair (cos $ pfst v) (cos $ psnd v)
+    tan v = pair (tan $ pfst v) (tan $ psnd v)
+    csc v = pair (csc $ pfst v) (csc $ psnd v)
+    sec v = pair (sec $ pfst v) (sec $ psnd v)
+    cot v = pair (cot $ pfst v) (cot $ psnd v)
+    arcsin v = pair (arcsin $ pfst v) (arcsin $ psnd v)
+    arccos v = pair (arccos $ pfst v) (arccos $ psnd v)
+    arctan v = pair (arctan $ pfst v) (arctan $ psnd v)
+    floor v = pair (floor $ pfst v) (floor $ psnd v)
+    ceil v = pair (ceil $ pfst v) (ceil $ psnd v)
 
-instance (Pair p, BooleanExpression x, BooleanExpression y) => BooleanExpression (p x y) where
-    (?!) v = pair ((#|) v) ((#|) v)
-    (?&&) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?||) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
+    (?!) v = pair ((#|) $ pfst v) ((#|) $ psnd v)
+    (?&&) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?||) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
 
-    (?<) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?<=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?>) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?>=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?==) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
-    (?!=) v1 v2 = pair ((?&&) v1 v2) ((?&&) v1 v2)
+    (?<) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?<=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?>) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?>=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?==) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
+    (?!=) v1 v2 = pair ((?&&) (pfst v1) (pfst v2)) ((?&&) (psnd v1) (psnd v2))
     
-instance (Pair p, ValueExpression x, ValueExpression y) => ValueExpression (p x y) where
-    inlineIf b v1 v2 = pair (inlineIf b v1 v2) (inlineIf b v1 v2)
-    funcApp n vs = pair (funcApp n vs) (funcApp n vs)
-    selfFuncApp n vs = pair (selfFuncApp n vs) (selfFuncApp n vs)
-    extFuncApp l n vs = pair (extFuncApp l n vs) (extFuncApp l n vs)
-    stateObj t vs = pair (stateObj t vs) (stateObj t vs)
-    extStateObj l t vs = pair (extStateObj l t vs) (extStateObj l t vs)
-    listStateObj t vs = pair (listStateObj t vs) (listStateObj t vs)
+instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
+    inlineIf b v1 v2 = pair (inlineIf (pfst b) (pfst v1) (pfst v2)) (inlineIf (psnd b) (psnd v1) (psnd v2))
+    funcApp n vs = pair (funcApp n $ map pfst vs) (funcApp n $ map psnd vs)
+    selfFuncApp n vs = pair (selfFuncApp n $ map pfst vs) (selfFuncApp n $ map psnd vs)
+    extFuncApp l n vs = pair (extFuncApp l n $ map pfst vs) (extFuncApp l n $ map psnd vs)
+    stateObj t vs = pair (stateObj (pfst t) (map pfst vs)) (stateObj (psnd t) (map psnd vs))
+    extStateObj l t vs = pair (extStateObj l (pfst t) (map pfst vs)) (extStateObj l (psnd t) (map psnd vs))
+    listStateObj t vs = pair (listStateObj (pfst t) (map pfst vs)) (listStateObj (psnd t) (map psnd vs))
 
-    exists v = pair (exists v) (exists v)
-    notNull v = pair (notNull v) (notNull v)
+    exists v = pair (exists $ pfst v) (exists $ psnd v)
+    notNull v = pair (notNull $ pfst v) (notNull $ psnd v)
 
-instance (Pair p, Selector x, Selector y) => Selector (p x y) where
-    objAccess v f = pair (objAccess v f) (objAccess v f)
-    ($.) v f = pair (($.) v f) (($.) v f)
+instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
+    objAccess v f = pair (objAccess (pfst v) (pfst f)) (objAccess (psnd v) (psnd f))
+    ($.) v f = pair (($.) (pfst v) (pfst f)) (($.) (psnd v) (psnd f))
 
-    objMethodCall o f ps = pair (objMethodCall o f ps) (objMethodCall o f ps)
-    objMethodCallVoid o f = pair (objMethodCallVoid o f) (objMethodCallVoid o f)
+    objMethodCall o f ps = pair (objMethodCall (pfst o) f (map pfst ps)) (objMethodCall (psnd o) f (map psnd ps))
+    objMethodCallVoid o f = pair (objMethodCallVoid (pfst o) f) (objMethodCallVoid (psnd o) f)
 
-    selfAccess f = pair (selfAccess f) (selfAccess f)
+    selfAccess f = pair (selfAccess $ pfst f) (selfAccess $ psnd f)
 
-    listPopulateAccess v f = pair (listPopulateAccess v f) (listPopulateAccess v f)
-    listSizeAccess v = pair (listSizeAccess v) (listSizeAccess v)
+    listPopulateAccess v f = pair (listPopulateAccess (pfst v) (pfst f)) (listPopulateAccess (psnd v) (psnd f))
+    listSizeAccess v = pair (listSizeAccess $ pfst v) (listSizeAccess $ psnd v)
 
-    listIndexExists v i = pair (listIndexExists v i) (listIndexExists v i)
+    listIndexExists v i = pair (listIndexExists (pfst v) (pfst i)) (listIndexExists (psnd v) (psnd i))
     argExists i = pair (argExists i) (argExists i)
     
-    indexOf l v = pair (indexOf l v) (indexOf l v)
+    indexOf l v = pair (indexOf (pfst l) (pfst v)) (indexOf (psnd l) (psnd v))
 
-    stringEqual v1 v2 = pair (stringEqual v1 v2)
+    stringEqual v1 v2 = pair (stringEqual (pfst v1) (pfst v2)) (stringEqual (psnd v1) (psnd v2))
 
-    castObj f v = pair (castObj f v) (castObj f v)
-    castStrToFloat v = pair (castStrToFloat v) (castStrToFloat v)
+    castObj f v = pair (castObj (pfst f) (pfst v)) (castObj (psnd f) (psnd v))
+    castStrToFloat v = pair (castStrToFloat $ pfst v) (castStrToFloat $ psnd v)
 
-instance (Pair p, FunctionSym x, FunctionSym y) => FunctionSym (p x y) where
-    type Function (p x y) = Doc
-    func l vs = pair (func l vs) (func l vs)
-    cast targT srcT = pair (cast targT srcT) (cast targT srcT)
+instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
+    type Function (p CppSrcCode CppHdrCode) = Doc
+    func l vs = pair (func l $ map pfst vs) (func l $ map psnd vs)
+    cast targT srcT = pair (cast (pfst targT) (pfst srcT)) (cast (psnd targT) (psnd srcT))
     castListToInt = pair castListToInt castListToInt
     get n = pair (get n) (get n)
-    set n v = pair (set n v) (set n v)
+    set n v = pair (set n $ pfst v) (set n $ psnd v)
 
     listSize = pair listSize listSize
-    listAdd i v = pair (listAdd i v) (listAdd i v)
-    listPopulateInt v = pair (listPopulateInt v) (listPopulateInt v)
-    listPopulateFloat v = pair (listPopulateFloat v) (listPopulateFloat v)
-    listPopulateChar v = pair (listPopulateChar v) (listPopulateChar v)
-    listPopulateBool v = pair (listPopulateBool v) (listPopulateBool v)
-    listPopulateString v = pair (listPopulateString v) (listPopulateString v)
-    listAppend v = pair (listAppend v) (listAppend v)
+    listAdd i v = pair (listAdd (pfst i) (pfst v)) (listAdd (psnd i) (psnd v))
+    listPopulateInt v = pair (listPopulateInt $ pfst v) (listPopulateInt $ psnd v)
+    listPopulateFloat v = pair (listPopulateFloat $ pfst v) (listPopulateFloat $ psnd v)
+    listPopulateChar v = pair (listPopulateChar $ pfst v) (listPopulateChar $ psnd v)
+    listPopulateBool v = pair (listPopulateBool $ pfst v) (listPopulateBool $ psnd v)
+    listPopulateString v = pair (listPopulateString $ pfst v) (listPopulateString $ psnd v)
+    listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
     listExtendInt = pair listExtendInt listExtendInt
     listExtendFloat = pair listExtendFloat listExtendFloat
     listExtendChar = pair listExtendChar listExtendChar
     listExtendBool = pair listExtendBool listExtendBool
     listExtendString = pair listExtendString listExtendString
-    listExtendList i t = pair (listExtendList i t) (listExtendList i t)
+    listExtendList i t = pair (listExtendList i $ pfst t) (listExtendList i $ psnd t)
 
     iterBegin = pair iterBegin iterBegin
     iterEnd = pair iterEnd iterEnd
 
-instance (Pair p, SelectorFunction x, SelectorFunction y) => SelectorFunction (p x y) where
-    listAccess v = pair (listAccess v) (listAccess v)
-    listSet i v = pair (listSet i v) (listSet i v)
+instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
+    listAccess v = pair (listAccess $ pfst v) (listAccess $ psnd v)
+    listSet i v = pair (listSet (pfst i) (pfst v)) (listSet (psnd i) (psnd v))
 
-    listAccessEnum t v = pair (listAccessEnum t v) (listAccessEnum t v)
-    listSetEnum t i v = pair (listSetEnum t i v) (listSetEnum t i v)
+    listAccessEnum t v = pair (listAccessEnum (pfst t) (pfst v)) (listAccessEnum (psnd t) (psnd v))
+    listSetEnum t i v = pair (listSetEnum (pfst t) (pfst i) (pfst v)) (listSetEnum (psnd t) (psnd i) (psnd v))
 
     at l = pair (at l) (at l)
 
-instance (Pair p, StatementSym x, StatementSym y) => StatementSym (p x y) where
-    type Statement (p x y) = (Doc, Terminator)
-    assign v1 v2 = pair (assign v1 v2) (assign v1 v2)
-    assignToListIndex lst index v = pair (assignToListIndex lst index v) (assignToListIndex lst index v)
-    (&=) v1 v2 = pair ((&=) v1 v2) ((&=) v1 v2)
-    (&.=) l v = pair ((&.=) l v) ((&.=) l v)
-    (&=.) v l = pair ((&=.) v l) ((&=.) v l)
-    (&-=) v1 v2 = pair ((&-=) v1 v2) ((&-=) v1 v2)
-    (&.-=) l v = pair ((&.-=) l v) ((&.-=) l v)
-    (&+=) v1 v2 = pair ((&+=) v1 v2) ((&+=) v1 v2)
-    (&.+=) l v = pair ((&.+=) l v) ((&.+=) l v)
-    (&++) v = pair ((&++) v) ((&++) v)
+instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
+    type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
+    assign v1 v2 = pair (assign (pfst v1) (pfst v2)) (assign (psnd v1) (psnd v2))
+    assignToListIndex lst index v = pair (assignToListIndex (pfst lst) (pfst index) (pfst v)) (assignToListIndex (psnd lst) (psnd index) (psnd v))
+    (&=) v1 v2 = pair ((&=) (pfst v1) (pfst v2)) ((&=) (psnd v1) (psnd v2))
+    (&.=) l v = pair ((&.=) l $ pfst v) ((&.=) l $ psnd v)
+    (&=.) v l = pair ((&=.) (pfst v) l) ((&=.) (psnd v) l)
+    (&-=) v1 v2 = pair ((&-=) (pfst v1) (pfst v2)) ((&-=) (psnd v1) (psnd v2))
+    (&.-=) l v = pair ((&.-=) l $ pfst v) ((&.-=) l $ psnd v)
+    (&+=) v1 v2 = pair ((&+=) (pfst v1) (pfst v2)) ((&+=) (psnd v1) (psnd v2))
+    (&.+=) l v = pair ((&.+=) l $ pfst v) ((&.+=) l $ psnd v)
+    (&++) v = pair ((&++) $ pfst v) ((&++) $ psnd v)
     (&.++) l = pair ((&.++) l) ((&.++) l)
-    (&~-) v = pair ((&~-) v) ((&~-) v)
+    (&~-) v = pair ((&~-) $ pfst v) ((&~-) $ psnd v)
     (&.~-) l = pair ((&.~-) l) ((&.~-) l)
 
-    varDec l t = pair (varDec l t) (varDec l t)
-    varDecDef l t v = pair (varDecDef l t v) (varDecDef l t v)
-    listDec l n t = pair (listDec l n t) (listDec l n t)
-    listDecDef l t vs = pair (listDecDef l t vs) (listDecDef l t vs)
-    objDecDef l t v = pair (objDecDef l t v) (objDecDef l t v)
-    objDecNew l t vs = pair (objDecNew l t vs) (objDecNew l t vs)
-    extObjDecNew l lib t vs = pair (extObjDecNew l lib t vs) (extObjDecNew l lib t vs)
-    objDecNewVoid l t = pair (objDecNewVoid l t) (objDecNewVoid l t)
-    extObjDecNewVoid l lib t = pair (extObjDecNewVoid l lib t) (extObjDecNewVoid l lib t)
-    constDecDef l t v = pair (constDecDef l t v) (constDecDef l t v)
+    varDec l t = pair (varDec l $ pfst t) (varDec l $ psnd t)
+    varDecDef l t v = pair (varDecDef l (pfst t) (pfst v)) (varDecDef l (psnd t) (psnd v))
+    listDec l n t = pair (listDec l n $ pfst t) (listDec l n $ psnd t)
+    listDecDef l t vs = pair (listDecDef l (pfst t) (map pfst vs)) (listDecDef l (psnd t) (map psnd vs))
+    objDecDef l t v = pair (objDecDef l (pfst t) (pfst v)) (objDecDef l (psnd t) (psnd v))
+    objDecNew l t vs = pair (objDecNew l (pfst t) (map pfst vs)) (objDecNew l (psnd t) (map psnd vs))
+    extObjDecNew l lib t vs = pair (extObjDecNew l lib (pfst t) (map pfst vs)) (extObjDecNew l lib (psnd t) (map psnd vs))
+    objDecNewVoid l t = pair (objDecNewVoid l $ pfst t) (objDecNewVoid l $ psnd t)
+    extObjDecNewVoid l lib t = pair (extObjDecNewVoid l lib $ pfst t) (extObjDecNewVoid l lib $ psnd t)
+    constDecDef l t v = pair (constDecDef l (pfst t) (pfst v)) (constDecDef l (psnd t) (psnd v))
 
-    print t v = pair (print t v) (print t v)
-    printLn t v = pair (printLn t v) (printLn t v)
+    print t v = pair (print (pfst t) (pfst v)) (print (psnd t) (psnd v))
+    printLn t v = pair (printLn (pfst t) (pfst v)) (printLn (psnd t) (psnd v))
     printStr s = pair (printStr s) (printStr s)
     printStrLn s = pair (printStrLn s) (printStrLn s)
 
-    printFile f t v = pair (printFile f t v) (printFile f t v)
-    printFileLn f t v = pair (printFileLn f t v) (printFileLn f t v)
-    printFileStr f s = pair (printFileStr f s) (printFileStr f s)
-    printFileStrLn f s = pair (printFileStrLn f s) (printFileStrLn f s)
+    printFile f t v = pair (printFile (pfst f) (pfst t) (pfst v)) (printFile (psnd f) (psnd t) (psnd v))
+    printFileLn f t v = pair (printFileLn (pfst f) (pfst t) (pfst v)) (printFileLn (psnd f) (psnd t) (psnd v))
+    printFileStr f s = pair (printFileStr (pfst f) s) (printFileStr (psnd f) s)
+    printFileStrLn f s = pair (printFileStrLn (pfst f) s) (printFileStrLn (psnd f) s)
 
-    printList t v = pair (printList t v) (printList t v)
-    printLnList t v = pair (printLnList t v) (printLnList t v)
-    printFileList f t v = pair (printFileList f t v) (printFileList f t v)
-    printFileLnList f t v = pair (printFileLnList f t v) (printFileLnList f t v)
+    printList t v = pair (printList (pfst t) (pfst v)) (printList (psnd t) (psnd v))
+    printLnList t v = pair (printLnList (pfst t) (pfst v)) (printLnList (psnd t) (psnd v))
+    printFileList f t v = pair (printFileList (pfst f) (pfst t) (pfst v)) (printFileList (psnd f) (psnd t) (psnd v))
+    printFileLnList f t v = pair (printFileLnList (pfst f) (pfst t) (pfst v)) (printFileLnList (psnd f) (psnd t) (psnd v))
 
-    getIntInput v = pair (getIntInput v) (getIntInput v)
-    getFloatInput v = pair (getFloatInput v) (getFloatInput v)
-    getBoolInput v = pair (getBoolInput v) (getBoolInput v)
-    getStringInput v = pair (getStringInput v) (getStringInput v)
-    getCharInput v = pair (getCharInput v) (getCharInput v)
+    getIntInput v = pair (getIntInput $ pfst v) (getIntInput $ psnd v)
+    getFloatInput v = pair (getFloatInput $ pfst v) (getFloatInput $ psnd v)
+    getBoolInput v = pair (getBoolInput $ pfst v) (getBoolInput $ psnd v)
+    getStringInput v = pair (getStringInput $ pfst v) (getStringInput $ psnd v)
+    getCharInput v = pair (getCharInput $ pfst v) (getCharInput $ psnd v)
     discardInput = pair discardInput discardInput
 
-    getIntFileInput f v = pair (getIntFileInput f v) (getIntFileInput f v)
-    getFloatFileInput f v = pair (getFloatFileInput f v) (getFloatFileInput f v)
-    getBoolFileInput f v = pair (getBoolFileInput f v) (getBoolFileInput f v)
-    getStringFileInput f v = pair (getStringFileInput f v) (getStringFileInput f v)
-    getCharFileInput f v = pair (getCharFileInput f v) (getCharFileInput f v)
-    discardFileInput f = pair discardFileInput discardFileInput
+    getIntFileInput f v = pair (getIntFileInput (pfst f) (pfst v)) (getIntFileInput (psnd f) (psnd v))
+    getFloatFileInput f v = pair (getFloatFileInput (pfst f) (pfst v)) (getFloatFileInput (psnd f) (psnd v))
+    getBoolFileInput f v = pair (getBoolFileInput (pfst f) (pfst v)) (getBoolFileInput (psnd f) (psnd v))
+    getStringFileInput f v = pair (getStringFileInput (pfst f) (pfst v)) (getStringFileInput (psnd f) (psnd v))
+    getCharFileInput f v = pair (getCharFileInput (pfst f) (pfst v)) (getCharFileInput (psnd f) (psnd v))
+    discardFileInput f = pair (discardFileInput $ pfst f) (discardFileInput $ psnd f)
 
-    openFileR f n = pair (openFileR f n) (openFileR f n)
-    openFileW f n = pair (openFileW f n) (openFileW f n)
-    openFileA f n = pair (openFileA f n) (openFileA f n)
-    closeFile f = pair (closeFile f) (closeFile f)
+    openFileR f n = pair (openFileR (pfst f) (pfst n)) (openFileR (psnd f) (psnd n))
+    openFileW f n = pair (openFileW (pfst f) (pfst n)) (openFileW (psnd f) (psnd n))
+    openFileA f n = pair (openFileA (pfst f) (pfst n)) (openFileA (psnd f) (psnd n))
+    closeFile f = pair (closeFile $ pfst f) (closeFile $ psnd f)
 
-    getFileInputLine f v = pair (getFileInputLine f v) (getFileInputLine f v)
-    discardFileLine f = pair (discardFileLine f) (discardFileLine f)
-    stringSplit d vnew s = pair (stringSplit d vnew s) (stringSplit d vnew s)
+    getFileInputLine f v = pair (getFileInputLine (pfst f) (pfst v)) (getFileInputLine (psnd f) (psnd v))
+    discardFileLine f = pair (discardFileLine $ pfst f) (discardFileLine $ psnd f)
+    stringSplit d vnew s = pair (stringSplit d (pfst vnew) (pfst s)) (stringSplit d (psnd vnew) (psnd s))
 
     break = pair break break
     continue = pair continue continue
 
-    returnState v = pair (returnState v) (returnState v)
+    returnState v = pair (returnState $ pfst v) (returnState $ psnd v)
     returnVar l = pair (returnVar l) (returnVar l)
 
-    valState v = pair (valState v) (valState v)
+    valState v = pair (valState $ pfst v) (valState $ psnd v)
 
     comment cmt = pair (comment cmt) (comment cmt)
 
-    free v = pair (free v) (free v)
+    free v = pair (free $ pfst v) (free $ psnd v)
 
     throw errMsg = pair (throw errMsg) (throw errMsg)
 
     initState fsmName initialState = pair (initState fsmName initialState) (initState fsmName initialState)
     changeState fsmName toState = pair (changeState fsmName toState) (changeState fsmName toState)
 
-    initObserverList t vs = pair (initObserverList t vs) (initObserverList t vs)
-    addObserver t o = pair (addObserver t o) (addObserver t o)
+    initObserverList t vs = pair (initObserverList (pfst t) (map pfst vs)) (initObserverList (psnd t) (map psnd vs))
+    addObserver t o = pair (addObserver (pfst t) (pfst o)) (addObserver (psnd t) (psnd o))
 
-    state s = pair (state s) (state s)
-    loopState s = pair (loopState s) (loopState s)
-    multi ss = pair (multi ss) (multi ss)
+    state s = pair (state $ pfst s) (state $ psnd s)
+    loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
+    multi ss = pair (multi $ map pfst ss) (multi $ map psnd ss)
 
-instance (Pair p, ControlStatementSym x, ControlStatementSym y) => ControlStatementSym (p x y) where
-    ifCond bs b = pair (ifCond bs b) (ifCond bs b)
-    ifNoElse bs = pair (ifNoElse bs) (ifNoElse bs)
-    switch v cs c = pair (switch v cs c) (switch v cs c)
-    switchAsIf v cs = pair (switchAsIf v cs) (switchAsIf v cs)
+instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
+    ifCond bs b = pair (ifCond (map ((mapPairFst pfst) . (mapPairSnd pfst)) bs) (pfst b)) (ifCond (map ((mapPairFst psnd) . (mapPairSnd psnd)) bs) (psnd b))
+    ifNoElse bs = pair (ifNoElse $ map ((mapPairFst pfst) . (mapPairSnd pfst)) bs) (ifNoElse $ map ((mapPairFst psnd) . (mapPairSnd psnd)) bs)
+    switch v cs c = pair (switch (pfst v) (map ((mapPairFst pfst) . (mapPairSnd pfst)) cs) (pfst c)) (switch (psnd v) (map ((mapPairFst psnd) . (mapPairSnd psnd)) cs) (psnd c))
+    switchAsIf v cs b = pair (switchAsIf (pfst v) (map ((mapPairFst pfst) . (mapPairSnd pfst)) cs) (pfst b)) (switchAsIf (psnd v) (map ((mapPairFst psnd) . (mapPairSnd psnd)) cs) (psnd b))
 
-    ifExists cond ifBody elseBody = pair (ifExists cond ifBody elseBody) (ifExists cond ifBody elseBody)
+    ifExists cond ifBody elseBody = pair (ifExists (pfst cond) (pfst ifBody) (pfst elseBody)) (ifExists (psnd cond) (psnd ifBody) (psnd elseBody))
 
-    for sInit vGuard sUpdate b = pair (for sInit vGuard sUpdate b) (for sInit vGuard sUpdate b)
-    forRange i initv finalv stepv b = pair (forRange i initv finalv stepv b) (forRange i initv finalv stepv b)
-    forEach l t v b = pair (forEach l t v b) (forEach l t v b)
-    while v b = pair (while v b) (while v b)
+    for sInit vGuard sUpdate b = pair (for (pfst sInit) (pfst vGuard) (pfst sUpdate) (pfst b)) (for (psnd sInit) (psnd vGuard) (psnd sUpdate) (psnd b))
+    forRange i initv finalv stepv b = pair (forRange i (pfst initv) (pfst finalv) (pfst stepv) (pfst b)) (forRange i (psnd initv) (psnd finalv) (psnd stepv) (psnd b))
+    forEach l t v b = pair (forEach l (pfst t) (pfst v) (pfst b)) (forEach l (psnd t) (psnd v) (psnd b))
+    while v b = pair (while (pfst v) (pfst b)) (while (psnd v) (psnd b))
 
-    tryCatch tb cb = pair (tryCatch tb cb) (tryCatch tb cb)
+    tryCatch tb cb = pair (tryCatch (pfst tb) (pfst cb)) (tryCatch (psnd tb) (psnd cb))
 
-    checkState l vs b = pair (checkState l vs b) (checkState l vs b)
+    checkState l vs b = pair (checkState l (map ((mapPairFst pfst) . (mapPairSnd pfst)) vs) (pfst b)) (checkState l (map ((mapPairFst psnd) . (mapPairSnd psnd)) vs) (psnd b))
 
-    notifyObservers fn t ps = pair (notifyObservers fn t ps) (notifyObservers fn t ps)
+    notifyObservers fn t ps = pair (notifyObservers fn (pfst t) (map pfst ps)) (notifyObservers fn (psnd t) (map psnd ps))
 
-    getFileInputAll f v = pair (getFileInputAll f v) (getFileInputAll f v)
+    getFileInputAll f v = pair (getFileInputAll (pfst f) (pfst v)) (getFileInputAll (psnd f) (psnd v))
 
-instance (Pair p, ScopeSym x, ScopeSym y) => ScopeSym (p x y) where
-    type Scope (p x y) = Doc
+instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
+    type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
     private = pair private private
     public = pair public public
 
-    includeScope s = pair (includeScope s) (includeScope s)
+    includeScope s = pair (includeScope $ pfst s) (includeScope $ psnd s)
 
-instance (Pair p, MethodTypeSym x, MethodTypeSym y) => MethodTypeSym (p x y) where
-    type MethodType (p x y) = Doc
-    mState t = pair (mState t) (mState t)
+instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
+    type MethodType (p CppSrcCode CppHdrCode) = Doc
+    mState t = pair (mState $ pfst t) (mState $ psnd t)
     void = pair void void
     construct n = pair (construct n) (construct n)
 
-instance (Pair p, ParameterSym x, ParameterSym y) => ParameterSym (p x y) where
-    type Parameter (p x y) = Doc
-    stateParam n t = CPPC (unCPPSC $ stateParam n t) (unCPPHC $ stateParam n t)
-    pointerParam n t = CPPC (unCPPSC $ pointerParam n t) (unCPPHC $ pointerParam n t)
+instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
+    type Parameter (p CppSrcCode CppHdrCode) = Doc
+    stateParam n t = pair (stateParam n $ pfst t) (stateParam n $ psnd t)
+    pointerParam n t = pair (pointerParam n $ pfst t) (pointerParam n $ psnd t)
 
-instance (Pair p, MethodSym x, MethodSym y) => MethodSym (p x y) where
+instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     -- Bool is True if the method is a main method, False otherwise
-    type Method (p x y) = (Doc, Bool)
-    method n c s p t ps b = pair (method n c s p t ps b) (method n c s p t ps b)
-    getMethod n c t = pair (getMethod n c t) (getMethod n c t) 
-    setMethod setLbl c paramLbl t = pair (setMethod setLbl c paramLbl t) (setMethod setLbl c paramLbl t)
-    mainMethod l b = pair (mainMethod l b) (mainMethod l b)
-    privMethod n c t ps b = pair (privMethod n c t ps b) (privMethod n c t ps b)
-    pubMethod n c t ps b = pair (pubMethod n c t ps b) (pubMethod n c t ps b)
-    constructor n ps b = pair (constructor n ps b) (constructor n ps b)
-    destructor n vs = pair (destructor n vs) (destructor n vs)
+    type Method (p CppSrcCode CppHdrCode) = (Doc, Bool, ScopeTag)
+    method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
+    getMethod n c t = pair (getMethod n c $ pfst t) (getMethod n c $ psnd t) 
+    setMethod setLbl c paramLbl t = pair (setMethod setLbl c paramLbl $ pfst t) (setMethod setLbl c paramLbl $ psnd t)
+    mainMethod l b = pair (mainMethod l $ pfst b) (mainMethod l $ psnd b)
+    privMethod n c t ps b = pair (privMethod n c (pfst t) (map pfst ps) (pfst b)) (privMethod n c (psnd t) (map psnd ps) (psnd b))
+    pubMethod n c t ps b = pair (pubMethod n c (pfst t) (map pfst ps) (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
+    constructor n ps b = pair (constructor n (map pfst ps) (pfst b)) (constructor n (map psnd ps) (psnd b))
+    destructor n vs = pair (destructor n $ map pfst vs) (destructor n $ map psnd vs)
 
-    function n s p t ps b = pair (function n s p t ps b) (function n s p t ps b)
+    function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-instance (Pair p, StateVarSym x, StateVarSym y) => StateVarSym (p x y) where
+instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
     -- (Doc, Bool) is the corresponding destructor code for the stateVar
-    type StateVar (p x y) = (Doc, (Doc, Terminator))
-    stateVar del l s p t = pair (stateVar del l s p t) (stateVar del l s p t)
-    privMVar del l t = pair (privMVar del l t) (privMVar del l t)
-    pubMVar del l t = pair (pubMVar del l t) (pubMVar del l t)
-    pubGVar del l t = pair (pubGVar del l t) (pubGVar del l t)
-    listStateVar del l s p t = pair (listStateVar del l s p t) (listStateVar del l s p t)
+    type StateVar (p CppSrcCode CppHdrCode) = (Doc, (Doc, Terminator), ScopeTag)
+    stateVar del l s p t = pair (stateVar del l (pfst s) (pfst p) (pfst t)) (stateVar del l (psnd s) (psnd p) (psnd t))
+    privMVar del l t = pair (privMVar del l $ pfst t) (privMVar del l $ psnd t)
+    pubMVar del l t = pair (pubMVar del l $ pfst t) (pubMVar del l $ psnd t)
+    pubGVar del l t = pair (pubGVar del l $ pfst t) (pubGVar del l $ psnd t)
+    listStateVar del l s p t = pair (listStateVar del l (pfst s) (pfst p) (pfst t)) (listStateVar del l (psnd s) (psnd p) (psnd t))
 
-instance (Pair p, ClassSym x, ClassSym y) => ClassSym (p x y) where
+instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
     -- Bool is True if the class is a main class, False otherwise
-    type Class (p x y) = (Doc, Bool)
-    buildClass n p s vs fs = pair (buildClass n p s vs fs) (buildClass n p s vs fs)
-    enum l ls s = pair (enum l ls s) (enum l ls s)
-    mainClass l vs fs = pair (mainClass l vs fs) (mainClass l vs fs)
-    privClass n p vs fs = pair (privClass n p vs fs) (privClass n p vs fs)
-    pubClass n p vs fs = pair (pubClass n p vs fs) (pubClass n p vs fs)
+    type Class (p CppSrcCode CppHdrCode) = (Doc, Bool)
+    buildClass n p s vs fs = pair (buildClass n p (pfst s) (map pfst vs) (map pfst fs)) (buildClass n p (psnd s) (map psnd vs) (map psnd fs))
+    enum l ls s = pair (enum l ls $ pfst s) (enum l ls $ psnd s)
+    mainClass l vs fs = pair (mainClass l (map pfst vs) (map pfst fs)) (mainClass l (map psnd vs) (map psnd fs))
+    privClass n p vs fs = pair (privClass n p (map pfst vs) (map pfst fs)) (privClass n p (map psnd vs) (map psnd fs))
+    pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) (pubClass n p (map psnd vs) (map psnd fs))
 
-instance (Pair p, ModuleSym x, ModuleSym y) => ModuleSym (p x y) where
+instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
     -- Label is module name
     -- Bool is True if the method is a main method, False otherwise
-    type Module (p x y) = (Doc, Label, Bool)
-    buildModule n l vs ms cs = pair (buildModule n l vs ms cs) (buildModule n l vs ms cs)
+    type Module (p CppSrcCode CppHdrCode) = (Doc, Label, Bool)
+    buildModule n l vs ms cs = pair (buildModule n l (map pfst vs) (map pfst ms) (map pfst cs)) (buildModule n l (map psnd vs) (map psnd ms) (map psnd cs))
 
 -----------------
 -- Source File --

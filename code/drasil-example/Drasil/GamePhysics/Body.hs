@@ -169,14 +169,14 @@ sysInfo = SI {
   _constants = [],
   _sysinfodb = everything,
   _usedinfodb = usedDB,
-   refdb = cpRefDB
+   refdb = refDB
 }
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
-cpRefDB :: ReferenceDB
-cpRefDB = rdb cpCitations concIns
+refDB :: ReferenceDB
+refDB = rdb cpCitations concIns
 
 --FIXME: All named ideas, not just acronyms.
 

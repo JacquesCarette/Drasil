@@ -23,7 +23,7 @@ import Drasil.SWHS.Concepts (water)
 import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
 
 symbolsAll :: [QuantityDict]
 symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
@@ -32,8 +32,8 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 
 -- Symbols with Units --
 
-swhsUnits :: [UnitaryConceptDict]
-swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
+units :: [UnitaryConceptDict]
+units = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   htCap_S, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,

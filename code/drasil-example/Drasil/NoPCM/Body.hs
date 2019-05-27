@@ -100,7 +100,7 @@ checkSi = collectUnits nopcm_SymbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -114,8 +114,8 @@ symbolsAll = map qw symbols ++ (map qw specParamValList) ++
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
-nopcm_Units :: [UnitaryConceptDict]
-nopcm_Units = map ucw [density, tau, in_SA, out_SA,
+units :: [UnitaryConceptDict]
+units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,

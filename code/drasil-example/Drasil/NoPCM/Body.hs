@@ -191,8 +191,8 @@ iMods = getTraceMapFromIM $ getSCSSub mkSRS
 genDef :: [GenDefn]
 genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-nopcm_theory :: [TheoryModel]
-nopcm_theory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 nopcm_concins :: [ConceptInstance]
 nopcm_concins =
@@ -248,13 +248,13 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
-  this_si label refBy dataDefn iMods genDef nopcm_theory
+  this_si label refBy dataDefn iMods genDef theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
- dataDefn iMods genDef nopcm_theory nopcm_concins
+ dataDefn iMods genDef theory nopcm_concins
  nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation

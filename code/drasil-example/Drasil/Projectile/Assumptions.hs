@@ -1,4 +1,4 @@
-module Drasil.Projectile.Assumptions (assumptions) where
+module Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, assumptions, equalHeights) where
 
 import Language.Drasil
 
@@ -24,7 +24,7 @@ twoDMotionDesc :: Sentence
 twoDMotionDesc = S "The projectile motion is in" +:+. getAcc twoD
 
 pointMassDesc :: Sentence
-pointMassDesc = S "The object is a point" +:+. phrase mass
+pointMassDesc = S "The projectile is a point" +:+. phrase mass
 
 equalHeightsDesc :: Sentence
 equalHeightsDesc = S "The heights of the launcher and target are equal."
@@ -40,4 +40,4 @@ ignoreCurvatureDesc = S "The effects of the Earth's curvature are ignored."
 
 freeFlightDesc :: Sentence
 freeFlightDesc = S "The flight is free; there are no" +:+ plural collision +:+.
-                 S "during the trajectory of the object"
+                 S "during the trajectory of the projectile"

@@ -3,18 +3,18 @@ The coordinate system used is set up so that the positive x-direction is the dir
 
 Physical System Description
 Elements:
-	1) The object
+	1) The projectile
 	2) The launcher
 	3) The target
 
 Assumptions
 1) The projectile motion is in 2D.
-2) The object is a point mass.
+2) The projectile is a point mass.
 3) The heights of the launcher and target are equal.
 4) Acceleration is zero in the x-direction.
 5) Acceleration in the y-direction is only caused by gravity.
 6) The effects of the Earth's curvature are ignored.
-7) The flight is free; there are no collisions during the trajectory of the object.
+7) The flight is free; there are no collisions during the trajectory of the projectile
 
 Goal Statments
 1) Calculate the landing position of the projectile.
@@ -25,7 +25,7 @@ Theoretical Models
 
 General Definitions
 1) v_f = v_i + a*t
-2) t = 2*v_i_y/(|a|) (from GD1)
+2) t = 2*v_i*sin(θ)/(|a|) (from GD1 and DD2)
 	- v at max height = 0
 	- t at max height = t_total/2 (from A3)
 3) d = v_i_x*t + a_x*(t^2)/2 (from A5)

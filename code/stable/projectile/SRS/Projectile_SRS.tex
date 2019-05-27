@@ -41,12 +41,12 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is in 2D.
-\item[pointMass:\phantomsection\label{pointMass}]The object is a point mass.
-\item[equalHeights:\phantomsection\label{equalHeights}]The heights of the launcher and target are equal.
-\item[accelZeroX:\phantomsection\label{accelZeroX}]Acceleration is zero in the x-direction.
-\item[accelGravityY:\phantomsection\label{accelGravityY}]Acceleration in the y-direction is only caused by gravity.
+\item[pointMass:\phantomsection\label{pointMass}]The projectile is a point mass.
+\item[equalHeights:\phantomsection\label{equalHeights}]The heights of the launcher and target are equal. \hyperref[GD:airTime]{GD: airTime}.
+\item[accelZeroX:\phantomsection\label{accelZeroX}]Acceleration is zero in the x-direction. \hyperref[GD:distanceRefined]{GD: distanceRefined}.
+\item[accelGravityY:\phantomsection\label{accelGravityY}]Acceleration in the y-direction is only caused by gravity. \hyperref[GD:distance]{GD: distance}.
 \item[ignoreCurvature:\phantomsection\label{ignoreCurvature}]The effects of the Earth's curvature are ignored.
-\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the object.
+\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -101,6 +101,131 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:finalVelocity}
+\phantomsection 
+\label{GD:finalVelocity}
+\\ \midrule \\
+Label & Final velocity
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{f}}={v_{i}}+\mathbf{a} t
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{f}}$ is the final velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & \hyperref[GD:airTime]{GD: airTime}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:airTime}
+\phantomsection 
+\label{GD:airTime}
+\\ \midrule \\
+Label & Air time
+\\ \midrule \\
+Units & s
+\\ \midrule \\
+Equation & \begin{displaymath}
+           t=\frac{2 {v_{i}} \sin\left(θ\right)}{|\mathbf{a}|}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$t$ is the time (s)}
+              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Air time is derived from \hyperref[DD:velY]{DD: velY}. and \hyperref[GD:finalVelocity]{GD: finalVelocity} It also comes from the fact that the velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:distance}
+\phantomsection 
+\label{GD:distance}
+\\ \midrule \\
+Label & Distance
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           r={v_{i}} t+\frac{\mathbf{a} t^{2}}{2}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$r$ is the distance (m)}
+              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[accelGravityY]{A: accelGravityY}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:distanceRefined}
+\phantomsection 
+\label{GD:distanceRefined}
+\\ \midrule \\
+Label & Distance (refined)
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           r=\frac{2 {v_{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{|\mathbf{a}|}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$r$ is the distance (m)}
+              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[accelZeroX]{A: accelZeroX}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Distance (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -159,7 +284,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:airTime]{GD: airTime}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \end{document}

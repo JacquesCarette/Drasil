@@ -7,15 +7,15 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
 
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Theory.Drasil (DataDefinition, InstanceModel)
 
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc, DocSection(SSDSec), Field(..), Fields,
   InclUnits(IncludeUnits), ProblemDescription(PDProg),
-  SCSSub(Assumptions, DDs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  SCSSub(Assumptions, DDs, GDs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   Verbosity(Verbose),
-  generateTraceMap, generateTraceMap', getSCSSub, getTraceMapFromTM, goalStmtF, mkDoc, mkEnumSimpleD)
+  generateTraceMap, generateTraceMap', goalStmtF, mkDoc, mkEnumSimpleD)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumption, datum, general, goalStmt, information, input_, output_,
+import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, datum, general, goalStmt, information, input_, output_,
   physicalSystem, problemDescription, problem,  section_,
   solutionCharacteristic, specification, srs, system)
 import Data.Drasil.Concepts.Math (angle, equation)
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (collision, position, twoD)
 import Data.Drasil.Concepts.Software (program)
 
-import Data.Drasil.Quantities.Physics (acceleration, displacement, time, velocity)
+import Data.Drasil.Quantities.Physics (acceleration, displacement, distance, time, velocity)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 import Data.Drasil.People (samCrawford)
@@ -34,6 +34,7 @@ import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.DataDefs (dataDefns)
+import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
@@ -49,6 +50,7 @@ mkSRS = [
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
+        , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         ]
       ]
@@ -73,21 +75,20 @@ systInfo = SI {
    refdb       = refDB
 }
 
-theoryModels :: [TheoryModel]
-theoryModels = getTraceMapFromTM $ getSCSSub mkSRS
-
 symbMap :: ChunkDB
-symbMap = cdb (map qw [acceleration, displacement, time, velocity] ++ unitalQuants)
-  (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++ map nw [datum, general, information, input_, output_, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification, system] ++ map nw [acceleration, displacement, time, velocity] ++
+symbMap = cdb (map qw [acceleration, displacement, distance, time, velocity] ++ unitalQuants)
+  (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++
+    map nw [datum, general, information, input_, output_, physicalSystem, problemDescription,
+    problem, section_, solutionCharacteristic, specification, system] ++
+    map nw [acceleration, displacement, distance, time, velocity] ++
   map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++ unitalIdeas)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  dataDefns ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
+  [assumpDom] ([] :: [UnitDefn]) label refBy
+  dataDefns ([] :: [InstanceModel]) genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  dataDefns ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
+usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) [assumpDom] ([] :: [UnitDefn]) label refBy
+  dataDefns ([] :: [InstanceModel]) genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 stdFields :: Fields

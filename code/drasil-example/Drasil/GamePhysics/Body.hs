@@ -66,7 +66,7 @@ import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints, defSymbols)
+  inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -102,7 +102,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+            [inDataConstTbl inputConstraints, outDataConstTbl cpOutputConstraints]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -165,7 +165,7 @@ sysInfo = SI {
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = blockQDefs,
-  _constraints = cpInputConstraints,
+  _constraints = inputConstraints,
   _constants = [],
   _sysinfodb = everything,
   _usedinfodb = usedDB,

@@ -19,7 +19,7 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 import Control.Lens((^.))
 
 defSymbols :: [DefinedQuantityDict]
-defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr cpInputConstraints) ++
+defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr inputConstraints) ++
   (map dqdWr cpOutputConstraints)
 
 unitSymbs :: [UnitaryConceptDict]
@@ -41,7 +41,7 @@ symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
 symbols = (map qw unitalChunks) ++ 
   (map qw unitless) ++ 
-  (map qw cpInputConstraints)
+  (map qw inputConstraints)
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
@@ -268,8 +268,8 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
 
-cpInputConstraints :: [UncertQ]
-cpInputConstraints = map (`uq` defaultUncrt)
+inputConstraints :: [UncertQ]
+inputConstraints = map (`uq` defaultUncrt)
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 

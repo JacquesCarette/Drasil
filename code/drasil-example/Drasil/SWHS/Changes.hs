@@ -15,14 +15,11 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat,
   thermalConductor)
 import Data.Drasil.Quantities.Physics (energy)
 
-import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
+import Data.Drasil.SentenceStructures (chgsStart, foldlSent, sAnd, ofThe)
 
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
-
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-chgsStart a = sDash (makeRef2S a)
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,

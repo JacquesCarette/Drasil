@@ -11,7 +11,7 @@ module Data.Drasil.SentenceStructures
   , follows
   , getTandS, getTDS
   , eqN
-  , displayConstrntsAsSet
+  , displayConstrntsAsSet, chgsStart
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -191,3 +191,7 @@ eqN n = at_start equation +:+ sParen (S $ show n)
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
+
+--Produces a common beginning of a likely change of the form "reference - sentence"
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+chgsStart = sDash . makeRef2S

@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (chgsStart, foldlSent)
 
 import Drasil.NoPCM.Assumptions(assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
@@ -12,9 +12,6 @@ import Drasil.SWHS.Concepts (water)
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
-
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-chgsStart a = sDash (makeRef2S a)
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgDT]

@@ -99,8 +99,8 @@ checkSi :: [UnitDefn]
 checkSi = collectUnits nopcm_SymbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
-nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+symbols :: [DefinedQuantityDict]
+symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -110,7 +110,7 @@ resourcePath = "../../../datafiles/NoPCM/"
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = map qw nopcm_Symbols ++ (map qw specParamValList) ++ 
+nopcm_SymbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
@@ -216,7 +216,7 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _quants = symbTT,
-  _concepts = nopcm_Symbols,
+  _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
   _inputs = (map qw nopcm_Constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
@@ -240,18 +240,18 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
+nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
-  (map cw nopcm_Symbols ++ srsDomains)
+  (map cw symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw checkSi)
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi nopcm_label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon

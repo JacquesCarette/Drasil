@@ -369,7 +369,7 @@ momEqlDerivSheariM1Sentence = [S "The", phrase intrslce, phrase shearForce,
   S "rotate in the clockwise direction, and has the same", phrase momntArm `sC`
   S "so the", phrase momntOfBdy, S "is"]
 
--- FIXME: Once differentials are expressible in Expr, change "sy yi" to the differential dy. "ch yi" actually means y and should stay as-is.
+-- FIXME: Once differentials are expressible in Expr (issue #1407), change "sy yi" to the differential dy. "ch yi" actually means y and should stay as-is.
 momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
   S "entire height of the" +:+. phrase slice, S "For each horizontal segment",
   S "of the", phrase slice `sC` S "the seismic", phrase force, S "is",

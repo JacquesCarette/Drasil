@@ -86,7 +86,7 @@ import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
-import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
+import Drasil.NoPCM.GenDefs (rocTempSimp, genDefs)
 import Drasil.NoPCM.Goals (nopcmGoals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
@@ -157,7 +157,7 @@ mkSRS = [RefSec $ RefProg intro
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoretical_models
-      , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+      , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
@@ -574,7 +574,7 @@ traceTheories = ["T1", "T2"]
 traceTheoriesRef = map makeRef2S theoretical_models
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef2S swhsGDs
+traceGenDefRef = map makeRef2S genDefs
 
 traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef2S [dd1HtFluxC]

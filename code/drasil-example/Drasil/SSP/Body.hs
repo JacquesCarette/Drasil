@@ -113,7 +113,7 @@ si = SI {
   _constants = [],
   _sysinfodb = symMap,
   _usedinfodb = usedDB,
-   refdb = sspRefDB
+   refdb = refDB
 }
 
 resourcePath :: String
@@ -224,8 +224,8 @@ usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  dataDefs iMods genDefs theory concIns section 
  labCon
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb sspCitations concIns
+refDB :: ReferenceDB
+refDB = rdb sspCitations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration

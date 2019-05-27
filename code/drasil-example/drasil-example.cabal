@@ -233,6 +233,7 @@ executable projectile
   main-is: Drasil/Projectile/Main.hs
   other-modules:
       Drasil.Projectile.Body
+    , Drasil.Projectile.Assumptions
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

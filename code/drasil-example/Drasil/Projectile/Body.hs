@@ -23,6 +23,8 @@ import Data.Drasil.Phrase (for'')
 
 import qualified Data.Map as Map
 
+import Drasil.Projectile.Assumptions (assumptions)
+
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
@@ -61,18 +63,21 @@ symbMap = cdb ([] :: [QuantityDict])
   map nw [assumption, dataDefn, genDefn, inModel, thModel])
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
+  concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
+  concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 refDB :: ReferenceDB
-refDB = rdb [] []
+refDB = rdb [] concIns
+
+concIns :: [ConceptInstance]
+concIns = assumptions
 
 label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' []
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label

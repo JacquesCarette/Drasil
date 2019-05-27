@@ -19,7 +19,8 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
   definition, doccon, doccon', document, goal, information, item,
   material_, model, physSyst, problem, property, purpose, reference,
-  requirement, srs, srsDomains, traceyMatrix)
+  requirement, srsDomains, traceyMatrix)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
@@ -206,7 +207,7 @@ labCon :: [LabelledContent]
 labCon = [inputInitQuantsTblabled, dataConstTable1]
 
 sec :: [Section]
-sec = extractSection nopcm_srs
+sec = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -214,7 +215,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 si :: SystemInformation
 si = SI {
   _sys = srs_swhs,
-  _kind = srs,
+  _kind = Doc.srs,
   _authors = [thulasi],
   _quants = symbTT,
   _concepts = symbols,
@@ -237,8 +238,8 @@ code :: CodeSpec
 code = codeSpec si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
-nopcm_srs :: Document
-nopcm_srs = mkDoc mkSRS (for) si
+srs :: Document
+srs = mkDoc mkSRS (for) si
 
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
@@ -293,7 +294,7 @@ purpDoc pro = foldlSent [S "The main", phrase purpose, S "of this",
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
   S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
+  short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved, but do not say how to solve it"]
 
 -------------------------------------

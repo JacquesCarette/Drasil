@@ -7,8 +7,8 @@ import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.NoPCM.Body (srs, code, printSetting)
 
-nopcm_Choices :: Choices
-nopcm_Choices = Choices {
+choices :: Choices
+choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
@@ -23,4 +23,4 @@ main :: IO ()
 main = do
   gen (DocSpec SRS "NoPCM_SRS") srs printSetting
   gen (DocSpec Website "NoPCM_SRS") srs printSetting
-  genCode nopcm_Choices code
+  genCode choices code

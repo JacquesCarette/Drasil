@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization)
+import Language.Drasil hiding (Vector, organization, section)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
@@ -142,8 +142,8 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   funcReqs
 
-gameSection :: [Section]
-gameSection = gameSec
+section :: [Section]
+section = gameSec
 
 gameSec :: [Section]
 gameSec = extractSection srs
@@ -191,12 +191,12 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
   label refBy dataDefs iMods genDef theory
-  concIns gameSection []
+  concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
  ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDef theory concIns gameSection
+ dataDefs iMods genDef theory concIns section
  []
 
 printSetting :: PrintingInformation

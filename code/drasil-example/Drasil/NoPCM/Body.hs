@@ -211,8 +211,8 @@ sec = extractSection nopcm_srs
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-nopcm_si :: SystemInformation
-nopcm_si = SI {
+si :: SystemInformation
+si = SI {
   _sys = srs_swhs,
   _kind = srs,
   _authors = [thulasi],
@@ -234,11 +234,11 @@ nopcmRefDB :: ReferenceDB
 nopcmRefDB = rdb referencesRefList concIns
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec nopcm_si [inputMod]
+nopcm_code = codeSpec si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
-nopcm_srs = mkDoc mkSRS (for) nopcm_si
+nopcm_srs = mkDoc mkSRS (for) si
 
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
@@ -546,7 +546,7 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable nopcm_si
+traceTableAll = generateTraceTable si
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]

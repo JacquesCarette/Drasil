@@ -234,6 +234,7 @@ executable projectile
   other-modules:
       Drasil.Projectile.Assumptions
     , Drasil.Projectile.Body
+    , Drasil.Projectile.Goals
     , Drasil.Projectile.TMods
     
   Build-Depends:

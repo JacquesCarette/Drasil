@@ -23,7 +23,7 @@ import Drasil.SWHS.Concepts (water)
 import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrained
 
 symbolsAll :: [QuantityDict]
 symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
@@ -201,8 +201,8 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 ----------------------
 
 -- FIXME: this list should not be hand-constructed
-swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
+unitless :: [DefinedQuantityDict]
+unitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 
@@ -225,8 +225,8 @@ frac_min = dqd' (dcc "frac_min"
 -- Constraints --
 -----------------
 
-swhsConstrained ::[ConstrConcept]
-swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
+constrained ::[ConstrConcept]
+constrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
 
 -- Input Constraints
 swhsInputs :: [UncertQ]

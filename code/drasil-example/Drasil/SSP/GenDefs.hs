@@ -26,7 +26,8 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol,
   getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
-  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS)
+  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
+  assumpHFSM)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
   slcHeight, stressDD, ratioVariation)
@@ -394,7 +395,8 @@ momEqlDerivSeismicWSentence = [S "Using", makeRef2S weightGD,
   S "as", E (inxi slcWght) `sC` S "the", phrase momntOfBdy, S "is"]
 
 momEqlDerivHydroSentence = [S "The surface hydrostatic", phrase force, 
-  S "acts into the midpoint of the surface of the" +:+. phrase slice,
+  S "acts into the midpoint of the surface of the", phrase slice +:+.
+  sParen (makeRef2S assumpHFSM),
   S "Thus, the vertical", phrase component, S "of the", phrase force,
   S "acts directly towards the point of rotation, and has a",
   phrase momntOfBdy +:+. S "of zero", S "The horizontal", phrase component, 
@@ -410,7 +412,7 @@ momEqlDerivExtSentence = [S "The external", phrase force, S "again acts into",
 
 momEqlDerivFinalSentence = [S "The base hydrostatic", phrase force `sAnd`
   phrase slice, phrase weight, S "both act in the direction of the point of",
-  S "rotation, therefore both have", plural momntOfBdy +:+. S "of zero",
+  S "rotation", sParen (makeRef2S assumpHFSM) `sC` S "therefore both have", plural momntOfBdy +:+. S "of zero",
   S "Thus, all of the", plural momntOfBdy +:+. S "have been determined",
   S "The", phrase momentEqlGD, S "is then represented by the sum of all",
   plural momntOfBdy]

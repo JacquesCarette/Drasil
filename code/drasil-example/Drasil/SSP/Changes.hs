@@ -9,7 +9,7 @@ import Drasil.DocLang (mkEnumSimpleD)
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSP, sAnd)
+import Data.Drasil.SentenceStructures (chgsStart, foldlSent, foldlSP, sAnd)
 
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
   assumpSF, assumpSL)
@@ -32,19 +32,19 @@ likelyChgCEF :: ConceptInstance
 likelyChgCEF = cic "LC_external" lcCEFDesc "Calculate-External-Force" likeChgDom
 
 lcCISLDesc :: Sentence
-lcCISLDesc = foldlSent [S "The", phrase system, S "currently assumes the", 
-  phrase soil, S "mass is homogeneous" +:+. sParen (makeRef2S assumpSLH),
+lcCISLDesc = foldlSent [chgsStart assumpSLH (S "The"), phrase system,
+  S "currently assumes the", phrase soil +:+. S "mass is homogeneous",
   S "In the future" `sC` plural calculation,
   S "can be added for inconsistent", plural soilPrpty, S "throughout"]
 
 lcCSFDesc :: Sentence
-lcCSFDesc = foldlSent [S "The", phrase system, S "currently assumes no seismic",
-  phrase force +:+. sParen (makeRef2S assumpSF), S "In the future" `sC`
+lcCSFDesc = foldlSent [chgsStart assumpSF (S "The"), phrase system,
+  S "currently assumes no seismic" +:+. phrase force, S "In the future" `sC`
   plural calculation, S "can be added for the presence of seismic", phrase force]
 
 lcCEFDesc :: Sentence
-lcCEFDesc = foldlSent [S "The", phrase system, S "currently assumes no",
-  phrase surfLoad +:+. sParen (makeRef2S assumpSL), S "In the future" `sC`
+lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
+  S "currently assumes no" +:+. phrase surfLoad, S "In the future" `sC`
   plural calculation, S "can be added for an imposed surface load on the", 
   phrase slope]
 

@@ -87,7 +87,8 @@ import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.Goals (nopcmGoals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
+import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
 import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
 import Drasil.NoPCM.Unitals (temp_init)
 
@@ -158,7 +159,7 @@ mkSRS = [RefSec $ RefProg intro
       , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        iMods ShowDerivation
+        NoPCM.iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       , CorrSolnPpties propsDerivNoPCM
@@ -184,8 +185,8 @@ refBy = generateRefbyMap label
 dataDefn :: [DataDefinition]
 dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-nopcm_insmodel :: [InstanceModel]
-nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+iMods :: [InstanceModel]
+iMods = getTraceMapFromIM $ getSCSSub mkSRS
 
 nopcm_gendef :: [GenDefn]
 nopcm_gendef = getTraceMapFromGD $ getSCSSub mkSRS
@@ -247,13 +248,13 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
-  this_si label refBy dataDefn nopcm_insmodel nopcm_gendef nopcm_theory
+  this_si label refBy dataDefn iMods nopcm_gendef nopcm_theory
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
- dataDefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
+ dataDefn iMods nopcm_gendef nopcm_theory nopcm_concins
  nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation

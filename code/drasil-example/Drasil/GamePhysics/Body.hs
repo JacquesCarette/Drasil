@@ -66,7 +66,7 @@ import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints, symbols)
+  inputSymbols, outputSymbols, cpInputConstraints, defSymbols)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -189,7 +189,7 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw symbols ++ srsDomains ++ map cw iModelsNew) units
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units
   label refBy dataDefs iMods genDef theory
   concIns section []
 
@@ -462,9 +462,9 @@ goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity,
   QP.angularVelocity]
 
 goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
-  (goalStatement4Inputs) --fixme input symbols
+  (goalStatement4Inputs) --fixme input defSymbols
   EmptyS (S "of")
-  (goalStatement4Inputs) --fixme input symbols
+  (goalStatement4Inputs) --fixme input defSymbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
   S "that have undergone a" +:+ (phrase CP.collision))-}
 

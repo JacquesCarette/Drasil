@@ -23,7 +23,7 @@ defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr cpInputConstraints) ++
   (map dqdWr cpOutputConstraints)
 
 unitSymbs :: [UnitaryConceptDict]
-unitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
+unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
@@ -39,7 +39,7 @@ symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
 symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
-symbols = (map qw cpUnits) ++ 
+symbols = (map qw unitalChunks) ++ 
   (map qw cpUnitless) ++ 
   (map qw cpInputConstraints)
 
@@ -51,8 +51,8 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity]
 
 
-cpUnits :: [UnitalChunk]
-cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
+unitalChunks :: [UnitalChunk]
+unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,

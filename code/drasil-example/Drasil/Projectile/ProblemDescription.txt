@@ -1,5 +1,5 @@
 ﻿Coordinate System
-The coordinate system used is set up so that the positive x-direction is the direction from the launcher to the target and the positive y-direction is the direction opposite to gravity.
+The coordinate system used is set up so that the positive x-direction is the direction from the launcher to the target and the positive y-direction is up.
 
 Physical System Description
 Elements:
@@ -15,8 +15,6 @@ Assumptions
 5) Acceleration in the y-direction is only caused by gravity.
 6) The effects of the Earth's curvature are ignored.
 7) The flight is free; there are no collisions during the trajectory of the object.
-8) The positive x-direction is the direction from start to the end of the object's path.
-9) The positive y-direction is up.
 
 Goal Statments
 1) Calculate the landing position of the projectile.

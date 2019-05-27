@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
+module Drasil.SSP.Body (srs, ssp_code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
@@ -32,9 +32,10 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
   environment, goal, information, input_, interest, issue, loss, method_,
   model, organization, physical, physics, problem, purpose, requirement,
-  section_, software, softwareSys, srs, srsDomains, symbol_, sysCont,
+  section_, software, softwareSys, srsDomains, symbol_, sysCont,
   system, systemConstraint, template, type_, user, value, variable,
   physSyst, doccon, doccon')
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
@@ -99,7 +100,7 @@ checkSi = collectUnits sspSymMap symbTT
 si :: SystemInformation
 si = SI {
   _sys = ssp, 
-  _kind = srs, 
+  _kind = Doc.srs, 
   _authors = [henryFrankis, brooks],
   _quants = sspSymbols,
   _concepts = symbTT,
@@ -118,8 +119,8 @@ si = SI {
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
-ssp_srs :: Document
-ssp_srs = mkDoc mkSRS for si
+srs :: Document
+srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
@@ -184,7 +185,7 @@ ssp_section :: [Section]
 ssp_section = ssp_sec
 
 ssp_sec :: [Section]
-ssp_sec = extractSection ssp_srs
+ssp_sec = extractSection srs
 
 ssp_labcon :: [LabelledContent]
 ssp_labcon = [fig_physsyst, fig_indexconv, fig_forceacting, 
@@ -289,7 +290,7 @@ purposeDoc pname =
   S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
   S "basis of" +:+. short pname, S "With the exception of", 
   plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
-  short srs, S "will remain abstract, describing what", phrase problem,
+  short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
   --FIXME: Last sentence is also present in GlassBR, SWHS and NoPCM... pull out?
 
@@ -311,7 +312,7 @@ scpIncl = S "stability analysis of a" +:+ introduceAbb twoD +:+
 orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
-  short srs, S "for", phrase sciCompS,
+  short Doc.srs, S "for", phrase sciCompS,
   S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
   S "Lai", makeRef2S smithLai2005]
 orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",

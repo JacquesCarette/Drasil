@@ -8,7 +8,13 @@
 \usepackage{mathtools}
 \usepackage{unicode-math}
 \usepackage{enumitem}
+\usepackage{tabu}
+\usepackage{longtable}
+\usepackage{booktabs}
 \setmathfont{Latin Modern Math}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\global\tabulinesep=1mm
 \title{Software Requirements Specification for Projectile}
 \author{Samuel J. Crawford}
 \begin{document}
@@ -25,5 +31,65 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
+\item[twoDMotion:\phantomsection\label{twoDMotion}]
+\item[pointMass:\phantomsection\label{pointMass}]
+\item[equalHeights:\phantomsection\label{equalHeights}]
+\item[accelZeroX:\phantomsection\label{accelZeroX}]
+\item[accelGravityY:\phantomsection\label{accelGravityY}]
+\item[ignoreCurvature:\phantomsection\label{ignoreCurvature}]
+\item[freeFlight:\phantomsection\label{freeFlight}]
 \end{itemize}
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+This section focuses on the general equations and laws that Projectile is based on.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:velocity}
+\phantomsection 
+\label{TM:velocity}
+\\ \midrule \\
+Label & Velocity
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{v}=\frac{d\,\mathbf{r}}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:acceleration}
+\phantomsection 
+\label{TM:acceleration}
+\\ \midrule \\
+Label & Acceleration
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{a}=\frac{d\,\mathbf{v}}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \end{document}

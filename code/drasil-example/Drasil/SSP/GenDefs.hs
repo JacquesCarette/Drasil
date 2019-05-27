@@ -320,7 +320,7 @@ momEqlDerivMomentSentence = [S "Considering one dimension, with",
 
 momEqlDerivNormaliSentence = [S "where", ch rotForce, S "is the", 
   phrase rotForce `sAnd` ch momntArm, S "is the", phrase momntArm `sC`
-  S "or the distance between the", phrase force, S "and this axis about" +:+.
+  S "or the distance between the", phrase force, S "and the axis about" +:+.
   S "which the rotation acts",
   S "To represent the", phrase momentEqlGD `sC` S "the", plural momntOfBdy,
   S "from each", phrase force, S "acting on a", phrase slice +:+. 
@@ -425,10 +425,10 @@ momEqlDerivNormaliEqn = negate (inxi intNormForce) * (inxi sliceHght +
 momEqlDerivNormaliM1Eqn = inxiM1 intNormForce * (inxiM1 sliceHght -
   (inxi baseWthX / 2) * tan (inxi baseAngle))
 
-momEqlDerivWateriEqn = negate (inxi watrForce) * (inxi sliceHghtW +
+momEqlDerivWateriEqn = negate (inxi watrForce) * ((1/3) * inxi sliceHghtW +
   (inxi baseWthX / 2) * tan (inxi baseAngle))
 
-momEqlDerivWateriM1Eqn = inxiM1 watrForce * (inxiM1 sliceHghtW +
+momEqlDerivWateriM1Eqn = inxiM1 watrForce * ((1/3) * inxiM1 sliceHghtW +
   (inxi baseWthX / 2) * tan (inxi baseAngle))
 
 momEqlDerivSheariEqn = inxi intShrForce * (inxi baseWthX / 2)

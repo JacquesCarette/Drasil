@@ -66,12 +66,12 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, swhscon)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, swhsNFRequirements)
+import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -79,7 +79,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC,
+  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
@@ -168,7 +168,7 @@ mkSRS = [RefSec $ RefProg intro
     ],
   ReqrmntSec $ ReqsProg [
     FReqsSub funcReqsList,
-    NonFReqsSub swhsNFRequirements
+    NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
@@ -243,10 +243,10 @@ srs = mkDoc mkSRS (for) si
 
 symbMap :: ChunkDB
 symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory

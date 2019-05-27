@@ -22,18 +22,18 @@ import Drasil.SWHS.Concepts (water)
 
 import Control.Lens ((^.))
 
-swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = pi_ : (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
+symbols :: [DefinedQuantityDict]
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrained
 
-swhsSymbolsAll :: [QuantityDict]
-swhsSymbolsAll = (map qw swhsSymbols) ++ (map qw specParamValList) ++
+symbolsAll :: [QuantityDict]
+symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
   (map qw [htFusion_min, htFusion_max, coil_SA_max]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
 -- Symbols with Units --
 
-swhsUnits :: [UnitaryConceptDict]
-swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
+units :: [UnitaryConceptDict]
+units = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   htCap_S, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -42,8 +42,8 @@ swhsUnits = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
-swhsUC :: [UnitalChunk]
-swhsUC = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+unitalChuncks :: [UnitalChunk]
+unitalChuncks = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -201,8 +201,8 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 ----------------------
 
 -- FIXME: this list should not be hand-constructed
-swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
+unitless :: [DefinedQuantityDict]
+unitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 
@@ -225,12 +225,12 @@ frac_min = dqd' (dcc "frac_min"
 -- Constraints --
 -----------------
 
-swhsConstrained ::[ConstrConcept]
-swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
+constrained ::[ConstrConcept]
+constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
-swhsInputs :: [UncertQ]
-swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputs :: [UncertQ]
+inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
@@ -389,9 +389,9 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   (dbl 0.01) defaultUncrt
   
 -- Output Constraints
-swhsOutputs :: [ConstrConcept]
+outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
+outputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
 temp_W = cuc' "temp_W"

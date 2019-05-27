@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (srs, ssp_code, sspSymMap, printSetting) where
+module Drasil.SSP.Body (srs, code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb, section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec)
@@ -195,8 +195,8 @@ labCon = [fig_physsyst, fig_indexconv, fig_forceacting,
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
-ssp_code :: CodeSpec
-ssp_code = codeSpec si [sspInputMod]
+code :: CodeSpec
+code = codeSpec si [sspInputMod]
 
 traceyMatrix :: LabelledContent
 traceyMatrix = generateTraceTable si

@@ -163,8 +163,8 @@ mkSRS = [RefSec $ RefProg intro
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' ssp_concins
  
-ssp_refby :: RefbyMap
-ssp_refby = generateRefbyMap label
+refBy :: RefbyMap
+refBy = generateRefbyMap label
 
 ssp_datadefn :: [DataDefinition]
 ssp_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
@@ -215,12 +215,12 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
-  ssp_refby ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
+  refBy ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins
   ssp_section ssp_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
- map nw checkSi) ([] :: [ConceptChunk]) checkSi label ssp_refby
+ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section 
  ssp_labcon
 

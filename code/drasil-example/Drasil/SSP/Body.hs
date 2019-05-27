@@ -64,7 +64,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
-import Drasil.SSP.DataDesc (sspInputMod)
+import Drasil.SSP.DataDesc (inputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, sspdef, sspdef',
@@ -196,7 +196,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
 code :: CodeSpec
-code = codeSpec si [sspInputMod]
+code = codeSpec si [inputMod]
 
 traceyMatrix :: LabelledContent
 traceyMatrix = generateTraceTable si

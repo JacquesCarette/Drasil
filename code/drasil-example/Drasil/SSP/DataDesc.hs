@@ -1,11 +1,11 @@
-module Drasil.SSP.DataDesc (sspInputMod) where
+module Drasil.SSP.DataDesc (inputMod) where
 
 import Language.Drasil.Code (Func, Mod(Mod), funcData)
 --import Drasil.SSP.Unitals (elasticMod, effCohesion,
   --poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight)
 
-sspInputMod :: Mod
-sspInputMod = Mod "InputFormat" [sspInputData]
+inputMod :: Mod
+inputMod = Mod "InputFormat" [sspInputData]
 
 sspInputData :: Func
 sspInputData = funcData "get_inputs" [

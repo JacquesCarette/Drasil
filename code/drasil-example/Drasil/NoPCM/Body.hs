@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (constraints)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
@@ -100,7 +100,7 @@ checkSi = collectUnits nopcm_SymbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr nopcm_Constraints)
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -121,8 +121,8 @@ units = map ucw [density, tau, in_SA, out_SA,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W, QT.sensHeat]
 
-nopcm_Constraints :: [UncertQ]
-nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+constraints :: [UncertQ]
+constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 
@@ -219,10 +219,10 @@ nopcm_si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw nopcm_Constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
+  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw nopcm_Constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
   _usedinfodb = usedDB,

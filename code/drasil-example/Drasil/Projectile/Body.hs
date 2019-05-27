@@ -9,13 +9,18 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Drasil.DocLang (DocDesc, DocSection(SSDSec), SCSSub(Assumptions),
-  SSDSec(..), SSDSub(SSDSolChSpec), SolChSpec(SCSProg), generateTraceMap,
-  generateTraceMap', mkDoc)
+import Drasil.DocLang (DocDesc, DocSection(SSDSec), Field(..), Fields,
+  InclUnits(IncludeUnits),
+  SCSSub(Assumptions, TMs), SSDSec(..), SSDSub(SSDSolChSpec), SolChSpec(SCSProg),
+  Verbosity(Verbose),
+  generateTraceMap, generateTraceMap', getSCSSub, getTraceMapFromTM, mkDoc)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumption, information,
+import Data.Drasil.Concepts.Documentation as Doc (assumption, general, information,
   physicalSystem, problemDescription, problem, section_,
   solutionCharacteristic, specification, srs)
+import Data.Drasil.Concepts.Math (equation)
+
+import Data.Drasil.Quantities.Physics (position, time, velocity)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 import Data.Drasil.People (samCrawford)
@@ -24,6 +29,7 @@ import Data.Drasil.Phrase (for'')
 import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.TMods (tMods)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -33,7 +39,9 @@ mkSRS = [
   SSDSec $
     SSDProg
       [SSDSolChSpec $ SCSProg
-        [Assumptions]
+        [ Assumptions
+        , TMs [] (Label : stdFields) tMods
+        ]
       ]
   ]
 
@@ -56,19 +64,25 @@ systInfo = SI {
    refdb       = refDB
 }
 
+theoryModels :: [TheoryModel]
+theoryModels = getTraceMapFromTM $ getSCSSub mkSRS
+
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict])
-  (nw projectile : map nw [information, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification] ++
+symbMap = cdb (map qw [position, time, velocity])
+  (nw projectile : nw equation : map nw [general, information, physicalSystem, problemDescription,
+    problem, section_, solutionCharacteristic, specification] ++ map nw [position, time, velocity] ++
   map nw [assumption, dataDefn, genDefn, inModel, thModel])
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels
   concIns ([] :: [Section]) ([] :: [LabelledContent])
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 refDB :: ReferenceDB
 refDB = rdb [] concIns

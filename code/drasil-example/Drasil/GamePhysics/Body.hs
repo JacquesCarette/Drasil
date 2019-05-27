@@ -135,8 +135,8 @@ iMods = getTraceMapFromIM $ getSCSSub mkSRS
 genDef :: [GenDefn]
 genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-gameTheory :: [TheoryModel]
-gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 gameConcins :: [ConceptInstance]
 gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
@@ -190,13 +190,13 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
-  label refBy dataDefs iMods genDef gameTheory
+  label refBy dataDefs iMods genDef theory
   gameConcins gameSection []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
  ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDef gameTheory gameConcins gameSection
+ dataDefs iMods genDef theory gameConcins gameSection
  []
 
 printSetting :: PrintingInformation

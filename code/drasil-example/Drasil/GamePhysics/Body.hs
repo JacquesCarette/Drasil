@@ -65,7 +65,7 @@ import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
-import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
+import Drasil.GamePhysics.Unitals (symbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, defSymbols)
 
 import Control.Lens ((^.))
@@ -184,7 +184,7 @@ units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
+everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
@@ -194,7 +194,7 @@ everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
   concIns section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw acronyms
+usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
  ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
  dataDefs iMods genDef theory concIns section
  []

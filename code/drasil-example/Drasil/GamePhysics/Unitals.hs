@@ -35,9 +35,9 @@ unitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
-cpSymbolsAll = symbols ++ inputSymbols ++ outputSymbols
+symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
 symbols = (map qw cpUnits) ++ 
   (map qw cpUnitless) ++ 

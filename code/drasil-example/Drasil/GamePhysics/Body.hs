@@ -65,7 +65,7 @@ import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
-import Drasil.GamePhysics.Unitals (symbolsAll, cpOutputConstraints,
+import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
 import Control.Lens ((^.))
@@ -102,7 +102,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl inputConstraints, outDataConstTbl cpOutputConstraints]
+            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
         , CorrSolnPpties propsDeriv
         ]
       ],

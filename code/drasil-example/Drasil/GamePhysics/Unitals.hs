@@ -20,7 +20,7 @@ import Control.Lens((^.))
 
 defSymbols :: [DefinedQuantityDict]
 defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr inputConstraints) ++
-  (map dqdWr cpOutputConstraints)
+  (map dqdWr outputConstraints)
 
 unitSymbs :: [UnitaryConceptDict]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
@@ -273,8 +273,8 @@ inputConstraints = map (`uq` defaultUncrt)
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
-cpOutputConstraints :: [UncertQ]
-cpOutputConstraints = map (`uq` defaultUncrt) 
+outputConstraints :: [UncertQ]
+outputConstraints = map (`uq` defaultUncrt) 
   [posCons, veloCons, orientCons, angVeloCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints

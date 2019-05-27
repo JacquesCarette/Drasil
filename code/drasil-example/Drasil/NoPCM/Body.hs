@@ -177,7 +177,7 @@ mkSRS = [RefSec $ RefProg intro
   map Verbatim [specParamVal] ++ [Bibliography]
 
 label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label
@@ -194,8 +194,8 @@ genDef = getTraceMapFromGD $ getSCSSub mkSRS
 theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-nopcm_concins :: [ConceptInstance]
-nopcm_concins =
+concIns :: [ConceptInstance]
+concIns =
  reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
@@ -231,7 +231,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb referencesRefList nopcm_concins
+nopcmRefDB = rdb referencesRefList concIns
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -249,12 +249,12 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory
-  nopcm_concins nopcm_section nopcm_labcon
+  concIns nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
- dataDefn iMods genDef theory nopcm_concins
+ dataDefn iMods genDef theory concIns
  nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation

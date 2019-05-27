@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (constraints)
+import Language.Drasil hiding (constraints, section)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
@@ -199,8 +199,8 @@ concIns =
  reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
-nopcm_section :: [Section]
-nopcm_section = nopcm_sec
+section :: [Section]
+section = nopcm_sec
 
 nopcm_labcon :: [LabelledContent]
 nopcm_labcon = [inputInitQuantsTblabled, dataConstTable1]
@@ -249,13 +249,13 @@ nopcm_SymbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw th
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory
-  concIns nopcm_section nopcm_labcon
+  concIns section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
  ([] :: [ConceptChunk]) checkSi label refBy
  dataDefn iMods genDef theory concIns
- nopcm_section nopcm_labcon
+ section nopcm_labcon
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

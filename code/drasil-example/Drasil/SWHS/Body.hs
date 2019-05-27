@@ -80,7 +80,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
-  swhsOutputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
+  outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ si = SI {
   _definitions = qDefs,
   _datadefs = dataDefs,
   _inputs = map qw inputs,
-  _outputs = map qw swhsOutputs,
+  _outputs = map qw outputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (constrained),
   _constants = [],

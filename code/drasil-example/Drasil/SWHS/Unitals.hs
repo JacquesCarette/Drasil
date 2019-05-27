@@ -226,7 +226,7 @@ frac_min = dqd' (dcc "frac_min"
 -----------------
 
 constrained ::[ConstrConcept]
-constrained = map cnstrw' inputs ++ map cnstrw' swhsOutputs
+constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
 inputs :: [UncertQ]
@@ -389,9 +389,9 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   (dbl 0.01) defaultUncrt
   
 -- Output Constraints
-swhsOutputs :: [ConstrConcept]
+outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
+outputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
 temp_W = cuc' "temp_W"

@@ -1,4 +1,4 @@
-module Drasil.SWHS.References (swhsCitations, bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, 
+module Drasil.SWHS.References (citations, bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, parnas1972, parnasClements1984, smithLai2005) where
 
 import Language.Drasil
@@ -11,8 +11,8 @@ import Data.Drasil.Citations (koothoor2013, parnasClements1986, smithLai2005, pa
 ----------------------------
 -- Section 9 : References --
 ----------------------------
-swhsCitations :: BibRef
-swhsCitations = [bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, 
+citations :: BibRef
+citations = [bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, 
   smithLai2005, parnas1972, parnasClements1984]
 
 bueche1986, incroperaEtAl2007, lightstone2012 :: Citation

@@ -11,6 +11,9 @@ Body.hs
   
 Main.hs 
   - A list of what should be generated
+
+ProblemDescription.txt
+  - A rough framework for the Problem Description section
   
 README.md
   - This file

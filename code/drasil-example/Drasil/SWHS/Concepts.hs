@@ -9,8 +9,8 @@ import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 
-swhscon :: [ConceptChunk]
-swhscon = [charging, coil, discharging, gauss_div,
+con :: [ConceptChunk]
+con = [charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, tank,
   tank_pcm, transient, water, sWHT, tank_para]
 
@@ -33,8 +33,8 @@ rightSide   = commonIdeaWithDict "rightSide"  (nounPhrase "right hand side"
 progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS" [materialEng]
 
-swhsFull :: NamedChunk
-swhsFull    = nc "swhsFull" (progName `with` phsChgMtrl)
+full :: NamedChunk
+full    = nc "full" (progName `with` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 
@@ -81,11 +81,11 @@ tank_pcm = dcc "tank_pcm" (nounPhrase''
   CapFirst CapWords)
   "Solar water heating tank incorporating phase change material"
 
-swhs_pcm :: CommonConcept
+swhsPCM :: CommonConcept
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings
 -- Another capitalization hack.
-swhs_pcm = dcc' "swhs_pcm" (nounPhrase''
+swhsPCM = dcc' "swhsPCM" (nounPhrase''
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)

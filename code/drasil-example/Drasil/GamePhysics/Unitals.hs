@@ -40,7 +40,7 @@ symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
 symbols = (map qw unitalChunks) ++ 
-  (map qw cpUnitless) ++ 
+  (map qw unitless) ++ 
   (map qw cpInputConstraints)
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
@@ -255,8 +255,8 @@ massB      = rigidParam "B" cB
 -- CHUNKS WITHOUT UNITS --
 --------------------------
 
-cpUnitless :: [QuantityDict]
-cpUnitless = qw QM.pi_ : [numParticles]
+unitless :: [QuantityDict]
+unitless = qw QM.pi_ : [numParticles]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer

@@ -169,8 +169,8 @@ refBy = generateRefbyMap label
 dataDefs :: [DataDefinition]
 dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
 
-ssp_insmodel :: [InstanceModel]
-ssp_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+iMods :: [InstanceModel]
+iMods = getTraceMapFromIM $ getSCSSub mkSRS
 
 ssp_gendef :: [GenDefn]
 ssp_gendef = getTraceMapFromGD $ getSCSSub mkSRS
@@ -215,13 +215,13 @@ sspSymMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
-  refBy dataDefs ssp_insmodel ssp_gendef ssp_theory ssp_concins
+  refBy dataDefs iMods ssp_gendef ssp_theory ssp_concins
   ssp_section ssp_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs ssp_insmodel ssp_gendef ssp_theory ssp_concins ssp_section 
+ dataDefs iMods ssp_gendef ssp_theory ssp_concins ssp_section 
  ssp_labcon
 
 sspRefDB :: ReferenceDB

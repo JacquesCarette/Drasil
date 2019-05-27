@@ -78,7 +78,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC,
+  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
@@ -244,7 +244,7 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
   (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory

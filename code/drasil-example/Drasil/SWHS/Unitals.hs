@@ -25,8 +25,8 @@ import Control.Lens ((^.))
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
 
-swhsSymbolsAll :: [QuantityDict]
-swhsSymbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
+symbolsAll :: [QuantityDict]
+symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
   (map qw [htFusion_min, htFusion_max, coil_SA_max]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 

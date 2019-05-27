@@ -80,7 +80,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, swhsConstrained, swhsInputs,
-  swhsOutputs, symbols, swhsSymbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
+  swhsOutputs, symbols, symbolsAll, swhsUC, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
 symMap :: ChunkDB
-symMap = cdb (qw heatEInPCM : swhsSymbolsAll) -- heatEInPCM ?
+symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con

@@ -226,11 +226,11 @@ frac_min = dqd' (dcc "frac_min"
 -----------------
 
 constrained ::[ConstrConcept]
-constrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
+constrained = map cnstrw' inputs ++ map cnstrw' swhsOutputs
 
 -- Input Constraints
-swhsInputs :: [UncertQ]
-swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputs :: [UncertQ]
+inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 

@@ -61,7 +61,7 @@ import Drasil.GamePhysics.Concepts (chipmunk, acronyms, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
-import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (cpTModsNew)
@@ -176,7 +176,7 @@ symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 refDB :: ReferenceDB
-refDB = rdb cpCitations concIns
+refDB = rdb citations concIns
 
 --FIXME: All named ideas, not just acronyms.
 

@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, general, informati
   solutionCharacteristic, specification, srs)
 import Data.Drasil.Concepts.Math (equation)
 
-import Data.Drasil.Quantities.Physics (position, time, velocity)
+import Data.Drasil.Quantities.Physics (acceleration, displacement, time, velocity)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 import Data.Drasil.People (samCrawford)
@@ -68,9 +68,9 @@ theoryModels :: [TheoryModel]
 theoryModels = getTraceMapFromTM $ getSCSSub mkSRS
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw [position, time, velocity])
+symbMap = cdb (map qw [acceleration, displacement, time, velocity])
   (nw projectile : nw equation : map nw [general, information, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification] ++ map nw [position, time, velocity] ++
+    problem, section_, solutionCharacteristic, specification] ++ map nw [acceleration, displacement, time, velocity] ++
   map nw [assumption, dataDefn, genDefn, inModel, thModel])
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) theoryModels

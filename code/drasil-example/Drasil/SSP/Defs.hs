@@ -27,8 +27,8 @@ defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   slopeStability, ssa]
 
-sspdef' :: [ConceptChunk]
-sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
+defs' :: [ConceptChunk]
+defs' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,

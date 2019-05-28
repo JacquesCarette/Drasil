@@ -146,7 +146,7 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement)lJ) metre
+  (sub (eqSymb QP.displacement)(Concat [cO, cB])) metre
 
 rRot  = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^.term) 
               (cn "perpendicular distance between the j-th particle and the angle of rotation"))
@@ -161,7 +161,6 @@ posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
 massI = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
-
 
 posI = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))

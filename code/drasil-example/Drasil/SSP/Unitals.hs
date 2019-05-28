@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
 
 symbols :: [DefinedQuantityDict]
 symbols = (map dqdWr inputs) ++ (map dqdWr outputs) ++ 
-  (map dqdWr units) ++ (map dqdWr sspUnitless)
+  (map dqdWr units) ++ (map dqdWr unitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -394,8 +394,8 @@ waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by wate
 -- Unitless Symbols --
 ----------------------
 
-sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
+unitless :: [DefinedQuantityDict]
+unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
   mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,

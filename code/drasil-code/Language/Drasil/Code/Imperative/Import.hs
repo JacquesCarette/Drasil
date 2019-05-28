@@ -13,9 +13,9 @@ import Language.Drasil.Code.Imperative.New (Label,
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (buildAll, BuildConfig, 
-  buildSingle, cppCompiler, inCodePackage, interp, interpMM, mainModule, 
-  mainModuleFile, nativeBinary, Runnable, withExt)
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
+  BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
+  mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
@@ -31,7 +31,6 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
-import Data.List.Utils (endswith)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
@@ -40,6 +39,7 @@ import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Text.PrettyPrint.HughesPJ (Doc)
+import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -159,12 +159,13 @@ getRunnable CSharp = nativeBinary
 getRunnable Cpp = nativeBinary
 
 getBuildConfig :: Lang -> Maybe BuildConfig
-getBuildConfig Java = buildSingle (\i _ -> ["javac", unwords i]) $
+getBuildConfig Java = buildSingle (\i _ -> asFragment "javac" : i) $
   inCodePackage mainModuleFile
 getBuildConfig Python = Nothing
-getBuildConfig CSharp = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o]
-getBuildConfig Cpp = buildAll $ \i o -> [cppCompiler, unwords $
-  filter (not . endswith ".hpp") i, "--std=c++11", "-o", o]
+getBuildConfig CSharp = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
+  asFragment "-out:" P.<> o] ++ i
+getBuildConfig Cpp = buildAll $ \i o -> cppCompiler : i ++ map asFragment
+  ["--std=c++11", "-o"] ++ [o]
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

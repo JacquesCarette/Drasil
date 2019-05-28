@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.Build.AST (buildSingle, includeExt, inCodePackage, interp, mainModule,
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildSingle, includeExt, inCodePackage, interp, mainModule,
   mainModuleFile, NameOpts(NameOpts), packSep, withExt)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
@@ -51,7 +51,8 @@ javaConfig options c =
         enumsEqualInts   = False,
         ext              = ".java",
         dir              = "java",
-        buildConfig      = buildSingle (\i _ -> ["javac", unwords i]) $ inCodePackage mainModuleFile,
+        buildConfig      = buildSingle (\i _ -> asFragment "javac" : i) $
+          inCodePackage mainModuleFile,
         runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",

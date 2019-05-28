@@ -7,17 +7,15 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
 
-import Theory.Drasil (DataDefinition, InstanceModel)
-
-import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc, DocSection(SSDSec), Field(..), Fields,
+import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(SSDSec), Field(..), Fields,
   InclUnits(IncludeUnits), ProblemDescription(PDProg),
-  SCSSub(Assumptions, DDs, GDs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  SCSSub(Assumptions, DDs, GDs, IMs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   Verbosity(Verbose),
   generateTraceMap, generateTraceMap', goalStmtF, mkDoc, mkEnumSimpleD)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, datum, general, goalStmt, information, input_, output_,
+import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, datum, general, goalStmt, information, input_, model, output_,
   physicalSystem, problemDescription, problem,  section_,
-  solutionCharacteristic, specification, srs, system)
+  solutionCharacteristic, specification, srs, symbol_, system)
 import Data.Drasil.Concepts.Math (angle, equation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (collision, position, twoD)
@@ -36,6 +34,7 @@ import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
+import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
 
@@ -52,6 +51,7 @@ mkSRS = [
         , TMs [] (Label : stdFields) tMods
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
         ]
       ]
   ]
@@ -64,7 +64,7 @@ systInfo = SI {
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs    = [] :: [DataDefinition],
+  _datadefs    = dataDefns,
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
   _defSequence = [] :: [Block QDefinition],
@@ -78,17 +78,17 @@ systInfo = SI {
 symbMap :: ChunkDB
 symbMap = cdb (map qw [acceleration, displacement, distance, time, velocity] ++ unitalQuants)
   (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++
-    map nw [datum, general, information, input_, output_, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification, system] ++
+    map nw [datum, general, information, input_, model, output_, physicalSystem, problemDescription,
+    problem, section_, solutionCharacteristic, specification, symbol_, system] ++
     map nw [acceleration, displacement, distance, time, velocity] ++
   map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++ unitalIdeas)
   [assumpDom] ([] :: [UnitDefn]) label refBy
-  dataDefns ([] :: [InstanceModel]) genDefns tMods
+  dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) [assumpDom] ([] :: [UnitDefn]) label refBy
-  dataDefns ([] :: [InstanceModel]) genDefns tMods
+  dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 stdFields :: Fields

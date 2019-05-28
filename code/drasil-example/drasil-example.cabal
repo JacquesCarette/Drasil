@@ -237,6 +237,7 @@ executable projectile
     , Drasil.Projectile.DataDefs
     , Drasil.Projectile.GenDefs
     , Drasil.Projectile.Goals
+    , Drasil.Projectile.IMods
     , Drasil.Projectile.TMods
     , Drasil.Projectile.Unitals
     

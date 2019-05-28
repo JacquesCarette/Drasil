@@ -20,7 +20,7 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- note that this is just the Reader Monad for now, but we might need
 -- to extend, so start there.
 
--- there are two proper contexts, test and math; curr is the 'current' context.
+-- there are two proper contexts, text and math; curr is the 'current' context.
 -- There are multiple ways of getting there: for Text, either being at the top-level 
 -- or inside \text. For Math, either surrounded by $ or 
 -- in \begin{equation} .. \end{equation}.

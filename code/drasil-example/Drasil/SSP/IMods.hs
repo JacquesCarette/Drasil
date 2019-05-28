@@ -47,8 +47,8 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  Instance Models  --
 -----------------------
 
-sspIMods :: [InstanceModel]
-sspIMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
+iMods :: [InstanceModel]
+iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 
 --
 

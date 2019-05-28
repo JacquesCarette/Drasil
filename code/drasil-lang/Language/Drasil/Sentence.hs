@@ -1,10 +1,9 @@
 {-# LANGUAGE GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Sentence
-  (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS, P, Ref, Percent),
-   sParen, (+:+), sC, (+:+.), (+:), ch,
-   SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
+module Language.Drasil.Sentence (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS,
+  P, Ref, Percent),sParen, sDash, (+:+), sC, (+:+.), (+:), ch, SentenceStyle(..),
+  sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
@@ -65,9 +64,14 @@ sentenceTerm = Ch TermStyle
 
 sentencePlural :: UID ->Sentence
 sentencePlural = Ch PluralTerm
--- | Helper function for wrapping sentences in parentheses.
+
+-- | Helper for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
+
+-- | Helper for concatenating two sentences with a space-surrounded dash between them.
+sDash :: Sentence -> Sentence -> Sentence
+sDash a b = a +:+ S "-" +:+ b
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

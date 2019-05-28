@@ -37,6 +37,7 @@ resolver: lts-11.2
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - ../drasil-lang
+- ../drasil-data
 - ../drasil-build
 - ../drasil-database
 - ./

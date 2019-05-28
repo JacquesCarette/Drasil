@@ -18,12 +18,12 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 
 import Control.Lens((^.))
 
-gamephySymbols :: [DefinedQuantityDict]
-gamephySymbols = (map dqdWr gamephyUnitSymbs) ++ (map dqdWr cpInputConstraints) ++
-  (map dqdWr cpOutputConstraints)
+defSymbols :: [DefinedQuantityDict]
+defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr inputConstraints) ++
+  (map dqdWr outputConstraints)
 
-gamephyUnitSymbs :: [UnitaryConceptDict]
-gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
+unitSymbs :: [UnitaryConceptDict]
+unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
@@ -35,13 +35,13 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
-cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
+symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
-cpSymbols = (map qw cpUnits) ++ 
-  (map qw cpUnitless) ++ 
-  (map qw cpInputConstraints)
+symbols = (map qw unitalChunks) ++ 
+  (map qw unitless) ++ 
+  (map qw inputConstraints)
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
@@ -51,8 +51,8 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity]
 
 
-cpUnits :: [UnitalChunk]
-cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
+unitalChunks :: [UnitalChunk]
+unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
@@ -256,8 +256,8 @@ massB      = rigidParam "B" cB
 -- CHUNKS WITHOUT UNITS --
 --------------------------
 
-cpUnitless :: [QuantityDict]
-cpUnitless = qw QM.pi_ : [numParticles]
+unitless :: [QuantityDict]
+unitless = qw QM.pi_ : [numParticles]
 
 numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
@@ -269,13 +269,13 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
 
-cpInputConstraints :: [UncertQ]
-cpInputConstraints = map (`uq` defaultUncrt)
+inputConstraints :: [UncertQ]
+inputConstraints = map (`uq` defaultUncrt)
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
-cpOutputConstraints :: [UncertQ]
-cpOutputConstraints = map (`uq` defaultUncrt) 
+outputConstraints :: [UncertQ]
+outputConstraints = map (`uq` defaultUncrt) 
   [posCons, veloCons, orientCons, angVeloCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints

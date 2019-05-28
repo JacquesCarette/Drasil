@@ -122,7 +122,7 @@ ${r_{j}}$ & Distance Perpendicular Distance Between the J-Th Particle and the An
 \\
 $\mathbf{r}$ & Displacement & m
 \\
-${\mathbf{r}_{j}}$ & Displacement vector between the origin and point B & m
+${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
 \\
 $\mathbf{r}(t)$ & Linear Displacement & m
 \\
@@ -408,17 +408,17 @@ RefBy &
 Label & Chasles' theorem
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{j}}
+           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{r}_{j}}$ is the displacement vector between the origin and point B (m)}
+              \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{j}}$ (m).
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -746,17 +746,17 @@ Symbol & ${\mathbf{v}_{B}}$
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{j}}
+           {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{r}_{j}}$ is the displacement vector between the origin and point B (m)}
+              \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{j}}$ (m).
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
         \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}

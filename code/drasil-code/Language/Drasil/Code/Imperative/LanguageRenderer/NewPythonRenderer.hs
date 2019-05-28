@@ -35,6 +35,7 @@ import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, vibcat, tripFst,
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
+import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
     equals, vcat, colon, brackets, isEmpty, render)
@@ -68,9 +69,9 @@ instance KeywordSym PythonCode where
     endStatementLoop = return empty
 
     include n = return $ pyInclude n
-    inherit = return $ empty
+    inherit = return empty
 
-    list _ = return $ empty
+    list _ = return empty
     listObj = return empty
 
     blockStart = return colon
@@ -104,7 +105,7 @@ instance BodySym PythonCode where
 
 instance BlockSym PythonCode where
     type Block PythonCode = Doc
-    block sts = lift1List blockDocD endStatement (map (fmap fst) (map state sts))
+    block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym PythonCode where
     type StateType PythonCode = Doc
@@ -137,63 +138,63 @@ instance ControlBlockSym PythonCode where
 
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
-    notOp = return $ notOpDocD'
-    negateOp = return $ negateOpDocD
-    sqrtOp = return $ sqrtOpDocD'
-    absOp = return $ absOpDocD'
-    logOp = return $ pyLogOp
-    lnOp = return $ pyLnOp
-    expOp = return $ expOpDocD'
-    sinOp = return $ sinOpDocD'
-    cosOp = return $ cosOpDocD'
-    tanOp = return $ tanOpDocD'
-    asinOp = return $ asinOpDocD'
-    acosOp = return $ acosOpDocD'
-    atanOp = return $ atanOpDocD'
+    notOp = return notOpDocD'
+    negateOp = return negateOpDocD
+    sqrtOp = return sqrtOpDocD'
+    absOp = return absOpDocD'
+    logOp = return pyLogOp
+    lnOp = return pyLnOp
+    expOp = return expOpDocD'
+    sinOp = return sinOpDocD'
+    cosOp = return cosOpDocD'
+    tanOp = return tanOpDocD'
+    asinOp = return asinOpDocD'
+    acosOp = return acosOpDocD'
+    atanOp = return atanOpDocD'
     floorOp = return $ text "math.floor"
     ceilOp = return $ text "math.ceil"
 
 instance BinaryOpSym PythonCode where
     type BinaryOp PythonCode = Doc
-    equalOp = return $ equalOpDocD
-    notEqualOp = return $ notEqualOpDocD
-    greaterOp = return $ greaterOpDocD
-    greaterEqualOp = return $ greaterEqualOpDocD
-    lessOp = return $ lessOpDocD
-    lessEqualOp = return $ lessEqualOpDocD
-    plusOp = return $ plusOpDocD
-    minusOp = return $ minusOpDocD
-    multOp = return $ multOpDocD
-    divideOp = return $ divideOpDocD
+    equalOp = return equalOpDocD
+    notEqualOp = return notEqualOpDocD
+    greaterOp = return greaterOpDocD
+    greaterEqualOp = return greaterEqualOpDocD
+    lessOp = return lessOpDocD
+    lessEqualOp = return lessEqualOpDocD
+    plusOp = return plusOpDocD
+    minusOp = return minusOpDocD
+    multOp = return multOpDocD
+    divideOp = return divideOpDocD
     powerOp = return $ text "**"
-    moduloOp = return $ moduloOpDocD
+    moduloOp = return moduloOpDocD
     andOp = return $ text "and"
     orOp = return $ text "or"
 
 instance ValueSym PythonCode where
     type Value PythonCode = (Doc, Maybe String)
-    litTrue = return $ (text "True", Just "True")
-    litFalse = return $ (text "False", Just "False")
-    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
-    litFloat v = return $ (litFloatD v, Just $ show v)
-    litInt v = return $ (litIntD v, Just $ show v)
-    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
+    litTrue = return (text "True", Just "True")
+    litFalse = return (text "False", Just "False")
+    litChar c = return (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return (litFloatD v, Just $ show v)
+    litInt v = return (litIntD v, Just $ show v)
+    litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just "0.0")
-    defaultInt = return $ (defaultIntD, Just "0")
-    defaultString = return $ (defaultStringD, Just "empty string")
+    defaultChar = return (defaultCharD, Just "space character")
+    defaultFloat = return (defaultFloatD, Just "0.0")
+    defaultInt = return (defaultIntD, Just "0")
+    defaultString = return (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ (varDocD n, Just n)
-    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
-    self = return $ (text "self", Just "self")
+    var n = return (varDocD n, Just n)
+    extVar l n = return (extVarDocD l n, Just $ l ++ "." ++ n)
+    self = return (text "self", Just "self")
     arg n = liftPairFst (liftA2 argDocD (litInt (n + 1)) argsList, Nothing)
-    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
+    enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
     objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
     objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Just $ "self." ++ n)
@@ -201,11 +202,10 @@ instance ValueSym PythonCode where
     n `listOf` t = listVar n t
     iterVar = var
 
-    inputFunc = return $ (text "input()", Nothing)  -- raw_input() for < Python 3.0
-    argsList = return $ (text "sys.argv", Nothing)
+    inputFunc = return (text "input()", Nothing)  -- raw_input() for < Python 3.0
+    argsList = return (text "sys.argv", Nothing)
 
-    valName (PC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
-                                    Just valstr -> valstr
+    valName (PC (v, s)) = fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression PythonCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -285,7 +285,7 @@ instance FunctionSym PythonCode where
     cast targT _ = targT
     castListToInt = cast int (listType static int)
     get n = fmap funcDocD (var n)
-    set n v = fmap funcDocD (liftPairFst (fmap fst $ assign (var n) v, Nothing))
+    set n v = fmap funcDocD (liftPairFst (fst <$> assign (var n) v, Nothing))
 
     listSize = return $ text "len"
     listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
@@ -485,7 +485,7 @@ instance ClassSym PythonCode where
 
 instance ModuleSym PythonCode where
     type Module PythonCode = (Doc, Label, Bool)
-    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, or [any (snd . unPC) fs, any (snd . unPC) cs])
+    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, any (snd . unPC) fs || any (snd . unPC) cs)
 
 -- convenience
 imp, incl, initName :: Label
@@ -558,33 +558,33 @@ pyListAccess (v, _) = brackets v
 pyForRange :: Label -> Doc ->  (Doc, Maybe String) ->  (Doc, Maybe String) ->  (Doc, Maybe String) -> Doc -> Doc
 pyForRange i inLabel (initv, _) (finalv, _) (stepv, _) b = vcat [
     forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
-    oneTab $ b]
+    oneTab b]
 
 pyForEach :: Label -> Doc -> Doc ->  (Doc, Maybe String) -> Doc -> Doc
 pyForEach i forEachLabel inLabel (lstVar, _) b = vcat [
     forEachLabel <+> text i <+> inLabel <+> lstVar <> colon,
-    oneTab $ b]
+    oneTab b]
 
 pyWhile ::  (Doc, Maybe String) -> Doc -> Doc
 pyWhile (v, _) b = vcat [
     text "while" <+> v <> colon,
-    oneTab $ b]
+    oneTab b]
 
 pyTryCatch :: Doc -> Doc -> Doc
 pyTryCatch tryB catchB = vcat [
     text "try" <+> colon,
-    oneTab $ tryB,
+    oneTab tryB,
     text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
-    oneTab $ catchB]
+    oneTab catchB]
 
 pyListSlice :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 pyListSlice (vnew, _) (vold, _) (b, _) (e, _) (s, _) = vnew <+> equals <+> 
-    vold <> (brackets $ b <> colon <> e <> colon <> s)
+    vold <> brackets (b <> colon <> e <> colon <> s)
 
 pyMethod :: Label ->  (Doc, Maybe String) -> Doc -> Doc -> Doc
 pyMethod n (slf, _) ps b = vcat [
     text "def" <+> text n <> parens (slf <> oneParam <> ps) <> colon,
-    oneTab $ bodyD]
+    oneTab bodyD]
         where oneParam | isEmpty ps = empty
                        | otherwise  = text ", "
               bodyD | isEmpty b = text "None"
@@ -593,14 +593,14 @@ pyMethod n (slf, _) ps b = vcat [
 pyFunction :: Label -> Doc -> Doc -> Doc
 pyFunction n ps b = vcat [
     text "def" <+> text n <> parens ps <> colon,
-    oneTab $ bodyD]
+    oneTab bodyD]
         where bodyD | isEmpty b = text "None"
                     | otherwise = b
 
 pyClass :: Label -> Doc -> Doc -> Doc
 pyClass n pn fs = vcat [
     classDec <+> text n <> pn <> colon,
-    oneTab $ fs]
+    oneTab fs]
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

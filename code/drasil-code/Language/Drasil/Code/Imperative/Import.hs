@@ -124,14 +124,10 @@ generateCode l unRepr g =
         pckg = runReader (genPackage prog) g
 
 genPackage :: (PackageSym repr) => String -> Reader (State repr) (repr (Package repr))
-genPackage n = do
-  fs <- genFiles
-  return $ packMods n fs
+genPackage n = packMods n <$> genFiles
 
 genFiles :: (RenderSym repr) => Reader (State repr) [(repr (RenderFile repr))]
-genFiles = do
-  ms <- genModules
-  return $ map fileDoc ms
+genFiles = map fileDoc <$> genModules
 
 genModules :: (RenderSym repr) => Reader (State repr) [(repr (Module repr))]
 genModules = do
@@ -164,7 +160,7 @@ getRunnable Cpp = nativeBinary
 
 getBuildConfig :: Lang -> Maybe BuildConfig
 getBuildConfig Java = buildSingle (\i _ -> ["javac", unwords i]) $
-  inCodePackage $ mainModuleFile
+  inCodePackage mainModuleFile
 getBuildConfig Python = Nothing
 getBuildConfig CSharp = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o]
 getBuildConfig Cpp = buildAll $ \i o -> [cppCompiler, unwords $

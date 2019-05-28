@@ -133,18 +133,18 @@ liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> f a ->
 liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
 
 liftList :: Monad m => ([a] -> b) -> [m a] -> m b
-liftList f as = fmap f $ sequence as
+liftList f as = f <$> sequence as
 
 lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
 lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
 
-lift1List :: (Applicative m, Monad m) => (a -> [b] -> c) -> m a -> [m b] -> m c
+lift1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
 lift1List f a as = liftA2 f a (sequence as)
 
-lift4Pair :: (Applicative m, Monad m) => (a -> b -> c -> d -> [(e, f)] -> g) -> m a -> m b -> m c -> m d -> [(m e, m f)] -> m g
+lift4Pair :: Monad m => (a -> b -> c -> d -> [(e, f)] -> g) -> m a -> m b -> m c -> m d -> [(m e, m f)] -> m g
 lift4Pair f a1 a2 a3 a4 as = liftA5 f a1 a2 a3 a4 (mapM liftPair as)
 
-lift3Pair :: (Applicative m, Monad m) => (a -> b -> c -> [(d, e)] -> f) -> m a -> m b -> m c -> [(m d, m e)] -> m f
+lift3Pair :: Monad m => (a -> b -> c -> [(d, e)] -> f) -> m a -> m b -> m c -> [(m d, m e)] -> m f
 lift3Pair f a1 a2 a3 as = liftA4 f a1 a2 a3 (mapM liftPair as)
 
 liftPair :: Applicative f => (f a, f b) -> f (a, b)

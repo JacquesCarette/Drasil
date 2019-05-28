@@ -66,7 +66,7 @@ genCode chs spec = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  mapM_ (\x -> do genLangCode x) (lang $ chs)
+  mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
   where genLangCode Java = genCall Java [unJC]
         genLangCode Python = genCall Python [unPC]

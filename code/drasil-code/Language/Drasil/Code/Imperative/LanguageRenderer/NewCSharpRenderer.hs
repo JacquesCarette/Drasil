@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer (
@@ -42,6 +43,7 @@ import Language.Drasil.Code.Imperative.Helpers (oneTab, tripFst, tripSnd,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
+import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, colon, render)
@@ -111,17 +113,17 @@ instance BodySym CSharpCode where
 
 instance BlockSym CSharpCode where
     type Block CSharpCode = Doc
-    block sts = (lift1List blockDocD endStatement (map (fmap fst) (map state sts)))
+    block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CSharpCode where
     type StateType CSharpCode = Doc
-    bool = return $ boolTypeDocD
-    int = return $ intTypeDocD
-    float = return $ csFloatTypeDoc
-    char = return $ charTypeDocD
-    string = return $ stringTypeDocD
-    infile = return $ csInfileTypeDoc
-    outfile = return $ csOutfileTypeDoc
+    bool = return boolTypeDocD
+    int = return intTypeDocD
+    float = return csFloatTypeDoc
+    char = return charTypeDocD
+    string = return stringTypeDocD
+    infile = return csInfileTypeDoc
+    outfile = return csOutfileTypeDoc
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = listType p int
     floatListType p = listType p float
@@ -158,8 +160,8 @@ instance ControlBlockSym CSharpCode where
 
 instance UnaryOpSym CSharpCode where
     type UnaryOp CSharpCode = Doc
-    notOp = return $ notOpDocD
-    negateOp = return $ negateOpDocD
+    notOp = return notOpDocD
+    negateOp = return negateOpDocD
     sqrtOp = return $ text "Math.Sqrt"
     absOp = return $ text "Math.Abs"
     logOp = return $ text "Math.Log10"
@@ -176,34 +178,34 @@ instance UnaryOpSym CSharpCode where
 
 instance BinaryOpSym CSharpCode where
     type BinaryOp CSharpCode = Doc
-    equalOp = return $ equalOpDocD
-    notEqualOp = return $ notEqualOpDocD
-    greaterOp = return $ greaterOpDocD
-    greaterEqualOp = return $ greaterEqualOpDocD
-    lessOp = return $ lessOpDocD
-    lessEqualOp = return $ lessEqualOpDocD
-    plusOp = return $ plusOpDocD
-    minusOp = return $ minusOpDocD
-    multOp = return $ multOpDocD
-    divideOp = return $ divideOpDocD
+    equalOp = return equalOpDocD
+    notEqualOp = return notEqualOpDocD
+    greaterOp = return greaterOpDocD
+    greaterEqualOp = return greaterEqualOpDocD
+    lessOp = return lessOpDocD
+    lessEqualOp = return lessEqualOpDocD
+    plusOp = return plusOpDocD
+    minusOp = return minusOpDocD
+    multOp = return multOpDocD
+    divideOp = return divideOpDocD
     powerOp = return $ text "Math.Pow"
-    moduloOp = return $ moduloOpDocD
-    andOp = return $ andOpDocD
-    orOp = return $ orOpDocD
+    moduloOp = return moduloOpDocD
+    andOp = return andOpDocD
+    orOp = return orOpDocD
 
 instance ValueSym CSharpCode where
     type Value CSharpCode = (Doc, Maybe String)
-    litTrue = return $ (litTrueD, Just "true")
-    litFalse = return $ (litFalseD, Just "false")
-    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
-    litFloat v = return $ (litFloatD v, Just $ show v)
-    litInt v = return $ (litIntD v, Just $ show v)
-    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
+    litTrue = return (litTrueD, Just "true")
+    litFalse = return (litFalseD, Just "false")
+    litChar c = return (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return (litFloatD v, Just $ show v)
+    litInt v = return (litIntD v, Just $ show v)
+    litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just "0.0")
-    defaultInt = return $ (defaultIntD, Just "0")
-    defaultString = return $ (defaultStringD, Just "empty string")
+    defaultChar = return (defaultCharD, Just "space character")
+    defaultFloat = return (defaultFloatD, Just "0.0")
+    defaultInt = return (defaultIntD, Just "0")
+    defaultString = return (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
@@ -211,7 +213,7 @@ instance ValueSym CSharpCode where
 
     const = var
     var n = return (varDocD n, Just n)
-    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
+    extVar l n = return (extVarDocD l n, Just $ l ++ "." ++ n)
     self = return (selfDocD, Just "this")
     arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
     enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
@@ -222,11 +224,10 @@ instance ValueSym CSharpCode where
     n `listOf` t = listVar n t
     iterVar = var
     
-    inputFunc = return $ (text "Console.ReadLine()", Nothing)
-    argsList = return $ (text "args", Nothing)
+    inputFunc = return (text "Console.ReadLine()", Nothing)
+    argsList = return (text "args", Nothing)
 
-    valName (CSC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
-                                     Just valstr -> valstr
+    valName (CSC (v, s)) = case s of Nothing -> fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression CSharpCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -372,10 +373,10 @@ instance StatementSym CSharpCode where
     printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), Semi)
     printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), Semi)
 
-    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
-    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
-    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
-    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
+    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
+    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
+    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
+    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
 
     getIntInput v = liftPairFst (liftA2 (csInput "Int32.Parse") v inputFunc, Semi)
     getFloatInput v = liftPairFst (liftA2 (csInput "Double.Parse") v inputFunc, Semi)
@@ -444,14 +445,14 @@ instance ControlStatementSym CSharpCode where
 
     checkState l = switch (var l)
 
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) (index &.++) notify
         where obsList = observerListName `listOf` t
               index = "observerIndex"
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while ((?!) (objVar f (var "EndOfStream")))
-        (oneLiner $ valState $ v $. (listAppend $ fmap csFileInput f))
+    getFileInputAll f v = while (objVar f (var "EndOfStream") ?!)
+        (oneLiner $ valState $ v $. listAppend (fmap csFileInput f))
 
 instance ScopeSym CSharpCode where
     type Scope CSharpCode = Doc
@@ -479,7 +480,7 @@ instance MethodSym CSharpCode where
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod c b = fmap setMain $ method "Main" c public static void [return $ text "string[] args"] b
+    mainMethod c b = setMain <$> method "Main" c public static void [return $ text "string[] args"] b
     privMethod n c = method n c private dynamic
     pubMethod n c = method n c public dynamic
     constructor n = method n n public dynamic (construct n)
@@ -500,7 +501,7 @@ instance ClassSym CSharpCode where
     type Class CSharpCode = (Doc, Bool)
     buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unCSC) fs)
     enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es False) s, False)
-    mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
+    mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -509,10 +510,9 @@ instance ModuleSym CSharpCode where
     -- Bool is True if the method is a main method, False otherwise
     type Module CSharpCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unCSC) cs) 
-                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
-                                        Nothing (map (liftA4 statementsToStateVars
-                                        public static endStatement) vs) ms):cs), n, or [any (snd . unCSC) ms, any (snd . unCSC) cs])
+        if null vs && null ms then 
+            liftTripFst (liftList moduleDocD cs, n, any (snd . unCSC) cs) else
+            liftTripFst (liftList moduleDocD (pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs), n, any (snd . unCSC) ms || any (snd . unCSC) cs)
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
@@ -536,9 +536,9 @@ csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 csTryCatch :: Doc -> Doc -> Doc
 csTryCatch tb cb= vcat [
     text "try" <+> lbrace,
-    oneTab $ tb,
+    oneTab tb,
     rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
-    oneTab $ cb,
+    oneTab cb,
     rbrace]
 
 csDiscardInput :: (Doc, Maybe String) -> Doc

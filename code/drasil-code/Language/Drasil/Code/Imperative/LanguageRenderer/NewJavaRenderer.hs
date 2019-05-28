@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (
@@ -42,6 +43,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles, oneTab, tripFst,
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
+import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
     semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
@@ -117,17 +119,17 @@ instance BodySym JavaCode where
 
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
-    block sts = lift1List blockDocD endStatement (map (fmap fst) (map state sts))
+    block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
 instance StateTypeSym JavaCode where
     type StateType JavaCode = Doc
-    bool = return $ boolTypeDocD
-    int = return $ intTypeDocD
-    float = return $ jFloatTypeDocD
-    char = return $ charTypeDocD
-    string = return $ jStringTypeDoc
-    infile = return $ jInfileTypeDoc
-    outfile = return $ jOutfileTypeDoc
+    bool = return boolTypeDocD
+    int = return intTypeDocD
+    float = return jFloatTypeDocD
+    char = return charTypeDocD
+    string = return jStringTypeDoc
+    infile = return jInfileTypeDoc
+    outfile = return jOutfileTypeDoc
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = fmap jIntListTypeDoc (list p)
     floatListType p = fmap jFloatListTypeDoc (list p)
@@ -164,8 +166,8 @@ instance ControlBlockSym JavaCode where
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
-    notOp = return $ notOpDocD
-    negateOp = return $ negateOpDocD
+    notOp = return notOpDocD
+    negateOp = return negateOpDocD
     sqrtOp = return $ text "Math.sqrt"
     absOp = return $ text "Math.abs"
     logOp = return $ text "Math.log10"
@@ -182,46 +184,46 @@ instance UnaryOpSym JavaCode where
 
 instance BinaryOpSym JavaCode where
     type BinaryOp JavaCode = Doc
-    equalOp = return $ equalOpDocD
-    notEqualOp = return $ notEqualOpDocD
-    greaterOp = return $ greaterOpDocD
-    greaterEqualOp = return $ greaterEqualOpDocD
-    lessOp = return $ lessOpDocD
-    lessEqualOp = return $ lessEqualOpDocD
-    plusOp = return $ plusOpDocD
-    minusOp = return $ minusOpDocD
-    multOp = return $ multOpDocD
-    divideOp = return $ divideOpDocD
+    equalOp = return equalOpDocD
+    notEqualOp = return notEqualOpDocD
+    greaterOp = return greaterOpDocD
+    greaterEqualOp = return greaterEqualOpDocD
+    lessOp = return lessOpDocD
+    lessEqualOp = return lessEqualOpDocD
+    plusOp = return plusOpDocD
+    minusOp = return minusOpDocD
+    multOp = return multOpDocD
+    divideOp = return divideOpDocD
     powerOp = return $ text "Math.pow"
-    moduloOp = return $ moduloOpDocD
-    andOp = return $ andOpDocD
-    orOp = return $ orOpDocD
+    moduloOp = return moduloOpDocD
+    andOp = return andOpDocD
+    orOp = return orOpDocD
 
 instance ValueSym JavaCode where
     -- Maybe String is the String representation of the value
     type Value JavaCode = (Doc, Maybe String)
-    litTrue = return $ (litTrueD, Just "true")
-    litFalse = return $ (litFalseD, Just "false")
-    litChar c = return $ (litCharD c, Just $ "\'" ++ [c] ++ "\'")
-    litFloat v = return $ (litFloatD v, Just $ show v)
-    litInt v = return $ (litIntD v, Just $ show v)
-    litString s = return $ (litStringD s, Just $ "\"" ++ s ++ "\"")
+    litTrue = return (litTrueD, Just "true")
+    litFalse = return (litFalseD, Just "false")
+    litChar c = return (litCharD c, Just $ "\'" ++ [c] ++ "\'")
+    litFloat v = return (litFloatD v, Just $ show v)
+    litInt v = return (litIntD v, Just $ show v)
+    litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
 
-    defaultChar = return $ (defaultCharD, Just "space character")
-    defaultFloat = return $ (defaultFloatD, Just "0.0")
-    defaultInt = return $ (defaultIntD, Just "0")
-    defaultString = return $ (defaultStringD, Just "empty string")
+    defaultChar = return (defaultCharD, Just "space character")
+    defaultFloat = return (defaultFloatD, Just "0.0")
+    defaultInt = return (defaultIntD, Just "0")
+    defaultString = return (defaultStringD, Just "empty string")
     defaultBool = litFalse
 
     ($->) = objVar
     ($:) = enumElement
 
     const = var
-    var n = return $ (varDocD n, Just n)
-    extVar l n = return $ (extVarDocD l n, Just $ l ++ "." ++ n)
-    self = return $ (selfDocD, Just "this")
+    var n = return (varDocD n, Just n)
+    extVar l n = return (extVarDocD l n, Just $ l ++ "." ++ n)
+    self = return (selfDocD, Just "this")
     arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
-    enumElement en e = return $ (enumElemDocD en e, Just $ en ++ "." ++ e)
+    enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
     enumVar = var
     objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
     objVarSelf = var
@@ -230,10 +232,9 @@ instance ValueSym JavaCode where
     iterVar = var
     
     inputFunc = return (parens (text "new Scanner(System.in)"), Nothing)
-    argsList = return $ (text "args", Nothing)
+    argsList = return (text "args", Nothing)
 
-    valName (JC (v, s)) = case s of Nothing -> error $ "Attempt to print unprintable Value (" ++ render v ++ ")"
-                                    Just valstr -> valstr
+    valName (JC (v, s)) = fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression JavaCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -380,10 +381,10 @@ instance StatementSym JavaCode where
     printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), Semi)
     printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), Semi)
 
-    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
-    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
-    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
-    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
+    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
+    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
+    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
+    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
 
     getIntInput v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInt") v inputFunc, Semi)
     getFloatInput v = liftPairFst (liftA3 jInput' (return $ text "Double.parseDouble") v inputFunc, Semi)
@@ -451,14 +452,14 @@ instance ControlStatementSym JavaCode where
     tryCatch tb cb = liftPairFst (liftA2 jTryCatch tb cb, Empty)
     
     checkState l = switch (var l)
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) (index &.++) notify
         where obsList = observerListName `listOf` t
               index = "observerIndex"
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
     getFileInputAll f v = while (f $. (func "hasNextLine" []))
-        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
+        (oneLiner $ valState $ v $. listAppend (f $. func "nextLine" []))
 
 instance ScopeSym JavaCode where
     type Scope JavaCode = Doc
@@ -486,7 +487,7 @@ instance MethodSym JavaCode where
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod c b = fmap setMain $ method "main" c public static void [return $ text "String[] args"] b
+    mainMethod c b = setMain <$> method "main" c public static void [return $ text "String[] args"] b
     privMethod n c = method n c private dynamic
     pubMethod n c = method n c public dynamic
     constructor n = method n n public dynamic (construct n)
@@ -507,7 +508,7 @@ instance ClassSym JavaCode where
     type Class JavaCode = (Doc, Bool)
     buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs), any (snd . unJC) fs)
     enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ enumElementsDocD es enumsEqualInts) s, False)
-    mainClass n vs fs = fmap setMain $ buildClass n Nothing public vs fs
+    mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
     privClass n p = buildClass n p private
     pubClass n p = buildClass n p public
 
@@ -516,10 +517,9 @@ instance ModuleSym JavaCode where
     -- Bool is True if the method is a main method, False otherwise
     type Module JavaCode = (Doc, Label, Bool)
     buildModule n _ vs ms cs = 
-        case null vs && null ms of True -> liftTripFst (liftList moduleDocD cs, n, any (snd . unJC) cs) 
-                                   _  -> liftTripFst (liftList moduleDocD ((pubClass n 
-                                        Nothing (map (liftA4 statementsToStateVars
-                                        public static endStatement) vs) ms):cs), n, or [any (snd . unJC) ms, any (snd . unJC) cs])
+        if null vs && null ms then 
+            liftTripFst (liftList moduleDocD cs, n, any (snd . unJC) cs) else
+            liftTripFst (liftList moduleDocD (pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs), n, any (snd . unJC) ms || any (snd . unJC) cs)
 
 enumsEqualInts :: Bool
 enumsEqualInts = False
@@ -565,9 +565,9 @@ jThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 jTryCatch :: Doc -> Doc -> Doc
 jTryCatch tb cb = vcat [
     text "try" <+> lbrace,
-    oneTab $ tb,
+    oneTab tb,
     rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
-    oneTab $ cb,
+    oneTab cb,
     rbrace]
 
 jDiscardInput :: (Doc, Maybe String) -> Doc
@@ -598,7 +598,7 @@ jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> t
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [
     s <+> p <+> t <+> text n <> parens ps <+> text "throws Exception" <+> lbrace,
-    oneTab $ b,
+    oneTab b,
     rbrace]
 
 jListIndexExists :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc

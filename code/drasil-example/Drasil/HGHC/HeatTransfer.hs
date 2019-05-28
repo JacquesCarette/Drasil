@@ -14,15 +14,15 @@ symbols = htOutputs ++ htInputs
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
-hghcVars :: [QDefinition]
-hghcVars = [htTransCladFuel, htTransCladCool]
+qDefs :: [QDefinition]
+qDefs = [htTransCladFuel, htTransCladCool]
 
 htVars :: [QuantityDict]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: [QuantityDict]
 htInputs = map qw htVars
-htOutputs = map qw hghcVars
+htOutputs = map qw qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")

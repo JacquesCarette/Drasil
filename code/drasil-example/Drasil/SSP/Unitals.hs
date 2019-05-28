@@ -17,8 +17,8 @@ import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
   weight)
 
 
-sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++ 
+symbols :: [DefinedQuantityDict]
+symbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++ 
   (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
 
 ---------------------------

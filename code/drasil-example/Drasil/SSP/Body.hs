@@ -78,7 +78,7 @@ import Drasil.SSP.Requirements (funcReqs, nonFuncReqs, inputDataTable,
   inputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
-  sspConstrained, sspInputs, sspOutputs, sspSymbols)
+  sspConstrained, sspInputs, sspOutputs, symbols)
 
 --type declarations for sections--
 aux_cons :: Section
@@ -103,7 +103,7 @@ si = SI {
   _sys = ssp, 
   _kind = Doc.srs, 
   _authors = [henryFrankis, brooks],
-  _quants = sspSymbols,
+  _quants = symbols,
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
   _datadefs = dataDefns,
@@ -208,19 +208,19 @@ traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other
 
 -- SYMBOL MAP HELPERS --
 symMap :: ChunkDB
-symMap = cdb (map qw SSP.iMods ++ map qw sspSymbols) (map nw sspSymbols
+symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw SSP.iMods ++ map cw sspSymbols ++ srsDomains) this_si label
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) this_si label
   refBy dataDefs iMods genDefs theory concIns
   section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
  map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
  dataDefs iMods genDefs theory concIns section 
  labCon

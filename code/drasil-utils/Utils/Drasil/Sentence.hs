@@ -21,8 +21,8 @@ sOr     = sentHelper "or"
 sVersus = sentHelper "versus"
 toThe   = sentHelper "to the"
 
-isExpctdToHv a b = S "The" +:+ (sentHelper "is expected to have" a b)
-ofGiv        a b = S "the" +:+ (sentHelper "of a given"          a b)
-ofGiv'       a b = S "The" +:+ (sentHelper "of a given"          a b)
-ofThe        a b = S "the" +:+ (sentHelper "of the"              a b)
-ofThe'       a b = S "The" +:+ (sentHelper "of the"              a b)
+isExpctdToHv a b = S "The" +:+ sentHelper "is expected to have" a b
+ofGiv        a b = S "the" +:+ sentHelper "of a given"          a b
+ofGiv'       a b = S "The" +:+ sentHelper "of a given"          a b
+ofThe        a b = S "the" +:+ sentHelper "of the"              a b
+ofThe'       a b = S "The" +:+ sentHelper "of the"              a b

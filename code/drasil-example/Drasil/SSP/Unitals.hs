@@ -51,10 +51,10 @@ wiif  = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw sspInputsWUncrtn ++ map cnstrw sspOutputs
+constrained = map cnstrw inputsWUncrtn ++ map cnstrw sspOutputs
 
-sspInputsWUncrtn :: [UncertQ]
-sspInputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
+inputsWUncrtn :: [UncertQ]
+inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, 
   fricAngle, dryWeight, satWeight, waterWeight]
 
@@ -62,7 +62,7 @@ sspInputsNoUncrtn :: [DefinedQuantityDict]
 sspInputsNoUncrtn = [constF]
 
 sspInputs :: [DefinedQuantityDict]
-sspInputs = map dqdWr sspInputsWUncrtn ++ map dqdWr sspInputsNoUncrtn
+sspInputs = map dqdWr inputsWUncrtn ++ map dqdWr sspInputsNoUncrtn
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]

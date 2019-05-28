@@ -20,7 +20,7 @@ velXQD :: QDefinition
 velXQD = mkQuantDef vx velXEqn
 
 velXEqn :: Expr
-velXEqn = (sy velocity) * cos (sy projAngle)
+velXEqn = sy velocity * cos (sy projAngle)
 
 ----------
 velY :: DataDefinition
@@ -30,4 +30,4 @@ velYQD :: QDefinition
 velYQD = mkQuantDef vy velYEqn
 
 velYEqn :: Expr
-velYEqn = (sy velocity) * sin (sy projAngle)
+velYEqn = sy velocity * sin (sy projAngle)

@@ -16,7 +16,7 @@ shortIM = imNoDerivNoRefs shortRC [qw targDist, qw projDist]
 
 shortRC :: RelationConcept
 shortRC = makeRC "shortRC" (nounPhraseSP "isShort") 
-  shortDesc $ (sy isShort) $= (sy targDist) $> (sy projDist)
+  shortDesc $ sy isShort $= sy targDist $> sy projDist
   
 shortDesc :: Sentence
 shortDesc = EmptyS
@@ -29,7 +29,7 @@ offsetIM = imNoDerivNoRefs offsetRC [qw targDist, qw projDist]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  offsetDesc $ (sy offset) $= UnaryOp Abs ((sy targDist) - (sy projDist))
+  offsetDesc $ sy offset $= UnaryOp Abs (sy targDist - sy projDist)
   
 offsetDesc :: Sentence
 offsetDesc = EmptyS
@@ -42,7 +42,7 @@ hitIM = imNoDerivNoRefs hitRC [qw offset, qw targDist]
 
 hitRC :: RelationConcept
 hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  hitDesc $ (sy isHit) $= (sy offset) $< (0.02 * (sy targDist))
+  hitDesc $ sy isHit $= sy offset $< (0.02 * sy targDist)
   
 hitDesc :: Sentence
 hitDesc = EmptyS

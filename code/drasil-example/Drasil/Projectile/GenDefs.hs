@@ -23,7 +23,7 @@ finalVelocityRC :: RelationConcept
 finalVelocityRC = makeRC "finalVelocityRC" (nounPhraseSP "final velocity") EmptyS finalVelocityRel
 
 finalVelocityRel :: Relation
-finalVelocityRel = (sy vf) $= (sy vi) + (sy acceleration) * (sy time)
+finalVelocityRel = sy vf $= sy vi + sy acceleration * sy time
 
 ----------
 airTimeGD :: GenDefn
@@ -33,7 +33,7 @@ airTimeRC :: RelationConcept
 airTimeRC = makeRC "airTimeR" (nounPhraseSP "air time") EmptyS airTimeRel
 
 airTimeRel :: Relation
-airTimeRel = (sy time) $= BinaryOp Frac (2 * sy vi * sin (sy projAngle)) (UnaryOp Abs (sy acceleration))
+airTimeRel = sy time $= BinaryOp Frac (2 * sy vi * sin (sy projAngle)) (UnaryOp Abs (sy acceleration))
 
 airTimeDeriv :: Sentence
 airTimeDeriv = foldlSent [at_start airTimeGD, S "is derived from" +:+.
@@ -50,7 +50,7 @@ distanceRC :: RelationConcept
 distanceRC = makeRC "distanceRC" (nounPhraseSP "distance") EmptyS distanceRel
 
 distanceRel :: Relation
-distanceRel = (sy distance) $= (sy vi) * (sy time) + BinaryOp Frac ((sy acceleration) * square (sy time)) 2
+distanceRel = sy distance $= sy vi * sy time + BinaryOp Frac (sy acceleration * square (sy time)) 2
 
 ----------
 distanceRefinedGD :: GenDefn
@@ -60,7 +60,7 @@ distanceRefinedRC :: RelationConcept
 distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "distance (refined)") EmptyS distanceRefinedRel
 
 distanceRefinedRel :: Relation
-distanceRefinedRel = (sy distance) $= BinaryOp Frac (2 * square (sy vi) * sin (sy projAngle) *
+distanceRefinedRel = sy distance $= BinaryOp Frac (2 * square (sy vi) * sin (sy projAngle) *
                       cos (sy projAngle)) (UnaryOp Abs (sy acceleration))
 
 distanceRefinedDeriv :: Sentence

@@ -17,7 +17,7 @@ velocityRC :: RelationConcept
 velocityRC = makeRC "velocityRC" (cn' "velocity") EmptyS velocityRel
 
 velocityRel :: Relation
-velocityRel = (sy velocity) $= deriv (sy displacement) time
+velocityRel = sy velocity $= deriv (sy displacement) time
 
 ------------- New Chunk -----------
 accelerationTM :: TheoryModel
@@ -29,4 +29,4 @@ accelerationRC :: RelationConcept
 accelerationRC = makeRC "accelerationRC" (cn' "acceleration") EmptyS accelerationRel
 
 accelerationRel :: Relation
-accelerationRel = (sy acceleration) $= deriv (sy velocity) time
+accelerationRel = sy acceleration $= deriv (sy velocity) time

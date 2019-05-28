@@ -29,7 +29,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP, rRot ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -60,7 +60,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
+  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, rRot]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -122,7 +122,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP, rRot :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -146,12 +146,12 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
+  (sub (eqSymb QP.displacement)lJ) metre
 
-{-r_F    = uc' "r_F" 
-  (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
-  
+rRot  = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^.term) 
+              (cn "perpendicular distance between the j-th particle and the angle of rotation"))
+              (phrase QP.distance)) (sub (eqSymb QP.distance) lJ) Real metre 
+
 posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 
@@ -161,6 +161,7 @@ posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
 massI = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
+
 
 posI = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))

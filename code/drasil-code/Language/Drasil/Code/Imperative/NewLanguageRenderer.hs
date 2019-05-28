@@ -105,7 +105,7 @@ enumElementsDocD :: [Label] -> Bool -> Doc
 enumElementsDocD es enumsEqualInts = vcat $
     zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
     where nums = [0..length es - 1]
-          equalsInt i = if enumsEqualInts then (equals <+> int i) else empty 
+          equalsInt i = if enumsEqualInts then equals <+> int i else empty 
           interComma i = if i < length es - 1 then text "," else empty
 
 enumElementsDocD' :: [Label] -> Doc
@@ -119,7 +119,7 @@ multiStateDocD :: Doc -> [(Doc, Terminator)] -> (Doc, Terminator)
 multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
-        applyEnd ((s, t):ss) = (s <> getTermDoc t):(applyEnd ss)
+        applyEnd ((s, t):ss) = (s <> getTermDoc t) : applyEnd ss
         needsEnd [] = Empty
         needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
@@ -133,7 +133,7 @@ blockDocD end sts = vcat statements
 bodyDocD :: [Doc] -> Doc
 bodyDocD bs = vibcat blocks
   where blocks = filter notNullBlock bs
-        notNullBlock b = (not $ isEmpty b)
+        notNullBlock b = not $ isEmpty b
 
 -- IO --
 

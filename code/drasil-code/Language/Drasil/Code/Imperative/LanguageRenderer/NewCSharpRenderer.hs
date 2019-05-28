@@ -146,11 +146,11 @@ instance ControlBlockSym CSharpCode where
             l_i = "i_temp"
             v_i = var l_i
         in
-        (bodyStatements [
-            (listDec l_temp 0 t),
+        bodyStatements [
+            listDec l_temp 0 t,
             for (varDecDef l_i int (getB b)) (v_i ?< getE e) (getS s v_i)
-                (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            (vnew &= v_temp)])
+                (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess v_i)),
+            vnew &= v_temp]
         where getB Nothing = litInt 0
               getB (Just n) = n
               getE Nothing = vold $. listSize
@@ -227,7 +227,7 @@ instance ValueSym CSharpCode where
     inputFunc = return (text "Console.ReadLine()", Nothing)
     argsList = return (text "args", Nothing)
 
-    valName (CSC (v, s)) = case s of Nothing -> fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
+    valName (CSC (v, s)) = fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression CSharpCode where
     (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -246,9 +246,9 @@ instance NumericExpression CSharpCode where
     sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
     cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
     tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
-    csc v = (litFloat 1.0) #/ (sin v)
-    sec v = (litFloat 1.0) #/ (cos v)
-    cot v = (litFloat 1.0) #/ (tan v)
+    csc v = litFloat 1.0 #/ sin v
+    sec v = litFloat 1.0 #/ cos v
+    cot v = litFloat 1.0 #/ tan v
     arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
     arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
     arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
@@ -346,10 +346,10 @@ instance StatementSym CSharpCode where
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
     (&+=) v1 v2 = liftPairFst (liftA2 plusEqualsDocD v1 v2, Semi)
-    (&.+=) l v = (var l) &+= v
+    (&.+=) l v = var l &+= v
     (&++) v = liftPairFst (fmap plusPlusDocD v, Semi)
     (&.++) l = (&++) (var l)
-    (&~-) v = v &= (v #- (litInt 1))
+    (&~-) v = v &= (v #- litInt 1)
     (&.~-) l = (&~-) (var l)
 
     varDec l t = liftPairFst (fmap (varDecDocD l) t, Semi)
@@ -373,10 +373,10 @@ instance StatementSym CSharpCode where
     printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) (litString s), Semi)
     printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) (litString s), Semi)
 
-    printList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStr "]")]
-    printLnList t v = multi [(state (printStr "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])), (state (print t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printStrLn "]")]
-    printFileList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStr f "]")]
-    printFileLnList f t v = multi [(state (printFileStr f "[")), (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. listSize) #- (litInt 1))) ("i" &.++) (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])), (state (printFile f t (v $. (listAccess ((v $. listSize) #- (litInt 1)))))), (printFileStrLn f "]")]
+    printList t v = multi [state (printStr "["), for (varDecDef "i" int (litInt 0)) (var "i" ?< ((v $. listSize) #- litInt 1)) ("i" &.++) (bodyStatements [print t (v $. listAccess (var "i")), printStr ","]), state (print t (v $. listAccess ((v $. listSize) #- litInt 1))), printStr "]"]
+    printLnList t v = multi [state (printStr "["), for (varDecDef "i" int (litInt 0)) (var "i" ?< ((v $. listSize) #- litInt 1)) ("i" &.++) (bodyStatements [print t (v $. listAccess (var "i")), printStr ","]), state (print t (v $. listAccess ((v $. listSize) #- litInt 1))), printStrLn "]"]
+    printFileList f t v = multi [state (printFileStr f "["), for (varDecDef "i" int (litInt 0)) (var "i" ?< ((v $. listSize) #- litInt 1)) ("i" &.++) (bodyStatements [printFile f t (v $. listAccess (var "i")), printFileStr f ","]), state (printFile f t (v $. listAccess ((v $. listSize) #- litInt 1))), printFileStr f "]"]
+    printFileLnList f t v = multi [state (printFileStr f "["), for (varDecDef "i" int (litInt 0)) (var "i" ?< ((v $. listSize) #- litInt 1)) ("i" &.++) (bodyStatements [printFile f t (v $. listAccess (var "i")), printFileStr f ","]), state (printFile f t (v $. listAccess ((v $. listSize) #- litInt 1))), printFileStrLn f "]"]
 
     getIntInput v = liftPairFst (liftA2 (csInput "Int32.Parse") v inputFunc, Semi)
     getFloatInput v = liftPairFst (liftA2 (csInput "Double.Parse") v inputFunc, Semi)
@@ -399,7 +399,7 @@ instance StatementSym CSharpCode where
 
     getFileInputLine = getStringFileInput
     discardFileLine f = valState $ fmap csFileInput f
-    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. (func "Split" [litChar d])]
+    stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) [s $. func "Split" [litChar d]]
 
     break = return (breakDocD, Semi)
     continue = return (continueDocD, Semi)
@@ -416,7 +416,7 @@ instance StatementSym CSharpCode where
     throw errMsg = liftPairFst (fmap csThrowDoc (litString errMsg), Semi)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
-    changeState fsmName toState = fsmName &.= (litString toState)
+    changeState fsmName toState = fsmName &.= litString toState
 
     initObserverList = listDecDef observerListName
     addObserver t o = valState $ obsList $. listAdd lastelem o
@@ -437,7 +437,7 @@ instance ControlStatementSym CSharpCode where
     ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
     for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b, Empty)
-    forRange i initv finalv stepv = for (varDecDef i int initv) ((var i) ?< finalv) (i &.+= stepv)
+    forRange i initv finalv stepv = for (varDecDef i int initv) (var i ?< finalv) (i &.+= stepv)
     forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b, Empty)
     while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, Empty)
 
@@ -477,9 +477,9 @@ instance MethodSym CSharpCode where
     type Method CSharpCode = (Doc, Bool)
     method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b, False)
     getMethod n c t = method (getterName n) c public dynamic t [] getBody
-        where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
-        where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
+        where getBody = oneLiner $ returnState (self $-> var n)
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [stateParam paramLbl t] setBody
+        where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
     mainMethod c b = setMain <$> method "Main" c public static void [return $ text "string[] args"] b
     privMethod n c = method n c private dynamic
     pubMethod n c = method n c public dynamic

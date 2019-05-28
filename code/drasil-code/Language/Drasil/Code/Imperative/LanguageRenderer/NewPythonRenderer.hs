@@ -224,9 +224,9 @@ instance NumericExpression PythonCode where
     sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
     cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
     tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
-    csc v = (litFloat 1.0) #/ (sin v)
-    sec v = (litFloat 1.0) #/ (cos v)
-    cot v = (litFloat 1.0) #/ (tan v)
+    csc v = litFloat 1.0 #/ sin v
+    sec v = litFloat 1.0 #/ cos v
+    cot v = litFloat 1.0 #/ tan v
     arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
     arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
     arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
@@ -254,7 +254,7 @@ instance ValueExpression PythonCode where
     extStateObj l t vs = liftPairFst (liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs), Nothing)
     listStateObj t _ = liftPairFst (t, Nothing)
 
-    exists v = v ?!= (var "None")
+    exists v = v ?!= var "None"
     notNull = exists
 
 instance Selector PythonCode where
@@ -269,7 +269,7 @@ instance Selector PythonCode where
     listPopulateAccess v f = liftPairFst (liftA2 pyListPopAccess v f, Nothing)
     listSizeAccess v = liftPairFst (liftA2 pyListSizeAccess v listSize, Nothing)
 
-    listIndexExists lst index = (listSizeAccess lst) ?> index
+    listIndexExists lst index = listSizeAccess lst ?> index
     argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     
     indexOf l v = objAccess l (fmap funcDocD (funcApp "index" [v]))
@@ -325,10 +325,10 @@ instance StatementSym PythonCode where
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
     (&+=) v1 v2 = liftPairFst (liftA3 plusEqualsDocD' v1 plusOp v2, Empty)
-    (&.+=) l v = (var l) &+= v
+    (&.+=) l v = var l &+= v
     (&++) v = liftPairFst (liftA2 plusPlusDocD' v plusOp, Empty)
     (&.++) l = (&++) (var l)
-    (&~-) v = v &= (v #- (litInt 1))
+    (&~-) v = v &= (v #- litInt 1)
     (&.~-) l = (&~-) (var l)
 
     varDec _ _ = return (empty, Empty)
@@ -357,25 +357,25 @@ instance StatementSym PythonCode where
     printFileList = printFile
     printFileLnList = printFileLn
 
-    getIntInput v = v &= (funcApp "int" [inputFunc])
-    getFloatInput v = v &= (funcApp "float" [inputFunc])
-    getBoolInput v = v &= (inputFunc ?!= (litString "0"))
-    getStringInput v = v &= (objMethodCall inputFunc "rstrip" [])
+    getIntInput v = v &= funcApp "int" [inputFunc]
+    getFloatInput v = v &= funcApp "float" [inputFunc]
+    getBoolInput v = v &= inputFunc ?!= litString "0"
+    getStringInput v = v &= objMethodCall inputFunc "rstrip" []
     getCharInput v = v &= inputFunc
     discardInput = valState inputFunc
-    getIntFileInput f v = v &= (funcApp "int" [(objMethodCall f "readline" [])])
-    getFloatFileInput f v = v &= (funcApp "float" [(objMethodCall f "readline" [])])
-    getBoolFileInput f v =  v &= ((objMethodCall f "readline" []) ?!= (litString "0"))
-    getStringFileInput f v = v &= (objMethodCall (objMethodCall f "readline" []) "rstrip" [])
-    getCharFileInput f v = v &= (objMethodCall f "readline" [])
+    getIntFileInput f v = v &= funcApp "int" [objMethodCall f "readline" []]
+    getFloatFileInput f v = v &= funcApp "float" [objMethodCall f "readline" []]
+    getBoolFileInput f v =  v &= (objMethodCall f "readline" [] ?!= litString "0")
+    getStringFileInput f v = v &= objMethodCall (objMethodCall f "readline" []) "rstrip" []
+    getCharFileInput f v = v &= objMethodCall f "readline" []
     discardFileInput f = valState (objMethodCall f "readline" [])
 
-    openFileR f n = f &= (funcApp "open" [n, litString "r"])
-    openFileW f n = f &= (funcApp "open" [n, litString "w"])
-    openFileA f n = f &= (funcApp "open" [n, litString "a"])
+    openFileR f n = f &= funcApp "open" [n, litString "r"]
+    openFileW f n = f &= funcApp "open" [n, litString "w"]
+    openFileA f n = f &= funcApp "open" [n, litString "a"]
     closeFile f = valState $ objMethodCall f "close" []
 
-    getFileInputLine f v = v &= (objMethodCall f "readline" [])
+    getFileInputLine f v = v &= objMethodCall f "readline" []
     discardFileLine f = valState $ objMethodCall f "readline" []
     stringSplit d vnew s = assign vnew (objAccess s 
         (func "split" [litString [d]]))    
@@ -390,12 +390,12 @@ instance StatementSym PythonCode where
 
     comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
 
-    free v = v &= (var "None")
+    free v = v &= var "None"
 
     throw errMsg = liftPairFst (fmap pyThrow (litString errMsg), Empty)
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
-    changeState fsmName toState = fsmName &.= (litString toState)
+    changeState fsmName toState = fsmName &.= litString toState
 
     initObserverList = listDecDef observerListName
     addObserver t o = valState $ obsList $. listAdd lastelem o
@@ -423,13 +423,13 @@ instance ControlStatementSym PythonCode where
     tryCatch tb cb = liftPairFst (liftA2 pyTryCatch tb cb, Empty)
 
     checkState l = switch (var l)
-    notifyObservers fn t ps = forRange index initv ((listSizeAccess obsList)) (litInt 1) notify
+    notifyObservers fn t ps = forRange index initv (listSizeAccess obsList) (litInt 1) notify
         where obsList = observerListName `listOf` t
               index = "observerIndex"
               initv = litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
     
-    getFileInputAll f v = v &= (objMethodCall f "readlines" [])
+    getFileInputAll f v = v &= objMethodCall f "readlines" []
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc
@@ -453,9 +453,9 @@ instance MethodSym PythonCode where
     type Method PythonCode = (Doc, Bool)
     method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList paramListDocD ps) b, False)
     getMethod n c t = method (getterName n) c public dynamic t [] getBody
-        where getBody = oneLiner $ returnState (self $-> (var n))
-    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [(stateParam paramLbl t)] setBody
-        where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
+        where getBody = oneLiner $ returnState (self $-> var n)
+    setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [stateParam paramLbl t] setBody
+        where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
     mainMethod _ b = liftPairFst (b, True)
     privMethod n c = method n c private dynamic
     pubMethod n c = method n c public dynamic

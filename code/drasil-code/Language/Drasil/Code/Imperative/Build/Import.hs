@@ -42,7 +42,7 @@ renderExt e CodeExt = head e
 renderExt _ (OtherExt e) = e
 
 getMainModule :: [(Doc, Label, Bool)] -> Label
-getMainModule c = mainName $ filter (tripThird) c
+getMainModule c = mainName $ filter tripThird c
   where mainName [(_, a, _)] = a
         mainName _ = error "Expected a single main module."
 

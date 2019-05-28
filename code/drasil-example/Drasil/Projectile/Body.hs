@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance, time, velocity)
 
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
+import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.People (samCrawford)
 import Data.Drasil.Phrase (for'')
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, ofThe, sAnd)
@@ -31,6 +31,7 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, ofThe, sAnd)
 import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.Concepts (concepts, projectileTitle, projectile)
 import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -45,7 +46,7 @@ mkSRS :: DocDesc
 mkSRS = [
   SSDSec $
     SSDProg
-      [ SSDProblem   $ PDProg  probStart projectile probEnding [goalStmts]
+      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding [goalStmts]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -58,7 +59,7 @@ mkSRS = [
 
 systInfo :: SystemInformation
 systInfo = SI {
-  _sys         = projectile,
+  _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford],
   _quants      = [] :: [QuantityDict],
@@ -77,11 +78,12 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw [acceleration, displacement, distance, time, velocity] ++ unitalQuants)
-  (nw projectile : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++
+  (nw projectileTitle : nw mass : nw twoD : map nw [angle, collision, equation, position, program] ++
     map nw [datum, general, information, input_, model, output_, physicalSystem, problemDescription,
     problem, section_, solutionCharacteristic, specification, symbol_, system] ++
     map nw [acceleration, displacement, distance, time, velocity] ++
-  map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++ unitalIdeas)
+    map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++
+    map nw concepts ++ unitalIdeas)
   [assumpDom] ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
@@ -109,10 +111,6 @@ refBy = generateRefbyMap label
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
--- MOVE TO CONCEPTS
-projectile :: CI -- Title
-projectile = commonIdeaWithDict "projectile" (pn "Projectile") "Projectile" [physics]
-
 -------------------------
 -- Problem Description --
 -------------------------
@@ -120,14 +118,13 @@ projectile = commonIdeaWithDict "projectile" (pn "Projectile") "Projectile" [phy
 probStart :: Sentence
 probStart = foldlSent [S "A", phrase system,
   S "is needed to efficiently" `sAnd` S "correctly predict the landing",
-  phrase position, S "of a projectile"]
+  phrase position, S "of a", phrase projectile]
 
 probEnding :: Sentence
 probEnding = foldlSent_ [S "interpret the", plural input_,
-  S "to give out the", plural output_,
-  S "which predict the landing", phrase position,
-  S "of a projectile"]
+  S "to give out the", plural output_, S "which predict the landing",
+  phrase position, S "of a", phrase projectile]
 
 goalStmts :: Section
-goalStmts = goalStmtF [(phrase angle `sAnd` phrase velocity) `ofThe` S "projectile"]
+goalStmts = goalStmtF [(phrase angle `sAnd` phrase velocity) `ofThe` phrase projectile]
   (mkEnumSimpleD goals)

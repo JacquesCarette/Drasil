@@ -74,7 +74,7 @@ import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
+import Drasil.SSP.Requirements (funcReqs, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
@@ -180,7 +180,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
+concIns = goals ++ assumptions ++ funcReqs ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
 section :: [Section]
 section = sec
@@ -536,7 +536,7 @@ slopeVert = verticesConst $ phrase slope
 
 -- SECTION 5.1 --
 funcReqList :: [Contents]
-funcReqList = (mkEnumSimpleD sspFRequirements) ++
+funcReqList = (mkEnumSimpleD funcReqs) ++
   [LlC sspInputDataTable, LlC sspInputsToOutputTable]
 
 -- SECTION 5.2 --

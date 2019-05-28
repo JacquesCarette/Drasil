@@ -1,4 +1,4 @@
-module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
+module Drasil.SSP.Requirements (funcReqs, sspNFRequirements,
   sspInputDataTable, sspInputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
@@ -26,8 +26,8 @@ import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce,
 
 {-Functional Requirements-}
 
-sspFRequirements :: [ConceptInstance]
-sspFRequirements = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
+funcReqs :: [ConceptInstance]
+funcReqs = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
   displayInput, displayGraph, displayFS, displayNormal, displayShear, 
   writeToFile]
 

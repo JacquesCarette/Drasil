@@ -58,11 +58,11 @@ inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, 
   fricAngle, dryWeight, satWeight, waterWeight]
 
-sspInputsNoUncrtn :: [DefinedQuantityDict]
-sspInputsNoUncrtn = [constF]
+inputsNoUncrtn :: [DefinedQuantityDict]
+inputsNoUncrtn = [constF]
 
 sspInputs :: [DefinedQuantityDict]
-sspInputs = map dqdWr inputsWUncrtn ++ map dqdWr sspInputsNoUncrtn
+sspInputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]

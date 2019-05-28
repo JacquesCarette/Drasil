@@ -16,10 +16,10 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems Incorporating PCM}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith}
@@ -489,7 +489,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \midrule \\
-Source & \cite{incroperaEtAl2007}
+Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -708,7 +708,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \cite{bueche1986}
+Source & \cite[(pg. 282)]{bueche1986}
 \\ \midrule \\
 RefBy & \hyperref[DD:melt.frac]{DD: melt\_frac} \hyperref[TM:latentHtE]{TM: latentHtE} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \\ \bottomrule \end{tabular}
@@ -1151,7 +1151,7 @@ This section provides the non-functional requirements, the qualities that the so
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
-\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]\hyperref[assumpWAL]{A: Water-Always-Liquid} ,  \hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
 \item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]\hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{IM: heatEInPCM} to be valid.
 \end{itemize}

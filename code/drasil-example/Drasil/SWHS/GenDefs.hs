@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
+module Drasil.SWHS.GenDefs (genDefs, nwtnCooling, rocTempSimp,
   roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
@@ -32,17 +32,17 @@ import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
 --  General Definitions  --
 ---------------------------
 
---FIXME: swhsGDs, nwtnCoolingGD, and rocTempSimpGD were added--
+--FIXME: genDefs, nwtnCoolingGD, and rocTempSimpGD were added--
 --since referencing implementation for RelationConcept hasn't--
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
-swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCooling, rocTempSimp] 
+genDefs :: [GenDefn]
+genDefs = [nwtnCooling, rocTempSimp] 
 
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
-  [makeCite incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+  [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCooling_desc]
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
                  "rocTempSimp" [rocTempSimp_desc]

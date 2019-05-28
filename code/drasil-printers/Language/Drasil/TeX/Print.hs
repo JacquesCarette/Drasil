@@ -36,7 +36,7 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, externalref,
-  snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+  snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -260,11 +260,12 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref Internal r sn)  = snref r $ spec sn
-spec (Ref Cite2 r _)      = cite $ pure $ text r
-spec (Ref External r sn)  = externalref r $ spec sn
-spec EmptyS                 = empty
-spec (Quote q)              = quote $ spec q
+spec (Ref Internal r sn) = snref r $ spec sn
+spec (Ref Cite2    r EmptyS) = cite (pure $ text r)
+spec (Ref Cite2    r i)      = citeInfo (pure $ text r) (spec i)
+spec (Ref External r sn) = externalref r $ spec sn
+spec EmptyS              = empty
+spec (Quote q)           = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

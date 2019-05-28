@@ -5,10 +5,10 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.GamePhysics.Body (chipmunkSRS', printSetting)
+import Drasil.GamePhysics.Body (srs, printSetting)
 
-chipChoices :: Choices
-chipChoices = Choices {
+choices :: Choices
+choices = Choices {
   lang             = [Python, Cpp, CSharp, Java],
   impType          = Library,
   logFile          = "log.txt",
@@ -21,5 +21,5 @@ chipChoices = Choices {
        
 main :: IO ()
 main = do
-  gen (DocSpec SRS "Chipmunk_SRS") chipmunkSRS'  printSetting
-  gen (DocSpec Website "Chipmunk_SRS") chipmunkSRS' printSetting
+  gen (DocSpec SRS "Chipmunk_SRS") srs  printSetting
+  gen (DocSpec Website "Chipmunk_SRS") srs printSetting

@@ -16,15 +16,15 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
-swhsRefMDB :: ModelDB
-swhsRefMDB = mdb [] [] swhsDDefs []
+refMDB :: ModelDB
+refMDB = mdb [] [] dataDefs []
 
-swhsQDefs :: [QDefinition]
-swhsQDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
+qDefs :: [QDefinition]
+qDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
-swhsDDefs :: [DataDefinition] 
-swhsDDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
+dataDefs :: [DataDefinition] 
+dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
   ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
@@ -90,7 +90,7 @@ htFusionEqn = (sy latentHeat) / (sy mass)
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = dd dd3HtFusionQD [makeCite bueche1986 {- +:+ sParen (S "pg. 282") -} ]
+dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
   [] "htFusion" []
 
 ----

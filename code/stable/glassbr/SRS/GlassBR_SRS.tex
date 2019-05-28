@@ -16,10 +16,10 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -305,7 +305,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \item{Load- A uniformly distributed lateral pressure.}
 \begin{itemize}
-\item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in \cite{astm2009} (pg. 1, 53).}
+\item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in \cite[(pp. 1 and 53)]{astm2009}.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
 \item{Short duration load - Any load lasting 3 seconds or less.}
@@ -346,7 +346,7 @@ The instance models that govern GlassBR are presented in \hyperref[Sec:IMs]{Sect
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
 \item[glassType:\phantomsection\label{assumpGT}]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
-\item[glassCondition:\phantomsection\label{assumpGC}]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.
+\item[glassCondition:\phantomsection\label{assumpGC}]Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.
 \item[explainScenario:\phantomsection\label{assumpES}]This system only considers the external explosion scenario for its calculations. \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.
 \item[standardValues:\phantomsection\label{assumpSV}]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} \hyperref[DD:sdfTol]{DD: sdfTol} \hyperref[DD:nFL]{DD: nFL} \hyperref[DD:loadDurFactor]{DD: loadDurFactor} \hyperref[DD:dimlessLoad]{DD: dimlessLoad} \hyperref[assumpLDFC]{A: ldfConstant}.
 \item[glassLite:\phantomsection\label{assumpGL}]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[DD:calofCapacity]{DD: calofCapacity} \hyperref[DD:dimlessLoad]{DD: dimlessLoad} \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.
@@ -452,7 +452,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
 \\ \midrule \\
-Source & \cite{astm2009}, \cite{beasonEtAl1998}, and \cite{campidelli}
+Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
 \\ \midrule \\
 RefBy & \hyperref[DD:probOfBreak]{DD: probOfBreak}.
 \\ \bottomrule \end{tabular}
@@ -674,7 +674,7 @@ Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofD
         $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
-Source & \cite{astm2009} and \cite{campidelli}
+Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
 \\ \midrule \\
 RefBy & \hyperref[DD:stressDistFac]{DD: stressDistFac}.
 \\ \bottomrule \end{tabular}

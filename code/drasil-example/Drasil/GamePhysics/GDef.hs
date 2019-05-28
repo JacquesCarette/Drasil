@@ -4,7 +4,7 @@
 -- so it is not actually 'plugged in'.  The definitions in here
 -- may not type check anymore!
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%
-module Drasil.GamePhysics.GDefs (cpGDefs) where
+module Drasil.GamePhysics.GDefs (genDefs) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics (rigidBody)
@@ -13,8 +13,8 @@ import Data.Drasil.Utils (foldlSent)
 
 ----- General Models -----
 
-cpGDefs :: [RelationConcept]
---cpGDefs = []
+genDefs :: [RelationConcept]
+--genDefs = []
 
 impulseGDef :: RelationConcept
 impulseGDef = makeRC "impulse" (nounPhraseSP "Impulse") 

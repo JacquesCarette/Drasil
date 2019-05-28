@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
 
 
 symbols :: [DefinedQuantityDict]
-symbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++ 
+symbols = (map dqdWr inputs) ++ (map dqdWr sspOutputs) ++ 
   (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
 
 ---------------------------
@@ -61,8 +61,8 @@ inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip,
 inputsNoUncrtn :: [DefinedQuantityDict]
 inputsNoUncrtn = [constF]
 
-sspInputs :: [DefinedQuantityDict]
-sspInputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords]

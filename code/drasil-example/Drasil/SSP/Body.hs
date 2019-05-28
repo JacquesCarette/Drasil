@@ -78,7 +78,7 @@ import Drasil.SSP.Requirements (funcReqs, nonFuncReqs, inputDataTable,
   inputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
-  constrained, sspInputs, sspOutputs, symbols)
+  constrained, inputs, sspOutputs, symbols)
 
 --type declarations for sections--
 aux_cons :: Section
@@ -107,7 +107,7 @@ si = SI {
   _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
   _datadefs = dataDefns,
-  _inputs = map qw sspInputs,
+  _inputs = map qw inputs,
   _outputs = map qw sspOutputs,
   _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
   _constraints = constrained,

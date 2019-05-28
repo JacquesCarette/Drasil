@@ -21,7 +21,7 @@ import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
 import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce, 
-  intShrForce, sspInputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
+  intShrForce, inputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
   yMaxSlip, yMinSlip)
 
 {-Functional Requirements-}
@@ -93,7 +93,7 @@ writeToFile = cic "writeToFile" ( foldlSent [
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
+inputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr inputs
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]

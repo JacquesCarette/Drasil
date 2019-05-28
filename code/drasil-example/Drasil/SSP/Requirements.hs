@@ -1,5 +1,5 @@
 module Drasil.SSP.Requirements (funcReqs, sspNFRequirements,
-  sspInputDataTable, sspInputsToOutputTable, propsDeriv) where
+  inputDataTable, sspInputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
 
@@ -37,7 +37,7 @@ readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput,
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
-  makeRef2S sspInputDataTable `sC` S "and store the", plural datum]) 
+  makeRef2S inputDataTable `sC` S "and store the", plural datum]) 
   "Read-and-Store" funcReqDom
 
 verifyInput = cic "verifyInput" ( foldlSent [
@@ -92,8 +92,8 @@ writeToFile = cic "writeToFile" ( foldlSent [
   funcReqDom
 
 ------------------
-sspInputDataTable :: LabelledContent
-sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
+inputDataTable :: LabelledContent
+inputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]

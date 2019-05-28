@@ -29,9 +29,6 @@ IMods.hs
   
 Main.hs 
   - A list of what should be generated
-
-ProblemDescription.txt
-  - A rough framework for the Problem Description section
   
 README.md
   - This file
@@ -41,6 +38,9 @@ Requirements.txt
 
 RequirementsAndEquations.jpg
   - Rough work for the requirements and equations for Projectile
+
+SpecificSystemDescription.txt
+  - A rough framework for the Specific System Description section
 
 TMods.hs
   - The theoretical models for Projectile

@@ -54,8 +54,8 @@ riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
 risk = dd riskQD 
-  (map makeCite [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
-  campidelli {- FIXME +:+ sParen (S "Eq. 14") -}])
+  ([makeCite astm2009, makeCiteInfo beasonEtAl1998 $ Equation [4, 5],
+  makeCiteInfo campidelli $ Equation [14]])
   [{-derivation-}] "riskFun"
   [aGrtrThanB, hRef, ldfRef, jRef]
 
@@ -138,7 +138,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = dd dimLLQD (map makeCite [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}]) [{-derivation-}] "dimlessLoad"
+dimLL = dd dimLLQD ([makeCite astm2009, makeCiteInfo campidelli $ Equation [7]]) [{-derivation-}] "dimlessLoad"
   [qRef , aGrtrThanB , hRef, gtfRef, glassLiteRef, makeRef2S assumpSV]
 
 --DD8--

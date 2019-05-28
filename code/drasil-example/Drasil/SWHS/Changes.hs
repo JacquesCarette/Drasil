@@ -70,14 +70,14 @@ unlikelyChgs = [unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS]
 
 unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
-  foldlSent [makeRef2S assumpWAL, S ", ", chgsStart assumpNGSP, S "It is unlikely for the change of",
+  foldlSent [makeRef2S assumpWAL `sC` chgsStart assumpNGSP, S "It is unlikely for the change of",
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP, S "Is used for the derivations of",
-  makeRef2S eBalanceOnWtr, S "and", makeRef2S eBalanceOnPCM] )
+  makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (

@@ -14,12 +14,10 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (caption, image,
-  div_tag, td, th, tr,
-  bold, sub, sup, cases, fraction, em, refwrap,
-  reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, head_tag,
-  table, ol, ul, li, pa, ba)
+import Language.Drasil.HTML.Helpers (article_title, author, ba, body, bold,
+  caption, cases, div_tag, em, fraction, h, head_tag, html, image, li, ol, pa,
+  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
+  th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 
@@ -102,9 +100,10 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref Internal r a )  = reflink  r $ p_spec a
-p_spec (Ref Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
-p_spec (Ref External r a ) = reflinkURI  r $ p_spec a
+p_spec (Ref Internal r a)      = reflink     r $ p_spec a
+p_spec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
+p_spec (Ref Cite2    r a)      = reflinkInfo r (text r) (p_spec a) -- no difference for citations?
+p_spec (Ref External r a)      = reflinkURI  r $ p_spec a
 p_spec EmptyS             = text "" -- Expected in the output
 p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.

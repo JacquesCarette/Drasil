@@ -1,4 +1,4 @@
-module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
+module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
@@ -24,8 +24,8 @@ import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
 
-swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCooling, rocTempSimp] 
+genDefs :: [GenDefn]
+genDefs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 

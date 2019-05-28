@@ -22,13 +22,13 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
-sspdef :: [NamedChunk]
-sspdef = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+defs :: [NamedChunk]
+defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   slopeStability, ssa]
 
-sspdef' :: [ConceptChunk]
-sspdef' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
+defs' :: [ConceptChunk]
+defs' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,

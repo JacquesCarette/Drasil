@@ -70,7 +70,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
-import Drasil.SSP.Goals (sspGoals)
+import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (sspIMods, instModIntro)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
@@ -179,7 +179,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = sspGoals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
+concIns = goals ++ assumptions ++ sspFRequirements ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
 
 section :: [Section]
 section = sec
@@ -487,7 +487,7 @@ goal_stmt = goalStmtF (map (uncurry ofThe) [
   (plural mtrlPrpty, phrase soil)
   ]) goals_list
 
-goals_list = mkEnumSimpleD sspGoals
+goals_list = mkEnumSimpleD goals
 
 -- SECTION 4.2 --
 

@@ -1,4 +1,4 @@
-module Drasil.SSP.Requirements (funcReqs, sspNFRequirements,
+module Drasil.SSP.Requirements (funcReqs, nonFuncReqs,
   inputDataTable, sspInputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
@@ -106,8 +106,8 @@ sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True
 
 {-Nonfunctional Requirements-}
-sspNFRequirements :: [ConceptInstance]
-sspNFRequirements = [correct, understandable, reusable, maintainable]
+nonFuncReqs :: [ConceptInstance]
+nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 propsDeriv :: [Contents]
 propsDeriv = [foldlSP [S "FIXME"]]

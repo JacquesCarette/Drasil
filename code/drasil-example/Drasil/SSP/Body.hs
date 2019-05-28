@@ -74,7 +74,7 @@ import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, sspNFRequirements, inputDataTable,
+import Drasil.SSP.Requirements (funcReqs, nonFuncReqs, inputDataTable,
   sspInputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
@@ -153,7 +153,7 @@ mkSRS = [RefSec $ RefProg intro
         ],
     ReqrmntSec $ ReqsProg [
     FReqsSub funcReqList,
-    NonFReqsSub sspNFRequirements
+    NonFReqsSub nonFuncReqs
   ],
   LCsSec $ LCsProg likelyChanges_SRS,
   UCsSec $ UCsProg unlikelyChanges_SRS,
@@ -180,7 +180,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ funcReqs ++ sspNFRequirements ++ likelyChgs ++ unlikelyChgs
+concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 section :: [Section]
 section = sec

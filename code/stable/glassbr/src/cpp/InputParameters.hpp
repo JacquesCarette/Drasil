@@ -9,8 +9,6 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-class InputParameters;
-
 class InputParameters {
     public:
         double a;
@@ -35,6 +33,5 @@ class InputParameters {
     
     private:
 };
-
 
 #endif

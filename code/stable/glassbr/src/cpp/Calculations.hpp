@@ -1,5 +1,3 @@
-#include "Interpolation.hpp"
-#include "InputParameters.hpp"
 #ifndef Calculations_h
 #define Calculations_h
 
@@ -11,7 +9,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-
+#include "Interpolation.hpp"
+#include "InputParameters.hpp"
 
 double func_q(InputParameters &inParams);
 

@@ -1503,7 +1503,7 @@ cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
     where end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: (Doc, Maybe String) -> Doc
-cppThrowDoc (errMsg, _) = text "throw" <+> errMsg
+cppThrowDoc (errMsg, _) = text "throw" <> parens errMsg
 
 cppTryCatch :: Doc -> Doc -> Doc
 cppTryCatch tb cb= vcat [
@@ -1514,13 +1514,13 @@ cppTryCatch tb cb= vcat [
     rbrace]
 
 cppDiscardInput :: Label -> (Doc, Maybe String) -> Doc
-cppDiscardInput sep (inFn, _) = inFn <> dot <> text "ignore" <+> parens 
+cppDiscardInput sep (inFn, _) = inFn <> dot <> text "ignore" <> parens 
     (text "std::numeric_limits<std::streamsize>::max()" <> comma <+> quotes (text sep))
 
 cppInput :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> Doc
 cppInput (v, _) (inFn, _) end = vcat [
     inFn <+> text ">>" <+> v <> end,
-    inFn <> dot <> text "ignore (std::numeric_limits<std::streamsize>::max(), '\\n')"]
+    inFn <> dot <> text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
 cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> parens (n <> comma <+> text mode)
@@ -1552,7 +1552,7 @@ cppMainMethod t b bStart bEnd = vcat [
     t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
     oneTab b,
     blank,
-    text "return 0;",
+    oneTab $ text "return 0;",
     bEnd]
 
 cpphVarsFuncsList :: ScopeTag -> [(Doc, (Doc, Terminator), ScopeTag)] -> [(Doc, Bool, ScopeTag)] -> Doc

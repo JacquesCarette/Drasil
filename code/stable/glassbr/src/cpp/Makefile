@@ -15,7 +15,7 @@ endif
 
 build: GlassBR$(TARGET_EXTENSION)
 
-GlassBR$(TARGET_EXTENSION): InputParameters.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp InputFormat.hpp Interpolation.hpp Control.cpp InputParameters.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp InputFormat.cpp Interpolation.cpp
+GlassBR$(TARGET_EXTENSION): Control.cpp InputParameters.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp InputFormat.cpp Interpolation.cpp InputParameters.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp InputFormat.hpp Interpolation.hpp
 	"$(CXX)" Control.cpp InputParameters.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp InputFormat.cpp Interpolation.cpp --std=c++11 -o GlassBR$(TARGET_EXTENSION)
 
 run: build

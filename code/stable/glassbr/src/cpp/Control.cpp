@@ -1,11 +1,3 @@
-
-#include "InputParameters.hpp"
-#include "DerivedValues.hpp"
-#include "InputConstraints.hpp"
-#include "InputFormat.hpp"
-#include "OutputFormat.hpp"
-#include "Calculations.hpp"
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -20,6 +12,13 @@ using std::string;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+
+#include "InputParameters.hpp"
+#include "DerivedValues.hpp"
+#include "InputConstraints.hpp"
+#include "InputFormat.hpp"
+#include "OutputFormat.hpp"
+#include "Calculations.hpp"
 
 int main(int argc, const char *argv[]) {
     string inputfile = argv[1];
@@ -40,7 +39,6 @@ int main(int argc, const char *argv[]) {
     double P_b = func_P_b(B);
     bool is_safePb = func_is_safePb(inParams, P_b);
     write_output(is_safePb, is_safeLR, P_b);
-    
     return 0;
 }
 

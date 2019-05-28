@@ -11,8 +11,8 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 symbols :: [QuantityDict]
 symbols = htOutputs ++ htInputs
 
-hghcVarsDD :: [DataDefinition]
-hghcVarsDD = [htTransCladFuelDD, htTransCladCoolDD]
+dataDefs :: [DataDefinition]
+dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]

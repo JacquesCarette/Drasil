@@ -2,8 +2,8 @@ module Drasil.GamePhysics.Requirements (funcReqsContent,
   funcReqs, nonfuncReqs, propsDeriv, requirements) where
 
 import Language.Drasil hiding (Vector, organization)
-
 import Drasil.DocLang (mkEnumSimpleD, reqF)
+import Utils.Drasil
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSP, ofThe', sAnd, sOr)
+  foldlSent, foldlSP)
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)

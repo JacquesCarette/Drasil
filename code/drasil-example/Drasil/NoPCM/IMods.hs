@@ -2,6 +2,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
@@ -12,8 +13,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec,
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe, 
-  ofThe, sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Concepts (water, tank)

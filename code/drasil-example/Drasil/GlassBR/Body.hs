@@ -11,6 +11,7 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
   Theory(defined_fun, defined_quant), TheoryModel)
+import Utils.Drasil
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
@@ -55,8 +56,8 @@ import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, isThe, ofThe, sAnd, showingCxnBw,
-  sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, underConsidertn)
+  foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, showingCxnBw,
+  tAndDOnly, tAndDWAcc, tAndDWSym, underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs)
   

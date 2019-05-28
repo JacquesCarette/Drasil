@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asExpr')
 import Theory.Drasil (InstanceModel, imNoDeriv)
+import Utils.Drasil
 
 import Drasil.GlassBR.DataDefs (standOffDis, eqTNTWDD, calofDemand)
 import Drasil.GlassBR.Goals (willBreakGS)
@@ -16,7 +17,7 @@ import Drasil.GlassBR.ModuleDefs (interpY)
 
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 iMods :: [InstanceModel]
 iMods = [calofDemandi]

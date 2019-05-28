@@ -4,10 +4,11 @@ import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Database.Drasil (cdb)
 import Theory.Drasil (TheoryModel, tm)
+import Utils.Drasil
 
 import Control.Lens ((^.))
 
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)

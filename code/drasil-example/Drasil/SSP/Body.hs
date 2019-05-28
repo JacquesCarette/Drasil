@@ -13,6 +13,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, qdFro
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 import qualified Data.Map as Map
+import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
@@ -53,9 +54,8 @@ import Data.Drasil.Theories.Physics (physicsTMs)
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (andThe, foldlList, SepType(Comma),
-  FoldType(List), foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOf, sOr,
-  foldlSPCol)
+import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List),
+  foldlSP, foldlSent, foldlSent_, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 

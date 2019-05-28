@@ -1,5 +1,5 @@
-module Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements,
-  sspInputDataTable, sspInputsToOutputTable, propsDeriv) where
+module Drasil.SSP.Requirements (funcReqs, nonFuncReqs,
+  inputDataTable, inputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
 
@@ -21,13 +21,13 @@ import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
 import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce, 
-  intShrForce, sspInputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
+  intShrForce, inputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
   yMaxSlip, yMinSlip)
 
 {-Functional Requirements-}
 
-sspFRequirements :: [ConceptInstance]
-sspFRequirements = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
+funcReqs :: [ConceptInstance]
+funcReqs = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
   displayInput, displayGraph, displayFS, displayNormal, displayShear, 
   writeToFile]
 
@@ -37,7 +37,7 @@ readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput,
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
-  makeRef2S sspInputDataTable `sC` S "and store the", plural datum]) 
+  makeRef2S inputDataTable `sC` S "and store the", plural datum]) 
   "Read-and-Store" funcReqDom
 
 verifyInput = cic "verifyInput" ( foldlSent [
@@ -61,7 +61,7 @@ verifyOutput = cic "verifyOutput" ( foldlSent [
 
 displayInput = cic "displayInput" ( foldlSent [
   S "Display as", phrase output_, S "the", phrase user :+: S "-supplied",
-  plural input_, S "listed in", makeRef2S sspInputsToOutputTable])
+  plural input_, S "listed in", makeRef2S inputsToOutputTable])
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
@@ -92,22 +92,22 @@ writeToFile = cic "writeToFile" ( foldlSent [
   funcReqDom
 
 ------------------
-sspInputDataTable :: LabelledContent
-sspInputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr sspInputs
+inputDataTable :: LabelledContent
+inputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr inputs
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]
 inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
   xMinEtrSlip, yMaxSlip, yMinSlip])
 
-sspInputsToOutputTable :: LabelledContent
-sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
+inputsToOutputTable :: LabelledContent
+inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
   (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True
 
 {-Nonfunctional Requirements-}
-sspNFRequirements :: [ConceptInstance]
-sspNFRequirements = [correct, understandable, reusable, maintainable]
+nonFuncReqs :: [ConceptInstance]
+nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 propsDeriv :: [Contents]
 propsDeriv = [foldlSP [S "FIXME"]]

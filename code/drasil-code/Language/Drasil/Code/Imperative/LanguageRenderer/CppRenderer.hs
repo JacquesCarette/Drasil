@@ -37,9 +37,9 @@ validListTypes = ["deque", "vector"]
 
 cppConfig :: Options -> Config -> Config
 cppConfig options c =
-    let listType = case (cpplist options) of Nothing -> "vector"
-                                             Just lt -> if lt `elem` validListTypes then lt
-                                                        else error $ "Unsupported C++ list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
+    let listType = case cpplist options of Nothing -> "vector"
+                                           Just lt -> if lt `elem` validListTypes then lt
+                                                      else error $ "Unsupported C++ list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
     in Config {
         renderCode = renderCode' c,
 
@@ -97,8 +97,8 @@ cppHeaderExt = ".hpp"
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
 renderCode' c (AbsCode p@(Pack l ms)) =
-  Code $ (fileCode c (Pack l (ignoreMain ms)) Header cppHeaderExt) ++
-         (fileCode c p Source (ext c))
+  Code $ fileCode c (Pack l (ignoreMain ms)) Header cppHeaderExt ++
+         fileCode c p Source (ext c)
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
@@ -112,7 +112,7 @@ cppstateType c s d              = stateTypeD c s d
 
 cpptop :: Config -> FileType -> Label -> Module -> Doc
 cpptop c Header _ (Mod n l _ _ _) = vcat $
-    (map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l)
+    map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l
     ++ [
     text "#ifndef" <+> text n <> text "_h",
     text "#define" <+> text n <> text "_h",
@@ -130,7 +130,7 @@ cpptop c Source _ m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
       else empty,
     blank] 
     ++
-    (map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l)
+    map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l
     ++ 
     [blank,
     include c "<algorithm>",
@@ -336,7 +336,7 @@ complexDoc' c (ReadAll f v) = let l_line = "nextLine"
     [ 
       block [
         varDec l_line string,
-        while (funcApp' "std::getline" [f, v_line]) (oneLiner $ valStmt $ v$.(listAppend v_line))
+        while (funcApp' "std::getline" [f, v_line]) (oneLiner $ valStmt $ v $. listAppend v_line)
       ]
     ]
     
@@ -351,7 +351,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
       block [
         listDec' l_temp st 0,
         for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
-          (oneLiner $ valStmt $ v_temp$.(listAppend (vold$.(listAccess v_i)))),
+          (oneLiner $ valStmt $ v_temp $. listAppend (vold $. listAccess v_i)),
         vnew &= v_temp
       ] 
     ],
@@ -372,11 +372,11 @@ complexDoc' c (StringSplit vnew s d) =    let l_ss = "ss"
     blockStart c,
     oneTab $ bodyDoc c [ 
       block [
-        valStmt $ vnew$.(Func "clear" []),
+        valStmt $ vnew $. Func "clear" [],
         DeclState $ VarDec l_ss (Type "std::stringstream"),
         valStmt $ objMethodCall v_ss "str" [s],
         varDec l_word string,
-        while (funcApp' "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valStmt $ vnew$.(listAppend v_word))
+        while (funcApp' "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valStmt $ vnew $. listAppend v_word)
       ] 
     ],
     blockEnd c

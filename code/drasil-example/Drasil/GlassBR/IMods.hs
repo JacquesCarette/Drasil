@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -14,11 +14,11 @@ import Drasil.GlassBR.Unitals (charWeight, demand,
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
-gbrIMods :: [InstanceModel]
-gbrIMods = [pbIsSafe, lrIsSafe]
+iMods :: [InstanceModel]
+iMods = [pbIsSafe, lrIsSafe]
 
-glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
+symb :: [DefinedQuantityDict]
+symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
 
 

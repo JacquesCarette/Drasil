@@ -38,9 +38,9 @@ validListTypes = ["ArrayList", "LinkedList", "Vector"]
 
 javaConfig :: Options -> Config -> Config
 javaConfig options c = 
-    let listType = case (javalist options) of Nothing -> "Vector"
-                                              Just lt -> if lt `elem` validListTypes then lt
-                                                         else error $ "Unsupported Java list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
+    let listType = case javalist options of Nothing -> "Vector"
+                                            Just lt -> if lt `elem` validListTypes then lt
+                                                       else error $ "Unsupported Java list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
     in Config {
         renderCode = renderCode' c,
         
@@ -55,7 +55,7 @@ javaConfig options c =
         runnable         = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java",
         fileName         = fileNameD c,
         include          = includeD "import",
-        includeScope     = (scopeDoc c),
+        includeScope     = scopeDoc c,
         inherit          = text "extends",
         inputFunc        = parens(text "new Scanner(System.in)"),
         iterForEachLabel = forLabel,
@@ -116,7 +116,7 @@ jstateType c s d = stateTypeD c s d
 
 jtop :: Config -> FileType -> Label -> Module -> Doc
 jtop c _ p _ = vcat [
-    package c p <> (endStatement c),
+    package c p <> endStatement c,
     blank,
     include c "java.util.Arrays" <> endStatement c,
     include c "java.util.BitSet" <> endStatement c,     --TODO: only include these if they are used in the code?
@@ -228,10 +228,10 @@ inputDoc' c io (Base t) (Just v) = valueDoc c v <+> equals <+> typeFunc t <> par
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "nextLine" []))
-complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "nextLine" []))
+complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ f $. Func "nextLine" [])
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &=      f $. Func "nextLine" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop $
-  while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v $. listAppend (f $.(Func "nextLine" [])))    
+  while (f $. Func "hasNextLine" []) (oneLiner $ valStmt $ v $. listAppend (f $. Func "nextLine" []))
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp
                                                    l_i = "i_temp"
@@ -243,7 +243,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
       block [
         listDec' l_temp st 0,
         for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
-          (oneLiner $ valStmt $ v_temp$.(listAppend (vold$.(listAccess v_i)))),
+          (oneLiner $ valStmt $ v_temp $. listAppend (vold $. listAccess v_i)),
         vnew &= v_temp
       ] 
     ],
@@ -256,7 +256,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
          getS Nothing v = (&++) v
          getS (Just n) v = v &+= n
 complexDoc' c (StringSplit vnew s d) = valueDoc c vnew <+> equals <+> new 
-  <+> stateType c (List Dynamic string) Dec <> parens (funcAppDoc c "Arrays.asList" [s$.(Func "split" [litString [d]])]) 
+  <+> stateType c (List Dynamic string) Dec <> parens (funcAppDoc c "Arrays.asList" [s $. Func "split" [litString [d]]]) 
   <> semi
 
 --helpers

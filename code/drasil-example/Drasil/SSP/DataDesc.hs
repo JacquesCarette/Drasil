@@ -1,14 +1,14 @@
-module Drasil.SSP.DataDesc (sspInputMod) where
+module Drasil.SSP.DataDesc (inputMod) where
 
 import Language.Drasil.Code (Func, Mod(Mod), funcData)
 --import Drasil.SSP.Unitals (elasticMod, effCohesion,
   --poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight)
 
-sspInputMod :: Mod
-sspInputMod = Mod "InputFormat" [sspInputData]
+inputMod :: Mod
+inputMod = Mod "InputFormat" [inputData]
 
-sspInputData :: Func
-sspInputData = funcData "get_inputs" [
+inputData :: Func
+inputData = funcData "get_inputs" [
 {- --FIXME: unfinished. Needs more inputs? 
     --Needs way to think of (x,y) as two seperate things
     --number of layers, layer direction

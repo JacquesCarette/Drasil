@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984) where
+module Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984) where
 
 import Language.Drasil
 
@@ -9,8 +9,8 @@ import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite,
 
 parnas1978, sciComp2013, jfBeucheIntro :: Citation
 
-cpCitations :: BibRef
-cpCitations = [parnas1978, sciComp2013, parnas1972, parnasClements1984,
+citations :: BibRef
+citations = [parnas1978, sciComp2013, parnas1972, parnasClements1984,
   parnasClements1986, koothoor2013, smithLai2005, jfBeucheIntro]
 
 --FIXME: check for references made within document

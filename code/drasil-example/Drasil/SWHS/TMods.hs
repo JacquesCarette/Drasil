@@ -1,4 +1,4 @@
-module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
+module Drasil.SWHS.TMods (tMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -25,8 +25,8 @@ import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 
-swhsTMods :: [TheoryModel]
-swhsTMods = [consThermE, sensHtE, latentHtE]
+tMods :: [TheoryModel]
+tMods = [consThermE, sensHtE, latentHtE]
 
 -------------------------
 -- Theoretical Model 1 --

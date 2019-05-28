@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
@@ -7,7 +7,7 @@ import Theory.Drasil (TheoryModel, tm)
 import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 import Drasil.GlassBR.Concepts (lResistance)
-import Drasil.GlassBR.IMods (glassBRsymb)
+import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (tm_demand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
@@ -16,8 +16,8 @@ import qualified Data.Map as Map
 
 {--}
 
-gbrTMods :: [TheoryModel]
-gbrTMods = [pbIsSafe, lrIsSafe]
+tMods :: [TheoryModel]
+tMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
@@ -32,7 +32,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLoad, qw tm_lRe, qw tm_demand] ([] :: [ConceptChunk])
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
-   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
+   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
@@ -53,7 +53,7 @@ pbIsSafe = tm (cw pbIsSafe_RC)
   [qw is_safeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
   [relToQD locSymbMap pbIsSafe_RC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
-  where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) glassBRsymb
+  where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 

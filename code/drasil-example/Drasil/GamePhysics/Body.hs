@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization)
+import Language.Drasil hiding (Vector, organization, section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
@@ -30,9 +30,10 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   goalStmt, guide, information, input_, interface, item, model, object,
   organization, physical, physicalSim, physics, problem, problemDescription,
   product_, project, quantity, realtime, reference, requirement, section_,
-  simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
+  simulation, software, softwareSys, srsDomains, system, systemConstraint,
   sysCont, task, template, termAndDef, traceyMatrix, user, userCharacteristic,
   doccon, doccon')
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
@@ -56,16 +57,16 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 import Drasil.GamePhysics.Assumptions(assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
-import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
+import Drasil.GamePhysics.Concepts (chipmunk, acronyms, twoD)
+import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
-import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
     propsDeriv, requirements)
-import Drasil.GamePhysics.TMods (cpTModsNew)
-import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
+import Drasil.GamePhysics.TMods (tModsNew)
+import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
+  inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -76,8 +77,8 @@ authors = [alex, luthfi]
 auths :: Sentence
 auths = S $ manyNames authors
 
-chipmunkSRS' :: Document
-chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
+srs :: Document
+srs = mkDoc mkSRS for' sysInfo
 
 checkSi :: [UnitDefn] -- FIXME
 checkSi = collectUnits everything symbTT 
@@ -95,13 +96,13 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg [SSDSubVerb problemDescriptionSection
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) cpTModsNew
+        , TMs [] (Label : stdFields) tModsNew
         , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -119,90 +120,90 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
-gameLabel :: TraceMap
-gameLabel = Map.union (generateTraceMap mkSRS) $ generateTraceMap' gameConcins
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
 
-gameRefby :: RefbyMap
-gameRefby = generateRefbyMap gameLabel
+refBy :: RefbyMap
+refBy = generateRefbyMap label
 
-gameDatadefn :: [DataDefinition]
-gameDatadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefs :: [DataDefinition]
+dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
 
-gameInsmodel :: [InstanceModel]
-gameInsmodel = getTraceMapFromIM $ getSCSSub mkSRS
+iMods :: [InstanceModel]
+iMods = getTraceMapFromIM $ getSCSSub mkSRS
 
-gameGendef :: [GenDefn]
-gameGendef = getTraceMapFromGD $ getSCSSub mkSRS
+genDef :: [GenDefn]
+genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-gameTheory :: [TheoryModel]
-gameTheory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-gameConcins :: [ConceptInstance]
-gameConcins = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
+concIns :: [ConceptInstance]
+concIns = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
   funcReqs
 
-gameSection :: [Section]
-gameSection = gameSec
+section :: [Section]
+section = sec
 
-gameSec :: [Section]
-gameSec = extractSection chipmunkSRS'
+sec :: [Section]
+sec = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
     --FIXME: Need to be able to print defn for gravitational constant.
 
-chipmunkSysInfo :: SystemInformation
-chipmunkSysInfo = SI {
+sysInfo :: SystemInformation
+sysInfo = SI {
   _sys = chipmunk,
-  _kind = srs,
+  _kind = Doc.srs,
   _authors = authors,
   _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
-  _definitions = cpDDefs,
+  _definitions = qDefs,
   _datadefs = dataDefns,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
-  _defSequence = cpQDefs,
-  _constraints = cpInputConstraints,
+  _defSequence = blockQDefs,
+  _constraints = inputConstraints,
   _constants = [],
   _sysinfodb = everything,
   _usedinfodb = usedDB,
-   refdb = cpRefDB
+   refdb = refDB
 }
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
-cpRefDB :: ReferenceDB
-cpRefDB = rdb cpCitations gameConcins
+refDB :: ReferenceDB
+refDB = rdb citations concIns
 
 --FIXME: All named ideas, not just acronyms.
 
-chipUnits :: [UnitDefn] -- FIXME
-chipUnits = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
+units :: [UnitDefn] -- FIXME
+units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb (map qw iModelsNew ++ map qw cpSymbolsAll) (map nw cpSymbolsAll
-  ++ map nw cpAcronyms ++ map nw prodtcon ++ map nw iModelsNew
+everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
+  ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains ++ map cw iModelsNew) chipUnits
-  gameLabel gameRefby gameDatadefn gameInsmodel gameGendef gameTheory
-  gameConcins gameSection []
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units
+  label refBy dataDefs iMods genDef theory
+  concIns section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi gameLabel gameRefby
- gameDatadefn gameInsmodel gameGendef gameTheory gameConcins gameSection
+usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
+ ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
+ dataDefs iMods genDef theory concIns section
  []
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
 
-chipCode :: CodeSpec
-chipCode = codeSpec chipmunkSysInfo []
+code :: CodeSpec
+code = codeSpec sysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
@@ -280,7 +281,7 @@ organizationOfDocumentsIntro :: Sentence
 
 organizationOfDocumentsIntro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
-  S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
+  S "follows the", phrase template, S "for an", (getAcc Doc.srs), S "for", 
   (phrase sciCompS), S "proposed by", makeCiteS parnas1972 `sAnd` 
   makeCiteS parnasClements1984]
 
@@ -461,9 +462,9 @@ goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity,
   QP.angularVelocity]
 
 goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
-  (goalStatement4Inputs) --fixme input symbols
+  (goalStatement4Inputs) --fixme input defSymbols
   EmptyS (S "of")
-  (goalStatement4Inputs) --fixme input symbols
+  (goalStatement4Inputs) --fixme input defSymbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
   S "that have undergone a" +:+ (phrase CP.collision))-}
 
@@ -593,7 +594,7 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
 traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable chipmunkSysInfo
+traceTable1 = generateTraceTable sysInfo
 
 traceabilityMatricesAndGraph :: Section
 traceabilityMatricesAndGraph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,
@@ -628,7 +629,7 @@ traceMatInstaModel = ["IM1", "IM2", "IM3"]
 traceMatInstaModelRef = map makeRef2S iModelsNew
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRef2S cpTModsNew
+traceMatTheoryModelRef = map makeRef2S tModsNew
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 traceMatDataDefRef = map makeRef2S dataDefns

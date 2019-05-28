@@ -39,10 +39,10 @@ readTable = funcData "read_table"
 --from defaultInput.txt:
 
 inputMod :: Mod
-inputMod = packmod "InputFormat" [glassInputData]
+inputMod = packmod "InputFormat" [inputData]
 
-glassInputData :: Func
-glassInputData = funcData "get_input"
+inputData :: Func
+inputData = funcData "get_input"
   [ junkLine,
     singleton plateLen, singleton plateWidth, singleton nomThick,
     junkLine,

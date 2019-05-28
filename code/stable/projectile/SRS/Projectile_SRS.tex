@@ -287,4 +287,127 @@ Source & --
 RefBy & \hyperref[GD:airTime]{GD: airTime}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:shortIM}
+\phantomsection 
+\label{IM:shortIM}
+\\ \midrule \\
+Label & IsShort
+\\ \midrule \\
+Input & ${d_{target}}$, $d$
+\\ \midrule \\
+Output & $isShort$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {d_{target}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    d>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           isShort={d_{target}}>d
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$isShort$ is the variable that is assigned true when the target distance is greater than the projectile distance (Unitless)}
+              \item{${d_{target}}$ is the target distance (m)}
+              \item{$d$ is the distance of projectile (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:offsetIM}
+\phantomsection 
+\label{IM:offsetIM}
+\\ \midrule \\
+Label & Offset
+\\ \midrule \\
+Input & ${d_{target}}$, $d$
+\\ \midrule \\
+Output & ${d_{offset}}$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {d_{target}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    d>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {d_{offset}}=|{d_{target}}-d|
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${d_{offset}}$ is the the offset between the target distance and the distance of the projectile (Unitless)}
+              \item{${d_{target}}$ is the target distance (m)}
+              \item{$d$ is the distance of projectile (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:hitIM}
+\phantomsection 
+\label{IM:hitIM}
+\\ \midrule \\
+Label & IsHit
+\\ \midrule \\
+Input & ${d_{offset}}$, ${d_{target}}$
+\\ \midrule \\
+Output & $isHit$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {d_{offset}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {d_{target}}>0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           isHit={d_{offset}}<\frac{1}{50} {d_{target}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$isHit$ is the variable that is assigned true when the projectile distance is within a degree of tolerance of the target distance (Unitless)}
+              \item{${d_{offset}}$ is the the offset between the target distance and the distance of the projectile (Unitless)}
+              \item{${d_{target}}$ is the target distance (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \end{document}

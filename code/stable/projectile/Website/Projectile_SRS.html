@@ -484,6 +484,213 @@ This section collects and defines all the data needed to build the instance mode
 </div>
 </div>
 </div>
+<div id="Sec:IMs">
+<div class="subsubsection">
+<h3>Instance Models</h3>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+</p>
+<p class="paragraph"></p>
+<div id="IM:shortIM">
+<table class="idefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">IsShort</p></td>
+</tr>
+<tr>
+<th>Input</th>
+<td>
+<p class="paragraph"><em>d<sub>target</sub></em>, <em>d</em></p>
+</td>
+</tr>
+<tr>
+<th>Output</th>
+<td><p class="paragraph"><em>isShort</em></p></td>
+</tr>
+<tr>
+<th>Input Constraints</th>
+<td>
+<div class="equation">
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation"><em>d&thinsp;&gt;&thinsp;0</em></div>
+</td>
+</tr>
+<tr>
+<th>Output Constraints</th>
+<td></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>isShort = d<sub>target</sub>&thinsp;&gt;&thinsp;d</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>isShort</em> is the variable that is assigned true when the target distance is greater than the projectile distance (Unitless)
+</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
+<li><em>d</em> is the distance of projectile (m)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td><p class="paragraph"></p></td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+<div id="IM:offsetIM">
+<table class="idefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Offset</p></td>
+</tr>
+<tr>
+<th>Input</th>
+<td>
+<p class="paragraph"><em>d<sub>target</sub></em>, <em>d</em></p>
+</td>
+</tr>
+<tr>
+<th>Output</th>
+<td><p class="paragraph"><em>d<sub>offset</sub></em></p></td>
+</tr>
+<tr>
+<th>Input Constraints</th>
+<td>
+<div class="equation">
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation"><em>d&thinsp;&gt;&thinsp;0</em></div>
+</td>
+</tr>
+<tr>
+<th>Output Constraints</th>
+<td></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>d<sub>offset</sub> = |d<sub>target</sub>&minus;d|</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>d<sub>offset</sub></em> is the the offset between the target distance and the distance of the projectile (Unitless)
+</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
+<li><em>d</em> is the distance of projectile (m)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td><p class="paragraph"></p></td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+<div id="IM:hitIM">
+<table class="idefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">IsHit</p></td>
+</tr>
+<tr>
+<th>Input</th>
+<td>
+<p class="paragraph">
+<em>d<sub>offset</sub></em>, <em>d<sub>target</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>Output</th>
+<td><p class="paragraph"><em>isHit</em></p></td>
+</tr>
+<tr>
+<th>Input Constraints</th>
+<td>
+<div class="equation">
+<em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+<div class="equation">
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Output Constraints</th>
+<td></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>isHit = d<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
+                                                  <span class="fup">1</span>
+                                                  <span class="fdn">50</span>
+                                                  </div>&#8239;d<sub>target</sub></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>isHit</em> is the variable that is assigned true when the projectile distance is within a degree of tolerance of the target distance (Unitless)
+</li>
+<li>
+<em>d<sub>offset</sub></em> is the the offset between the target distance and the distance of the projectile (Unitless)
+</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td><p class="paragraph"></p></td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

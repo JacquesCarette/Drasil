@@ -3,7 +3,7 @@ module Data.Drasil.SentenceStructures
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
-  , toThe, tableShows, figureLabel
+  , toThe, tableShows
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
@@ -11,20 +11,17 @@ module Data.Drasil.SentenceStructures
   , follows
   , getTandS, getTDS
   , eqN
-  , displayConstrntsAsSet
-  , fmtPhys, fmtSfwr, typUncr
-  , mkTableFromColumns
+  , displayConstrntsAsSet, chgsStart
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (addPercent, foldle, foldle1)
+import Data.Drasil.Utils (foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
-import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.List (intersperse, transpose)
+import Data.List (intersperse)
 import Data.Monoid (mconcat)
 
 {--** Sentence Folding **--}
@@ -130,13 +127,6 @@ tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
--- | Function that creates (a label for) a figure
---FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> String -> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (makeFigRef rn) $
-  Figure (titleize figure +: 
-  (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
-
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
@@ -172,20 +162,16 @@ maybeWOVerb a   = likelyFrame a EmptyS
 maybeChanged a  = likelyFrame a (S "changed")
 maybeExpanded a = likelyFrame a (S "expanded")
 
-sParenDash :: Sentence -> Sentence
-sParenDash x = S " (" :+: x :+: S ") - "
-
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ (at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)
+tAndDWAcc temp = Flat $ (at_start temp) +:+ (sParen (short temp) `sDash` (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ ((at_start tD) :+: 
-  sParenDash (ch sym)) :+: (tD ^. defn)
+tAndDWSym tD sym = Flat $ (at_start tD) +:+ (sParen (ch sym) `sDash` (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
+tAndDOnly chunk  = Flat $ (at_start chunk) `sDash` (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
@@ -206,43 +192,6 @@ eqN n = at_start equation +:+ sParen (S $ show n)
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
 
-{-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
-
-mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
-mkTableFromColumns l = 
-  let l' = filter (any (not . isEmpty) . snd) l in 
-  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
-  where
-    isEmpty EmptyS = True
-    isEmpty _      = False
-
-none :: Sentence
-none = S "--"
-
-found :: Double -> Maybe Int -> Sentence
-found x Nothing  = addPercent $ x * 100
-found x (Just p) = addPercent (realFracToDecimal (fromIntegral p) (x * 100) :: DecimalRaw Integer)
-    
-typUncr :: (HasUncertainty c) => c -> Sentence
-typUncr x = found (uncVal x) (uncPrec x)
-
-constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
-constraintToExpr c (Range _ ri)         = real_interval c ri
-constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
-constraintToExpr c (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
-
---Formatters for the constraints
-fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
-
-fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
-
--- Helper for formatting constraints
-foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
-foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldl1 ($&&) $ map (constraintToExpr c) e
-
-replaceEmptyS :: Sentence -> Sentence
-replaceEmptyS EmptyS = none
-replaceEmptyS s      = s
+--Produces a common beginning of a likely change of the form "reference - sentence"
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+chgsStart = sDash . makeRef2S

@@ -1,10 +1,7 @@
 module Data.Drasil.SentenceStructures
   ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlEnumList
-  , sAnd, andIts, andThe, sAre, sIn, sVersus
-  , sIs, isThe, sOf, sOr, ofThe, ofThe'
-  , ofGiv, ofGiv'
-  , toThe, tableShows
-  , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
+  , tableShows
+  , underConsidertn, showingCxnBw, refineChain
   , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
@@ -16,6 +13,8 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.Utils (foldle, foldle1)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
@@ -81,47 +80,6 @@ getSep :: SepType -> (Sentence -> Sentence -> Sentence)
 getSep Comma   = sC
 getSep SemiCol = (\a b -> a :+: S ";" +:+ b)
 
-{--** Combinators **--}
-sAnd, andIts :: Sentence -> Sentence -> Sentence
-sAnd p1 p2 = p1 +:+ S "and" +:+ p2
-
-andIts p1 p2 = p1 +:+ S "and its" +:+ p2
-
-andThe :: Sentence -> Sentence -> Sentence
-andThe p1 p2 = p1 +:+ S "and the" +:+ p2
-
-sAre :: Sentence -> Sentence -> Sentence
-sAre p1 p2 = p1 +:+ S "are" +:+ p2
-
-sIn :: Sentence -> Sentence -> Sentence
-sIn p1 p2 = p1 +:+ S "in" +:+ p2
-
-sIs :: Sentence -> Sentence -> Sentence
-sIs p1 p2 = p1 +:+ S "is" +:+ p2
-
-isThe :: Sentence -> Sentence -> Sentence
-isThe p1 p2 = p1 +:+ S "is the" +:+ p2
-
-sOf :: Sentence -> Sentence -> Sentence
-sOf p1 p2 = p1 +:+ S "of" +:+ p2
-
-sOr :: Sentence -> Sentence -> Sentence
-sOr p1 p2 = p1 +:+ S "or" +:+ p2
-
-sVersus :: Sentence -> Sentence -> Sentence
-sVersus p1 p2 = p1 +:+ S "versus" +:+ p2
-
-ofThe, ofThe' :: Sentence -> Sentence -> Sentence
-ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
-ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
-
-ofGiv, ofGiv' :: Sentence -> Sentence -> Sentence
-ofGiv  p1 p2 = S "the" +:+ p1 +:+ S "of a given" +:+ p2
-ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
-
-toThe :: Sentence -> Sentence -> Sentence
-toThe p1 p2 = p1 +:+ S "to the" +:+ p2
-
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
@@ -130,9 +88,6 @@ tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
-
-isExpctdToHv :: Sentence -> Sentence -> Sentence
-a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
 
 underConsidertn :: ConceptChunk -> Sentence
 underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ 

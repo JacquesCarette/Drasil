@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
 
 symbols :: [DefinedQuantityDict]
 symbols = (map dqdWr inputs) ++ (map dqdWr outputs) ++ 
-  (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
+  (map dqdWr units) ++ (map dqdWr sspUnitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -182,8 +182,8 @@ coords = cuc' "(x,y)"
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
+units :: [UnitaryConceptDict]
+units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 

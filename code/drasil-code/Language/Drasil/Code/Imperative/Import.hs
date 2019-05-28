@@ -200,7 +200,7 @@ genInputClass = do
   let ins          = inputs $ codeSpec g
       inputVars    =
           map (\x -> pubMVar 0 (codeName x) (convType $ codeType x)) ins
-      varsList     = map (\x -> objVarSelf (codeName x)) ins
+      varsList     = map (objVarSelf . codeName) ins
       vals         = map (getDefaultValue . codeType) ins
   asgs <- zipWithM assign' varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
@@ -233,7 +233,7 @@ genInputDerived = do
   pnames <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
   publicMethod void "derived_values" parms ptypes pnames
-      (return $ inps)
+      (return inps)
 
 -- need Expr -> String to print constraint
 constrWarn :: (RenderSym repr) => Expr -> (repr (Body repr))
@@ -272,7 +272,7 @@ genCalcFunc cdef = do
     (mState $ convType (codeType cdef))
     (codeName cdef)
     parms ptypes pnames
-    (return $ [blck])
+    (return [blck])
   where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
@@ -283,7 +283,7 @@ genCalcBlock t v (Case e) = genCaseBlock t v e
 genCalcBlock t v e
     | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
       convExpr e; assign' vv ee}
-    | otherwise        = fmap block $ liftS $ fmap returnState $ convExpr e
+    | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
   Reader (State repr) (repr (Block repr))
@@ -313,7 +313,7 @@ genOutputFormat outs =
         return [ printFileStr v_outfile (codeName x ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod void "write_output" parms ptypes pnames (return $ [block $
+    publicMethod void "write_output" parms ptypes pnames (return [block $
       [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
@@ -486,7 +486,7 @@ getParamTypes cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      pts = map (\y -> convType $ codeType y)
+      pts = map (convType . codeType)
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
               csSubIns)
   return $ if length csSubIns < length cs
@@ -498,7 +498,7 @@ getParamNames cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      pvs = map (\y -> codeName y)
+      pvs = map codeName
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
               csSubIns)
   return $ if length csSubIns < length cs
@@ -649,7 +649,7 @@ genFunc (FDef (FuncDef n i o s)) = do
   pnames <- getParamNames i
   stmts <- mapM convStmt s
   publicMethod (mState $ convType o) n parms ptypes pnames
-    (return $ [block $
+    (return [block $
         map (\x -> varDec (codeName x) (convType $ codeType x))
           (fstdecl (sysinfodb (codeSpec g)) s \\ i)
         ++ stmts
@@ -715,19 +715,19 @@ genDataFunc nameTitle ddef = do
     inD <- mapM inData ddef
     publicMethod void nameTitle (p_filename : parms) (string : ptypes)
       (l_filename : pnames) $
-      return $ [ (block $ [
+      return [block $ [
       varDec l_infile infile,
       varDec l_line string,
       listDec l_lines 0 (listType dynamic string),
       listDec l_linetokens 0 (listType dynamic string),
       openFileR v_infile v_filename ] ++
       concat inD ++ [
-      closeFile v_infile ])]
+      closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable $ codeName v
-            return $ [(getFileInput (codeType v)) v_infile vv]
-        inData JunkData = return $ [discardFileLine v_infile]
+            return [getFileInput (codeType v) v_infile vv]
+        inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData lp (litInt 0)
           return $ [getFileInputLine v_infile v_line, 
@@ -754,7 +754,7 @@ genDataFunc nameTitle ddef = do
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
           return [forRange l_j (litInt 0) (castObj (cast int float)
-            (listSizeAccess v_linetokens #/ (litInt $ toInteger $ length p))) (litInt 1)
+            (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) (litInt 1)
             ( bodyStatements pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
@@ -780,9 +780,9 @@ genDataFunc nameTitle ddef = do
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
           return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [
-            valState $ (indexData indx lineNo patNo vv) $. 
-            (listSet (getIndex indx lineNo patNo) $ 
-            getCastFunc (getListType (codeType v) (toInteger $ length indx))
+            valState $ indexData indx lineNo patNo vv $. 
+            listSet (getIndex indx lineNo patNo)
+            (getCastFunc (getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $. listAccess tokIndex))]
         entryData _ _ _ JunkEntry = return []
         ---------------

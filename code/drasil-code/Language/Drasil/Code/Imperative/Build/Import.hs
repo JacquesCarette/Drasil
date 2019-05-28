@@ -18,8 +18,7 @@ data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] ([(Doc, Label, Bool)
 
 instance RuleTransformer CodeHarness where
   makeRule (Ch b r e m co@(Code code)) = [
-    mkRule "build" (map (const $ renderBuildName e m nameOpts nm) $ maybeToList $
-      b) []
+    mkRule "build" (map (const $ renderBuildName e m nameOpts nm) $ maybeToList b) []
     ] ++
     maybe [] (\(BuildConfig comp bt) -> [
     mkFile (renderBuildName e m nameOpts nm) (map fst code) [

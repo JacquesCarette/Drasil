@@ -98,7 +98,7 @@ classDocD n p inherit s vs fs = vcat [
 enumDocD :: Label -> Doc -> Doc -> Doc
 enumDocD n es s = vcat [
     s <+> text "enum" <+> text n <+> lbrace,
-    oneTab $ es,
+    oneTab es,
     rbrace]
 
 enumElementsDocD :: [Label] -> Bool -> Doc
@@ -123,12 +123,12 @@ multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
         needsEnd [] = Empty
         needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
-        notNullStatement s = (not $ isEmpty (fst s)) && (render (fst s) /= render end)
+        notNullStatement s = not (isEmpty (fst s)) && (render (fst s) /= render end)
 
 blockDocD :: Doc -> [Doc] -> Doc
 blockDocD end sts = vcat statements
   where statements = filter notNullStatement sts
-        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+        notNullStatement s = not (isEmpty s) && (render s /= render end)
 
 bodyDocD :: [Doc] -> Doc
 bodyDocD bs = vibcat blocks
@@ -193,12 +193,12 @@ paramListDocD = hicat (text ", ")
 methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
     s <+> p <+> t <+> text n <> parens ps <+> lbrace,
-    oneTab $ b,
+    oneTab b,
     rbrace]
 
 methodListDocD :: [(Doc, Bool)] -> Doc
 methodListDocD ms = vibcat methods
-    where methods = filter (\m -> not $ isEmpty m) (map fst ms)
+    where methods = filter (not . isEmpty) (map fst ms)
 
 -- StateVar --
 
@@ -263,7 +263,7 @@ forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
 forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
 forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b = vcat [
     iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+> blockStart,
-    oneTab $ b,
+    oneTab b,
     blockEnd]
 
 whileDocD :: Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
@@ -275,9 +275,9 @@ whileDocD blockStart blockEnd (v, _) b = vcat [
 tryCatchDocD :: Doc -> Doc -> Doc 
 tryCatchDocD tb cb = vcat [
     text "try" <+> lbrace,
-    oneTab $ tb,
+    oneTab tb,
     rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") <+> lbrace,
-    oneTab $ cb,
+    oneTab cb,
     rbrace]
 
 stratDocD :: Doc -> (Doc, Terminator) -> Doc

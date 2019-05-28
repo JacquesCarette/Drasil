@@ -1,5 +1,5 @@
 module Drasil.SSP.Requirements (funcReqs, nonFuncReqs,
-  inputDataTable, sspInputsToOutputTable, propsDeriv) where
+  inputDataTable, inputsToOutputTable, propsDeriv) where
 
 import Language.Drasil
 
@@ -61,7 +61,7 @@ verifyOutput = cic "verifyOutput" ( foldlSent [
 
 displayInput = cic "displayInput" ( foldlSent [
   S "Display as", phrase output_, S "the", phrase user :+: S "-supplied",
-  plural input_, S "listed in", makeRef2S sspInputsToOutputTable])
+  plural input_, S "listed in", makeRef2S inputsToOutputTable])
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
@@ -100,8 +100,8 @@ inputsToOutput :: [DefinedQuantityDict]
 inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
   xMinEtrSlip, yMaxSlip, yMinSlip])
 
-sspInputsToOutputTable :: LabelledContent
-sspInputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
+inputsToOutputTable :: LabelledContent
+inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
   (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True
 

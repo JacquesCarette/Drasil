@@ -71,7 +71,8 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept,
   waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (sspIMods, instModIntro)
+import Drasil.SSP.IMods (instModIntro)
+import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (sspCitations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable, propsDeriv)
@@ -144,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
-            OutConstraints] ++ stdFields) sspIMods ShowDerivation
+            OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [data_constraint_Table2, data_constraint_Table3]
           , CorrSolnPpties propsDeriv
@@ -207,14 +208,14 @@ traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other
 
 -- SYMBOL MAP HELPERS --
 symMap :: ChunkDB
-symMap = cdb (map qw sspIMods ++ map qw sspSymbols) (map nw sspSymbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw sspIMods
+symMap = cdb (map qw SSP.iMods ++ map qw sspSymbols) (map nw sspSymbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw sspIMods ++ map cw sspSymbols ++ srsDomains) this_si label
+  (map cw SSP.iMods ++ map cw sspSymbols ++ srsDomains) this_si label
   refBy dataDefs iMods genDefs theory concIns
   section labCon
 

@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (constraints, section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
@@ -19,7 +19,8 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
   definition, doccon, doccon', document, goal, information, item,
   material_, model, physSyst, problem, property, purpose, reference,
-  requirement, srs, srsDomains, traceyMatrix)
+  requirement, srsDomains, traceyMatrix)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
@@ -85,9 +86,10 @@ import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
-import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
-import Drasil.NoPCM.Goals (nopcmGoals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro)
+import Drasil.NoPCM.GenDefs (rocTempSimp, genDefs)
+import Drasil.NoPCM.Goals (goals)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
+import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
 import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
 import Drasil.NoPCM.Unitals (temp_init)
 
@@ -96,33 +98,33 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 checkSi :: [UnitDefn]
-checkSi = collectUnits nopcm_SymbMap symbTT 
+checkSi = collectUnits symbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
-nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = pi_ : (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+symbols :: [DefinedQuantityDict]
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
   
-nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
+symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = map qw nopcm_Symbols ++ (map qw specParamValList) ++ 
+symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
-nopcm_Units :: [UnitaryConceptDict]
-nopcm_Units = map ucw [density, tau, in_SA, out_SA,
+units :: [UnitaryConceptDict]
+units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W, QT.sensHeat]
 
-nopcm_Constraints :: [UncertQ]
-nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+constraints :: [UncertQ]
+constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 
@@ -155,10 +157,10 @@ mkSRS = [RefSec $ RefProg intro
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoretical_models
-      , GDs [] ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
+      , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        iMods ShowDerivation
+        NoPCM.iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       , CorrSolnPpties propsDerivNoPCM
@@ -175,92 +177,92 @@ mkSRS = [RefSec $ RefProg intro
   (map UlC traceIntro2)) []] ++
   map Verbatim [specParamVal] ++ [Bibliography]
 
-nopcm_label :: TraceMap
-nopcm_label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' nopcm_concins
+label :: TraceMap
+label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
-nopcm_refby :: RefbyMap
-nopcm_refby = generateRefbyMap nopcm_label
+refBy :: RefbyMap
+refBy = generateRefbyMap label
 
-nopcm_datadefn :: [DataDefinition]
-nopcm_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-nopcm_insmodel :: [InstanceModel]
-nopcm_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
+iMods :: [InstanceModel]
+iMods = getTraceMapFromIM $ getSCSSub mkSRS
 
-nopcm_gendef :: [GenDefn]
-nopcm_gendef = getTraceMapFromGD $ getSCSSub mkSRS
+genDef :: [GenDefn]
+genDef = getTraceMapFromGD $ getSCSSub mkSRS
 
-nopcm_theory :: [TheoryModel]
-nopcm_theory = getTraceMapFromTM $ getSCSSub mkSRS
+theory :: [TheoryModel]
+theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-nopcm_concins :: [ConceptInstance]
-nopcm_concins =
+concIns :: [ConceptInstance]
+concIns =
  reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
-nopcm_section :: [Section]
-nopcm_section = nopcm_sec
+section :: [Section]
+section = sec
 
-nopcm_labcon :: [LabelledContent]
-nopcm_labcon = [inputInitQuantsTblabled, dataConstTable1]
+labCon :: [LabelledContent]
+labCon = [inputInitQuantsTblabled, dataConstTable1]
 
-nopcm_sec :: [Section]
-nopcm_sec = extractSection nopcm_srs
+sec :: [Section]
+sec = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-nopcm_si :: SystemInformation
-nopcm_si = SI {
+si :: SystemInformation
+si = SI {
   _sys = srs_swhs,
-  _kind = srs,
+  _kind = Doc.srs,
   _authors = [thulasi],
   _quants = symbTT,
-  _concepts = nopcm_Symbols,
+  _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw nopcm_Constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
+  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw nopcm_Constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
-  _sysinfodb = nopcm_SymbMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = nopcmRefDB
+   refdb = refDB
 }
 
-nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb referencesRefList nopcm_concins
+refDB :: ReferenceDB
+refDB = rdb referencesRefList concIns
 
-nopcm_code :: CodeSpec
-nopcm_code = codeSpec nopcm_si [inputMod]
+code :: CodeSpec
+code = codeSpec si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
-nopcm_srs :: Document
-nopcm_srs = mkDoc mkSRS (for) nopcm_si
+srs :: Document
+srs = mkDoc mkSRS (for) si
 
-nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
+symbMap :: ChunkDB
+symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
   ++ map nw [abs_tol, rel_tol, cons_tol])
-  (map cw nopcm_Symbols ++ srsDomains)
-  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
-  nopcm_concins nopcm_section nopcm_labcon
+  (map cw symbols ++ srsDomains)
+  this_si label refBy dataDefn iMods genDef theory
+  concIns section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi nopcm_label nopcm_refby
- nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_concins
- nopcm_section nopcm_labcon
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
+ ([] :: [ConceptChunk]) checkSi label refBy
+ dataDefn iMods genDef theory concIns
+ section labCon
 
 printSetting :: PrintingInformation
-printSetting = PI nopcm_SymbMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -292,7 +294,7 @@ purpDoc pro = foldlSent [S "The main", phrase purpose, S "of this",
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
   S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
+  short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved, but do not say how to solve it"]
 
 -------------------------------------
@@ -392,7 +394,7 @@ goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
   S "the material" +:+ plural property]
 
 goalStatesList :: [Contents]
-goalStatesList = mkEnumSimpleD nopcmGoals
+goalStatesList = mkEnumSimpleD goals
 
 
 ------------------------------------------------------
@@ -545,7 +547,7 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable nopcm_si
+traceTableAll = generateTraceTable si
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
@@ -572,7 +574,7 @@ traceTheories = ["T1", "T2"]
 traceTheoriesRef = map makeRef2S theoretical_models
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef2S swhsGDs
+traceGenDefRef = map makeRef2S genDefs
 
 traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef2S [dd1HtFluxC]

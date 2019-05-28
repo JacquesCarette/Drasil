@@ -15,7 +15,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
@@ -34,7 +34,7 @@ thisSI = SI {
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = ([] :: [QDefinition]),
-  _datadefs = hghcVarsDD,
+  _datadefs = dataDefs,
   _inputs = htInputs,
   _outputs = htOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -68,7 +68,7 @@ thisSRS = [RefSec $
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
         DDs [] [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits] hghcVarsDD HideDerivation
+          Description Verbose IncludeUnits] dataDefs HideDerivation
       ]]]
   
 srsBody :: Document

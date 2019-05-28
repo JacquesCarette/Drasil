@@ -17,9 +17,9 @@ import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
   weight)
 
 
-sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++ 
-  (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
+symbols :: [DefinedQuantityDict]
+symbols = (map dqdWr inputs) ++ (map dqdWr outputs) ++ 
+  (map dqdWr units) ++ (map dqdWr unitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -50,22 +50,22 @@ wiif  = "without the influence of interslice forces"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrainedChunk]
-sspConstrained = map cnstrw sspInputsWUncrtn ++ map cnstrw sspOutputs
+constrained :: [ConstrainedChunk]
+constrained = map cnstrw inputsWUncrtn ++ map cnstrw outputs
 
-sspInputsWUncrtn :: [UncertQ]
-sspInputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
+inputsWUncrtn :: [UncertQ]
+inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
   xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, 
   fricAngle, dryWeight, satWeight, waterWeight]
 
-sspInputsNoUncrtn :: [DefinedQuantityDict]
-sspInputsNoUncrtn = [constF]
+inputsNoUncrtn :: [DefinedQuantityDict]
+inputsNoUncrtn = [constF]
 
-sspInputs :: [DefinedQuantityDict]
-sspInputs = map dqdWr sspInputsWUncrtn ++ map dqdWr sspInputsNoUncrtn
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
-sspOutputs :: [ConstrConcept]
-sspOutputs = [fs, coords]
+outputs :: [ConstrConcept]
+outputs = [fs, coords]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
@@ -182,8 +182,8 @@ coords = cuc' "(x,y)"
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
+units :: [UnitaryConceptDict]
+units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
   genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
@@ -394,8 +394,8 @@ waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by wate
 -- Unitless Symbols --
 ----------------------
 
-sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
+unitless :: [DefinedQuantityDict]
+unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
   mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,

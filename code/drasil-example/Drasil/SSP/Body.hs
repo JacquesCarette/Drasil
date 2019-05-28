@@ -73,7 +73,7 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
-import Drasil.SSP.References (sspCitations, morgenstern1965)
+import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (sspFRequirements, sspNFRequirements, sspInputDataTable,
   sspInputsToOutputTable, propsDeriv)
 import Drasil.SSP.TMods (tMods)
@@ -226,7 +226,7 @@ usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++
  labCon
 
 refDB :: ReferenceDB
-refDB = rdb sspCitations concIns
+refDB = rdb citations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration

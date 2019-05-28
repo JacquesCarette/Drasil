@@ -50,8 +50,8 @@ wiif  = "without the influence of interslice forces"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrainedChunk]
-sspConstrained = map cnstrw sspInputsWUncrtn ++ map cnstrw sspOutputs
+constrained :: [ConstrainedChunk]
+constrained = map cnstrw sspInputsWUncrtn ++ map cnstrw sspOutputs
 
 sspInputsWUncrtn :: [UncertQ]
 sspInputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 

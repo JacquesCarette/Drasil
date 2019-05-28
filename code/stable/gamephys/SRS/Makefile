@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 \documentclass[12pt]{article}
 \usepackage{fontspec}
 \usepackage{fullpage}
@@ -1415,6 +1416,8 @@ else
 	endif
 endif
 
+=======
+>>>>>>> master
 srs: Chipmunk_SRS.pdf
 
 Chipmunk_SRS.pdf: Chipmunk_SRS.tex

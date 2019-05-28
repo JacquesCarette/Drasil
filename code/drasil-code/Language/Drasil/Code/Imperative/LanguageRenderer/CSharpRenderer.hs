@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.Build.AST (buildAll, nativeBinary)
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll, nativeBinary, osClassDefault)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
@@ -28,6 +28,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   buildConfig, runnable)
 import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
+import qualified Prelude as P ((<>))
+
 import Prelude hiding (print,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), semi, parens, equals, vcat, doubleQuotes,
   render, rbrace, lbrace, empty, colon)
@@ -44,7 +46,7 @@ csharpConfig _ c =
         enumsEqualInts   = False,
         ext              = ".cs",
         dir              = "csharp",
-        buildConfig      = buildAll $ \i o -> ["mcs", unwords i, "-out:" ++ o],
+        buildConfig      = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", asFragment "-out:" P.<> o] ++ i,
         runnable         = nativeBinary,
         fileName         = fileNameD c,
         include          = includeD "using",

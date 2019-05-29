@@ -66,7 +66,7 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
-  , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
+  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcUnit, ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw

@@ -61,12 +61,12 @@ isShort = vc "isShort"
   (Atomic "isShort") Boolean
 
 offset :: QuantityDict
-offset = vc "offset"
+offset = vcUnit "offset"
   (nounPhraseSent (S "offset between the" +:+ phrase targetDist `andThe` phrase launchDist))
-  (sub lD $ Atomic "offset") Real
+  (sub lD $ Atomic "offset") Real metre
 
 isHit :: QuantityDict
 isHit = vc "isHit"
   (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase launchDist +:+
    S "is within a degree of tolerance of the" +:+ phrase targetDist))
-  (Atomic "isHit") Real
+  (Atomic "isHit") Boolean

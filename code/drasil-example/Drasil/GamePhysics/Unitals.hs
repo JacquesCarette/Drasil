@@ -29,7 +29,7 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP, rRot ]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -60,7 +60,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
+  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, rRot]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -122,7 +122,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP, rRot :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -201,6 +201,10 @@ normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
                   (Concat [Atomic "||",(eqSymb QM.normalVect), Atomic "||"]) Real metre
+
+rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
+                (cn "between the j-th particle and the angle of rotation")) (phrase QP.distance)) 
+                (sub (eqSymb QP.distance) lJ) Real metre
 
 timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real second

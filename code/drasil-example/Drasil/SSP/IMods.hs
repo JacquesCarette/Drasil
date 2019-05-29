@@ -498,10 +498,10 @@ nrmShrForDen = im nrmShrForDenRC [qw slipDist, qw constF]
 
 nrmShrForDenRC :: RelationConcept
 nrmShrForDenRC = makeRC "nrmShrForDenRC" (nounPhraseSP "normal and shear force proportionality constant denominator")
-  nrmShrFDen_desc nrmShrFDen_rel 
+  nrmShrFDen_desc nrmShrFDenRel 
 
-nrmShrFDen_rel :: Relation
-nrmShrFDen_rel = inxi nrmShearDen $= case_ [
+nrmShrFDenRel :: Relation
+nrmShrFDenRel = inxi nrmShearDen $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inxiM1 scalFunc  * inxiM1 intNormForce),

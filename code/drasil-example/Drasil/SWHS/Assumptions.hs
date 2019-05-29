@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mechEnergy)
 
 import Data.Drasil.SentenceStructures (foldlSent)
-import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
+import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, tempInit, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
@@ -119,7 +119,7 @@ assumpS14 mat = foldlSent [
   phrase meltPt, S "of", phrase water `sC` S "or rise above its",
   phrase boilPt]
 assumpS15 = foldlSent [
-  S "The", phrase tank, S "is", phrase perfect_insul,
+  S "The", phrase tank, S "is", phrase perfectInsul,
   S "so that there is no", phrase CT.heat, S "loss from the",
   phrase tank]
 assumpS16 = foldlSent [

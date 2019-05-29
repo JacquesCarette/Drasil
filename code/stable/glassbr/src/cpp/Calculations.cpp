@@ -1,7 +1,7 @@
 #include "Calculations.hpp"
 
-#include "Interpolation.hpp"
 #include "InputParameters.hpp"
+#include "Interpolation.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -18,16 +18,20 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-double func_q(InputParameters &inParams) {
-    return func_interpY("TSD.txt", inParams.SD, inParams.w_TNT);
-}
-
 bool func_is_safePb(InputParameters &inParams, double P_b) {
     return P_b < inParams.P_btol;
 }
 
 bool func_is_safeLR(double LR, double q) {
     return LR > q;
+}
+
+bool func_is_safeProb(double P_f, double P_ftol) {
+    return P_f < P_ftol;
+}
+
+bool func_is_safeLoad(double capacity, double Load) {
+    return capacity > Load;
 }
 
 double func_B(InputParameters &inParams, double J) {

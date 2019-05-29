@@ -589,12 +589,12 @@ crtSlpId = imNoDeriv crtSlpIdRC [qw slopeDist, qw slopeHght, qw waterDist,
 
 crtSlpIdRC :: RelationConcept
 crtSlpIdRC = makeRC "crtSlpIdRC" (nounPhraseSP "critical slip surface identification")
-  crtSlpId_desc crtSlpId_rel -- crtSlpIdL
+  crtSlpId_desc crtSlpIdRel -- crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
-crtSlpId_rel :: Relation
-crtSlpId_rel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist, 
+crtSlpIdRel :: Relation
+crtSlpIdRel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist, 
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 
   sy dryWeight, sy satWeight, sy waterWeight, sy constF])
 

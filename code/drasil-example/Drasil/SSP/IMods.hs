@@ -523,11 +523,11 @@ nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in",
 
 intsliceFs :: InstanceModel
 intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw intNormForce) [] [makeCite chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
+  [] (qw intNormForce) [] [makeCite chen2005] intrSlcDeriv "intsliceFs" [sliceFsDesc]
 
 intsliceFsRC :: RelationConcept
 intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
-  sliceFs_desc sliceFsRel -- inslideFxL
+  sliceFsDesc sliceFsRel -- inslideFxL
 
 sliceFsRel :: Relation
 sliceFsRel = inxi intNormForce $= case_ [
@@ -539,8 +539,8 @@ sliceFsRel = inxi intNormForce $= case_ [
   (0, sy index $= 0 $|| sy index $= sy numbSlices)]  
   -- FIXME: Use index i as part of condition
 
-sliceFs_desc :: Sentence
-sliceFs_desc = foldlSent [ch shearFNoIntsl, S "is defined in", 
+sliceFsDesc :: Sentence
+sliceFsDesc = foldlSent [ch shearFNoIntsl, S "is defined in", 
   makeRef2S mobShearWOGD `sC` ch shearRNoIntsl, S "is defined in",
   makeRef2S resShearWOGD `sC` ch shrResC, S "is defined in",
   makeRef2S convertFunc1 `sC` S "and", ch mobShrC, S "is defined in",

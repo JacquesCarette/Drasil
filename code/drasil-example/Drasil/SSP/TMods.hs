@@ -44,13 +44,13 @@ factOfSafetyRel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm (cw equilibrium_rc)
+equilibrium = tm (cw equilibriumRC)
   [qw fx] ([] :: [ConceptChunk])
   [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
 
 ------------------------------------  
-equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel
+equilibriumRC :: RelationConcept
+equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation

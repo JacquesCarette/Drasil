@@ -453,17 +453,17 @@ nrmShrDerivEqn4 = inxi normToShear $= sum1toN
 ---------------------------------------------------------------------
 
 nrmShrForNum :: InstanceModel
-nrmShrForNum = im nrmShrForNum_rc [qw slopeDist, qw slopeHght, qw waterHght, 
+nrmShrForNum = im nrmShrForNumRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
   [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012]) nrmShrFNum_deriv 
   "nrmShrForNum" [nrmShrFNum_desc]
 
-nrmShrForNum_rc :: RelationConcept
-nrmShrForNum_rc = makeRC "nrmShrForNum_rc" (nounPhraseSP "normal and shear force proportionality constant numerator")
-  nrmShrFNum_desc nrmShrFNum_rel 
+nrmShrForNumRC :: RelationConcept
+nrmShrForNumRC = makeRC "nrmShrForNumRC" (nounPhraseSP "normal and shear force proportionality constant numerator")
+  nrmShrFNum_desc nrmShrFNumRel 
 
-nrmShrFNum_rel :: Relation
-nrmShrFNum_rel = inxi nrmShearNum $= case_ [case1,case2,case3]
+nrmShrFNumRel :: Relation
+nrmShrFNumRel = inxi nrmShearNum $= case_ [case1,case2,case3]
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*

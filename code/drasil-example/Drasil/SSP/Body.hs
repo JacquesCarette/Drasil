@@ -86,7 +86,7 @@ aux_cons :: Section
 tableOfSymbIntro :: [TSIntro]
 
 problemDesc, termiDefi, phys_sys_desc, goal_stmt :: Section
-termi_defi_list, phys_sys_intro, phys_sys_convention, 
+termiDefiList, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
 
@@ -407,9 +407,9 @@ problemDesc = probDescF EmptyS ssp ending [termiDefi, phys_sys_desc, goal_stmt]
           phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
 
 -- SECTION 4.1.1 --
-termiDefi = termDefnF Nothing [termi_defi_list]
+termiDefi = termDefnF Nothing [termiDefiList]
 
-termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
+termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))
   [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,

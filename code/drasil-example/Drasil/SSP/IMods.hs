@@ -527,10 +527,10 @@ intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCo
 
 intsliceFsRC :: RelationConcept
 intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
-  sliceFs_desc sliceFs_rel -- inslideFxL
+  sliceFs_desc sliceFsRel -- inslideFxL
 
-sliceFs_rel :: Relation
-sliceFs_rel = inxi intNormForce $= case_ [
+sliceFsRel :: Relation
+sliceFsRel = inxi intNormForce $= case_ [
   (((sy fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     sy index $= 1),
   ((inxiM1 mobShrC * inxiM1 intNormForce +

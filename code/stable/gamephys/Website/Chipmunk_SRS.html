@@ -208,6 +208,13 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m</td>
 </tr>
 <tr>
+<td><em>r<sub>j</sub></em></td>
+<td>
+Distance Between the J-Th Particle and the Angle of Rotation
+</td>
+<td>m</td>
+</tr>
+<tr>
 <td><em><b>r</b></em></td>
 <td>Displacement</td>
 <td>m</td>
@@ -615,7 +622,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpOT">
-objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:momentOfInertia>DD: momentOfInertia</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -1719,6 +1726,63 @@ In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A
 </tr>
 </table>
 </div>
+<div id="DD:momentOfInertia">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Moment of inertia</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em><b>I</b></em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">kg&sdot;m<sup>2</sup></p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em><b>I</b> = &sum;m<sub>j</sub>&#8239;r<sub>j</sub><sup>2</sup></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+</li>
+<li>
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+</li>
+<li>
+<em>r<sub>j</sub></em> is the distance between the j-th particle and the angle of rotation (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td>
+<p class="paragraph">
+The moment of inertia <em><b>I</b></em> of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
+</p>
+<p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -2326,6 +2390,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#DD:ctrOfMass>DD: ctrOfMass</a></th>
 <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
 <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
+<th><a href=#DD:momentOfInertia>DD: momentOfInertia</a></th>
 <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
 </tr>
 <tr>
@@ -2333,6 +2398,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
 </td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2375,11 +2441,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:angDisp>DD: angDisp</a></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2421,6 +2489,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpAD>A: axesDefined</a></td>
@@ -2428,6 +2497,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2467,6 +2537,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpCT>A: collisionType</a></td>
@@ -2477,6 +2548,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2513,6 +2585,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpOD>A: objectDimension</a></td>
@@ -2534,6 +2607,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -2559,6 +2633,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td>X</td>
 </tr>
 <tr>
 <td><a href=#DD:impulse>DD: impulse</a></td>
@@ -2566,6 +2641,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2605,6 +2681,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:linDisp>DD: linDisp</a></td>
@@ -2613,6 +2690,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2651,6 +2729,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
@@ -2659,6 +2738,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3124,7 +3204,7 @@ LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 <td></td>
 </tr>
 <tr>
-<td>LC3 (<a href=#IM:transMot>IM: transMot</a>)</td>
+<td>LC3 (<a href=#DD:momentOfInertia>DD: momentOfInertia</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3134,7 +3214,7 @@ LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 <td></td>
 </tr>
 <tr>
-<td>LC4 (<a href=#IM:rotMot>IM: rotMot</a>)</td>
+<td>LC4 (<a href=#IM:transMot>IM: transMot</a>)</td>
 <td></td>
 <td></td>
 <td></td>

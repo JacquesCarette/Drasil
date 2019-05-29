@@ -49,9 +49,9 @@ parens = P.Fenced P.Paren P.Paren
 
 mulExpr ::  [Expr] -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
-  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
+  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
+  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
+  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ mulExpr (hd2 : tl) sm
 mulExpr [hd]     sm     = [expr' sm (precA Mul) hd]
 mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 
@@ -61,8 +61,8 @@ digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess (hd:tl) pos coun ex 
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
-  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-  | otherwise = [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
+  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int hd] ++ map P.Int tl
 digitsProcess [] pos coun ex 
   | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
@@ -160,14 +160,14 @@ lookupC :: ChunkDB -> UID -> Symbol
 lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ (termLookup c (termTable sm)) ^. term
+lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
   where l = termLookup c $ termTable sm
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ (termLookup c (termTable sm)) ^. term
+lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
 -- --plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
@@ -242,8 +242,8 @@ symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol Corners{}                = error "rendering of Corners (general)"
-symbol (Atop f s) = sFormat f s
-symbol (Empty)    = P.Row []
+symbol (Atop f s)               = sFormat f s
+symbol Empty                    = P.Row []
 
 sFormat :: Decoration -> Symbol -> P.Expr
 sFormat Hat    s = P.Over P.Hat $ symbol s
@@ -376,7 +376,7 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
+  (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
@@ -400,7 +400,7 @@ layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
 -- Called internally by layout.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
+  (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs

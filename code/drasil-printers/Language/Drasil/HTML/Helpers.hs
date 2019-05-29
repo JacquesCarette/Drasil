@@ -57,7 +57,7 @@ img        = wrapInside "img"
 h :: Int -> Doc -> Doc
 h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
-          | otherwise = wrap ("h"++show n) []
+          | otherwise = wrap ("h" ++ show n) []
 
 data Variation = Class | Id
 
@@ -74,11 +74,11 @@ wrap_genAux sepf _ s _ [] = \x ->
   let tb c = text $ "<" ++ c ++ ">"
   in sepf [tb s, indent x, tb $ '/':s]
 wrap_genAux sepf Class s _ ts = \x ->
-  let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
+  let tb c = text $ "<" ++ c ++ " class=\"" ++ foldr1 (++) (intersperse " " ts) ++ "\">"
   in let te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s]
 wrap_genAux sepf Id s ti _ = \x ->
-  let tb c = text ("<" ++c++ " id=\"") <> ti <> text ("\">")
+  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s] 
 
@@ -121,7 +121,7 @@ image f c 100 =
   figcaption c]
 image f c wp =
   figure $ vcat [
-  img [("src", f), ("alt", c), ("width", text $ show (wp) ++ "%")],
+  img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")],
   figcaption c]
 
 em, sup, sub, bold :: Doc -> Doc
@@ -163,6 +163,6 @@ cases ps p_expr = span_tag ["casebr"] (text "{") $$ div_tag ["cases"]
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) <> text " , " <>
-                            (span_tag ["case"] (p_expr (snd p))))) $$
-                            makeCases ps p_expr)
+makeCases (p:ps) p_expr = span_tag [] (p_expr (fst p) <> text " , " <>
+                          span_tag ["case"] (p_expr (snd p))) $$
+                          makeCases ps p_expr

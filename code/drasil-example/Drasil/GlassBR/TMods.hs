@@ -53,16 +53,16 @@ lrIsSafeDesc = tModDesc (is_safeLoad) s ending
       (titleize demandq)) `isThe` (demandq ^. defn)
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafe_RC) 
+pbIsSafe = tm (cw pbIsSafeRC) 
   [qw is_safeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
+  [relToQD locSymbMap pbIsSafeRC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 
-pbIsSafe_RC :: RelationConcept
-pbIsSafe_RC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
+pbIsSafeRC :: RelationConcept
+pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
   pbIsSafeDesc ((sy is_safeProb) $= (sy probFail) $< (sy pbTolfail))
 
 pbIsSafeDesc :: Sentence

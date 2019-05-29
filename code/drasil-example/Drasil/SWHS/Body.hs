@@ -311,7 +311,7 @@ genSystDesc = genSysF [systCont] (userCharContents progName) [] []
 --------------------------
 
 systCont :: Section
-systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro 
+systCont = SRS.sysCont [systCContents progName, LlC sysContextFig, systCIntro 
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
@@ -838,7 +838,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phrase sysCont, 
+systCContents pro = foldlSP [makeRef2S sysContextFig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -846,9 +846,9 @@ systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phras
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sys_context_fig :: LabelledContent
-sys_context_fig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
+sysContextFig :: LabelledContent
+sysContextFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [makeRef2S sysContextFig +: EmptyS, titleize sysCont])
   $ resourcePath ++ "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents

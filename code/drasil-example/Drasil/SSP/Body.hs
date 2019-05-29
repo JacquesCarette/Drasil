@@ -81,7 +81,7 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
   constrained, inputs, outputs, symbols)
 
 --type declarations for sections--
-aux_cons :: Section
+auxCons :: Section
 
 tableOfSymbIntro :: [TSIntro]
 
@@ -159,7 +159,7 @@ mkSRS = [RefSec $ RefProg intro
   UCsSec $ UCsProg unlikelyChanges_SRS,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],
-  Verbatim aux_cons, Bibliography]
+  Verbatim auxCons, Bibliography]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -545,7 +545,7 @@ funcReqList = (mkEnumSimpleD funcReqs) ++
 --Likely Changes is automatically generated
 
 -- SECTION 7 --
-aux_cons = valsOfAuxConstantsF ssa []
+auxCons = valsOfAuxConstantsF ssa []
 
 -- References --
 -- automatically generated

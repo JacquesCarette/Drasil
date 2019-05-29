@@ -161,7 +161,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       [Client glassBR $ S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
       Cstmr glassBR],
-  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
@@ -191,7 +191,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
-  AppndxSec $ AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]]
+  AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -226,7 +226,7 @@ termsAndDesc, physSystDescription, goalStmts :: Section
 physSystDescriptionList, appdxIntro :: Contents
 
 inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, 
-  traceMatsAndGraphsTable3, figGlassbr, fig_2, fig_3, fig_4, fig_5, fig_6 :: LabelledContent
+  traceMatsAndGraphsTable3, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
@@ -264,7 +264,7 @@ traceyMatrices :: [LabelledContent]
 traceyMatrices = [traceTable1, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
 
 traceyGraphs :: [LabelledContent]
-traceyGraphs = [fig_2, fig_3, fig_4]
+traceyGraphs = [traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig]
 
 solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
@@ -348,15 +348,15 @@ orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the Doc.dataDefn),
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRef2S sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short glassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
-sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ 
+sysCtxFig :: LabelledContent
+sysCtxFig = llcc (makeFigRef "sysCtxDiag") $ 
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
 
 sysCtxDesc :: Contents
@@ -427,10 +427,10 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short glassBR) figGlassbr 
-  [physSystDescriptionList, LlC figGlassbr]
+physSystDescription = physSystDesc (short glassBR) physSystFig 
+  [physSystDescriptionList, LlC physSystFig]
 
-figGlassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
+physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
@@ -661,15 +661,15 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
+traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
   titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png")
 
-fig_3 = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
+traceReqsItemsFig = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
   titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png")
 
-fig_4 = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
+traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
   titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png")
 
@@ -681,15 +681,15 @@ fig_4 = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix
 
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((makeRef2S fig_5) `sAnd` (makeRef2S fig_6)),
+  sParen ((makeRef2S demandVsSDFig) `sAnd` (makeRef2S dimlessloadVsARFig)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
+demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
-fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
+dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))

@@ -13,7 +13,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (tmDemand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
+import Drasil.GlassBR.Unitals (tmDemand, demandq, is_safeProb, is_safeLoad, tmLRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
@@ -33,8 +33,8 @@ tMods = [pbIsSafe, lrIsSafe]
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafeRC)
-   [qw is_safeLoad, qw tm_lRe, qw tmDemand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tmDemand)] [] [makeCite astm2009] 
+   [qw is_safeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
+   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLoad) $= (sy tmLRe) $> (sy tmDemand)] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
    where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
@@ -42,7 +42,7 @@ lrIsSafe = tm (cw lrIsSafeRC)
 
 lrIsSafeRC :: RelationConcept
 lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
-  lrIsSafeDesc ( (sy is_safeLoad) $= (sy tm_lRe) $> (sy tmDemand))
+  lrIsSafeDesc ( (sy is_safeLoad) $= (sy tmLRe) $> (sy tmDemand))
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLoad) s ending

@@ -147,14 +147,14 @@ Label & Air time
 Units & s
 \\ \midrule \\
 Equation & \begin{displaymath}
-           t=\frac{2 {v_{i}} \sin\left(θ\right)}{a}
+           t=\frac{2 {v_{i}} \sin\left(θ\right)}{{a_{y}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the angle of projectile (${}^{\circ}$)}
-              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{y}}$ is the y-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -173,19 +173,19 @@ Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:fina
 \phantomsection 
 \label{GD:distance}
 \\ \midrule \\
-Label & Distance
+Label & X-component of distance
 \\ \midrule \\
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           r={v_{i}} t+\frac{a t^{2}}{2}
+           {r_{x}}={v_{i,x}} t+\frac{{a_{x}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$r$ is the distance (m)}
-              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${r_{x}}$ is the x-component of distance (m)}
+              \item{${v_{i,x}}$ is the x-component of initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{x}}$ is the x-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelGravityY]{A: accelGravityY}
@@ -203,19 +203,19 @@ RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \phantomsection 
 \label{GD:distanceRefined}
 \\ \midrule \\
-Label & Distance (refined)
+Label & X-component of distance (refined)
 \\ \midrule \\
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           r=\frac{2 {v_{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{a}
+           {r_{x}}=\frac{2 {v_{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{{a_{y}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$r$ is the distance (m)}
+              \item{${r_{x}}$ is the x-component of distance (m)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the angle of projectile (${}^{\circ}$)}
-              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{y}}$ is the y-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelZeroX]{A: accelZeroX}
@@ -225,7 +225,7 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Distance (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
+X-component of distance (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.

@@ -240,7 +240,7 @@ This section collects the laws and equations that will be used to build the inst
 <div class="equation">
 <em>t = <div class="fraction">
         <span class="fup">2&#8239;v<sub>i</sub>&#8239;sin(θ)</span>
-        <span class="fdn">a</span>
+        <span class="fdn">a<sub>y</sub></span>
         </div></em>
 </div>
 </td>
@@ -252,7 +252,9 @@ This section collects the laws and equations that will be used to build the inst
 <li><em>t</em> is the time (s)</li>
 <li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>a<sub>y</sub></em> is the y-component of scalar acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -281,7 +283,7 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Distance</p></td>
+<td><p class="paragraph">X-component of distance</p></td>
 </tr>
 <tr>
 <th>Units</th>
@@ -291,10 +293,12 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>r = v<sub>i</sub>&#8239;t&plus;<div class="fraction">
-                                   <span class="fup">a&#8239;t<sup>2</sup></span>
-                                   <span class="fdn">2</span>
-                                   </div></em>
+<em>r<sub>x</sub> = v<sub>i,x</sub>&#8239;t&plus;<div class="fraction">
+                                                 <span class="fup">
+                                                 a<sub>x</sub>&#8239;t<sup>2</sup>
+                                                 </span>
+                                                 <span class="fdn">2</span>
+                                                 </div></em>
 </div>
 </td>
 </tr>
@@ -302,10 +306,14 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>r</em> is the distance (m)</li>
-<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
+<li><em>r<sub>x</sub></em> is the x-component of distance (m)</li>
+<li>
+<em>v<sub>i,x</sub></em> is the x-component of initial speed (m/s)
+</li>
 <li><em>t</em> is the time (s)</li>
-<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>a<sub>x</sub></em> is the x-component of scalar acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -335,7 +343,7 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Distance (refined)</p></td>
+<td><p class="paragraph">X-component of distance (refined)</p></td>
 </tr>
 <tr>
 <th>Units</th>
@@ -345,12 +353,12 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>r = <div class="fraction">
-        <span class="fup">
-        2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-        </span>
-        <span class="fdn">a</span>
-        </div></em>
+<em>r<sub>x</sub> = <div class="fraction">
+                    <span class="fup">
+                    2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                    </span>
+                    <span class="fdn">a<sub>y</sub></span>
+                    </div></em>
 </div>
 </td>
 </tr>
@@ -358,10 +366,12 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>r</em> is the distance (m)</li>
+<li><em>r<sub>x</sub></em> is the x-component of distance (m)</li>
 <li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>a<sub>y</sub></em> is the y-component of scalar acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -382,7 +392,7 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 </table>
 </div>
 <p class="paragraph">
-Distance (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a href=#GD:distance>GD: distance</a>.
+X-component of distance (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a href=#GD:distance>GD: distance</a>.
 </p>
 </div>
 </div>

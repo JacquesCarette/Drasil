@@ -23,9 +23,6 @@ module Drasil.DocLang (
     intro,
     -- Sections.Requirements
     reqF,
-    -- Sections.SolutionCharacterSpec
-    SubSec, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
-    siUQI, siUQO,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
     inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
@@ -63,8 +60,6 @@ import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.SolutionCharacterSpec (SubSec, sSubSec, siCon, 
-    siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
     outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)

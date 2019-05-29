@@ -13,13 +13,13 @@ import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
-  SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
+  SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   LCsSec(..), UCsSec(..), generateTraceMap',
   dataConstraintUncertainty, goalStmtF,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  mkEnumSimpleD, outDataConstTbl, sSubSec, siCon, termDefnF,
+  mkEnumSimpleD, outDataConstTbl, termDefnF,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   organization, physical, physicalSim, physics, problem, product_, project,
   quantity, realtime, reference, requirement, section_, simulation, software,
   softwareSys, srsDomains, system, systemConstraint, sysCont, task, template,
-  traceyMatrix, user, userCharacteristic, doccon, doccon')
+  traceyMatrix, user, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -345,9 +345,6 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- 3.2 : User Characteristics --
 --------------------------------
 
-userCharacteristicSect :: SubSec
-userCharacteristicSect = sSubSec userCharacteristic [(siCon [userCharacteristicsIntro])]
-
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
   [S "The", phrase endUser `sOf` short chipmunk,
@@ -357,9 +354,6 @@ userCharacteristicsIntro = foldlSP
 -------------------------------
 -- 3.3 : System Constraints  --
 -------------------------------
-
-systemConstraintSect :: SubSec
-systemConstraintSect = sSubSec systemConstraint []
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --

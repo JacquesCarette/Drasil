@@ -86,7 +86,7 @@ aux_cons :: Section
 tableOfSymbIntro :: [TSIntro]
 
 problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
-termiDefiList, phys_sys_intro, phys_sys_convention, 
+termiDefiList, physSysIntro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
 
@@ -419,10 +419,10 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
-  [phys_sys_intro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
+  [physSysIntro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
    LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
 
-phys_sys_intro = physSystIntro ssp fig_physsyst
+physSysIntro = physSystIntro ssp fig_physsyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
 physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",

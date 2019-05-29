@@ -60,7 +60,7 @@ bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
 resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]   
   [makeCite chen2005]                      "resShr"      [resShrDesc]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
-  [makeCite chen2005]                      "mobShr"      [mobShr_desc]
+  [makeCite chen2005]                      "mobShr"      [mobShrDesc]
 effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
   [makeCite chen2005]                      "effNormF"    [effNormF_desc]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
@@ -156,13 +156,13 @@ resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobilized shear force") mobShr_desc mobShrRel -- genDef4Label
+  (nounPhraseSP "mobilized shear force") mobShrDesc mobShrRel -- genDef4Label
 
 mobShrRel :: Relation
 mobShrRel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
-mobShr_desc :: Sentence
-mobShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+mobShrDesc :: Sentence
+mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
 mobShr_deriv :: Sentence

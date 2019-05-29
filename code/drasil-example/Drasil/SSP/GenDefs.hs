@@ -58,7 +58,7 @@ normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
 resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
-  [makeCite chen2005]                      "resShr"      [resShr_desc]
+  [makeCite chen2005]                      "resShr"      [resShrDesc]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
   [makeCite chen2005]                      "mobShr"      [mobShr_desc]
 effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
@@ -129,13 +129,13 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShrRel -- genDef3Label
+  resShrDesc resShrRel -- genDef3Label
 
 resShrRel :: Relation
 resShrRel = inxi shrResI $= shrResEqn
 
-resShr_desc :: Sentence
-resShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+resShrDesc :: Sentence
+resShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
 resShr_deriv :: Sentence

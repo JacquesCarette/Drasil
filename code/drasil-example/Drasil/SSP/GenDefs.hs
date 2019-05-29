@@ -64,7 +64,7 @@ mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]
 effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormFDeriv] 
   [makeCite chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
-  (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
@@ -211,7 +211,7 @@ nmShrRDesc = foldlSent [S "Mathematical representation of the primary",
 --
 resShearWO :: RelationConcept
 resShearWO = makeRC "resShearWO"
-  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWO_desc resShearWORel
+  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWODesc resShearWORel
 
 resShearWORel :: Relation
 resShearWORel = inxi shearRNoIntsl $= 
@@ -221,8 +221,8 @@ resShearWORel = inxi shearRNoIntsl $=
   (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
   (inxi baseLngth)
 
-resShearWO_desc :: Sentence
-resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
+resShearWODesc :: Sentence
+resShearWODesc = foldlSent_ [ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",

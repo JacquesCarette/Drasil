@@ -161,7 +161,7 @@ people = [thulasi, brooks, spencerSmith]
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
-    tsymb'' tsymb_intro (TermExcept [uNormalVect]),
+    tsymb'' tSymbIntro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
@@ -204,8 +204,8 @@ mkSRS = [RefSec $ RefProg intro [
 code :: CodeSpec
 code = codeSpec si [inputMod]
 
-tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose, SymbConvention
+tSymbIntro :: [TSIntro]
+tSymbIntro = [TSPurpose, SymbConvention
   [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
 
 --- The document starts here

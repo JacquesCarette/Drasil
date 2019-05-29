@@ -189,7 +189,7 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, fig_indexconv, fig_forceacting, 
+labCon = [figPhysSyst, figIndexConv, fig_forceacting, 
   data_constraint_Table2, data_constraint_Table3, inputDataTable, 
   inputsToOutputTable]
 
@@ -420,7 +420,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
   [physSysIntro, physSysDescBullets, LlC figPhysSyst, physSysConv,
-   LlC fig_indexconv, physSysFbd, LlC fig_forceacting] []
+   LlC figIndexConv, physSysFbd, LlC fig_forceacting] []
 
 physSysIntro = physSystIntro ssp figPhysSyst
 
@@ -430,7 +430,7 @@ physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of"
   S "includes the following elements"]
 
 physSysConv = physSystConvention morPrice morgenstern1965 slope how 
-  index slice intrslce fig_indexconv
+  index slice intrslce figIndexConv
   where how = S "as a series of vertical" +:+ plural slice
 
 physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
@@ -471,8 +471,8 @@ figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   S "by", short ssp `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
-fig_indexconv :: LabelledContent
-fig_indexconv = llcc (makeFigRef "IndexConvention") $ 
+figIndexConv :: LabelledContent
+figIndexConv = llcc (makeFigRef "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 

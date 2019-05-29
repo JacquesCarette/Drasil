@@ -108,10 +108,10 @@ rocTempSimpDeriv :: Derivation
 rocTempSimpDeriv =
   S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
     phrase temp +:+ S ":" :
-  weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns]
+  weave [rocTempSimpDerivSent, map E roc_temp_simp_deriv_eqns]
 
-roc_temp_simp_deriv_sentences :: [Sentence]
-roc_temp_simp_deriv_sentences = map foldlSentCol [
+rocTempSimpDerivSent :: [Sentence]
+rocTempSimpDerivSent = map foldlSentCol [
   s4_2_3_desc1 consThermE vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,

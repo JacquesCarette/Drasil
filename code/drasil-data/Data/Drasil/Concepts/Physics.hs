@@ -12,10 +12,11 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   cohesion, collision, compression, damping, displacement, distance, elasticity,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
-  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, joint, kEnergy,
-  linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
-  strain, stress, tension, time, torque, velocity, weight, xSpeed, ySpeed]
+  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, ixSpeed, joint,
+  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
+  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
+  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xSpeed,
+  yDist, ySpeed, xScalAcc, yScalAcc]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
@@ -23,10 +24,11 @@ physicCon' = [twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   collision, compression, damping, displacement, distance, elasticity, energy,
   fbd, force, friction, gravitationalAccel, fSpeed, fVel, gravitationalConst,
-  impulseS, impulseV, isotropy, iSpeed, iVel, joint, kEnergy, linAccel, linDisp,
-  linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
+  impulseS, impulseV, isotropy, iSpeed, iVel, ixSpeed, joint, kEnergy, linAccel,
+  linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
   restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed, strain,
-  stress, tension, time, torque, velocity, weight, xSpeed, ySpeed :: ConceptChunk
+  stress, tension, time, torque, velocity, weight, xDist, xSpeed, yDist,
+  ySpeed, xScalAcc, yScalAcc :: ConceptChunk
 
   -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
@@ -97,13 +99,21 @@ pressure     = dccWDS "pressure" (cn' "pressure")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
+xDist = dccWDS "xDist" (cn "x-component of distance") (S "The x-component of" +:+ phrase distance)
+yDist = dccWDS "yDist" (cn "y-component of distance") (S "The y-component of" +:+ phrase distance)
+
 fSpeed = dccWDS "fSpeed" (cn "final speed")          (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed")        (S "The" +:+ phrase speed +:+ S "at the body's initial point")
-xSpeed = dccWDS "xSpeed" (cn "x-component of speed") (S "The x-component of speed")
-ySpeed = dccWDS "ySpeed" (cn "y-component of speed") (S "The y-component of speed")
+xSpeed = dccWDS "xSpeed" (cn "x-component of speed") (S "The x-component of" +:+ phrase speed)
+ySpeed = dccWDS "ySpeed" (cn "y-component of speed") (S "The y-component of" +:+ phrase speed)
+
+ixSpeed = dccWDS "ixSpeed" (cn "x-component of initial speed") (S "The x-component of initial" +:+ phrase speed)
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
+
+xScalAcc = dccWDS "xScalAcc" (cn "x-component of scalar acceleration") (S "The x-component of" +:+ phrase scalarAccel)
+yScalAcc = dccWDS "yScalAcc" (cn "y-component of scalar acceleration") (S "The y-component of" +:+ phrase scalarAccel)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

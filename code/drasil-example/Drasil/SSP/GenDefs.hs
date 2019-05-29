@@ -254,10 +254,10 @@ mobShearWODesc = foldlSent_ [ch slcWght, S "is defined in",
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEql_rel -- genDef6Label
+  momEql_desc momEqlRel -- genDef6Label
 
-momEql_rel :: Relation
-momEql_rel = 0 $= momExpr (\ x y -> x -
+momEqlRel :: Relation
+momEqlRel = 0 $= momExpr (\ x y -> x -
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence

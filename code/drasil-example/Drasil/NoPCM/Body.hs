@@ -31,7 +31,7 @@ import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
   thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
   phaseChange)
 
-import qualified Data.Drasil.Concepts.Math as M (ode, de, equation)
+import qualified Data.Drasil.Concepts.Math as M (ode, de)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
@@ -41,7 +41,7 @@ import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSent, foldlSP)
+  sOf, ofThe, foldlSent, foldlSP)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
@@ -62,7 +62,6 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
@@ -86,7 +85,7 @@ import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
-import Drasil.NoPCM.GenDefs (rocTempSimp, genDefs)
+import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)

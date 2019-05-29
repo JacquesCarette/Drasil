@@ -247,7 +247,7 @@ calofDemandDesc =
   (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
 
 capacityS :: [Sentence]
-capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
+capacityS = [ch lRe +:+ S "is the" +:+. (phrase lRe `sC` S "which is also called capacity") +:+
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
   makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
   makeRef2S glaTyFac, makeRef2S assumpGL, makeRef2S glaTyFac, makeRef2S nonFL]

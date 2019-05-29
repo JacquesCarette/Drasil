@@ -522,11 +522,11 @@ nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in",
 --------------------------------------------------------------------------
 
 intsliceFs :: InstanceModel
-intsliceFs = im intsliceFs_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw intNormForce) [] [makeCite chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
 
-intsliceFs_rc :: RelationConcept
-intsliceFs_rc = makeRC "intsliceFs_rc" (nounPhraseSP "interslice normal forces")
+intsliceFsRC :: RelationConcept
+intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
   sliceFs_desc sliceFs_rel -- inslideFxL
 
 sliceFs_rel :: Relation

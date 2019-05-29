@@ -211,10 +211,10 @@ nmShrRDesc = foldlSent [S "Mathematical representation of the primary",
 --
 resShearWO :: RelationConcept
 resShearWO = makeRC "resShearWO"
-  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWO_desc resShearWO_rel
+  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWO_desc resShearWORel
 
-resShearWO_rel :: Relation
-resShearWO_rel = inxi shearRNoIntsl $= 
+resShearWORel :: Relation
+resShearWORel = inxi shearRNoIntsl $= 
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle))) *
   (cos (inxi baseAngle)) + (negate (inxi watrForce) + (inxiM1 watrForce) + 
   (inxi surfHydroForce) * sin (inxi surfAngle)) * (sin (inxi baseAngle)) -

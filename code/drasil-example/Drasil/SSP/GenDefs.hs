@@ -156,10 +156,10 @@ resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobilized shear force") mobShr_desc mobShr_rel -- genDef4Label
+  (nounPhraseSP "mobilized shear force") mobShr_desc mobShrRel -- genDef4Label
 
-mobShr_rel :: Relation
-mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
+mobShrRel :: Relation
+mobShrRel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 

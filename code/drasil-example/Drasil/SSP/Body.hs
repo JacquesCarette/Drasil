@@ -85,7 +85,7 @@ aux_cons :: Section
 
 tableOfSymbIntro :: [TSIntro]
 
-problemDesc, termiDefi, phys_sys_desc, goal_stmt :: Section
+problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
 termiDefiList, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
@@ -396,7 +396,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termiDefi, phys_sys_desc, goal_stmt]
+problemDesc = probDescF EmptyS ssp ending [termiDefi, physSysDesc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
@@ -418,7 +418,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
-phys_sys_desc = SRS.physSyst
+physSysDesc = SRS.physSyst
   [phys_sys_intro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
    LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
 

@@ -85,7 +85,7 @@ aux_cons :: Section
 
 tableOfSymbIntro :: [TSIntro]
 
-problemDesc, termi_defi, phys_sys_desc, goal_stmt :: Section
+problemDesc, termiDefi, phys_sys_desc, goal_stmt :: Section
 termi_defi_list, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
@@ -396,7 +396,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
+problemDesc = probDescF EmptyS ssp ending [termiDefi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
@@ -407,7 +407,7 @@ problemDesc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
           phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
 
 -- SECTION 4.1.1 --
-termi_defi = termDefnF Nothing [termi_defi_list]
+termiDefi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))

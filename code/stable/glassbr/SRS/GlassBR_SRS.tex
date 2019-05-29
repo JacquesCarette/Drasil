@@ -447,7 +447,7 @@ Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
@@ -557,9 +557,9 @@ Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
+Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
-        $AR$ is the aspect ratio defined in. \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}
+        $AR$ is the aspect ratio defined in \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -593,7 +593,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
         \hyperref[assumpSV]{A: standardValues}
@@ -630,9 +630,9 @@ Description & \begin{symbDescription}
               \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & AN is annealed glass
-        FT is fully tempered glass
-        HS is heat strengthened glass
+Notes & AN is annealed glass.
+        FT is fully tempered glass.
+        HS is heat strengthened glass.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -668,7 +668,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
-        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
+        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
         $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
@@ -704,7 +704,7 @@ Description & \begin{symbDescription}
               \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol}. and \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}, respectively
+Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}, respectively.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -742,7 +742,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
-        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
+        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         ${P_{btol}}$ is the tolerable probability entered by the user.
@@ -807,7 +807,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -866,7 +866,7 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: riskFun}
+Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: riskFun}.
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
@@ -933,7 +933,7 @@ Description & \begin{symbDescription}
               \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -1193,7 +1193,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
+\hyperref[Figure:demandVSsod]{Fig:demandVSsod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\\
 \hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:eqTNTW]{DD: eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\

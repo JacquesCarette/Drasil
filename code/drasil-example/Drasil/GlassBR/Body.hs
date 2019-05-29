@@ -121,7 +121,7 @@ section :: [Section]
 section = sec
 
 labelledCon :: [LabelledContent]
-labelledCon = [inputGlassPropsTable]
+labelledCon = [inputGlassPropsTable, demandVsSDFig, dimlessloadVsARFig]
 
 sec :: [Section]
 sec = extractSection srs

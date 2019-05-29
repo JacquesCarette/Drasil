@@ -376,10 +376,10 @@ nrmShrFor = im nrmShrForRC [qw slopeDist, qw slopeHght, qw waterHght,
 
 nrmShrForRC :: RelationConcept
 nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proportionality constant")
-  nrmShrF_desc nrmShrF_rel -- nrmShrForL
+  nrmShrF_desc nrmShrFRel -- nrmShrForL
 
-nrmShrF_rel :: Relation
-nrmShrF_rel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
+nrmShrFRel :: Relation
+nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [ch nrmShearNum, S "is defined in", 

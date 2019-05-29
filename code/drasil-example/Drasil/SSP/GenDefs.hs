@@ -57,7 +57,7 @@ normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]
   [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
-resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
+resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]   
   [makeCite chen2005]                      "resShr"      [resShrDesc]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
   [makeCite chen2005]                      "mobShr"      [mobShr_desc]
@@ -138,8 +138,8 @@ resShrDesc :: Sentence
 resShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-resShr_deriv :: Sentence
-resShr_deriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
+resShrDeriv :: Sentence
+resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
   S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
   S "and multiplying both sides of the", phrase equation, S "by", 
   phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord  +:+. 

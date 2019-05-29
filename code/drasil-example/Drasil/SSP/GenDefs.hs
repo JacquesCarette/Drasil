@@ -235,10 +235,10 @@ resShearWODesc = foldlSent_ [ch slcWght, S "is defined in",
 --
 mobShearWO :: RelationConcept
 mobShearWO = makeRC "mobShearWO"
-  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWO_desc mobShearWO_rel
+  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWO_desc mobShearWORel
 
-mobShearWO_rel :: Relation
-mobShearWO_rel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
+mobShearWORel :: Relation
+mobShearWORel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle))) * (sin (inxi baseAngle)) - (negate (inxi watrForce) + 
   (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle)) * (cos (inxi baseAngle))
 

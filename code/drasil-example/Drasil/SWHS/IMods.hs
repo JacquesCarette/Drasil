@@ -35,14 +35,14 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
+eBalanceOnWtr = im eBalanceOnWtrRC [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
  qw pcm_HTC, qw coil_SA, qw temp_PCM, qw time_final, qw temp_C, qw temp_init]
   [sy temp_init $< sy temp_C] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
 
-eBalanceOnWtr_rc :: RelationConcept
-eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
+eBalanceOnWtrRC :: RelationConcept
+eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel 
   -- eBalanceOnWtrL
 

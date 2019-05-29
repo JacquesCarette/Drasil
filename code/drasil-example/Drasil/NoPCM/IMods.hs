@@ -34,15 +34,15 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final, 
+eBalanceOnWtr = im eBalanceOnWtrRC [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [0 $< sy time $< sy time_final] [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
-eBalanceOnWtr_rc :: RelationConcept
-eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
+eBalanceOnWtrRC :: RelationConcept
+eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 

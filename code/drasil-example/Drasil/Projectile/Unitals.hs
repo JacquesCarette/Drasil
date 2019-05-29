@@ -16,10 +16,10 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Projectile.Concepts (launcher, projectile, targetDist, target)
 
 unitalQuants :: [QuantityDict]
-unitalQuants = quantDicts ++ map qw constrained ++ map qw [vf, vi, vx, vy]
+unitalQuants = quantDicts ++ map qw constrained
 
 unitalIdeas :: [IdeaDict]
-unitalIdeas = map nw quantDicts ++ map nw constrained ++ map nw [vf, vi, vx, vy]
+unitalIdeas = map nw quantDicts ++ map nw constrained
 
 constrained :: [ConstrConcept]
 constrained = [projAngle, projDist, projSpeed, targDist]
@@ -51,12 +51,6 @@ projSpeedConcept = dccWDS "speed of projectile" (cn "speed of projectile")
 targDistConcept :: ConceptChunk
 targDistConcept = cc' targetDist
   (foldlSent [S "The", phrase distance, S "from the", phrase launcher, S "to the", phrase target])
-
-vf, vi, vx, vy :: UnitalChunk
-vf = uc' "vf" (cn "final velocity")          "" (sub lV lF) velU
-vi = uc' "vi" (cn "initial velocity")        "" (sub lV lI) velU
-vx = uc' "vx" (cn "x-component of velocity") "" (sub lV lX) velU
-vy = uc' "vy" (cn "y-component of velocity") "" (sub lV lY) velU
 
 ---
 

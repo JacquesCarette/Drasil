@@ -1,33 +1,33 @@
-module Drasil.Projectile.DataDefs (dataDefns, velY) where
+module Drasil.Projectile.DataDefs (dataDefns, speedY) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
 
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 
-import Data.Drasil.Quantities.Physics (velocity)
+import Data.Drasil.Quantities.Physics (speed, xSpeed, ySpeed)
 
-import Drasil.Projectile.Unitals (projAngle, vx, vy)
+import Drasil.Projectile.Unitals (projAngle)
 
 dataDefns :: [DataDefinition]
-dataDefns = [velX, velY]
+dataDefns = [speedX, speedY]
 
 ----------
-velX :: DataDefinition
-velX = ddNoRefs velXQD [{-Derivation-}] "velX" [{-Notes-}]
+speedX :: DataDefinition
+speedX = ddNoRefs speedXQD [{-Derivation-}] "speedX" [{-Notes-}]
 
-velXQD :: QDefinition
-velXQD = mkQuantDef vx velXEqn
+speedXQD :: QDefinition
+speedXQD = mkQuantDef xSpeed speedXEqn
 
-velXEqn :: Expr
-velXEqn = sy velocity * cos (sy projAngle)
+speedXEqn :: Expr
+speedXEqn = sy speed * cos (sy projAngle)
 
 ----------
-velY :: DataDefinition
-velY = ddNoRefs velYQD [{-Derivation-}] "velY" [{-Notes-}]
+speedY :: DataDefinition
+speedY = ddNoRefs speedYQD [{-Derivation-}] "speedY" [{-Notes-}]
 
-velYQD :: QDefinition
-velYQD = mkQuantDef vy velYEqn
+speedYQD :: QDefinition
+speedYQD = mkQuantDef ySpeed speedYEqn
 
-velYEqn :: Expr
-velYEqn = sy velocity * sin (sy projAngle)
+speedYEqn :: Expr
+speedYEqn = sy speed * sin (sy projAngle)

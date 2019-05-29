@@ -179,11 +179,11 @@ This section focuses on the general equations and laws that Projectile is based 
 <p class="paragraph">
 This section collects the laws and equations that will be used to build the instance models.
 </p>
-<div id="GD:finalVelocity">
+<div id="GD:finalSpeed">
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Final velocity</p></td>
+<td><p class="paragraph">Final speed</p></td>
 </tr>
 <tr>
 <th>Units</th>
@@ -193,7 +193,7 @@ This section collects the laws and equations that will be used to build the inst
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>v<sub>f</sub> = v<sub>i</sub>&plus;<b>a</b>&#8239;t</em>
+<em>v<sub>f</sub> = v<sub>i</sub>&plus;a&#8239;t</em>
 </div>
 </td>
 </tr>
@@ -201,9 +201,9 @@ This section collects the laws and equations that will be used to build the inst
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>v<sub>f</sub></em> is the final velocity (m/s)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>v<sub>f</sub></em> is the final speed (m/s)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
+<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
 <li><em>t</em> is the time (s)</li>
 </ul>
 </td>
@@ -240,7 +240,7 @@ This section collects the laws and equations that will be used to build the inst
 <div class="equation">
 <em>t = <div class="fraction">
         <span class="fup">2&#8239;v<sub>i</sub>&#8239;sin(θ)</span>
-        <span class="fdn">|<b>a</b>|</span>
+        <span class="fdn">a</span>
         </div></em>
 </div>
 </td>
@@ -250,9 +250,9 @@ This section collects the laws and equations that will be used to build the inst
 <td>
 <ul class="hide-list-style-no-indent">
 <li><em>t</em> is the time (s)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
 </ul>
 </td>
 </tr>
@@ -275,7 +275,7 @@ This section collects the laws and equations that will be used to build the inst
 </table>
 </div>
 <p class="paragraph">
-Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVelocity>GD: finalVelocity</a> It also comes from the fact that the velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#equalHeights>A: equalHeights</a>).
+Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:finalSpeed>GD: finalSpeed</a> It also comes from the fact that the y-component of speed at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#equalHeights>A: equalHeights</a>).
 </p>
 <div id="GD:distance">
 <table class="gdefn">
@@ -292,7 +292,7 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <td>
 <div class="equation">
 <em>r = v<sub>i</sub>&#8239;t&plus;<div class="fraction">
-                                   <span class="fup"><b>a</b>&#8239;t<sup>2</sup></span>
+                                   <span class="fup">a&#8239;t<sup>2</sup></span>
                                    <span class="fdn">2</span>
                                    </div></em>
 </div>
@@ -303,9 +303,9 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <td>
 <ul class="hide-list-style-no-indent">
 <li><em>r</em> is the distance (m)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>t</em> is the time (s)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
 </ul>
 </td>
 </tr>
@@ -349,7 +349,7 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
         <span class="fup">
         2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
         </span>
-        <span class="fdn">|<b>a</b>|</span>
+        <span class="fdn">a</span>
         </div></em>
 </div>
 </td>
@@ -359,9 +359,9 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <td>
 <ul class="hide-list-style-no-indent">
 <li><em>r</em> is the distance (m)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
 </ul>
 </td>
 </tr>
@@ -392,11 +392,11 @@ Distance (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a hr
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:velX">
+<div id="DD:speedX">
 <table class="ddefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">X-component of velocity</p></td>
+<td><p class="paragraph">X-component of speed</p></td>
 </tr>
 <tr>
 <th>Symbol</th>
@@ -409,19 +409,15 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation">
-<em>v<sub>x</sub> = <b>v</b>&#8239;cos(θ)</em>
-</div>
+<div class="equation"><em>v<sub>x</sub> = v&#8239;cos(θ)</em></div>
 </td>
 </tr>
 <tr>
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>v<sub>x</sub></em> is the x-component of velocity (m/s)
-</li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>v<sub>x</sub></em> is the x-component of speed (m/s)</li>
+<li><em>v</em> is the speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
 </ul>
 </td>
@@ -436,11 +432,11 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 </table>
 </div>
-<div id="DD:velY">
+<div id="DD:speedY">
 <table class="ddefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Y-component of velocity</p></td>
+<td><p class="paragraph">Y-component of speed</p></td>
 </tr>
 <tr>
 <th>Symbol</th>
@@ -453,19 +449,15 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation">
-<em>v<sub>y</sub> = <b>v</b>&#8239;sin(θ)</em>
-</div>
+<div class="equation"><em>v<sub>y</sub> = v&#8239;sin(θ)</em></div>
 </td>
 </tr>
 <tr>
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li>
-<em>v<sub>y</sub></em> is the y-component of velocity (m/s)
-</li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>v<sub>y</sub></em> is the y-component of speed (m/s)</li>
+<li><em>v</em> is the speed (m/s)</li>
 <li><em>θ</em> is the angle of projectile (&deg;)</li>
 </ul>
 </td>

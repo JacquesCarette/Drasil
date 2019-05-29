@@ -1,11 +1,4 @@
-module Data.Drasil.Concepts.Physics (acceleration, angAccel, angDisp, angVelo,
-  angular, cartesian, cohesion, collision, compression, damping, displacement,
-  distance, elasticity, energy, fbd, force, friction, gravitationalAccel,
-  gravitationalConst, impulseS, impulseV, isotropy, joint, kEnergy, linAccel,
-  linDisp, linVelo, linear, mechEnergy, momentOfInertia, physicCon, physicCon',
-  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel,
-  space, speed, strain, stress, tension, threeD, time, torque, twoD, velocity,
-  weight) where
+module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
@@ -18,22 +11,22 @@ import Control.Lens((^.)) --need for parametrization hack
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   cohesion, collision, compression, damping, displacement, distance, elasticity,
-  energy, fbd, force, friction, gravitationalAccel, gravitationalConst, impulseS,
-  impulseV, isotropy, joint, kEnergy, linAccel, linDisp, linVelo, linear,
-  mechEnergy, momentOfInertia, position, pressure, restitutionCoef, rightHand,
-  rigidBody, scalarAccel, space, speed, strain, stress, tension, time, torque,
-  velocity, weight]
+  energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
+  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, joint, kEnergy,
+  linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
+  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
+  strain, stress, tension, time, torque, velocity, weight, xSpeed, ySpeed]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   collision, compression, damping, displacement, distance, elasticity, energy,
-  fbd, force, friction, gravitationalAccel, gravitationalConst, impulseS,
-  impulseV, isotropy, joint, kEnergy, linAccel, linDisp, linVelo, linear,
-  mechEnergy, momentOfInertia, position, pressure, restitutionCoef, rightHand,
-  rigidBody, scalarAccel, space, speed, strain, stress, tension, time, torque,
-  velocity, weight :: ConceptChunk
+  fbd, force, friction, gravitationalAccel, fSpeed, fVel, gravitationalConst,
+  impulseS, impulseV, isotropy, iSpeed, iVel, joint, kEnergy, linAccel, linDisp,
+  linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
+  restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed, strain,
+  stress, tension, time, torque, velocity, weight, xSpeed, ySpeed :: ConceptChunk
 
   -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
@@ -99,6 +92,18 @@ compression  = dccWDS "compression" (cn' "compression")
 
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+
+-- Some variants of distance, speed, velocity, and scalar acceleration
+-- FIXME: Complete all variants?
+-- FIXME: Pull out commonalities?
+
+fSpeed = dccWDS "fSpeed" (cn "final speed")          (S "The" +:+ phrase speed +:+ S "at the body's final point")
+iSpeed = dccWDS "iSpeed" (cn "initial speed")        (S "The" +:+ phrase speed +:+ S "at the body's initial point")
+xSpeed = dccWDS "xSpeed" (cn "x-component of speed") (S "The x-component of speed")
+ySpeed = dccWDS "ySpeed" (cn "y-component of speed") (S "The y-component of speed")
+
+fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
+iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

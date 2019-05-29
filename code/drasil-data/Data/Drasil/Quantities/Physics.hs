@@ -6,7 +6,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
   acceleration, displacement, distance, energy, force, gravitationalAccel, 
   gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
   momentOfInertia, position, pressure, restitutionCoef, scalarAccel, speed,
-  time, torque, velocity, weight, kEnergy)
+  time, torque, velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, xSpeed, ySpeed)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -19,12 +19,12 @@ physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration,
   displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
   impulseS, impulseV, linearAccel, linearDisplacement, linearVelocity,
   momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
-  velocity, weight, kEnergy]
+  velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, xSpeed, ySpeed]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, scalarAccel, speed, time, torque, velocity, weight,
+  position, pressure, scalarAccel, speed, time, torque, velocity, weight, fVel, iVel, fSpeed, iSpeed, xSpeed, ySpeed,
   kEnergy :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -52,3 +52,16 @@ time                 = uc CP.time lT second
 torque               = uc CP.torque lTau torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
+
+-- Variants of distance, speed, and scalar acceleration
+-- FIXME: Add variants of vector forms?
+-- FIXME: Pull out commonalities?
+
+fSpeed = uc CP.fSpeed (sub lV lF) velU
+iSpeed = uc CP.iSpeed (sub lV lI) velU
+xSpeed = uc CP.xSpeed (sub lV lX) velU
+ySpeed = uc CP.ySpeed (sub lV lY) velU
+
+fVel = uc CP.fVel (sub (vec lV) lF) velU
+iVel = uc CP.iVel (sub (vec lV) lI) velU
+

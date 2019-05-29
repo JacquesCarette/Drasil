@@ -70,18 +70,18 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgthRC)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
+  [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
 mcShrStrgthRC :: RelationConcept
 mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcShrStrgthRel
+  mcShrStrgthDesc mcShrStrgthRel
 
 mcShrStrgthRel :: Relation
 mcShrStrgthRel = (sy shrStress) $= ((sy effNormStress) * (tan (sy fricAngle)) + (sy effCohesion))
 
-mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "In this", phrase model, S "the",
+mcShrStrgthDesc :: Sentence
+mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.

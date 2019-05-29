@@ -17,9 +17,9 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   LCsSec(..), UCsSec(..), generateTraceMap',
-  assembler, dataConstraintUncertainty,
+  dataConstraintUncertainty, goalStmtF,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  mkEnumSimpleD, outDataConstTbl, sSubSec, siCon, siSTitl, siSent,
+  mkEnumSimpleD, outDataConstTbl, sSubSec, siCon, termDefnF,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
@@ -29,11 +29,10 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, datumConstraint, document, endUser, environment, game,
   goalStmt, guide, information, input_, interface, item, model, object,
-  organization, physical, physicalSim, physics, problem, problemDescription,
-  product_, project, quantity, realtime, reference, requirement, section_,
-  simulation, software, softwareSys, srsDomains, system, systemConstraint,
-  sysCont, task, template, termAndDef, traceyMatrix, user, userCharacteristic,
-  doccon, doccon')
+  organization, physical, physicalSim, physics, problem, product_, project,
+  quantity, realtime, reference, requirement, section_, simulation, software,
+  softwareSys, srsDomains, system, systemConstraint, sysCont, task, template,
+  traceyMatrix, user, userCharacteristic, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -94,7 +93,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    GSDSec $ GSDProg2 [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
-   SSDSec $ SSDProg [SSDSubVerb problemDescriptionSection
+   SSDSec $ SSDProg [SSDSubVerb probDescription
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
@@ -373,19 +372,15 @@ systemConstraintSect = sSubSec systemConstraint []
 -- 4.1 : Problem Description --
 -------------------------------
 
-problemDescriptionSection :: Section
-problemDescriptionIntro :: Sentence
+probDescription :: Section
+probDescription = SRS.probDesc [probDescIntro]
+  [termAndDefn, goalStates]
 
-problemDescriptionSection = assembler chipmunk everything problemDescriptionSect [termAndDefSect, 
-  goalStatementSect]
+probDescIntro :: Contents
+probDescIntro = problemDescriptionIntroParam physLib game
 
-problemDescriptionSect :: SubSec
-problemDescriptionSect = sSubSec problemDescription [(siSent [problemDescriptionIntro])]
-
-problemDescriptionIntro = problemDescriptionIntroParam physLib game
-
-problemDescriptionIntroParam :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-problemDescriptionIntroParam lib app = foldlSent 
+problemDescriptionIntroParam :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
+problemDescriptionIntroParam lib app = foldlSP 
   [S "Creating a gaming", (phrase lib), S "is a difficult" +:+. phrase task,
   (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
   S "acting under various", (phrase physical), plural condition `sC` S "while", 
@@ -405,85 +400,26 @@ problemDescriptionIntroParam lib app = foldlSent
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-terminologyAndDefinitionsBullets :: Contents
-
-termAndDefSect :: SubSec
-termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [terminologyAndDefinitionsBullets])]
-
-terminologyAndDefinitionsTerms :: [ConceptChunk]
-terminologyAndDefinitionsTerms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
-  CP.cartesian, CP.rightHand]
+termAndDefn :: Section
+termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 terminologyLabel :: Reference
 terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
-terminologyAndDefinitionsBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminologyAndDefinitionsTerms)
+termAndDefnBullets :: Contents
+termAndDefnBullets = LlC $ enumBullet terminologyLabel
+  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn))
+    [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
 -----------------------------
 
-goalStatementsList :: [Contents]
+goalStates :: Section
+goalStates = goalStmtF [S "the" +:+ plural input_] goalStateList
 
-goalStatementSect :: SubSec
-goalStatementSect = sSubSec goalStmt [siCon goalStatementsList]
-
-{-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
-  Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
-goalStatementStruct state inputs wrt adjective outputs objct condition1 condition2 = 
-  [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
-  (plural objct) `sC` S "determine", condition1, listOfOutputs, 
-  S "over a period of", (phrase QP.time), condition2]
-  where initial EmptyS      = S "initial"
-        initial p           = p `sC` (S "initial")
-        listOfInputs EmptyS = (foldlList Comma List $ map plural inputs)
-        listOfInputs i      = (foldlList Comma List $ map plural inputs) `sC` S "and" +:+ i
-        listOfOutputs       = (foldlList Comma List $ map plural outputs)
---GS1: Given the physical properties, initial positions and velocities, 
---and forces applied on a set of rigid bodies, determine their new positions 
---and velocities over a period of time. 
-goalStatementsGLinear = goalStatementStruct (plural physicalProperty) 
-  (take 2 inputSymbols) (plural QP.force) (S "applied on")
-  (take 2 outputSymbols) CP.rigidBody
-  (S "their new") EmptyS
-
-goalStatementsGAngular = goalStatementStruct (plural physicalProperty) 
-  (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
-  (drop 3 $ take 5 inputSymbols) CP.rigidBody
-  (S "their new") EmptyS-}
-
-{-goal_statements_G_detectCollision = goalStatementStruct EmptyS
-  (take 2 inputSymbols) EmptyS (S "of")
-  (take 0 inputSymbols) CP.rigidBody
-  (S "if any of them will collide with one another") EmptyS
-
-goalStatement4Inputs :: [UnitalChunk]
-goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity, 
-  QP.angularVelocity]
-
-goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
-  (goalStatement4Inputs) --fixme input defSymbols
-  EmptyS (S "of")
-  (goalStatement4Inputs) --fixme input defSymbols
-  CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
-  S "that have undergone a" +:+ (phrase CP.collision))-}
-
-{-goalStatementsGLinear, goalStatementsGAngular, 
-  goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
-
-goalStatementsList' :: [Sentence]
-goalStatementsList' = map (foldlSent) [goalStatementsGLinear, 
-  goalStatementsGAngular, goal_statements_G_detectCollision, 
-  goal_statements_G_collision]-}
-
-  {-, 
-  goal_statements_G_detectCollision, goal_statements_G_collision-} 
-
-  {-, goal_statements_G_detectCollision, 
-  goal_statements_G_collision-}
-
-goalStatementsList = mkEnumSimpleD goals
+goalStateList :: [Contents]
+goalStateList = mkEnumSimpleD goals
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -572,7 +508,7 @@ offTheShelfSolutionsIntro, off_the_shelf_solutions_2dlist,
 offTheShelfSolutions = SRS.offShelfSol [offTheShelfSolutionsIntro, 
   off_the_shelf_solutions_2dlist, offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist] []
 
-offTheShelfSolutionsIntro = offTheShelfSolutionsIntroParam problemDescriptionSection physLib
+offTheShelfSolutionsIntro = offTheShelfSolutionsIntroParam probDescription physLib
 
 offTheShelfSolutionsIntroParam :: NamedIdea n => Section -> n -> Contents
 offTheShelfSolutionsIntroParam problmDescSec lib = mkParagraph $ foldlSentCol 
@@ -645,7 +581,7 @@ traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
-traceMatGoalStmtRef = makeListRef goals problemDescriptionSection
+traceMatGoalStmtRef = makeListRef goals probDescription
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])) -- FIXME: hack?
@@ -697,7 +633,7 @@ traceMatTabReqGoalOther = llcc (makeTabRef "TraceyReqGoalsOther") $ Table
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef2S requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef2S problemDescriptionSection) `sAnd` S "Other" +:+
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef2S probDescription) `sAnd` S "Other" +:+
   titleize' item)) True
 
 traceMatTabAssumpCol' :: [[String]]
@@ -768,7 +704,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc (makeTabRef "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S problemDescriptionSection)
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S probDescription)
   `sAnd` S "Other" +:+ titleize' item)) True
 
 traceMatTabDefnModelCol :: [[String]]

@@ -6,6 +6,7 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   TraceMap, cdb, generateRefbyMap, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
+import Utils.Drasil
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(SSDSec), Field(..), Fields,
   InclUnits(IncludeUnits), ProblemDescription(PDProg),
@@ -26,7 +27,7 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.People (samCrawford)
 import Data.Drasil.Phrase (for'')
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 
 import qualified Data.Map as Map
 

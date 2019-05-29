@@ -1,8 +1,7 @@
 module Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, assumptions, equalHeights) where
 
 import Language.Drasil
-
-import Data.Drasil.SentenceStructures (sAnd)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

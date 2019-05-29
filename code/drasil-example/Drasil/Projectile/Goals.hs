@@ -1,11 +1,10 @@
 module Drasil.Projectile.Goals (goals) where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (position)
-
-import Data.Drasil.SentenceStructures (ofThe)
 
 goals :: [ConceptInstance]
 goals = [calcPosition]

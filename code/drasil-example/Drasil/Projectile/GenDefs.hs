@@ -3,10 +3,11 @@ module Drasil.Projectile.GenDefs (accelGravityY, genDefns) where
 import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Quantities.Physics (acceleration, distance, time, velocity)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent, sAnd)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent)
 
 import Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, equalHeights)
 import Drasil.Projectile.DataDefs (velY)

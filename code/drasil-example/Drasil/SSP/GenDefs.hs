@@ -62,7 +62,7 @@ resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]   
   [makeCite chen2005]                      "mobShr"      [mobShrDesc]
 effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
-  [makeCite chen2005]                      "effNormF"    [effNormF_desc]
+  [makeCite chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
 mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
@@ -176,13 +176,13 @@ mobShrDeriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
 --
 effNormF :: RelationConcept
 effNormF = makeRC "effNormF"
-  (nounPhraseSP "effective normal force") effNormF_desc effNormFRel
+  (nounPhraseSP "effective normal force") effNormFDesc effNormFRel
 
 effNormFRel :: Relation
 effNormFRel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 
-effNormF_desc :: Sentence
-effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
+effNormFDesc :: Sentence
+effNormFDesc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 
 effNormF_deriv :: Sentence
 effNormF_deriv = foldlSent [

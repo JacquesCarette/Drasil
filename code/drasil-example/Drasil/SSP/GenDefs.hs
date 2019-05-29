@@ -59,7 +59,7 @@ bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
 resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]   
   [makeCite chen2005]                      "resShr"      [resShrDesc]
-mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
+mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]   
   [makeCite chen2005]                      "mobShr"      [mobShrDesc]
 effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
   [makeCite chen2005]                      "effNormF"    [effNormF_desc]
@@ -165,8 +165,8 @@ mobShrDesc :: Sentence
 mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-mobShr_deriv :: Sentence
-mobShr_deriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
+mobShrDeriv :: Sentence
+mobShrDeriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
   phrase definition `ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
   S "by", phrase definition `ofThe` phrase fs, S "from" +:+.
   makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,

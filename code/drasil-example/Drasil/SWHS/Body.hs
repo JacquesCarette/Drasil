@@ -367,7 +367,7 @@ tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, LlC fig_tank]
+physSystDescription = physSystDesc (short progName) figTank [physSystDescList, LlC figTank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
@@ -944,8 +944,8 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- Structure of list would be same between examples but content is completely
 -- different
 
-fig_tank :: LabelledContent
-fig_tank = llcc (makeFigRef "Tank") $ fig (
+figTank :: LabelledContent
+figTank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
   $ resourcePath ++ "Tank.png"

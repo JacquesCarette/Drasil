@@ -87,7 +87,7 @@ tableOfSymbIntro :: [TSIntro]
 
 problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
 termiDefiList, physSysIntro, physSysConv, 
-  phys_sys_desc_bullets, phys_sys_fbd :: Contents
+  physSysDescBullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
 
 
@@ -419,7 +419,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
-  [physSysIntro, phys_sys_desc_bullets, LlC fig_physsyst, physSysConv,
+  [physSysIntro, physSysDescBullets, LlC fig_physsyst, physSysConv,
    LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
 
 physSysIntro = physSystIntro ssp fig_physsyst
@@ -445,7 +445,7 @@ physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
   phrase value, S "between", phrase ixd, ch ix `sAnd` S "adjacent", phrase ixd,
   E $ sy ix + 1]
 
-phys_sys_desc_bullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
+physSysDescBullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
 
 physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence

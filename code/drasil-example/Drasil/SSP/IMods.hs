@@ -493,7 +493,7 @@ nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in",
 
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im nrmShrForDenRC [qw slipDist, qw constF]
-  [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012]) nrmShrFDen_deriv
+  [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012]) nrmShrFDenDeriv
   "nrmShrForDen" [nrmShrFDen_desc]
 
 nrmShrForDenRC :: RelationConcept
@@ -510,8 +510,8 @@ nrmShrFDenRel = inxi nrmShearDen $= case_ [
     idx (sy scalFunc) (sy numbSlices - 1), sy index $= 1)
   ]
 
-nrmShrFDen_deriv :: Derivation
-nrmShrFDen_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
+nrmShrFDenDeriv :: Derivation
+nrmShrFDenDeriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
   S "for the derivation of" +:+. ch nrmShearDen]
 
 nrmShrFDen_desc :: Sentence

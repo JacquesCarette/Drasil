@@ -189,7 +189,7 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [fig_physsyst, fig_indexconv, fig_forceacting, 
+labCon = [figPhysSyst, fig_indexconv, fig_forceacting, 
   data_constraint_Table2, data_constraint_Table3, inputDataTable, 
   inputsToOutputTable]
 
@@ -419,10 +419,10 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
-  [physSysIntro, physSysDescBullets, LlC fig_physsyst, physSysConv,
+  [physSysIntro, physSysDescBullets, LlC figPhysSyst, physSysConv,
    LlC fig_indexconv, physSysFbd, LlC fig_forceacting] []
 
-physSysIntro = physSystIntro ssp fig_physsyst
+physSysIntro = physSystIntro ssp figPhysSyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
 physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
@@ -465,8 +465,8 @@ physSysFbd = foldlSP [S "A", phrase fbd, S "of the",
   plural force `sAnd` plural symbol_, S "will be discussed in detail in",
   makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
 
-fig_physsyst :: LabelledContent
-fig_physsyst = llcc (makeFigRef "PhysicalSystem") $
+figPhysSyst :: LabelledContent
+figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   fig (foldlSent_ [S "An example", phrase slope, S "for", phrase analysis,
   S "by", short ssp `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")

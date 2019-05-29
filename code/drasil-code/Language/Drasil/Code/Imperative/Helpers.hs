@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (
+module Language.Drasil.Code.Imperative.Helpers (Pair(..),
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
@@ -18,6 +18,11 @@ import Data.String.Utils (replace)
 import Data.List (nub,intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), ($+$), comma, punctuate, nest)
+
+class Pair p where
+  pfst :: p x y a -> x a
+  psnd :: p x y b -> y b
+  pair :: x a -> y a -> p x y a
 
 blank :: Doc
 blank = text ""

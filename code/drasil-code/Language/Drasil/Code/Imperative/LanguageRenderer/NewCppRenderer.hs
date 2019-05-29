@@ -35,10 +35,11 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, 
     dot, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
     getterName, setterName, setEmpty)
-import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
-  oneTab, oneTabbed, mapPairFst, mapPairSnd, tripFst, tripSnd, tripThird, 
-  vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, 
-  lift3Pair, lift4Pair, liftPairFst, liftTripFst, liftTrip)
+import Language.Drasil.Code.Imperative.Helpers (Pair(..), 
+  angles, blank, doubleQuotedText, oneTab, oneTabbed, mapPairFst, mapPairSnd, 
+  tripFst, tripSnd, tripThird, vibcat, liftA4, liftA5, liftA6, liftA8, liftList,
+  lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst, liftTripFst, 
+  liftTrip)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -49,11 +50,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   isEmpty)
 
 data CppCode x y a = CPPC {src :: x a, hdr :: y a}
-
-class Pair p where
-    pfst :: p x y a -> x a
-    psnd :: p x y b -> y b
-    pair :: x a -> y a -> p x y a
 
 instance Pair CppCode where
     pfst (CPPC xa _) = xa

@@ -456,11 +456,11 @@ nrmShrForNum :: InstanceModel
 nrmShrForNum = im nrmShrForNumRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
   [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012]) nrmShrFNumDeriv 
-  "nrmShrForNum" [nrmShrFNum_desc]
+  "nrmShrForNum" [nrmShrFNumDesc]
 
 nrmShrForNumRC :: RelationConcept
 nrmShrForNumRC = makeRC "nrmShrForNumRC" (nounPhraseSP "normal and shear force proportionality constant numerator")
-  nrmShrFNum_desc nrmShrFNumRel 
+  nrmShrFNumDesc nrmShrFNumRel 
 
 nrmShrFNumRel :: Relation
 nrmShrFNumRel = inxi nrmShearNum $= case_ [case1,case2,case3]
@@ -480,8 +480,8 @@ nrmShrFNumDeriv :: Derivation
 nrmShrFNumDeriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
   S "for the derivation of" +:+. ch nrmShearNum]
 
-nrmShrFNum_desc :: Sentence
-nrmShrFNum_desc = foldlSent [ch baseWthX, S "is defined in", 
+nrmShrFNumDesc :: Sentence
+nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in", 
   makeRef2S lengthB `sC` ch watrForce, S "is defined in", 
   makeRef2S intersliceWtrF `sC` ch baseAngle, S "is defined in", 
   makeRef2S angleA `sC` ch midpntHght, S "is defined in", 

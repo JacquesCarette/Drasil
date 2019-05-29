@@ -67,14 +67,14 @@ eqDesc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (cw mcShrStrgth_rc)
+mcShrStrgth = tm (cw mcShrStrgthRC)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
 
 ------------------------------------
-mcShrStrgth_rc :: RelationConcept
-mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
+mcShrStrgthRC :: RelationConcept
+mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation

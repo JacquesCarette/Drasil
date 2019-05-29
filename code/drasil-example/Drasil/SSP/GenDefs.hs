@@ -56,7 +56,7 @@ normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD,
 normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]    
   [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
-  [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
+  [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
 resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
   [makeCite chen2005]                      "resShr"      [resShr_desc]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
@@ -103,14 +103,14 @@ nmFEqDeriv = foldlSent [at_start normForcEq, S "is derived from the free",
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEqRel
+  bShFEqDesc bShFEqRel
 
 bShFEqRel :: Relation
 bShFEqRel = inxi mobShrI $= eqlExpr sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
-bShFEq_desc :: Sentence
-bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
+bShFEqDesc :: Sentence
+bShFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",

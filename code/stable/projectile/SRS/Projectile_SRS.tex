@@ -29,7 +29,7 @@ This section first presents the problem description, which gives a high-level vi
 A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the angle and velocity of the projectile, the goal statements are:
+Given the angle and speed of the projectile, the goal statements are:
 \begin{itemize}
 \item[calcLandingPosition:\phantomsection\label{calcPosition}]Calculate the landing position of the projectile.
 \end{itemize}
@@ -55,20 +55,20 @@ This section focuses on the general equations and laws that Projectile is based 
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:velocity}
+\toprule \textbf{Refname} & \textbf{TM:speed}
 \phantomsection 
-\label{TM:velocity}
+\label{TM:speed}
 \\ \midrule \\
-Label & Velocity
+Label & Speed
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{v}=\frac{d\,\mathbf{r}}{d\,t}
+           v=\frac{d\,r}{d\,t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$r$ is the distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -80,20 +80,20 @@ RefBy &
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:acceleration}
+\toprule \textbf{Refname} & \textbf{TM:scalarAccel}
 \phantomsection 
-\label{TM:acceleration}
+\label{TM:scalarAccel}
 \\ \midrule \\
-Label & Acceleration
+Label & Scalar acceleration
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{a}=\frac{d\,\mathbf{v}}{d\,t}
+           a=\frac{d\,v}{d\,t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --

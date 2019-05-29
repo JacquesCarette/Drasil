@@ -2,10 +2,11 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
-    acceleration, displacement, distance, energy, force, gravitationalAccel, 
-    gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
-    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, weight, kEnergy)
+import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
+  acceleration, displacement, distance, energy, force, gravitationalAccel, 
+  gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
+  momentOfInertia, position, pressure, restitutionCoef, scalarAccel, speed,
+  time, torque, velocity, weight, kEnergy)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -14,15 +15,17 @@ restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqd' CP.restitutionCoef (const $ sub cC cR) Real Nothing
 
 physicscon :: [UnitalChunk]
-physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
-  distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
-  impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity, weight, kEnergy]
+physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, 
+  displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
+  impulseS, impulseV, linearAccel, linearDisplacement, linearVelocity,
+  momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
+  velocity, weight, kEnergy]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity, weight, kEnergy :: UnitalChunk
+  position, pressure, scalarAccel, speed, time, torque, velocity, weight,
+  kEnergy :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
@@ -43,6 +46,8 @@ linearVelocity       = uc CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic "
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 position             = uc CP.position (vec lP) metre
 pressure             = uc CP.pressure lP pascal
+speed                = uc CP.speed lV velU
+scalarAccel          = uc CP.scalarAccel lA accelU
 time                 = uc CP.time lT second
 torque               = uc CP.torque lTau torqueU
 velocity             = uc CP.velocity (vec lV) velU

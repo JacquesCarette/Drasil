@@ -2,31 +2,31 @@ module Drasil.Projectile.TMods (tMods) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)
-import Data.Drasil.Quantities.Physics (acceleration, displacement, time, velocity)
+import Data.Drasil.Quantities.Physics (distance, scalarAccel, speed, time)
 
 tMods :: [TheoryModel]
-tMods = [velocityTM, accelerationTM]
+tMods = [speedTM, scalarAccelTM]
 
 ------------- New Chunk -----------
-velocityTM :: TheoryModel
-velocityTM = tmNoRefs (cw velocityRC)
-  [qw velocity, qw displacement, qw time] ([] :: [ConceptChunk])
-  [] [velocityRel] [] "velocity" []
+speedTM :: TheoryModel
+speedTM = tmNoRefs (cw speedRC)
+  [qw speed, qw distance, qw time] ([] :: [ConceptChunk])
+  [] [speedRel] [] "speed" []
 
-velocityRC :: RelationConcept
-velocityRC = makeRC "velocityRC" (cn' "velocity") EmptyS velocityRel
+speedRC :: RelationConcept
+speedRC = makeRC "speedRC" (cn' "speed") EmptyS speedRel
 
-velocityRel :: Relation
-velocityRel = sy velocity $= deriv (sy displacement) time
+speedRel :: Relation
+speedRel = sy speed $= deriv (sy distance) time
 
 ------------- New Chunk -----------
-accelerationTM :: TheoryModel
-accelerationTM = tmNoRefs (cw accelerationRC)
-  [qw acceleration, qw velocity, qw time] ([] :: [ConceptChunk])
-  [] [accelerationRel] [] "acceleration" []
+scalarAccelTM :: TheoryModel
+scalarAccelTM = tmNoRefs (cw scalarAccelRC)
+  [qw scalarAccel, qw speed, qw time] ([] :: [ConceptChunk])
+  [] [scalarAccelRel] [] "scalarAccel" []
 
-accelerationRC :: RelationConcept
-accelerationRC = makeRC "accelerationRC" (cn' "acceleration") EmptyS accelerationRel
+scalarAccelRC :: RelationConcept
+scalarAccelRC = makeRC "scalarAccelRC" (cn' "scalar acceleration") EmptyS scalarAccelRel
 
-accelerationRel :: Relation
-accelerationRel = sy acceleration $= deriv (sy velocity) time
+scalarAccelRel :: Relation
+scalarAccelRel = sy scalarAccel $= deriv (sy speed) time

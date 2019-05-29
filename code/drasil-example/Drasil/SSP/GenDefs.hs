@@ -176,10 +176,10 @@ mobShrDeriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
 --
 effNormF :: RelationConcept
 effNormF = makeRC "effNormF"
-  (nounPhraseSP "effective normal force") effNormF_desc effNormF_rel
+  (nounPhraseSP "effective normal force") effNormF_desc effNormFRel
 
-effNormF_rel :: Relation
-effNormF_rel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
+effNormFRel :: Relation
+effNormFRel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 
 effNormF_desc :: Sentence
 effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD

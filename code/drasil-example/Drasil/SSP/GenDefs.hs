@@ -103,10 +103,10 @@ nmFEqDeriv = foldlSent [at_start normForcEq, S "is derived from the free",
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel
+  bShFEq_desc bShFEqRel
 
-bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
+bShFEqRel :: Relation
+bShFEqRel = inxi mobShrI $= eqlExpr sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence

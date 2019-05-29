@@ -69,7 +69,7 @@ mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
-momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
+momentEqlGD  = gd momentEql  (Just newton)           [momEqlDeriv]  
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
@@ -270,8 +270,8 @@ momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
   makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, S "is defined in", 
   makeRef2S angleB]
 
-momEql_deriv :: Sentence
-momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
+momEqlDeriv :: Sentence
+momEqlDeriv = foldlSent_ [at_start momentEql, S "is derived from the free",
   S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --

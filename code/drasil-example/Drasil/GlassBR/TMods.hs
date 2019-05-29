@@ -13,7 +13,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (tm_demand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
+import Drasil.GlassBR.Unitals (tmDemand, demandq, is_safeProb, is_safeLoad, tm_lRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
@@ -33,8 +33,8 @@ tMods = [pbIsSafe, lrIsSafe]
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafeRC)
-   [qw is_safeLoad, qw tm_lRe, qw tm_demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
+   [qw is_safeLoad, qw tm_lRe, qw tmDemand] ([] :: [ConceptChunk])
+   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tmDemand)] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
    where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
@@ -42,14 +42,14 @@ lrIsSafe = tm (cw lrIsSafeRC)
 
 lrIsSafeRC :: RelationConcept
 lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
-  lrIsSafeDesc ( (sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand))
+  lrIsSafeDesc ( (sy is_safeLoad) $= (sy tm_lRe) $> (sy tmDemand))
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLoad) s ending
   where 
     s = ((ch is_safeProb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLoad))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
-      sParen (S "also called capacity") `sC` (ch tm_demand) +:+ sParen (S "also referred as the" +:+ 
+      sParen (S "also called capacity") `sC` (ch tmDemand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn)
 
 pbIsSafe :: TheoryModel

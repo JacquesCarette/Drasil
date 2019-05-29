@@ -181,16 +181,16 @@ sdMin     = mkQuantDef (unitary "sdMin"
 {--}
 
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
+symbols = [minThick, sflawParamK, sflawParamM, demand, tmDemand, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight]
 
-minThick, sflawParamK, sflawParamM, demand, tm_demand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,
+minThick, sflawParamK, sflawParamM, demand, tmDemand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
 
-tm_demand      = unitary "tm_demand"      (nounPhraseSP "applied load (demand) or pressure")
+tmDemand      = unitary "tmDemand"      (nounPhraseSP "applied load (demand) or pressure")
   (Atomic "Load") pascal Rational --correct Space used?
   
 lRe      = unitary "lRe"      (nounPhraseSP "load resistance")

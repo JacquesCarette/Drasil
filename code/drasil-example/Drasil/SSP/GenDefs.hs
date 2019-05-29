@@ -54,7 +54,7 @@ normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD,
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 
   srfWtrFGD :: GenDefn
 normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
-  [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
+  [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
@@ -81,14 +81,14 @@ srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEqRel
+  nmFEqDesc nmFEqRel
 
 nmFEqRel :: Relation
 nmFEqRel = inxi totNrmForce $= eqlExprN cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
-nmFEq_desc :: Sentence
-nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
+nmFEqDesc :: Sentence
+nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the normal direction", ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce,  S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",

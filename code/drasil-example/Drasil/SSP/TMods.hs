@@ -4,6 +4,7 @@ module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStres
 import Prelude hiding (tan)
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm)
+import Utils.Drasil
 
 import Data.Drasil.Quantities.Physics (distance, force)
 
@@ -11,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (model)
 import Data.Drasil.Concepts.Physics (friction, linear)
 import Data.Drasil.Theories.Physics (newtonSL)
 
-import Data.Drasil.SentenceStructures (foldlSent, getTandS, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, getTandS)
 
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)

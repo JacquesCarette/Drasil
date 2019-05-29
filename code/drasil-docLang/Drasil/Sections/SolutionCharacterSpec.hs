@@ -19,12 +19,14 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition)
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, 
-  SepType(Comma), FoldType(List), sAnd)
+import Data.Drasil.SentenceStructures (foldlSP, foldlSent, foldlList, 
+  SepType(Comma), FoldType(List))
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.List (find)

@@ -34,7 +34,7 @@ instance Functor PrintLaTeX where
 
 instance Applicative PrintLaTeX where
   pure = PL . const
-  PL f <*> PL v = PL $ \ctx -> (f ctx) (v ctx)
+  PL f <*> PL v = PL $ \ctx -> f ctx (v ctx)
 
 instance Monad PrintLaTeX where
   return = pure
@@ -59,7 +59,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     -- we are producing Math, but want some Text embedded
     adjust Math Text gen = bstext TP.<> br (gen Text)
     -- we are producing Text, but want some Math embedded
-    adjust Text Math gen = dollar TP.<> (gen Math) TP.<> dollar
+    adjust Text Math gen = dollar TP.<> gen Math TP.<> dollar
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
     adjust x Curr gen = gen x 
@@ -73,12 +73,12 @@ get_ctx :: PrintLaTeX MathContext
 get_ctx = PL id
 
 instance Semigroup (PrintLaTeX TP.Doc) where
-  (PL s1) <> (PL s2) = PL $ \ctx -> (s1 ctx) TP.<> (s2 ctx)
+  (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx
 
 -- very convenient lifting of $$
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
-  (PL s1) `mappend` (PL s2) = PL $ \ctx -> (s1 ctx) $$ (s2 ctx)
+  (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
 
 -- since Text.PrettyPrint steals <>, use %% instead
 -- may revisit later

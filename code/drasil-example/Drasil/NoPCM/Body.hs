@@ -410,47 +410,6 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
   phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
-genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> [Sentence]
-genDefnDesc2 g_d su vo tfv unv un =
-  [S "Applying", titleize g_d, S "to the first term over",
-  (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
-  ch tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` ch unv, S "as a", phrase un,
-  S "outward", phrase unv, S "for a", phrase su]
-
-genDefnDesc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
-genDefnDesc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
-  phrase vhg, S "is assumed constant. Then (1) can be written as"]
-
-genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-genDefnDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
-  ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
-
-genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
-
-genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
-
-genDefnEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
-
 --TODO: Implement physical properties of a substance
 
 dataConstTable1 :: LabelledContent

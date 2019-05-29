@@ -66,7 +66,7 @@ effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormFDeriv]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
-  (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
@@ -235,15 +235,15 @@ resShearWODesc = foldlSent_ [ch slcWght, S "is defined in",
 --
 mobShearWO :: RelationConcept
 mobShearWO = makeRC "mobShearWO"
-  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWO_desc mobShearWORel
+  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWODesc mobShearWORel
 
 mobShearWORel :: Relation
 mobShearWORel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle))) * (sin (inxi baseAngle)) - (negate (inxi watrForce) + 
   (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle)) * (cos (inxi baseAngle))
 
-mobShearWO_desc :: Sentence
-mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
+mobShearWODesc :: Sentence
+mobShearWODesc = foldlSent_ [ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",

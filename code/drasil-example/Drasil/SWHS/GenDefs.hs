@@ -1,5 +1,5 @@
 module Drasil.SWHS.GenDefs (genDefs, nwtnCooling, rocTempSimp,
-  roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
+  rocTempSimpDeriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -45,7 +45,7 @@ nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
   [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCooling_desc]
 
-rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv
                  "rocTempSimp" [rocTempSimp_desc]
 
 --
@@ -104,8 +104,8 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
 --  General Definitions  Derivation  --
 ---------------------------------------
 
-roc_temp_simp_deriv :: Derivation
-roc_temp_simp_deriv =
+rocTempSimpDeriv :: Derivation
+rocTempSimpDeriv =
   S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
     phrase temp +:+ S ":" :
   weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns]

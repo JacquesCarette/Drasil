@@ -9,6 +9,7 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
   _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Utils.Drasil
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -54,8 +55,7 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSPCol, ofThe, ofThe', sAnd, 
-  showingCxnBw, sOf)
+  foldlSent, foldlSent_, foldlSP, foldlSPCol, showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)

@@ -4,6 +4,7 @@ import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv)
+import Utils.Drasil
 
 import Data.Drasil.Utils (weave)
 
@@ -14,8 +15,7 @@ import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
 import Data.Drasil.Concepts.Math (angle, equation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
-import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
-  foldlSentCol, getTandS, sAnd, sOf)
+import Data.Drasil.SentenceStructures (eqN, foldlSent, foldlSent_, foldlSentCol, getTandS)
 
 import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL, 
   assumpES, assumpSF, assumpSL)

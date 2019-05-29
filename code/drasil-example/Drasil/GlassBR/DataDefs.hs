@@ -1,19 +1,21 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, qDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
   eqTNTWDD, probOfBreak, calofCapacity, calofDemand) where
+  
 import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asExpr')
 import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Database.Drasil (Block(Parallel))
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)

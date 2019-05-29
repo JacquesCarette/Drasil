@@ -4,15 +4,17 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv)
-import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
+import Utils.Drasil
+
 import Drasil.GlassBR.Concepts (lResistance)
+import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (charWeight, demand, 
-  demandq, plateLen, plateWidth, 
+import Drasil.GlassBR.Unitals (charWeight, demand, demandq, plateLen, plateWidth, 
   standOffDist, isSafePb, isSafeLR, lRe, pbTol, probBr)
+
 import Data.Drasil.Concepts.Documentation (goal)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 iMods :: [InstanceModel]
 iMods = [pbIsSafe, lrIsSafe]

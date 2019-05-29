@@ -6,6 +6,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd)
+import Utils.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
@@ -21,8 +22,7 @@ import Data.Drasil.Concepts.Physics (distance, twoD, weight)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Theories.Physics (weightGD)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, 
-  getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, getTandS)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE)

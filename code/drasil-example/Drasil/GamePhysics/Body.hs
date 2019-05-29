@@ -8,6 +8,7 @@ import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Utils.Drasil
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
@@ -41,7 +42,7 @@ import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, sOf)
+  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)

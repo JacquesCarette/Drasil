@@ -97,14 +97,14 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm (cw effStress_rc)
+effStress = tm (cw effStressRC)
   [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
   [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
 
 ------------------------------------
-effStress_rc :: RelationConcept
-effStress_rc = makeRC "effStress_rc"
+effStressRC :: RelationConcept
+effStressRC = makeRC "effStressRC"
   (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
 
 effS_rel :: Relation

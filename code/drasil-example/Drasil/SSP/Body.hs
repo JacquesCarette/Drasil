@@ -85,7 +85,7 @@ aux_cons :: Section
 
 tableOfSymbIntro :: [TSIntro]
 
-problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
+problemDesc, termiDefi, physSysDesc, goalStmt :: Section
 termiDefiList, physSysIntro, physSysConv, 
   physSysDescBullets, physSysFbd :: Contents
 goals_list :: [Contents]
@@ -396,7 +396,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termiDefi, physSysDesc, goal_stmt]
+problemDesc = probDescF EmptyS ssp ending [termiDefi, physSysDesc, goalStmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
@@ -482,7 +482,7 @@ figForceActing = llcc (makeFigRef "ForceDiagram") $
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goal_stmt = goalStmtF (map (uncurry ofThe) [
+goalStmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)

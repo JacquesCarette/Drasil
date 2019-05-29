@@ -46,15 +46,15 @@ factOfSafetyRel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibriumRC)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
+  [] [eqRel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
 
 ------------------------------------  
 equilibriumRC :: RelationConcept
-equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eq_desc eq_rel
+equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eq_desc eqRel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
-eq_rel :: Relation
-eq_rel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
+eqRel :: Relation
+eqRel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",

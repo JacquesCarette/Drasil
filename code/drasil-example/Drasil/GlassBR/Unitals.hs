@@ -125,7 +125,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, is_safeLoad] 
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
@@ -231,10 +231,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-riskFun, isSafePb, isSafeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -255,7 +255,7 @@ isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned 
   ++ " (capacity) is greater than load (demand)")
   (Atomic "is-safeLR") Boolean
 
-is_safeLoad      = vc "is_safeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
+isSafeLoad      = vc "isSafeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than applied load (demand)")
   (Atomic "is-safeLoad") Boolean
 

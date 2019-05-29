@@ -54,10 +54,10 @@ iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 
 fctSfty :: InstanceModel
 fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw fs) [] (map makeCite [chen2005, karchewski2012]) fctSftyDeriv "fctSfty" [fcSfty_desc]
+  [] (qw fs) [] (map makeCite [chen2005, karchewski2012]) fctSftyDeriv "fctSfty" [fctSftyDesc]
 
 fctSftyRC :: RelationConcept
-fctSftyRC = makeRC "fctSftyRC" factorOfSafety fcSfty_desc fctSftyRel -- fctSftyL
+fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
 
 fctSftyRel :: Relation
 fctSftyRel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
@@ -66,8 +66,8 @@ fctSftyRel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
         sumOp sym = (defsum (eqSymb index) 1 (sy numbSlices - 1)
           (idx (sy sym) (sy index) * prodOp)) + idx (sy sym) (sy numbSlices)
 
-fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S 
+fctSftyDesc :: Sentence
+fctSftyDesc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S 
   resShearWOGD `sC` ch mobShrC, S "is defined in", makeRef2S convertFunc2 `sC` 
   S "and", ch shearFNoIntsl, S "is defined in", makeRef2S mobShearWOGD]
 

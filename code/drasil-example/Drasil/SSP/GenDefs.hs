@@ -61,7 +61,7 @@ resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]
   [makeCite chen2005]                      "resShr"      [resShrDesc]
 mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]   
   [makeCite chen2005]                      "mobShr"      [mobShrDesc]
-effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
+effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormFDeriv] 
   [makeCite chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
@@ -184,8 +184,8 @@ effNormFRel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 effNormFDesc :: Sentence
 effNormFDesc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 
-effNormF_deriv :: Sentence
-effNormF_deriv = foldlSent [
+effNormFDeriv :: Sentence
+effNormFDeriv = foldlSent [
   S "Derived by substituting", makeRef2S stressDD, S "into", 
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
   S "by the", phrase genericA `ofThe` phrase slice, S "in the shear-" :+: 

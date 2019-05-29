@@ -35,9 +35,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   assumption, characteristic, company, condition, content, dataConst,
   datum, definition, doccon, doccon', document, emphasis, environment, goal,
   information, input_, interface, item, likelyChg, model, organization, output_,
-  physical, physicalSystem, physSyst, problem, product_, purpose, reference,
-  requirement, section_, software, softwareConstraint, softwareSys, srsDomains,
-  standard, sysCont, system, template, term_, traceyMatrix, user, value, variable)
+  physical, physSyst, problem, product_, purpose, reference, requirement, section_,
+  software, softwareConstraint, softwareSys, srsDomains, standard, sysCont, system,
+  template, term_, traceyMatrix, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
@@ -64,9 +64,10 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
-import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glassBR, 
-  ptOfExplsn, stdOffDist, con, con')
+import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
+  ptOfExplsn, con, con')
 import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
+import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -75,11 +76,10 @@ import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
   inputGlassPropsTable, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
-import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, charWeight,
-  demand, demandq, dimlessLoad, explosion, constants, constrained,
-  inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, terms)
+import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
+  constrained, inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
+  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, termsWithAccDefn,
+  termsWithDefsOnly, terms)
 import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
 
 {--}
@@ -140,9 +140,6 @@ printSetting = PI symbMap defaultConfiguration
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symbMap thisSymbols 
-
-resourcePath :: String
-resourcePath = "../../../datafiles/GlassBR/"
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -226,7 +223,7 @@ termsAndDesc, physSystDescription, goalStmts :: Section
 physSystDescriptionList, appdxIntro :: Contents
 
 inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, 
-  traceMatsAndGraphsTable3, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
+  traceMatsAndGraphsTable3 :: LabelledContent
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
@@ -354,10 +351,6 @@ sysCtxIntro = foldlSP
    phrase softwareSys, S "itself", sParen (short glassBR) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
-   
-sysCtxFig :: LabelledContent
-sysCtxFig = llcc (makeFigRef "sysCtxDiag") $ 
-  fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -429,9 +422,6 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 physSystDescription = physSystDesc (short glassBR) physSystFig 
   [physSystDescriptionList, LlC physSystFig]
-
-physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth 
-  (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
 
@@ -661,18 +651,6 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
-  titleize' item +:+ S "of Different" +:+ titleize' section_)
-  (resourcePath ++ "Trace.png")
-
-traceReqsItemsFig = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
-  titleize' requirement `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "RTrace.png")
-
-traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
-  titleize' assumption `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "ATrace.png")
-
 {--VALUES OF AUXILIARY CONSTANTS--}
 
 {--REFERENCES--}
@@ -683,17 +661,6 @@ appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
   sParen ((makeRef2S demandVsSDFig) `sAnd` (makeRef2S dimlessloadVsARFig)),
   S "used for interpolating", plural value, S "needed in the", plural model]
-
-demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start charWeight +:+ sParen (ch charWeight))
-  (resourcePath ++ "ASTM_F2248-09.png")
-
-dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
-  phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
-  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+

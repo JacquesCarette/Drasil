@@ -3,6 +3,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (characteristic, decision,
@@ -13,7 +14,7 @@ import Data.Drasil.Concepts.Documentation as Doc (characteristic, decision,
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-  foldlList, foldlsC, foldlSP, ofThe, ofThe', refineChain)
+  foldlList, foldlsC, foldlSP, refineChain)
 
 -----------------------
 --     Constants     --

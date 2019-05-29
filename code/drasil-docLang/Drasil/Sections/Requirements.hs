@@ -1,10 +1,11 @@
 module Drasil.Sections.Requirements (fReqF, reqF, reqIntro, nfReqF,) where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (software, nonfunctionalRequirement,
   functionalRequirement, section_)
-import Data.Drasil.SentenceStructures (foldlSent_, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent_)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -34,7 +35,7 @@ nfrReqIntroBody = foldlSent_
 
 --generalized requirements introduction
 reqIntroS :: Sentence
-reqIntroS = reqIntroStart +:+. ((frReqIntroBody :+: S ",") `sAnd` nfrReqIntroBody) -- FIXME: comma hack?
+reqIntroS = reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
 
 reqIntro :: Contents
 reqIntro = mkParagraph reqIntroS

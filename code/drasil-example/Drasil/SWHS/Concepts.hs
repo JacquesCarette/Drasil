@@ -11,7 +11,7 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,
-  perfectInsul, phase_change_material, tank,
+  perfectInsul, phaseChangeMaterial, tank,
   tank_pcm, transient, water, sWHT, tank_para]
 
 ---Acronyms---
@@ -41,7 +41,7 @@ full    = nc "full" (progName `with` phsChgMtrl)
 ---ConceptChunks---
 
 charging, coil, discharging, gaussDiv,
-  perfectInsul, phase_change_material, tank,
+  perfectInsul, phaseChangeMaterial, tank,
   tank_pcm, transient, water, sWHT, tank_para :: ConceptChunk
 
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
@@ -63,7 +63,7 @@ perfectInsul = dcc "perfectInsul" (nounPhraseSP "perfectly insulated")
   ("Describes the property of a material not allowing" ++
   "heat transfer through its boundaries")
 
-phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
+phaseChangeMaterial = dcc "pcm" (phsChgMtrl ^. term)
   ("A substance that uses phase changes (such as melting) to absorb or " ++
   "release large amounts of heat at a constant temperature")
   

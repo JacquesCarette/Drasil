@@ -66,7 +66,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
+  coil, tank, transient, swhsPCM, phaseChangeMaterial, tank_pcm, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
@@ -351,7 +351,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.htFlux, phase_change_material, CT.heatCapSpec,
+  [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec,
   CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType

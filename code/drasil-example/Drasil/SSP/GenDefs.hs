@@ -68,7 +68,7 @@ resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []
 mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
-  [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
+  [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
@@ -197,13 +197,13 @@ effNormFDeriv = foldlSent [
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
   (nounPhraseSP "interslice normal and shear force proportionality") 
-  nmShrR_desc nmShrRRel -- genDef5Label
+  nmShrRDesc nmShrRRel -- genDef5Label
 
 nmShrRRel :: Relation
 nmShrRRel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
-nmShrR_desc :: Sentence
-nmShrR_desc = foldlSent [S "Mathematical representation of the primary", 
+nmShrRDesc :: Sentence
+nmShrRDesc = foldlSent [S "Mathematical representation of the primary", 
   phrase assumption, S "for the Morgenstern-Price", phrase method_ +:+.
   sParen (makeRef2S assumpINSFL), ch scalFunc, S "is defined in", 
   makeRef2S ratioVariation]

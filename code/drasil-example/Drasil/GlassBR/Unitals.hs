@@ -125,7 +125,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, is_safeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
@@ -231,10 +231,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+riskFun, isSafePb, isSafeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -247,7 +247,7 @@ isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned 
   " probability is less than tolerable probability")
   (Atomic "is-safePb") Boolean
 
-is_safeProb      = vc "is_safeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
+isSafeProb      = vc "isSafeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
   " probability of failure is less than tolerable probability of failure")
   (Atomic "is-safeProb") Boolean
 

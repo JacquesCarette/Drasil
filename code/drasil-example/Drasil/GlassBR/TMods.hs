@@ -13,7 +13,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (tmDemand, demandq, is_safeProb, is_safeLoad, tmLRe, pbTolfail, probFail)
+import Drasil.GlassBR.Unitals (tmDemand, demandq, isSafeProb, is_safeLoad, tmLRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
 import qualified Data.Map as Map
@@ -47,15 +47,15 @@ lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLoad) s ending
   where 
-    s = ((ch is_safeProb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLoad))
+    s = ((ch isSafeProb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLoad))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` (ch tmDemand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn)
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafeRC) 
-  [qw is_safeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafeRC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
+  [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
+  [relToQD locSymbMap pbIsSafeRC] [(sy isSafeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
@@ -63,12 +63,12 @@ pbIsSafe = tm (cw pbIsSafeRC)
 
 pbIsSafeRC :: RelationConcept
 pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
-  pbIsSafeDesc ((sy is_safeProb) $= (sy probFail) $< (sy pbTolfail))
+  pbIsSafeDesc ((sy isSafeProb) $= (sy probFail) $< (sy pbTolfail))
 
 pbIsSafeDesc :: Sentence
-pbIsSafeDesc = tModDesc (is_safeProb) s ending
+pbIsSafeDesc = tModDesc (isSafeProb) s ending
   where 
-    s = (ch is_safeProb) `sAnd` (ch is_safeLoad) +:+ sParen (S "from" +:+
+    s = (ch isSafeProb) `sAnd` (ch is_safeLoad) +:+ sParen (S "from" +:+
       (makeRef2S lrIsSafe))
     ending = ((ch probFail) `isThe` (phrase probFail)) `sC` (ch pbTolfail) `isThe` (phrase pbTolfail) 
 

@@ -53,7 +53,7 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, 
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 
   srfWtrFGD :: GenDefn
-normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
+normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]    
   [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
 bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
   [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
@@ -95,8 +95,8 @@ nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
 
-nmFEq_deriv :: Sentence
-nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
+nmFEqDeriv :: Sentence
+nmFEqDeriv = foldlSent [at_start normForcEq, S "is derived from the free",
   S "body diagram of", makeRef2S figForceActing, S "in", 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 

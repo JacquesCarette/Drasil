@@ -5,7 +5,7 @@ import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
 import Utils.Drasil
 
-import Data.Drasil.Quantities.Physics (fSpeed, iSpeed, ixSpeed, scalarAccel, time, xScalAcc, xDist, yScalAcc, ySpeed)
+import Data.Drasil.Quantities.Physics (fSpeed, iSpeed, ixVel, scalarAccel, time, xAccel, xDist, yAccel, yVel)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent)
 
@@ -34,12 +34,12 @@ airTimeRC :: RelationConcept
 airTimeRC = makeRC "airTimeR" (nounPhraseSP "air time") EmptyS airTimeRel
 
 airTimeRel :: Relation
-airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy launAngle)) (sy yScalAcc)
+airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy launAngle)) (sy yAccel)
 
 airTimeDeriv :: Sentence
 airTimeDeriv = foldlSent [at_start airTimeGD, S "is derived from" +:+.
   makeRef2S speedY `sAnd` makeRef2S finalSpeedGD, S "It also comes from the",
-  S "fact that the", phrase ySpeed, S "at the maximum height is zero" `sAnd`
+  S "fact that the", phrase yVel, S "at the maximum height is zero" `sAnd`
   S "that the maximum height is the halfway point of the trajectory",
   sParen (S "from" +:+ makeRef2S equalHeights)]
 
@@ -48,21 +48,21 @@ distanceGD :: GenDefn
 distanceGD = gdNoRefs distanceRC (getUnit xDist) [{-Derivation-}] "distance" [makeRef2S accelGravityY]
 
 distanceRC :: RelationConcept
-distanceRC = makeRC "distanceRC" (nounPhraseSP "x-component of distance") EmptyS distanceRel
+distanceRC = makeRC "distanceRC" (nounPhraseSP "distance in the x-direction") EmptyS distanceRel
 
 distanceRel :: Relation
-distanceRel = sy xDist $= sy ixSpeed * sy time + BinaryOp Frac (sy xScalAcc * square (sy time)) 2
+distanceRel = sy xDist $= sy ixVel * sy time + BinaryOp Frac (sy xAccel * square (sy time)) 2
 
 ----------
 distanceRefinedGD :: GenDefn
 distanceRefinedGD = gdNoRefs distanceRefinedRC (getUnit xDist) [distanceRefinedDeriv] "distanceRefined" [makeRef2S accelZeroX]
 
 distanceRefinedRC :: RelationConcept
-distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "x-component of distance (refined)") EmptyS distanceRefinedRel
+distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "distance in the x-direction (refined)") EmptyS distanceRefinedRel
 
 distanceRefinedRel :: Relation
 distanceRefinedRel = sy xDist $= BinaryOp Frac (2 * square (sy iSpeed) * sin (sy launAngle) *
-                      cos (sy launAngle)) (sy yScalAcc)
+                      cos (sy launAngle)) (sy yAccel)
 
 distanceRefinedDeriv :: Sentence
 distanceRefinedDeriv = foldlSent [at_start distanceRefinedGD, S "is derived from",

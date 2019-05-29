@@ -12,11 +12,11 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   cohesion, collision, compression, damping, displacement, distance, elasticity,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
-  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, ixSpeed, joint,
+  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
   position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
-  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xSpeed,
-  yDist, ySpeed, xScalAcc, yScalAcc]
+  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
+  yDist, yVel, xAccel, yAccel]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
@@ -24,11 +24,11 @@ physicCon' = [twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   collision, compression, damping, displacement, distance, elasticity, energy,
   fbd, force, friction, gravitationalAccel, fSpeed, fVel, gravitationalConst,
-  impulseS, impulseV, isotropy, iSpeed, iVel, ixSpeed, joint, kEnergy, linAccel,
+  impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy, linAccel,
   linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
   restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed, strain,
-  stress, tension, time, torque, velocity, weight, xDist, xSpeed, yDist,
-  ySpeed, xScalAcc, yScalAcc :: ConceptChunk
+  stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
+  yVel, xAccel, yAccel :: ConceptChunk
 
   -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
@@ -99,21 +99,21 @@ pressure     = dccWDS "pressure" (cn' "pressure")
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (cn "x-component of distance") (S "The x-component of" +:+ phrase distance)
-yDist = dccWDS "yDist" (cn "y-component of distance") (S "The y-component of" +:+ phrase distance)
+xDist = dccWDS "xDist" (cn "distance in the x-direction") (at_start distance +:+ S "in the x-direction")
+yDist = dccWDS "yDist" (cn "distance in the y-direction") (at_start distance +:+ S "in the y-direction")
 
-fSpeed = dccWDS "fSpeed" (cn "final speed")          (S "The" +:+ phrase speed +:+ S "at the body's final point")
-iSpeed = dccWDS "iSpeed" (cn "initial speed")        (S "The" +:+ phrase speed +:+ S "at the body's initial point")
-xSpeed = dccWDS "xSpeed" (cn "x-component of speed") (S "The x-component of" +:+ phrase speed)
-ySpeed = dccWDS "ySpeed" (cn "y-component of speed") (S "The y-component of" +:+ phrase speed)
-
-ixSpeed = dccWDS "ixSpeed" (cn "x-component of initial speed") (S "The x-component of initial" +:+ phrase speed)
+fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
+iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
+xVel = dccWDS "xVel" (cn "x-component of velocity") (S "The x-component of" +:+ phrase velocity)
+yVel = dccWDS "yVel" (cn "y-component of velocity") (S "The y-component of" +:+ phrase velocity)
 
-xScalAcc = dccWDS "xScalAcc" (cn "x-component of scalar acceleration") (S "The x-component of" +:+ phrase scalarAccel)
-yScalAcc = dccWDS "yScalAcc" (cn "y-component of scalar acceleration") (S "The y-component of" +:+ phrase scalarAccel)
+ixVel = dccWDS "ixVel" (cn "x-component of initial velocity") (S "The x-component of initial" +:+ phrase velocity)
+
+xAccel = dccWDS "xScalAcc" (cn "x-component of acceleration") (S "The x-component of" +:+ phrase acceleration)
+yAccel = dccWDS "yScalAcc" (cn "y-component of acceleration") (S "The y-component of" +:+ phrase acceleration)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

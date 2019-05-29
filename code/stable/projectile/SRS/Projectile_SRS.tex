@@ -154,7 +154,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
-              \item{${a_{y}}$ is the y-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{y}}$ is the y-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -164,7 +164,7 @@ Source & --
 RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of speed at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
+Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -173,7 +173,7 @@ Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:fina
 \phantomsection 
 \label{GD:distance}
 \\ \midrule \\
-Label & X-component of distance
+Label & Distance in the x-direction
 \\ \midrule \\
 Units & m
 \\ \midrule \\
@@ -182,10 +182,10 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${r_{x}}$ is the x-component of distance (m)}
-              \item{${v_{i,x}}$ is the x-component of initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${r_{x}}$ is the distance in the x-direction (m)}
+              \item{${v_{i,x}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{${a_{x}}$ is the x-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{x}}$ is the x-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelGravityY]{A: accelGravityY}
@@ -203,7 +203,7 @@ RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \phantomsection 
 \label{GD:distanceRefined}
 \\ \midrule \\
-Label & X-component of distance (refined)
+Label & Distance in the x-direction (refined)
 \\ \midrule \\
 Units & m
 \\ \midrule \\
@@ -212,10 +212,10 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${r_{x}}$ is the x-component of distance (m)}
+              \item{${r_{x}}$ is the distance in the x-direction (m)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
-              \item{${a_{y}}$ is the y-component of scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{y}}$ is the y-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelZeroX]{A: accelZeroX}
@@ -225,7 +225,7 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-X-component of distance (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
+Distance in the x-direction (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -237,7 +237,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:speedX}
 \\ \midrule \\
-Label & X-component of speed
+Label & X-component of velocity
 \\ \midrule \\
 Symbol & ${v_{x}}$
 \\ \midrule \\
@@ -248,7 +248,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{x}}$ is the x-component of speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{x}}$ is the x-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
               \end{symbDescription}
@@ -266,7 +266,7 @@ RefBy &
 \phantomsection 
 \label{DD:speedY}
 \\ \midrule \\
-Label & Y-component of speed
+Label & Y-component of velocity
 \\ \midrule \\
 Symbol & ${v_{y}}$
 \\ \midrule \\
@@ -277,7 +277,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{y}}$ is the y-component of speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{y}}$ is the y-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
               \end{symbDescription}

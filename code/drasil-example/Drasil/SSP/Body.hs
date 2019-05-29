@@ -92,8 +92,8 @@ goals_list :: [Contents]
 
 
 --Document Setup--
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+thisSi :: [UnitDefn]
+thisSi = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symMap symbTT
@@ -214,8 +214,8 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) this_si label
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi label
   refBy dataDefs iMods genDefs theory concIns
   section labCon
 

@@ -21,7 +21,7 @@ import Data.Drasil.Utils (mkInputDatTb)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
-import Drasil.SSP.Unitals (constF, coords, fs, fs_min, intNormForce, 
+import Drasil.SSP.Unitals (constF, coords, fs, fsMin, intNormForce, 
   intShrForce, inputs, xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, xMinEtrSlip, 
   yMaxSlip, yMinSlip)
 
@@ -56,7 +56,7 @@ determineCritSlip = cic "determineCritSlip" ( foldlSent [
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
-  S "Verify that the", phrase fs_min `sAnd` phrase crtSlpSrf, S "satisfy the",
+  S "Verify that the", phrase fsMin `sAnd` phrase crtSlpSrf, S "satisfy the",
   plural physicalConstraint, S "shown in", makeRef2S data_constraint_Table3])
   "Verify-Output" funcReqDom
 

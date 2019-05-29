@@ -165,8 +165,8 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
 fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
-fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
+fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
+fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
   ("The minimum factor of safety associated with the critical slip surface")) 
   (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
@@ -396,7 +396,7 @@ waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by wate
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
-  mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
+  mobShrC, shrResC, index, pi_, varblV, fsMin, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

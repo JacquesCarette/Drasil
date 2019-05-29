@@ -32,14 +32,14 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafetyRC)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" []
+  [] [factOfSafetyRel] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
 factOfSafetyRC :: RelationConcept
-factOfSafetyRC = makeRC "factOfSafetyRC" factorOfSafety EmptyS factOfSafety_rel
+factOfSafetyRC = makeRC "factOfSafetyRC" factorOfSafety EmptyS factOfSafetyRel
 
-factOfSafety_rel :: Relation
-factOfSafety_rel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
+factOfSafetyRel :: Relation
+factOfSafetyRel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
 
 --
 ------------- New Chunk -----------

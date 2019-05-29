@@ -197,10 +197,10 @@ effNormFDeriv = foldlSent [
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
   (nounPhraseSP "interslice normal and shear force proportionality") 
-  nmShrR_desc nmShrR_rel -- genDef5Label
+  nmShrR_desc nmShrRRel -- genDef5Label
 
-nmShrR_rel :: Relation
-nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
+nmShrRRel :: Relation
+nmShrRRel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "Mathematical representation of the primary", 

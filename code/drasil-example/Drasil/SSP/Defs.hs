@@ -28,7 +28,7 @@ defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   slopeStability, ssa]
 
 defs' :: [ConceptChunk]
-defs' = [slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable]
+defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,
@@ -58,7 +58,7 @@ soilMechanics = compoundNC soil mechanics
 slopeStability = compoundNC slope stability
 ssa = compoundNC slopeStability analysis
 
-effFandS, slpSrf, crtSlpSrf, plnStrn, fs_concept, waterTable :: ConceptChunk
+effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
   (S "The" +:+ phrase normForce `sOr` phrase nrmStrss +:+
@@ -84,10 +84,10 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+
-  S "that has the lowest" +:+ phrase fs_concept `sC`
+  S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure.")
 
-fs_concept = dccWDS "FS" factorOfSafety
+fsConcept = dccWDS "FS" factorOfSafety
   (S "The global stability metric of a" +:+ phrase slpSrf +:+ S "of a" +:+
   phrase slope `sC` S "defined as the ratio of" +:+ phrase shearRes +:+ 
   S "to" +:+ phrase mobShear)
@@ -101,6 +101,6 @@ waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
 factor :: NamedChunk --FIXME: this is here becuase this phrase is
                      --used in datadefs and instance models
 factor = nc "factor" (cn' "factor") -- possible use this everywhere
-                                      -- (fs, fs_rc, fs_concept...)
+                                      -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_''` safety

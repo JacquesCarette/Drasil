@@ -65,7 +65,7 @@ import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (inputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
   waterTable)
@@ -358,7 +358,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
-  S "Find the" +:+ phrase fs_concept +:+ S "for the" +:+ phrase slope,
+  S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
   S "Find the" +:+ phrase intrslce +:+ phrase normForce `sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
   
 sysCtxResp :: [Sentence]
@@ -411,11 +411,11 @@ termiDefi = termDefnF Nothing [termiDefiList]
 
 termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))
-  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
   plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
-  -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
+  -- except for fsConcept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst

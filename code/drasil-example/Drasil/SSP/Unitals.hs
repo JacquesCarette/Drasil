@@ -3,7 +3,7 @@ module Drasil.SSP.Unitals where --export all of it
 import Language.Drasil
 import Language.Drasil.ShortHands
 
-import Drasil.SSP.Defs (fs_concept)
+import Drasil.SSP.Defs (fsConcept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
@@ -162,7 +162,7 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
   " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
+fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.

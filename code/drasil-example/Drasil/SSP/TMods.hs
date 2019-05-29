@@ -100,15 +100,15 @@ effStress :: TheoryModel
 effStress = tm (cw effStressRC)
   [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effS_desc]
+  [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
 effStressRC :: RelationConcept
 effStressRC = makeRC "effStressRC"
-  (nounPhraseSP "effective stress") effS_desc effStressRel -- l4
+  (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
 effStressRel :: Relation
 effStressRel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)
 
-effS_desc :: Sentence
-effS_desc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]
+effStressDesc :: Sentence
+effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]

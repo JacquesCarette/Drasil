@@ -88,7 +88,7 @@ tableOfSymbIntro :: [TSIntro]
 problemDesc, termiDefi, physSysDesc, goalStmt :: Section
 termiDefiList, physSysIntro, physSysConv, 
   physSysDescBullets, physSysFbd :: Contents
-goals_list :: [Contents]
+goalsList :: [Contents]
 
 
 --Document Setup--
@@ -486,9 +486,9 @@ goalStmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)
-  ]) goals_list
+  ]) goalsList
 
-goals_list = mkEnumSimpleD goals
+goalsList = mkEnumSimpleD goals
 
 -- SECTION 4.2 --
 

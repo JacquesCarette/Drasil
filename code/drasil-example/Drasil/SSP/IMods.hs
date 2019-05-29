@@ -57,10 +57,10 @@ fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion
   [] (qw fs) [] (map makeCite [chen2005, karchewski2012]) fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSftyRC :: RelationConcept
-fctSftyRC = makeRC "fctSftyRC" factorOfSafety fcSfty_desc fcSfty_rel -- fctSftyL
+fctSftyRC = makeRC "fctSftyRC" factorOfSafety fcSfty_desc fctSftyRel -- fctSftyL
 
-fcSfty_rel :: Relation
-fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
+fctSftyRel :: Relation
+fctSftyRel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod (eqSymb varblV) (sy index) (sy numbSlices - 1)
           (idx (sy mobShrC) (sy varblV))
         sumOp sym = (defsum (eqSymb index) 1 (sy numbSlices - 1)
@@ -98,7 +98,7 @@ fctSftyDerivEqns1 = [fctSftyDerivEqn1, fctSftyDerivEqn2, fctSftyDerivEqn3,
 fctSftyDerivEqns2 :: [Expr]
 fctSftyDerivEqns2 = [fctSftyDerivEqn11, fctSftyDerivEqn12, fctSftyDerivEqn13,
   fctSftyDerivEqn14, fctSftyDerivEqn15, fctSftyDerivEqn16, fctSftyDerivEqn17,
-  fctSftyDerivEqn18, fcSfty_rel]
+  fctSftyDerivEqn18, fctSftyRel]
 
 fctSftyDerivSentence1 :: [Sentence]
 fctSftyDerivSentence1 = [S "The" +:+ phrase mobShrI +:+ S "defined in",

@@ -11,7 +11,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
 
 import Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, equalHeights)
 import Drasil.Projectile.DataDefs (speedY)
-import Drasil.Projectile.Unitals (projAngle)
+import Drasil.Projectile.Unitals (launAngle)
 
 genDefns :: [GenDefn]
 genDefns = [finalSpeedGD, airTimeGD, distanceGD, distanceRefinedGD]
@@ -34,7 +34,7 @@ airTimeRC :: RelationConcept
 airTimeRC = makeRC "airTimeR" (nounPhraseSP "air time") EmptyS airTimeRel
 
 airTimeRel :: Relation
-airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy projAngle)) (sy yScalAcc)
+airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy launAngle)) (sy yScalAcc)
 
 airTimeDeriv :: Sentence
 airTimeDeriv = foldlSent [at_start airTimeGD, S "is derived from" +:+.
@@ -61,8 +61,8 @@ distanceRefinedRC :: RelationConcept
 distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "x-component of distance (refined)") EmptyS distanceRefinedRel
 
 distanceRefinedRel :: Relation
-distanceRefinedRel = sy xDist $= BinaryOp Frac (2 * square (sy iSpeed) * sin (sy projAngle) *
-                      cos (sy projAngle)) (sy yScalAcc)
+distanceRefinedRel = sy xDist $= BinaryOp Frac (2 * square (sy iSpeed) * sin (sy launAngle) *
+                      cos (sy launAngle)) (sy yScalAcc)
 
 distanceRefinedDeriv :: Sentence
 distanceRefinedDeriv = foldlSent [at_start distanceRefinedGD, S "is derived from",

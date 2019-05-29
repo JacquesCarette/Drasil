@@ -7,7 +7,7 @@ import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 
 import Data.Drasil.Quantities.Physics (speed, xSpeed, ySpeed)
 
-import Drasil.Projectile.Unitals (projAngle)
+import Drasil.Projectile.Unitals (launAngle)
 
 dataDefns :: [DataDefinition]
 dataDefns = [speedX, speedY]
@@ -20,7 +20,7 @@ speedXQD :: QDefinition
 speedXQD = mkQuantDef xSpeed speedXEqn
 
 speedXEqn :: Expr
-speedXEqn = sy speed * cos (sy projAngle)
+speedXEqn = sy speed * cos (sy launAngle)
 
 ----------
 speedY :: DataDefinition
@@ -30,4 +30,4 @@ speedYQD :: QDefinition
 speedYQD = mkQuantDef ySpeed speedYEqn
 
 speedYEqn :: Expr
-speedYEqn = sy speed * sin (sy projAngle)
+speedYEqn = sy speed * sin (sy launAngle)

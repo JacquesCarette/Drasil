@@ -7,13 +7,14 @@ import Utils.Drasil
 import Data.Drasil.SentenceStructures (foldlSent)
 
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, position)
+import Data.Drasil.Concepts.Physics (distance, iSpeed, position)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre)
 import Data.Drasil.Units.Physics (velU)
 
-import Drasil.Projectile.Concepts (launcher, projectile, targetDist, target)
+import Drasil.Projectile.Concepts (launcher, launchAngle, launchDist,
+  launchSpeed, projectile, targetDist, target)
 
 unitalQuants :: [QuantityDict]
 unitalQuants = quantDicts ++ map qw constrained
@@ -22,31 +23,30 @@ unitalIdeas :: [IdeaDict]
 unitalIdeas = map nw quantDicts ++ map nw constrained
 
 constrained :: [ConstrConcept]
-constrained = [projAngle, projDist, projSpeed, targDist]
+constrained = [launAngle, launDist, launSpeed, targDist]
 
 quantDicts :: [QuantityDict]
 quantDicts = [isShort, offset, isHit]
 
 ---
-projAngle, projDist, projSpeed, targDist :: ConstrConcept
-projAngle = constrained' (dqd' projAngleConcept (const lTheta)                     Real (Just degree)) [gtZeroConstr] (dbl 1)
-projDist  = constrained' (dqd' progDistConcept  (const lD)                         Real (Just metre))  [gtZeroConstr] (dbl 1)
-projSpeed = constrained' (dqd' projSpeedConcept (const lV)                         Real (Just velU))   [gtZeroConstr] (dbl 1)
+launAngle, launDist, launSpeed, targDist :: ConstrConcept
+launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [gtZeroConstr] (dbl 1)
+launDist  = constrained' (dqd' launDistConcept  (const lD)                         Real (Just metre))  [gtZeroConstr] (dbl 1)
+launSpeed = constrained' (dqd' launSpeedConcept (const lV)                         Real (Just velU))   [gtZeroConstr] (dbl 1)
 targDist  = constrained' (dqd' targDistConcept  (const $ sub lD $ Atomic "target") Real (Just metre))  [gtZeroConstr] (dbl 1)
 
-progDistConcept :: ConceptChunk
-progDistConcept = dccWDS "distance of projectile" (cn "distance of projectile")
+launDistConcept :: ConceptChunk
+launDistConcept = cc' launchDist
   (foldlSent [S "The", phrase distance, S "from the", phrase launcher, S "to",
             (S "final" +:+ phrase position) `ofThe` phrase projectile])
 
-projAngleConcept :: ConceptChunk
-projAngleConcept = dccWDS "angle of projectile" (cn "angle of projectile")
+launAngleConcept :: ConceptChunk
+launAngleConcept = cc' launchAngle
   (foldlSent [S "The", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",
              S "from the", phrase launcher, S "to the", phrase target])
 
-projSpeedConcept :: ConceptChunk
-projSpeedConcept = dccWDS "speed of projectile" (cn "speed of projectile")
-  (S "The initial speed of the" +:+ phrase projectile +:+. S "when launched")
+launSpeedConcept :: ConceptChunk
+launSpeedConcept = cc' launchSpeed (phrase iSpeed `ofThe` phrase projectile +:+. S "when launched")
 
 targDistConcept :: ConceptChunk
 targDistConcept = cc' targetDist
@@ -55,16 +55,18 @@ targDistConcept = cc' targetDist
 ---
 
 isShort :: QuantityDict
-isShort = vc "isShort" (nounPhraseSP $ "variable that is assigned true when the target distance"
-  ++ " is greater than the projectile distance")
+isShort = vc "isShort"
+  (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase targetDist +:+
+   S "is greater than the" +:+ phrase launchDist))
   (Atomic "isShort") Boolean
 
 offset :: QuantityDict
-offset = vc "offset" (nounPhraseSP $ "the offset between the target distance and the"
-  ++ " distance of the projectile")
+offset = vc "offset"
+  (nounPhraseSent (S "offset between the" +:+ phrase targetDist `andThe` phrase launchDist))
   (sub lD $ Atomic "offset") Real
 
 isHit :: QuantityDict
-isHit = vc "isHit" (nounPhraseSP $ "variable that is assigned true when the projectile distance"
-  ++ " is within a degree of tolerance of the target distance")
+isHit = vc "isHit"
+  (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase launchDist +:+
+   S "is within a degree of tolerance of the" +:+ phrase targetDist))
   (Atomic "isHit") Real

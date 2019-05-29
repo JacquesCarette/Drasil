@@ -53,11 +53,11 @@ iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 --
 
 fctSfty :: InstanceModel
-fctSfty = im fctSfty_rc [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw fs) [] (map makeCite [chen2005, karchewski2012]) fctSftyDeriv "fctSfty" [fcSfty_desc]
 
-fctSfty_rc :: RelationConcept
-fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel -- fctSftyL
+fctSftyRC :: RelationConcept
+fctSftyRC = makeRC "fctSftyRC" factorOfSafety fcSfty_desc fcSfty_rel -- fctSftyL
 
 fcSfty_rel :: Relation
 fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl

@@ -369,13 +369,13 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
 ------------------------------------------------------------------------
 
 nrmShrFor :: InstanceModel
-nrmShrFor = im nrmShrFor_rc [qw slopeDist, qw slopeHght, qw waterHght, 
+nrmShrFor = im nrmShrForRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw normToShear) [] (map makeCite [chen2005, karchewski2012]) nrmShrDeriv "nrmShrFor" 
   [nrmShrF_desc]
 
-nrmShrFor_rc :: RelationConcept
-nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal and shear force proportionality constant")
+nrmShrForRC :: RelationConcept
+nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proportionality constant")
   nrmShrF_desc nrmShrF_rel -- nrmShrForL
 
 nrmShrF_rel :: Relation

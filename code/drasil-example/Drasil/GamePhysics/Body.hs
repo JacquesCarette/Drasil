@@ -371,25 +371,22 @@ probDescription = SRS.probDesc [probDescIntro]
   [termAndDefn, goalStates]
 
 probDescIntro :: Contents
-probDescIntro = problemDescriptionIntroParam physLib game
-
-problemDescriptionIntroParam :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-problemDescriptionIntroParam lib app = foldlSP 
-  [S "Creating a gaming", (phrase lib), S "is a difficult" +:+. phrase task,
-  (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
-  S "acting under various", (phrase physical), plural condition `sC` S "while", 
+probDescIntro = foldlSP 
+  [S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task,
+  titleize' game, S "need",  plural physLib, S "that simulate", plural object,
+  S "acting under various", phrase physical, plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",
-  (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
-  (phrase lib), S "from scratch takes a long period of", (phrase QP.time) `sAnd`
+  phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
+  phrase physLib, S "from scratch takes a long period of", phrase QP.time `sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
-  (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
-  (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
+  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
+  plural product_, S "There are a few free" `sC` phrase openSource `sAnd` S "high quality",
+  plural physLib, S "available to be used for", phrase consumer, plural product_ +:+. 
   sParen (makeRef2S offTheShelfSolutions), S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
+  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` phrase game,
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
-  (plural product_), S "will be produced"]
-
+  plural product_, S "will be produced"]
+  
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------

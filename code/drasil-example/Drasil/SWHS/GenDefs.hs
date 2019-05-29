@@ -23,7 +23,7 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
   assumpDWPCoV, assumpSHECoV)
-import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
@@ -113,7 +113,7 @@ rocTempSimpDeriv =
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
   s4_2_3_desc1 consThermE vol,
-  s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_desc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,

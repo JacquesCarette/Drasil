@@ -10,7 +10,7 @@ import Data.Drasil.Phrase (with)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 
 con :: [ConceptChunk]
-con = [charging, coil, discharging, gauss_div,
+con = [charging, coil, discharging, gaussDiv,
   perfect_insul, phase_change_material, tank,
   tank_pcm, transient, water, sWHT, tank_para]
 
@@ -40,7 +40,7 @@ full    = nc "full" (progName `with` phsChgMtrl)
 
 ---ConceptChunks---
 
-charging, coil, discharging, gauss_div,
+charging, coil, discharging, gaussDiv,
   perfect_insul, phase_change_material, tank,
   tank_pcm, transient, water, sWHT, tank_para :: ConceptChunk
 
@@ -54,7 +54,7 @@ discharging = dcc "discharging" (nounPhraseSP "discharging")
 
 transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"
 
-gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
+gaussDiv = dcc "gaussDiv" (nounPhraseSP "gauss's divergence theorem")
   ("A result that relates the flow of a vector field through a surface" ++
   "to the behavior of the vector field inside the surface")
 --TODO: Physical property.

@@ -18,7 +18,7 @@ import Data.Drasil.Utils (weave)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)
-import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimp_desc)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
@@ -40,7 +40,7 @@ rocTempSimpDeriv =
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
   genDefDesc1 consThermE vol,
-  genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
+  genDefDesc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
   genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],

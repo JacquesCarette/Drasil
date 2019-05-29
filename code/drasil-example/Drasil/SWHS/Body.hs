@@ -427,7 +427,7 @@ s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_2 consThermE vol,
   s4_2_3_deriv_3,
-  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_deriv_4 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_deriv_5,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,

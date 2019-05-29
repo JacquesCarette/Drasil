@@ -492,12 +492,12 @@ nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in",
 ---------------------------------------------------------------------------
 
 nrmShrForDen :: InstanceModel
-nrmShrForDen = im nrmShrForDen_rc [qw slipDist, qw constF]
+nrmShrForDen = im nrmShrForDenRC [qw slipDist, qw constF]
   [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012]) nrmShrFDen_deriv
   "nrmShrForDen" [nrmShrFDen_desc]
 
-nrmShrForDen_rc :: RelationConcept
-nrmShrForDen_rc = makeRC "nrmShrForDen_rc" (nounPhraseSP "normal and shear force proportionality constant denominator")
+nrmShrForDenRC :: RelationConcept
+nrmShrForDenRC = makeRC "nrmShrForDenRC" (nounPhraseSP "normal and shear force proportionality constant denominator")
   nrmShrFDen_desc nrmShrFDen_rel 
 
 nrmShrFDen_rel :: Relation

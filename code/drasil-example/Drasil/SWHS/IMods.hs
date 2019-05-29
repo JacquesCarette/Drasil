@@ -43,11 +43,11 @@ eBalanceOnWtr = im eBalanceOnWtrRC [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_S
 
 eBalanceOnWtrRC :: RelationConcept
 eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel 
+  "water to find the temperature of the water") balWtrDesc balWtrRel 
   -- eBalanceOnWtrL
 
-balWtr_Rel :: Relation
-balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
+balWtrRel :: Relation
+balWtrRel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 

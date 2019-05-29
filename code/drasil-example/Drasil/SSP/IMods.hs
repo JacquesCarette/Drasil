@@ -582,13 +582,13 @@ intrSlcDerivEqn = (inxi intNormForce) $=
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel
-crtSlpId = imNoDeriv crtSlpId_rc [qw slopeDist, qw slopeHght, qw waterDist, 
+crtSlpId = imNoDeriv crtSlpIdRC [qw slopeDist, qw slopeHght, qw waterDist, 
   qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight,
   qw waterWeight, qw constF] [] (qw fs_min) [] [makeCite li2010] "crtSlpId" 
   [crtSlpId_desc]
 
-crtSlpId_rc :: RelationConcept
-crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip surface identification")
+crtSlpIdRC :: RelationConcept
+crtSlpIdRC = makeRC "crtSlpIdRC" (nounPhraseSP "critical slip surface identification")
   crtSlpId_desc crtSlpId_rel -- crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!

@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
-import Drasil.SWHS.Unitals (temp_init, temp_C, temp_PCM)
+import Drasil.SWHS.Unitals (tempInit, temp_C, temp_PCM)
 import Drasil.SWHS.Assumptions (assumpTPCAV, assumpTHCCoT, assumpTHCCoL,
   assumpCTNOD, assumpSITWP, assumpWAL, assumpPIT, assumpNIHGBWP, assumpNGSP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInPCM)
@@ -52,7 +52,7 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase temp_init `ofThe` phrase water) `sAnd`
+  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `sAnd`
   S "the", short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --

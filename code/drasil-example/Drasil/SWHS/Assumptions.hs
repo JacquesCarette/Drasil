@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
-import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
+import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, tempInit, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
 -------------------------
@@ -103,10 +103,10 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)",
+  phrase tempInit, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)",
   S "to the", phrase temp_C]
 assumpS12 = foldlSent [
-  phrase temp_init `ofThe'` phrase water `sAnd` S "the",
+  phrase tempInit `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same"]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",

@@ -4,7 +4,7 @@ import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 
 import Drasil.SWHS.Unitals (tank_length, diam, pcm_vol, pcm_SA, pcm_density,
     temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-    w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, tau, time_final,
+    w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, tau, time_final,
     abs_tol, rel_tol, cons_tol)
 
 inputMod :: Mod
@@ -43,7 +43,7 @@ inputData = funcData "get_inputs"
     junkLine, -- 29
     singleton  pcm_HTC,
     junkLine, -- 31
-    singleton  temp_init,
+    singleton  tempInit,
     junkLine, -- 33
     singleton  tau, -- FIXME: Not sure if tau should be used for "time-step"
     junkLine,-- 35

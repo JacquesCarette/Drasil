@@ -232,11 +232,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 inputs :: [UncertQ]
 inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
+  w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final :: UncertQ
+  htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
@@ -368,7 +368,7 @@ pcm_HTC = uqc "pcm_HTC"
   sfwrc $ Bounded (Inc, sy pcm_HTC_min) (Inc, sy pcm_HTC_max)] (dbl 1000) defaultUncrt
   
 -- Constraint 16
-temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
+tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
   (sub (eqSymb temp)(Atomic "init")) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc, sy meltPt)] (dbl 40) defaultUncrt
@@ -398,7 +398,7 @@ temp_W = cuc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational
-  [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy temp_C)] (dbl 0)
 
 -- Constraint 19
 temp_PCM = cuc' "temp_PCM"
@@ -406,7 +406,7 @@ temp_PCM = cuc' "temp_PCM"
   ("The average kinetic energy of the " ++
     "particles within the phase change material")
   (sub (eqSymb temp) cP) centigrade Rational
-  [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy temp_C)] (dbl 0)
   
 -- Constraint 20
 w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")

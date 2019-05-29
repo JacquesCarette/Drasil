@@ -21,7 +21,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
-  coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
+  coil_SA, tempInit, time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
@@ -34,9 +34,9 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtrRC [qw temp_C, qw temp_init, qw time_final, 
+eBalanceOnWtr = im eBalanceOnWtrRC [qw temp_C, qw tempInit, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
-  [sy temp_init $<= sy temp_C] (qw temp_W) 
+  [sy tempInit $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [0 $< sy time $< sy time_final] [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]

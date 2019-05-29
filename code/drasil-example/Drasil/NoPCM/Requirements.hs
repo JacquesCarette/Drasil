@@ -20,14 +20,14 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tank_length,
   tau_W, temp_C, time_final, w_density, w_mass, w_vol, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
-import Drasil.NoPCM.Unitals (temp_init)
+import Drasil.NoPCM.Unitals (tempInit)
 
 inputVar :: [QuantityDict]
 inputVar = map qw dataConstListIn ++ map qw [abs_tol, rel_tol, cons_tol]
 
 dataConstListIn :: [UncertQ]
 dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
-  coil_HTC, temp_init, time_final]
+  coil_HTC, tempInit, time_final]
 
 --------------------------
 --Section 5 : REQUIREMENTS

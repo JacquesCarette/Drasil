@@ -90,7 +90,7 @@ import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
 import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
-import Drasil.NoPCM.Unitals (temp_init)
+import Drasil.NoPCM.Unitals (tempInit)
 
 -- This defines the standard units used throughout the document
 thisSi :: [UnitDefn]
@@ -123,7 +123,7 @@ units = map ucw [density, tau, in_SA, out_SA,
   vol, w_mass, w_vol, tau_W, QT.sensHeat]
 
 constraints :: [UncertQ]
-constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+constraints =  [coil_SA, htCap_W, coil_HTC, tempInit,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 

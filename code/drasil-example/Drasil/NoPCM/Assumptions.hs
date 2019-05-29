@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
-import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, temp_init, temp_W, htCap_W, w_density)
+import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, tempInit, temp_W, htCap_W, w_density)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -55,7 +55,7 @@ assumpS9_npcm =
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
-  phrase temp_init, S "is less than (or equal to) the", phrase temp_C])
+  phrase tempInit, S "is less than (or equal to) the", phrase temp_C])
 
 assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
   "Charging-Tank-No-Temp-Discharge" assumpDom

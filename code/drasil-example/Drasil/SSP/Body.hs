@@ -60,7 +60,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
+import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
   unlikelyChanges_SRS)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
@@ -155,7 +155,7 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqList,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChanges_SRS,
+  LCsSec $ LCsProg likelyChgsCon,
   UCsSec $ UCsProg unlikelyChanges_SRS,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],

@@ -83,7 +83,7 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 --type declarations for sections--
 aux_cons :: Section
 
-table_of_symbol_intro :: [TSIntro]
+tableOfSymbIntro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
 termi_defi_list, phys_sys_intro, phys_sys_convention, 
@@ -125,7 +125,7 @@ srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
-  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
@@ -243,7 +243,7 @@ symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 -- SECTION 1.2 --
 --automatically generated in mkSRS using the intro below
 
-table_of_symbol_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
+tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [plural value, S "with a subscript", ch index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
   `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]

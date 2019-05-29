@@ -455,7 +455,7 @@ nrmShrDerivEqn4 = inxi normToShear $= sum1toN
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im nrmShrForNumRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
-  [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012]) nrmShrFNum_deriv 
+  [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012]) nrmShrFNumDeriv 
   "nrmShrForNum" [nrmShrFNum_desc]
 
 nrmShrForNumRC :: RelationConcept
@@ -476,8 +476,8 @@ nrmShrFNumRel = inxi nrmShearNum $= case_ [case1,case2,case3]
           (sy numbSlices - 1)) * tan (idx (sy baseAngle)
           (sy numbSlices - 1)), sy index $= (sy numbSlices))
 
-nrmShrFNum_deriv :: Derivation
-nrmShrFNum_deriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
+nrmShrFNumDeriv :: Derivation
+nrmShrFNumDeriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
   S "for the derivation of" +:+. ch nrmShearNum]
 
 nrmShrFNum_desc :: Sentence

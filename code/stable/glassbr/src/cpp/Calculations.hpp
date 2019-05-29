@@ -9,14 +9,16 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-#include "Interpolation.hpp"
 #include "InputParameters.hpp"
-
-double func_q(InputParameters &inParams);
+#include "Interpolation.hpp"
 
 bool func_is_safePb(InputParameters &inParams, double P_b);
 
 bool func_is_safeLR(double LR, double q);
+
+bool func_is_safeProb(double P_f, double P_ftol);
+
+bool func_is_safeLoad(double capacity, double Load);
 
 double func_B(InputParameters &inParams, double J);
 

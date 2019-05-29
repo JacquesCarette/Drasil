@@ -98,15 +98,15 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass
      makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
-eBalanceOnWtrDerivDesc2 dd1 =
-  [S "Using", makeRef2S dd1, S ", this can be written as"]
+eBalanceOnWtrDerivDesc2 dd =
+  [S "Using", makeRef2S dd, S ", this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
-eBalanceOnWtrDerivDesc3 eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", (E eq) `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
-eBalanceOnWtrDerivDesc4 eq22 = 
-  [S "Setting"] ++ eq22 ++ [S ", Equation (4) can be written in its final form as"]
+eBalanceOnWtrDerivDesc4 eq = 
+  [S "Setting"] ++ eq ++ [S ", Equation (4) can be written in its final form as"]
 
 eq1:: Expr
 eq1 = (sy w_mass) * (sy htCap_W)

@@ -2,17 +2,20 @@ from __future__ import print_function
 import sys
 import math
 
-import Interpolation
 import InputParameters
-
-def func_q(inParams):
-    return Interpolation.func_interpY("TSD.txt", inParams.SD, inParams.w_TNT)
+import Interpolation
 
 def func_is_safePb(inParams, P_b):
     return (P_b < inParams.P_btol)
 
 def func_is_safeLR(LR, q):
     return (LR > q)
+
+def func_is_safeProb(P_f, P_ftol):
+    return (P_f < P_ftol)
+
+def func_is_safeLoad(capacity, Load):
+    return (capacity > Load)
 
 def func_B(inParams, J):
     return ((2.86e-53 / ((inParams.a * inParams.b) ** (7.0 - 1))) * (((7.17e10 * (inParams.h ** 2)) ** 7.0) * (inParams.LDF * math.exp(J))))

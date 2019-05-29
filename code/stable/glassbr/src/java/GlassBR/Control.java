@@ -16,7 +16,6 @@ public class Control {
         InputFormat.func_get_input(inputfile, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
-        double q = Calculations.func_q(inParams);
         double J_tol = Calculations.func_J_tol(inParams);
         double q = Calculations.func_q(inParams);
         double q_hat = Calculations.func_q_hat(inParams, q);

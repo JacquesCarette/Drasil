@@ -155,7 +155,7 @@ mkSRS = [RefSec $ RefProg intro
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
       [ Assumptions
-      , TMs [] (Label : stdFields) theoretical_models
+      , TMs [] (Label : stdFields) theoreticalModels
       , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -400,8 +400,8 @@ goalStatesList = mkEnumSimpleD goals
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
 
-theoretical_models :: [TheoryModel]
-theoretical_models = [consThermE, sensHtE]
+theoreticalModels :: [TheoryModel]
+theoreticalModels = [consThermE, sensHtE]
 
 sensHtE :: TheoryModel
 sensHtE = sensHtE_template Liquid sensHtEdesc
@@ -482,7 +482,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2"]
-traceTheoriesRef = map makeRef2S theoretical_models
+traceTheoriesRef = map makeRef2S theoreticalModels
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S genDefs

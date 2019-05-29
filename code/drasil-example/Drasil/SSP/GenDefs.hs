@@ -129,10 +129,10 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShr_rel -- genDef3Label
+  resShr_desc resShrRel -- genDef3Label
 
-resShr_rel :: Relation
-resShr_rel = inxi shrResI $= shrResEqn
+resShrRel :: Relation
+resShrRel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 

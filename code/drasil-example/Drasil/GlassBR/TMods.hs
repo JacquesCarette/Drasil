@@ -32,16 +32,16 @@ tMods = [pbIsSafe, lrIsSafe]
 
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (cw lrIsSafe_RC)
+lrIsSafe = tm (cw lrIsSafeRC)
    [qw is_safeLoad, qw tm_lRe, qw tm_demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
+   [relToQD locSymbMap lrIsSafeRC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
    where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
-lrIsSafe_RC :: RelationConcept
-lrIsSafe_RC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
+lrIsSafeRC :: RelationConcept
+lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
   lrIsSafeDesc ( (sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand))
 
 lrIsSafeDesc :: Sentence

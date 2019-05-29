@@ -81,10 +81,10 @@ srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel
+  nmFEq_desc nmFEqRel
 
-nmFEq_rel :: Relation
-nmFEq_rel = inxi totNrmForce $= eqlExprN cos sin
+nmFEqRel :: Relation
+nmFEqRel = inxi totNrmForce $= eqlExprN cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence

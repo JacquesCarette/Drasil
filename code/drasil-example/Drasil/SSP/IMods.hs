@@ -372,17 +372,17 @@ nrmShrFor :: InstanceModel
 nrmShrFor = im nrmShrForRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
   [] (qw normToShear) [] (map makeCite [chen2005, karchewski2012]) nrmShrDeriv "nrmShrFor" 
-  [nrmShrF_desc]
+  [nrmShrFDesc]
 
 nrmShrForRC :: RelationConcept
 nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proportionality constant")
-  nrmShrF_desc nrmShrFRel -- nrmShrForL
+  nrmShrFDesc nrmShrFRel -- nrmShrForL
 
 nrmShrFRel :: Relation
 nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
 
-nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent [ch nrmShearNum, S "is defined in", 
+nrmShrFDesc :: Sentence
+nrmShrFDesc = foldlSent [ch nrmShearNum, S "is defined in", 
   makeRef2S nrmShrForNum `sAnd` ch nrmShearDen, S "is defined in",
   makeRef2S nrmShrForDen]
 

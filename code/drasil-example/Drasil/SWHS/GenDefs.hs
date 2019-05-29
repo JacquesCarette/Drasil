@@ -108,7 +108,7 @@ rocTempSimpDeriv :: Derivation
 rocTempSimpDeriv =
   S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
     phrase temp +:+ S ":" :
-  weave [rocTempSimpDerivSent, map E roc_temp_simp_deriv_eqns]
+  weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns]
 
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
@@ -174,6 +174,6 @@ s4_2_3_eq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-roc_temp_simp_deriv_eqns :: [Expr]
-roc_temp_simp_deriv_eqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
+rocTempSimpDerivEqns :: [Expr]
+rocTempSimpDerivEqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
   s4_2_3_eq5]

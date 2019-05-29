@@ -189,7 +189,7 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, fig_forceacting, 
+labCon = [figPhysSyst, figIndexConv, figForceActing, 
   data_constraint_Table2, data_constraint_Table3, inputDataTable, 
   inputsToOutputTable]
 
@@ -420,7 +420,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
   [physSysIntro, physSysDescBullets, LlC figPhysSyst, physSysConv,
-   LlC figIndexConv, physSysFbd, LlC fig_forceacting] []
+   LlC figIndexConv, physSysFbd, LlC figForceActing] []
 
 physSysIntro = physSystIntro ssp figPhysSyst
 
@@ -461,7 +461,7 @@ physSystDescriptionListPhysys2 = foldlSent [S "A", phrase waterTable `sC`
 
 physSysFbd = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on a", phrase slice, 
-  S "is displayed in" +:+. makeRef2S fig_forceacting, S "The specific",
+  S "is displayed in" +:+. makeRef2S figForceActing, S "The specific",
   plural force `sAnd` plural symbol_, S "will be discussed in detail in",
   makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
 
@@ -476,8 +476,8 @@ figIndexConv = llcc (makeFigRef "IndexConvention") $
   fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
-fig_forceacting :: LabelledContent
-fig_forceacting = llcc (makeFigRef "ForceDiagram") $
+figForceActing :: LabelledContent
+figForceActing = llcc (makeFigRef "ForceDiagram") $
   fig (at_start fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 

@@ -31,7 +31,7 @@ import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb,
   slcHeight, stressDD, ratioVariation)
 import Drasil.SSP.Defs (intrslce, slice, slope, slopeSrf, slpSrf, soil, 
   soilPrpty, waterTable)
-import Drasil.SSP.Figures (fig_forceacting)
+import Drasil.SSP.Figures (figForceActing)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -97,7 +97,7 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 
 nmFEq_deriv :: Sentence
 nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
-  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  S "body diagram of", makeRef2S figForceActing, S "in", 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --
@@ -119,7 +119,7 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 
 bShFEq_deriv :: Sentence
 bShFEq_deriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
-  S "body diagram of", makeRef2S fig_forceacting, S "in", 
+  S "body diagram of", makeRef2S figForceActing, S "in", 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --

@@ -585,11 +585,11 @@ crtSlpId :: InstanceModel
 crtSlpId = imNoDeriv crtSlpIdRC [qw slopeDist, qw slopeHght, qw waterDist, 
   qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight,
   qw waterWeight, qw constF] [] (qw fs_min) [] [makeCite li2010] "crtSlpId" 
-  [crtSlpId_desc]
+  [crtSlpIdDesc]
 
 crtSlpIdRC :: RelationConcept
 crtSlpIdRC = makeRC "crtSlpIdRC" (nounPhraseSP "critical slip surface identification")
-  crtSlpId_desc crtSlpIdRel -- crtSlpIdL
+  crtSlpIdDesc crtSlpIdRel -- crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
@@ -599,8 +599,8 @@ crtSlpIdRel = (sy fs_min) $= (apply (sy minFunction) [sy slopeDist,
   sy dryWeight, sy satWeight, sy waterWeight, sy constF])
 
 -- FIXME: The constraints described here should be replaced with formal constraints on the input variables once that is possible
-crtSlpId_desc :: Sentence
-crtSlpId_desc = foldlSent [S "The", phrase minFunction, S "must enforce the",
+crtSlpIdDesc :: Sentence
+crtSlpIdDesc = foldlSent [S "The", phrase minFunction, S "must enforce the",
   plural constraint, S "on the", phrase crtSlpSrf, S "expressed in" +:+.
   (makeRef2S assumpSSC `sAnd` makeRef2S data_constraint_Table3), 
   S "The sizes of", ch waterDist `sAnd` ch waterHght +:+. 

@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes (likelyChgsCon, likelyChgs, unlikelyChanges_SRS,
+module Drasil.SSP.Changes (likelyChgsCon, likelyChgs, unlikelyChgsCon,
   unlikelyChgs) where
 
 -- A list of likely and unlikely changes for the SSP example
@@ -49,8 +49,8 @@ lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
   plural calculation, S "can be added for an imposed surface load on the", 
   phrase slope]
 
-unlikelyChanges_SRS :: [Contents]
-unlikelyChanges_SRS = ucIntro : mkEnumSimpleD unlikelyChgs
+unlikelyChgsCon :: [Contents]
+unlikelyChgsCon = ucIntro : mkEnumSimpleD unlikelyChgs
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikelyChgNISLO, unlikelyChg2AO]

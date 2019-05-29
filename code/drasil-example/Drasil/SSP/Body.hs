@@ -61,7 +61,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
-  unlikelyChanges_SRS)
+  unlikelyChgsCon)
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (inputMod)
@@ -156,7 +156,7 @@ mkSRS = [RefSec $ RefProg intro
     NonFReqsSub nonFuncReqs
   ],
   LCsSec $ LCsProg likelyChgsCon,
-  UCsSec $ UCsProg unlikelyChanges_SRS,
+  UCsSec $ UCsProg unlikelyChgsCon,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],
   Verbatim auxCons, Bibliography]

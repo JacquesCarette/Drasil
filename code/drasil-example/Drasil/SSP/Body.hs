@@ -85,7 +85,7 @@ aux_cons :: Section
 
 tableOfSymbIntro :: [TSIntro]
 
-problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
+problemDesc, termi_defi, phys_sys_desc, goal_stmt :: Section
 termi_defi_list, phys_sys_intro, phys_sys_convention, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
@@ -138,7 +138,7 @@ mkSRS = [RefSec $ RefProg intro
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
-      SSDProg [SSDSubVerb problem_desc
+      SSDProg [SSDSubVerb problemDesc
         , SSDSolChSpec $ SCSProg
           [Assumptions
           , TMs [] (Label : stdFields) tMods
@@ -396,7 +396,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problem_desc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
+problemDesc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",

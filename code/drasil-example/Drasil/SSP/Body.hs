@@ -87,7 +87,7 @@ tableOfSymbIntro :: [TSIntro]
 
 problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
 termiDefiList, physSysIntro, physSysConv, 
-  physSysDescBullets, phys_sys_fbd :: Contents
+  physSysDescBullets, physSysFbd :: Contents
 goals_list :: [Contents]
 
 
@@ -420,7 +420,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
   [physSysIntro, physSysDescBullets, LlC fig_physsyst, physSysConv,
-   LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
+   LlC fig_indexconv, physSysFbd, LlC fig_forceacting] []
 
 physSysIntro = physSystIntro ssp fig_physsyst
 
@@ -459,7 +459,7 @@ physSystDescriptionListPhysys1 = foldlSent [S "A", phrase slope,
 physSystDescriptionListPhysys2 = foldlSent [S "A", phrase waterTable `sC` 
   S "which may or may not exist"]
 
-phys_sys_fbd = foldlSP [S "A", phrase fbd, S "of the", 
+physSysFbd = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on a", phrase slice, 
   S "is displayed in" +:+. makeRef2S fig_forceacting, S "The specific",
   plural force `sAnd` plural symbol_, S "will be discussed in detail in",

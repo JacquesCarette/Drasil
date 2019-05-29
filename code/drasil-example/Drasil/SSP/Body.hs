@@ -86,7 +86,7 @@ aux_cons :: Section
 tableOfSymbIntro :: [TSIntro]
 
 problemDesc, termiDefi, physSysDesc, goal_stmt :: Section
-termiDefiList, physSysIntro, phys_sys_convention, 
+termiDefiList, physSysIntro, physSysConv, 
   phys_sys_desc_bullets, phys_sys_fbd :: Contents
 goals_list :: [Contents]
 
@@ -419,7 +419,7 @@ termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
 
 -- SECTION 4.1.2 --
 physSysDesc = SRS.physSyst
-  [physSysIntro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
+  [physSysIntro, phys_sys_desc_bullets, LlC fig_physsyst, physSysConv,
    LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
 
 physSysIntro = physSystIntro ssp fig_physsyst
@@ -429,7 +429,7 @@ physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of"
   short what `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 
-phys_sys_convention = physSystConvention morPrice morgenstern1965 slope how 
+physSysConv = physSystConvention morPrice morgenstern1965 slope how 
   index slice intrslce fig_indexconv
   where how = S "as a series of vertical" +:+ plural slice
 

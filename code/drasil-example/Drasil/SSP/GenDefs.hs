@@ -70,7 +70,7 @@ mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
-  [makeCite chen2005]                      "momentEql"   [momEql_desc]
+  [makeCite chen2005]                      "momentEql"   [momEqlDesc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
 baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) bsWtrFDeriv
@@ -254,14 +254,14 @@ mobShearWODesc = foldlSent_ [ch slcWght, S "is defined in",
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEqlRel -- genDef6Label
+  momEqlDesc momEqlRel -- genDef6Label
 
 momEqlRel :: Relation
 momEqlRel = 0 $= momExpr (\ x y -> x -
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
-momEql_desc :: Sentence
-momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
+momEqlDesc :: Sentence
+momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies", 
   makeRef2S equilibrium, S "for the" +:+. phrase momntOfBdy, ch baseWthX,
   S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch slcWght, S "is defined in", 

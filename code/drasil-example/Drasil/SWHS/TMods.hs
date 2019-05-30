@@ -77,15 +77,15 @@ data PhaseChange = AllPhases
                  | Liquid
 
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
-sensHtETemplate pc desc = tm (sensHtE_rc pc eqn desc)
+sensHtETemplate pc desc = tm (sensHtERC pc eqn desc)
   [qw sensHeat, qw htCap_S, qw mass, 
     qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
 
-sensHtE_rc :: PhaseChange -> Relation -> Sentence -> RelationConcept
-sensHtE_rc pc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP ("Sensible heat energy" ++ case pc of
+sensHtERC :: PhaseChange -> Relation -> Sentence -> RelationConcept
+sensHtERC pc eqn desc = makeRC "sensHtERC" (nounPhraseSP ("Sensible heat energy" ++ case pc of
   Liquid -> " (no state change)"
   AllPhases -> "")) desc eqn
 

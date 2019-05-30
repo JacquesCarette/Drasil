@@ -27,7 +27,7 @@ import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
-  out_SA, inSA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
+  outSA, inSA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 
 ---------------------------
 --  General Definitions  --
@@ -81,7 +81,7 @@ rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
 rocTempSimpRel :: Relation
 rocTempSimpRel = (sy QPP.mass) * (sy QT.heatCapSpec) *
   deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy inSA -
-  sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
+  sy ht_flux_out * sy outSA + sy vol_ht_gen * sy QPP.vol
 
 rocTempSimpDesc :: Sentence
 rocTempSimpDesc = foldlSent [S "The basic", phrase equation,
@@ -94,7 +94,7 @@ rocTempSimpDesc = foldlSent [S "The basic", phrase equation,
   ch QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
   ch ht_flux_in `sAnd` ch ht_flux_out, S "are the in and out heat",
   S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.htFlux),
-  ch inSA `sAnd` ch out_SA, S "are the surface areas over which the",
+  ch inSA `sAnd` ch outSA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
   sParen (unwrap $ getUnit pcm_SA), ch vol_ht_gen `isThe`
   S "volumetric heat generated" +:+. sParen (Sy $ unit_symb vol_ht_gen),
@@ -115,7 +115,7 @@ rocTempSimpDerivSent = map foldlSentCol [
   s4_2_3_desc1 consThermE vol,
   s4_2_3_desc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
-  s4_2_3_desc4 ht_flux_in ht_flux_out inSA out_SA density QT.heatCapSpec
+  s4_2_3_desc4 ht_flux_in ht_flux_out inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
                  makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
@@ -163,16 +163,16 @@ s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVe
   ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq3 = (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (sy outSA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+  (sy outSA) + (sy vol_ht_gen) * (sy vol)
 
 s4_2_3_eq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+  * (sy outSA) + (sy vol_ht_gen) * (sy vol)
 
 rocTempSimpDerivEqns :: [Expr]
 rocTempSimpDerivEqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,

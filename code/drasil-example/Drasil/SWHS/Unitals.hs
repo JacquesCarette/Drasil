@@ -34,7 +34,7 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 
 units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
-  htCapS, htCapV, sensHeat, pcm_initMltE,
+  htCapS, htCapV, sensHeat, pcmInitMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
@@ -44,7 +44,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
-  pcm_initMltE, vol_ht_gen, htTransCoeff,
+  pcmInitMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
@@ -52,7 +52,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
-  pcm_initMltE, vol_ht_gen, htTransCoeff,
+  pcmInitMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
@@ -92,7 +92,7 @@ htCapV = uc' "htCapV"
   "unit mass of vapour by a given amount")
   (sup (eqSymb heatCapSpec) cV) UT.heatCapSpec
 
-pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
+pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
   (sup (sub (sub (eqSymb sensHeat)

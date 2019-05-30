@@ -1,5 +1,5 @@
 module Drasil.SWHS.GenDefs (genDefs, nwtnCooling, rocTempSimp,
-  rocTempSimpDeriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
+  rocTempSimpDeriv, nwtnCoolingDesc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -43,7 +43,7 @@ genDefs = [nwtnCooling, rocTempSimp]
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
-  [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCooling_desc]
+  [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCoolingDesc]
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv
                  "rocTempSimp" [rocTempSimp_desc]
@@ -52,14 +52,14 @@ rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeri
 
 nwtnCoolingRC :: RelationConcept
 nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCoolingRel -- nwtnCoolingL
+  nwtnCoolingDesc nwtnCoolingRel -- nwtnCoolingL
 
 nwtnCoolingRel :: Relation
 nwtnCoolingRel = apply1 htFlux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
-nwtnCooling_desc :: Sentence
-nwtnCooling_desc = foldlSent [at_start lawConvCooling +:+.
+nwtnCoolingDesc :: Sentence
+nwtnCoolingDesc = foldlSent [at_start lawConvCooling +:+.
   S "describes convective cooling from a surface" +:
   S "The law is stated as", S "the", phrase rate,
   S "of heat loss from a body is proportional to the",

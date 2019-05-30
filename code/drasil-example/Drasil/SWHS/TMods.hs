@@ -143,12 +143,12 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm latentHtE_rc
+latentHtE = tm latentHtERC
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
 
-latentHtE_rc :: RelationConcept
-latentHtE_rc = makeRC "latentHtE_rc"
+latentHtERC :: RelationConcept
+latentHtERC = makeRC "latentHtERC"
   (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
 
 latHtEEqn :: Relation

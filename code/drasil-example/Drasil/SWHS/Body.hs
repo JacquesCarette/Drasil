@@ -78,7 +78,7 @@ import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDer
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
-  htFluxC, ht_flux_P, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
+  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
   pcm_HTC, pcm_SA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
@@ -378,7 +378,7 @@ physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) 
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
-  physSyst3 phsChgMtrl tank ht_flux_P]
+  physSyst3 phsChgMtrl tank htFluxP]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -947,7 +947,7 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase htFluxC, S "of",
-  ch htFluxC `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
+  ch htFluxC `sAnd` phrase htFluxP, S "of", ch htFluxP])
   $ resourcePath ++ "Tank.png"
 
 -----------------------------
@@ -1101,7 +1101,7 @@ iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
 
 iMod1Eqn1 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy htFluxC) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
+  (sy htFluxC) * (sy coil_SA) - (sy htFluxP) * (sy pcm_SA))
 
 iMod1Eqn2 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
@@ -1153,7 +1153,7 @@ iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcmMass :+:
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
 
 iMod2Eqn1 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
-  time $= (sy ht_flux_P) * (sy pcm_SA))
+  time $= (sy htFluxP) * (sy pcm_SA))
 
 iMod2Eqn2 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
   time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))

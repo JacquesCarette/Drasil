@@ -727,12 +727,12 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 </p>
 <p>
 <div id="assumpCWTAT">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:htFluxP>DD: htFluxP</a>.
 </div>
 </p>
 <p>
 <div id="assumpTPCAV">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:htFluxP>DD: htFluxP</a>.
 </div>
 </p>
 <p>
@@ -762,7 +762,7 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 </p>
 <p>
 <div id="assumpLCCWP">
-Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:htFluxP>DD: htFluxP</a>.
 </div>
 </p>
 <p>
@@ -1301,7 +1301,7 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 </table>
 </div>
-<div id="DD:ht.flux.P">
+<div id="DD:htFluxP">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -1757,7 +1757,7 @@ To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy bala
                                             </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
 <p class="paragraph">
-Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
+Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -2030,7 +2030,7 @@ To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy bala
                                                         </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>P</sub></em>, this equation can be written as:
+Using <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this equation can be written as:
 </p>
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
@@ -2518,7 +2518,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a h
 <div class="subsubsection">
 <h3>Properties of a Correct Solution</h3>
 <p class="paragraph">
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
 <div class="equation">
 <em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
@@ -2838,7 +2838,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
-<th><a href=#DD:ht.flux.P>DD: ht_flux_P</a></th>
+<th><a href=#DD:htFluxP>DD: htFluxP</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
 <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
 <th><a href=#unlikeChgWPFS>UC: Water-PCM-Fixed-States</a></th>
@@ -3929,6 +3929,41 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
+<td><a href=#DD:htFluxP>DD: htFluxP</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td><a href=#DD:htFusion>DD: htFusion</a></td>
 <td></td>
 <td></td>
@@ -3961,41 +3996,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
-<td></td>
-</tr>
-<tr>
-<td><a href=#DD:ht.flux.P>DD: ht_flux_P</a></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 </tr>
 <tr>
@@ -4258,7 +4258,7 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 <th>GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)</th>
 <th>GD2 (<a href=#GD:rocTempSimp>GD: rocTempSimp</a>)</th>
 <th>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</th>
-<th>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</th>
+<th>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</th>
 <th>DD3 (<a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>)</th>
 <th>
 DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
@@ -4379,7 +4379,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</td>
+<td>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5083,7 +5083,7 @@ A17 (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</td>
+<td>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</td>
 <td></td>
 <td></td>
 <td>X</td>

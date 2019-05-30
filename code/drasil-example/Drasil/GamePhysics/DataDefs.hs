@@ -24,6 +24,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
+import Data.Drasil.Utils (weave)
 
 ----- Data Definitions -----
 

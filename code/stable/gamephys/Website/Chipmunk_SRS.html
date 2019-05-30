@@ -143,6 +143,11 @@ The table that follows summarizes the symbols used in this document along with t
 <td>N&sdot;s</td>
 </tr>
 <tr>
+<td><em><b>J</b></em></td>
+<td>Impulse (vector)</td>
+<td>N&sdot;s</td>
+</tr>
+<tr>
 <td><em>KE</em></td>
 <td>Kinetic energy</td>
 <td>J</td>
@@ -258,6 +263,16 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m/s</td>
 </tr>
 <tr>
+<td><em><b>v</b><sub>1</sub></em></td>
+<td>Velocity Of the Firstbody</td>
+<td>m/s</td>
+</tr>
+<tr>
+<td><em><b>v</b><sub>2</sub></em></td>
+<td>Velocity Of the Secondbody</td>
+<td>m/s</td>
+</tr>
+<tr>
 <td><em><b>v</b><sub>A</sub></em></td>
 <td>Velocity At Point A</td>
 <td>m/s</td>
@@ -278,7 +293,7 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m/s</td>
 </tr>
 <tr>
-<td><em><b>v</b></em></td>
+<td><em>Δ<b>v</b></em></td>
 <td>Velocity</td>
 <td>m/s</td>
 </tr>
@@ -587,7 +602,7 @@ Right-handed coordinate system: A coordinate system where the positive z-axis co
 <div class="list">
 <p>
 <div id="linearGS">
-Determine-Linear-Properties: Determine their new positions and velocities over a period of time.
+Determine-Linear-Properties: Determine their new positions and velocity over a period of time.
 </div>
 </p>
 <p>
@@ -615,7 +630,7 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="assumpOT">
-objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </p>
 <p>
@@ -1114,7 +1129,7 @@ This section collects and defines all the data needed to build the instance mode
 <td>
 <div class="equation">
 <em><b>a</b>(t) = <div class="fraction">
-                  <span class="fup">d&#8239;<b>v</b>(t)</span>
+                  <span class="fup">d&#8239;Δ<b>v</b>(t)</span>
                   <span class="fdn">d&#8239;t</span>
                   </div></em>
 </div>
@@ -1128,7 +1143,7 @@ This section collects and defines all the data needed to build the instance mode
 <em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>)
 </li>
 <li><em>t</em> is the time (s)</li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
 </ul>
 </td>
 </tr>
@@ -1554,7 +1569,7 @@ The torque on a body measures the the tendency of a force to rotate the body aro
 <td>
 <div class="equation">
 <em>KE = <div class="fraction">
-         <span class="fup">m&#8239;<b>v</b><sup>2</sup></span>
+         <span class="fup">m&#8239;Δ<b>v</b><sup>2</sup></span>
          <span class="fdn">2</span>
          </div></em>
 </div>
@@ -1566,7 +1581,7 @@ The torque on a body measures the the tendency of a force to rotate the body aro
 <ul class="hide-list-style-no-indent">
 <li><em>KE</em> is the kinetic energy (J)</li>
 <li><em>m</em> is the mass (kg)</li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
+<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
 </ul>
 </td>
 </tr>
@@ -1705,7 +1720,7 @@ Initial Relative Velocity Between Rigid Bodies of A and B
 <th>Notes</th>
 <td>
 <p class="paragraph">
-In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
+In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocity of A and B at point P.
 </p>
 </td>
 </tr>
@@ -1718,6 +1733,72 @@ In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A
 <td><p class="paragraph"></p></td>
 </tr>
 </table>
+</div>
+<div id="DD:impulseV">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Impulse (vector)</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em><b>J</b></em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">N&sdot;s</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation"><em><b>J</b> = m&#8239;Δ<b>v</b></em></div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li><em><b>J</b></em> is the impulse (vector) (N&sdot;s)</li>
+<li><em>m</em> is the mass (kg)</li>
+<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td>
+<p class="paragraph">
+An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts over a body over an interval of time Derivation of impulse (vector).
+</p>
+<p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+<p class="paragraph">
+ Derivation of impulse (vector) - Newton's second law of motion states:
+</p>
+<div class="equation">
+<em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
+                                          <span class="fup">d&#8239;Δ<b>v</b></span>
+                                          <span class="fdn">d&#8239;t</span>
+                                          </div></em>
+</div>
+<p class="paragraph">Rearranging :</p>
+<div class="equation">
+<em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
+</div>
+<p class="paragraph">Integrating the right hand side :</p>
+<div class="equation">
+<em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
 </div>
 </div>
 </div>
@@ -2063,7 +2144,7 @@ This instance model is based on our assumptions regarding rigid body <a href=#as
 <td>10<em>%</em></td>
 </tr>
 <tr>
-<td><em><b>v</b></em></td>
+<td><em>Δ<b>v</b></em></td>
 <td>--</td>
 <td><em>2.51</em> m/s</td>
 <td>10<em>%</em></td>
@@ -2098,7 +2179,7 @@ This instance model is based on our assumptions regarding rigid body <a href=#as
 <table class="table">
 <tr><th>Var</th></tr>
 <tr><td><em><b>p</b></em></td></tr>
-<tr><td><em><b>v</b></em></td></tr>
+<tr><td><em>Δ<b>v</b></em></td></tr>
 <tr><td><em>ϕ</em></td></tr>
 <tr><td><em>ω</em></td></tr>
 </table>
@@ -2136,7 +2217,7 @@ Simulation-Space: Create a space for all of the rigid bodies in the physical sim
 </p>
 <p>
 <div id="inputInitialConds">
-Input-Initial-Conditions: Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
+Input-Initial-Conditions: Input the initial masses, velocity, orientations, angular velocities of, and forces applied on rigid bodies.
 </div>
 </p>
 <p>
@@ -2151,7 +2232,7 @@ Verify-Physical_Constraints: Verify that the inputs satisfy the required physica
 </p>
 <p>
 <div id="calcTransOverTime">
-Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+Calculate-Translation-Over-Time: Determine the positions and velocity over a period of time of the 2D rigid bodies acted upon by a force.
 </div>
 </p>
 <p>
@@ -2166,7 +2247,7 @@ Determine-Collisions: Determine if any of the rigid bodies in the space have col
 </p>
 <p>
 <div id="deterCollRespOverTime">
-Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+Determine-Collision-Response-Over-Time: Determine the positions and velocity over a period of time of the 2D rigid bodies that have undergone a collision.
 </div>
 </p>
 </div>
@@ -2326,6 +2407,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#DD:ctrOfMass>DD: ctrOfMass</a></th>
 <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
 <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
+<th><a href=#DD:impulseV>DD: impulseV</a></th>
 <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
 </tr>
 <tr>
@@ -2333,6 +2415,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
 </td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2375,11 +2458,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:angDisp>DD: angDisp</a></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2421,6 +2506,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpAD>A: axesDefined</a></td>
@@ -2428,6 +2514,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2467,6 +2554,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpCT>A: collisionType</a></td>
@@ -2477,6 +2565,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2513,6 +2602,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpOD>A: objectDimension</a></td>
@@ -2534,6 +2624,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -2559,6 +2650,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td>X</td>
 </tr>
 <tr>
 <td><a href=#DD:impulse>DD: impulse</a></td>
@@ -2566,6 +2658,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2605,6 +2698,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:linDisp>DD: linDisp</a></td>
@@ -2613,6 +2707,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2651,6 +2746,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
@@ -2659,6 +2755,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3124,7 +3221,7 @@ LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 <td></td>
 </tr>
 <tr>
-<td>LC3 (<a href=#IM:transMot>IM: transMot</a>)</td>
+<td>LC3 (<a href=#DD:impulseV>DD: impulseV</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3134,7 +3231,7 @@ LC1 (<a href=#DD:coeffRestitution>DD: coeffRestitution</a>)
 <td></td>
 </tr>
 <tr>
-<td>LC4 (<a href=#IM:rotMot>IM: rotMot</a>)</td>
+<td>LC4 (<a href=#IM:transMot>IM: transMot</a>)</td>
 <td></td>
 <td></td>
 <td></td>

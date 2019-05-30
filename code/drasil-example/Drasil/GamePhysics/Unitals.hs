@@ -29,7 +29,8 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP, velBP ]
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
+  velBP, time_1, time_2, velo_1, velo_2]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -66,7 +67,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 -----------------------
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
-forceParam, massParam, momtParam, contParam:: String -> String -> UnitalChunk
+forceParam, massParam, momtParam, contParam, timeParam :: String -> String -> UnitalChunk
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
@@ -85,6 +86,10 @@ contParam n w = ucs'
  (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
   (phrase QP.displacement)) (sub (eqSymb QP.displacement)
   (Concat [Atomic w, cP])) Real metre
+
+timeParam n w = ucs'
+ (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
+  (phrase QP.time)) (sub (eqSymb QP.time) (Atomic n)) Real second
 
 contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
@@ -125,7 +130,8 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
-  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel, velAP, velBP :: UnitalChunk
+  momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
+  velAP, velBP, time_1, time_2, velo_1, velo_2 :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 

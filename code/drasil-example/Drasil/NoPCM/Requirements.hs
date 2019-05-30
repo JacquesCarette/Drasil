@@ -1,17 +1,15 @@
-module Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn) where
+module Drasil.NoPCM.Requirements (dataConstListIn, funcReqsList,
+  inputInitQuantsTable, reqs) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation as Doc (description, input_,
-  quantity, requirement, symbol_, variable)
+import Data.Drasil.Concepts.Documentation (quantity)
 
-import Data.Drasil.Concepts.Math (unit_)
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
-import Drasil.DocLang (mkEnumSimpleD)
-import Drasil.DocumentLanguage.Units (toSentence) 
+import Drasil.DocLang (mkEnumSimpleD, mkInputPropsTable)
 import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
@@ -62,10 +60,7 @@ oIDQQuants = map foldlSent_ [
   ]
 
 inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = llcc (makeTabRef "Input-Variable-Requirements") $ 
-  Table [titleize symbol_, titleize unit_, titleize description]
-  (mkTable [ch, toSentence, phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
+inputInitQuantsTable = mkInputPropsTable inputVar inputInitQuants
 
 reqs :: [ConceptInstance]
 reqs = [inputInitQuants, findMass, checkWithPhysConsts,

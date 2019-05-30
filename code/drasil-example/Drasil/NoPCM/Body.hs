@@ -70,9 +70,8 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
+import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
@@ -88,8 +87,8 @@ import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
-import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
-import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
+import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
+import Drasil.NoPCM.Requirements (dataConstListIn, funcReqsList, inputInitQuantsTable, reqs)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -203,7 +202,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTblabled, dataConstTable1]
+labCon = [inputInitQuantsTable, dataConstTable1]
 
 sec :: [Section]
 sec = extractSection srs

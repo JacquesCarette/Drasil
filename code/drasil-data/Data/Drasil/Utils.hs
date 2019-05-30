@@ -3,12 +3,12 @@ module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
   foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
   mkEnumAbbrevList, mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT,
-  prodUCTbl, typUncr, unwrap, weave, zipFTable', zipSentList) where
+  typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
+import Data.Drasil.Concepts.Documentation (fterms, input_, symbol_)
 import Data.Drasil.Concepts.Math (unit_)
 
 import Control.Lens ((^.))
@@ -155,8 +155,3 @@ noRefs a = zip a $ repeat Nothing
 -- a ListTuple which can be used with Contents but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
-
-prodUCTbl :: [[Sentence]] -> LabelledContent
-prodUCTbl cases = llcc (makeTabRef "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
-  Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
-  cases (titleize useCaseTable) True

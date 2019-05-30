@@ -200,14 +200,14 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw tempInit, qw pcm_SA,
+eBalanceOnPCM = im eBalanceOnPCMRC [qw temp_melt_P, qw time_final, qw tempInit, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [sy tempInit $< sy temp_melt_P] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDesc_note]
 
-eBalanceOnPCM_rc :: RelationConcept
-eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
+eBalanceOnPCMRC :: RelationConcept
+eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
   "Energy Balance on PCM to find temperature of PCM")
   balPCMDesc balPCM_Rel -- eBalanceOnPCML
 

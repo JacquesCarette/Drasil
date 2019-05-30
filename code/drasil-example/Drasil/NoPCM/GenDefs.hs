@@ -21,7 +21,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT)
 import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimpDesc)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (inSA, outSA, vol_ht_gen, thFluxVect, ht_flux_in, 
+import Drasil.SWHS.Unitals (inSA, outSA, volHtGen, thFluxVect, ht_flux_in, 
   ht_flux_out)
 
 genDefs :: [GenDefn]
@@ -41,7 +41,7 @@ rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
   genDefDesc1 consThermE vol,
   genDefDesc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
-  genDefDesc3 vol vol_ht_gen,
+  genDefDesc3 vol volHtGen,
   genDefDesc4 ht_flux_in ht_flux_out inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],
   genDefDesc5 density mass vol]
@@ -79,26 +79,26 @@ genDefDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
 genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
 
 genDefEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) (sy volHtGen)) $=
   (int_all (eqSymb vol) ((sy density)
   * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
+  (int_all (eqSymb vol) (sy volHtGen)) $= 
   (int_all (eqSymb vol)
   ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq3 = (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
-  (sy outSA) + (sy vol_ht_gen) * (sy vol) $= 
+  (sy outSA) + (sy volHtGen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
-  (sy outSA) + (sy vol_ht_gen) * (sy vol)
+  (sy outSA) + (sy volHtGen) * (sy vol)
 
 genDefEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out)
-  * (sy outSA) + (sy vol_ht_gen) * (sy vol)
+  * (sy outSA) + (sy volHtGen) * (sy vol)
 
 rocTempSimpDerivEqns :: [Expr]
 rocTempSimpDerivEqns = [genDefEq1, genDefEq2, genDefEq3, genDefEq4,

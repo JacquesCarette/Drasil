@@ -35,7 +35,7 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
-  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
+  volHtGen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
@@ -44,7 +44,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
-  pcmInitMltE, vol_ht_gen, htTransCoeff,
+  pcmInitMltE, volHtGen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
@@ -52,7 +52,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
-  pcmInitMltE, vol_ht_gen, htTransCoeff,
+  pcmInitMltE, volHtGen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
@@ -98,7 +98,7 @@ pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
   (sup (sub (sub (eqSymb sensHeat)
   (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
 
-vol_ht_gen = uc' "vol_ht_gen"
+volHtGen = uc' "volHtGen"
   (nounPhraseSP "volumetric heat generation per unit volume")
   "Amount of thermal energy generated per unit volume" lG UT.volHtGenU
 

@@ -24,7 +24,7 @@ import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCapV, htCapS,
-  htCapL, vol_ht_gen, thFluxVect)
+  htCapL, volHtGen, thFluxVect)
 
 tMods :: [TheoryModel]
 tMods = [consThermE, sensHtE, latentHtE]
@@ -34,7 +34,7 @@ tMods = [consThermE, sensHtE, latentHtE]
 -------------------------
 consThermE :: TheoryModel
 consThermE = tm consThermERC
-  [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+  [qw thFluxVect, qw gradient, qw volHtGen, 
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
 
@@ -43,7 +43,7 @@ consThermERC = makeRC "consThermERC"
   (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
 
 consThermERel :: Relation
-consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
+consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy volHtGen) $=
   (sy density) * (sy heatCapSpec) * (pderiv (sy temp) time)
 
 -- the second argument is a 'ShortName'...
@@ -59,7 +59,7 @@ consThermEdesc = foldlSent [
   ch heatCapSpec, sParen (Sy (unit_symb heatCapSpec)) `sAnd` phrase density `sC`
   ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 
   foldlList Comma List [ch thFluxVect `isThe` phrase thFluxVect +:+ sParen (Sy (unit_symb thFluxVect)),
-  ch vol_ht_gen `isThe` phrase vol_ht_gen +:+ sParen (Sy (unit_symb vol_ht_gen)),
+  ch volHtGen `isThe` phrase volHtGen +:+ sParen (Sy (unit_symb volHtGen)),
   ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`

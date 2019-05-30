@@ -81,7 +81,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, inSA, outSA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
-  temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
+  temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
 
@@ -429,7 +429,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_3,
   s4_2_3_deriv_4 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_deriv_5,
-  s4_2_3_deriv_6 vol vol_ht_gen,
+  s4_2_3_deriv_6 vol volHtGen,
   s4_2_3_deriv_7,
   s4_2_3_deriv_8 ht_flux_in ht_flux_out inSA outSA density heatCapSpec
     temp vol assumption assump3 assump4 assump5 assump6,
@@ -1000,7 +1000,7 @@ genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
 
 genDefDeriv3 = eqUnR'
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) (sy volHtGen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
@@ -1013,7 +1013,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
 
 genDefDeriv5 = eqUnR'
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
+  (int_all (eqSymb vol) (sy volHtGen)) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
@@ -1023,7 +1023,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 
 genDefDeriv7 = eqUnR'
   ((sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
-  (sy outSA) + (sy vol_ht_gen) * (sy vol) $= 
+  (sy outSA) + (sy volHtGen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
@@ -1033,7 +1033,7 @@ genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
 genDefDeriv11 = eqUnR'
   ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out)
-  * (sy outSA) + (sy vol_ht_gen) * (sy vol))
+  * (sy outSA) + (sy volHtGen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)

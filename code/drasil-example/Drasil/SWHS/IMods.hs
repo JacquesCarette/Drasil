@@ -415,10 +415,10 @@ heatEInPCM = imNoDeriv heatEInPCMRC [qw temp_melt_P, qw time_final, qw tempInit,
 
 heatEInPCMRC :: RelationConcept
 heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel
+  htPCMDesc htPCMRel
 
-htPCM_Rel :: Relation
-htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
+htPCMRel :: Relation
+htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcm_mass * ((apply1 temp_PCM time) -
           sy tempInit), real_interval temp_PCM (UpTo (Exc, sy temp_melt_P)))
 

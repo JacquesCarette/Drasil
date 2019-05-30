@@ -204,7 +204,7 @@ eBalanceOnPCM = im eBalanceOnPCMRC [qw temp_melt_P, qw time_final, qw tempInit, 
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [sy tempInit $< sy temp_melt_P] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
-   "eBalanceOnPCM" [balPCMDesc_note]
+   "eBalanceOnPCM" [balPCMDescNote]
 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
@@ -236,8 +236,8 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit tau_S_P),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
-balPCMDesc_note :: Sentence
-balPCMDesc_note = foldlSent [
+balPCMDescNote :: Sentence
+balPCMDescNote = foldlSent [
   (E (sy temp_melt_P)) `sC` (E (sy time_final)) `sC` (E (sy tempInit)) `sC`
   (E (sy pcm_HTC)) `sC` (E (sy pcm_mass)) `sC` (E (sy htCap_S_P)) `sC`
   (E (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),

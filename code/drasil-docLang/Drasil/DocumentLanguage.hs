@@ -214,7 +214,7 @@ data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] 
 {--}
 
 -- | Off-The-Shelf Solutions section 
-data ExistingSolnSec = ExistSolnProg [Contents]
+newtype ExistingSolnSec = ExistSolnProg [Contents]
 
 {--}
 

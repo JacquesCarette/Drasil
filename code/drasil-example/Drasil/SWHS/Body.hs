@@ -79,7 +79,7 @@ import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, inSA, outSA, pcm_E,
-  pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
+  pcm_HTC, pcm_SA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
 
@@ -1109,7 +1109,7 @@ iMod1Eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
 
 iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
-  (sy temp_W)) - ((sy pcm_mass) * (sy pcm_SA)) / ((sy w_mass) *
+  (sy temp_W)) - ((sy pcmMass) * (sy pcm_SA)) / ((sy w_mass) *
   (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
@@ -1142,24 +1142,24 @@ iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for",
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
-iMod2Sent2 = [S "Dividing by", ch pcm_mass :+: ch htCap_S_P,
+iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCap_S_P,
   S "we obtain"]
 
 iMod2Sent3 :: [Sentence]
-iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcm_mass :+: 
+iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcmMass :+: 
   ch htCap_S_P :+: S "/" :+: ch pcm_HTC :+: ch pcm_SA `sC`
   S "this can be written as"]
 
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
 
-iMod2Eqn1 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+iMod2Eqn1 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
   time $= (sy ht_flux_P) * (sy pcm_SA))
 
-iMod2Eqn2 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+iMod2Eqn2 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
   time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
-  (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
+  (sy pcm_SA)) / ((sy pcmMass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
   ((sy temp_W) - (sy temp_PCM)))

@@ -8,7 +8,7 @@ import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
-import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
+import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcmMass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C, htCap_S_P,
   htCap_L_P, pcm_HTC, pcm_SA, tau_S_P, tau_L_P)
 
@@ -60,7 +60,7 @@ ddBalanceSolidPCMQD :: QDefinition
 ddBalanceSolidPCMQD = mkQuantDef tau_S_P balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
-balanceSolidPCMEqn = ((sy pcm_mass) * (sy htCap_S_P)) /
+balanceSolidPCMEqn = ((sy pcmMass) * (sy htCap_S_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))
 
 ddBalanceSolidPCM :: DataDefinition
@@ -73,7 +73,7 @@ ddBalanceLiquidPCMQD :: QDefinition
 ddBalanceLiquidPCMQD = mkQuantDef tau_L_P balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
-balanceLiquidPCMEqn = ((sy pcm_mass) * (sy htCap_L_P)) /
+balanceLiquidPCMEqn = ((sy pcmMass) * (sy htCap_L_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))
 
 ddBalanceLiquidPCM :: DataDefinition
@@ -105,7 +105,7 @@ dd4MeltFracQD = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   -- produced according to CaseStudies' original
 
 meltFracEqn :: Expr
-meltFracEqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
+meltFracEqn = (sy latentE_P) / ((sy htFusion) * (sy pcmMass))
 
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "melt_frac"

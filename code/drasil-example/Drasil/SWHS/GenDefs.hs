@@ -52,10 +52,10 @@ rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeri
 
 nwtnCoolingRC :: RelationConcept
 nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel -- nwtnCoolingL
+  nwtnCooling_desc nwtnCoolingRel -- nwtnCoolingL
 
-nwtnCooling_rel :: Relation
-nwtnCooling_rel = apply1 htFlux QP.time $= sy htTransCoeff *
+nwtnCoolingRel :: Relation
+nwtnCoolingRel = apply1 htFlux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence

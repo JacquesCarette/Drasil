@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.Physics (distance, twoD, weight)
 import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Theories.Physics (weightGD)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, getTandS)
+import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE)

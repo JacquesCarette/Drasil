@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
 import Data.Drasil.Concepts.Math (angle, equation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
-import Data.Drasil.SentenceStructures (eqN, foldlSent, foldlSent_, foldlSentCol, getTandS)
+import Data.Drasil.SentenceStructures (eqN, getTandS)
 
 import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL, 
   assumpES, assumpSF, assumpSL)

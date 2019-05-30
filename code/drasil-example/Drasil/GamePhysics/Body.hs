@@ -113,7 +113,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     ],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
-    ExistingSolnSec $ ExistSolnVerb offTheShelfSolutions,
+    ExistingSolnSec $ ExistSolnVerb offShelfSols,
     TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
       traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
       (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
@@ -396,7 +396,7 @@ problemDescriptionIntroParam lib app = foldlSent
   (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  sParen (makeRef2S offTheShelfSolutions), S "By creating a simple, lightweight, fast and portable",
+  sParen (makeRef2S offShelfSols), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
@@ -565,28 +565,28 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
 -----------------------------------------
 
-offTheShelfSolutions :: Section
-offTheShelfSolutionsIntro, off_the_shelf_solutions_2dlist, 
-  offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist :: Contents
+offShelfSols :: Section
+offShelfSolsIntro, offShelfSols2DList, 
+  offShelfSolsMid, offShelfSols3DList :: Contents
 
-offTheShelfSolutions = SRS.offShelfSol [offTheShelfSolutionsIntro, 
-  off_the_shelf_solutions_2dlist, offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist] []
+offShelfSols = SRS.offShelfSol [offShelfSolsIntro, 
+  offShelfSols2DList, offShelfSolsMid, offShelfSols3DList] []
 
-offTheShelfSolutionsIntro = offTheShelfSolutionsIntroParam problemDescriptionSection physLib
+offShelfSolsIntro = offShelfSolsIntroParam problemDescriptionSection physLib
 
-offTheShelfSolutionsIntroParam :: NamedIdea n => Section -> n -> Contents
-offTheShelfSolutionsIntroParam problmDescSec lib = mkParagraph $ foldlSentCol 
+offShelfSolsIntroParam :: NamedIdea n => Section -> n -> Contents
+offShelfSolsIntroParam problmDescSec lib = mkParagraph $ foldlSentCol 
   [S "As mentioned in", (makeRef2S problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
-off_the_shelf_solutions_2dlist = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
+offShelfSols2DList = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
 
-offTheShelfSolutionsMid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
+offShelfSolsMid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural physLib), S "include:"]
 
-off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
+offShelfSols3DList = LlC $ enumBullet solutionLabel [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
   (S "Newton Game Dynamics: http://newtondynamics.com/")]

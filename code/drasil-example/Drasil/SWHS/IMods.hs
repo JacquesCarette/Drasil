@@ -381,10 +381,10 @@ heatEInWtr = im heatEInWtrRC [qw tempInit, qw w_mass, qw htCap_W, qw w_mass]
 
 heatEInWtrRC :: RelationConcept
 heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel -- heatEInWtrL
+  htWtrDesc htWtrRel -- heatEInWtrL
 
-htWtr_Rel :: Relation
-htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
+htWtrRel :: Relation
+htWtrRel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
   ((apply1 temp_W time) - sy tempInit)
 
 htWtrDesc :: Sentence

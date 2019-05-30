@@ -6,19 +6,16 @@ import Data.Function (on)
 import Data.List (sortBy)
 
 import Language.Drasil
-import Language.Drasil.Utils (sortBySymbol)
-import Drasil.DocLang (mkEnumSimple, mkListTuple)
+import Drasil.DocLang (mkEnumSimple, mkInputPropsTable, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
-import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
-  condition, datumConstraint, description, environment, failure, funcReqDom,
-  input_, likelyChg, message, mg, mis, module_, nonFuncReqDom, output_,
-  property, quantity, requirement, srs, symbol_, system, traceyMatrix,
-  unlikelyChg, value, vavPlan)
+  condition, datumConstraint, environment, failure, funcReqDom, input_,
+  likelyChg, message, mg, mis, module_, nonFuncReqDom, output_, property,
+  quantity, requirement, srs, system, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
@@ -76,13 +73,7 @@ inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "f
   phrase blast)]]
 
 inputGlassPropsTable :: LabelledContent
-inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $ 
-  Table
-  [at_start symbol_, at_start description, S "Units"]
-  (mkTable
-  [ch,
-   at_start, U.toSentence] $ sortBySymbol requiredInputs)
-  (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
+inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
   where
     requiredInputs :: [QuantityDict]
     requiredInputs = (map qw [plateLen, plateWidth, charWeight])

@@ -57,8 +57,9 @@ nfReqIntroS = reqIntroStart +:+. nfrReqIntroBody
 fReqIntro :: Contents
 fReqIntro = mkParagraph fReqIntroS
 
---Builds input properties table for input properties functional requirement
-mkInputPropsTable :: [QuantityDict] -> ConceptInstance -> LabelledContent
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
+                          [i] -> r -> LabelledContent
 mkInputPropsTable reqInputs req = llcc (makeTabRef "InputPropsReqInputs") $ 
   Table [at_start symbol_, at_start description, at_start' unit_]
   (mkTable [ch, at_start, toSentence] $ sortBySymbol reqInputs)

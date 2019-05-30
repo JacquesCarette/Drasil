@@ -4,6 +4,7 @@ module Drasil.SSP.Requirements (funcReqs, nonFuncReqs,
 import Language.Drasil
 import Utils.Drasil
 
+import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
@@ -16,7 +17,6 @@ import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
   foldlList, foldlSent, foldlSP)
-import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
@@ -94,7 +94,7 @@ writeToFile = cic "writeToFile" ( foldlSent [
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputDatTb $ dqdWr coords : map dqdWr inputs
+inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs) readAndStore
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]

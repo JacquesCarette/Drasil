@@ -4,6 +4,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) wher
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
 import Database.Drasil
+import Utils.Drasil
 
 import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P
@@ -11,8 +12,6 @@ import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb)
-
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList)
 
 import Data.List (intersperse)
 import Data.Maybe (fromMaybe)

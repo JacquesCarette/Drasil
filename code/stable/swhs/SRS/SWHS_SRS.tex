@@ -1066,7 +1066,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
+\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:InputPropsReqInputs]{Table:InputPropsReqInputs}, which define the tank parameters, material properties and initial conditions.
 \item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(π \left(\frac{D}{2}\right)^{2} L-{V_{P}}\right) {ρ_{W}}$, ${m_{P}}={V_{P}} {ρ_{P}}$, and \hyperref[assumpVCN]{A: Volume-Coil-Negligible}, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
 \item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}), and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
@@ -1078,55 +1078,57 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \end{itemize}
-\begin{longtabu}{l l X[l]}
+\begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Unit & Description
+Symbol & Description & Units
 \\
 \midrule
 \endhead
-$L$ & m & length of tank
+${A_{C}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
-$D$ & m & diameter of tank
+${A_{P}}$ & Phase change material surface area & $\text{m}^{2}$
 \\
-${V_{P}}$ & $\text{m}^{3}$ & volume of PCM
+${A_{tol}}$ & Absolute tolerance & --
 \\
-${A_{P}}$ & $\text{m}^{2}$ & phase change material surface area
+${C_{tol}}$ & Relative tolerance for conservation of energy & --
 \\
-${ρ_{P}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of PCM
+${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{T_{melt}}^{P}}$ & ${}^{\circ}$C & melting point temperature for PCM
+${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{C_{P}}^{S}}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & specific heat capacity of PCM as a solid
+${{C_{P}}^{S}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{C_{P}}^{L}}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & specific heat capacity of PCM as a liquid
+$D$ & Diameter of tank & m
 \\
-${H_{f}}$ & $\frac{\text{J}}{\text{kg}}$ & specific latent heat of fusion
+${h_{C}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${A_{C}}$ & $\text{m}^{2}$ & heating coil surface area
+${H_{f}}$ & Specific latent heat of fusion & $\frac{\text{J}}{\text{kg}}$
 \\
-${T_{C}}$ & ${}^{\circ}$C & temperature of the heating coil
+${h_{P}}$ & Convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${ρ_{W}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of water
+$L$ & Length of tank & m
 \\
-${C_{W}}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & specific heat capacity of water
+${R_{tol}}$ & Relative tolerance & --
 \\
-${h_{C}}$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & convective heat transfer coefficient between coil and water
+${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${h_{P}}$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & convective heat transfer coefficient between PCM and water
+${t_{final}}$ & Final time & s
 \\
-${T_{init}}$ & ${}^{\circ}$C & initial temperature
+${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
-${t_{final}}$ & s & final time
+${t_{step}}$ & Time step for simulation & s
 \\
-${A_{tol}}$ & -- & absolute tolerance
+${{T_{melt}}^{P}}$ & Melting point temperature for PCM & ${}^{\circ}$C
 \\
-${R_{tol}}$ & -- & relative tolerance
+${V_{P}}$ & Volume of PCM & $\text{m}^{3}$
 \\
-${C_{tol}}$ & -- & relative tolerance for conservation of energy
+${ρ_{P}}$ & Density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
-\caption{Input Variable Requirements}
-\label{Table:Input-Variable-Requirements}
+\caption{Required Inputs following \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}}
+\label{Table:InputPropsReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -1166,7 +1168,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \endhead
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:InputPropsReqInputs]{Table:InputPropsReqInputs} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank} &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

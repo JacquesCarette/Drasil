@@ -1,4 +1,4 @@
-module Drasil.Projectile.GenDefs (accelGravityY, genDefns) where
+module Drasil.Projectile.GenDefs (genDefns) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil

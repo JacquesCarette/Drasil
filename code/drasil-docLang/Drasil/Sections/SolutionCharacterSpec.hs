@@ -24,9 +24,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures (foldlSP, foldlSent, foldlList, 
-  SepType(Comma), FoldType(List))
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 import Data.List (find)
@@ -372,7 +369,7 @@ problemDescriptionSent progName start end = foldlSP [start, short progName,
 --------------------------
 
 termDefinitionIntro :: [Sentence] -> Contents
-termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) EmptyS
+termDefinitionIntro end = mkParagraph $ foldlSent_
   [S "This subsection provides a list of terms",
   S "that are used in the subsequent", plural Doc.section_, S "and their",
   S "meaning, with the", phrase Doc.purpose, S "of reducing ambiguity",
@@ -384,7 +381,7 @@ termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) EmptyS
 --------------------
 
 goalStatementIntro :: [Sentence] -> Contents
-goalStatementIntro inputs = mkParagraph $ foldl (+:+) EmptyS [S "Given", 
+goalStatementIntro inputs = mkParagraph $ foldlSent_ [S "Given", 
   inputToSystem inputs, plural Doc.goalStmt +: S "are"]
   where inputToSystem [] = S "the inputs" `sC` S "the" --FIXME add ref input variables if none are given?
         inputToSystem listInputs = foldlList Comma List listInputs `sC` S "the"

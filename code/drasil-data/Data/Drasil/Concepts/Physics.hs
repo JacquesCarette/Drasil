@@ -5,7 +5,7 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, weight, fbd, angular, linear, tension, compression, stress
   , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
-  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
+  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -23,7 +23,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, coll
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, cohesion, isotropy, kEnergy]
+  joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity]
 
 
 physicCon' :: [CI]
@@ -35,9 +35,7 @@ rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
-
-  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity :: ConceptChunk
 
 twoD, threeD :: CI
 
@@ -160,6 +158,9 @@ cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
+
+chgInVelocity = dccWDS "velocity" (cn "velocity") (S "Change in" +:+ phrase velocity +:+ S "of a"
+   +:+ S "body.")
 
 twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
 

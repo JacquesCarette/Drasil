@@ -9,7 +9,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, angularDisplacement, angularVelocity, displacement, distance, 
   force, gravitationalAccel, gravitationalConst, impulseS, impulseV, 
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
-  restitutionCoef, time, torque, velocity, kEnergy)
+  restitutionCoef, time, torque, velocity, kEnergy, chgInVelocity)
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
@@ -48,7 +48,7 @@ inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation,
   QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy] ++ [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
-  QP.angularVelocity]
+  QP.angularVelocity, QP.chgInVelocity]
 
 
 unitalChunks :: [UnitalChunk]
@@ -66,7 +66,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 -----------------------
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
-forceParam, massParam, momtParam, contParam :: String -> String -> UnitalChunk
+forceParam, massParam, momtParam, contParam:: String -> String -> UnitalChunk
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
@@ -90,12 +90,15 @@ contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
 
-perpParam, rigidParam, velParam, 
-  angParam :: String -> Symbol -> UnitalChunk
+perpParam, rigidParam, velParam, velBodyParam, angParam :: String -> Symbol -> UnitalChunk
 
 velParam n w = ucs'
- (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
+ (dccWDS ("velocity" ++ n) ( compoundPhrase' (QP.velocity ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+
+velBodyParam n w = ucs'
+ (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
+  (cn $ "of the  " ++ n ++ "body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
 angParam n w = ucs'
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
@@ -250,6 +253,8 @@ contDispB  = contParam  "B" "B"
 contDispK  = contParam  "k" "k"
 massA      = rigidParam "A" cA
 massB      = rigidParam "B" cB
+velo_1     = velBodyParam "first" (Atomic "1")
+velo_2     = velBodyParam "second" (Atomic "2")
 
 --------------------------
 -- CHUNKS WITHOUT UNITS --

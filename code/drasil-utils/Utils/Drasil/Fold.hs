@@ -68,11 +68,10 @@ data FoldType = List   | Options
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
-    numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  wt len = map (wrap wt . S . show) [1..len]
-    numList Upper wt len = map (\x -> wrap wt $ S [x]) (take len ['A'..'Z'])
-    numList Lower wt len = map (\x -> wrap wt $ S [x]) (take len ['a'..'z'])
-    wrap :: WrapType -> Sentence -> Sentence
+    numList enum wt len = map (\x -> wrap wt $ S x) (take len (chList enum))
+    chList Numb  = map show ([1..] :: [Integer])
+    chList Upper = map show ['A'..'Z']
+    chList Lower = map show ['a'..'z']
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 

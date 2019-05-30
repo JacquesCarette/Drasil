@@ -60,7 +60,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP]
+  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -255,6 +255,8 @@ massA      = rigidParam "A" cA
 massB      = rigidParam "B" cB
 velo_1     = velBodyParam "first" (Atomic "1")
 velo_2     = velBodyParam "second" (Atomic "2")
+time_1     = timeParam "1" "first"
+time_2     = timeParam "2" "second"
 
 --------------------------
 -- CHUNKS WITHOUT UNITS --

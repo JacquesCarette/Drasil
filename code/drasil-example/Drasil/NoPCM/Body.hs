@@ -71,7 +71,7 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
-import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
+import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
@@ -404,7 +404,7 @@ theoreticalModels :: [TheoryModel]
 theoreticalModels = [consThermE, sensHtE]
 
 sensHtE :: TheoryModel
-sensHtE = sensHtE_template Liquid sensHtEdesc
+sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",

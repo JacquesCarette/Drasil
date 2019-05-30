@@ -1,4 +1,4 @@
-module Drasil.SWHS.TMods (tMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
+module Drasil.SWHS.TMods (tMods, consThermE, sensHtE, sensHtETemplate, latentHtE, PhaseChange(Liquid)) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -71,13 +71,13 @@ consThermEdesc = foldlSent [
 -------------------------
 
 sensHtE :: TheoryModel
-sensHtE = sensHtE_template AllPhases sensHtEdesc
+sensHtE = sensHtETemplate AllPhases sensHtEdesc
 
 data PhaseChange = AllPhases
                  | Liquid
 
-sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
-sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
+sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
+sensHtETemplate pc desc = tm (sensHtE_rc pc eqn desc)
   [qw sensHeat, qw htCap_S, qw mass, 
     qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where

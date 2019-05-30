@@ -1,9 +1,9 @@
 {-# Language TypeFamilies #-}
 module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
-  foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
-  mkEnumAbbrevList, mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT,
-  typUncr, unwrap, weave, zipFTable', zipSentList) where
+  fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
+  mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT, typUncr, unwrap, weave,
+  zipFTable', zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil

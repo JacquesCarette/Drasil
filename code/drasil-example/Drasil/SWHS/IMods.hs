@@ -375,12 +375,12 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = im heatEInWtr_rc [qw tempInit, qw w_mass, qw htCap_W, qw w_mass] 
+heatEInWtr = im heatEInWtrRC [qw tempInit, qw w_mass, qw htCap_W, qw w_mass] 
   [] (qw w_E) [0 $< sy time $< sy time_final] [makeCite koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
-heatEInWtr_rc :: RelationConcept
-heatEInWtr_rc = makeRC "heatEInWtr_rc" (nounPhraseSP "Heat energy in the water")
+heatEInWtrRC :: RelationConcept
+heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel -- heatEInWtrL
 
 htWtr_Rel :: Relation

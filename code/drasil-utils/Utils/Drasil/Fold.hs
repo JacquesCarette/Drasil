@@ -6,9 +6,6 @@ module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..),
 import Language.Drasil
 import Utils.Drasil.Sentence (sAnd, sOr)
 
-import Data.List (intersperse)
-import Data.Monoid (mconcat)
-
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
@@ -41,7 +38,7 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 
 -- | foldlSent but does not end with period
 foldlSent_ :: [Sentence] -> Sentence
-foldlSent_ = foldle (+:+) (+:+) EmptyS
+foldlSent_ = foldl (+:+) EmptyS
 
 -- | foldlSent but ends with colon
 foldlSentCol :: [Sentence] -> Sentence
@@ -58,13 +55,14 @@ foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = mkParagraph . foldlSentCol
 
 -- | creates a list of elements separated by commas, including the last element
-foldlsC :: [Sentence] -> Sentence
-foldlsC = mconcat . intersperse (S ", ")
+foldlsC :: [Sentence] -> Sentence 
+foldlsC [] = EmptyS
+foldlsC xs = foldl1 sC xs
 
-data EnumType = Numb | Upper | Lower
+data EnumType = Numb   | Upper   | Lower
 data WrapType = Parens | Period
-data SepType  = Comma | SemiCol
-data FoldType = List | Options
+data SepType  = Comma  | SemiCol
+data FoldType = List   | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence

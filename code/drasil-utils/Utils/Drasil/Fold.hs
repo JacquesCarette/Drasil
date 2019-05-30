@@ -80,13 +80,15 @@ foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length 
 
 -- | creates a list of elements separated by a "separator", ending with "and" or "or"
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-foldlList _ _       []     = EmptyS
-foldlList _ List    [a, b] = a `sAnd` b
-foldlList _ Options [a, b] = a `sOr` b
-foldlList s List    lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
-foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
+foldlList _ _ []     = EmptyS
+foldlList _ f [a, b] = end f a b
+foldlList s f lst    = foldle1 (sep s) (\a b -> end f ((sep s) a EmptyS) b) lst
 
---Helper function to foldlList - not exported
-getSep :: SepType -> (Sentence -> Sentence -> Sentence)
-getSep Comma   = sC
-getSep SemiCol = (\a b -> a :+: S ";" +:+ b)
+--Helper functions to foldlList - not exported
+end :: FoldType -> (Sentence -> Sentence -> Sentence)
+end List    = sAnd
+end Options = sOr
+
+sep :: SepType -> (Sentence -> Sentence -> Sentence)
+sep Comma   = sC
+sep SemiCol = (\a b -> a :+: S ";" +:+ b)

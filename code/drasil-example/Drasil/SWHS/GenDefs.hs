@@ -1,5 +1,5 @@
 module Drasil.SWHS.GenDefs (genDefs, nwtnCooling, rocTempSimp,
-  rocTempSimpDeriv, nwtnCoolingDesc, rocTempSimpRC, rocTempSimp_desc) where
+  rocTempSimpDeriv, nwtnCoolingDesc, rocTempSimpRC, rocTempSimpDesc) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -46,7 +46,7 @@ nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation)
   [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCoolingDesc]
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv
-                 "rocTempSimp" [rocTempSimp_desc]
+                 "rocTempSimp" [rocTempSimpDesc]
 
 --
 
@@ -76,15 +76,15 @@ nwtnCoolingDesc = foldlSent [at_start lawConvCooling +:+.
 --
 rocTempSimpRC :: RelationConcept
 rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimpRel -- rocTempSimpL
+  "of change of temperature") rocTempSimpDesc rocTempSimpRel -- rocTempSimpL
 
 rocTempSimpRel :: Relation
 rocTempSimpRel = (sy QPP.mass) * (sy QT.heatCapSpec) *
   deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
   sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 
-rocTempSimp_desc :: Sentence
-rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
+rocTempSimpDesc :: Sentence
+rocTempSimpDesc = foldlSent [S "The basic", phrase equation,
   S "governing the", phrase rOfChng, S "of", phrase temp `sC`
   S "for a given", phrase QPP.vol, ch QPP.vol `sC` S "with" +:+.
   phrase QP.time, ch QPP.mass `isThe` phrase QPP.mass +:+.

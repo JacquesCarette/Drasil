@@ -19,7 +19,7 @@ import Data.Drasil.Utils (weave)
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)
 import Drasil.SWHS.Concepts (gaussDiv)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimp_desc)
+import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimpDesc)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
@@ -29,7 +29,7 @@ genDefs = [nwtnCooling, rocTempSimp]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv 
-  "rocTempSimp" [rocTempSimp_desc]
+  "rocTempSimp" [rocTempSimpDesc]
 
 rocTempSimpDeriv :: Derivation
 rocTempSimpDeriv =

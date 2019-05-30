@@ -24,7 +24,7 @@ import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
-  htCap_L, vol_ht_gen, thFluxVect)
+  htCapL, vol_ht_gen, thFluxVect)
 
 tMods :: [TheoryModel]
 tMods = [consThermE, sensHtE, latentHtE]
@@ -79,7 +79,7 @@ data PhaseChange = AllPhases
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 sensHtETemplate pc desc = tm (sensHtERC pc eqn desc)
   [qw sensHeat, qw htCap_S, qw mass, 
-    qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
+    qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
@@ -102,7 +102,7 @@ sensHtEEqn pChange = (sy sensHeat) $= case pChange of
       (sy boilPt))), ((sy htCap_V) * (sy mass) *
       (sy deltaT), ((sy boilPt) $< (sy temp)))]
   where
-    liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
+    liquidFormula = (sy htCapL) * (sy mass) * (sy deltaT)
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -112,8 +112,8 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   ch sensHeat `isThe` S "change in",
   phrase sensHeat, phrase energy +:+. sParen (Sy (usymb joule)),
-  ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
-  phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
+  ch htCap_S `sC` ch htCapL `sC` ch htCap_V, S "are the",
+  phrase htCap_S `sC` phrase htCapL `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heatCapSpec)),
   ch mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
   ch temp `isThe` phrase temp,

@@ -83,7 +83,6 @@ executable nopcm
     , Drasil.NoPCM.Goals
     , Drasil.NoPCM.Requirements
     , Drasil.SWHS.Assumptions
-    , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
@@ -131,7 +130,6 @@ executable swhs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Goals
     , Drasil.SWHS.IMods
-    , Drasil.SWHS.Labels
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
@@ -171,7 +169,6 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
-    , Drasil.SSP.Labels
     , Drasil.SSP.References
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods

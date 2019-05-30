@@ -66,7 +66,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhsPCM, phaseChangeMaterial, tank_pcm, con)
+  coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
@@ -168,7 +168,7 @@ mkSRS = [RefSec $ RefProg intro [
     progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
     progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
+     IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
      IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])

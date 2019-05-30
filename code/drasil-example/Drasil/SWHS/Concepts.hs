@@ -12,7 +12,7 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
-  tank_pcm, transient, water, sWHT, tankParam]
+  tankPCM, transient, water, sWHT, tankParam]
 
 ---Acronyms---
 acronyms :: [CI]
@@ -42,7 +42,7 @@ full    = nc "full" (progName `with` phsChgMtrl)
 
 charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
-  tank_pcm, transient, water, sWHT, tankParam :: ConceptChunk
+  tankPCM, transient, water, sWHT, tankParam :: ConceptChunk
 
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
 
@@ -75,7 +75,7 @@ tank = dcc "tank" (cn' "tank") "Enclosure containing some kind of substance"
 sWHT = dcc "sWHT" (cn' "solar water heating tank") "Solar water heating tank"
 water = dcc "water" (cn' "water") "The liquid with which the tank is filled"
 
-tank_pcm = dcc "tank_pcm" (nounPhrase''
+tankPCM = dcc "tankPCM" (nounPhrase''
   (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
   (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)

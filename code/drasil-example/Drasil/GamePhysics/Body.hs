@@ -113,7 +113,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     ],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
-    ExistingSolnSec $ ExistSolnVerb offShelfSols,
+    ExistingSolnSec $ ExistSolnProg offShelfSols,
     TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
       traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
       (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
@@ -396,10 +396,10 @@ problemDescriptionIntroParam lib app = foldlSent
   (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  sParen (makeRef2S offShelfSols), S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
-  S "development will be more accessible to the masses" `sAnd` S "higher quality",
-  (plural product_), S "will be produced"]
+  sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])),
+  S "By creating a simple, lightweight, fast and portable", (getAcc twoD), (phrase CP.rigidBody),
+  (phrase lib) `sC` (phrase app), S "development will be more accessible to the masses" `sAnd`
+  S "higher quality", (plural product_), S "will be produced"]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -565,12 +565,16 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
 -----------------------------------------
 
-offShelfSols :: Section
+offShelfSols :: [Contents]
+offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
+                offShelfSolsMid,   offShelfSols3DList]
+
 offShelfSolsIntro, offShelfSols2DList, 
   offShelfSolsMid, offShelfSols3DList :: Contents
 
+{-offShelfSols :: Section
 offShelfSols = SRS.offShelfSol [offShelfSolsIntro, 
-  offShelfSols2DList, offShelfSolsMid, offShelfSols3DList] []
+  offShelfSols2DList, offShelfSolsMid, offShelfSols3DList] []-}
 
 offShelfSolsIntro = offShelfSolsIntroParam problemDescriptionSection physLib
 

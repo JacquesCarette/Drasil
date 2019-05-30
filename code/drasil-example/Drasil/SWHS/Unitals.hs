@@ -36,7 +36,7 @@ units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
-  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
@@ -46,7 +46,7 @@ unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
@@ -54,7 +54,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
@@ -119,7 +119,7 @@ thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "Vector denoting the direction of thermal flux through a surface"
   (vec lQ) UT.thermalFlux
 
-ht_flux_C = uc' "ht_flux_C"
+htFluxC = uc' "htFluxC"
   (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
   (sub (eqSymb htFlux) cC) UT.thermalFlux

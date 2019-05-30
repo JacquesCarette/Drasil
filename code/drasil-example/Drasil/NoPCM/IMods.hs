@@ -21,7 +21,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, wMass, htCap_W, coil_HTC, 
-  coil_SA, tempInit, time_final, w_vol, ht_flux_C, volHtGen)
+  coil_SA, tempInit, time_final, w_vol, htFluxC, volHtGen)
 import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.GenDefs (rocTempSimp)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
@@ -75,7 +75,7 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass wMass heatCapSpec
-    htCap_W heatTrans ht_flux_C coil_SA tank assumpCTNTD assumpNIHGBW volHtGen,
+    htCap_W heatTrans htFluxC coil_SA tank assumpCTNTD assumpNIHGBW volHtGen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]
@@ -117,7 +117,7 @@ eq2 = [ch tau_W, S "=", ch wMass, ch htCap_W, S "/", ch coil_HTC, ch coil_SA]
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
 eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy ht_flux_C) * (sy coil_SA)
+  (sy htFluxC) * (sy coil_SA)
 
 eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
   (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))

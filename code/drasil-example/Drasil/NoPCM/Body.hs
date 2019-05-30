@@ -74,7 +74,7 @@ import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
-  coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCapL, 
+  coil_SA_max, deltaT, diam, eta, htFluxC, ht_flux_in, ht_flux_out, htCapL, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, volHtGen, w_density, 
@@ -119,7 +119,7 @@ units :: [UnitaryConceptDict]
 units = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, ht_flux_in, ht_flux_out, volHtGen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
-  deltaT, temp_env, thFluxVect, time, ht_flux_C,
+  deltaT, temp_env, thFluxVect, time, htFluxC,
   vol, wMass, w_vol, tau_W, QT.sensHeat]
 
 constraints :: [UncertQ]
@@ -378,12 +378,12 @@ physSystDescription = physSystDesc (getAcc progName) figTank
 
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase htFlux +:+
-  S "from" +:+ phrase coil `sOf` ch ht_flux_C)
+  S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
-  [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
+  [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
 

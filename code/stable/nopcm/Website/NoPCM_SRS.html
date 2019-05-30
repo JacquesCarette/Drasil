@@ -567,17 +567,17 @@ Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water h
 </p>
 <p>
 <div id="assumpLCCCW">
-Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
 <div id="assumpTHCCoT">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
 <div id="assumpTHCCoL">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
@@ -925,7 +925,7 @@ Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:ht.flux.C">
+<div id="DD:htFluxC">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -1121,7 +1121,7 @@ To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy bala
                                             </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
 </div>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> , this can be written as:
+Using <a href=#DD:htFluxC>DD: htFluxC</a> , this can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1589,7 +1589,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
-<th><a href=#DD:ht.flux.C>DD: ht_flux_C</a></th>
+<th><a href=#DD:htFluxC>DD: htFluxC</a></th>
 <th><a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a></th>
 <th><a href=#likeChgTLH>LC: Tank-Lose-Heat</a></th>
 <th><a href=#TM:consThermE>TM: consThermE</a></th>
@@ -2051,7 +2051,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 </tr>
 <tr>
-<td><a href=#DD:ht.flux.C>DD: ht_flux_C</a></td>
+<td><a href=#DD:htFluxC>DD: htFluxC</a></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2151,7 +2151,7 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 <th>T2 (<a href=#TM:sensHtE>TM: sensHtE</a>)</th>
 <th>GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)</th>
 <th>GD2 (<a href=#GD:rocTempSimp>GD: rocTempSimp</a>)</th>
-<th>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</th>
+<th>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</th>
 <th>IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</th>
 <th>IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</th>
 </tr>
@@ -2196,7 +2196,7 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 <td></td>
 </tr>
 <tr>
-<td>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</td>
+<td>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -2462,7 +2462,7 @@ A12 (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</td>
+<td>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</td>
 <td></td>
 <td></td>
 <td></td>

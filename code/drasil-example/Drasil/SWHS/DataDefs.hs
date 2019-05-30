@@ -9,7 +9,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcmMass,
-  temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C, htCap_S_P,
+  temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, htFluxC, htCap_S_P,
   htCap_L_P, pcm_HTC, pcm_SA, tau_S_P, tau_L_P)
 
 import Data.Drasil.Quantities.Physics (time)
@@ -32,13 +32,13 @@ dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
 --    I think this will need an overhaul after we fix Data Definitions.
 
 dd1HtFluxCQD :: QDefinition
-dd1HtFluxCQD = mkQuantDef ht_flux_C htFluxCEqn
+dd1HtFluxCQD = mkQuantDef htFluxC htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "ht_flux_C"
+dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
   [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT, makeRef2S assumpTHCCoL]
 
 --Can't include info in description beyond definition of variables?

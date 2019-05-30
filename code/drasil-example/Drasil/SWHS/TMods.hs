@@ -33,13 +33,13 @@ tMods = [consThermE, sensHtE, latentHtE]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm consThermE_rc
+consThermE = tm consThermERC
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
 
-consThermE_rc :: RelationConcept
-consThermE_rc = makeRC "consThermE_rc"
+consThermERC :: RelationConcept
+consThermERC = makeRC "consThermERC"
   (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
 
 consThermERel :: Relation

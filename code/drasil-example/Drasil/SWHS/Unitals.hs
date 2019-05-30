@@ -36,7 +36,7 @@ units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
-  thFluxVect, htFluxC, htFluxIn, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
@@ -46,7 +46,7 @@ unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, htFluxC, htFluxIn, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
@@ -54,7 +54,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, htFluxC, htFluxIn, ht_flux_out, ht_flux_P, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
@@ -128,7 +128,7 @@ htFluxIn = uc' "htFluxIn" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
   (sub (eqSymb htFlux) (Atomic "in")) UT.thermalFlux
 
-ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
+htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
   (sub (eqSymb htFlux) (Atomic "out")) UT.thermalFlux
 

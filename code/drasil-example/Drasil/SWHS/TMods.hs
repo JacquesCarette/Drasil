@@ -23,7 +23,7 @@ import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
+import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCapS,
   htCapL, vol_ht_gen, thFluxVect)
 
 tMods :: [TheoryModel]
@@ -78,7 +78,7 @@ data PhaseChange = AllPhases
 
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 sensHtETemplate pc desc = tm (sensHtERC pc eqn desc)
-  [qw sensHeat, qw htCap_S, qw mass, 
+  [qw sensHeat, qw htCapS, qw mass, 
     qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
@@ -97,7 +97,7 @@ sensHtESrc = makeURI "sensHtESrc"
 sensHtEEqn :: PhaseChange -> Relation
 sensHtEEqn pChange = (sy sensHeat) $= case pChange of
   Liquid -> liquidFormula
-  AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
+  AllPhases -> case_ [((sy htCapS) * (sy mass) * (sy deltaT),
       ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<
       (sy boilPt))), ((sy htCap_V) * (sy mass) *
       (sy deltaT), ((sy boilPt) $< (sy temp)))]
@@ -112,8 +112,8 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   ch sensHeat `isThe` S "change in",
   phrase sensHeat, phrase energy +:+. sParen (Sy (usymb joule)),
-  ch htCap_S `sC` ch htCapL `sC` ch htCap_V, S "are the",
-  phrase htCap_S `sC` phrase htCapL `sC` S "and", phrase htCap_V `sC`
+  ch htCapS `sC` ch htCapL `sC` ch htCap_V, S "are the",
+  phrase htCapS `sC` phrase htCapL `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heatCapSpec)),
   ch mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
   ch temp `isThe` phrase temp,

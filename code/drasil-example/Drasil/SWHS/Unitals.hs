@@ -34,7 +34,7 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 
 units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
-  htCap_S, htCap_V, sensHeat, pcm_initMltE,
+  htCapS, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
@@ -43,7 +43,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 unitalChuncks :: [UnitalChunk]
-unitalChuncks = [inSA, outSA, htCapL, htCap_S, htCap_V,
+unitalChuncks = [inSA, outSA, htCapL, htCapS, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -51,7 +51,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCap_S, htCap_V,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
-inSA, outSA, htCapL, htCap_S, htCap_V,
+inSA, outSA, htCapL, htCapS, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -80,7 +80,7 @@ htCapL = uc' "htCapL" (nounPhraseSP "specific heat capacity of a liquid")
   "unit mass of a given liquid by a given amount")
   (sup (eqSymb heatCapSpec) cL) UT.heatCapSpec
 
-htCap_S = uc' "htCap_S"
+htCapS = uc' "htCapS"
   (nounPhraseSP "specific heat capacity of a solid")
   ("The amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")

@@ -68,7 +68,7 @@ data FoldType = List   | Options
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
   where
-    numList enum wt len = map (\x -> wrap wt $ S x) (take len (chList enum))
+    numList enum wt len = map (wrap wt . S) (take len (chList enum))
     chList Numb  = map show ([1..] :: [Integer])
     chList Upper = map show ['A'..'Z']
     chList Lower = map show ['a'..'z']
@@ -79,7 +79,7 @@ foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length 
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 foldlList _ _ []     = EmptyS
 foldlList _ f [a, b] = end f a b
-foldlList s f lst    = foldle1 (sep s) (\a b -> end f ((sep s) a EmptyS) b) lst
+foldlList s f lst    = foldle1 (sep s) (\a b -> end f (sep s a EmptyS) b) lst
 
 --Helper functions to foldlList - not exported
 end :: FoldType -> (Sentence -> Sentence -> Sentence)
@@ -88,4 +88,4 @@ end Options = sOr
 
 sep :: SepType -> (Sentence -> Sentence -> Sentence)
 sep Comma   = sC
-sep SemiCol = (\a b -> a :+: S ";" +:+ b)
+sep SemiCol = \a b -> a :+: S ";" +:+ b

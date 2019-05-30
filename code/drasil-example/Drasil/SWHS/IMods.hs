@@ -209,10 +209,10 @@ eBalanceOnPCM = im eBalanceOnPCMRC [qw temp_melt_P, qw time_final, qw tempInit, 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
   "Energy Balance on PCM to find temperature of PCM")
-  balPCMDesc balPCM_Rel -- eBalanceOnPCML
+  balPCMDesc balPCMRel -- eBalanceOnPCML
 
-balPCM_Rel :: Relation
-balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
+balPCMRel :: Relation
+balPCMRel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
 

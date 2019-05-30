@@ -78,7 +78,7 @@ import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDer
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
-  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
+  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, inSA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
@@ -431,7 +431,7 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_5,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,
-  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heatCapSpec
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out inSA out_SA density heatCapSpec
     temp vol assumption assump3 assump4 assump5 assump6,
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
@@ -1022,7 +1022,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
 genDefDeriv7 = eqUnR'
-  ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  ((sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
@@ -1032,7 +1032,7 @@ genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
 
 genDefDeriv11 = eqUnR'
   ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?

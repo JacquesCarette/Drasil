@@ -21,7 +21,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT)
 import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimpDesc)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
+import Drasil.SWHS.Unitals (inSA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
 
 genDefs :: [GenDefn]
@@ -42,7 +42,7 @@ rocTempSimpDerivSent = map foldlSentCol [
   genDefDesc1 consThermE vol,
   genDefDesc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
-  genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
+  genDefDesc4 ht_flux_in ht_flux_out inSA out_SA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],
   genDefDesc5 density mass vol]
 
@@ -88,16 +88,16 @@ genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVec
   (int_all (eqSymb vol)
   ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+genDefEq3 = (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 genDefEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  time $= (sy ht_flux_in) * (sy inSA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 rocTempSimpDerivEqns :: [Expr]

@@ -75,7 +75,7 @@ import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
+  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
   w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
@@ -116,7 +116,7 @@ symbolsAll = map qw symbols ++ (map qw specParamValList) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
 units :: [UnitaryConceptDict]
-units = map ucw [density, tau, in_SA, out_SA,
+units = map ucw [density, tau, inSA, out_SA,
   htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,

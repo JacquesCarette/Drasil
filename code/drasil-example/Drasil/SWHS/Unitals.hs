@@ -33,7 +33,7 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 -- Symbols with Units --
 
 units :: [UnitaryConceptDict]
-units = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
+units = map ucw [inSA, out_SA, heatCapSpec, htCap_L,
   htCap_S, htCap_V, sensHeat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -43,7 +43,7 @@ units = map ucw [in_SA, out_SA, heatCapSpec, htCap_L,
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 unitalChuncks :: [UnitalChunk]
-unitalChuncks = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+unitalChuncks = [inSA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -51,7 +51,7 @@ unitalChuncks = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
-in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+inSA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
@@ -65,7 +65,7 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
 
 --symbol names can't begin with a capital
 
-in_SA = uc' "in_SA" (nounPhraseSP
+inSA = uc' "inSA" (nounPhraseSP
   "surface area over which heat is transferred in")
   "Surface area over which thermal energy is transferred into an object"
   (sub cA (Atomic "in")) m_2

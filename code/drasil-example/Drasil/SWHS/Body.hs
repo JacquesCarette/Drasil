@@ -81,7 +81,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, inSA, outSA, pcm_E,
   pcm_HTC, pcm_SA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
-  temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
+  temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
 
@@ -1089,7 +1089,7 @@ iMod1Sent5 = [S "Which simplifies to"]
 
 iMod1Sent6 :: [Sentence]
 iMod1Sent6 = [S "Setting",
-  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)) `sAnd`
+  (E $ sy tau_W $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coil_SA)) `sAnd`
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)) `sC`
   titleize equation, S "(5) can be written as"]
 
@@ -1100,28 +1100,28 @@ iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC`
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
 
-iMod1Eqn1 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iMod1Eqn1 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
 
-iMod1Eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iMod1Eqn2 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
-  (sy temp_W)) - ((sy pcmMass) * (sy pcm_SA)) / ((sy w_mass) *
+  (sy coil_SA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W)) - ((sy pcmMass) * (sy pcm_SA)) / ((sy wMass) *
   (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (sy coil_SA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
   (((sy coil_HTC) * (sy coil_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
-  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy wMass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (sy coil_SA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
   (((sy pcm_HTC) * (sy pcm_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
-  (((sy coil_HTC) * (sy coil_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  (((sy coil_HTC) * (sy coil_SA)) / ((sy wMass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn6 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *

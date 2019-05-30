@@ -35,7 +35,7 @@ symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
 units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
-  volHtGen, htTransCoeff, pcmMass, w_mass, htFlux, latentHeat,
+  volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
@@ -45,7 +45,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
-  pcmMass, w_mass,
+  pcmMass, wMass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
@@ -53,7 +53,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
 
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
-  pcmMass, w_mass,
+  pcmMass, wMass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
@@ -112,7 +112,7 @@ pcmMass = uc' "pcmMass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
   (sub (eqSymb mass) cP) kilogram
 
-w_mass = uc' "w_mass" (nounPhraseSP "mass of water")
+wMass = uc' "wMass" (nounPhraseSP "mass of water")
   "The quantity of matter within the water" (sub (eqSymb mass) cW) kilogram
 
 thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")

@@ -76,10 +76,10 @@ nwtnCoolingDesc = foldlSent [at_start lawConvCooling +:+.
 --
 rocTempSimpRC :: RelationConcept
 rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
+  "of change of temperature") rocTempSimp_desc rocTempSimpRel -- rocTempSimpL
 
-rocTempSimp_rel :: Relation
-rocTempSimp_rel = (sy QPP.mass) * (sy QT.heatCapSpec) *
+rocTempSimpRel :: Relation
+rocTempSimpRel = (sy QPP.mass) * (sy QT.heatCapSpec) *
   deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
   sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 

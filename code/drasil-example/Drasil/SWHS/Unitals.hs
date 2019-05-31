@@ -230,11 +230,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
 inputs :: [UncertQ]
-inputs = [tankLength, diam, pcmVol, pcmSA, pcm_density,
+inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
-tankLength, diam, pcmVol, pcmSA, pcm_density, temp_melt_P,
+tankLength, diam, pcmVol, pcmSA, pcmDensity, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
@@ -276,10 +276,10 @@ pcmSA = uqc "pcmSA"
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5
-pcm_density = uqc "pcm_density" (nounPhraseSP "density of PCM")
+pcmDensity = uqc "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (eqSymb density) cP) densityU Rational
-  [ physc $ Bounded (Exc, sy pcm_density_min) (Exc, sy pcm_density_max)] (dbl 1007) defaultUncrt
+  [ physc $ Bounded (Exc, sy pcmDensity_min) (Exc, sy pcmDensity_max)] (dbl 1007) defaultUncrt
 
 -- Constraint 6
 temp_melt_P = uqc "temp_melt_P"
@@ -448,13 +448,13 @@ cons_tol = uvc "cons_tol"
 
 specParamValList :: [QDefinition]
 specParamValList = [tank_length_min, tank_length_max,
-  pcm_density_min, pcm_density_max, w_density_min, w_density_max,
+  pcmDensity_min, pcmDensity_max, w_density_min, w_density_max,
   htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux]
 
-tank_length_min, tank_length_max, pcm_density_min, 
-  pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
+tank_length_min, tank_length_max, pcmDensity_min, 
+  pcmDensity_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
   pcm_HTC_max, time_final_max, frac_min_aux :: QDefinition
@@ -473,13 +473,13 @@ tank_length_max = mkQuantDef (unitary "tank_length_max"
 frac_min_aux    = mkQuantDef fracMin $ dbl 1.0e-6
 
 -- Used in Constraint 5
-pcm_density_min = mkQuantDef (unitary "pcm_density_min"
+pcmDensity_min = mkQuantDef (unitary "pcmDensity_min"
   (nounPhraseSP "minimum density of PCM")
-  (sup (eqSymb pcm_density) (Atomic "min")) densityU Rational) 500
+  (sup (eqSymb pcmDensity) (Atomic "min")) densityU Rational) 500
 
-pcm_density_max = mkQuantDef (unitary "pcm_density_max"
+pcmDensity_max = mkQuantDef (unitary "pcmDensity_max"
   (nounPhraseSP "maximum density of PCM")
-  (sup (eqSymb pcm_density) (Atomic "max")) densityU Rational) 20000
+  (sup (eqSymb pcmDensity) (Atomic "max")) densityU Rational) 20000
 
 -- Used in Constraint 7
 htCap_S_P_min = mkQuantDef (unitary "htCap_S_P_min"

@@ -29,7 +29,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
-  htCap_W, htFusion, pcm_E, pcm_HTC, pcmSA, pcm_density, pcmMass, pcmVol,
+  htCap_W, htFusion, pcm_E, pcm_HTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
   w_density, wMass, wVol)
@@ -43,7 +43,7 @@ dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcm_density,
+inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
@@ -97,7 +97,7 @@ inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy w_density) $=
   ((sy tankVol) - (sy pcmVol)) * (sy w_density) $=
   ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) - (sy pcmVol)) * (sy w_density) -- FIXME: Ref Hack
 
-findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcm_density) -- FIXME: Ref Hack
+findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcmDensity) -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

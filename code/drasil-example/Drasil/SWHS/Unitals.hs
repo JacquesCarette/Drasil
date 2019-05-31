@@ -279,7 +279,7 @@ pcmSA = uqc "pcmSA"
 pcmDensity = uqc "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (eqSymb density) cP) densityU Rational
-  [ physc $ Bounded (Exc, sy pcmDensity_min) (Exc, sy pcmDensity_max)] (dbl 1007) defaultUncrt
+  [ physc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)] (dbl 1007) defaultUncrt
 
 -- Constraint 6
 tempMeltP = uqc "tempMeltP"
@@ -448,13 +448,13 @@ consTol = uvc "consTol"
 
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
-  pcmDensity_min, pcmDensity_max, w_density_min, w_density_max,
+  pcmDensityMin, pcmDensityMax, w_density_min, w_density_max,
   htCapSP_min, htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcmHTC_min, pcmHTC_max, timeFinal_max, fracMinAux]
 
-tankLengthMin, tankLengthMax, pcmDensity_min, 
-  pcmDensity_max, w_density_min, w_density_max, htCapSP_min, 
+tankLengthMin, tankLengthMax, pcmDensityMin, 
+  pcmDensityMax, w_density_min, w_density_max, htCapSP_min, 
   htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
@@ -473,11 +473,11 @@ tankLengthMax = mkQuantDef (unitary "tankLengthMax"
 fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
 
 -- Used in Constraint 5
-pcmDensity_min = mkQuantDef (unitary "pcmDensity_min"
+pcmDensityMin = mkQuantDef (unitary "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM")
   (sup (eqSymb pcmDensity) (Atomic "min")) densityU Rational) 500
 
-pcmDensity_max = mkQuantDef (unitary "pcmDensity_max"
+pcmDensityMax = mkQuantDef (unitary "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM")
   (sup (eqSymb pcmDensity) (Atomic "max")) densityU Rational) 20000
 

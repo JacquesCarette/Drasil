@@ -30,7 +30,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcmMass, pcm_vol,
-  simTime, tFinalMelt, tInitMelt, tank_length, tankVol, tauLP, tauSP,
+  simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
   w_density, wMass, wVol)
 
@@ -43,7 +43,7 @@ dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputConstraints = [tankLength, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
@@ -95,7 +95,7 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
 
 inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy w_density) $=
   ((sy tankVol) - (sy pcm_vol)) * (sy w_density) $=
-  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
+  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
 
 findMassEqn = (sy pcmMass) $= (sy pcm_vol) * (sy pcm_density) -- FIXME: Ref Hack
 --

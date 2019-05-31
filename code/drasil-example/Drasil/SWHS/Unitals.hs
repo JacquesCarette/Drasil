@@ -40,7 +40,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
   tFinalMelt, vol, tankVol, wVol, deltaT,
   density, tau, tauLP, tauSP, tauW, thickness] ++
-  map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
+  map ucw [mass, time] -- ++ [tankLength, diam, coil_SA]
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
@@ -230,18 +230,18 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
 inputs :: [UncertQ]
-inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputs = [tankLength, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
-tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+tankLength, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
-tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
+tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy tank_length_min) (Inc, sy tank_length_max)] (dbl 1.5)
@@ -464,11 +464,11 @@ htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 -- Used in Constraint 1
 tank_length_min = mkQuantDef (unitary "tank_length_min"
   (nounPhraseSP "minimum length of tank")
-  (sub (eqSymb tank_length) (Atomic "min")) metre Rational) (dbl 0.1)
+  (sub (eqSymb tankLength) (Atomic "min")) metre Rational) (dbl 0.1)
 
 tank_length_max = mkQuantDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
-  (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
+  (sub (eqSymb tankLength) (Atomic "max")) metre Rational) 50
 
 frac_min_aux    = mkQuantDef fracMin $ dbl 1.0e-6
 

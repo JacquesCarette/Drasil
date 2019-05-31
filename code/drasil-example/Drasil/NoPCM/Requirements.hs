@@ -16,7 +16,7 @@ import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tank_length,
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tankLength,
   tauW, temp_C, time_final, w_density, wMass, wVol, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
@@ -26,7 +26,7 @@ inputVar :: [QuantityDict]
 inputVar = map qw dataConstListIn ++ map qw [abs_tol, rel_tol, cons_tol]
 
 dataConstListIn :: [UncertQ]
-dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
+dataConstListIn = [tankLength, diam, coil_SA, temp_C, w_density, htCap_W,
   coil_HTC, tempInit, time_final]
 
 --------------------------
@@ -47,7 +47,7 @@ inputInitQuants = iIQConstruct inputInitQuantsTable
 --
 findMassExpr :: Expr
 findMassExpr = ((sy wMass) $= (sy wVol) * (sy w_density) $=
-  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tank_length) * (sy w_density)))
+  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) * (sy w_density)))
 
 findMass :: ConceptInstance
 findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)

@@ -43,15 +43,14 @@ funcReqsTables = [inputGlassPropsTable, sysSetValsFollowingAssumpsTable, outputQ
 inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownQuants, checkGlassSafety, outputQuants :: ConceptInstance
 
-inputGlassProps            = cic "inputGlassProps"            inputGlassPropsDesc              "Input-Glass-Props"                       funcReqDom
-sysSetValsFollowingAssumps = cic "sysSetValsFollowingAssumps" sysSetValsFollowingAssumpsDesc   "System-Set-Values-Following-Assumptions" funcReqDom
-checkInputWithDataCons     = cic "checkInputWithDataCons"     checkInputWithDataConsDesc       "Check-Input-with-Data_Constraints"       funcReqDom
-outputValsAndKnownQuants   = cic "outputValsAndKnownQuants"   outputValsAndKnownQuantsDesc     "Output-Values-and-Known-Quantities"      funcReqDom
-checkGlassSafety           = cic "checkGlassSafety"           (checkGlassSafetyDesc output_)   "Check-Glass-Safety"                      funcReqDom
-outputQuants               = cic "outputQuants"               outputQuantsDesc                 "Output-Quantities"                       funcReqDom
+inputGlassProps            = cic "inputGlassProps"            inputGlassPropsDesc            "Input-Glass-Props"                       funcReqDom
+sysSetValsFollowingAssumps = cic "sysSetValsFollowingAssumps" sysSetValsFollowingAssumpsDesc "System-Set-Values-Following-Assumptions" funcReqDom
+checkInputWithDataCons     = cic "checkInputWithDataCons"     checkInputWithDataConsDesc     "Check-Input-with-Data_Constraints"       funcReqDom
+outputValsAndKnownQuants   = cic "outputValsAndKnownQuants"   outputValsAndKnownQuantsDesc   "Output-Values-and-Known-Quantities"      funcReqDom
+checkGlassSafety           = cic "checkGlassSafety"           checkGlassSafetyDesc           "Check-Glass-Safety"                      funcReqDom
+outputQuants               = cic "outputQuants"               outputQuantsDesc               "Output-Quantities"                       funcReqDom
 
-inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc :: Sentence
-checkGlassSafetyDesc :: NamedChunk -> Sentence
+inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc, checkGlassSafetyDesc :: Sentence
 
 inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
@@ -69,14 +68,15 @@ inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
-    plural value +:+ S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
+    plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
-sysSetValsFollowingAssumpsTable = mkValsSourceTable (assumpTuple ++ (mkTuple r5DDs)) "ReqAssignments"
-                              (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
+sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
+                                  (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
-    assumpTuple = (qw loadSF, makeRef2S assumpGL) : zip (map qw (take 4 assumptionConstants)) (replicate 4 $ makeRef2S assumpSV)
-    r5DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+    r2AQs = loadSF   : map qw (take 4 assumptionConstants)
+    r2ARs = assumpGL : replicate 4 assumpSV
+    r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -91,28 +91,29 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S inputGlassProps `andThe` S "known", plural quantity,
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
-checkGlassSafetyDesc cmd = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ (makeRef2S pbIsSafe)
-  `sAnd` (makeRef2S lrIsSafe)) `sC` phrase cmd,
-  S "the", phrase message, Quote (safeMessage ^. defn),
-  S "If the", phrase condition, S "is false, then", phrase cmd,
+checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
+  sParen (S "from" +:+ (makeRef2S pbIsSafe) `sAnd` (makeRef2S lrIsSafe)) `sC`
+  phrase output_, S "the", phrase message, Quote (safeMessage ^. defn),
+  S "If the", phrase condition, S "is false, then", phrase output_,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-
 outputQuantsDesc :: Sentence
-outputQuantsDesc = titleize output_ +:+ S "the" +:+ plural quantity +:+ S "from" +:+. makeRef2S outputQuantsTable
+outputQuantsDesc = foldlSent [titleize output_, S "the", plural quantity, S "from", makeRef2S outputQuantsTable]
 
 outputQuantsTable :: LabelledContent
-outputQuantsTable = mkValsSourceTable ((mkTuple iMods) ++ (mkTuple r6DDs)) "ReqOutputs"
+outputQuantsTable = mkValsSourceTable ((mkQRTuple iMods) ++ (mkQRTuple r6DDs)) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputQuants)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
 
-mkTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
-mkTuple = map (\c -> (qw c, makeRef2S c))
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple = map (\c -> (qw c, makeRef2S c))
 
-{--Functional Requirements--}
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs
+
+{--Nonfunctional Requirements--}
 
 nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]

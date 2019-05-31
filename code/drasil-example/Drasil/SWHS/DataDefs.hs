@@ -9,8 +9,8 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
-  temp_W, temp_PCM, htFluxP, pcm_HTC, coilHTC, tempC, htFluxC, htCapSP,
-  htCapLP, pcm_HTC, pcmSA, tauSP, tauLP)
+  temp_W, temp_PCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
+  htCapLP, pcmHTC, pcmSA, tauSP, tauLP)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -48,7 +48,7 @@ dd2HtFluxPQD :: QDefinition
 dd2HtFluxPQD = mkQuantDef htFluxP htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
+htFluxPEqn = (sy pcmHTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
 dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"
@@ -61,7 +61,7 @@ ddBalanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
 balanceSolidPCMEqn = ((sy pcmMass) * (sy htCapSP)) /
-  ((sy pcm_HTC) * (sy pcmSA))
+  ((sy pcmHTC) * (sy pcmSA))
 
 ddBalanceSolidPCM :: DataDefinition
 ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012] []
@@ -74,7 +74,7 @@ ddBalanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
 balanceLiquidPCMEqn = ((sy pcmMass) * (sy htCapLP)) /
-  ((sy pcm_HTC) * (sy pcmSA))
+  ((sy pcmHTC) * (sy pcmSA))
 
 ddBalanceLiquidPCM :: DataDefinition
 ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012] []

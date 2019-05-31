@@ -29,7 +29,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, eta, htCapLP, htCapSP,
-  htCapW, htFusion, pcm_E, pcm_HTC, pcmSA, pcmDensity, pcmMass, pcmVol,
+  htCapW, htFusion, pcm_E, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, tempC, temp_PCM, temp_W, tempInit, tempMeltP, timeStep, time_final, w_E,
   wDensity, wMass, wVol)
@@ -45,7 +45,7 @@ dataConTable1 = inDataConstTbl inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA,
-  tempC, wDensity, htCapW, coilHTC, pcm_HTC, tempInit, timeStep, time_final]
+  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -239,7 +239,7 @@ propCorSolDeriv2 = eqUnR'
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coilHTC) * (sy coilSA) * ((sy tempC) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcmSA) * ((apply1 temp_W time) -
+  ((sy pcmHTC) * (sy pcmSA) * ((apply1 temp_W time) -
   (apply1 temp_PCM time)))))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
@@ -251,7 +251,7 @@ propCorSolDeriv3 epcm en pcmat wa =
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcmSA) * ((apply1 temp_W time) - 
+  ((sy pcmHTC) * (sy pcmSA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents

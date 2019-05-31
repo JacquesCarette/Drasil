@@ -23,7 +23,7 @@ import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
-  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
+  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcmHTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
@@ -36,7 +36,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
- qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
+ qw pcmHTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
@@ -62,7 +62,7 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
   (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)),
   S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
-  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coilHTC * sy coilSA)),
+  (E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
@@ -146,7 +146,7 @@ eq2 = [ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA]
 
 eq3, eq4, eq5:: Expr
 eq3 = (sy tauW) $= ((sy wMass) * (sy htCapW)) / ((sy coilHTC) * (sy coilSA))
-eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcmSA)) / 
+eq4 = (sy eta) $= ((sy pcmHTC) * (sy pcmSA)) / 
   ((sy coilHTC) * (sy coilSA))
 eq5 = 1 / (sy tauW)
 
@@ -158,7 +158,7 @@ eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $=
 
 eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $= 
   (sy coilHTC) * (sy coilSA) *  ((sy tempC) - (sy temp_W)) -
-  (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
+  (sy pcmHTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
   ((sy coilHTC) * (sy coilSA) / 
@@ -171,14 +171,14 @@ eBalanceOnWtrDerivEqn4 =
   ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
   ((sy coilHTC) * (sy coilSA) / 
-  ((sy coilHTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
+  ((sy coilHTC) * (sy coilSA))) * ((sy pcmHTC) * (sy pcmSA) / 
   ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn5 =  
   (deriv (sy temp_W) time) $= 
   ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
-  ((sy pcm_HTC) * (sy pcmSA) / 
+  ((sy pcmHTC) * (sy pcmSA) / 
   ((sy coilHTC) * (sy coilSA))) * ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
@@ -201,7 +201,7 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 ---------
 eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
- qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCapLP]
+ qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
   [sy tempInit $< sy tempMeltP] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDescNote]
@@ -228,18 +228,18 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ (sy tauSP) $= ((sy pcmMass) * (sy htCapSP)) /
-  ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
+  ((sy pcmHTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCapLP)) /
-  ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
+  ((sy pcmHTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauSP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
 balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
   (E (sy tempMeltP)) `sC` (E (sy time_final)) `sC` (E (sy tempInit)) `sC`
-  (E (sy pcm_HTC)) `sC` (E (sy pcmMass)) `sC` (E (sy htCapSP)) `sC`
+  (E (sy pcmHTC)) `sC` (E (sy pcmMass)) `sC` (E (sy htCapSP)) `sC`
   (E (sy htCapSP)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
   S "The input is constrained so that", (E (sy tempInit $< sy tempMeltP)),
   sParen (makeRef2S assumpPIS),
@@ -258,12 +258,12 @@ balPCMDescNote = foldlSent [
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
   (E $ (sy tauSP) $= ((sy pcmMass) * (sy htCapSP)) /
-  ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
+  ((sy pcmHTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   
   (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCapLP)) /
-  ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
+  ((sy pcmHTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauLP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
@@ -344,7 +344,7 @@ eq6 = [ch pcmMass, ch htCapSP]
 
 eq7:: [Sentence]
 eq7 = [ch tauSP, S "=", ch pcmMass, ch htCapSP, S "/", 
-  ch pcm_HTC, ch pcmSA]
+  ch pcmHTC, ch pcmSA]
 eq6_1 :: Expr
 eq6_1 = (sy temp_PCM) $= (sy tempMeltP)
 eq6_2 :: [Sentence]
@@ -358,10 +358,10 @@ eBalanceOnPCM_Eqn1 = (sy pcmMass) * (sy htCapSP) * (deriv (sy temp_PCM) time) $=
   (sy htFluxP) * (sy pcmSA)
 
 eBalanceOnPCM_Eqn2 = (sy pcmMass) * (sy htCapSP) * (deriv (sy temp_PCM) time) $= 
-  (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
+  (sy pcmHTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnPCM_Eqn3 = (deriv (sy temp_PCM) time) $= 
-  (((sy pcm_HTC) * (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP))) *  ((sy temp_W) - (sy temp_PCM))
+  (((sy pcmHTC) * (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnPCM_Eqn4 = 
   (deriv (sy temp_PCM) time) $= 
@@ -408,7 +408,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 ---------
 heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
- qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCapLP, qw temp_PCM, qw htFusion, qw tInitMelt]
+ qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP, qw temp_PCM, qw htFusion, qw tInitMelt]
   [sy tempInit $< sy tempMeltP] (qw pcm_E)
   [0 $< sy time $< sy time_final] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]

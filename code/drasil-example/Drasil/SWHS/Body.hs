@@ -79,7 +79,7 @@ import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
-  pcm_HTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
+  pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
   temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
 
@@ -1090,7 +1090,7 @@ iMod1Sent5 = [S "Which simplifies to"]
 iMod1Sent6 :: [Sentence]
 iMod1Sent6 = [S "Setting",
   (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)) `sAnd`
-  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coilHTC * sy coilSA)) `sC`
+  (E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)) `sC`
   titleize equation, S "(5) can be written as"]
 
 iMod1Sent7 :: [Sentence]
@@ -1105,7 +1105,7 @@ iMod1Eqn1 = ((sy wMass) * (sy htCapW) * deriv (sy temp_W) time $=
 
 iMod1Eqn2 = ((sy wMass) * (sy htCapW) * deriv (sy temp_W) time $=
   (sy coilHTC) * (sy coilSA) * ((sy tempC) - (sy temp_W)) -
-  (sy pcm_HTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
+  (sy pcmHTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coilHTC) *
   (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) -
@@ -1115,12 +1115,12 @@ iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coilHTC) *
 iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coilHTC) *
   (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy temp_W)) +
   (((sy coilHTC) * (sy coilSA)) / ((sy coilHTC) * (sy coilSA))) *
-  (((sy pcm_HTC) * (sy pcmSA)) / ((sy wMass) * (sy htCapW))) *
+  (((sy pcmHTC) * (sy pcmSA)) / ((sy wMass) * (sy htCapW))) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coilHTC) *
   (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy temp_W)) +
-  (((sy pcm_HTC) * (sy pcmSA)) / ((sy coilHTC) * (sy coilSA))) *
+  (((sy pcmHTC) * (sy pcmSA)) / ((sy coilHTC) * (sy coilSA))) *
   (((sy coilHTC) * (sy coilSA)) / ((sy wMass) * (sy htCapW))) *
   ((sy temp_PCM) - (sy temp_W)))
 
@@ -1147,7 +1147,7 @@ iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCapSP,
 
 iMod2Sent3 :: [Sentence]
 iMod2Sent3 = [S "Setting", ch tauSP :+: S "=" :+: ch pcmMass :+: 
-  ch htCapSP :+: S "/" :+: ch pcm_HTC :+: ch pcmSA `sC`
+  ch htCapSP :+: S "/" :+: ch pcmHTC :+: ch pcmSA `sC`
   S "this can be written as"]
 
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
@@ -1156,9 +1156,9 @@ iMod2Eqn1 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
   time $= (sy htFluxP) * (sy pcmSA))
 
 iMod2Eqn2 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
-  time $= (sy pcm_HTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
+  time $= (sy pcmHTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
+iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcmHTC) *
   (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tauSP)) *

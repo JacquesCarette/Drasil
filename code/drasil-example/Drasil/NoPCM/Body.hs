@@ -75,7 +75,7 @@ import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA, 
   coilSAMax, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
-  htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
+  htCapW, htCap_W_max, htCapWMin, htTransCoeff, inSA, outSA, 
   tankLength, tankLengthMax, tankLengthMin, tankVol, tau, tauW, tempC, 
   tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
   wDensityMax, wDensityMin, watE, wMass, wVol, specParamValList, unitalChuncks,
@@ -612,7 +612,7 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 
 specParamValListb :: [QDefinition]
 specParamValListb = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, htCap_W_min, htCap_W_max, coil_HTC_min,
+  wDensityMin, wDensityMax, htCapWMin, htCap_W_max, coil_HTC_min,
   coil_HTC_max, timeFinal_max]
 
 specParamVal = valsOfAuxConstantsF progName specParamValListb

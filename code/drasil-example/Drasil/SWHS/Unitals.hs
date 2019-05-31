@@ -346,7 +346,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
     "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heatCapSpec) cW) UT.heatCapSpec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) defaultUncrt
+  sfwrc $ Bounded (Exc, sy htCapWMin) (Exc, sy htCap_W_max)] (dbl 4186) defaultUncrt
   
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP
@@ -450,13 +450,13 @@ specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
+  htCapWMin, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcmHTC_min, pcmHTC_max, timeFinal_max, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
+  htCapWMin, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
 
 htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
@@ -523,7 +523,7 @@ wDensityMax = mkQuantDef (unitary "wDensityMax"
   (sup (eqSymb wDensity) (Atomic "max")) densityU Rational) 1000
   
 -- Used in Constraint 13
-htCap_W_min = mkQuantDef (unitary "htCap_W_min"
+htCapWMin = mkQuantDef (unitary "htCapWMin"
   (nounPhraseSP "minimum specific heat capacity of water")
   (sup (eqSymb htCapW) (Atomic "min")) UT.heatCapSpec Rational) 4170
 

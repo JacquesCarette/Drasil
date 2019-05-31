@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.UnitDefn (
     UnitDefn(..)
-  , from_udefn, unitCon, makeDerU
+  , fromUDefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift
   , derUC, derUC', derUC''
@@ -20,7 +20,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
-  comp_usymb, from_udefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
+  comp_usymb, fromUDefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 
 -- | for defining units
@@ -66,16 +66,16 @@ derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (US
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
-derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC'' a b c s ue = UD (dcc a b c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string

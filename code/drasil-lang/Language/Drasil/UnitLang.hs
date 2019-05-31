@@ -1,6 +1,6 @@
 module Language.Drasil.UnitLang (
     USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
-  , from_udefn, comp_usymb, get_usymb, get_defn
+  , fromUDefn, comp_usymb, get_usymb, get_defn
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
@@ -18,10 +18,10 @@ data UDefn = USynonym USymb      -- ^ to define straight synonyms
            | UShift Double USymb -- ^ shift, i.e. +
 
 -- | Can generate a default symbol
-from_udefn :: UDefn -> USymb
-from_udefn (USynonym x) = x
-from_udefn (UScale _ s) = s
-from_udefn (UShift _ s) = s
+fromUDefn :: UDefn -> USymb
+fromUDefn (USynonym x) = x
+fromUDefn (UScale _ s) = s
+fromUDefn (UShift _ s) = s
 
 -- | Hand-rolled version of compare. Should assume |USymb| is normalized, so
 -- that some redundant EQ cases can be removed.

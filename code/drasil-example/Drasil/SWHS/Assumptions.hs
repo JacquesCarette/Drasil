@@ -21,7 +21,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
 import Drasil.SWHS.Unitals (wVol, volHtGen, tempC, tempInit, temp_W,
-  temp_PCM, htCapLP, htCap_W, htCapSP, w_density, pcmDensity, pcmVol)
+  temp_PCM, htCapLP, htCap_W, htCapSP, wDensity, pcmDensity, pcmVol)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -80,7 +80,7 @@ assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcmVol]
   --FIXME `sC` makeRefS likeChg1]
 assumpS5 = foldlSent [
-  S "The", phrase w_density `sAnd` phrase pcmDensity,
+  S "The", phrase wDensity `sAnd` phrase pcmDensity,
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol]
 assumpS6 = foldlSent [

@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
-import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, temp_W, htCap_W, w_density)
+import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, temp_W, htCap_W, wDensity)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -38,7 +38,7 @@ assumpS3 =
   S "same throughout the entire", phrase tank])
 
 assumpS4 = 
-  (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
+  (foldlSent [S "The", phrase wDensity, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol])
 
 assumpDWCoW = cic "assumpDWCoW" assumpS4

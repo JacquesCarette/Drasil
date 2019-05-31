@@ -4,7 +4,7 @@ import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 
 import Drasil.SWHS.Unitals (tankLength, diam, pcmVol, pcmSA, pcmDensity,
     tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
-    w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, tau, time_final,
+    wDensity, htCap_W, coil_HTC, pcm_HTC, tempInit, tau, time_final,
     abs_tol, rel_tol, cons_tol)
 
 inputMod :: Mod
@@ -35,7 +35,7 @@ inputData = funcData "get_inputs"
     junkLine, -- 21
     singleton  tempC,
     junkLine, -- 23
-    singleton  w_density,
+    singleton  wDensity,
     junkLine, -- 25
     singleton  htCap_W,
     junkLine, -- 27

@@ -232,10 +232,10 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
-  w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
+  wDensity, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCapSP, htCapLP, htFusion, coilSA, tempC, w_density,
+  htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
@@ -334,7 +334,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
-w_density = uqc "w_density" (density `of_` water)
+wDensity = uqc "wDensity" (density `of_` water)
   "Mass per unit volume of water"
   (sub (eqSymb density) cW) densityU Rational
   [gtZeroConstr,
@@ -516,11 +516,11 @@ coil_SA_max = unitary "coil_SA_max"
 -- Used in Constraint 12
 w_density_min = mkQuantDef (unitary "w_density_min"
   (nounPhraseSP "minimum density of water")
-  (sup (eqSymb w_density) (Atomic "min")) densityU Rational) 950
+  (sup (eqSymb wDensity) (Atomic "min")) densityU Rational) 950
 
 w_density_max = mkQuantDef (unitary "w_density_max"
   (nounPhraseSP "maximum density of water")
-  (sup (eqSymb w_density) (Atomic "max")) densityU Rational) 1000
+  (sup (eqSymb wDensity) (Atomic "max")) densityU Rational) 1000
   
 -- Used in Constraint 13
 htCap_W_min = mkQuantDef (unitary "htCap_W_min"

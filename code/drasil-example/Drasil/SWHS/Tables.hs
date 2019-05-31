@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, input_, variabl
 import Data.Drasil.Concepts.Math (unit_)
 import Drasil.SWHS.Unitals (pcmSA, pcm_HTC, 
   tempC, coilSA,coil_HTC, htCapSP, htCap_W,
-  time_final, w_density, tempInit, htCapLP, htFusion, pcmDensity,
+  time_final, wDensity, tempInit, htCapLP, htFusion, pcmDensity,
   tempMeltP, pcmVol, diam, tankLength, abs_tol, rel_tol, cons_tol)
 
 inputInitQuantsTbl :: Contents
@@ -24,4 +24,4 @@ inputInitQuantsTblabled = llcc inputInitQuantsLbl (Table
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA,
-  tempC, w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, time_final]
+  tempC, wDensity, htCap_W, coil_HTC, pcm_HTC, tempInit, time_final]

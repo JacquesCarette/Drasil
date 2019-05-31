@@ -32,7 +32,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coilSA, diam, eta, htCapLP, htCapSP,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, tempC, temp_PCM, temp_W, tempInit, tempMeltP, timeStep, time_final, w_E,
-  w_density, wMass, wVol)
+  wDensity, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -45,7 +45,7 @@ dataConTable1 = inDataConstTbl inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA,
-  tempC, w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
+  tempC, wDensity, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -93,9 +93,9 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
   m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
-inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy w_density) $=
-  ((sy tankVol) - (sy pcmVol)) * (sy w_density) $=
-  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) - (sy pcmVol)) * (sy w_density) -- FIXME: Ref Hack
+inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy wDensity) $=
+  ((sy tankVol) - (sy pcmVol)) * (sy wDensity) $=
+  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) - (sy pcmVol)) * (sy wDensity) -- FIXME: Ref Hack
 
 findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcmDensity) -- FIXME: Ref Hack
 --

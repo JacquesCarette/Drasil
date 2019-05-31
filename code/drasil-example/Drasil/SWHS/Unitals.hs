@@ -365,7 +365,7 @@ pcmHTC = uqc "pcmHTC"
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heatTransferCoef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTC_max)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (dbl 1000) defaultUncrt
   
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
@@ -451,13 +451,13 @@ specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
-  pcmHTCMin, pcmHTC_max, timeFinal_max, fracMinAux]
+  pcmHTCMin, pcmHTCMax, timeFinal_max, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
-  pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
+  pcmHTCMax, timeFinal_max, fracMinAux :: QDefinition
 
 htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
 
@@ -548,7 +548,7 @@ pcmHTCMin = mkQuantDef (unitary "pcmHTCMin"
   "transfer coefficient between PCM and water")
   (sup (eqSymb pcmHTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
-pcmHTC_max = mkQuantDef (unitary "pcmHTC_max"
+pcmHTCMax = mkQuantDef (unitary "pcmHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
   (sup (eqSymb pcmHTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000

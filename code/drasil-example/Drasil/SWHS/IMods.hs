@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tau_S_P, tau_W, temp_C, tempInit, 
+  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tauSP, tau_W, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -213,7 +213,7 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 
 balPCMRel :: Relation
 balPCMRel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
-  where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
+  where case1 = ((1 / (sy tauSP)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
 
         case2 = ((1 / (sy tauLP)) * ((apply1 temp_W time) -
@@ -227,13 +227,13 @@ balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ (sy tau_S_P) $= ((sy pcmMass) * (sy htCap_S_P)) /
+  (E $ (sy tauSP) $= ((sy pcmMass) * (sy htCap_S_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P),
+  sParen (unwrap $ getUnit tauSP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
 balPCMDescNote :: Sentence
@@ -257,9 +257,9 @@ balPCMDescNote = foldlSent [
   S ") is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
-  (E $ (sy tau_S_P) $= ((sy pcmMass) * (sy htCap_S_P)) /
+  (E $ (sy tauSP) $= ((sy pcmMass) * (sy htCap_S_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P) +:+.
+  sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   
   (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
@@ -275,7 +275,7 @@ eBalanceOnPCMDeriv =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
     S "sensible heating phase:" ] ++
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2])
-  ++ (eBalanceOnPCMDerivDesc5 htCap_S_P htCap_L_P tau_S_P tauLP surface area melting vol assumpVCMPN)
+  ++ (eBalanceOnPCMDerivDesc5 htCap_S_P htCap_L_P tauSP tauLP surface area melting vol assumpVCMPN)
   ++ (eBalanceOnPCMDerivDesc6 temp_PCM)
   ++ (eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
 
@@ -343,7 +343,7 @@ eq6:: [Sentence]
 eq6 = [ch pcmMass, ch htCap_S_P]
 
 eq7:: [Sentence]
-eq7 = [ch tau_S_P, S "=", ch pcmMass, ch htCap_S_P, S "/", 
+eq7 = [ch tauSP, S "=", ch pcmMass, ch htCap_S_P, S "/", 
   ch pcm_HTC, ch pcm_SA]
 eq6_1 :: Expr
 eq6_1 = (sy temp_PCM) $= (sy temp_melt_P)
@@ -365,7 +365,7 @@ eBalanceOnPCM_Eqn3 = (deriv (sy temp_PCM) time) $=
 
 eBalanceOnPCM_Eqn4 = 
   (deriv (sy temp_PCM) time) $= 
-  (1 / sy tau_S_P) * ((sy temp_W) - (sy temp_PCM))
+  (1 / sy tauSP) * ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnPCM_deriv_eqns__im2 :: [Expr]
 eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,

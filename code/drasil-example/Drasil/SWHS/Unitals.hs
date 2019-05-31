@@ -39,7 +39,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
   tFinalMelt, vol, tankVol, wVol, deltaT,
-  density, tau, tauLP, tau_S_P, tau_W, thickness] ++
+  density, tau, tauLP, tauSP, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 unitalChuncks :: [UnitalChunk]
@@ -49,7 +49,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,
-  tau, tauLP, tau_S_P, tau_W, sim_time, thickness]
+  tau, tauLP, tauSP, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
@@ -57,7 +57,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,
-  tau, tauLP, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
+  tau, tauLP, tauSP, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
 -- Regular Symbols --
@@ -180,7 +180,7 @@ tauLP = uc' "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
   "changes ODE parameter for solid PCM into parameter for liquid")
   (sup (sub lTau cP) cL) second
 
-tau_S_P = uc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
+tauSP = uc' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
   ("Derived parameter based on rate of " ++
     "change of temperature of phase change material")
   (sup (sub lTau cP) cS) second

@@ -80,7 +80,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
   pcm_HTC, pcm_SA, pcmMass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
+  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tau_W, temp_C,
   temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
@@ -1146,7 +1146,7 @@ iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCap_S_P,
   S "we obtain"]
 
 iMod2Sent3 :: [Sentence]
-iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcmMass :+: 
+iMod2Sent3 = [S "Setting", ch tauSP :+: S "=" :+: ch pcmMass :+: 
   ch htCap_S_P :+: S "/" :+: ch pcm_HTC :+: ch pcm_SA `sC`
   S "this can be written as"]
 
@@ -1161,7 +1161,7 @@ iMod2Eqn2 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
 iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
   (sy pcm_SA)) / ((sy pcmMass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
+iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tauSP)) *
   ((sy temp_W) - (sy temp_PCM)))
 
 -- Add GD, A, and EqnBlock references when available

@@ -30,7 +30,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcmMass, pcm_vol,
-  sim_time, tFinalMelt, tInitMelt, tank_length, tankVol, tauLP, tau_S_P,
+  sim_time, tFinalMelt, tInitMelt, tank_length, tankVol, tauLP, tauSP,
   tau_W, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
   w_density, wMass, wVol)
 
@@ -118,7 +118,7 @@ oIDQQuants = map foldlSent_ [
   [S "the", plural mass, S "from", makeRef2S findMass],
   [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
   [ch eta, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
-  [ch tau_S_P, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
+  [ch tauSP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
   [ch tauLP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
   ]
   

@@ -20,7 +20,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
-  comp_usymb, fromUDefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
+  compUSymb, fromUDefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 
 -- | for defining units
@@ -163,4 +163,4 @@ fund' nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [nam]
 
 -- | We don't want an Ord on units, but this still allows us to compare them
 comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
-comp_unitdefn a b = comp_usymb (usymb a) (usymb b)
+comp_unitdefn a b = compUSymb (usymb a) (usymb b)

@@ -1,6 +1,6 @@
 module Language.Drasil.UnitLang (
     USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
-  , fromUDefn, comp_usymb, get_usymb, get_defn
+  , fromUDefn, compUSymb, get_usymb, get_defn
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
@@ -25,8 +25,8 @@ fromUDefn (UShift _ s) = s
 
 -- | Hand-rolled version of compare. Should assume |USymb| is normalized, so
 -- that some redundant EQ cases can be removed.
-comp_usymb :: USymb -> USymb -> Ordering
-comp_usymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
+compUSymb :: USymb -> USymb -> Ordering
+compUSymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
   where
     comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2
 

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (model)
 import Data.Drasil.Concepts.Physics (friction, linear)
 import Data.Drasil.Theories.Physics (newtonSL)
 
-import Data.Drasil.SentenceStructures (foldlSent, getTandS)
+import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)

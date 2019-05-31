@@ -9,7 +9,6 @@ import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DocLang (mkInputPropsTable)
-import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)

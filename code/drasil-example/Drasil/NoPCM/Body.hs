@@ -42,7 +42,7 @@ import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
 
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, foldlSent, foldlSP)
+import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)

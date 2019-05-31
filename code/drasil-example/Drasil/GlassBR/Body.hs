@@ -55,9 +55,8 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, showingCxnBw,
-  tAndDOnly, tAndDWAcc, tAndDWSym, underConsidertn)
+import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,
+  tAndDWSym, underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs)
   

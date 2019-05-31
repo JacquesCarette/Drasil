@@ -12,7 +12,7 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
  reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.SentenceStructures (foldlSent, showingCxnBw, tableShows)
+import Data.Drasil.SentenceStructures (showingCxnBw, tableShows)
 import Data.Drasil.Utils (makeTMatrix)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)

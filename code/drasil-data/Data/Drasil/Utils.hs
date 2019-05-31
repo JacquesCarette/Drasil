@@ -1,13 +1,14 @@
 {-# Language TypeFamilies #-}
 module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
-  foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
-  mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
-  prodUCTbl, typUncr, unwrap, weave, zipFTable', zipSentList) where
+  fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, noRefsLT,
+  typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
+import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (fterms, input_, output_, useCaseTable)
+import Data.Drasil.Concepts.Documentation (fterms, input_, symbol_)
 
 import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
@@ -18,22 +19,6 @@ eqUnR e lbl = llcc lbl $ EqnBlock e
 
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
-
--- | fold helper functions applies f to all but the last element, applies g to
--- last element and the accumulator
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-foldle _ _ z []     = z
-foldle _ g z [x]    = g z x
-foldle f g z [x,y]  = g (f z x) y
-foldle f g z (x:xs) = foldle f g (f z x) xs
-
--- | fold helper functions applied f to all but last element, applies g to last
--- element and accumulator without starting value, does not work for empty list
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
-foldle1 _ _ [x]      = x
-foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
 -- | concantenates number to abbreviation
 -- should not be exported
@@ -60,15 +45,6 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 -- | formats software constraints
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
-
--- | helper for formatting constraints
-foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
-foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
-  where
-    constraintToExpr (Range _ ri)         = real_interval c ri
-    constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
-    constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr
@@ -170,8 +146,3 @@ noRefs a = zip a $ repeat Nothing
 -- a ListTuple which can be used with Contents but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
-
-prodUCTbl :: [[Sentence]] -> LabelledContent
-prodUCTbl cases = llcc (makeTabRef "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
-  Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
-  cases (titleize useCaseTable) True

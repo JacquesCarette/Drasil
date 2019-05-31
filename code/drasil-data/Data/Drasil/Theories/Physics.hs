@@ -6,7 +6,6 @@ import Utils.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd, 
   mkQuantDef, tmNoRefs)
 import Data.Drasil.Utils (weave)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (body, component, constant, value)
 import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)

@@ -11,9 +11,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
   traceyMatrix, unlikelyChg)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSP)
-
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)
 import qualified Data.Drasil.Concepts.Math as CM (surface)

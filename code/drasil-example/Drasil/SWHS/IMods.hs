@@ -5,7 +5,6 @@ import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)

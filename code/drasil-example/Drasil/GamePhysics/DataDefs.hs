@@ -5,6 +5,7 @@ module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns,
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
@@ -24,8 +25,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Data.Drasil.Theories.Physics (torque, torqueDD)
-
-import Data.Drasil.SentenceStructures (foldlSent)
 
 ----- Data Definitions -----
 

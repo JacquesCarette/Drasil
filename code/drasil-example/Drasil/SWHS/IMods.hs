@@ -25,7 +25,7 @@ import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
-  temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
+  tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
@@ -200,9 +200,9 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCMRC [qw temp_melt_P, qw time_final, qw tempInit, qw pcmSA,
+eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
  qw pcm_HTC, qw pcmMass, qw htCap_S_P, qw htCap_L_P]
-  [sy tempInit $< sy temp_melt_P] (qw temp_PCM)
+  [sy tempInit $< sy tempMeltP] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDescNote]
 
@@ -214,12 +214,12 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 balPCMRel :: Relation
 balPCMRel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tauSP)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy tempMeltP)))
 
         case2 = ((1 / (sy tauLP)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy temp_melt_P)))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy tempMeltP)))
 
-        case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
+        case3 = (0, (sy temp_PCM) $= (sy tempMeltP))
 
         case4 = (0, real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
 
@@ -238,10 +238,10 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
-  (E (sy temp_melt_P)) `sC` (E (sy time_final)) `sC` (E (sy tempInit)) `sC`
+  (E (sy tempMeltP)) `sC` (E (sy time_final)) `sC` (E (sy tempInit)) `sC`
   (E (sy pcm_HTC)) `sC` (E (sy pcmMass)) `sC` (E (sy htCap_S_P)) `sC`
   (E (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
-  S "The input is constrained so that", (E (sy tempInit $< sy temp_melt_P)),
+  S "The input is constrained so that", (E (sy tempInit $< sy tempMeltP)),
   sParen (makeRef2S assumpPIS),
   (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy time_final)) `sC`
   (S "with initial conditions")
@@ -251,7 +251,7 @@ balPCMDescNote = foldlSent [
   S "from", (makeRef2S eBalanceOnWtr) `sC`
   S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
-  (E (sy temp_melt_P)) `sC`
+  (E (sy tempMeltP)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
   (E (0 $< sy meltFrac $< 1)), S "(from", makeRef2S dd4MeltFrac,
   S ") is determined as part of the heat energy in the PCM, as given in" +:+.
@@ -346,7 +346,7 @@ eq7:: [Sentence]
 eq7 = [ch tauSP, S "=", ch pcmMass, ch htCap_S_P, S "/", 
   ch pcm_HTC, ch pcmSA]
 eq6_1 :: Expr
-eq6_1 = (sy temp_PCM) $= (sy temp_melt_P)
+eq6_1 = (sy temp_PCM) $= (sy tempMeltP)
 eq6_2 :: [Sentence]
 eq6_2 = [S "d" +:+ ch temp_PCM +:+ S "/ d" +:+ ch time +:+ S "= 0"]
 
@@ -407,9 +407,9 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv heatEInPCMRC [qw temp_melt_P, qw time_final, qw tempInit, qw pcmSA,
+heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
  qw pcm_HTC, qw pcmMass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw tInitMelt]
-  [sy tempInit $< sy temp_melt_P] (qw pcm_E)
+  [sy tempInit $< sy tempMeltP] (qw pcm_E)
   [0 $< sy time $< sy time_final] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]
 
@@ -420,14 +420,14 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
 htPCMRel :: Relation
 htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcmMass * ((apply1 temp_PCM time) -
-          sy tempInit), real_interval temp_PCM (UpTo (Exc, sy temp_melt_P)))
+          sy tempInit), real_interval temp_PCM (UpTo (Exc, sy tempMeltP)))
 
         case2 = (sy pcmInitMltE + (sy htFusion * sy pcmMass) +
           (sy htCap_L_P * sy pcmMass * ((apply1 temp_PCM time) -
-          sy temp_melt_P)), real_interval temp_PCM (UpFrom (Exc, sy temp_melt_P)))
+          sy tempMeltP)), real_interval temp_PCM (UpFrom (Exc, sy tempMeltP)))
 
         case3 = (sy pcmInitMltE + (apply1 latentEP time),
-          (sy temp_PCM) $= (sy temp_melt_P))
+          (sy temp_PCM) $= (sy tempMeltP))
 
         case4 = (sy pcmInitMltE + (apply1 latentEP time),
           real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
@@ -452,8 +452,8 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE) +:+.
   sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe` phrase liquid, short phsChgMtrl,
   S "is", ch htCap_L_P, sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change,
-  S "in", phrase temp, S "is", E (sy temp_PCM - sy temp_melt_P) +:+.
-  sParen (unwrap $ getUnit temp_melt_P), ch pcm_E, S "during", phrase melting, S "of the",
+  S "in", phrase temp, S "is", E (sy temp_PCM - sy tempMeltP) +:+.
+  sParen (unwrap $ getUnit tempMeltP), ch pcm_E, S "during", phrase melting, S "of the",
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
   phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`

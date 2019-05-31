@@ -231,10 +231,10 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 -- Input Constraints
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  tempMeltP, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
-tankLength, diam, pcmVol, pcmSA, pcmDensity, temp_melt_P,
+tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
@@ -282,7 +282,7 @@ pcmDensity = uqc "pcmDensity" (nounPhraseSP "density of PCM")
   [ physc $ Bounded (Exc, sy pcmDensity_min) (Exc, sy pcmDensity_max)] (dbl 1007) defaultUncrt
 
 -- Constraint 6
-temp_melt_P = uqc "temp_melt_P"
+tempMeltP = uqc "tempMeltP"
   (nounPhraseSP "melting point temperature for PCM")
   ("Temperature at which the phase change " ++
     "material transitions from a solid to a liquid")

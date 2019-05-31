@@ -398,7 +398,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4.1 --
 problemDesc = probDescF EmptyS ssp ending [termiDefi, physSysDesc, goalStmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrase's slope, phrase slpSrf, S "and identify the",
+          phrasePoss slope, phrase slpSrf, S "and identify the",
           phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
           phrase intrslce, phrase normForce `sAnd` phrase shearForce,
           S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",

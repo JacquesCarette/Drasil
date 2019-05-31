@@ -2,7 +2,7 @@
 -- Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
 module Language.Drasil.Development.Sentence (short, introduceAbb, atStart,
-  atStart', titleize, titleize', phrase, plural, phrase's, plural's) where
+  atStart', titleize, titleize', phrase, plural, phrasePoss, plural's) where
 
 import Control.Lens ((^.))
 
@@ -47,8 +47,8 @@ plural :: (HasUID n, NamedIdea n) => n -> Sentence
 plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 
-phrase's, plural's :: NamedIdea n => n -> Sentence
+phrasePoss, plural's :: NamedIdea n => n -> Sentence
 -- | Singular possesive function
-phrase's a = phrase a :+: S "'s"
+phrasePoss a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"

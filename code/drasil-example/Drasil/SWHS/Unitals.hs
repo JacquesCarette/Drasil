@@ -356,7 +356,7 @@ coilHTC = uqc "coilHTC" (nounPhraseSP
   (sub (eqSymb htTransCoeff) cC)
   UT.heatTransferCoef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy coilHTCMin) (Inc, sy coil_HTC_max)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (dbl 1000) defaultUncrt
 
 -- Constraint 15
 pcmHTC = uqc "pcmHTC"
@@ -450,13 +450,13 @@ specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
-  htCapWMin, htCapWMax, coilHTCMin, coil_HTC_max,
+  htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
   pcmHTC_min, pcmHTC_max, timeFinal_max, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax,
-  htCapWMin, htCapWMax, coilHTCMin, coil_HTC_max, pcmHTC_min,
+  htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
 
 htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
@@ -537,7 +537,7 @@ coilHTCMin = mkQuantDef (unitary "coilHTCMin"
   "transfer coefficient between coil and water")
   (sup (eqSymb coilHTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
-coil_HTC_max = mkQuantDef (unitary "coil_HTC_max"
+coilHTCMax = mkQuantDef (unitary "coilHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
   (sup (eqSymb coilHTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000

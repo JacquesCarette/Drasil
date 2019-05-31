@@ -10,7 +10,6 @@ import Data.Drasil.Concepts.Math (unit_)
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
-import Drasil.DocLang (mkEnumSimpleD)
 import Drasil.DocumentLanguage.Units (toSentence) 
 import Data.Drasil.SentenceStructures (foldlSent_)
 

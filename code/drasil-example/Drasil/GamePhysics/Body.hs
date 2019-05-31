@@ -20,7 +20,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   dataConstraintUncertainty, goalStmtF,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, termDefnF,
-  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  traceMGF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
 

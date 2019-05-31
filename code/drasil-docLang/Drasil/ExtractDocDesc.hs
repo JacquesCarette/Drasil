@@ -10,7 +10,6 @@ egetDocDesc :: DocDesc -> [Expr]
 egetDocDesc = concatMap egetDocSec
 
 egetDocSec :: DocSection -> [Expr]
-egetDocSec (Verbatim a)         = egetSec a
 egetDocSec (RefSec r)           = egetRefSec r
 egetDocSec IntroSec{}           = []
 egetDocSec (StkhldrSec s)       = egetStk s
@@ -150,7 +149,6 @@ getDocDesc :: DocDesc -> [Sentence]
 getDocDesc = concatMap getDocSec
 
 getDocSec :: DocSection -> [Sentence]
-getDocSec (Verbatim a)         = getSec a
 getDocSec (RefSec r)           = getRefSec r
 getDocSec (IntroSec i)         = getIntrosec i
 getDocSec (StkhldrSec s)       = getStk s
@@ -368,7 +366,6 @@ ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc = concatMap ciGetDocSec
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec Verbatim{}              = []
 ciGetDocSec RefSec{}                = []
 ciGetDocSec (IntroSec        intro) = ciGetIntro intro
 ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk

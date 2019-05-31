@@ -52,10 +52,9 @@ type DocKind = Sentence
 
 type DocDesc = [DocSection]
 
--- | Document sections are either Verbatim, Reference, Introduction, or Specific
+-- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!)
-data DocSection = Verbatim Section
-                | RefSec RefSec
+data DocSection = RefSec RefSec
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
@@ -237,7 +236,6 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si = map doit
   where
     doit :: DocSection -> Section
-    doit (Verbatim s)        = s
     doit (RefSec rs)         = mkRefSec si rs
     doit (IntroSec is)       = mkIntroSec si is
     doit (StkhldrSec sts)    = mkStkhldrSec sts

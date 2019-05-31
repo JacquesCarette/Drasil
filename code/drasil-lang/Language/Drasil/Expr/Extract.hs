@@ -46,12 +46,12 @@ names' (BinaryOp _ a b)  = names' a ++ names' b
 names' (Operator _ _ e)  = names' e
 names' (IsIn  a _)   = names' a
 names' (Matrix a)    = concatMap (concatMap names') a
-names' (RealI c b)   = c : names'_ri b
+names' (RealI c b)   = c : namesRI' b
 
-names'_ri :: RealInterval Expr Expr -> [String]
-names'_ri (Bounded il iu) = names' (snd il) ++ names' (snd iu)
-names'_ri (UpTo iu)       = names' (snd iu)
-names'_ri (UpFrom il)     = names' (snd il)
+namesRI' :: RealInterval Expr Expr -> [String]
+namesRI' (Bounded il iu) = names' (snd il) ++ names' (snd iu)
+namesRI' (UpTo iu)       = names' (snd iu)
+namesRI' (UpFrom il)     = names' (snd il)
 
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above

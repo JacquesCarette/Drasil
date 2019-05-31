@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)
 import Data.Drasil.SentenceStructures (foldlSent)
 
-import Drasil.SWHS.Unitals (tempW, temp_PCM, w_E, pcm_E)
+import Drasil.SWHS.Unitals (tempW, tempPCM, w_E, pcm_E)
 
 goals :: [ConceptInstance]
 goals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
@@ -17,7 +17,7 @@ waterTempGS = cic "waterTempGS" (goalState tempW) "Predict-Water-Temperature"
   goalStmtDom
 
 pcmTempGS :: ConceptInstance
-pcmTempGS = cic "pcmTempGS" (goalState temp_PCM) "Predict-PCM-Temperature" 
+pcmTempGS = cic "pcmTempGS" (goalState tempPCM) "Predict-PCM-Temperature" 
   goalStmtDom
 
 waterEnergyGS :: ConceptInstance

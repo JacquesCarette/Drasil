@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
-import Drasil.SWHS.Unitals (tempInit, tempC, temp_PCM)
+import Drasil.SWHS.Unitals (tempInit, tempC, tempPCM)
 import Drasil.SWHS.Assumptions (assumpTPCAV, assumpTHCCoT, assumpTHCCoL,
   assumpCTNOD, assumpSITWP, assumpWAL, assumpPIT, assumpNIHGBWP, assumpNGSP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInPCM)
@@ -32,7 +32,7 @@ likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
 likeChgUTP = cic "likeChgUTP" (
   foldlSent [chgsStart assumpTPCAV (short phsChgMtrl), S "is actually a poor",
   phrase CT.thermalConductor `sC` S "so the", phrase assumption,
-  S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
+  S "of uniform", phrase tempPCM, S "is not likely"] ) "Uniform-Temperature-PCM"
   likeChgDom
 --
 likeChgTCVOD = cic "likeChgTCVOD" (

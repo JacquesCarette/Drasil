@@ -31,7 +31,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, eta, htCapLP, htCapSP,
   htCapW, htFusion, pcm_E, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
-  tauW, tempC, temp_PCM, tempW, tempInit, tempMeltP, timeStep, timeFinal, w_E,
+  tauW, tempC, tempPCM, tempW, tempInit, tempMeltP, timeStep, timeFinal, w_E,
   wDensity, wMass, wVol)
 
 ------------------------------
@@ -130,8 +130,8 @@ calcTempWtrOverTime = cic "calcTempWtrOverTime" ( foldlSent [
   "Calculate-Temperature-Water-Over-Time" funcReqDom
 --
 calcTempPCMOverTime = cic "calcTempPCMOverTime" ( foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase temp_PCM,
-  sParen (ch temp_PCM :+: sParen (ch time)), S "over the",
+  S "Calculate and", phrase output_, S "the", phrase tempPCM,
+  sParen (ch tempPCM :+: sParen (ch time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
   "Calculate-Temperature-PCM-Over-Time" funcReqDom
 --
@@ -240,7 +240,7 @@ propCorSolDeriv2 = eqUnR'
   ((sy coilHTC) * (sy coilSA) * ((sy tempC) - apply1 tempW time)))
   - (defint (eqSymb time) 0 (sy time)
   ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) -
-  (apply1 temp_PCM time)))))
+  (apply1 tempPCM time)))))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
@@ -252,7 +252,7 @@ propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) - 
-  (apply1 temp_PCM time)))))
+  (apply1 tempPCM time)))))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

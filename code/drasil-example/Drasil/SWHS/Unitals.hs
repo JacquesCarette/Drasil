@@ -238,7 +238,7 @@ tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
   htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
-temp_PCM, tempW, w_E, pcm_E :: ConstrConcept
+tempPCM, tempW, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -391,7 +391,7 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-outputs = [tempW, temp_PCM, w_E, pcm_E]
+outputs = [tempW, tempPCM, w_E, pcm_E]
 
 -- Constraint 18
 tempW = cuc' "tempW"
@@ -401,7 +401,7 @@ tempW = cuc' "tempW"
   [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
 
 -- Constraint 19
-temp_PCM = cuc' "temp_PCM"
+tempPCM = cuc' "tempPCM"
   (nounPhraseSP "temperature of the phase change material" )
   ("The average kinetic energy of the " ++
     "particles within the phase change material")

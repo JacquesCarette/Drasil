@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
 
-import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
@@ -13,9 +12,13 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb)
 
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList)
+
+import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
+import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
-import Data.Tuple(fst, snd)
+
 -- | Render a Space
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
@@ -46,9 +49,9 @@ parens = P.Fenced P.Paren P.Paren
 
 mulExpr ::  [Expr] -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
-  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
+  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
+  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
+  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ mulExpr (hd2 : tl) sm
 mulExpr [hd]     sm     = [expr' sm (precA Mul) hd]
 mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 
@@ -58,8 +61,8 @@ digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess (hd:tl) pos coun ex 
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
-  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-  | otherwise = [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
+  | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+  | otherwise = [P.MO P.Point, P.Int hd] ++ map P.Int tl
 digitsProcess [] pos coun ex 
   | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
@@ -157,14 +160,14 @@ lookupC :: ChunkDB -> UID -> Symbol
 lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ (termLookup c (termTable sm)) ^. term
+lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
   where l = termLookup c $ termTable sm
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ (termLookup c (termTable sm)) ^. term
+lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
 -- --plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
@@ -239,8 +242,8 @@ symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol Corners{}                = error "rendering of Corners (general)"
-symbol (Atop f s) = sFormat f s
-symbol (Empty)    = P.Row []
+symbol (Atop f s)               = sFormat f s
+symbol Empty                    = P.Row []
 
 sFormat :: Decoration -> Symbol -> P.Expr
 sFormat Hat    s = P.Over P.Hat $ symbol s
@@ -286,11 +289,11 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref (Reference _ (RP rp ra) sn)) = 
+spec sm (Ref (Reference _ (RP rp ra) sn _)) = 
   P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
-spec sm (Ref (Reference _ (Citation ra) sn)) = 
-  P.Ref P.Cite2    ra $ spec sm $ renderCitation sm sn
-spec sm (Ref (Reference _ (URI ra) sn)) = 
+spec sm (Ref (Reference _ (Citation ra) _ r)) = 
+  P.Ref P.Cite2    ra (spec sm (renderCitInfo r))
+spec sm (Ref (Reference _ (URI ra) sn _)) = 
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
@@ -306,8 +309,42 @@ renderShortName _ Name sn = S $ getStringSN sn
 renderURI :: ctx -> ShortName -> Sentence
 renderURI _ sn = S $ getStringSN sn
 
-renderCitation :: ctx -> ShortName -> Sentence
-renderCitation _ sn = S $ getStringSN sn
+renderCitInfo :: RefInfo -> Sentence
+renderCitInfo  None          = EmptyS
+renderCitInfo (RefNote   rn) = sParen (S rn)
+renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
+renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
+renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
+renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
+foldNums :: [Int] -> Sentence
+foldNums x = foldlList Comma List $ map S (numbers x)
+
+-- | Helper for foldNums
+numbers :: [Int] -> [String]
+numbers []  = error "Empty list when making reference with additional information"
+numbers [x] = [show x]
+numbers [x, y]
+  | y == x + 1 = [hyp x y]
+  | otherwise  = map show [x, y]
+numbers (x:y:xs)
+  | y == x + 1 = range x y xs
+  | otherwise  = show x : numbers (y:xs)
+
+-- | Helper for foldNums
+range :: Int -> Int -> [Int] -> [String]
+range a b []   = [hyp a b]
+range a b [x]
+  | x == b + 1 = [hyp a x]
+  | otherwise  = [hyp a b, show x]
+range a b (x:xs)
+  | x == b + 1 = range a x xs
+  | otherwise  = hyp a b : numbers (x:xs)
+
+-- | Helper for foldNums
+hyp :: Int -> Int -> String
+hyp a b = show a ++ "-" ++ show b
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document
@@ -339,7 +376,7 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
+  (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
@@ -363,7 +400,7 @@ layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
 -- Called internally by layout.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
+  (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs

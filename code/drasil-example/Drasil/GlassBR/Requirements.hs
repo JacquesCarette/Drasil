@@ -11,6 +11,7 @@ import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Theory.Drasil (DataDefinition)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
@@ -23,8 +24,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
-  foldlList, foldlSent, foldlSent_, foldlSP, follows, ofThe, ofThe', sAnd, sOf)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
+  foldlList, foldlSent, foldlSent_, foldlSP, follows)
 import Data.Drasil.Utils (bulletFlat)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)

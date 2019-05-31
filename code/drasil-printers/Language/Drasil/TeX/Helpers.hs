@@ -40,15 +40,15 @@ command :: String -> (String -> D)
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
 
 commandD :: String -> (D -> D)
-commandD s c = (pure (H.bslash TP.<> text s)) <> br c
+commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> (maybe TP.empty H.sq o) TP.<> H.br c
+command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> maybe TP.empty H.sq o TP.<> H.br c
 
 -- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = (pure (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
+command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -90,7 +90,7 @@ genSec d
   | d == 3 = pure $ H.bslash TP.<> text "paragraph"
   | otherwise = pure $ 
      H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
-      TP.<> (if (not numberedSections) then text "*" else TP.empty) 
+      TP.<> (if not numberedSections then text "*" else TP.empty) 
 
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
@@ -107,8 +107,14 @@ href = command2 "href"
 custRef :: String -> D -> D
 custRef t x = pure (text t) <> br x
 
+custRef' :: String -> D -> D -> D
+custRef' t x i = pure (text t) <> sq i <> br x
+
 cite :: D -> D
 cite = custRef "\\cite"
+
+citeInfo :: D -> D -> D
+citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
@@ -161,8 +167,8 @@ sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> (pure H.unders) <> br b
-superscript a b = a <> (pure H.hat) <> br b
+subscript a b = a <> pure H.unders <> br b
+superscript a b = a <> pure H.hat <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")

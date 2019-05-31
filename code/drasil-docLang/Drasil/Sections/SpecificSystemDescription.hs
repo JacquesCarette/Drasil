@@ -18,6 +18,7 @@ module Drasil.Sections.SpecificSystemDescription
 
 import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, element, general, goalStmt, information, input_,
@@ -29,9 +30,8 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), fmtPhys, fmtSfwr, foldlList,
-  foldlSP, foldlSent, mkTableFromColumns, ofThe, sAnd, typUncr)
-import Data.Drasil.Utils (foldle, fmtU, getRVal)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSP, foldlSent)
+import Data.Drasil.Utils (foldle, fmtPhys, fmtSfwr, fmtU, getRVal, mkTableFromColumns, typUncr)
 
 import qualified Drasil.DocLang.SRS as SRS
 

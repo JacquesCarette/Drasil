@@ -4,12 +4,13 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
-  WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
+  WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
@@ -52,7 +53,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]]]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeCiteS astm2009, sParen (S "pg. 1") `sC` 
+glassConditionDesc = foldlSent [S "Following", makeCiteInfoS astm2009 (Page [1]) `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]

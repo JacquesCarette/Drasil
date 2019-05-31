@@ -5,6 +5,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
@@ -16,7 +17,7 @@ import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
   temp)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
+  foldlList, foldlSent, foldlSentCol)
 import Data.Drasil.Units.Thermodynamics (thermalFlux)
 import Data.Drasil.Utils (unwrap, weave)
 
@@ -42,7 +43,7 @@ genDefs = [nwtnCooling, rocTempSimp]
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
-  [makeCite incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+  [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCooling_desc]
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
                  "rocTempSimp" [rocTempSimp_desc]

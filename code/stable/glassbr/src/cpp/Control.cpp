@@ -27,7 +27,6 @@ int main(int argc, const char *argv[]) {
     func_get_input(inputfile, inParams);
     derived_values(inParams);
     input_constraints(inParams);
-    double q = func_q(inParams);
     double J_tol = func_J_tol(inParams);
     double q = func_q(inParams);
     double q_hat = func_q_hat(inParams, q);

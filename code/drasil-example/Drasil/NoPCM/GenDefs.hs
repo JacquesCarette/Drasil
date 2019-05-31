@@ -1,7 +1,8 @@
-module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
+module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -12,8 +13,7 @@ import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSentCol, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSentCol)
 import Data.Drasil.Utils (weave)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
@@ -24,8 +24,8 @@ import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
 
-swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCooling, rocTempSimp] 
+genDefs :: [GenDefn]
+genDefs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 

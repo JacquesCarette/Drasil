@@ -2,10 +2,10 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatE
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
+import Utils.Drasil
 
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, andThe, isThe,
-  ofThe, sAnd, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Concepts.Documentation (goal, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)

@@ -2,6 +2,7 @@ module Drasil.GamePhysics.IMods (iModels, iModelsNew, im1_new, im2_new, im3_new,
 
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
+import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
@@ -17,7 +18,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 import Data.Drasil.Utils (fmtU, foldle1)
 
 iModels :: [RelationConcept]

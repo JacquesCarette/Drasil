@@ -2,7 +2,8 @@
 module Language.Drasil.Output.Formats where
 
 import Data.Char (toLower)
-import Build.Drasil (Command, mkCheckedCommand, mkCommand, mkFile, mkRule, RuleTransformer(makeRule))
+import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
+  mkFile, mkRule, RuleTransformer(makeRule))
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension)
@@ -15,12 +16,13 @@ data DocSpec = DocSpec DocType Filename
 instance RuleTransformer DocSpec where
   makeRule (DocSpec Website _) = []
   makeRule (DocSpec dt fn) = [
-    mkRule (map toLower $ show dt) [fn ++ ".pdf"] [],
-    mkFile (fn ++ ".pdf") [fn ++ ".tex"] $
+    mkRule (makeS $ map toLower $ show dt) [pdfName] [],
+    mkFile pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
         lualatex, bibtex :: String -> Command
-        lualatex = mkCheckedCommand . (++) "lualatex $(TEXFLAGS) "
-        bibtex = mkCommand . (++) "bibtex $(BIBTEXFLAGS) "
+        lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS
+        bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
+        pdfName = makeS $ fn ++ ".pdf"
 
 instance Show DocType where
   show SRS      = "SRS"

@@ -14,12 +14,10 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (caption, image,
-  div_tag, td, th, tr,
-  bold, sub, sup, cases, fraction, em, refwrap,
-  reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, head_tag,
-  table, ol, ul, li, pa, ba)
+import Language.Drasil.HTML.Helpers (article_title, author, ba, body, bold,
+  caption, cases, div_tag, em, fraction, h, head_tag, html, image, li, ol, pa,
+  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
+  th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 
@@ -54,9 +52,9 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc
 build fn (Document t a c) =
-  text ( "<!DOCTYPE html>") $$
-  html ( head_tag ((linkCSS fn) $$ title (title_spec t) $$
-  text ("<meta charset=\"utf-8\">") $$
+  text "<!DOCTYPE html>" $$
+  html (head_tag (linkCSS fn $$ title (title_spec t) $$
+  text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
   body (article_title (p_spec t) $$ author (p_spec a)
@@ -102,9 +100,10 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref Internal r a )  = reflink  r $ p_spec a
-p_spec (Ref Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
-p_spec (Ref External r a ) = reflinkURI  r $ p_spec a
+p_spec (Ref Internal r a)      = reflink     r $ p_spec a
+p_spec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
+p_spec (Ref Cite2    r a)      = reflinkInfo r (text r) (p_spec a) -- no difference for citations?
+p_spec (Ref External r a)      = reflinkURI  r $ p_spec a
 p_spec EmptyS             = text "" -- Expected in the output
 p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
@@ -117,8 +116,8 @@ symbol (L.Special s) = unPH $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = (symbol s) ++ (render . sup . text) (symbol x)
-symbol (L.Corners [] [] [] [x] s) = (symbol s) ++ (render . sub . text) (symbol x)
+symbol (L.Corners [] [] [x] [] s) = symbol s ++ (render . sup . text) (symbol x)
+symbol (L.Corners [] [] [] [x] s) = symbol s ++ (render . sub . text) (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of L.Corners (general)"
@@ -154,20 +153,20 @@ p_expr (Int i)        = text $ show i
 p_expr (Str s)        = text s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
 p_expr (Case ps)      = cases ps p_expr
-p_expr (Mtx a)        = text ("<table class=\"matrix\">\n") <> p_matrix a <> text ("</table>")
+p_expr (Mtx a)        = text "<table class=\"matrix\">\n" <> p_matrix a <> text "</table>"
 p_expr (Row l)        = hcat $ map p_expr l
 p_expr (Ident s)      = text s
 p_expr (Spec s)       = text $ unPH $ L.special s
 --p_expr (Gr g)         = unPH $ greek g
 p_expr (Sub e)        = sub $ p_expr e
 p_expr (Sup e)        = sup $ p_expr e
-p_expr (Over Hat s)   = p_expr s <> text ("&#770;")
+p_expr (Over Hat s)   = p_expr s <> text "&#770;"
 p_expr (MO o)         = text $ p_ops o
 p_expr (Fenced l r e) = text (fence Open l) <> p_expr e <> text (fence Close r)
 p_expr (Font Bold e)  = bold $ p_expr e
-p_expr (Font Emph e)  = text ("<em>") <> p_expr e <> text ("</em>") -- FIXME
-p_expr (Spc Thin)     = text ("&#8239;")
-p_expr (Sqrt e)       = text ("&radic;(") <> p_expr e <> text (")")
+p_expr (Font Emph e)  = text "<em>" <> p_expr e <> text "</em>" -- FIXME
+p_expr (Spc Thin)     = text "&#8239;"
+p_expr (Sqrt e)       = text "&radic;(" <> p_expr e <> text ")"
 
 p_ops :: Ops -> String
 p_ops IsIn     = "&thinsp;&isin;&thinsp;"
@@ -261,10 +260,10 @@ makeColumns = vcat . map (td . p_spec)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt] (makeDRows ps)
-  where dtag (L.General)  = "gdefn"
-        dtag (L.Instance) = "idefn"
-        dtag (L.Theory)   = "tdefn"
-        dtag (L.Data)     = "ddefn"
+  where dtag L.General  = "gdefn"
+        dtag L.Instance = "idefn"
+        dtag L.Theory   = "tdefn"
+        dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc
@@ -320,7 +319,7 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 makeBib :: BibRef -> Doc
 makeBib = ul ["hide-list-style"] . vcat .
   map (\(x,(y,z)) -> makeRefList z y x) .
-  zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
+  zip [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
 
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)
@@ -475,7 +474,7 @@ foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
-foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
+foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
 -- LFM is Last, First Middle
 rendPers :: L.Person -> String

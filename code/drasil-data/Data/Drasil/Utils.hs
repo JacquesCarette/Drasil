@@ -1,16 +1,18 @@
 {-# Language TypeFamilies #-}
-module Data.Drasil.Utils ( foldle, foldle1, mkEnumAbbrevList, zipFTable', zipSentList,
-  makeTMatrix, itemRefToSent, noRefs, noRefsLT, makeListRef, bulletFlat, bulletNested,
-  enumSimple, enumBullet, enumSimpleU, enumBulletU, mkInputDatTb, getRVal, addPercent,
-  weave, fmtU, unwrap, fterms, prodUCTbl, eqUnR, eqUnR' ) where
+module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
+  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
+  foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
+  mkEnumAbbrevList, mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT,
+  prodUCTbl, typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
 
-import Control.Lens ((^.))
-import Data.List (elem, transpose)
-
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
+
+import Control.Lens ((^.))
+import Data.Decimal (DecimalRaw, realFracToDecimal)
+import Data.List (elem, transpose)
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
@@ -52,14 +54,38 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ unwrap (getUnit u)
 
+-- | formats physical constraints
+fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
+
+-- | formats software constraints
+fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+-- | helper for formatting constraints
+foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
+foldConstraints _ [] = EmptyS
+foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
+  where
+    constraintToExpr (Range _ ri)         = real_interval c ri
+    constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
+    constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
+
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
+-- | extracts the typical uncertainty to be displayed from something that has an uncertainty
+typUncr :: HasUncertainty c => c -> Sentence
+typUncr x = found (uncVal x) (uncPrec x)
+  where
+    found u Nothing  = addPercent $ u * 100
+    found u (Just p) = addPercent (realFracToDecimal (fromIntegral p) (u * 100) :: DecimalRaw Integer)
+
 -- | outputs sentence with % attached to it
-addPercent :: (Show a) => a -> Sentence -- commented out to suppress type default warning
+addPercent :: Show a => a -> Sentence
 addPercent num = (S (show num) :+: Percent)
 
 -- | appends a sentence to the front of a list of list of sentences
@@ -77,6 +103,16 @@ zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [Emp
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
 
+-- | Helper for making a table from a columns
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+mkTableFromColumns l = 
+  let l' = filter (any (not . isEmpty) . snd) l in 
+  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
+  where
+    isEmpty       EmptyS = True
+    isEmpty       _      = False
+    replaceEmptyS EmptyS = S "--"
+    replaceEmptyS s      = s
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent

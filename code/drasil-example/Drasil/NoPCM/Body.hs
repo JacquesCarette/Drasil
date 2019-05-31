@@ -79,7 +79,7 @@ import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA,
   tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
   tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
   w_density_max, w_density_min, watE, wMass, wVol, specParamValList, unitalChuncks,
-  abs_tol, rel_tol, cons_tol)
+  absTol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -113,7 +113,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tauW]) ++ (map qw [eta]) ++
-  (map qw [abs_tol, rel_tol, cons_tol])
+  (map qw [absTol, rel_tol, cons_tol])
 
 units :: [UnitaryConceptDict]
 units = map ucw [density, tau, inSA, outSA,
@@ -246,7 +246,7 @@ symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermoco
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
-  ++ map nw [abs_tol, rel_tol, cons_tol])
+  ++ map nw [absTol, rel_tol, cons_tol])
   (map cw symbols ++ srsDomains)
   thisSi label refBy dataDefn iMods genDef theory
   concIns section labCon

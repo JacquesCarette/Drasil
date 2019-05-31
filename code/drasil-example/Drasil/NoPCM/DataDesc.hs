@@ -2,7 +2,7 @@ module Drasil.NoPCM.DataDesc (inputMod) where
 
 import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 import Drasil.SWHS.Unitals (tankLength, diam, coilSA, tempC, wDensity,
-  htCapW, coilHTC, tempInit, tau, timeFinal, abs_tol, rel_tol, cons_tol)
+  htCapW, coilHTC, tempInit, tau, timeFinal, absTol, rel_tol, cons_tol)
 
 inputMod :: Mod
 inputMod = Mod "InputFormat" [inputData]
@@ -30,7 +30,7 @@ inputData = funcData "get_inputs"
     junkLine,
     singleton timeFinal,
     junkLine,
-    singleton abs_tol,
+    singleton absTol,
     junkLine,
     singleton rel_tol,
     junkLine,

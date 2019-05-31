@@ -28,7 +28,7 @@ symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrain
 symbolsAll :: [QuantityDict]
 symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
   (map qw [htFusion_min, htFusion_max, coil_SA_max]) ++
-  (map qw [abs_tol, rel_tol, cons_tol])
+  (map qw [absTol, rel_tol, cons_tol])
 
 -- Symbols with Units --
 
@@ -424,9 +424,9 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 -- Uncertainties with no Units --
 ---------------------------------
 
-abs_tol, rel_tol, cons_tol :: UncertainChunk
+absTol, rel_tol, cons_tol :: UncertainChunk
 
-abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance") 
+absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)

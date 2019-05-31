@@ -109,7 +109,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
   
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
-                               --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
+                               --Can't generate without SWHS-specific symbols like pcm_HTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tauW]) ++ (map qw [eta]) ++

@@ -230,11 +230,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
 inputs :: [UncertQ]
-inputs = [tankLength, diam, pcmVol, pcm_SA, pcm_density,
+inputs = [tankLength, diam, pcmVol, pcmSA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
-tankLength, diam, pcmVol, pcm_SA, pcm_density, temp_melt_P,
+tankLength, diam, pcmVol, pcmSA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
@@ -264,7 +264,7 @@ pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
 
 -- Constraint 4
 -- Capitalization Issue here too.
-pcm_SA = uqc "pcm_SA"
+pcmSA = uqc "pcmSA"
   (compoundPhrase (nounPhrase'' (S "phase change material")
   (S "phase change material")
   CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea)

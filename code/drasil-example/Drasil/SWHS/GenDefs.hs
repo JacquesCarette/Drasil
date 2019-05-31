@@ -26,7 +26,7 @@ import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
 import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (volHtGen, deltaT, tempEnv, pcm_SA,
+import Drasil.SWHS.Unitals (volHtGen, deltaT, tempEnv, pcmSA,
   outSA, inSA, htFluxIn, htFluxOut, htTransCoeff, thFluxVect)
 
 ---------------------------
@@ -96,7 +96,7 @@ rocTempSimpDesc = foldlSent [S "The basic", phrase equation,
   S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.htFlux),
   ch inSA `sAnd` ch outSA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
-  sParen (unwrap $ getUnit pcm_SA), ch volHtGen `isThe`
+  sParen (unwrap $ getUnit pcmSA), ch volHtGen `isThe`
   S "volumetric heat generated" +:+. sParen (Sy $ unit_symb volHtGen),
   ch QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]
 

@@ -21,12 +21,12 @@ names (BinaryOp _ a b)  = names a ++ names b
 names (Operator _ _ e)  = names e
 names (IsIn  a _)   = names a
 names (Matrix a)    = concatMap (concatMap names) a
-names (RealI c b)   = c : names_ri b
+names (RealI c b)   = c : namesRI b
 
-names_ri :: RealInterval Expr Expr -> [String]
-names_ri (Bounded (_,il) (_,iu)) = names il ++ names iu
-names_ri (UpTo (_,iu))       = names iu
-names_ri (UpFrom (_,il))     = names il
+namesRI :: RealInterval Expr Expr -> [String]
+namesRI (Bounded (_,il) (_,iu)) = names il ++ names iu
+namesRI (UpTo (_,iu))       = names iu
+namesRI (UpFrom (_,il))     = names il
 
 -- | Generic traverse of all positions that could lead to names, without
 -- functions.  FIXME : this should really be done via post-facto filtering, but

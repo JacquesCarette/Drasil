@@ -80,7 +80,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coilSA, eta, htCapSP, htCap_W,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
   pcm_HTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, temp_C,
+  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
   temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
 -----------------------------
 
 goalStates :: Section
-goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
+goalStates = goalStmtF (goalStateIntro tempC temp_W temp_PCM) goalStateList
 
 goalStateList :: [Contents]
 goalStateList = mkEnumSimpleD goals
@@ -1104,32 +1104,32 @@ iMod1Eqn1 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA))
 
 iMod1Eqn2 = ((sy wMass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy coil_HTC) * (sy coilSA) * ((sy temp_C) - (sy temp_W)) -
+  (sy coil_HTC) * (sy coilSA) * ((sy tempC) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy tempC) -
   (sy temp_W)) - ((sy pcmMass) * (sy pcmSA)) / ((sy wMass) *
   (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy tempC) - (sy temp_W)) +
   (((sy coil_HTC) * (sy coilSA)) / ((sy coil_HTC) * (sy coilSA))) *
   (((sy pcm_HTC) * (sy pcmSA)) / ((sy wMass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (sy coilSA)) / ((sy wMass) * (sy htCap_W)) * ((sy tempC) - (sy temp_W)) +
   (((sy pcm_HTC) * (sy pcmSA)) / ((sy coil_HTC) * (sy coilSA))) *
   (((sy coil_HTC) * (sy coilSA)) / ((sy wMass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn6 = (deriv (sy temp_W) time $= (1 / (sy tauW)) *
-  ((sy temp_C) - (sy temp_W)) + ((sy eta) / (sy tauW)) *
+  ((sy tempC) - (sy temp_W)) + ((sy eta) / (sy tauW)) *
   ((sy temp_PCM) - (sy temp_W)))
 
 iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tauW)) *
-  (((sy temp_C) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
+  (((sy tempC) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
   (sy temp_W))))
 
 -- Should "energy balance" be a concept?

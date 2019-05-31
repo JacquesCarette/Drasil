@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
-import Drasil.SWHS.Unitals (tempInit, temp_C, temp_PCM)
+import Drasil.SWHS.Unitals (tempInit, tempC, temp_PCM)
 import Drasil.SWHS.Assumptions (assumpTPCAV, assumpTHCCoT, assumpTHCCoL,
   assumpCTNOD, assumpSITWP, assumpWAL, assumpPIT, assumpNIHGBWP, assumpNGSP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInPCM)
@@ -36,12 +36,12 @@ likeChgUTP = cic "likeChgUTP" (
   likeChgDom
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
-  foldlSent [chgsStart assumpTHCCoT (S "The"), phrase temp_C, S "will change over",
+  foldlSent [chgsStart assumpTHCCoT (S "The"), phrase tempC, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy,
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (
-  foldlSent [chgsStart assumpTHCCoL (S "The"), phrase temp_C,
+  foldlSent [chgsStart assumpTHCCoL (S "The"), phrase tempC,
   S "will actually change along its length as the", phrase water,
   S "within it cools"] ) "Temperature-Coil-Variable-Over-Length" likeChgDom
 --

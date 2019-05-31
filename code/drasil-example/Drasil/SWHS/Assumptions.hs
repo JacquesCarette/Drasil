@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
-import Drasil.SWHS.Unitals (wVol, volHtGen, temp_C, tempInit, temp_W,
+import Drasil.SWHS.Unitals (wVol, volHtGen, tempC, tempInit, temp_W,
   temp_PCM, htCapLP, htCap_W, htCapSP, w_density, pcmDensity, pcmVol)
 
 -------------------------
@@ -92,9 +92,9 @@ assumpS7 = foldlSent [
   CT.lawConvCooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water]
 assumpS8 = foldlSent [
-  S "The", phrase temp_C, S "is constant over", phrase time]
+  S "The", phrase tempC, S "is constant over", phrase time]
 assumpS9 = foldlSent [
-  S "The", phrase temp_C, S "does not vary along its length"]
+  S "The", phrase tempC, S "does not vary along its length"]
 assumpS10 = foldlSent [
   CT.lawConvCooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl]
@@ -104,7 +104,7 @@ assumpS11 = foldlSent [
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase tempInit, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)",
-  S "to the", phrase temp_C]
+  S "to the", phrase tempC]
 assumpS12 = foldlSent [
   phrase tempInit `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same"]

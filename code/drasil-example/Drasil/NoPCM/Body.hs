@@ -76,7 +76,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coilSA, 
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
-  tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, temp_C, 
+  tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
   tempEnv, temp_W, thFluxVect, time_final, time_final_max, volHtGen, w_density, 
   w_density_max, w_density_min, w_E, wMass, wVol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
@@ -124,7 +124,7 @@ units = map ucw [density, tau, inSA, outSA,
 
 constraints :: [UncertQ]
 constraints =  [coilSA, htCap_W, coil_HTC, tempInit,
-  time_final, tankLength, temp_C, w_density, diam]
+  time_final, tankLength, tempC, w_density, diam]
   -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section

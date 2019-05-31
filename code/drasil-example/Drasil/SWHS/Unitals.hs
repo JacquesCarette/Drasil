@@ -231,11 +231,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 -- Input Constraints
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, temp_C,
+  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCapSP, htCapLP, htFusion, coilSA, temp_C, w_density,
+  htCapSP, htCapLP, htFusion, coilSA, tempC, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
@@ -287,7 +287,7 @@ tempMeltP = uqc "tempMeltP"
   ("Temperature at which the phase change " ++
     "material transitions from a solid to a liquid")
   (sup (sub (eqSymb temp) (Atomic "melt")) cP) centigrade Rational
-  [physc $ Bounded (Exc,0) (Exc, sy temp_C)] (dbl 44.2) defaultUncrt
+  [physc $ Bounded (Exc,0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
 htCapSP = uqc "htCapSP"
@@ -328,7 +328,7 @@ coilSA = uqc "coilSA"
   sfwrc $ UpTo (Inc, sy coil_SA_max)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
-temp_C = uqc "temp_C" (nounPhraseSP "temperature of the heating coil")
+tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   "The average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) cC) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
@@ -398,7 +398,7 @@ temp_W = cuc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy temp_C)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
 
 -- Constraint 19
 temp_PCM = cuc' "temp_PCM"
@@ -406,7 +406,7 @@ temp_PCM = cuc' "temp_PCM"
   ("The average kinetic energy of the " ++
     "particles within the phase change material")
   (sub (eqSymb temp) cP) centigrade Rational
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy temp_C)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
   
 -- Constraint 20
 w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")

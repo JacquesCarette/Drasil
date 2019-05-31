@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
+  pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -36,8 +36,8 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCap_W, qw coil_HTC, qw pcmSA,
- qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw temp_C, qw tempInit]
-  [sy tempInit $< sy temp_C] (qw temp_W)
+ qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
+  [sy tempInit $< sy tempC] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
 
@@ -48,18 +48,18 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
 
 balWtrRel :: Relation
 balWtrRel = (deriv (sy temp_W) time) $= 1 / (sy tauW) *
-  (((sy temp_C) - (apply1 temp_W time)) +
+  (((sy tempC) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
-  `sC` (E $ sy temp_C) `sC` (E $ sy temp_PCM), S "from" +:+.
+  `sC` (E $ sy tempC) `sC` (E $ sy temp_PCM), S "from" +:+.
   sParen (makeRef2S eBalanceOnPCM), S "The input is constrained so that" +:+.
-  (E $ sy tempInit $<= (sy temp_C)), sParen (makeRef2S assumpCTNOD),
+  (E $ sy tempInit $<= (sy tempC)), sParen (makeRef2S assumpCTNOD),
   (E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
+  (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
   (E $ sy tauW $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coilSA)),
   S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
   (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coil_HTC * sy coilSA)),
@@ -157,19 +157,19 @@ eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $=
   (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA)
 
 eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy coil_HTC) * (sy coilSA) *  ((sy temp_C) - (sy temp_W)) -
+  (sy coil_HTC) * (sy coilSA) *  ((sy tempC) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
+  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) -
   ((sy pcmMass) * (sy pcmSA) / 
   ((sy wMass) * (sy htCap_W))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn4 = 
   (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
+  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) +
   ((sy coil_HTC) * (sy coilSA) / 
   ((sy coil_HTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
   ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
@@ -177,18 +177,18 @@ eBalanceOnWtrDerivEqn4 =
 eBalanceOnWtrDerivEqn5 =  
   (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
+  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) +
   ((sy pcm_HTC) * (sy pcmSA) / 
   ((sy coil_HTC) * (sy coilSA))) * ((sy coil_HTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
 
 
 eBalanceOnWtrDerivEqn6 = (deriv (sy temp_W) time) $= 
-  1 / (sy tauW) * ((sy temp_C) - (sy temp_W)) +
+  1 / (sy tauW) * ((sy tempC) - (sy temp_W)) +
   (sy eta) / (sy tauW) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn7 =  
-  (deriv (sy temp_W) time) $= 1 / (sy tauW) * (((sy temp_C) - (sy temp_W)) +
+  (deriv (sy temp_W) time) $= 1 / (sy tauW) * (((sy tempC) - (sy temp_W)) +
   sy eta * ((sy temp_PCM) - (sy temp_W)))
 
 eBalanceOnWtr_deriv_eqns__im1 :: [Expr]

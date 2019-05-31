@@ -54,7 +54,7 @@ equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eqRel :: Relation
-eqRel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
+eqRel = foldr (($=) . sumAll (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",

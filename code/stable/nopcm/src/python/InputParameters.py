@@ -9,10 +9,14 @@ T_init = 0.0
 t_final = 0.0
 L = 0.0
 T_C = 0.0
+t_step = 0.0
 ρ_W = 0.0
 D = 0.0
 T_W = 0.0
 E_W = 0.0
+A_tol = 0.0
+R_tol = 0.0
+C_tol = 0.0
 
 def derived_values():
     None
@@ -43,6 +47,8 @@ def input_constraints(inParams):
     if (not(inParams.L > 0)) :
         print("Warning: constraint violated")
     if (not((0 < inParams.T_C) and (inParams.T_C < 100))) :
+        print("Warning: constraint violated")
+    if (not((0 < inParams.t_step) and (inParams.t_step < inParams.t_final))) :
         print("Warning: constraint violated")
     if (not(inParams.ρ_W > 0)) :
         print("Warning: constraint violated")

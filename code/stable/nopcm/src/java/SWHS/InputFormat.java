@@ -9,7 +9,7 @@ import java.util.Vector;
 
 public class InputFormat {
     
-    public static void func_get_inputs(String filename, InputParameters inParams, double τ, double A_tol, double R_tol, double C_tol) throws Exception {
+    public static void func_get_inputs(String filename, InputParameters inParams) throws Exception {
         Scanner infile;
         String line;
         Vector<String> lines = new Vector<String>(0);
@@ -32,15 +32,15 @@ public class InputFormat {
         infile.nextLine();
         inParams.T_init = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        τ = Double.parseDouble(infile.nextLine());
+        inParams.t_step = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.t_final = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        A_tol = Double.parseDouble(infile.nextLine());
+        inParams.A_tol = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        R_tol = Double.parseDouble(infile.nextLine());
+        inParams.R_tol = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        C_tol = Double.parseDouble(infile.nextLine());
+        inParams.C_tol = Double.parseDouble(infile.nextLine());
         infile.close();
     }
 }

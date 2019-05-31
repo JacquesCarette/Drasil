@@ -12,10 +12,14 @@ namespace SWHS {
         public static double t_final;
         public static double L;
         public static double T_C;
+        public static double t_step;
         public static double ρ_W;
         public static double D;
         public static double T_W;
         public static double E_W;
+        public static double A_tol;
+        public static double R_tol;
+        public static double C_tol;
         
         public static void derived_values() {
         }
@@ -58,6 +62,9 @@ namespace SWHS {
                 Console.WriteLine("Warning: constraint violated");
             }
             if (!((0 < inParams.T_C) && (inParams.T_C < 100))) {
+                Console.WriteLine("Warning: constraint violated");
+            }
+            if (!((0 < inParams.t_step) && (inParams.t_step < inParams.t_final))) {
                 Console.WriteLine("Warning: constraint violated");
             }
             if (!(inParams.ρ_W > 0)) {

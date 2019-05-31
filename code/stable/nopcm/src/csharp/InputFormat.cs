@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace SWHS {
     public class InputFormat {
         
-        public static void func_get_inputs(string filename, InputParameters inParams, double τ, double A_tol, double R_tol, double C_tol) {
+        public static void func_get_inputs(string filename, InputParameters inParams) {
             StreamReader infile;
             string line;
             List<string> lines = new List<string>(0);
@@ -29,15 +29,15 @@ namespace SWHS {
             infile.ReadLine();
             inParams.T_init = Double.Parse(infile.ReadLine());
             infile.ReadLine();
-            τ = Double.Parse(infile.ReadLine());
+            inParams.t_step = Double.Parse(infile.ReadLine());
             infile.ReadLine();
             inParams.t_final = Double.Parse(infile.ReadLine());
             infile.ReadLine();
-            A_tol = Double.Parse(infile.ReadLine());
+            inParams.A_tol = Double.Parse(infile.ReadLine());
             infile.ReadLine();
-            R_tol = Double.Parse(infile.ReadLine());
+            inParams.R_tol = Double.Parse(infile.ReadLine());
             infile.ReadLine();
-            C_tol = Double.Parse(infile.ReadLine());
+            inParams.C_tol = Double.Parse(infile.ReadLine());
             infile.Close();
         }
     }

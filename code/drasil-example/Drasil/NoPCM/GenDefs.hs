@@ -78,19 +78,19 @@ genDefDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
 
 genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
 
-genDefEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy volHtGen)) $=
-  (int_all (eqSymb vol) ((sy density)
+genDefEq1 = (negate (intAll (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
+  (intAll (eqSymb vol) (sy volHtGen)) $=
+  (intAll (eqSymb vol) ((sy density)
   * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
-genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy volHtGen)) $= 
-  (int_all (eqSymb vol)
+genDefEq2 = (negate (intAll (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (intAll (eqSymb vol) (sy volHtGen)) $= 
+  (intAll (eqSymb vol)
   ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq3 = (sy htFluxIn) * (sy inSA) - (sy htFluxOut) *
   (sy outSA) + (sy volHtGen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+  (intAll (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
 
 genDefEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy htFluxIn) * (sy inSA) - (sy htFluxOut) *

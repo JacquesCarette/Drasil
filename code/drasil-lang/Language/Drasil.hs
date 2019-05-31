@@ -10,7 +10,7 @@ module Language.Drasil (
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
-  , sum_all, defsum, prod_all, defprod, defint, int_all
+  , sum_all, defsum, prod_all, defprod, defint, intAll
   , real_interval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
@@ -188,7 +188,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           real_interval,
           apply, apply1, apply2,
           sy, deriv, pderiv,
-          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
+          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection

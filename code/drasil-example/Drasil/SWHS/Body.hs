@@ -999,9 +999,9 @@ genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR'
-  ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
-  (int_all (eqSymb vol) (sy volHtGen)) $=
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  ((negate (intAll (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
+  (intAll (eqSymb vol) (sy volHtGen)) $=
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> Contents
@@ -1012,9 +1012,9 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   S "outward", phrase unv, S "for a", phrase su]
 
 genDefDeriv5 = eqUnR'
-  ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy volHtGen)) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  ((negate (intAll (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (intAll (eqSymb vol) (sy volHtGen)) $= 
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1024,7 +1024,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 genDefDeriv7 = eqUnR'
   ((sy htFluxIn) * (sy inSA) - (sy htFluxOut) *
   (sy outSA) + (sy volHtGen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:

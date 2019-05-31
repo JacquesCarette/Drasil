@@ -87,10 +87,10 @@ isin = IsIn
 
 -- | Smart constructor for the summation, product, and integrals
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
-int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
+intAll, sum_all, prod_all :: Symbol -> Expr -> Expr
 
 defint v low high = Operator Add (BoundedDD v Continuous low high)
-int_all v = Operator Add (AllDD v Continuous)
+intAll v = Operator Add (AllDD v Continuous)
 
 defsum v low high = Operator Add (BoundedDD v Discrete low high)
 sum_all v = Operator Add (AllDD v Discrete)

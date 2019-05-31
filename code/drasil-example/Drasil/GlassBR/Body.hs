@@ -177,7 +177,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub' funcReqs funcReqsTables,
+    FReqsSub funcReqs funcReqsTables,
     NonFReqsSub nonfuncReqs
   ],
   LCsSec' $ LCsProg' likelyChgs,

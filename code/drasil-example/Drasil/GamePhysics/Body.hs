@@ -107,7 +107,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub' funcReqs [],
+      FReqsSub funcReqs [],
       NonFReqsSub nonfuncReqs
     ],
     LCsSec $ LCsProg likelyChangesListwithIntro,

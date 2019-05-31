@@ -151,7 +151,7 @@ mkSRS = [RefSec $ RefProg intro
           ]
         ],
     ReqrmntSec $ ReqsProg [
-    FReqsSub' funcReqs funcReqTables,
+    FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
   LCsSec $ LCsProg likelyChanges_SRS,

@@ -1,6 +1,6 @@
 module Language.Drasil.UnitLang (
     USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
-  , fromUDefn, compUSymb, get_usymb, get_defn
+  , fromUDefn, compUSymb, getUSymb, get_defn
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
@@ -38,10 +38,10 @@ data UnitSymbol =
    | DerivedSI USymb USymb UDefn
    | Defined USymb UDefn
 
-get_usymb :: UnitSymbol -> USymb
-get_usymb (BaseSI u) = u
-get_usymb (DerivedSI u _ _) = u
-get_usymb (Defined u _) = u
+getUSymb :: UnitSymbol -> USymb
+getUSymb (BaseSI u) = u
+getUSymb (DerivedSI u _ _) = u
+getUSymb (Defined u _) = u
 
 get_defn :: UnitSymbol -> Maybe UDefn
 get_defn (BaseSI _) = Nothing

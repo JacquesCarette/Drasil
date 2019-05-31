@@ -20,7 +20,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
-  compUSymb, fromUDefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
+  compUSymb, fromUDefn, getUSymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 
 -- | for defining units
@@ -39,7 +39,7 @@ instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 instance Eq            UnitDefn where a == b = (usymb a) == (usymb b)
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
-instance HasUnitSymbol UnitDefn where usymb = get_usymb . view cas
+instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
 instance IsUnit        UnitDefn where udefn = get_defn . view cas
                                       getUnits = view cu
 class MayHaveUnit u where

@@ -20,9 +20,11 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, torque, kEnergy, energy)
+  kEnergy, energy)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+
+import Data.Drasil.Theories.Physics (torque, torqueDD)
 
 ----- Data Definitions -----
 
@@ -264,20 +266,7 @@ reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity),
   S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
 
-torqueDD :: DataDefinition
-torqueDD = ddNoRefs torque [{-- Derivation --}] "torque"
- [torqueDesc] 
-
-torque :: QDefinition
-torque = mkQuantDef QP.torque torqueEqn
-
-torqueEqn :: Expr
-torqueEqn = (cross (sy QP.displacement) (sy  QP.force))
-
-torqueDesc :: Sentence
-torqueDesc = foldlSent [S "The", (phrase torque), 
-  S "on a body measures the", S "the tendency of a", (phrase QP.force), 
-  S "to rotate the body around an axis or pivot"]
+-- Imported from Theories.Physics
 
 ----------------------DD14 Coefficient of Restitution--------------------------
 coeffRestitutionDD :: DataDefinition

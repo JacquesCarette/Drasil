@@ -122,14 +122,14 @@ sensHtEdesc = foldlSent [
   ch meltPt `sAnd` ch boilPt,
   S "are the", phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start sensHeat :+: S "ing occurs as long as the material does",
+  atStart sensHeat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
   phrase phaseChange, S "occurs. A",
   phrase phaseChange, S "occurs if",
   ch temp :+: S "=" :+: ch boilPt,
   S "or", ch temp :+: S "=" +:+. ch meltPt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef2S latentHtE) `sC` at_start latentHeat,
+  (makeRef2S latentHtE) `sC` atStart latentHeat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -178,5 +178,5 @@ latentHtEdesc = foldlSent [
   ch meltPt `sAnd` ch boilPt, S "are the",
   phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start latentHeat :+: S "ing stops when all material has",
+  atStart latentHeat :+: S "ing stops when all material has",
   S "changed to the new phase"]

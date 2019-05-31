@@ -142,7 +142,7 @@ module Language.Drasil (
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
-  , introduceAbb, phrase, plural, phrase's, plural's, at_start, atStart'
+  , introduceAbb, phrase, plural, phrase's, plural's, atStart, atStart'
   , titleize, titleize'
   -- Uncertainty.Core
   , Uncertainty, uncty

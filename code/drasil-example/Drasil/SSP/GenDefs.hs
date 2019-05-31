@@ -96,7 +96,7 @@ nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 nmFEqDeriv :: Sentence
-nmFEqDeriv = foldlSent [at_start normForcEq, S "is derived from the free",
+nmFEqDeriv = foldlSent [atStart normForcEq, S "is derived from the free",
   S "body diagram of", makeRef2S figForceActing, S "in", 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
@@ -118,7 +118,7 @@ bShFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 bShFEqDeriv :: Sentence
-bShFEqDeriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
+bShFEqDeriv = foldlSent [atStart bsShrFEq, S "is derived from the free",
   S "body diagram of", makeRef2S figForceActing, S "in", 
   (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
@@ -166,7 +166,7 @@ mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+.
   makeRef2S lengthLb]
 
 mobShrDeriv :: Sentence
-mobShrDeriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
+mobShrDeriv = foldlSent_ [atStart mobShrI, S "is derived by dividing",
   phrase definition `ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
   S "by", phrase definition `ofThe` phrase fs, S "from" +:+.
   makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,
@@ -271,7 +271,7 @@ momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
   makeRef2S angleB]
 
 momEqlDeriv :: Sentence
-momEqlDeriv = foldlSent_ [at_start momentEql, S "is derived from the free",
+momEqlDeriv = foldlSent_ [atStart momentEql, S "is derived from the free",
   S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
 
 --

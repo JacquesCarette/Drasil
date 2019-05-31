@@ -418,7 +418,7 @@ terminologyLabel :: Reference
 terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
 terminologyAndDefinitionsBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminologyAndDefinitionsTerms)
+  (map (\x -> (atStart x) +: EmptyS +:+ (x ^. defn)) terminologyAndDefinitionsTerms)
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

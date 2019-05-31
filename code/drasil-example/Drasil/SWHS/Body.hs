@@ -355,7 +355,7 @@ termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
-tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
+tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, (c ^. defn)]
 
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -710,7 +710,7 @@ introP1 es en sp pcmat pro te lh un = foldlSent [
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
   plural es `sAnd` S "provide a novel way of storing" +:+. phrase en,
-  at_start sp, S "improve over the traditional",
+  atStart sp, S "improve over the traditional",
   plural pro, S "because of their smaller size. The",
   S "smaller size is possible because of the ability of",
   short pcmat, S "to store", phrase te, S "as", phrase lh `sC`
@@ -931,10 +931,10 @@ probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
 -----------------------------------------
 
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
-physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]
+physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 --
 physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-physSyst2 co ta hfc = [at_start co, S "at bottom of" +:+. phrase ta,
+physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
   sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 --
 physSyst3 :: CI -> ConceptChunk -> UnitalChunk -> [Sentence]
@@ -946,7 +946,7 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [at_start sWHT `sC` S "with", phrase htFluxC, S "of",
+  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC, S "of",
   ch htFluxC `sAnd` phrase htFluxP, S "of", ch htFluxP])
   $ resourcePath ++ "Tank.png"
 

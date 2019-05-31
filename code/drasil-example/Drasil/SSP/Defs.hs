@@ -83,7 +83,7 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
-  (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+
+  (atStart slpSrf +:+ S "of the" +:+ phrase slope +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure.")
 

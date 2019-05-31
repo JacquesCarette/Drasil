@@ -69,7 +69,7 @@ outputQuants               = cic "outputQuants"               outputQuantsDesc  
 inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc :: Sentence
 checkGlassSafetyDesc :: NamedChunk -> Sentence
 
-inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
+inputGlassPropsDesc = foldlSent [atStart input_, S "the", plural quantity, S "from",
   makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
   [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
   phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
@@ -78,10 +78,10 @@ inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "f
 inputGlassPropsTable :: LabelledContent
 inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $ 
   Table
-  [at_start symbol_, at_start description, S "Units"]
+  [atStart symbol_, atStart description, S "Units"]
   (mkTable
   [ch,
-   at_start, U.toSentence] $ sortBySymbol requiredInputs)
+   atStart, U.toSentence] $ sortBySymbol requiredInputs)
   (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
@@ -137,7 +137,7 @@ outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList iMods) ++ (mkReqList r
     get2 (_, b, _) = b
 
 mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef2S c)))
+mkReqList = map (\c -> (atStart c, symbol c Implementation, sParen (makeRef2S c)))
 
 {--Functional Requirements--}
 

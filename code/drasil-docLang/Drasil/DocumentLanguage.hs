@@ -270,7 +270,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational) 
                 (nub v))
-                at_start] []
+                atStart] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
@@ -283,13 +283,13 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] 
     []
-  where lf Term = at_start
+  where lf Term = atStart
         lf Defn = (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then
-          x ^. defn else at_start x --Compare chunk uids, since we don't
+          x ^. defn else atStart x --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` map (^.uid) cs then
-          at_start x else x ^. defn
+          atStart x else x ^. defn
         lf TAD = \tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn)
 
 -- | table of symbols constructor

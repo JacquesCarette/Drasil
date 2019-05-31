@@ -370,14 +370,14 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
-  at_start x :+: S ":" +:+ (x ^. defn))
+  atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) figTank
   [physSystDescList, LlC figTank]
 
 figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase htFlux +:+
+figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 

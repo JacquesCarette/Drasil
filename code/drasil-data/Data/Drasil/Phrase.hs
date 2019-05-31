@@ -9,7 +9,7 @@ and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_ t1 t2 = nounPhrase''
   ((phrase t1) +:+ S "and" +:+ (phrase t2))
   ((phrase t1) +:+ S "and" +:+ (plural t2))
-  (Replace ((at_start t1) +:+ S "and" +:+ (phrase t2)))
+  (Replace ((atStart t1) +:+ S "and" +:+ (phrase t2)))
   (Replace ((titleize t1) +:+ S "and" +:+ (titleize t2)))
 
 -- | Same as `and_` combinator, except phrase default of second term is plural instead of phrase
@@ -17,7 +17,7 @@ and_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_' t1 t2 = nounPhrase'' 
   ((phrase t1) +:+ S "and" +:+ (plural t2))
   ((phrase t1) +:+ S "and" +:+ (plural t2))
-  (Replace ((at_start t1) +:+ S "and" +:+ (plural t2)))
+  (Replace ((atStart t1) +:+ S "and" +:+ (plural t2)))
   (Replace ((titleize t1) +:+ S "and" +:+ (titleize' t2)))
 
 -- | Customizable `and` combinator
@@ -26,7 +26,7 @@ andRT :: (NamedIdea c, NamedIdea d) =>
 andRT f1 f2 t1 t2 = nounPhrase''
   ((phrase t1) +:+ S "and" +:+ (plural t2))
   ((phrase t1) +:+ S "and" +:+ (phrase t2))
-  (Replace ((at_start t1) +:+ S "and" +:+ (phrase t2)))
+  (Replace ((atStart t1) +:+ S "and" +:+ (phrase t2)))
   (Replace ((f1 t1) +:+ S "and" +:+ (f2 t2)))
 
 -- Case with "T1s with T2", as opposed to "T1 with T2", i.e.
@@ -44,14 +44,14 @@ of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_ t1 t2 = nounPhrase'' 
   ((phrase t1) +:+ S "of" +:+ (phrase t2))
   ((phrase t1) +:+ S "of" +:+ (plural t2))
-  (Replace ((at_start t1) +:+ S "of" +:+ (phrase t2)))
+  (Replace ((atStart t1) +:+ S "of" +:+ (phrase t2)))
   (Replace ((titleize t1) +:+ S "of" +:+ (titleize t2)))
 
 ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
 ofN_ t1 t2 = nounPhrase'' 
   ((phrase t1) +:+ S "of" +:+ (phraseNP t2))
   ((phrase t1) +:+ S "of" +:+ (pluralNP t2))
-  (Replace ((at_start t1) +:+ S "of" +:+ (phraseNP t2)))
+  (Replace ((atStart t1) +:+ S "of" +:+ (phraseNP t2)))
   (Replace ((titleize t1) +:+ S "of" +:+ (titleizeNP t2)))
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
@@ -60,7 +60,7 @@ of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_' t1 t2 = nounPhrase'' 
   ((phrase t1) +:+ S "of" +:+ (plural t2))
   ((phrase t1) +:+ S "of" +:+ (plural t2))
-  (Replace ((at_start t1) +:+ S "of" +:+ (plural t2)))
+  (Replace ((atStart t1) +:+ S "of" +:+ (plural t2)))
   (Replace ((titleize t1) +:+ S "of" +:+ (titleize' t2)))
 
 -- | Same as of_, except plural default of second term is phrase
@@ -68,7 +68,7 @@ of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_'' t1 t2 = nounPhrase'' 
   ((phrase t1) +:+ S "of" +:+ (phrase t2))
   ((plural t1) +:+ S "of" +:+ (phrase t2))
-  (Replace ((at_start t1) +:+ S "of" +:+ (phrase t2)))
+  (Replace ((atStart t1) +:+ S "of" +:+ (phrase t2)))
   (Replace ((titleize t1) +:+ S "of" +:+ (titleize t2)))
 
 -- | Same as of_, except phrase default of first term is plural instead of phrase

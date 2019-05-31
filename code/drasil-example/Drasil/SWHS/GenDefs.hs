@@ -59,7 +59,7 @@ nwtnCoolingRel = apply1 htFlux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCoolingDesc :: Sentence
-nwtnCoolingDesc = foldlSent [at_start lawConvCooling +:+.
+nwtnCoolingDesc = foldlSent [atStart lawConvCooling +:+.
   S "describes convective cooling from a surface" +:
   S "The law is stated as", S "the", phrase rate,
   S "of heat loss from a body is proportional to the",

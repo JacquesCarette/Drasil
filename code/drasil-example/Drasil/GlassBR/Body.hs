@@ -248,7 +248,7 @@ termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (at_start load `sDash` (load ^. defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
@@ -284,7 +284,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
-  at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
+  atStart prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
   S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
@@ -685,14 +685,14 @@ appdxIntro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start charWeight +:+ sParen (ch charWeight))
+  sParen (ch demand) `sVersus` atStart sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
+  `sVersus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
 
 blstRskInvWGlassSlab :: Sentence

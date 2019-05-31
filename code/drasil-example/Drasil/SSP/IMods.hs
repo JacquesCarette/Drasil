@@ -646,7 +646,7 @@ instModIntro1 = foldlSent [S "The", plural goal,
 
 instModIntro2 = foldlSent [S "The", titleize morPrice,
   phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
+  phrase ssa +:+. phrase method_, atStart analysis, S "is performed by",
   S "breaking the assumed", phrase slpSrf,
   S "into a series of vertical", plural slice, S "of" +:+. phrase mass,
   S "Static equilibrium analysis is performed, using two", phrase force,

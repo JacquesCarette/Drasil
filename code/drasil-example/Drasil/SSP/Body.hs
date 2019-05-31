@@ -260,9 +260,9 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   S "movement", S "The", plural effect, S "of", phrase soil,
   S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in signifcant life and economic" +:+.
-  plural loss, at_start slope, S "stability is of", phrase interest,
+  plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
-  S "and when designing an excavated" +:+.  phrase slope, at_start ssa,
+  S "and when designing an excavated" +:+.  phrase slope, atStart ssa,
   S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `sAnd`
@@ -437,7 +437,7 @@ physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
   NamedIdea d, HasSymbol d, NamedIdea e, NamedIdea f, HasShortName g, 
   Referable g) => a -> b -> c -> Sentence -> d -> e -> f -> g -> Contents
 physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
-  at_start anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
+  atStart anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
   S "involves representing the", phrase what +:+. how, S "As shown in",
   makeRef2S indexref `sC` S "the", phrase ix, ch ix, S "is used to denote a",
   phrase value, S "for a single", phrase ixd `sC` S "and an", phrase intrfce, 
@@ -478,7 +478,7 @@ figIndexConv = llcc (makeFigRef "IndexConvention") $
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (at_start fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
+  fig (atStart fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --

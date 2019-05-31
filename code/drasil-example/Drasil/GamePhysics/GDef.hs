@@ -7,9 +7,10 @@
 module Drasil.GamePhysics.GDefs (genDefs) where
 
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Utils (foldlSent)
 
 ----- General Models -----
 

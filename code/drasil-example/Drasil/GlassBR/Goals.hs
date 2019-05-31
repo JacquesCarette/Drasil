@@ -5,7 +5,6 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
-import Data.Drasil.SentenceStructures (foldlSent)
 
 import Drasil.GlassBR.Concepts (glaSlab)
 import Drasil.GlassBR.Unitals (explosion)

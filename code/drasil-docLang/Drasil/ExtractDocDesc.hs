@@ -78,7 +78,6 @@ egetApp :: AppndxSec -> [Expr]
 egetApp (AppndxProg c) = concatMap egetCon' c
 
 egetExist :: ExistingSolnSec -> [Expr]
-egetExist (ExistSolnVerb s) = egetSec s
 egetExist (ExistSolnProg c) = concatMap egetCon' c
 
 egetRefProg :: RefTab -> [Expr]
@@ -359,27 +358,26 @@ getApp :: AppndxSec -> [Sentence]
 getApp (AppndxProg c) = concatMap getCon' c
 
 getExist :: ExistingSolnSec -> [Sentence]
-getExist (ExistSolnVerb s) = getSec s
 getExist (ExistSolnProg c) = concatMap getCon' c
 
 ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc = concatMap ciGetDocSec
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec RefSec{}                = []
-ciGetDocSec (IntroSec        intro) = ciGetIntro intro
-ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
-ciGetDocSec GSDSec{}                = []
-ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
-ciGetDocSec ReqrmntSec{}            = []
-ciGetDocSec LCsSec{}                = []
-ciGetDocSec LCsSec'{}               = []
-ciGetDocSec UCsSec{}                = []
-ciGetDocSec TraceabilitySec{}       = []
-ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
-ciGetDocSec Bibliography            = []
-ciGetDocSec AppndxSec{}             = []
-ciGetDocSec ExistingSolnSec{}       = []
+ciGetDocSec RefSec{}            = []
+ciGetDocSec (IntroSec intro)    = ciGetIntro intro
+ciGetDocSec (StkhldrSec stk)    = ciGetStk stk
+ciGetDocSec GSDSec{}            = []
+ciGetDocSec (SSDSec ssd)        = ciGetSSD ssd
+ciGetDocSec ReqrmntSec{}        = []
+ciGetDocSec LCsSec{}            = []
+ciGetDocSec LCsSec'{}           = []
+ciGetDocSec UCsSec{}            = []
+ciGetDocSec TraceabilitySec{}   = []
+ciGetDocSec (AuxConstntSec aux) = ciGetAux aux
+ciGetDocSec Bibliography        = []
+ciGetDocSec AppndxSec{}         = []
+ciGetDocSec ExistingSolnSec{}   = []
 
 ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub

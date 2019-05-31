@@ -14,8 +14,6 @@ import Data.Drasil.Concepts.Documentation (assumption, code,
 import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), 
-  foldlList, foldlSent, foldlSP)
 import Data.Drasil.Utils (mkInputDatTb)
 
 import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)

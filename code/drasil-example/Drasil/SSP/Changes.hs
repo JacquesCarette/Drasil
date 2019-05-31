@@ -10,7 +10,7 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
-import Data.Drasil.SentenceStructures (chgsStart, foldlSent, foldlSP)
+import Data.Drasil.SentenceStructures (chgsStart)
 
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
   assumpSF, assumpSL)

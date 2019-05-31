@@ -1,5 +1,4 @@
-module Drasil.SSP.Requirements (funcReqs, nonFuncReqs,
-  inputDataTable, inputsToOutputTable, propsDeriv) where
+module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -31,6 +30,9 @@ funcReqs :: [ConceptInstance]
 funcReqs = [readAndStore, verifyInput, determineCritSlip, verifyOutput, 
   displayInput, displayGraph, displayFS, displayNormal, displayShear, 
   writeToFile]
+
+funcReqTables :: [LabelledContent]
+funcReqTables = [inputDataTable, inputsToOutputTable]
 
 readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, 
   displayGraph, displayFS, displayNormal, displayShear, 

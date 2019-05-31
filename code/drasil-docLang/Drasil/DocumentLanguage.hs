@@ -196,7 +196,7 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Replace with FReqsSub' once its used everywhere
-  FReqsSub' :: [ConceptInstance] -> ReqsSub
+  FReqsSub' :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
 {--}
@@ -490,9 +490,9 @@ mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub reqs) = R.fReqF reqs
-    mkSubs (FReqsSub' frs) = R.fReqF (mkEnumSimpleD frs)
-    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+    mkSubs (FReqsSub reqs)     = R.fReqF reqs
+    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (NonFReqsSub nfrs ) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}
 

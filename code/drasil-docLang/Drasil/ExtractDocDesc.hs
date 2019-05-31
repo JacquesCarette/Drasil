@@ -340,7 +340,7 @@ getReq (ReqsProg rs) = concatMap getReqSub rs
 
 getReqSub :: ReqsSub -> [Sentence]
 getReqSub (FReqsSub c)    = concatMap getCon' c
-getReqSub (FReqsSub' c)   = map (^. defn) c
+getReqSub (FReqsSub' c _) = map (^. defn) c
 getReqSub (NonFReqsSub c) = map (^. defn) c
 
 getLcs :: LCsSec -> [Sentence]

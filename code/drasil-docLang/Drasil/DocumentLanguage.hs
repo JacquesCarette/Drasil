@@ -195,7 +195,8 @@ data DerivationDisplay = ShowDerivation
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
-  FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
+  FReqsSub :: [Contents] -> ReqsSub --FIXME: Replace with FReqsSub' once its used everywhere
+  FReqsSub' :: [ConceptInstance] -> ReqsSub
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
 {--}
@@ -490,6 +491,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub reqs) = R.fReqF reqs
+    mkSubs (FReqsSub' frs) = R.fReqF (mkEnumSimpleD frs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}

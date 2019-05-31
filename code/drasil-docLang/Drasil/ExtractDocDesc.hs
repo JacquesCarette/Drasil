@@ -107,7 +107,8 @@ egetSSDSub (SSDProblem p)   = egetProblem p
 egetSSDSub (SSDSolChSpec s) = egetSol s
 
 egetReqSub :: ReqsSub -> [Expr]
-egetReqSub (FReqsSub c) = concatMap egetCon' c
+egetReqSub (FReqsSub c)  = concatMap egetCon' c
+egetReqSub FReqsSub'{}   = []
 egetReqSub NonFReqsSub{} = []
 
 egetFunc :: LFunc -> [Expr]
@@ -338,7 +339,8 @@ getReq :: ReqrmntSec -> [Sentence]
 getReq (ReqsProg rs) = concatMap getReqSub rs
 
 getReqSub :: ReqsSub -> [Sentence]
-getReqSub (FReqsSub c) = concatMap getCon' c
+getReqSub (FReqsSub c)    = concatMap getCon' c
+getReqSub (FReqsSub' c)   = map (^. defn) c
 getReqSub (NonFReqsSub c) = map (^. defn) c
 
 getLcs :: LCsSec -> [Sentence]

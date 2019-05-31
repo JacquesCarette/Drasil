@@ -1,4 +1,5 @@
-module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, reqF, reqIntro, nfReqF) where
+module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkValsSourceTable,
+  reqF, reqIntro, nfReqF) where
 
 import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol)
@@ -64,3 +65,10 @@ mkInputPropsTable reqInputs req = llcc (makeTabRef "InputPropsReqInputs") $
   Table [at_start symbol_, at_start description, at_start' unit_]
   (mkTable [ch, at_start, toSentence] $ sortBySymbol reqInputs)
   (S "Required" +:+ titleize' input_ `follows` req) True
+
+-- | takes a list of tuples of variables and sources and creates an table for uses in Functional Requirments
+mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+                          [(i, Sentence)] -> String -> Sentence -> LabelledContent
+mkValsSourceTable vals label cap = llcc (makeTabRef label) $ 
+  Table [at_start symbol_, at_start description, S "Source", at_start' unit_]
+  (mkTable [ch . fst, at_start . fst, snd, toSentence . fst] vals) cap True

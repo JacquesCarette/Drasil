@@ -77,7 +77,7 @@ import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA,
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
-  tempEnv, temp_W, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
+  tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
   w_density_max, w_density_min, w_E, wMass, wVol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
@@ -102,7 +102,7 @@ checkSi = collectUnits symbMap symbTT
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
- ++ map dqdWr [temp_W, w_E]
+ ++ map dqdWr [tempW, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
 resourcePath :: String
@@ -125,7 +125,7 @@ units = map ucw [density, tau, inSA, outSA,
 constraints :: [UncertQ]
 constraints =  [coilSA, htCapW, coilHTC, tempInit,
   timeFinal, tankLength, tempC, wDensity, diam]
-  -- w_E, temp_W
+  -- w_E, tempW
 
 probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
 
@@ -220,10 +220,10 @@ si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
-  _outputs = (map qw [temp_W, w_E]),     --outputs
+  _inputs = (map qw constraints ++ map qw [tempW, w_E]), --inputs ++ outputs?
+  _outputs = (map qw [tempW, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = (map cnstrw constraints ++ map cnstrw [tempW, w_E]),        --constrained
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
@@ -385,7 +385,7 @@ physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
-goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
+goalStates = goalStmtF (goalStatesIntro temp coil tempW) goalStatesList
 
 goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
 goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
@@ -426,7 +426,7 @@ dataConstTable2 = outDataConstTbl dataConstListOut
   -- (titleize output_ +:+ titleize' variable) True
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [temp_W, w_E]
+dataConstListOut = [tempW, w_E]
 
 --------------------------
 --Section 5 : REQUIREMENTS

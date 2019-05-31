@@ -9,7 +9,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
-  temp_W, temp_PCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
+  tempW, temp_PCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
   htCapLP, pcmHTC, pcmSA, tauSP, tauLP)
 
 import Data.Drasil.Quantities.Physics (time)
@@ -35,7 +35,7 @@ dd1HtFluxCQD :: QDefinition
 dd1HtFluxCQD = mkQuantDef htFluxC htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (sy coilHTC) * ((sy tempC) - apply1 temp_W time)
+htFluxCEqn = (sy coilHTC) * ((sy tempC) - apply1 tempW time)
 
 dd1HtFluxC :: DataDefinition
 dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
@@ -48,7 +48,7 @@ dd2HtFluxPQD :: QDefinition
 dd2HtFluxPQD = mkQuantDef htFluxP htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (sy pcmHTC) * (apply1 temp_W time - apply1 temp_PCM time)
+htFluxPEqn = (sy pcmHTC) * (apply1 tempW time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
 dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"

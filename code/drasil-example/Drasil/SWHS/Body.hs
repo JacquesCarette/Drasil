@@ -81,7 +81,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
   pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
-  temp_PCM, temp_W, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
+  temp_PCM, tempW, thFluxVect, thickness, volHtGen, w_E, wMass, abs_tol, rel_tol, cons_tol)
 
 -------------------------------------------------------------------------------
 
@@ -385,7 +385,7 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
 -----------------------------
 
 goalStates :: Section
-goalStates = goalStmtF (goalStateIntro tempC temp_W temp_PCM) goalStateList
+goalStates = goalStmtF (goalStateIntro tempC tempW temp_PCM) goalStateList
 
 goalStateList :: [Contents]
 goalStateList = mkEnumSimpleD goals
@@ -462,10 +462,10 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 
 dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
---FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
+--FIXME: add "(by A11)" in Physical Constraints of `tempW` and `temp_PCM`?
 
 outputConstraints :: [ConstrConcept]
-outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
+outputConstraints = [tempW, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?
@@ -1100,37 +1100,37 @@ iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tauW) `sC`
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
 
-iMod1Eqn1 = ((sy wMass) * (sy htCapW) * deriv (sy temp_W) time $=
+iMod1Eqn1 = ((sy wMass) * (sy htCapW) * deriv (sy tempW) time $=
   (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA))
 
-iMod1Eqn2 = ((sy wMass) * (sy htCapW) * deriv (sy temp_W) time $=
-  (sy coilHTC) * (sy coilSA) * ((sy tempC) - (sy temp_W)) -
-  (sy pcmHTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
+iMod1Eqn2 = ((sy wMass) * (sy htCapW) * deriv (sy tempW) time $=
+  (sy coilHTC) * (sy coilSA) * ((sy tempC) - (sy tempW)) -
+  (sy pcmHTC) * (sy pcmSA) * ((sy tempW) - (sy temp_PCM)))
 
-iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coilHTC) *
+iMod1Eqn3 = (deriv (sy tempW) time $= ((sy coilHTC) *
   (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) -
-  (sy temp_W)) - ((sy pcmMass) * (sy pcmSA)) / ((sy wMass) *
-  (sy htCapW)) * ((sy temp_W) - (sy temp_PCM)))
+  (sy tempW)) - ((sy pcmMass) * (sy pcmSA)) / ((sy wMass) *
+  (sy htCapW)) * ((sy tempW) - (sy temp_PCM)))
 
-iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coilHTC) *
-  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy temp_W)) +
+iMod1Eqn4 = (deriv (sy tempW) time $= ((sy coilHTC) *
+  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy tempW)) +
   (((sy coilHTC) * (sy coilSA)) / ((sy coilHTC) * (sy coilSA))) *
   (((sy pcmHTC) * (sy pcmSA)) / ((sy wMass) * (sy htCapW))) *
-  ((sy temp_PCM) - (sy temp_W)))
+  ((sy temp_PCM) - (sy tempW)))
 
-iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coilHTC) *
-  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy temp_W)) +
+iMod1Eqn5 = (deriv (sy tempW) time $= ((sy coilHTC) *
+  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy tempW)) +
   (((sy pcmHTC) * (sy pcmSA)) / ((sy coilHTC) * (sy coilSA))) *
   (((sy coilHTC) * (sy coilSA)) / ((sy wMass) * (sy htCapW))) *
-  ((sy temp_PCM) - (sy temp_W)))
+  ((sy temp_PCM) - (sy tempW)))
 
-iMod1Eqn6 = (deriv (sy temp_W) time $= (1 / (sy tauW)) *
-  ((sy tempC) - (sy temp_W)) + ((sy eta) / (sy tauW)) *
-  ((sy temp_PCM) - (sy temp_W)))
+iMod1Eqn6 = (deriv (sy tempW) time $= (1 / (sy tauW)) *
+  ((sy tempC) - (sy tempW)) + ((sy eta) / (sy tauW)) *
+  ((sy temp_PCM) - (sy tempW)))
 
-iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tauW)) *
-  (((sy tempC) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
-  (sy temp_W))))
+iMod1Eqn7 = (deriv (sy tempW) time $= (1 / (sy tauW)) *
+  (((sy tempC) - (sy tempW)) + (sy eta) * ((sy temp_PCM) -
+  (sy tempW))))
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
@@ -1156,13 +1156,13 @@ iMod2Eqn1 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
   time $= (sy htFluxP) * (sy pcmSA))
 
 iMod2Eqn2 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
-  time $= (sy pcmHTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
+  time $= (sy pcmHTC) * (sy pcmSA) * ((sy tempW) - (sy temp_PCM)))
 
 iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcmHTC) *
-  (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP)) * ((sy temp_W) - (sy temp_PCM)))
+  (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP)) * ((sy tempW) - (sy temp_PCM)))
 
 iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tauSP)) *
-  ((sy temp_W) - (sy temp_PCM)))
+  ((sy tempW) - (sy temp_PCM)))
 
 -- Add GD, A, and EqnBlock references when available
 -- FIXME: Replace derivs with regular derivative when available

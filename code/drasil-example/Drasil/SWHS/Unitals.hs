@@ -238,7 +238,7 @@ tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
   htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
-temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
+temp_PCM, tempW, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -391,10 +391,10 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-outputs = [temp_W, temp_PCM, w_E, pcm_E]
+outputs = [tempW, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
-temp_W = cuc' "temp_W"
+tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational

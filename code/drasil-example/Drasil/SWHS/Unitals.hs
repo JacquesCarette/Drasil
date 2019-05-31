@@ -37,7 +37,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
-  temp, boilPt, tempEnv, meltPt, t_init_melt,
+  temp, boilPt, tempEnv, meltPt, tInitMelt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
@@ -47,7 +47,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
-  tempEnv, t_init_melt,
+  tempEnv, tInitMelt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
@@ -55,7 +55,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
-  tempEnv, t_init_melt,
+  tempEnv, tInitMelt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
@@ -146,7 +146,7 @@ tempEnv = uc' "tempEnv" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment"
   (sub (eqSymb temp) (Atomic "env")) centigrade
 
-t_init_melt = uc' "t_init_melt"
+tInitMelt = uc' "tInitMelt"
   (nounPhraseSP "time at which melting of PCM begins")
   ("Time at which the phase change material " ++
     "begins changing from a solid to a liquid")

@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcm_SA, pcm_vol, t_init_melt, tau_L_P, tau_S_P, tau_W, temp_C, tempInit, 
+  pcmMass, pcm_SA, pcm_vol, tInitMelt, tau_L_P, tau_S_P, tau_W, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, w_vol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -397,7 +397,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   sParen (unwrap $ getUnit htCap_S_P) `sAnd` (ch wMass) `isThe` phrase mass, 
   S "of the", phrase water +:+. sParen (unwrap $ getUnit wMass), S "The", 
   phrase change, S "in", phrase temp, S "is the difference between the", 
-  phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit t_init_melt) `sC`
+  phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
   (ch temp_W) `sAnd` S "the", phrase tempInit `sC` ch tempInit +:+.
   sParen (unwrap $ getUnit tempInit), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
@@ -408,7 +408,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 ---------
 heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv heatEInPCMRC [qw temp_melt_P, qw time_final, qw tempInit, qw pcm_SA,
- qw pcm_HTC, qw pcmMass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
+ qw pcm_HTC, qw pcmMass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw tInitMelt]
   [sy tempInit $< sy temp_melt_P] (qw pcm_E)
   [0 $< sy time $< sy time_final] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]
@@ -458,7 +458,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
   phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`
   ch latentEP, sParen (unwrap $ getUnit latentEP), S "since the", phrase time, S "when",
-  phrase melting, S "began", ch t_init_melt +:+. sParen (unwrap $ getUnit t_init_melt),
+  phrase melting, S "began", ch tInitMelt +:+. sParen (unwrap $ getUnit tInitMelt),
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
   phrase solid, S "or", phrase liquid, S "state", sParen (makeRef2S assumpNGSP),

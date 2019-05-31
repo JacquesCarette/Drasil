@@ -30,7 +30,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcmMass, pcm_vol,
-  sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
+  sim_time, t_final_melt, tInitMelt, tank_length, tank_vol, tau_L_P, tau_S_P,
   tau_W, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
   w_density, wMass, w_vol)
 
@@ -159,7 +159,7 @@ verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
 calcPCMMeltBegin = cic "calcPCMMeltBegin" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
-  ch t_init_melt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
+  ch tInitMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
   "Calculate-PCM-Melt-Begin-Time" funcReqDom
 --
 calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [

@@ -338,7 +338,7 @@ wDensity = uqc "wDensity" (density `of_` water)
   "Mass per unit volume of water"
   (sub (eqSymb density) cW) densityU Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy w_density_max)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)] (dbl 1000) defaultUncrt
 
 -- Constraint 13
 htCapW = uqc "htCapW" (heatCapSpec `of_` water)
@@ -448,13 +448,13 @@ consTol = uvc "consTol"
 
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
-  pcmDensityMin, pcmDensityMax, wDensityMin, w_density_max,
+  pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcmHTC_min, pcmHTC_max, timeFinal_max, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
-  pcmDensityMax, wDensityMin, w_density_max, htCapSPMin, 
+  pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
@@ -518,7 +518,7 @@ wDensityMin = mkQuantDef (unitary "wDensityMin"
   (nounPhraseSP "minimum density of water")
   (sup (eqSymb wDensity) (Atomic "min")) densityU Rational) 950
 
-w_density_max = mkQuantDef (unitary "w_density_max"
+wDensityMax = mkQuantDef (unitary "wDensityMax"
   (nounPhraseSP "maximum density of water")
   (sup (eqSymb wDensity) (Atomic "max")) densityU Rational) 1000
   

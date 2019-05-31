@@ -31,7 +31,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, eta, htCapLP, htCapSP,
   htCapW, htFusion, pcm_E, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
-  tauW, tempC, temp_PCM, temp_W, tempInit, tempMeltP, timeStep, time_final, w_E,
+  tauW, tempC, temp_PCM, temp_W, tempInit, tempMeltP, timeStep, timeFinal, w_E,
   wDensity, wMass, wVol)
 
 ------------------------------
@@ -45,7 +45,7 @@ dataConTable1 = inDataConstTbl inputConstraints
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA,
-  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, time_final]
+  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --

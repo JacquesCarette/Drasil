@@ -77,7 +77,7 @@ import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA,
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
-  tempEnv, temp_W, thFluxVect, time_final, time_final_max, volHtGen, wDensity, 
+  tempEnv, temp_W, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
   w_density_max, w_density_min, w_E, wMass, wVol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
@@ -124,7 +124,7 @@ units = map ucw [density, tau, inSA, outSA,
 
 constraints :: [UncertQ]
 constraints =  [coilSA, htCapW, coilHTC, tempInit,
-  time_final, tankLength, tempC, wDensity, diam]
+  timeFinal, tankLength, tempC, wDensity, diam]
   -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
@@ -613,7 +613,7 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 specParamValListb :: [QDefinition]
 specParamValListb = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max]
+  coil_HTC_max, timeFinal_max]
 
 specParamVal = valsOfAuxConstantsF progName specParamValListb
 

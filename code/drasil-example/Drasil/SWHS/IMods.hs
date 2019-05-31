@@ -25,7 +25,7 @@ import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcmHTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
-  tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
+  tempMeltP, temp_PCM, temp_W, timeFinal, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
@@ -36,9 +36,9 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
- qw pcmHTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
+ qw pcmHTC, qw coilSA, qw temp_PCM, qw timeFinal, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw temp_W)
-   [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtrRC :: RelationConcept
@@ -52,7 +52,7 @@ balWtrRel = (deriv (sy temp_W) time) $= 1 / (sy tauW) *
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
+balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
   `sC` (E $ sy tempC) `sC` (E $ sy temp_PCM), S "from" +:+.
   sParen (makeRef2S eBalanceOnPCM), S "The input is constrained so that" +:+.
   (E $ sy tempInit $<= (sy tempC)), sParen (makeRef2S assumpCTNOD),
@@ -200,10 +200,10 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
+eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
   [sy tempInit $< sy tempMeltP] (qw temp_PCM)
-   [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDescNote]
 
 eBalanceOnPCMRC :: RelationConcept
@@ -238,12 +238,12 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
-  (E (sy tempMeltP)) `sC` (E (sy time_final)) `sC` (E (sy tempInit)) `sC`
+  (E (sy tempMeltP)) `sC` (E (sy timeFinal)) `sC` (E (sy tempInit)) `sC`
   (E (sy pcmHTC)) `sC` (E (sy pcmMass)) `sC` (E (sy htCapSP)) `sC`
   (E (sy htCapSP)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
   S "The input is constrained so that", (E (sy tempInit $< sy tempMeltP)),
   sParen (makeRef2S assumpPIS),
-  (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy time_final)) `sC`
+  (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy timeFinal)) `sC`
   (S "with initial conditions")
   `sC` (E (sy temp_W $= sy temp_PCM $= sy tempInit)) `sC`
   (S "FIXME t_w(0) = t_p(0)") `sC`
@@ -376,7 +376,7 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw w_E) [0 $< sy time $< sy time_final] [makeCite koothoor2013] [] "heatEInWtr"
+  [] (qw w_E) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
 heatEInWtrRC :: RelationConcept
@@ -407,10 +407,10 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
+heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP, qw temp_PCM, qw htFusion, qw tInitMelt]
   [sy tempInit $< sy tempMeltP] (qw pcm_E)
-  [0 $< sy time $< sy time_final] [makeCite koothoor2013]
+  [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]
 
 heatEInPCMRC :: RelationConcept

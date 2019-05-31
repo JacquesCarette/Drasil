@@ -30,7 +30,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcmMass, pcm_vol,
-  sim_time, tFinalMelt, tInitMelt, tank_length, tankVol, tauLP, tauSP,
+  simTime, tFinalMelt, tInitMelt, tank_length, tankVol, tauLP, tauSP,
   tauW, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
   w_density, wMass, wVol)
 
@@ -232,7 +232,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   (makeRef2S d1hfc) `sAnd` (makeRef2S d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
-  S "over the", phrase sim_time `sC` S "as follows"]
+  S "over the", phrase simTime `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR'

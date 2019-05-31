@@ -49,7 +49,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,
-  tau, tauLP, tauSP, tauW, sim_time, thickness]
+  tau, tauLP, tauSP, tauW, simTime, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
@@ -57,7 +57,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,
-  tau, tauLP, tauSP, tauW, sim_time, thickness:: UnitalChunk
+  tau, tauLP, tauSP, tauW, simTime, thickness:: UnitalChunk
 
 ---------------------
 -- Regular Symbols --
@@ -189,7 +189,7 @@ tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water")
   "Derived parameter based on rate of change of temperature of water"
   (sub lTau cW) second
 
-sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
+simTime = uc' "simTime" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "Time over which the simulation runs"
   lT second
 

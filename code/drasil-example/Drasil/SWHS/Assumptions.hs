@@ -21,7 +21,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
 import Drasil.SWHS.Unitals (wVol, volHtGen, tempC, tempInit, temp_W,
-  temp_PCM, htCapLP, htCap_W, htCapSP, wDensity, pcmDensity, pcmVol)
+  temp_PCM, htCapLP, htCapW, htCapSP, wDensity, pcmDensity, pcmVol)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -84,7 +84,7 @@ assumpS5 = foldlSent [
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol]
 assumpS6 = foldlSent [
-  S "The", phrase htCap_W `sC` phrase htCapSP `sC` S "and",
+  S "The", phrase htCapW `sC` phrase htCapSP `sC` S "and",
   phrase htCapLP, S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
   phrase vol]

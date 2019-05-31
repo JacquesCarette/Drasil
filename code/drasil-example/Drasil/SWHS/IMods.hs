@@ -23,7 +23,7 @@ import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
-  htCapSP, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
+  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
@@ -35,7 +35,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCap_W, qw coil_HTC, qw pcmSA,
+eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coil_HTC, qw pcmSA,
  qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
@@ -60,7 +60,7 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
-  (E $ sy tauW $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coilSA)),
+  (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coil_HTC * sy coilSA)),
   S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
   (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coil_HTC * sy coilSA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
@@ -84,9 +84,9 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol wVol mass wMass heatCapSpec
-    htCap_W heatTrans coil htFluxC coilSA pcmSA tank htFluxP surface volHtGen,
+    htCapW heatTrans coil htFluxC coilSA pcmSA tank htFluxP surface volHtGen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
-  eBalanceOnWtrDerivDesc3 wMass htCap_W,
+  eBalanceOnWtrDerivDesc3 wMass htCapW,
   eBalanceOnWtrDerivDesc4 eq2,
   eBalanceOnWtrDerivDesc5,
   eBalanceOnWtrDerivDesc6 eq3 eq4,
@@ -145,7 +145,7 @@ eq2 :: [Sentence]
 eq2 = [ch coil_HTC, ch coilSA, S "/", ch coil_HTC, ch coilSA]
 
 eq3, eq4, eq5:: Expr
-eq3 = (sy tauW) $= ((sy wMass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coilSA))
+eq3 = (sy tauW) $= ((sy wMass) * (sy htCapW)) / ((sy coil_HTC) * (sy coilSA))
 eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcmSA)) / 
   ((sy coil_HTC) * (sy coilSA))
 eq5 = 1 / (sy tauW)
@@ -153,34 +153,34 @@ eq5 = 1 / (sy tauW)
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
 
-eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $= 
   (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA)
 
-eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $= 
   (sy coil_HTC) * (sy coilSA) *  ((sy tempC) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) -
+  ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) -
   ((sy pcmMass) * (sy pcmSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy temp_W) - (sy temp_PCM))
+  ((sy wMass) * (sy htCapW))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn4 = 
   (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) +
+  ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
   ((sy coil_HTC) * (sy coilSA) / 
   ((sy coil_HTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
-  ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
+  ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn5 =  
   (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) *  ((sy tempC) - (sy temp_W)) +
+  ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
   ((sy pcm_HTC) * (sy pcmSA) / 
   ((sy coil_HTC) * (sy coilSA))) * ((sy coil_HTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
+  ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
 
 eBalanceOnWtrDerivEqn6 = (deriv (sy temp_W) time) $= 
@@ -375,7 +375,7 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCap_W, qw wMass] 
+heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
   [] (qw w_E) [0 $< sy time $< sy time_final] [makeCite koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
@@ -384,7 +384,7 @@ heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtrRel -- heatEInWtrL
 
 htWtrRel :: Relation
-htWtrRel = (apply1 w_E time) $= (sy htCap_W) * (sy wMass) *
+htWtrRel = (apply1 w_E time) $= (sy htCapW) * (sy wMass) *
   ((apply1 temp_W time) - sy tempInit)
 
 htWtrDesc :: Sentence
@@ -393,7 +393,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   phrase thermalEnergy, S "of the", phrase liquid, phrase water, 
   S "relative to the", phrase energy, S "at the initial", phrase temp, 
   sParen (ch tempInit) +:+. sParen (unwrap $ getUnit pcmInitMltE), 
-  (ch htCap_W) `isThe` phrase heatCapSpec, S "of", phrase liquid, phrase water,
+  (ch htCapW) `isThe` phrase heatCapSpec, S "of", phrase liquid, phrase water,
   sParen (unwrap $ getUnit htCapSP) `sAnd` (ch wMass) `isThe` phrase mass, 
   S "of the", phrase water +:+. sParen (unwrap $ getUnit wMass), S "The", 
   phrase change, S "in", phrase temp, S "is the difference between the", 

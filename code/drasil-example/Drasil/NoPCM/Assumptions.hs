@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
-import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, temp_W, htCap_W, wDensity)
+import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, temp_W, htCapW, wDensity)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -45,7 +45,7 @@ assumpDWCoW = cic "assumpDWCoW" assumpS4
   "Density-Water-Constant-over-Volume" assumpDom
 
 assumpS5 = 
-  (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
+  (foldlSent [S "The", phrase htCapW, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol])
 
 assumpSHECoW = cic "assumpSHECoW" assumpS5

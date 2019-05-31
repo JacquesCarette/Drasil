@@ -203,7 +203,7 @@ normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (Concat [Atomic "||",(eqSymb QM.normalVect), Atomic "||"]) Real metre
 
 rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
-                (cn "between the j-th particle and the angle of rotation")) (phrase QP.distance)) 
+                (cn "between the j-th particle and the axis of rotation")) (phrase QP.distance)) 
                 (sub (eqSymb QP.distance) lJ) Real metre
 
 timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))

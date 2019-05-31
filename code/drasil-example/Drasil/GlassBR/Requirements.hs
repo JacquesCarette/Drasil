@@ -1,12 +1,10 @@
 module Drasil.GlassBR.Requirements (funcReqsList, nonfuncReqs, funcReqs,
-  inputGlassPropsTable, propsDeriv) where
+  inputGlassPropsTable, outputQuantsTable, propsDeriv) where
 
 import Control.Lens ((^.))
-import Data.Function (on)
-import Data.List (sortBy)
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimple, mkInputPropsTable, mkListTuple)
+import Drasil.DocLang (mkEnumSimple, mkInputPropsTable, mkListTuple, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
@@ -39,7 +37,7 @@ import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type,
 
 funcReqsList :: [Contents]
 funcReqsList = mkEnumSimple (uncurry $ flip mkReqCI) 
-  (zip funcReqs funcReqsDetails) ++ [LlC inputGlassPropsTable]
+  (zip funcReqs funcReqsDetails) ++ map LlC [inputGlassPropsTable, outputQuantsTable]
 
 mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
 mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
@@ -50,8 +48,7 @@ funcReqs = [inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownQuants, checkGlassSafety, outputQuants]
 
 funcReqsDetails :: [[Sentence]]
-funcReqsDetails = [[], sysSetValsFollowingAssumpsList, [], [], [],
-  chunksToSent outputQuantsList]
+funcReqsDetails = [[], sysSetValsFollowingAssumpsList, [], [], [], []]
 
 inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownQuants, checkGlassSafety, outputQuants :: ConceptInstance
@@ -108,27 +105,24 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
 
 checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch isSafePb), S "∧", (ch isSafeLR),
   sParen (S "from" +:+ (makeRef2S pbIsSafe)
-  `sAnd` (makeRef2S lrIsSafe)), S "are true" `sC`
-  phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
+  `sAnd` (makeRef2S lrIsSafe)) `sC` phrase cmd,
+  S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
 
 outputQuantsDesc :: Sentence
-outputQuantsDesc = titleize output_ +:+ S "the following" +: plural quantity
+outputQuantsDesc = titleize output_ +:+ S "the" +:+ plural quantity +:+ S "from" +:+. makeRef2S outputQuantsTable
 
-chunksToSent :: [(Sentence, Symbol, Sentence)] -> [Sentence]
-chunksToSent = map (\(a, b, c) -> a +:+ sParen (P b) +:+ c)
-
-outputQuantsList :: [(Sentence, Symbol, Sentence)]
-outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList iMods) ++ (mkReqList r6DDs)
+outputQuantsTable :: LabelledContent
+outputQuantsTable = mkValsSourceTable ((mkTuple iMods) ++ (mkTuple r6DDs)) "ReqOutputs"
+                              (S "Required" +:+ titleize' output_ `follows` outputQuants)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
-    get2 (_, b, _) = b
 
-mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef2S c)))
+mkTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkTuple = map (\c -> (qw c, makeRef2S c))
 
 {--Functional Requirements--}
 

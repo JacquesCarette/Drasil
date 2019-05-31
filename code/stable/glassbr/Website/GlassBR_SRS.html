@@ -2145,47 +2145,12 @@ Output-Values-and-Known-Quantities: Output the input quantities from <a href=#in
 </p>
 <p>
 <div id="checkGlassSafety">
-Check-Glass-Safety: If <em>is-safePb</em> ∧ <em>is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is-safePb</em> ∧ <em>is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </p>
 <p>
 <div id="outputQuants">
-Output-Quantities: Output the following quantities:
-                   <ul class="list">
-                   <li>
-                   Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect_ratio</a>)
-                   </li>
-                   <li>
-                   Risk of failure (<em>B</em>) (<a href=#DD:riskFun>DD: riskFun</a>)
-                   </li>
-                   <li>
-                   Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
-                   </li>
-                   <li>
-                   Minimum thickness (<em>h</em>) (<a href=#DD:minThick>DD: minThick</a>)
-                   </li>
-                   <li>
-                   Safety Req-LR (<em>is-safeLR</em>) (<a href=#IM:isSafeLR>IM: isSafeLR</a>)
-                   </li>
-                   <li>
-                   Safety Req-Pb (<em>is-safePb</em>) (<a href=#IM:isSafePb>IM: isSafePb</a>)
-                   </li>
-                   <li>
-                   Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
-                   </li>
-                   <li>
-                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdfTol>DD: sdfTol</a>)
-                   </li>
-                   <li>
-                   Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
-                   </li>
-                   <li>
-                   Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
-                   </li>
-                   <li>
-                   Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD: tolLoad</a>)
-                   </li>
-                   </ul>
+Output-Quantities: Output the quantities from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
 </div>
 </p>
 </div>
@@ -2251,6 +2216,85 @@ Nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,1
 </table>
 <p class="caption">
 Required Inputs following <a href=#inputGlassProps>FR: Input-Glass-Props</a>
+</p>
+</div>
+<div id="Table:ReqOutputs">
+<table class="table">
+<tr>
+<th>Symbol</th>
+<th>Description</th>
+<th>Source</th>
+<th>Units</th>
+</tr>
+<tr>
+<td><em>AR</em></td>
+<td>Aspect ratio</td>
+<td><a href=#DD:aspect.ratio>DD: aspect_ratio</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>B</em></td>
+<td>Risk of failure</td>
+<td><a href=#DD:riskFun>DD: riskFun</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>GTF</em></td>
+<td>Glass type factor</td>
+<td><a href=#DD:gTF>DD: gTF</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>h</em></td>
+<td>Minimum thickness</td>
+<td><a href=#DD:minThick>DD: minThick</a></td>
+<td>m</td>
+</tr>
+<tr>
+<td><em>is-safeLR</em></td>
+<td>Safety Req-LR</td>
+<td><a href=#IM:isSafeLR>IM: isSafeLR</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>is-safePb</em></td>
+<td>Safety Req-Pb</td>
+<td><a href=#IM:isSafePb>IM: isSafePb</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>J</em></td>
+<td>Stress distribution factor (Function)</td>
+<td><a href=#DD:stressDistFac>DD: stressDistFac</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>J<sub>tol</sub></em></td>
+<td>Stress distribution factor (Function) based on Pbtol</td>
+<td><a href=#DD:sdfTol>DD: sdfTol</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>NFL</em></td>
+<td>Non-factored load</td>
+<td><a href=#DD:nFL>DD: nFL</a></td>
+<td>Pa</td>
+</tr>
+<tr>
+<td><em>q&#770;</em></td>
+<td>Dimensionless load</td>
+<td><a href=#DD:dimlessLoad>DD: dimlessLoad</a></td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>q&#770;<sub>tol</sub></em></td>
+<td>Tolerable load</td>
+<td><a href=#DD:tolLoad>DD: tolLoad</a></td>
+<td>--</td>
+</tr>
+</table>
+<p class="caption">
+Required Outputs following <a href=#outputQuants>FR: Output-Quantities</a>
 </p>
 </div>
 </div>
@@ -2357,6 +2401,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>
 </th>
 <th><a href=#inputGlassProps>FR: Input-Glass-Props</a></th>
+<th><a href=#outputQuants>FR: Output-Quantities</a></th>
 <th><a href=#DD:tolLoad>DD: tolLoad</a></th>
 <th><a href=#DD:stressDistFac>DD: stressDistFac</a></th>
 <th>
@@ -2423,11 +2468,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#Sec:DataConstraints>Section: Data Constraints</a></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2485,9 +2532,42 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href=#Table:ReqOutputs>Table:ReqOutputs</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:aspect.ratio>DD: aspect_ratio</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2518,6 +2598,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#assumpBC>A: boundaryConditions</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2554,6 +2635,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -2578,6 +2660,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#assumpGC>A: glassCondition</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2616,6 +2699,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
@@ -2638,6 +2722,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#assumpLDFC>A: ldfConstant</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2681,6 +2766,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -2707,6 +2793,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td>X</td>
@@ -2727,6 +2814,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2758,6 +2846,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:calofDemand>DD: calofDemand</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2807,6 +2896,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -2818,6 +2908,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:dimlessLoad>DD: dimlessLoad</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2850,6 +2941,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>
 <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>
 </td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2899,6 +2991,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -2910,6 +3003,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:gTF>DD: gTF</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2960,6 +3054,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -2970,6 +3065,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:calofCapacity>DD: calofCapacity</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3014,6 +3110,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3030,6 +3127,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:minThick>DD: minThick</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3068,6 +3166,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3090,6 +3189,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:probOfBreak>DD: probOfBreak</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3143,6 +3243,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3150,6 +3251,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#TM:isSafeLoad>TM: isSafeLoad</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3205,11 +3307,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td>X</td>
 </tr>
 <tr>
 <td><a href=#IM:isSafeLR>IM: isSafeLR</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3258,6 +3362,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3270,6 +3375,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:sdfTol>DD: sdfTol</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3319,6 +3425,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3330,6 +3437,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:stressDistFac>DD: stressDistFac</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3382,6 +3490,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3392,6 +3501,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#DD:tolLoad>DD: tolLoad</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>

@@ -2,7 +2,7 @@ module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkValsSourceTable
   reqF, reqIntro, nfReqF) where
 
 import Language.Drasil
-import Language.Drasil.Utils (sortBySymbol)
+import Language.Drasil.Utils (sortBySymbol, sortBySymbolTuple)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
@@ -71,4 +71,4 @@ mkValsSourceTable :: (Quantity i, MayHaveUnit i) =>
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals label cap = llcc (makeTabRef label) $ 
   Table [at_start symbol_, at_start description, S "Source", at_start' unit_]
-  (mkTable [ch . fst, at_start . fst, snd, toSentence . fst] vals) cap True
+  (mkTable [ch . fst, at_start . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True

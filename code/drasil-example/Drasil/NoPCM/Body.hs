@@ -77,9 +77,9 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
-  temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
-  abs_tol, rel_tol, cons_tol)
+  temp_env, temp_W, thFluxVect, time_final, time_final_max, timeStep, 
+  vol_ht_gen, w_density, w_density_max, w_density_min, w_E, w_mass, w_vol, 
+  specParamValList, unitalChuncks, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -124,7 +124,7 @@ units = map ucw [density, tau, in_SA, out_SA,
 
 constraints :: [UncertQ]
 constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
-  time_final, tank_length, temp_C, w_density, diam]
+  time_final, tank_length, temp_C, timeStep, w_density, diam]
   -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
@@ -220,7 +220,8 @@ si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
+  _inputs = (map qw constraints ++ map qw [temp_W, w_E] ++ 
+    map qw [abs_tol, rel_tol, cons_tol]), --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
   _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained

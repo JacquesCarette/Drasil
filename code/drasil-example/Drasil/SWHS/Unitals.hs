@@ -244,7 +244,7 @@ tempPCM, tempW, watE, pcmE :: ConstrConcept
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy tank_length_min) (Inc, sy tank_length_max)] (dbl 1.5)
+  sfwrc $ Bounded (Inc, sy tankLengthMin) (Inc, sy tank_length_max)] (dbl 1.5)
   defaultUncrt
 
 -- Constraint 2
@@ -447,13 +447,13 @@ consTol = uvc "consTol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max,
+specParamValList = [tankLengthMin, tank_length_max,
   pcmDensity_min, pcmDensity_max, w_density_min, w_density_max,
   htCapSP_min, htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcmHTC_min, pcmHTC_max, timeFinal_max, frac_min_aux]
 
-tank_length_min, tank_length_max, pcmDensity_min, 
+tankLengthMin, tank_length_max, pcmDensity_min, 
   pcmDensity_max, w_density_min, w_density_max, htCapSP_min, 
   htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
@@ -462,7 +462,7 @@ tank_length_min, tank_length_max, pcmDensity_min,
 htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
 -- Used in Constraint 1
-tank_length_min = mkQuantDef (unitary "tank_length_min"
+tankLengthMin = mkQuantDef (unitary "tankLengthMin"
   (nounPhraseSP "minimum length of tank")
   (sub (eqSymb tankLength) (Atomic "min")) metre Rational) (dbl 0.1)
 

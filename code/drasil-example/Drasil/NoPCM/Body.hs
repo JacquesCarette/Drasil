@@ -76,7 +76,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA, 
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
-  tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
+  tankLength, tank_length_max, tankLengthMin, tankVol, tau, tauW, tempC, 
   tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
   w_density_max, w_density_min, watE, wMass, wVol, specParamValList, unitalChuncks,
   absTol, relTol, consTol)
@@ -611,7 +611,7 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 ------------------------------------------
 
 specParamValListb :: [QDefinition]
-specParamValListb = [tank_length_min, tank_length_max,
+specParamValListb = [tankLengthMin, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, timeFinal_max]
 

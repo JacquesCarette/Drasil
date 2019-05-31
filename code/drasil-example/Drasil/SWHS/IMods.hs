@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tauSP, tau_W, temp_C, tempInit, 
+  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -47,12 +47,12 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- eBalanceOnWtrL
 
 balWtrRel :: Relation
-balWtrRel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
+balWtrRel = (deriv (sy temp_W) time) $= 1 / (sy tauW) *
   (((sy temp_C) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
+balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
   `sC` (E $ sy temp_C) `sC` (E $ sy temp_PCM), S "from" +:+.
   sParen (makeRef2S eBalanceOnPCM), S "The input is constrained so that" +:+.
   (E $ sy tempInit $<= (sy temp_C)), sParen (makeRef2S assumpCTNOD),
@@ -60,8 +60,8 @@ balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
-  (E $ sy tau_W $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tau_W),
+  (E $ sy tauW $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
+  S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
@@ -145,10 +145,10 @@ eq2 :: [Sentence]
 eq2 = [ch coil_HTC, ch coil_SA, S "/", ch coil_HTC, ch coil_SA]
 
 eq3, eq4, eq5:: Expr
-eq3 = (sy tau_W) $= ((sy wMass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
+eq3 = (sy tauW) $= ((sy wMass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
 eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcm_SA)) / 
   ((sy coil_HTC) * (sy coil_SA))
-eq5 = 1 / (sy tau_W)
+eq5 = 1 / (sy tauW)
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
@@ -184,11 +184,11 @@ eBalanceOnWtrDerivEqn5 =
 
 
 eBalanceOnWtrDerivEqn6 = (deriv (sy temp_W) time) $= 
-  1 / (sy tau_W) * ((sy temp_C) - (sy temp_W)) +
-  (sy eta) / (sy tau_W) * ((sy temp_PCM) - (sy temp_W))
+  1 / (sy tauW) * ((sy temp_C) - (sy temp_W)) +
+  (sy eta) / (sy tauW) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn7 =  
-  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * (((sy temp_C) - (sy temp_W)) +
+  (deriv (sy temp_W) time) $= 1 / (sy tauW) * (((sy temp_C) - (sy temp_W)) +
   sy eta * ((sy temp_PCM) - (sy temp_W)))
 
 eBalanceOnWtr_deriv_eqns__im1 :: [Expr]

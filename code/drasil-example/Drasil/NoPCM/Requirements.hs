@@ -17,7 +17,7 @@ import Data.Drasil.SentenceStructures (foldlSent_)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tank_length,
-  tau_W, temp_C, time_final, w_density, wMass, wVol, abs_tol, rel_tol, cons_tol)
+  tauW, temp_C, time_final, w_density, wMass, wVol, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (tempInit)
@@ -58,7 +58,7 @@ oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
   [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
   [S "the", phrase mass, S "from", makeRef2S findMass],
-  [ch tau_W, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
+  [ch tauW, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
   ]
 
 inputInitQuantsTable :: LabelledContent

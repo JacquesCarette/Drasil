@@ -76,7 +76,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
-  tank_length, tank_length_max, tank_length_min, tankVol, tau, tau_W, temp_C, 
+  tank_length, tank_length_max, tank_length_min, tankVol, tau, tauW, temp_C, 
   tempEnv, temp_W, thFluxVect, time_final, time_final_max, volHtGen, w_density, 
   w_density_max, w_density_min, w_E, wMass, wVol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
@@ -112,7 +112,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
+  (map qw [coil_SA_max]) ++ (map qw [tauW]) ++ (map qw [eta]) ++
   (map qw [abs_tol, rel_tol, cons_tol])
 
 units :: [UnitaryConceptDict]
@@ -120,7 +120,7 @@ units = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
-  vol, wMass, wVol, tau_W, QT.sensHeat]
+  vol, wMass, wVol, tauW, QT.sensHeat]
 
 constraints :: [UncertQ]
 constraints =  [coil_SA, htCap_W, coil_HTC, tempInit,

@@ -431,7 +431,7 @@ physSystDescription = physSystDesc (short glassBR) figGlassbr
   [physSystDescriptionList, LlC figGlassbr]
 
 figGlassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
-  (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+  (atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
 

@@ -26,7 +26,7 @@ introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 -- NamedIdea.
 at_start, at_start' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
-at_start  n = NP.at_startNP (n ^. term)
+at_start  n = NP.atStartNP (n ^. term)
 -- | Plural sentence case.
 at_start' n = NP.atStartNP' (n ^. term)
 

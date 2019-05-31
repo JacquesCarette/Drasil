@@ -8,7 +8,7 @@ import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
-import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcmMass,
+import Drasil.SWHS.Unitals (melt_frac, latentEP, htFusion, pcmMass,
   temp_W, temp_PCM, htFluxP, pcm_HTC, coil_HTC, temp_C, htFluxC, htCap_S_P,
   htCap_L_P, pcm_HTC, pcm_SA, tau_S_P, tau_L_P)
 
@@ -105,7 +105,7 @@ dd4MeltFracQD = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   -- produced according to CaseStudies' original
 
 meltFracEqn :: Expr
-meltFracEqn = (sy latentE_P) / ((sy htFusion) * (sy pcmMass))
+meltFracEqn = (sy latentEP) / ((sy htFusion) * (sy pcmMass))
 
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "melt_frac"

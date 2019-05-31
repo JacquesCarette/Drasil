@@ -36,7 +36,7 @@ units :: [UnitaryConceptDict]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
-  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp, boilPt, temp_env, meltPt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
@@ -46,7 +46,7 @@ unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
@@ -54,7 +54,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
 inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
-  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentE_P,
+  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
@@ -137,7 +137,7 @@ htFluxP = uc' "htFluxP" (nounPhraseSP "heat flux into the PCM from water")
   "change material from the water per unit time")
   (sub (eqSymb htFlux) cP) UT.thermalFlux
 
-latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
+latentEP = uc' "latentEP" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
   "change material") (sub (eqSymb latentHeat) cP) joule

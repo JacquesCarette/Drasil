@@ -23,7 +23,7 @@ import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
-  htCap_S_P, htCap_W, htFusion, latentE_P, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
+  htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcm_SA, pcm_vol, t_init_melt, tau_L_P, tau_S_P, tau_W, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, w_vol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
@@ -426,10 +426,10 @@ htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
           (sy htCap_L_P * sy pcmMass * ((apply1 temp_PCM time) -
           sy temp_melt_P)), real_interval temp_PCM (UpFrom (Exc, sy temp_melt_P)))
 
-        case3 = (sy pcmInitMltE + (apply1 latentE_P time),
+        case3 = (sy pcmInitMltE + (apply1 latentEP time),
           (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (sy pcmInitMltE + (apply1 latentE_P time),
+        case4 = (sy pcmInitMltE + (apply1 latentEP time),
           real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
 
 htPCMDesc :: Sentence
@@ -457,7 +457,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
   phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`
-  ch latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the", phrase time, S "when",
+  ch latentEP, sParen (unwrap $ getUnit latentEP), S "since the", phrase time, S "when",
   phrase melting, S "began", ch t_init_melt +:+. sParen (unwrap $ getUnit t_init_melt),
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 

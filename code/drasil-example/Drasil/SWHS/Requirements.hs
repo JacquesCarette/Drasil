@@ -2,6 +2,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition)
+import Utils.Drasil
 
 import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
 import Drasil.DocLang.SRS (propCorSol) 
@@ -19,7 +20,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe', sAnd)
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol)
 import Data.Drasil.Utils (eqUnR')
 
 import Drasil.SWHS.Assumptions (assumpVCN)

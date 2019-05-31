@@ -1,5 +1,5 @@
-#include "Interpolation.hpp"
 #include "InputParameters.hpp"
+#include "Interpolation.hpp"
 #ifndef Calculations_h
 #define Calculations_h
 
@@ -13,11 +13,13 @@ using std::ofstream;
 
 
 
-double func_q(InputParameters &inParams);
-
 bool func_is_safePb(InputParameters &inParams, double P_b);
 
 bool func_is_safeLR(double LR, double q);
+
+bool func_is_safeProb(double P_f, double P_ftol);
+
+bool func_is_safeLoad(double capacity, double Load);
 
 double func_B(InputParameters &inParams, double J);
 

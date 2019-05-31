@@ -1,6 +1,6 @@
 # For documentation on how to add to this, see Issue #1371
 # List of all known packages
-PACKAGES = lang build code theory database printers gen data docLang example
+PACKAGES = lang utils build code theory database printers gen data docLang example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -123,7 +123,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFI
 	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
 # actually run the tests
-test: $(GEN_EXAMPLES) $(TEST_EXAMPLES)
+test: $(MOVE_DF_EXAMPLES) $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------

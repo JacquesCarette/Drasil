@@ -1,10 +1,10 @@
-module Drasil.SSP.Goals (sspGoals, identifyCritAndFSGS, determineNormalFGS,
+module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
   determineShearFGS) where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
-import Data.Drasil.SentenceStructures (andThe)
 
 import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slice, slope)
 import Drasil.SSP.Unitals (intNormForce, intShrForce)
@@ -13,8 +13,8 @@ import Drasil.SSP.Unitals (intNormForce, intShrForce)
 -- Goals --
 -----------
 
-sspGoals :: [ConceptInstance]
-sspGoals = [identifyCritAndFSGS, determineNormalFGS, determineShearFGS]
+goals :: [ConceptInstance]
+goals = [identifyCritAndFSGS, determineNormalFGS, determineShearFGS]
 
 identifyCritAndFSGS :: ConceptInstance
 identifyCritAndFSGS = cic "identifyCritAndFS" identifyCritAndFS 

@@ -2,6 +2,7 @@ module Drasil.SWHS.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Control.Lens ((^.))
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem, assumpDom)
@@ -16,7 +17,7 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mechEnergy)
 
-import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,

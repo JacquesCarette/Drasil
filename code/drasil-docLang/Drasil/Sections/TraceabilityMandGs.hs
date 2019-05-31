@@ -7,12 +7,12 @@ module Drasil.Sections.TraceabilityMandGs
 import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation, refbyLookup, refbyTable,
   _sysinfodb)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
  reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.SentenceStructures (ofThe', foldlSent, showingCxnBw,
-  tableShows)
+import Data.Drasil.SentenceStructures (foldlSent, showingCxnBw, tableShows)
 import Data.Drasil.Utils (makeTMatrix)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)

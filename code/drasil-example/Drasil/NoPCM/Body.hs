@@ -9,6 +9,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Utils.Drasil
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -31,7 +32,7 @@ import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
   thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
   phaseChange)
 
-import qualified Data.Drasil.Concepts.Math as M (ode, de, equation)
+import qualified Data.Drasil.Concepts.Math as M (ode, de)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
@@ -40,8 +41,7 @@ import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSent, foldlSP)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, foldlSent, foldlSP)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
@@ -62,7 +62,6 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
@@ -86,7 +85,7 @@ import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
-import Drasil.NoPCM.GenDefs (rocTempSimp, genDefs)
+import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
@@ -411,95 +410,7 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
   phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
-genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> [Sentence]
-genDefnDesc2 g_d su vo tfv unv un =
-  [S "Applying", titleize g_d, S "to the first term over",
-  (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
-  ch tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` ch unv, S "as a", phrase un,
-  S "outward", phrase unv, S "for a", phrase su]
-
-genDefnDesc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
-genDefnDesc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
-  phrase vhg, S "is assumed constant. Then (1) can be written as"]
-
-genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-genDefnDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
-  ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
-
-genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
-
-genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
-
-genDefnEq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
-
-genDefnEq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
-
 --TODO: Implement physical properties of a substance
-
-iModDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
-  ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
-iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
-  [S "To find the", phrase roc `sOf` ch temw `sC`
-  S "we look at the", phrase en, S "balance on" +:+.
-  phrase wa, S "The", phrase vo, S "being considered" `isThe`
-  phrase wv, ch wv `sC` S "which has", phrase ma +:+.
-  (ch wm `sAnd` (phrase hcw `sC` ch hcw)),
-  at_start ht, S "occurs in the water from the coil as", (ch hfc
-  `sC` S "over area") +:+. ch csa, S "No",
-  phrase ht, S "occurs to", (S "outside" `ofThe`
-  phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef2S assumpCTNOD), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef2S assumpSITWP) `sC`
-  E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  makeRef2S rocTempSimp, S "can be written as"]
-
-iModDesc2 :: DataDefinition -> [Sentence]
-iModDesc2 d1hf = [S "Using", (makeRef2S d1hf) `sC` S "this can be written as"]
-
-iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]
-iModDesc3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
-  S "we obtain"]
-
-iModDesc4 :: UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ ->
-  UncertQ -> [Sentence]
-iModDesc4 temw wm hcw chtc csa = [S "Setting", (ch temw :+: S "=" :+:
-  ch wm :+: ch hcw :+: S "/" :+: ch chtc :+: ch csa)
-  `sC` titleize M.equation, S "(4) can be written in its final form as"]
-
-iModEq1, iModEq2, iModEq3, iModEq4 ::Expr
-
-iModEq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy ht_flux_C) * (sy coil_SA)
- 
-iModEq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
-
-iModEq3 = deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
-  (sy temp_W))
-
-iModEq4 = deriv (sy temp_W) time $= (1 / (sy tau_W)) *
-  ((sy temp_C) - (sy temp_W))
 
 dataConstTable1 :: LabelledContent
 dataConstTable1 = inDataConstTbl dataConstListIn

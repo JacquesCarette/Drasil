@@ -9,6 +9,7 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
   _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Utils.Drasil
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -54,8 +55,7 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSPCol, ofThe, ofThe', sAnd, 
-  showingCxnBw, sOf)
+  foldlSent, foldlSent_, foldlSP, foldlSPCol, showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
@@ -386,6 +386,15 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
 
 goalStates :: Section
 goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
+
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
+goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
+  S "the" +:+ phrase tempcm,
+  S "the material" +:+ plural property]
+
+-- 2 examples include this paragraph, 2 don't. The "givens" would need to be
+-- abstracted out if this paragraph were to be abstracted out.
 
 goalStateList :: [Contents]
 goalStateList = mkEnumSimpleD goals
@@ -953,21 +962,6 @@ fig_tank = llcc (makeFigRef "Tank") $ fig (
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
-
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
-goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
-  S "the" +:+ phrase tempcm,
-  S "the material" +:+ plural property]
-
--- 2 examples include this paragraph, 2 don't. The "givens" would need to be
--- abstracted out if this paragraph were to be abstracted out.
-
--- List structure is repeated between examples. (For all of these lists I am
--- imagining the potential for something like what was done with the lists in
--- MG, where you define goals, assumptions, physical system components, etc. in
--- separate files, import them and pass them as arguments to some "makeSRS"
--- function and the rest is automated.)
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --

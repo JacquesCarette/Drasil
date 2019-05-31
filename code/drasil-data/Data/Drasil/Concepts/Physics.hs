@@ -10,9 +10,10 @@ module Data.Drasil.Concepts.Physics
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.IdeaDicts (physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.SentenceStructures (sOf)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]

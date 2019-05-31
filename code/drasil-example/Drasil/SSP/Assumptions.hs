@@ -1,6 +1,7 @@
 module Drasil.SSP.Assumptions where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
   soil, soilPrpty, intrslce, slice, waterTable)
@@ -9,7 +10,7 @@ import Drasil.SSP.Unitals (baseHydroForce, effCohesion, fricAngle, intNormForce,
   surfHydroForce, surfLoad, xi, zcoord)
 import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.SentenceStructures (foldlSent, sAnd, andThe)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
   condition, constant, interface)

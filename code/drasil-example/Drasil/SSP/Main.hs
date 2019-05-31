@@ -5,7 +5,7 @@ module Main (main) where
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SSP.Body (ssp_srs, printSetting)
+import Drasil.SSP.Body (srs, printSetting)
 
 {- for when we can generate code again, comment this out
 sspChoices :: Choices
@@ -22,6 +22,6 @@ sspChoices = Choices {
        
 main :: IO ()            
 main = do
-  gen (DocSpec Website "SSP_SRS") ssp_srs printSetting
-  gen (DocSpec SRS "SSP_SRS")     ssp_srs printSetting
+  gen (DocSpec Website "SSP_SRS") srs printSetting
+  gen (DocSpec SRS "SSP_SRS")     srs printSetting
   --genCode ssp_code

@@ -61,7 +61,7 @@ fReqIntro = mkParagraph fReqIntroS
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
                           [i] -> r -> LabelledContent
-mkInputPropsTable reqInputs req = llcc (makeTabRef "InputPropsReqInputs") $ 
+mkInputPropsTable reqInputs req = llcc (makeTabRef "ReqInputs") $ 
   Table [at_start symbol_, at_start description, at_start' unit_]
   (mkTable [ch, at_start, toSentence] $ sortBySymbol reqInputs)
   (S "Required" +:+ titleize' input_ `follows` req) True

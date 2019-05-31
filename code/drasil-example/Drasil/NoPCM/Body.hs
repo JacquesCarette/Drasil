@@ -50,21 +50,22 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import qualified Drasil.DocLang.SRS as SRS (probDesc, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..), DocSection(..),
+  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..), AuxConstntSec(AuxConsProg),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  termDefnF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmtF, physSystDescriptionLabel, generateTraceMap')
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
+import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
+  physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
+  sysCntxtRespIntro, traceIntro2, traceTrailing, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
@@ -127,7 +128,7 @@ constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam]
   -- w_E, temp_W
 
-probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
+probDescription, termAndDefn, physSystDescription, goalStates :: Section
 
 
 -------------------
@@ -150,7 +151,11 @@ mkSRS = [RefSec $ RefProg intro
     water),
   IChar [] ((charReader1 htTransTheo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
-  Verbatim genSystDesc,
+  GSDSec $ GSDProg2 
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    , UsrChars [userChars progName]
+    , SystCons [] []
+    ],
   SSDSec $
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
@@ -173,8 +178,9 @@ mkSRS = [RefSec $ RefProg intro
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2)) []] ++
-  map Verbatim [specParamVal] ++ [Bibliography]
+  (map UlC traceIntro2)) [],
+  AuxConstntSec $ AuxConsProg progName auxCons,
+  Bibliography]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -610,12 +616,10 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
 
-specParamValListb :: [QDefinition]
-specParamValListb = [tank_length_min, tank_length_max,
+auxCons :: [QDefinition]
+auxCons = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
-
-specParamVal = valsOfAuxConstantsF progName specParamValListb
 
 ------------
 --REFERENCES

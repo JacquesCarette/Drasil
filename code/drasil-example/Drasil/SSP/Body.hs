@@ -20,11 +20,12 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..),
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
+  tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
+  getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -78,7 +79,6 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
   constrained, inputs, outputs, symbols)
 
 --type declarations for sections--
-aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
@@ -156,7 +156,8 @@ mkSRS = [RefSec $ RefProg intro
   UCsSec $ UCsProg unlikelyChanges_SRS,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],
-  Verbatim aux_cons, Bibliography]
+  AuxConstntSec $ AuxConsProg ssp [],
+  Bibliography]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -538,7 +539,7 @@ slopeVert = verticesConst $ phrase slope
 --Likely Changes is automatically generated
 
 -- SECTION 7 --
-aux_cons = valsOfAuxConstantsF ssa []
+-- Table of aux consts is automatically generated
 
 -- References --
 -- automatically generated

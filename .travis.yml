@@ -71,13 +71,6 @@ script:
      ci_fstep "CI: Docs" make docs haddockArgs=\"--no-haddock-deps --no-haddock-hyperlink-source\"
  - python3 scripts/pr_label_update.py
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: bash scripts/deploy.bash
-  on:
-    branch: master
-
 notifications:
   email:
     - szymczdm@mcmaster.ca

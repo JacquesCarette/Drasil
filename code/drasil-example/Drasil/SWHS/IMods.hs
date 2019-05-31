@@ -22,7 +22,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCapLP, 
+import Drasil.SWHS.Unitals (coil_HTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
@@ -36,7 +36,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCap_W, qw coil_HTC, qw pcmSA,
- qw pcm_HTC, qw coil_SA, qw temp_PCM, qw time_final, qw temp_C, qw tempInit]
+ qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw temp_C, qw tempInit]
   [sy tempInit $< sy temp_C] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
@@ -60,9 +60,9 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
-  (E $ sy tauW $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
+  (E $ sy tauW $= (sy wMass * sy htCap_W) / (sy coil_HTC * sy coilSA)),
   S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
-  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coil_HTC * sy coil_SA)),
+  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coil_HTC * sy coilSA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
@@ -84,7 +84,7 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol wVol mass wMass heatCapSpec
-    htCap_W heatTrans coil htFluxC coil_SA pcmSA tank htFluxP surface volHtGen,
+    htCap_W heatTrans coil htFluxC coilSA pcmSA tank htFluxP surface volHtGen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
   eBalanceOnWtrDerivDesc3 wMass htCap_W,
   eBalanceOnWtrDerivDesc4 eq2,
@@ -142,44 +142,44 @@ eBalanceOnWtrDerivDesc7 eq55 =
   sParen (makeRef2S eBalanceOnWtr)]
 
 eq2 :: [Sentence]
-eq2 = [ch coil_HTC, ch coil_SA, S "/", ch coil_HTC, ch coil_SA]
+eq2 = [ch coil_HTC, ch coilSA, S "/", ch coil_HTC, ch coilSA]
 
 eq3, eq4, eq5:: Expr
-eq3 = (sy tauW) $= ((sy wMass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
+eq3 = (sy tauW) $= ((sy wMass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coilSA))
 eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcmSA)) / 
-  ((sy coil_HTC) * (sy coil_SA))
+  ((sy coil_HTC) * (sy coilSA))
 eq5 = 1 / (sy tauW)
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
 
 eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy htFluxC) * (sy coil_SA) - (sy htFluxP) * (sy pcmSA)
+  (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA)
 
 eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W)) -
+  (sy coil_HTC) * (sy coilSA) *  ((sy temp_C) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy coil_HTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
   ((sy pcmMass) * (sy pcmSA) / 
   ((sy wMass) * (sy htCap_W))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn4 = 
   (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy coil_HTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy coil_HTC) * (sy coil_SA))) * ((sy pcm_HTC) * (sy pcmSA) / 
+  ((sy coil_HTC) * (sy coilSA) / 
+  ((sy coil_HTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
   ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn5 =  
   (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy coil_HTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
   ((sy pcm_HTC) * (sy pcmSA) / 
-  ((sy coil_HTC) * (sy coil_SA))) * ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy coil_HTC) * (sy coilSA))) * ((sy coil_HTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
 
 

@@ -73,7 +73,7 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
 import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
+import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coilSA, 
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, temp_C, 
@@ -123,7 +123,7 @@ units = map ucw [density, tau, inSA, outSA,
   vol, wMass, wVol, tauW, QT.sensHeat]
 
 constraints :: [UncertQ]
-constraints =  [coil_SA, htCap_W, coil_HTC, tempInit,
+constraints =  [coilSA, htCap_W, coil_HTC, tempInit,
   time_final, tankLength, temp_C, w_density, diam]
   -- w_E, temp_W
 

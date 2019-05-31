@@ -40,7 +40,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
   tFinalMelt, vol, tankVol, wVol, deltaT,
   density, tau, tauLP, tauSP, tauW, thickness] ++
-  map ucw [mass, time] -- ++ [tankLength, diam, coil_SA]
+  map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
 
 unitalChuncks :: [UnitalChunk]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
@@ -231,11 +231,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 -- Input Constraints
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCapSP, htCapLP, htFusion, coil_SA, temp_C,
+  tempMeltP, htCapSP, htCapLP, htFusion, coilSA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCapSP, htCapLP, htFusion, coil_SA, temp_C, w_density,
+  htCapSP, htCapLP, htFusion, coilSA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
@@ -320,7 +320,7 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
 -- Since the capitalization issue, they are replaced by S so far.
-coil_SA = uqc "coil_SA"
+coilSA = uqc "coilSA"
   (compoundPhrase (nounPhrase'' (S "heating coil") (S "heating coil") CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
@@ -511,7 +511,7 @@ htFusion_max = unitary "htFusion_max"
 -- Used in Constraint 10
 coil_SA_max = unitary "coil_SA_max"
   (nounPhraseSP "maximum surface area of coil")
-  (sup (eqSymb coil_SA) (Atomic "max")) m_2 Rational
+  (sup (eqSymb coilSA) (Atomic "max")) m_2 Rational
 
 -- Used in Constraint 12
 w_density_min = mkQuantDef (unitary "w_density_min"

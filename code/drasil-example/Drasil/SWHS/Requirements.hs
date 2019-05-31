@@ -4,7 +4,7 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
 
-import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
+import Drasil.DocLang (inDataConstTbl)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
@@ -27,7 +27,7 @@ import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
   sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
@@ -53,12 +53,6 @@ inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsList :: [Contents]
-funcReqsList = reqs ++ [inputInitQuantsTbl]
-
-reqs :: [Contents]
-reqs = mkEnumSimpleD funcReqs
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,

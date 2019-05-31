@@ -6,7 +6,8 @@ import Utils.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gd, tmNoRefs)
 import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
-import Data.Drasil.Concepts.Documentation (body, component, constant, value)
+import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
+  value)
 import Data.Drasil.Concepts.Math (equation, vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
@@ -120,4 +121,5 @@ hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure"
 
 hsPressureNotes :: Sentence
 hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
-  S "Bernoulli's" +:+. phrase equation
+  S "Bernoulli's" +:+ phrase equation +:+ S "for a slow moving fluid" +:+
+  S "through a porous" +:+. phrase material_

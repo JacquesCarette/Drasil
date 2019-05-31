@@ -3,7 +3,7 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, props
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (mkInputPropsTable, mkValsSourceTable)
+import Drasil.DocLang (mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
@@ -106,12 +106,6 @@ outputQuantsTable = mkValsSourceTable ((mkQRTuple iMods) ++ (mkQRTuple r6DDs)) "
   where
     r6DDs :: [DataDefinition]
     r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
-
-mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
-mkQRTuple = map (\c -> (qw c, makeRef2S c))
-
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs
 
 {--Nonfunctional Requirements--}
 

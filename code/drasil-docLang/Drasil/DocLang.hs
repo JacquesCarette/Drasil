@@ -8,7 +8,7 @@ module Drasil.DocLang (
     SSDSub(..), SolChSpec(..), ExistingSolnSec(..), StkhldrSec(StkhldrProg2),
     LCsSec'(..), StkhldrSub(Client, Cstmr), TConvention(..),
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc,
-    tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple,
+    tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -22,7 +22,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    reqF, mkInputPropsTable, mkValsSourceTable,
+    reqF, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
     inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
@@ -50,7 +50,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb,
-    tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple)
+    tsymb'', mkEnumSimple, mkEnumSimpleD)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
@@ -59,7 +59,8 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (reqF, mkInputPropsTable, mkValsSourceTable)
+import Drasil.Sections.Requirements (reqF, mkInputPropsTable, mkQRTuple, mkQRTupleRef,
+    mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
     outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)

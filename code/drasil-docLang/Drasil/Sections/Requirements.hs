@@ -1,5 +1,5 @@
-module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkValsSourceTable,
-  reqF, reqIntro, nfReqF) where
+module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
+  mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Language.Drasil.Utils (sortBySymbol, sortBySymbolTuple)
@@ -38,25 +38,16 @@ nfrReqIntroBody = foldlSent_
         phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
-reqIntroS :: Sentence
-reqIntroS = reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
-
 reqIntro :: Contents
-reqIntro = mkParagraph reqIntroS
+reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
 
 --generalized functional requirements introduction
-fReqIntroS :: Sentence
-fReqIntroS = reqIntroStart +:+. frReqIntroBody
-
-nfReqIntro :: Contents
-nfReqIntro = mkParagraph nfReqIntroS
+fReqIntro :: Contents
+fReqIntro = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 
 --generalized nonfunctional requirements introduction
-nfReqIntroS :: Sentence
-nfReqIntroS = reqIntroStart +:+. nfrReqIntroBody
-
-fReqIntro :: Contents
-fReqIntro = mkParagraph fReqIntroS
+nfReqIntro :: Contents
+nfReqIntro = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
@@ -72,3 +63,9 @@ mkValsSourceTable :: (Quantity i, MayHaveUnit i) =>
 mkValsSourceTable vals label cap = llcc (makeTabRef label) $ 
   Table [at_start symbol_, at_start description, S "Source", at_start' unit_]
   (mkTable [ch . fst, at_start . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
+
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple = map (\c -> (qw c, makeRef2S c))
+
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs

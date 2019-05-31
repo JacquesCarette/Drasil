@@ -12,7 +12,6 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DocLang (mkEnumSimpleD)
 import Drasil.DocumentLanguage.Units (toSentence) 
-import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)

@@ -13,7 +13,6 @@ import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSentCol)
 import Data.Drasil.Utils (weave)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)

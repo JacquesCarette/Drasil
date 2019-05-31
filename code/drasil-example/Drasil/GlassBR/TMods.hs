@@ -8,8 +8,6 @@ import Utils.Drasil
 
 import Control.Lens ((^.))
 
-import Data.Drasil.SentenceStructures (foldlSent)
-
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)

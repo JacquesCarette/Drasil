@@ -11,11 +11,10 @@ import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
 import Data.Drasil.Theories.Physics (torqueDD)
-import Data.Drasil.SentenceStructures (foldlSent)
-import Drasil.SSP.Defs (slice)
+
 import Drasil.SSP.Assumptions (assumpSBSBISL)
-import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
-  huston2008)
+import Drasil.SSP.Defs (slice)
+import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
   fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 

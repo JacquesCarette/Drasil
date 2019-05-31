@@ -5,7 +5,6 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (software, nonfunctionalRequirement,
   functionalRequirement, section_)
-import Data.Drasil.SentenceStructures (foldlSent_)
 
 import qualified Drasil.DocLang.SRS as SRS
 

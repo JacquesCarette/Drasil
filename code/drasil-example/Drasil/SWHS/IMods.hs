@@ -25,7 +25,7 @@ import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcm_SA, pcm_vol, tInitMelt, tau_L_P, tau_S_P, tau_W, temp_C, tempInit, 
-  temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, w_vol) 
+  temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
@@ -83,7 +83,7 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass wMass heatCapSpec
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol wVol mass wMass heatCapSpec
     htCap_W heatTrans coil htFluxC coil_SA pcm_SA tank htFluxP surface volHtGen,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
   eBalanceOnWtrDerivDesc3 wMass htCap_W,

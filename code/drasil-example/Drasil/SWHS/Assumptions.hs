@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Physics (mechEnergy)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
-import Drasil.SWHS.Unitals (w_vol, volHtGen, temp_C, tempInit, temp_W,
+import Drasil.SWHS.Unitals (wVol, volHtGen, temp_C, tempInit, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
 -------------------------
@@ -138,7 +138,7 @@ assumpS19 = foldlSent [
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [
-  S "When considering the", phrase w_vol, S "in the",
+  S "When considering the", phrase wVol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRefS req2]

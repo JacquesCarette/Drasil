@@ -38,7 +38,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
-  tFinalMelt, vol, tankVol, w_vol, deltaT,
+  tFinalMelt, vol, tankVol, wVol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
@@ -48,7 +48,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  tFinalMelt, tankVol, w_vol, deltaT,
+  tFinalMelt, tankVol, wVol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
@@ -56,7 +56,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  tFinalMelt, tankVol, w_vol, deltaT,
+  tFinalMelt, tankVol, wVol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
@@ -162,7 +162,7 @@ tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank"
   (sub (eqSymb vol) (Atomic "tank")) m_3
 
-w_vol = uc' "w_vol" (vol `of_` water)
+wVol = uc' "wVol" (vol `of_` water)
   "The amount of space occupied by a given quantity of water"
   (sub (eqSymb vol) cW) m_3
 

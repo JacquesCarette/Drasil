@@ -32,7 +32,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcmMass, pcm_vol,
   sim_time, tFinalMelt, tInitMelt, tank_length, tankVol, tau_L_P, tau_S_P,
   tau_W, temp_C, temp_PCM, temp_W, tempInit, temp_melt_P, timeStep, time_final, w_E,
-  w_density, wMass, w_vol)
+  w_density, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -84,7 +84,7 @@ iIQConstruct x = cic "inputInitQuants" ( foldlSent [
 findMass = findMassConstruct inputInitQuants (plural mass)
             (foldlList Comma List $ map makeRef2S iMods)
             (foldlList Comma List [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
-            (ch w_vol `isThe` phrase w_vol `sAnd` ch tankVol `isThe` phrase tankVol)
+            (ch wVol `isThe` phrase wVol `sAnd` ch tankVol `isThe` phrase tankVol)
 
 findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
                                    Sentence -> Sentence -> Sentence -> ConceptInstance
@@ -93,7 +93,7 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
   m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
-inputInitQuantsEqn = (sy wMass) $= (sy w_vol) * (sy w_density) $=
+inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy w_density) $=
   ((sy tankVol) - (sy pcm_vol)) * (sy w_density) $=
   ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tank_length) - (sy pcm_vol)) * (sy w_density) -- FIXME: Ref Hack
 

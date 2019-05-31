@@ -16,7 +16,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  LCsSec(..), UCsSec(..), generateTraceMap',
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), generateTraceMap',
   dataConstraintUncertainty, goalStmtF,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, termDefnF,
@@ -54,7 +54,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity,
 import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
-import Drasil.GamePhysics.Assumptions(assumptions)
+import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, twoD)
@@ -116,7 +116,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
       traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
       (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
-    Verbatim valuesOfAuxiliaryConstatnts,
+    AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -763,9 +763,6 @@ traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --
 -----------------------------------
-
-valuesOfAuxiliaryConstatnts :: Section
-valuesOfAuxiliaryConstatnts = valsOfAuxConstantsF chipmunk []
 
 ----------------
 -- REFERENCES --

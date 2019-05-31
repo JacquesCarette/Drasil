@@ -1,10 +1,9 @@
-module Drasil.GlassBR.Requirements (funcReqsList, nonfuncReqs, funcReqs,
-  funcReqsTables, propsDeriv) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimpleD, mkInputPropsTable, mkValsSourceTable)
+import Drasil.DocLang (mkInputPropsTable, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
@@ -33,10 +32,6 @@ import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type,
   safeMessage, sdx, sdy, sdz, tNT)
 
 {--Functional Requirements--}
-
-funcReqsList :: [Contents]
-funcReqsList = mkEnumSimpleD funcReqs ++ 
-  map LlC [inputGlassPropsTable, sysSetValsFollowingAssumpsTable, outputQuantsTable]
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,

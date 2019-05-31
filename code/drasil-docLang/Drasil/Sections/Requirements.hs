@@ -1,13 +1,16 @@
-module Drasil.Sections.Requirements (fReqF, reqF, reqIntro, nfReqF,) where
+module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, reqF, reqIntro, nfReqF) where
 
 import Language.Drasil
+import Language.Drasil.Utils (sortBySymbol)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (software, nonfunctionalRequirement,
-  functionalRequirement, section_)
-import Data.Drasil.SentenceStructures (foldlSent_)
+import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
+  input_, nonfunctionalRequirement, section_, software, symbol_)
+import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.SentenceStructures (foldlSent_, follows)
 
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocumentLanguage.Units (toSentence)
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
@@ -53,3 +56,11 @@ nfReqIntroS = reqIntroStart +:+. nfrReqIntroBody
 
 fReqIntro :: Contents
 fReqIntro = mkParagraph fReqIntroS
+
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
+                          [i] -> r -> LabelledContent
+mkInputPropsTable reqInputs req = llcc (makeTabRef "InputPropsReqInputs") $ 
+  Table [at_start symbol_, at_start description, at_start' unit_]
+  (mkTable [ch, at_start, toSentence] $ sortBySymbol reqInputs)
+  (S "Required" +:+ titleize' input_ `follows` req) True

@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
@@ -39,6 +39,7 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
 import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+
 
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, foldlSent, foldlSP)
@@ -70,7 +71,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
+import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
@@ -87,8 +88,8 @@ import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
-import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
-import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable, dataConstListIn)
+import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
+import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -245,7 +246,7 @@ symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermoco
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
-  ++ map nw [abs_tol, rel_tol, cons_tol])
+  ++ map nw [abs_tol, rel_tol, cons_tol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory
   concIns section labCon

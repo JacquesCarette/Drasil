@@ -22,7 +22,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    reqF,
+    reqF, mkInputPropsTable,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
     inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
@@ -59,7 +59,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.Requirements (reqF, mkInputPropsTable)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
     outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)

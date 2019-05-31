@@ -2,13 +2,12 @@
 module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
   foldle, foldle1, fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix,
-  mkEnumAbbrevList, mkInputDatTb, mkTableFromColumns, noRefs, noRefsLT,
+  mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
   prodUCTbl, typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, useCaseTable)
-import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.Concepts.Documentation (fterms, input_, output_, useCaseTable)
 
 import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
@@ -113,14 +112,6 @@ mkTableFromColumns l =
     isEmpty       _      = False
     replaceEmptyS EmptyS = S "--"
     replaceEmptyS s      = s
-
--- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
-mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
-mkInputDatTb inputVar = llcc (makeTabRef "inDataTable") $ 
-  Table [titleize symbol_, titleize unit_, 
-  S "Name"]
-  (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference

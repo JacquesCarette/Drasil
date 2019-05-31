@@ -27,7 +27,7 @@ symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrain
 
 symbolsAll :: [QuantityDict]
 symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
-  (map qw [htFusionMin, htFusion_max, coil_SA_max]) ++
+  (map qw [htFusionMin, htFusionMax, coil_SA_max]) ++
   (map qw [absTol, relTol, consTol])
 
 -- Symbols with Units --
@@ -315,7 +315,7 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   "completely melt a unit mass of a substance")
   (sub cH lF) specificE Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusion_max)] (dbl 211600) defaultUncrt
+  sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (dbl 211600) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
@@ -459,7 +459,7 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
 
-htFusionMin, htFusion_max, coil_SA_max :: UnitaryChunk
+htFusionMin, htFusionMax, coil_SA_max :: UnitaryChunk
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
@@ -504,7 +504,7 @@ htFusionMin = unitary "htFusionMin"
   (nounPhraseSP "minimum specific latent heat of fusion")
   (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational
 
-htFusion_max = unitary "htFusion_max"
+htFusionMax = unitary "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
   (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational
 

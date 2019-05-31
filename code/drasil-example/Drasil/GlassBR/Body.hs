@@ -72,8 +72,7 @@ import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
-  inputGlassPropsTable, outputQuantsTable, propsDeriv)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, funcReqsTables, nonfuncReqs, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -121,7 +120,7 @@ section :: [Section]
 section = sec
 
 labelledCon :: [LabelledContent]
-labelledCon = [inputGlassPropsTable, outputQuantsTable, demandVsSDFig, dimlessloadVsARFig]
+labelledCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 sec :: [Section]
 sec = extractSection srs

@@ -1,10 +1,10 @@
 module Drasil.GlassBR.Requirements (funcReqsList, nonfuncReqs, funcReqs,
-  inputGlassPropsTable, outputQuantsTable, propsDeriv) where
+  funcReqsTables, propsDeriv) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimple, mkInputPropsTable, mkListTuple, mkValsSourceTable)
+import Drasil.DocLang (mkEnumSimpleD, mkInputPropsTable, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
@@ -21,34 +21,29 @@ import Data.Drasil.Concepts.Software (errMsg)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, foldlSent_, foldlSP, follows)
-import Data.Drasil.Utils (bulletFlat)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
-import Drasil.GlassBR.Concepts (glass, lShareFac)
+import Drasil.GlassBR.Concepts (glass)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
 import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
-  isSafeLR, isSafePb, nomThick, notSafe, pbTol, plateLen, plateWidth, 
+  isSafeLR, isSafePb, loadSF, nomThick, notSafe, pbTol, plateLen, plateWidth, 
   safeMessage, sdx, sdy, sdz, tNT)
 
 {--Functional Requirements--}
 
 funcReqsList :: [Contents]
-funcReqsList = mkEnumSimple (uncurry $ flip mkReqCI) 
-  (zip funcReqs funcReqsDetails) ++ map LlC [inputGlassPropsTable, outputQuantsTable]
-
-mkReqCI :: (Definition c, HasShortName c, Referable c) => [Sentence] -> c -> ListTuple
-mkReqCI e = mkListTuple $ if null e then \x -> Flat $ x ^. defn else
-  \x -> Nested (x ^. defn) $ bulletFlat e
+funcReqsList = mkEnumSimpleD funcReqs ++ 
+  map LlC [inputGlassPropsTable, sysSetValsFollowingAssumpsTable, outputQuantsTable]
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownQuants, checkGlassSafety, outputQuants]
 
-funcReqsDetails :: [[Sentence]]
-funcReqsDetails = [[], sysSetValsFollowingAssumpsList, [], [], [], []]
+funcReqsTables :: [LabelledContent]
+funcReqsTables = [inputGlassPropsTable, sysSetValsFollowingAssumpsTable, outputQuantsTable]
 
 inputGlassProps, sysSetValsFollowingAssumps, checkInputWithDataCons,
   outputValsAndKnownQuants, checkGlassSafety, outputQuants :: ConceptInstance
@@ -78,17 +73,15 @@ inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
       ++ (map qw [glass_type, nomThick])
 
 sysSetValsFollowingAssumpsDesc :: Sentence
-sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall set the known",
-    plural value +: S "as follows"]
+sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
+    plural value +:+ S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
 
-sysSetValsFollowingAssumpsList :: [Sentence]
-sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `follows` assumpSV,
-  ch loadDF +:+ S "from" +:+ makeRef2S loadDF, 
-  short lShareFac `follows` assumpGL,
-  ch hFromt +:+ S "from" +:+ makeRef2S hFromt,
-  ch glaTyFac +:+ S "from" +:+ makeRef2S glaTyFac,
-  ch standOffDis +:+ S "from" +:+ makeRef2S standOffDis,
-  ch aspRat +:+ S "from" +:+ makeRef2S aspRat]
+sysSetValsFollowingAssumpsTable :: LabelledContent
+sysSetValsFollowingAssumpsTable = mkValsSourceTable (assumpTuple ++ (mkTuple r5DDs)) "ReqAssignments"
+                              (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
+  where
+    assumpTuple = (qw loadSF, makeRef2S assumpGL) : zip (map qw (take 4 assumptionConstants)) (replicate 4 $ makeRef2S assumpSV)
+    r5DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)

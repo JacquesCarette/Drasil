@@ -379,7 +379,7 @@ timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo (Exc, sy timeFinal_max)] (dbl 50000) defaultUncrt
+  sfwrc $ UpTo (Exc, sy timeFinalMax)] (dbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("The finite discretization of time used in the numerical method" ++
@@ -451,13 +451,13 @@ specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
-  pcmHTCMin, pcmHTCMax, timeFinal_max, fracMinAux]
+  pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
-  pcmHTCMax, timeFinal_max, fracMinAux :: QDefinition
+  pcmHTCMax, timeFinalMax, fracMinAux :: QDefinition
 
 htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
 
@@ -554,6 +554,6 @@ pcmHTCMax = mkQuantDef (unitary "pcmHTCMax"
   (sup (eqSymb pcmHTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 17
-timeFinal_max = mkQuantDef (unitary "timeFinal_max"
+timeFinalMax = mkQuantDef (unitary "timeFinalMax"
   (nounPhraseSP "maximum final time")
   (sup (eqSymb timeFinal) (Atomic "max")) second Rational) 86400

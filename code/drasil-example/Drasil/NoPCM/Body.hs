@@ -77,7 +77,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilHTCMax, coilHTCMin, coilSA,
   coilSAMax, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCapWMax, htCapWMin, htTransCoeff, inSA, outSA, 
   tankLength, tankLengthMax, tankLengthMin, tankVol, tau, tauW, tempC, 
-  tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
+  tempEnv, tempW, thFluxVect, timeFinal, timeFinalMax, volHtGen, wDensity, 
   wDensityMax, wDensityMin, watE, wMass, wVol, specParamValList, unitalChuncks,
   absTol, relTol, consTol)
 
@@ -613,7 +613,7 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 specParamValListb :: [QDefinition]
 specParamValListb = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, htCapWMin, htCapWMax, coilHTCMin,
-  coilHTCMax, timeFinal_max]
+  coilHTCMax, timeFinalMax]
 
 specParamVal = valsOfAuxConstantsF progName specParamValListb
 

@@ -9,7 +9,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
-  temp_W, temp_PCM, htFluxP, pcm_HTC, coil_HTC, temp_C, htFluxC, htCap_S_P,
+  temp_W, temp_PCM, htFluxP, pcm_HTC, coil_HTC, temp_C, htFluxC, htCapSP,
   htCap_L_P, pcm_HTC, pcmSA, tauSP, tauLP)
 
 import Data.Drasil.Quantities.Physics (time)
@@ -60,7 +60,7 @@ ddBalanceSolidPCMQD :: QDefinition
 ddBalanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
-balanceSolidPCMEqn = ((sy pcmMass) * (sy htCap_S_P)) /
+balanceSolidPCMEqn = ((sy pcmMass) * (sy htCapSP)) /
   ((sy pcm_HTC) * (sy pcmSA))
 
 ddBalanceSolidPCM :: DataDefinition

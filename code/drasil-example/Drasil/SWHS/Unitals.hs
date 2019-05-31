@@ -231,11 +231,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 -- Input Constraints
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  tempMeltP, htCapSP, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
+  htCapSP, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
@@ -290,13 +290,13 @@ tempMeltP = uqc "tempMeltP"
   [physc $ Bounded (Exc,0) (Exc, sy temp_C)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
-htCap_S_P = uqc "htCap_S_P"
+htCapSP = uqc "htCapSP"
   (nounPhraseSP "specific heat capacity of PCM as a solid")
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) cP) cS) UT.heatCapSpec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCap_S_P_min) (Exc, sy htCap_S_P_max)]
+  sfwrc $ Bounded (Exc, sy htCapSP_min) (Exc, sy htCapSP_max)]
   (dbl 1760) defaultUncrt
 
 -- Constraint 8
@@ -449,13 +449,13 @@ cons_tol = uvc "cons_tol"
 specParamValList :: [QDefinition]
 specParamValList = [tank_length_min, tank_length_max,
   pcmDensity_min, pcmDensity_max, w_density_min, w_density_max,
-  htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
+  htCapSP_min, htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux]
 
 tank_length_min, tank_length_max, pcmDensity_min, 
-  pcmDensity_max, w_density_min, w_density_max, htCap_S_P_min, 
-  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
+  pcmDensity_max, w_density_min, w_density_max, htCapSP_min, 
+  htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
   pcm_HTC_max, time_final_max, frac_min_aux :: QDefinition
 
@@ -482,13 +482,13 @@ pcmDensity_max = mkQuantDef (unitary "pcmDensity_max"
   (sup (eqSymb pcmDensity) (Atomic "max")) densityU Rational) 20000
 
 -- Used in Constraint 7
-htCap_S_P_min = mkQuantDef (unitary "htCap_S_P_min"
+htCapSP_min = mkQuantDef (unitary "htCapSP_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (sub (eqSymb htCap_S_P) (Atomic "min")) UT.heatCapSpec Rational) 100
+  (sub (eqSymb htCapSP) (Atomic "min")) UT.heatCapSpec Rational) 100
 
-htCap_S_P_max = mkQuantDef (unitary "htCap_S_P_max"
+htCapSP_max = mkQuantDef (unitary "htCapSP_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (sub (eqSymb htCap_S_P) (Atomic "max")) UT.heatCapSpec Rational) 4000
+  (sub (eqSymb htCapSP) (Atomic "max")) UT.heatCapSpec Rational) 4000
 
 -- Used in Constraint 8
 htCap_L_P_min = mkQuantDef (unitary "htCap_L_P_min"

@@ -77,7 +77,7 @@ import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCapSP, htCap_W,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
   pcm_HTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, temp_C,
@@ -1142,24 +1142,24 @@ iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for",
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
-iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCap_S_P,
+iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCapSP,
   S "we obtain"]
 
 iMod2Sent3 :: [Sentence]
 iMod2Sent3 = [S "Setting", ch tauSP :+: S "=" :+: ch pcmMass :+: 
-  ch htCap_S_P :+: S "/" :+: ch pcm_HTC :+: ch pcmSA `sC`
+  ch htCapSP :+: S "/" :+: ch pcm_HTC :+: ch pcmSA `sC`
   S "this can be written as"]
 
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
 
-iMod2Eqn1 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+iMod2Eqn1 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
   time $= (sy htFluxP) * (sy pcmSA))
 
-iMod2Eqn2 = ((sy pcmMass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+iMod2Eqn2 = ((sy pcmMass) * (sy htCapSP) * deriv (sy temp_PCM)
   time $= (sy pcm_HTC) * (sy pcmSA) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
-  (sy pcmSA)) / ((sy pcmMass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
+  (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP)) * ((sy temp_W) - (sy temp_PCM)))
 
 iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tauSP)) *
   ((sy temp_W) - (sy temp_PCM)))

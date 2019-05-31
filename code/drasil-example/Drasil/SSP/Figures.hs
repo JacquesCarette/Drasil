@@ -7,7 +7,7 @@ import Drasil.SSP.Defs (slice)
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (at_start' force +:+ S "acting on a" +:+
+  fig (atStart' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 resourcePath :: String

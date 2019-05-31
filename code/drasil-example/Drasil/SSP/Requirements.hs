@@ -104,7 +104,7 @@ inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip,
 inputsToOutputTable :: LabelledContent
 inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
-  (at_start' input_ +:+ S "to be returned as" +:+ phrase output_) True
+  (atStart' input_ +:+ S "to be returned as" +:+ phrase output_) True
 
 {-Nonfunctional Requirements-}
 nonFuncReqs :: [ConceptInstance]

@@ -261,9 +261,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_usedinfodb = db}  TUnits =
-        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+        tableOfUnits (sortBy compUnitDefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
     mkSubRef SI {_usedinfodb = db} (TUnits' con) =
-        tableOfUnits (sortBy comp_unitdefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
+        tableOfUnits (sortBy compUnitDefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,

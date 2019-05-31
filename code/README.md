@@ -39,7 +39,7 @@ top level
 | `+:+` | Concatenates two sentences and adds a space in between them | Sentence -> Sentence -> Sentence |
 | `:+:` | Concatenates two sentences | Sentence -> Sentence -> Sentence |
 | `at_start` | Returns the singular form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
-| `at_start'` | Returns the plural form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
+| `atStart'` | Returns the plural form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
 | `cn` | Create a self-plural, common-noun NounPhrase | String -> NP |
 | `cn'` | Create a common-noun NounPhrase which becomes plural by adding "s" | String -> NP |
 | `introduceAbb` | Introduces an abbreviation using the titleized version of the term followed by the abbreviation in parentheses | NamedIdea n => n -> Sentence |

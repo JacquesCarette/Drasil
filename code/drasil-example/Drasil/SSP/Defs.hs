@@ -79,7 +79,7 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   S "constrained to not deform in one direction, or when the" +:+ 
   phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
   S "dominates the others, to the point where it can be assumed as" +:+.
-  S "infinite" +:+ at_start' stress +:+ S "in the direction of the" +:+
+  S "infinite" +:+ atStart' stress +:+ S "in the direction of the" +:+
   S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 

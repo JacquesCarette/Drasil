@@ -272,7 +272,7 @@ introStart es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   plural es `sAnd` phrase en +:+. S "storage technology", 
-  at_start' pro, S "provide a novel way of storing", phrase en]
+  atStart' pro, S "provide a novel way of storing", phrase en]
 
 introEnd :: CI -> ConceptChunk -> Sentence
 introEnd pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",

@@ -35,7 +35,7 @@ with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with t1 t2 = nounPhrase''
   (plural t1 +:+ S "with" +:+ phrase t2)
   (plural t1 +:+ S "with" +:+ plural t2)
-  (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
+  (Replace (atStart' t1 +:+ S "with" +:+ phrase t2))
   (Replace (titleize' t1 +:+ S "with" +:+ titleize t2))
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
@@ -76,7 +76,7 @@ of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of__ t1 t2 = nounPhrase'' 
   ((plural t1) +:+ S "of" +:+ (phrase t2))
   ((plural t1) +:+ S "of" +:+ (phrase t2))
-  (Replace ((at_start' t1) +:+ S "of" +:+ (phrase t2)))
+  (Replace ((atStart' t1) +:+ S "of" +:+ (phrase t2)))
   (Replace ((titleize' t1) +:+ S "of" +:+ (titleize t2)))
 
 -- | Same as of__, except combining Sentence piece is "of a"
@@ -84,7 +84,7 @@ ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofA t1 t2 = nounPhrase'' 
   ((plural t1) +:+ S "of a" +:+ (phrase t2))
   ((plural t1) +:+ S "of a" +:+ (phrase t2))
-  (Replace ((at_start' t1) +:+ S "of a" +:+ (phrase t2)))
+  (Replace ((atStart' t1) +:+ S "of a" +:+ (phrase t2)))
   (Replace ((titleize' t1) +:+ S "of a" +:+ (titleize t2)))
 
 --FIXME: As mentioned in issue #487, the following should be re-examined later,

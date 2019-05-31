@@ -2,7 +2,7 @@
 -- Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
 module Language.Drasil.Development.Sentence (short, introduceAbb, at_start,
-  at_start', titleize, titleize', phrase, plural, phrase's, plural's) where
+  atStart', titleize, titleize', phrase, plural, phrase's, plural's) where
 
 import Control.Lens ((^.))
 
@@ -24,11 +24,11 @@ introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a 
 -- NamedIdea.
-at_start, at_start' :: NamedIdea n => n -> Sentence
+at_start, atStart' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
 at_start  n = NP.atStartNP (n ^. term)
 -- | Plural sentence case.
-at_start' n = NP.atStartNP' (n ^. term)
+atStart' n = NP.atStartNP' (n ^. term)
 
 -- | Helper function for getting the title case of a noun phrase from a 
 -- NamedIdea.

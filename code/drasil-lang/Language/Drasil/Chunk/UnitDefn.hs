@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.UnitDefn (
   , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   , IsUnit(getUnits)
   ) where
@@ -162,5 +162,5 @@ fund' :: String -> String -> Symbol -> UnitDefn
 fund' nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [nam]
 
 -- | We don't want an Ord on units, but this still allows us to compare them
-comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
-comp_unitdefn a b = compUSymb (usymb a) (usymb b)
+compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
+compUnitDefn a b = compUSymb (usymb a) (usymb b)

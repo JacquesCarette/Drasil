@@ -285,7 +285,7 @@ purposeDoc pname =
   foldlSent [S "The primary purpose of this", phrase document, S "is to",
   S "record the", plural requirement `sOf` short pname `andThe` plural model,
   S "that will be used to meet those" +:+. plural requirement, 
-  at_start' goal `sC` plural assumption `sC` plural thModel `sC` 
+  atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",

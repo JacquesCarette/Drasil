@@ -142,7 +142,7 @@ module Language.Drasil (
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
-  , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
+  , introduceAbb, phrase, plural, phrase's, plural's, at_start, atStart'
   , titleize, titleize'
   -- Uncertainty.Core
   , Uncertainty, uncty
@@ -172,7 +172,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
 ) where
 
@@ -278,5 +278,5 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))

@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcm_SA, pcm_vol, tInitMelt, tau_L_P, tau_S_P, tau_W, temp_C, tempInit, 
+  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tau_S_P, tau_W, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -216,7 +216,7 @@ balPCMRel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
 
-        case2 = ((1 / (sy tau_L_P)) * ((apply1 temp_W time) -
+        case2 = ((1 / (sy tauLP)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy temp_melt_P)))
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
@@ -231,7 +231,7 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
   sParen (unwrap $ getUnit tau_S_P) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
-  (E $ (sy tau_L_P) $= ((sy pcmMass) * (sy htCap_L_P)) /
+  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
   sParen (unwrap $ getUnit tau_S_P),
   sParen (makeRef2S ddBalanceLiquidPCM)]
@@ -262,9 +262,9 @@ balPCMDescNote = foldlSent [
   sParen (unwrap $ getUnit tau_S_P) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   
-  (E $ (sy tau_L_P) $= ((sy pcmMass) * (sy htCap_L_P)) /
+  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_L_P),
+  sParen (unwrap $ getUnit tauLP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
  ----------------------------------------------
@@ -275,7 +275,7 @@ eBalanceOnPCMDeriv =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
     S "sensible heating phase:" ] ++
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2])
-  ++ (eBalanceOnPCMDerivDesc5 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol assumpVCMPN)
+  ++ (eBalanceOnPCMDerivDesc5 htCap_S_P htCap_L_P tau_S_P tauLP surface area melting vol assumpVCMPN)
   ++ (eBalanceOnPCMDerivDesc6 temp_PCM)
   ++ (eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
 

@@ -202,9 +202,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, frac_min]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin]
 
-eta, meltFrac, frac_min:: DefinedQuantityDict
+eta, meltFrac, fracMin:: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
@@ -216,7 +216,7 @@ meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
 
-frac_min = dqd' (dcc "frac_min" 
+fracMin = dqd' (dcc "fracMin" 
   (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
   "minimum fraction of the tank volume taken up by the PCM")
    (const $ Atomic "MINFRACT") Real Nothing
@@ -258,7 +258,7 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tankVol),
-   sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tankVol))] 
+   sfwrc $ UpFrom (Inc, (sy fracMin)*(sy tankVol))] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -470,7 +470,7 @@ tank_length_max = mkQuantDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
 
-frac_min_aux    = mkQuantDef frac_min $ dbl 1.0e-6
+frac_min_aux    = mkQuantDef fracMin $ dbl 1.0e-6
 
 -- Used in Constraint 5
 pcm_density_min = mkQuantDef (unitary "pcm_density_min"

@@ -67,7 +67,7 @@ foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
 foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
   where
-    constraintToExpr (Range _ ri)         = real_interval c ri
+    constraintToExpr (Range _ ri)         = realInterval c ri
     constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
     constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 

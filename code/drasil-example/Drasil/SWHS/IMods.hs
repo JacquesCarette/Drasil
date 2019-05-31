@@ -65,7 +65,7 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
   (E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ real_interval tempW (Bounded (Exc,0) (Exc,100))),
+  S "is in", phrase liquid, S "form" `sC` (E $ realInterval tempW (Bounded (Exc,0) (Exc,100))),
   sParen (unwrap $ getUnit tempW), S "where", E 0,
   sParen (unwrap $ getUnit tempW) `sAnd` (E 100),
   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `sAnd`
@@ -214,14 +214,14 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 balPCMRel :: Relation
 balPCMRel = (deriv (sy tempPCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tauSP)) * ((apply1 tempW time) -
-          (apply1 tempPCM time)), real_interval tempPCM (UpTo (Exc,sy tempMeltP)))
+          (apply1 tempPCM time)), realInterval tempPCM (UpTo (Exc,sy tempMeltP)))
 
         case2 = ((1 / (sy tauLP)) * ((apply1 tempW time) -
-          (apply1 tempPCM time)), real_interval tempPCM (UpFrom (Exc,sy tempMeltP)))
+          (apply1 tempPCM time)), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
 
         case3 = (0, (sy tempPCM) $= (sy tempMeltP))
 
-        case4 = (0, real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
+        case4 = (0, realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
@@ -400,7 +400,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
   (ch tempW) `sAnd` S "the", phrase tempInit `sC` ch tempInit +:+.
   sParen (unwrap $ getUnit tempInit), S "This", phrase equation,
-  S "applies as long as", (E $ real_interval tempW (Bounded (Exc,0) (Exc,100)))
+  S "applies as long as", (E $ realInterval tempW (Bounded (Exc,0) (Exc,100)))
   :+: unwrap (getUnit tempW), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
 
 ---------
@@ -420,17 +420,17 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
 htPCMRel :: Relation
 htPCMRel = sy pcmE $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCapSP * sy pcmMass * ((apply1 tempPCM time) -
-          sy tempInit), real_interval tempPCM (UpTo (Exc, sy tempMeltP)))
+          sy tempInit), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
 
         case2 = (sy pcmInitMltE + (sy htFusion * sy pcmMass) +
           (sy htCapLP * sy pcmMass * ((apply1 tempPCM time) -
-          sy tempMeltP)), real_interval tempPCM (UpFrom (Exc, sy tempMeltP)))
+          sy tempMeltP)), realInterval tempPCM (UpFrom (Exc, sy tempMeltP)))
 
         case3 = (sy pcmInitMltE + (apply1 latentEP time),
           (sy tempPCM) $= (sy tempMeltP))
 
         case4 = (sy pcmInitMltE + (apply1 latentEP time),
-          real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
+          realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.

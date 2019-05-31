@@ -11,7 +11,7 @@ module Language.Drasil (
   , sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
   , sumAll, defsum, prodAll, defprod, defint, intAll
-  , real_interval
+  , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2
@@ -185,7 +185,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           csc, cot, arcsin, arccos, arctan, exp,
           dim, idx, int, dbl, str, isin, case_,
           sumAll, defsum, prodAll, defprod,
-          real_interval,
+          realInterval,
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)

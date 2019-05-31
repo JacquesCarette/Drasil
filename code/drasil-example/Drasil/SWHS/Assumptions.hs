@@ -21,7 +21,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
 import Drasil.SWHS.Unitals (wVol, volHtGen, temp_C, tempInit, temp_W,
-  temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
+  temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcmVol)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -77,7 +77,7 @@ assumpS3 = foldlSent [
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank]
 assumpS4 = foldlSent [
-  S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol]
+  S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcmVol]
   --FIXME `sC` makeRefS likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,

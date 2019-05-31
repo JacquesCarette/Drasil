@@ -24,7 +24,7 @@ import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
-  pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
+  pcmMass, pcm_SA, pcmVol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
@@ -281,7 +281,7 @@ eBalanceOnPCMDeriv =
 
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
-  eBalanceOnPCMDerivDesc1 rOfChng temp_PCM energy water vol pcm_vol pcmMass heatCapSpec
+  eBalanceOnPCMDerivDesc1 rOfChng temp_PCM energy water vol pcmVol pcmMass heatCapSpec
   htCap_S_P htFlux htFluxP phaseChange pcm_SA heat assumpNIHGBWP volHtGen,
   eBalanceOnPCMDerivDesc2 dd2HtFluxP htFluxP,
   eBalanceOnPCMDerivDesc3 eq6,

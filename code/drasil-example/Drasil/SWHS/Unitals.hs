@@ -230,11 +230,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 
 -- Input Constraints
 inputs :: [UncertQ]
-inputs = [tankLength, diam, pcm_vol, pcm_SA, pcm_density,
+inputs = [tankLength, diam, pcmVol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
-tankLength, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+tankLength, diam, pcmVol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
@@ -254,7 +254,7 @@ diam = uqc "diam" (nounPhraseSP "diameter of tank")
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
-pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
+pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tankVol),
@@ -272,7 +272,7 @@ pcm_SA = uqc "pcm_SA"
   "Area covered by the outermost layer of the phase change material"
   (sub cA cP) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tankVol)]
+  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (2 / sy thickness) * sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5

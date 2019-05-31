@@ -710,16 +710,16 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite[(pg. 282)]{bueche1986}
 \\ \midrule \\
-RefBy & \hyperref[DD:melt.frac]{DD: melt\_frac} \hyperref[TM:latentHtE]{TM: latentHtE} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
+RefBy & \hyperref[DD:meltFrac]{DD: meltFrac} \hyperref[TM:latentHtE]{TM: latentHtE} \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:melt.frac}
+\toprule \textbf{Refname} & \textbf{DD:meltFrac}
 \phantomsection 
-\label{DD:melt.frac}
+\label{DD:meltFrac}
 \\ \midrule \\
 Label & Melt fraction
 \\ \midrule \\
@@ -812,7 +812,7 @@ Which simplifies to:
 \begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
-Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:melt.frac]{DD: melt\_frac}), Equation (5) can be written as:
+Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:meltFrac]{DD: meltFrac}), Equation (5) can be written as:
 \begin{displaymath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
@@ -861,7 +861,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}). ${{τ_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).
+Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:meltFrac]{DD: meltFrac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}). ${{τ_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -1160,7 +1160,7 @@ This section provides the non-functional requirements, the qualities that the so
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. \hyperref[Table:Tracey2]{Table:Tracey2} shows the dependencies of instance models, requirements, and data constraints on each other. \hyperref[Table:Tracey1]{Table:Tracey1} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[DD:htFluxP]{DD: htFluxP} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:htFluxC]{DD: htFluxC} & \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States} & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State} & \hyperref[IM:heatEInPCM]{IM: heatEInPCM} & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water} & \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} & \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} & \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} & \hyperref[DD:melt.frac]{DD: melt\_frac} & \hyperref[TM:latentHtE]{TM: latentHtE} & \hyperref[TM:sensHtE]{TM: sensHtE}
+ & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[DD:htFluxP]{DD: htFluxP} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:htFluxC]{DD: htFluxC} & \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States} & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State} & \hyperref[IM:heatEInPCM]{IM: heatEInPCM} & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water} & \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} & \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} & \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} & \hyperref[DD:meltFrac]{DD: meltFrac} & \hyperref[TM:latentHtE]{TM: latentHtE} & \hyperref[TM:sensHtE]{TM: sensHtE}
 \\
 \midrule
 \endhead
@@ -1230,7 +1230,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:latentHtE]{TM: latentHtE} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-\hyperref[DD:melt.frac]{DD: melt\_frac} &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:meltFrac]{DD: meltFrac} &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  & X &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1246,7 +1246,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:htFluxC]{DD: htFluxC}) & DD2 (\hyperref[DD:htFluxP]{DD: htFluxP}) & DD3 (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}) & DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) & DD5 (\hyperref[DD:htFusion]{DD: htFusion}) & DD6 (\hyperref[DD:melt.frac]{DD: melt\_frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
+ & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:htFluxC]{DD: htFluxC}) & DD2 (\hyperref[DD:htFluxP]{DD: htFluxP}) & DD3 (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}) & DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) & DD5 (\hyperref[DD:htFusion]{DD: htFusion}) & DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
 \\
 \midrule
 \endhead
@@ -1270,7 +1270,7 @@ DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) &  &  &  &  &  &  &  
 \\
 DD5 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  &  &  & X &  & 
 \\
@@ -1350,7 +1350,7 @@ DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) &  &  &  &  &  &  &  
 \\
 DD5 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\

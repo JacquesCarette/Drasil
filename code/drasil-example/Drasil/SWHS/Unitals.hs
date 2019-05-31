@@ -202,16 +202,16 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, frac_min]
 
-eta, melt_frac, frac_min:: DefinedQuantityDict
+eta, meltFrac, frac_min:: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
   (const lEta) Real Nothing
 
-melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
+meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing

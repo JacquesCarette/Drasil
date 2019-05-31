@@ -8,7 +8,7 @@ import Theory.Drasil (DataDefinition, dd, mkQuantDef)
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
-import Drasil.SWHS.Unitals (melt_frac, latentEP, htFusion, pcmMass,
+import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
   temp_W, temp_PCM, htFluxP, pcm_HTC, coil_HTC, temp_C, htFluxC, htCap_S_P,
   htCap_L_P, pcm_HTC, pcm_SA, tauSP, tauLP)
 
@@ -96,9 +96,9 @@ dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
 ----
 
 dd4MeltFracQD :: QDefinition
-dd4MeltFracQD = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
-  (melt_frac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb melt_frac) meltFracEqn 
+dd4MeltFracQD = fromEqn' (meltFrac ^. uid) -- FIXME Should (^. id) be used
+  (meltFrac ^. term) (S "fraction of the PCM that is liquid")
+  (eqSymb meltFrac) meltFracEqn 
 
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
@@ -108,7 +108,7 @@ meltFracEqn :: Expr
 meltFracEqn = (sy latentEP) / ((sy htFusion) * (sy pcmMass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "melt_frac"
+dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
  [makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions

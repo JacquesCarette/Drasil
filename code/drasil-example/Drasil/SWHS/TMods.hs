@@ -23,7 +23,7 @@ import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCapV, htCapS,
+import Drasil.SWHS.Unitals (meltFrac, tau, deltaT, htCapV, htCapS,
   htCapL, volHtGen, thFluxVect)
 
 tMods :: [TheoryModel]
@@ -173,7 +173,7 @@ latentHtEdesc = foldlSent [
   S "elapsed, as long as the",
   phrase phaseChange, S "is not complete. The status of",
   S "the", phrase phaseChange,
-  S "depends on the", phrase melt_frac `sC`
+  S "depends on the", phrase meltFrac `sC`
   (makeRef2S dd3HtFusion) :+: S ".",
   ch meltPt `sAnd` ch boilPt, S "are the",
   phrase meltPt `sAnd` phrase boilPt `sC`

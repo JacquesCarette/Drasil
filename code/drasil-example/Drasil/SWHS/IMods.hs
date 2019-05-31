@@ -23,7 +23,7 @@ import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
-  htCap_S_P, htCap_W, htFusion, latentEP, melt_frac, pcm_E, pcm_HTC, pcmInitMltE, 
+  htCap_S_P, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcm_SA, pcm_vol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
   temp_melt_P, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
@@ -221,7 +221,7 @@ balPCMRel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (0, real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
+        case4 = (0, real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -253,7 +253,7 @@ balPCMDescNote = foldlSent [
   S "The temperature remains constant at",
   (E (sy temp_melt_P)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
+  (E (0 $< sy meltFrac $< 1)), S "(from", makeRef2S dd4MeltFrac,
   S ") is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
@@ -430,7 +430,7 @@ htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
           (sy temp_PCM) $= (sy temp_melt_P))
 
         case4 = (sy pcmInitMltE + (apply1 latentEP time),
-          real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
+          real_interval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.

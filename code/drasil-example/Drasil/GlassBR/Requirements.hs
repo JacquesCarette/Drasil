@@ -103,7 +103,7 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S inputGlassProps `andThe` S "known", plural quantity,
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
-checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch isSafePb), S "∧", (ch isSafeLR),
+checkGlassSafetyDesc cmd = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
   sParen (S "from" +:+ (makeRef2S pbIsSafe)
   `sAnd` (makeRef2S lrIsSafe)) `sC` phrase cmd,
   S "the", phrase message, Quote (safeMessage ^. defn),

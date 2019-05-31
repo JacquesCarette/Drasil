@@ -1,14 +1,12 @@
 {-# Language TypeFamilies #-}
 module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
-  fterms, getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
+  getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, noRefsLT,
   typUncr, unwrap, weave, zipFTable', zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil
-
-import Data.Drasil.Concepts.Documentation (fterms, input_, symbol_)
 
 import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)

@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.UnitDefn (
     UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
@@ -150,8 +150,8 @@ shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (usymb b)
 
 -- | Smart constructor for new derived units from existing units.
-new_unit :: String -> UnitEquation -> UnitDefn
-new_unit s = makeDerU (unitCon s)
+newUnit :: String -> UnitEquation -> UnitDefn
+newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn

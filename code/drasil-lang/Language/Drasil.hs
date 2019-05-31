@@ -169,7 +169,7 @@ module Language.Drasil (
   -- Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
@@ -275,7 +275,7 @@ import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec)
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''

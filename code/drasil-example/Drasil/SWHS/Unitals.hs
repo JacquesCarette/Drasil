@@ -232,11 +232,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
   tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
-  wDensity, htCapW, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
+  wDensity, htCapW, coilHTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
-  htCapW, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
+  htCapW, coilHTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
@@ -349,7 +349,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
   sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) defaultUncrt
   
 -- Constraint 14
-coil_HTC = uqc "coil_HTC" (nounPhraseSP
+coilHTC = uqc "coilHTC" (nounPhraseSP
   "convective heat transfer coefficient between coil and water")
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the coil to the surrounding water")
@@ -535,12 +535,12 @@ htCap_W_max = mkQuantDef (unitary "htCap_W_max"
 coil_HTC_min = mkQuantDef (unitary "coil_HTC_min"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
+  (sup (eqSymb coilHTC) (Atomic "min")) UT.heatTransferCoef Rational) 10
 
 coil_HTC_max = mkQuantDef (unitary "coil_HTC_max"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
-  (sup (eqSymb coil_HTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
+  (sup (eqSymb coilHTC) (Atomic "max")) UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 15
 pcm_HTC_min = mkQuantDef (unitary "pcm_HTC_min"

@@ -22,7 +22,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coil_HTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
+import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
@@ -35,7 +35,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coil_HTC, qw pcmSA,
+eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
  qw pcm_HTC, qw coilSA, qw temp_PCM, qw time_final, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw temp_W)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnWtrDeriv
@@ -60,9 +60,9 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy time_final)
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
-  (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coil_HTC * sy coilSA)),
+  (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)),
   S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
-  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coil_HTC * sy coilSA)),
+  (E $ sy eta $= (sy pcm_HTC * sy pcmSA) / (sy coilHTC * sy coilSA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
@@ -142,12 +142,12 @@ eBalanceOnWtrDerivDesc7 eq55 =
   sParen (makeRef2S eBalanceOnWtr)]
 
 eq2 :: [Sentence]
-eq2 = [ch coil_HTC, ch coilSA, S "/", ch coil_HTC, ch coilSA]
+eq2 = [ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA]
 
 eq3, eq4, eq5:: Expr
-eq3 = (sy tauW) $= ((sy wMass) * (sy htCapW)) / ((sy coil_HTC) * (sy coilSA))
+eq3 = (sy tauW) $= ((sy wMass) * (sy htCapW)) / ((sy coilHTC) * (sy coilSA))
 eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcmSA)) / 
-  ((sy coil_HTC) * (sy coilSA))
+  ((sy coilHTC) * (sy coilSA))
 eq5 = 1 / (sy tauW)
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
@@ -157,29 +157,29 @@ eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $=
   (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA)
 
 eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCapW) * (deriv (sy temp_W) time) $= 
-  (sy coil_HTC) * (sy coilSA) *  ((sy tempC) - (sy temp_W)) -
+  (sy coilHTC) * (sy coilSA) *  ((sy tempC) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcmSA) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coilSA) / 
+  ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) -
   ((sy pcmMass) * (sy pcmSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn4 = 
   (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coilSA) / 
+  ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
-  ((sy coil_HTC) * (sy coilSA) / 
-  ((sy coil_HTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
+  ((sy coilHTC) * (sy coilSA) / 
+  ((sy coilHTC) * (sy coilSA))) * ((sy pcm_HTC) * (sy pcmSA) / 
   ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn5 =  
   (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coilSA) / 
+  ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy temp_W)) +
   ((sy pcm_HTC) * (sy pcmSA) / 
-  ((sy coil_HTC) * (sy coilSA))) * ((sy coil_HTC) * (sy coilSA) / 
+  ((sy coilHTC) * (sy coilSA))) * ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) * ((sy temp_PCM) - (sy temp_W))
 
 

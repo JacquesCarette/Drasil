@@ -29,7 +29,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, eta, htCapLP, htCapSP,
-  htCapW, htFusion, pcm_E, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
+  htCapW, htFusion, pcmE, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, tempC, tempPCM, tempW, tempInit, tempMeltP, timeStep, timeFinal, watE,
   wDensity, wMass, wVol)
@@ -142,14 +142,14 @@ calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" ( foldlSent [
   "Calculate-Change-Heat_Energy-Water-Over-Time" funcReqDom
 --
 calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase pcm_E,
-  sParen (ch pcm_E :+: sParen (ch time)), S "over the",
+  S "Calculate and", phrase output_, S "the", phrase pcmE,
+  sParen (ch pcmE :+: sParen (ch time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInPCM)] )
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
-  sParen (ch watE :+: sParen (ch time) `sAnd` ch pcm_E :+:
+  sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
   S "as outlined in"
   --FIXME , makeRefS s4_2_7 `sC` -}
@@ -214,7 +214,7 @@ propsDeriv =
   [propCorSolDeriv1 CT.lawConsEnergy watE energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heatTrans,
   propCorSolDeriv2,
-  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
+  propCorSolDeriv3 pcmE energy phsChgMtrl water,
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
@@ -250,7 +250,7 @@ propCorSolDeriv3 epcm en pcmat wa =
 
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
-  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy pcmE) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) - 
   (apply1 tempPCM time)))))
 

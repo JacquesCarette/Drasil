@@ -238,7 +238,7 @@ tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
   htCapSP, htCapLP, htFusion, coilSA, tempC, wDensity,
   htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal :: UncertQ
 
-tempPCM, tempW, watE, pcm_E :: ConstrConcept
+tempPCM, tempW, watE, pcmE :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
@@ -391,7 +391,7 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
 -- Output Constraints
 outputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
-outputs = [tempW, tempPCM, watE, pcm_E]
+outputs = [tempW, tempPCM, watE, pcmE]
 
 -- Constraint 18
 tempW = cuc' "tempW"
@@ -415,7 +415,7 @@ watE = cuc' "watE" (nounPhraseSP "change in heat energy in the water")
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
-pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
+pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
   (sub (eqSymb sensHeat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)

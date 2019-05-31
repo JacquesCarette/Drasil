@@ -23,7 +23,7 @@ import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
-  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcmHTC, pcmInitMltE, 
+  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmE, pcmHTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, tempPCM, tempW, timeFinal, volHtGen, watE, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
@@ -409,7 +409,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP, qw tempPCM, qw htFusion, qw tInitMelt]
-  [sy tempInit $< sy tempMeltP] (qw pcm_E)
+  [sy tempInit $< sy tempMeltP] (qw pcmE)
   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]
 
@@ -418,7 +418,7 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCMRel
 
 htPCMRel :: Relation
-htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
+htPCMRel = sy pcmE $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCapSP * sy pcmMass * ((apply1 tempPCM time) -
           sy tempInit), real_interval tempPCM (UpTo (Exc, sy tempMeltP)))
 
@@ -434,15 +434,15 @@ htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
-  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcm_E `isThe` phrase change,
+  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcmE `isThe` phrase change,
   S "in", phrase thermalEnergy, S "of the", short phsChgMtrl, S "relative to the",
   phrase energy, S "at the", phrase tempInit, sParen (ch tempInit) +:+.
-  unwrap (getUnit pcmInitMltE), ch pcm_E, S "for the", phrase solid,
+  unwrap (getUnit pcmInitMltE), ch pcmE, S "for the", phrase solid,
   short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat,
   S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
   ch htCapSP, sParen (unwrap $ getUnit htCapSP), S "and the", phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase tempInit +:+.
-  sParen (unwrap $ getUnit tempInit), ch pcm_E, S "for the melted", short phsChgMtrl,
+  sParen (unwrap $ getUnit tempInit), ch pcmE, S "for the melted", short phsChgMtrl,
   sParen (E (sy tempPCM $> sy pcmInitMltE)), S "is found using", makeRef2S sensHtE,
   S "for", phrase sensHeat, S "of the" +:+. phrase liquid, short phsChgMtrl,
   S "plus the", phrase energy, S "when", phrase melting, S "starts, plus the", phrase energy,
@@ -453,7 +453,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe` phrase liquid, short phsChgMtrl,
   S "is", ch htCapLP, sParen (unwrap $ getUnit htCapLP) `sAnd` S "the", phrase change,
   S "in", phrase temp, S "is", E (sy tempPCM - sy tempMeltP) +:+.
-  sParen (unwrap $ getUnit tempMeltP), ch pcm_E, S "during", phrase melting, S "of the",
+  sParen (unwrap $ getUnit tempMeltP), ch pcmE, S "during", phrase melting, S "of the",
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
   phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`
@@ -481,4 +481,4 @@ instModIntro = S "The" +:+ plural goal +:+ makeRef2S waterTempGS `sC`
   S "has been solved" +:+ S "The" +:+ plural solution `sOf` 
   makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM +:+ 
   S "are also coupled" `sC` S "since the" +:+ phrase tempPCM `andThe` 
-  phrase pcm_E +:+ S "depend on the" +:+. phrase phaseChange
+  phrase pcmE +:+ S "depend on the" +:+. phrase phaseChange

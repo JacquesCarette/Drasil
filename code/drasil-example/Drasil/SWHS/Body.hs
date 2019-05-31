@@ -78,7 +78,7 @@ import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDer
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
-  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcm_E,
+  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
   pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
   tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, abs_tol, rel_tol, cons_tol)
@@ -465,7 +465,7 @@ dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
 
 outputConstraints :: [ConstrConcept]
-outputConstraints = [tempW, tempPCM, watE, pcm_E]
+outputConstraints = [tempW, tempPCM, watE, pcmE]
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?

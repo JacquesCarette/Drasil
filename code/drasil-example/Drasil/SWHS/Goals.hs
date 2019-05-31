@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)
 import Data.Drasil.SentenceStructures (foldlSent)
 
-import Drasil.SWHS.Unitals (tempW, tempPCM, watE, pcm_E)
+import Drasil.SWHS.Unitals (tempW, tempPCM, watE, pcmE)
 
 goals :: [ConceptInstance]
 goals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
@@ -25,7 +25,7 @@ waterEnergyGS = cic "waterEnergyGS" (goalState watE) "Predict-Water-Energy"
   goalStmtDom
 
 pcmEnergyGS :: ConceptInstance
-pcmEnergyGS = cic "pcmEnergyGS" (goalState pcm_E) "Predict-PCM-Energy" 
+pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy" 
   goalStmtDom
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence

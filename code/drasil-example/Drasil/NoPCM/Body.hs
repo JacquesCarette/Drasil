@@ -51,7 +51,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
@@ -72,7 +72,6 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
@@ -89,7 +88,7 @@ import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
-import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable, dataConstListIn)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -166,7 +165,7 @@ mkSRS = [RefSec $ RefProg intro
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub' funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
@@ -196,14 +195,14 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
 concIns =
- reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
 section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTblabled, dataConstTable1]
+labCon = [inputInitQuantsTable, dataConstTable1]
 
 sec :: [Section]
 sec = extractSection srs
@@ -472,7 +471,7 @@ traceInstaModel = ["IM1", "IM2"]
 traceInstaModelRef = map makeRef2S [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRef2S reqs
+traceFuncReqRef = map makeRef2S funcReqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?

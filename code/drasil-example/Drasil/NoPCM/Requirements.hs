@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn) where
+module Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable, dataConstListIn) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -37,9 +37,6 @@ dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
 --Section 5.1 : FUNCTIONAL REQUIREMENTS
 ---------------------------------------
 
-funcReqsList :: [Contents]
-funcReqsList = (mkEnumSimpleD reqs) ++ [LlC inputInitQuantsTable]
-
 --
 inputInitQuants :: ConceptInstance
 inputInitQuants = iIQConstruct inputInitQuantsTable
@@ -67,8 +64,8 @@ inputInitQuantsTable = llcc (makeTabRef "Input-Variable-Requirements") $
   (mkTable [ch, toSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
-reqs :: [ConceptInstance]
-reqs = [inputInitQuants, findMass, checkWithPhysConsts,
+funcReqs :: [ConceptInstance]
+funcReqs = [inputInitQuants, findMass, checkWithPhysConsts,
         oIDQConstruct oIDQQuants, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
 
 -------------------------------------------

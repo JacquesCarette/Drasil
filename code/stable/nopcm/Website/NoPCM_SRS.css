@@ -60,9 +60,11 @@ th, td {border: 1px solid black; padding: 0.5em;}
   background: #faf8f0;}
 .list {text-align: left;}
 figure {
-max-width: 100%;
 text-align: center;
 font-style: bold;
+}
+figure > img {
+max-width: 100%;
 }
 .matrix {
   position: relative;

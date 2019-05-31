@@ -26,7 +26,7 @@ import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
 import Drasil.SWHS.Concepts (gaussDiv)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (volHtGen, deltaT, temp_env, pcm_SA,
+import Drasil.SWHS.Unitals (volHtGen, deltaT, tempEnv, pcm_SA,
   outSA, inSA, htFluxIn, htFluxOut, htTransCoeff, thFluxVect)
 
 ---------------------------
@@ -69,7 +69,7 @@ nwtnCoolingDesc = foldlSent [at_start lawConvCooling +:+.
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", ch QT.temp, sParen (makeRef2S assumpHTCC) +:+.
   sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
-  apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
+  apply1 temp QP.time - apply1 tempEnv QP.time) `isThe` 
   S "time-dependant thermal gradient between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
 

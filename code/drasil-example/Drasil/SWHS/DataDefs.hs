@@ -10,7 +10,7 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
   temp_W, temp_PCM, htFluxP, pcm_HTC, coil_HTC, temp_C, htFluxC, htCapSP,
-  htCap_L_P, pcm_HTC, pcmSA, tauSP, tauLP)
+  htCapLP, pcm_HTC, pcmSA, tauSP, tauLP)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -73,7 +73,7 @@ ddBalanceLiquidPCMQD :: QDefinition
 ddBalanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
-balanceLiquidPCMEqn = ((sy pcmMass) * (sy htCap_L_P)) /
+balanceLiquidPCMEqn = ((sy pcmMass) * (sy htCapLP)) /
   ((sy pcm_HTC) * (sy pcmSA))
 
 ddBalanceLiquidPCM :: DataDefinition

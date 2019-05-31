@@ -28,7 +28,7 @@ import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCapSP,
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCapLP, htCapSP,
   htCap_W, htFusion, pcm_E, pcm_HTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
   tauW, temp_C, temp_PCM, temp_W, tempInit, tempMeltP, timeStep, time_final, w_E,
@@ -44,7 +44,7 @@ dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCapSP, htCap_L_P, htFusion, coil_SA,
+  tempMeltP, htCapSP, htCapLP, htFusion, coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 ------------------------------

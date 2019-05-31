@@ -231,11 +231,11 @@ constrained = map cnstrw' inputs ++ map cnstrw' outputs
 -- Input Constraints
 inputs :: [UncertQ]
 inputs = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCapSP, htCap_L_P, htFusion, coil_SA, temp_C,
+  tempMeltP, htCapSP, htCapLP, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final]
 
 tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
-  htCapSP, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
+  htCapSP, htCapLP, htFusion, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, pcm_HTC, tempInit, timeStep, time_final :: UncertQ
 
 temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
@@ -300,7 +300,7 @@ htCapSP = uqc "htCapSP"
   (dbl 1760) defaultUncrt
 
 -- Constraint 8
-htCap_L_P = uqc "htCap_L_P"
+htCapLP = uqc "htCapLP"
   (nounPhraseSP "specific heat capacity of PCM as a liquid")
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of liquid phase change material by a given amount")
@@ -493,11 +493,11 @@ htCapSP_max = mkQuantDef (unitary "htCapSP_max"
 -- Used in Constraint 8
 htCap_L_P_min = mkQuantDef (unitary "htCap_L_P_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (sub (eqSymb htCap_L_P) (Atomic "min")) UT.heatCapSpec Rational) 100
+  (sub (eqSymb htCapLP) (Atomic "min")) UT.heatCapSpec Rational) 100
 
 htCap_L_P_max = mkQuantDef (unitary "htCap_L_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (sub (eqSymb htCap_L_P) (Atomic "max")) UT.heatCapSpec Rational) 5000
+  (sub (eqSymb htCapLP) (Atomic "max")) UT.heatCapSpec Rational) 5000
 
 -- Used in Constraint 9
 htFusion_min = unitary "htFusion_min"

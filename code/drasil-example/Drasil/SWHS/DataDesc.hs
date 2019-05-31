@@ -3,7 +3,7 @@ module Drasil.SWHS.DataDesc (inputMod) where
 import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 
 import Drasil.SWHS.Unitals (tankLength, diam, pcmVol, pcmSA, pcmDensity,
-    tempMeltP, htCapSP, htCap_L_P, htFusion, coil_SA, temp_C,
+    tempMeltP, htCapSP, htCapLP, htFusion, coil_SA, temp_C,
     w_density, htCap_W, coil_HTC, pcm_HTC, tempInit, tau, time_final,
     abs_tol, rel_tol, cons_tol)
 
@@ -27,7 +27,7 @@ inputData = funcData "get_inputs"
     junkLine, -- 13
     singleton  htCapSP,
     junkLine, -- 15
-    singleton  htCap_L_P,
+    singleton  htCapLP,
     junkLine, -- 17
     singleton  htFusion,
     junkLine, -- 19

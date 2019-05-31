@@ -22,7 +22,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCap_L_P, 
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCap_W, htFusion, latentEP, meltFrac, pcm_E, pcm_HTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, temp_C, tempInit, 
   tempMeltP, temp_PCM, temp_W, time_final, volHtGen, w_E, wMass, wVol) 
@@ -201,7 +201,7 @@ eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 ---------
 eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
- qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCap_L_P]
+ qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCapLP]
   [sy tempInit $< sy tempMeltP] (qw temp_PCM)
    [0 $< sy time $< sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDescNote]
@@ -231,7 +231,7 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
-  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
+  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCapLP)) /
   ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauSP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
@@ -262,7 +262,7 @@ balPCMDescNote = foldlSent [
   sParen (unwrap $ getUnit tauSP) +:+.
   sParen (makeRef2S ddBalanceSolidPCM),
   
-  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCap_L_P)) /
+  (E $ (sy tauLP) $= ((sy pcmMass) * (sy htCapLP)) /
   ((sy pcm_HTC) * (sy pcmSA))), S "is a constant",
   sParen (unwrap $ getUnit tauLP),
   sParen (makeRef2S ddBalanceLiquidPCM)]
@@ -275,7 +275,7 @@ eBalanceOnPCMDeriv =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
     S "sensible heating phase:" ] ++
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2])
-  ++ (eBalanceOnPCMDerivDesc5 htCapSP htCap_L_P tauSP tauLP surface area melting vol assumpVCMPN)
+  ++ (eBalanceOnPCMDerivDesc5 htCapSP htCapLP tauSP tauLP surface area melting vol assumpVCMPN)
   ++ (eBalanceOnPCMDerivDesc6 temp_PCM)
   ++ (eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
 
@@ -408,7 +408,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
 ---------
 heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw time_final, qw tempInit, qw pcmSA,
- qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCap_L_P, qw temp_PCM, qw htFusion, qw tInitMelt]
+ qw pcm_HTC, qw pcmMass, qw htCapSP, qw htCapLP, qw temp_PCM, qw htFusion, qw tInitMelt]
   [sy tempInit $< sy tempMeltP] (qw pcm_E)
   [0 $< sy time $< sy time_final] [makeCite koothoor2013]
   "heatEInPCM" [htPCMDesc]
@@ -423,7 +423,7 @@ htPCMRel = sy pcm_E $= case_ [case1, case2, case3, case4]
           sy tempInit), real_interval temp_PCM (UpTo (Exc, sy tempMeltP)))
 
         case2 = (sy pcmInitMltE + (sy htFusion * sy pcmMass) +
-          (sy htCap_L_P * sy pcmMass * ((apply1 temp_PCM time) -
+          (sy htCapLP * sy pcmMass * ((apply1 temp_PCM time) -
           sy tempMeltP)), real_interval temp_PCM (UpFrom (Exc, sy tempMeltP)))
 
         case3 = (sy pcmInitMltE + (apply1 latentEP time),
@@ -451,7 +451,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   S "The", phrase energy, S "required to melt all of the", short phsChgMtrl, S "is",
   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE) +:+.
   sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe` phrase liquid, short phsChgMtrl,
-  S "is", ch htCap_L_P, sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change,
+  S "is", ch htCapLP, sParen (unwrap $ getUnit htCapLP) `sAnd` S "the", phrase change,
   S "in", phrase temp, S "is", E (sy temp_PCM - sy tempMeltP) +:+.
   sParen (unwrap $ getUnit tempMeltP), ch pcm_E, S "during", phrase melting, S "of the",
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+

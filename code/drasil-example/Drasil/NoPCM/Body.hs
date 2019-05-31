@@ -74,7 +74,7 @@ import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA, 
-  coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
+  coilSAMax, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tankLength, tankLengthMax, tankLengthMin, tankVol, tau, tauW, tempC, 
   tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
@@ -112,7 +112,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tauW]) ++ (map qw [eta]) ++
+  (map qw [coilSAMax]) ++ (map qw [tauW]) ++ (map qw [eta]) ++
   (map qw [absTol, relTol, consTol])
 
 units :: [UnitaryConceptDict]

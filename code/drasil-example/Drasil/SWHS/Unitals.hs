@@ -27,7 +27,7 @@ symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrain
 
 symbolsAll :: [QuantityDict]
 symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
-  (map qw [htFusionMin, htFusionMax, coil_SA_max]) ++
+  (map qw [htFusionMin, htFusionMax, coilSAMax]) ++
   (map qw [absTol, relTol, consTol])
 
 -- Symbols with Units --
@@ -325,7 +325,7 @@ coilSA = uqc "coilSA"
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ UpTo (Inc, sy coil_SA_max)] (dbl 0.12) defaultUncrt
+  sfwrc $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
@@ -459,7 +459,7 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
   pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
 
-htFusionMin, htFusionMax, coil_SA_max :: UnitaryChunk
+htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
@@ -509,7 +509,7 @@ htFusionMax = unitary "htFusionMax"
   (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational
 
 -- Used in Constraint 10
-coil_SA_max = unitary "coil_SA_max"
+coilSAMax = unitary "coilSAMax"
   (nounPhraseSP "maximum surface area of coil")
   (sup (eqSymb coilSA) (Atomic "max")) m_2 Rational
 

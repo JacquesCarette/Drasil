@@ -2,7 +2,7 @@ DEPLOY_BRANCH="gh-pages"
 DEPLOY_FOLDER="deploy"
 BUILD_NUMBER_FILE=".build-num"
 
-if [ "$TRAVIS_EVENT_TYPE" != "push"]; then
+if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
   echo "Deployment only occurs for push builds."
   exit 0
 fi
@@ -27,6 +27,8 @@ if [ -z "$BOT_TOKEN" ]; then
   echo "Failing build for this."
   exit 1
 fi
+
+source "$ALL_FUNCTIONS_FILE"
 
 copy_docs() {
   rm -r docs
@@ -67,5 +69,4 @@ try_deploy() {
   return $PUSH_RET
 }
 
-cd code
 travis_retry try_deploy

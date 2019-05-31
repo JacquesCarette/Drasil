@@ -22,13 +22,13 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, intro, mkDoc,
+  GSDSec(..), GSDSub(..),
+  dataConstraintUncertainty, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
   getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
-  unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
@@ -172,7 +172,11 @@ mkSRS = [RefSec $ RefProg intro [
      IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
-  Verbatim genSystDesc,
+  GSDSec $ GSDProg2 
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    , UsrChars [userChars progName]
+    , SystCons [] []
+    ],
   SSDSec $
     SSDProg [SSDSubVerb probDescription
       , SSDSolChSpec $ SCSProg
@@ -197,8 +201,8 @@ mkSRS = [RefSec $ RefProg intro [
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++
   [LlC traceFig1, LlC traceFig2]) [],
-    AuxConstntSec $ AuxConsProg progName specParamValList,
-    Bibliography]
+  AuxConstntSec $ AuxConsProg progName specParamValList,
+  Bibliography]
 
 code :: CodeSpec
 code = codeSpec si [inputMod]
@@ -301,21 +305,9 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-genSystDesc :: Section
-genSystDesc = genSysF [systCont] (userCharContents progName) [] []
--- First empty list is the list of constraints
-
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-
-systCont :: Section
-systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro 
-  progName user, systContRespBullets] []
-
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
-  resp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -845,8 +837,8 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 -- 3.1 : System Context --
 --------------------------
 
-systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phrase sysCont, 
+sysCntxtDesc :: CI -> Contents
+sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -854,16 +846,20 @@ systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phras
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sys_context_fig :: LabelledContent
-sys_context_fig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
+sysCntxtFig :: LabelledContent
+sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
   $ resourcePath ++ "SystemContextFigure.png"
 
-systCIntro :: CI -> NamedChunk -> Contents
-systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
-  S "The only external interaction is through the", phrase us +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase us `sAnd`
+sysCntxtRespIntro :: CI -> Contents
+sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
+  S "The only external interaction is through the", phrase user +:+.
+  S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
   S "the", phrase system, S "are as follows"]
+
+systContRespBullets :: Contents
+systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
+  resp]
 
 -- User Responsibilities --
 userResp :: NamedChunk -> NamedChunk -> ItemType
@@ -897,10 +893,10 @@ resp = Nested (short progName +: S "Responsibilities")
 -- 3.2 : User Characteristics --
 --------------------------------
 
-userCharContents :: CI -> Contents
-userCharContents pro = foldlSP [S "The end", phrase user, S "of",
+userChars :: CI -> Contents
+userChars pro = foldlSP [S "The end", phrase user `sOf`
   short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize Doc.physics]
+  S "Level 1 Calculus" `sAnd` titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.

@@ -451,13 +451,13 @@ specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensity_min, pcmDensity_max, w_density_min, w_density_max,
   htCapSP_min, htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
-  pcmHTC_min, pcmHTC_max, timeFinal_max, frac_min_aux]
+  pcmHTC_min, pcmHTC_max, timeFinal_max, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensity_min, 
   pcmDensity_max, w_density_min, w_density_max, htCapSP_min, 
   htCapSP_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcmHTC_min,
-  pcmHTC_max, timeFinal_max, frac_min_aux :: QDefinition
+  pcmHTC_max, timeFinal_max, fracMinAux :: QDefinition
 
 htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
@@ -470,7 +470,7 @@ tankLengthMax = mkQuantDef (unitary "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tankLength) (Atomic "max")) metre Rational) 50
 
-frac_min_aux    = mkQuantDef fracMin $ dbl 1.0e-6
+fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
 
 -- Used in Constraint 5
 pcmDensity_min = mkQuantDef (unitary "pcmDensity_min"

@@ -87,7 +87,7 @@ isin = IsIn
 
 -- | Smart constructor for the summation, product, and integrals
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
-intAll, sumAll, prod_all :: Symbol -> Expr -> Expr
+intAll, sumAll, prodAll :: Symbol -> Expr -> Expr
 
 defint v low high = Operator Add (BoundedDD v Continuous low high)
 intAll v = Operator Add (AllDD v Continuous)
@@ -96,7 +96,7 @@ defsum v low high = Operator Add (BoundedDD v Discrete low high)
 sumAll v = Operator Add (AllDD v Discrete)
 
 defprod v low high = Operator Mul (BoundedDD v Discrete low high)
-prod_all v = Operator Mul (AllDD v Discrete)
+prodAll v = Operator Mul (AllDD v Discrete)
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr

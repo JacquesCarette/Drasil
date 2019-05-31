@@ -10,7 +10,7 @@ module Language.Drasil (
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
-  , sumAll, defsum, prod_all, defprod, defint, intAll
+  , sumAll, defsum, prodAll, defprod, defint, intAll
   , real_interval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
@@ -184,7 +184,7 @@ import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME:
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, idx, int, dbl, str, isin, case_,
-          sumAll, defsum, prod_all, defprod,
+          sumAll, defsum, prodAll, defprod,
           real_interval,
           apply, apply1, apply2,
           sy, deriv, pderiv,

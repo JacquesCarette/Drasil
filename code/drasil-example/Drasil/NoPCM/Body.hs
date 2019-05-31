@@ -76,7 +76,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
-  tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
+  tank_length, tank_length_max, tank_length_min, tankVol, tau, tau_W, temp_C, 
   tempEnv, temp_W, thFluxVect, time_final, time_final_max, volHtGen, w_density, 
   w_density_max, w_density_min, w_E, wMass, w_vol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
@@ -118,7 +118,7 @@ symbolsAll = map qw symbols ++ (map qw specParamValList) ++
 units :: [UnitaryConceptDict]
 units = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
-  htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
+  htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
   vol, wMass, w_vol, tau_W, QT.sensHeat]
 

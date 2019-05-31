@@ -38,7 +38,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
-  tFinalMelt, vol, tank_vol, w_vol, deltaT,
+  tFinalMelt, vol, tankVol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
@@ -48,7 +48,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  tFinalMelt, tank_vol, w_vol, deltaT,
+  tFinalMelt, tankVol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
@@ -56,7 +56,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  tFinalMelt, tank_vol, w_vol, deltaT,
+  tFinalMelt, tankVol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
@@ -158,7 +158,7 @@ tFinalMelt = uc' "tFinalMelt"
     "finishes changes from a solid to a liquid")
   (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "final")) second
   
-tank_vol = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
+tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank"
   (sub (eqSymb vol) (Atomic "tank")) m_3
 
@@ -257,8 +257,8 @@ diam = uqc "diam" (nounPhraseSP "diameter of tank")
 pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
-  [physc $ Bounded (Exc,0) (Exc, sy tank_vol),
-   sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tank_vol))] 
+  [physc $ Bounded (Exc,0) (Exc, sy tankVol),
+   sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tankVol))] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -272,7 +272,7 @@ pcm_SA = uqc "pcm_SA"
   "Area covered by the outermost layer of the phase change material"
   (sub cA cP) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tank_vol)]
+  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5

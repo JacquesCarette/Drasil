@@ -62,7 +62,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a", phrase momntOfBdy, S "equal to" +:+ E 0]
+  S "will create a net", phrase momntOfBdy, S "equal to" +:+ E 0]
 
 --
 ------------- New Chunk -----------

@@ -28,7 +28,7 @@ at_start, at_start' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
 at_start  n = NP.at_startNP (n ^. term)
 -- | Plural sentence case.
-at_start' n = NP.at_startNP' (n ^. term)
+at_start' n = NP.atStartNP' (n ^. term)
 
 -- | Helper function for getting the title case of a noun phrase from a 
 -- NamedIdea.

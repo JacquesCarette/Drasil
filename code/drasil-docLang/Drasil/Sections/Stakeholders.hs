@@ -35,5 +35,5 @@ tCustomerF :: (Idea a) => a -> Section
 tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
 
 customerIntro :: (Idea a) => a -> Contents
-customerIntro kWord = foldlSP [at_startNP' $ the customer,
+customerIntro kWord = foldlSP [atStartNP' $ the customer,
   S "are the", phrase endUser, S "of", short kWord]

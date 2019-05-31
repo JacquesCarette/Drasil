@@ -333,7 +333,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the Doc.dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(atStartNP' $ the Doc.dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 

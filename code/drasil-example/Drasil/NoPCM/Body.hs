@@ -78,7 +78,7 @@ import Drasil.SWHS.Unitals (coilHTC, coil_HTC_max, coil_HTC_min, coilSA,
   htCapW, htCap_W_max, htCap_W_min, htTransCoeff, inSA, outSA, 
   tankLength, tank_length_max, tank_length_min, tankVol, tau, tauW, tempC, 
   tempEnv, tempW, thFluxVect, timeFinal, timeFinal_max, volHtGen, wDensity, 
-  w_density_max, w_density_min, w_E, wMass, wVol, specParamValList, unitalChuncks,
+  w_density_max, w_density_min, watE, wMass, wVol, specParamValList, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
@@ -102,7 +102,7 @@ checkSi = collectUnits symbMap symbTT
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
- ++ map dqdWr [tempW, w_E]
+ ++ map dqdWr [tempW, watE]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
 resourcePath :: String
@@ -125,7 +125,7 @@ units = map ucw [density, tau, inSA, outSA,
 constraints :: [UncertQ]
 constraints =  [coilSA, htCapW, coilHTC, tempInit,
   timeFinal, tankLength, tempC, wDensity, diam]
-  -- w_E, tempW
+  -- watE, tempW
 
 probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
 
@@ -220,10 +220,10 @@ si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [tempW, w_E]), --inputs ++ outputs?
-  _outputs = (map qw [tempW, w_E]),     --outputs
+  _inputs = (map qw constraints ++ map qw [tempW, watE]), --inputs ++ outputs?
+  _outputs = (map qw [tempW, watE]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw constraints ++ map cnstrw [tempW, w_E]),        --constrained
+  _constraints = (map cnstrw constraints ++ map cnstrw [tempW, watE]),        --constrained
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
@@ -426,7 +426,7 @@ dataConstTable2 = outDataConstTbl dataConstListOut
   -- (titleize output_ +:+ titleize' variable) True
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [tempW, w_E]
+dataConstListOut = [tempW, watE]
 
 --------------------------
 --Section 5 : REQUIREMENTS

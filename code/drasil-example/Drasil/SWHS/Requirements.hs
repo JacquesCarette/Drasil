@@ -31,7 +31,7 @@ import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, eta, htCapLP, htCapSP,
   htCapW, htFusion, pcm_E, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol,
   simTime, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
-  tauW, tempC, tempPCM, tempW, tempInit, tempMeltP, timeStep, timeFinal, w_E,
+  tauW, tempC, tempPCM, tempW, tempInit, tempMeltP, timeStep, timeFinal, watE,
   wDensity, wMass, wVol)
 
 ------------------------------
@@ -136,8 +136,8 @@ calcTempPCMOverTime = cic "calcTempPCMOverTime" ( foldlSent [
   "Calculate-Temperature-PCM-Over-Time" funcReqDom
 --
 calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" ( foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase w_E,
-  sParen (ch w_E :+: sParen (ch time)), S "over the",
+  S "Calculate and", phrase output_, S "the", phrase watE,
+  sParen (ch watE :+: sParen (ch time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInWtr)] )
   "Calculate-Change-Heat_Energy-Water-Over-Time" funcReqDom
 --
@@ -149,7 +149,7 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
-  sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
+  sParen (ch watE :+: sParen (ch time) `sAnd` ch pcm_E :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
   S "as outlined in"
   --FIXME , makeRefS s4_2_7 `sC` -}
@@ -211,7 +211,7 @@ maintainable = cic "maintainable" (foldlSent [
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [propCorSolDeriv1 CT.lawConsEnergy w_E energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.lawConsEnergy watE energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcm_E energy phsChgMtrl water,
@@ -236,7 +236,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR'
-  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy watE) $= (defint (eqSymb time) 0 (sy time)
   ((sy coilHTC) * (sy coilSA) * ((sy tempC) - apply1 tempW time)))
   - (defint (eqSymb time) 0 (sy time)
   ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) -

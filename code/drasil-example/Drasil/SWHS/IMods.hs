@@ -25,7 +25,7 @@ import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP, 
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcm_E, pcmHTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
-  tempMeltP, tempPCM, tempW, timeFinal, volHtGen, w_E, wMass, wVol) 
+  tempMeltP, tempPCM, tempW, timeFinal, volHtGen, watE, wMass, wVol) 
 import Drasil.SWHS.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
@@ -376,7 +376,7 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw w_E) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] [] "heatEInWtr"
+  [] (qw watE) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
 heatEInWtrRC :: RelationConcept
@@ -384,12 +384,12 @@ heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtrRel -- heatEInWtrL
 
 htWtrRel :: Relation
-htWtrRel = (apply1 w_E time) $= (sy htCapW) * (sy wMass) *
+htWtrRel = (apply1 watE time) $= (sy htCapW) * (sy wMass) *
   ((apply1 tempW time) - sy tempInit)
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+. 
-  makeRef2S sensHtE, ch w_E `isThe` phrase change, S "in", 
+  makeRef2S sensHtE, ch watE `isThe` phrase change, S "in", 
   phrase thermalEnergy, S "of the", phrase liquid, phrase water, 
   S "relative to the", phrase energy, S "at the initial", phrase temp, 
   sParen (ch tempInit) +:+. sParen (unwrap $ getUnit pcmInitMltE), 

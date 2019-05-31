@@ -202,8 +202,8 @@ mkSRS = [RefSec $ RefProg intro [
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++
   [LlC traceFig1, LlC traceFig2]) [],
-    AuxConstntSec $ AuxConsProg progName specParamValList,
-    Bibliography]
+  AuxConstntSec $ AuxConsProg progName specParamValList,
+  Bibliography]
 
 code :: CodeSpec
 code = codeSpec si [inputMod]

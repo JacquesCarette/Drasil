@@ -38,7 +38,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   temp, boilPt, tempEnv, meltPt, tInitMelt,
-  t_final_melt, vol, tank_vol, w_vol, deltaT,
+  tFinalMelt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
@@ -48,7 +48,7 @@ unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  t_final_melt, tank_vol, w_vol, deltaT,
+  tFinalMelt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
 
 inSA, outSA, htCapL, htCapS, htCapV,
@@ -56,7 +56,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   pcmMass, wMass,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
-  t_final_melt, tank_vol, w_vol, deltaT,
+  tFinalMelt, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
@@ -152,7 +152,7 @@ tInitMelt = uc' "tInitMelt"
     "begins changing from a solid to a liquid")
   (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "init")) second
 
-t_final_melt = uc' "t_final_melt"
+tFinalMelt = uc' "tFinalMelt"
   (nounPhraseSP "time at which melting of PCM ends")
   ("Time at which the phase change material " ++
     "finishes changes from a solid to a liquid")

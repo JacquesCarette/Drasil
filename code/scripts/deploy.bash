@@ -1,3 +1,4 @@
+SOURCE_BRANCH="con_dep"
 DEPLOY_BRANCH="gh-pages"
 DEPLOY_FOLDER="deploy"
 BUILD_NUMBER_FILE=".build-num"
@@ -7,8 +8,8 @@ if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
   exit 0
 fi
 
-if [ "$TRAVIS_BRANCH" != "master" ]; then
-  echo "Only perform deploys for master."
+if [ "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
+  echo "Only perform deploys for $SOURCE_BRANCH."
   echo "Skipping."
   exit 0
 fi
@@ -34,11 +35,11 @@ copy_docs() {
   rm -r docs
   DOC_DIR=$(stack path | grep local-doc-root | cut -d":" -f2 | sed -e "s/^ //")/
   mkdir -p docs
-  cp -r "$DOC_DIR" docs
+  cp -r "$DOC_DIR"/. docs/
 }
 
 try_deploy() {
-  git clone --quiet --branch="$DEPLOY_BRANCH"  --depth=1 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
+  git clone --quiet --branch="$DEPLOY_BRANCH" --depth=5 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
   if [ $? = 1 ]; then
     echo "Clone failed. Bailing."
     exit 1
@@ -59,12 +60,12 @@ try_deploy() {
   git config user.name "drasil-bot"
   git add -A .
   # We overwrite history because the artifacts we keep in here are moderately large and woiuld pollute history otherwise.
-  git commit -q --amend --allow-empty --reset-author -m "drasil-bot deploy of master@$TRAVIS_COMMIT"
-  git push --force-with-lease --quiet "https://$BOT_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_BRANCH" >/dev/null 2>&1
+  git commit -q --allow-empty -m "drasil-bot deploy of $SOURCE_BRANCH@$TRAVIS_COMMIT"
+  git push --quiet "https://$BOT_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_BRANCH"
   PUSH_RET=$?
   # Perform some cleanup so we can (optionally retry)
   cd "$CUR_DIR"
-  rm -r "$DEPLOY_FOLDER"
+  rm -rf "$DEPLOY_FOLDER"
   # git push returns >0 if push fails (i.e. we would need to force push)
   return $PUSH_RET
 }

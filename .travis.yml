@@ -25,6 +25,7 @@ env:
     - LABEL_FILE=/tmp/ci_build_failures
     - MANAGED_LABEL_FILE=/tmp/ci_managed_labels
     - ALL_FUNCTIONS_FILE=$(mktemp)
+    - SHELL_OPTS_FILE=$(mktemp)
 
 # Caching so the next build will be fast too.
 cache:
@@ -77,6 +78,13 @@ script:
  - >-
      ci_fstep "CI: Docs" make docs haddockArgs=\"--no-haddock-deps --no-haddock-hyperlink-source\"
  - python3 scripts/pr_label_update.py
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: bash scripts/deploy_wrapper.bash
+  on:
+    branch: con_dep
 
 notifications:
   email:

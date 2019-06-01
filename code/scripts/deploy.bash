@@ -44,6 +44,11 @@ copy_docs() {
   cp -r "$DOC_DIR"/. docs/
 }
 
+copy_graphs() {
+  rm -r graphs
+  cp -r ../graphs/. graphs/
+}
+
 try_deploy() {
   git clone --quiet --branch="$DEPLOY_BRANCH" --depth=5 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
   if [ $? = 1 ]; then
@@ -61,6 +66,7 @@ try_deploy() {
 
   echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
   copy_docs
+  copy_graphs
   echo "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Drasil</title></head><body>Missing real index.</body></html>" > index.html
 
   git config user.email "$BOT_EMAIL"

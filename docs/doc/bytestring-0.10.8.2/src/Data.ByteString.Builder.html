@@ -1,0 +1,454 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP, BangPatterns #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# OPTIONS_GHC -fno-warn-unused-imports -fno-warn-orphans #-}</span><span>
+</span><a name="line-3"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 701
+</span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-5"></a><span class="hs-cpp">#endif
+</span><span class="hs-comment">{- | Copyright   : (c) 2010 Jasper Van der Jeugt
+                   (c) 2010 - 2011 Simon Meier
+License     : BSD3-style (see LICENSE)
+Maintainer  : Simon Meier &lt;iridcode@gmail.com&gt;
+Portability : GHC
+
+'Builder's are used to efficiently construct sequences of bytes from
+  smaller parts.
+Typically,
+  such a construction is part of the implementation of an /encoding/, i.e.,
+  a function for converting Haskell values to sequences of bytes.
+Examples of encodings are the generation of the sequence of bytes
+  representing a HTML document to be sent in a HTTP response by a
+  web application or the serialization of a Haskell value using
+  a fixed binary format.
+
+For an /efficient implementation of an encoding/,
+  it is important that (a) little time is spent on converting
+  the Haskell values to the resulting sequence of bytes /and/
+  (b) that the representation of the resulting sequence
+  is such that it can be consumed efficiently.
+'Builder's support (a) by providing an /O(1)/ concatentation operation
+  and efficient implementations of basic encodings for 'Char's, 'Int's,
+  and other standard Haskell values.
+They support (b) by providing their result as a lazy 'L.ByteString',
+  which is internally just a linked list of pointers to /chunks/
+  of consecutive raw memory.
+Lazy 'L.ByteString's can be efficiently consumed by functions that
+  write them to a file or send them over a network socket.
+Note that each chunk boundary incurs expensive extra work (e.g., a system call)
+  that must be amortized over the work spent on consuming the chunk body.
+'Builder's therefore take special care to ensure that the
+  average chunk size is large enough.
+The precise meaning of large enough is application dependent.
+The current implementation is tuned
+  for an average chunk size between 4kb and 32kb,
+  which should suit most applications.
+
+As a simple example of an encoding implementation,
+  we show how to efficiently convert the following representation of mixed-data
+  tables to an UTF-8 encoded Comma-Separated-Values (CSV) table.
+
+&gt;data Cell = StringC String
+&gt;          | IntC Int
+&gt;          deriving( Eq, Ord, Show )
+&gt;
+&gt;type Row   = [Cell]
+&gt;type Table = [Row]
+
+We use the following imports and abbreviate 'mappend' to simplify reading.
+
+@
+import qualified &quot;Data.ByteString.Lazy&quot;               as L
+import           &quot;Data.ByteString.Builder&quot;
+import           Data.Monoid
+import           Data.Foldable                        ('foldMap')
+import           Data.List                            ('intersperse')
+
+infixr 4 \&lt;\&gt;
+(\&lt;\&gt;) :: 'Monoid' m =&gt; m -&gt; m -&gt; m
+(\&lt;\&gt;) = 'mappend'
+@
+
+CSV is a character-based representation of tables. For maximal modularity,
+we could first render 'Table's as 'String's and then encode this 'String'
+using some Unicode character encoding. However, this sacrifices performance
+due to the intermediate 'String' representation being built and thrown away
+right afterwards. We get rid of this intermediate 'String' representation by
+fixing the character encoding to UTF-8 and using 'Builder's to convert
+'Table's directly to UTF-8 encoded CSV tables represented as lazy
+'L.ByteString's.
+
+@
+encodeUtf8CSV :: Table -&gt; L.ByteString
+encodeUtf8CSV = 'toLazyByteString' . renderTable
+
+renderTable :: Table -&gt; Builder
+renderTable rs = 'mconcat' [renderRow r \&lt;\&gt; 'charUtf8' \'\\n\' | r &lt;- rs]
+
+renderRow :: Row -&gt; Builder
+renderRow []     = 'mempty'
+renderRow (c:cs) =
+    renderCell c \&lt;\&gt; mconcat [ charUtf8 \',\' \&lt;\&gt; renderCell c\' | c\' &lt;- cs ]
+
+renderCell :: Cell -&gt; Builder
+renderCell (StringC cs) = renderString cs
+renderCell (IntC i)     = 'intDec' i
+
+renderString :: String -&gt; Builder
+renderString cs = charUtf8 \'\&quot;\' \&lt;\&gt; foldMap escape cs \&lt;\&gt; charUtf8 \'\&quot;\'
+  where
+    escape \'\\\\\' = charUtf8 \'\\\\\' \&lt;\&gt; charUtf8 \'\\\\\'
+    escape \'\\\&quot;\' = charUtf8 \'\\\\\' \&lt;\&gt; charUtf8 \'\\\&quot;\'
+    escape c    = charUtf8 c
+@
+
+Note that the ASCII encoding is a subset of the UTF-8 encoding,
+  which is why we can use the optimized function 'intDec' to
+  encode an 'Int' as a decimal number with UTF-8 encoded digits.
+Using 'intDec' is more efficient than @'stringUtf8' . 'show'@,
+  as it avoids constructing an intermediate 'String'.
+Avoiding this intermediate data structure significantly improves
+  performance because encoding 'Cell's is the core operation
+  for rendering CSV-tables.
+See &quot;Data.ByteString.Builder.Prim&quot; for further
+  information on how to improve the performance of 'renderString'.
+
+We demonstrate our UTF-8 CSV encoding function on the following table.
+
+@
+strings :: [String]
+strings =  [\&quot;hello\&quot;, \&quot;\\\&quot;1\\\&quot;\&quot;, \&quot;&amp;#955;-w&amp;#246;rld\&quot;]
+
+table :: Table
+table = [map StringC strings, map IntC [-3..3]]
+@
+
+The expression @encodeUtf8CSV table@ results in the following lazy
+'L.ByteString'.
+
+&gt;Chunk &quot;\&quot;hello\&quot;,\&quot;\\\&quot;1\\\&quot;\&quot;,\&quot;\206\187-w\195\182rld\&quot;\n-3,-2,-1,0,1,2,3\n&quot; Empty
+
+We can clearly see that we are converting to a /binary/ format. The \'&amp;#955;\'
+and \'&amp;#246;\' characters, which have a Unicode codepoint above 127, are
+expanded to their corresponding UTF-8 multi-byte representation.
+
+We use the @criterion@ library (&lt;http://hackage.haskell.org/package/criterion&gt;)
+  to benchmark the efficiency of our encoding function on the following table.
+
+&gt;import Criterion.Main     -- add this import to the ones above
+&gt;
+&gt;maxiTable :: Table
+&gt;maxiTable = take 1000 $ cycle table
+&gt;
+&gt;main :: IO ()
+&gt;main = defaultMain
+&gt;  [ bench &quot;encodeUtf8CSV maxiTable (original)&quot; $
+&gt;      whnf (L.length . encodeUtf8CSV) maxiTable
+&gt;  ]
+
+On a Core2 Duo 2.20GHz on a 32-bit Linux,
+  the above code takes 1ms to generate the 22'500 bytes long lazy 'L.ByteString'.
+Looking again at the definitions above,
+  we see that we took care to avoid intermediate data structures,
+  as otherwise we would sacrifice performance.
+For example,
+  the following (arguably simpler) definition of 'renderRow' is about 20% slower.
+
+&gt;renderRow :: Row -&gt; Builder
+&gt;renderRow  = mconcat . intersperse (charUtf8 ',') . map renderCell
+
+Similarly, using /O(n)/ concatentations like '++' or the equivalent 'S.concat'
+  operations on strict and lazy 'L.ByteString's should be avoided.
+The following definition of 'renderString' is also about 20% slower.
+
+&gt;renderString :: String -&gt; Builder
+&gt;renderString cs = charUtf8 $ &quot;\&quot;&quot; ++ concatMap escape cs ++ &quot;\&quot;&quot;
+&gt;  where
+&gt;    escape '\\' = &quot;\\&quot;
+&gt;    escape '\&quot;' = &quot;\\\&quot;&quot;
+&gt;    escape c    = return c
+
+Apart from removing intermediate data-structures,
+  encodings can be optimized further by fine-tuning their execution
+  parameters using the functions in &quot;Data.ByteString.Builder.Extra&quot; and
+  their \&quot;inner loops\&quot; using the functions in
+  &quot;Data.ByteString.Builder.Prim&quot;.
+-}</span><span>
+</span><a name="line-174"></a><span>
+</span><a name="line-175"></a><span>
+</span><a name="line-176"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.ByteString.Builder</span><span>
+</span><a name="line-177"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-178"></a><span>      </span><span class="hs-comment">-- * The Builder type</span><span>
+</span><a name="line-179"></a><span>      </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-180"></a><span>
+</span><a name="line-181"></a><span>      </span><span class="hs-comment">-- * Executing Builders</span><span>
+</span><a name="line-182"></a><span>      </span><span class="hs-comment">-- | Internally, 'Builder's are buffer-filling functions. They are</span><span>
+</span><a name="line-183"></a><span>      </span><span class="hs-comment">-- executed by a /driver/ that provides them with an actual buffer to</span><span>
+</span><a name="line-184"></a><span>      </span><span class="hs-comment">-- fill. Once called with a buffer, a 'Builder' fills it and returns a</span><span>
+</span><a name="line-185"></a><span>      </span><span class="hs-comment">-- signal to the driver telling it that it is either done, has filled the</span><span>
+</span><a name="line-186"></a><span>      </span><span class="hs-comment">-- current buffer, or wants to directly insert a reference to a chunk of</span><span>
+</span><a name="line-187"></a><span>      </span><span class="hs-comment">-- memory. In the last two cases, the 'Builder' also returns a</span><span>
+</span><a name="line-188"></a><span>      </span><span class="hs-comment">-- continutation 'Builder' that the driver can call to fill the next</span><span>
+</span><a name="line-189"></a><span>      </span><span class="hs-comment">-- buffer. Here, we provide the two drivers that satisfy almost all use</span><span>
+</span><a name="line-190"></a><span>      </span><span class="hs-comment">-- cases. See &quot;Data.ByteString.Builder.Extra&quot;, for information</span><span>
+</span><a name="line-191"></a><span>      </span><span class="hs-comment">-- about fine-tuning them.</span><span>
+</span><a name="line-192"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#toLazyByteString"><span class="hs-identifier hs-var">toLazyByteString</span></a><span>
+</span><a name="line-193"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#hPutBuilder"><span class="hs-identifier hs-var">hPutBuilder</span></a><span>
+</span><a name="line-194"></a><span>
+</span><a name="line-195"></a><span>      </span><span class="hs-comment">-- * Creating Builders</span><span>
+</span><a name="line-196"></a><span>
+</span><a name="line-197"></a><span>      </span><span class="hs-comment">-- ** Binary encodings</span><span>
+</span><a name="line-198"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.Internal.html#byteString"><span class="hs-identifier hs-var">byteString</span></a><span>
+</span><a name="line-199"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.Internal.html#lazyByteString"><span class="hs-identifier hs-var">lazyByteString</span></a><span>
+</span><a name="line-200"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.Internal.html#shortByteString"><span class="hs-identifier hs-var">shortByteString</span></a><span>
+</span><a name="line-201"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int8"><span class="hs-identifier hs-var">int8</span></a><span>
+</span><a name="line-202"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word8"><span class="hs-identifier hs-var">word8</span></a><span>
+</span><a name="line-203"></a><span>
+</span><a name="line-204"></a><span>      </span><span class="hs-comment">-- *** Big-endian</span><span>
+</span><a name="line-205"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int16BE"><span class="hs-identifier hs-var">int16BE</span></a><span>
+</span><a name="line-206"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int32BE"><span class="hs-identifier hs-var">int32BE</span></a><span>
+</span><a name="line-207"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int64BE"><span class="hs-identifier hs-var">int64BE</span></a><span>
+</span><a name="line-208"></a><span>
+</span><a name="line-209"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word16BE"><span class="hs-identifier hs-var">word16BE</span></a><span>
+</span><a name="line-210"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word32BE"><span class="hs-identifier hs-var">word32BE</span></a><span>
+</span><a name="line-211"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word64BE"><span class="hs-identifier hs-var">word64BE</span></a><span>
+</span><a name="line-212"></a><span>
+</span><a name="line-213"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#floatBE"><span class="hs-identifier hs-var">floatBE</span></a><span>
+</span><a name="line-214"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#doubleBE"><span class="hs-identifier hs-var">doubleBE</span></a><span>
+</span><a name="line-215"></a><span>
+</span><a name="line-216"></a><span>      </span><span class="hs-comment">-- *** Little-endian</span><span>
+</span><a name="line-217"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int16LE"><span class="hs-identifier hs-var">int16LE</span></a><span>
+</span><a name="line-218"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int32LE"><span class="hs-identifier hs-var">int32LE</span></a><span>
+</span><a name="line-219"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#int64LE"><span class="hs-identifier hs-var">int64LE</span></a><span>
+</span><a name="line-220"></a><span>
+</span><a name="line-221"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word16LE"><span class="hs-identifier hs-var">word16LE</span></a><span>
+</span><a name="line-222"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word32LE"><span class="hs-identifier hs-var">word32LE</span></a><span>
+</span><a name="line-223"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#word64LE"><span class="hs-identifier hs-var">word64LE</span></a><span>
+</span><a name="line-224"></a><span>
+</span><a name="line-225"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#floatLE"><span class="hs-identifier hs-var">floatLE</span></a><span>
+</span><a name="line-226"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#doubleLE"><span class="hs-identifier hs-var">doubleLE</span></a><span>
+</span><a name="line-227"></a><span>
+</span><a name="line-228"></a><span>    </span><span class="hs-comment">-- ** Character encodings</span><span>
+</span><a name="line-229"></a><span>    </span><span class="hs-comment">-- | Conversion from 'Char' and 'String' into 'Builder's in various encodings.</span><span>
+</span><a name="line-230"></a><span>
+</span><a name="line-231"></a><span>    </span><span class="hs-comment">-- *** ASCII (Char7)</span><span>
+</span><a name="line-232"></a><span>    </span><span class="hs-comment">-- | The ASCII encoding is a 7-bit encoding. The /Char7/ encoding implemented here</span><span>
+</span><a name="line-233"></a><span>    </span><span class="hs-comment">-- works by truncating the Unicode codepoint to 7-bits, prefixing it</span><span>
+</span><a name="line-234"></a><span>    </span><span class="hs-comment">-- with a leading 0, and encoding the resulting 8-bits as a single byte.</span><span>
+</span><a name="line-235"></a><span>    </span><span class="hs-comment">-- For the codepoints 0-127 this corresponds the ASCII encoding.</span><span>
+</span><a name="line-236"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#char7"><span class="hs-identifier hs-var">char7</span></a><span>
+</span><a name="line-237"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#string7"><span class="hs-identifier hs-var">string7</span></a><span>
+</span><a name="line-238"></a><span>
+</span><a name="line-239"></a><span>    </span><span class="hs-comment">-- *** ISO/IEC 8859-1 (Char8)</span><span>
+</span><a name="line-240"></a><span>    </span><span class="hs-comment">-- | The ISO/IEC 8859-1 encoding is an 8-bit encoding often known as Latin-1.</span><span>
+</span><a name="line-241"></a><span>    </span><span class="hs-comment">-- The /Char8/ encoding implemented here works by truncating the Unicode codepoint</span><span>
+</span><a name="line-242"></a><span>    </span><span class="hs-comment">-- to 8-bits and encoding them as a single byte. For the codepoints 0-255 this corresponds</span><span>
+</span><a name="line-243"></a><span>    </span><span class="hs-comment">-- to the ISO/IEC 8859-1 encoding.</span><span>
+</span><a name="line-244"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#char8"><span class="hs-identifier hs-var">char8</span></a><span>
+</span><a name="line-245"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#string8"><span class="hs-identifier hs-var">string8</span></a><span>
+</span><a name="line-246"></a><span>
+</span><a name="line-247"></a><span>    </span><span class="hs-comment">-- *** UTF-8</span><span>
+</span><a name="line-248"></a><span>    </span><span class="hs-comment">-- | The UTF-8 encoding can encode /all/ Unicode codepoints. We recommend</span><span>
+</span><a name="line-249"></a><span>    </span><span class="hs-comment">-- using it always for encoding 'Char's and 'String's unless an application</span><span>
+</span><a name="line-250"></a><span>    </span><span class="hs-comment">-- really requires another encoding.</span><span>
+</span><a name="line-251"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#charUtf8"><span class="hs-identifier hs-var">charUtf8</span></a><span>
+</span><a name="line-252"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Builder.html#stringUtf8"><span class="hs-identifier hs-var">stringUtf8</span></a><span>
+</span><a name="line-253"></a><span>
+</span><a name="line-254"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-keyword">module</span><span> </span><a href="Data.ByteString.Builder.ASCII.html"><span class="hs-identifier">Data.ByteString.Builder.ASCII</span></a><span>
+</span><a name="line-255"></a><span>
+</span><a name="line-256"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-257"></a><span>
+</span><a name="line-258"></a><span class="hs-keyword">import</span><span>           </span><a href="Data.ByteString.Builder.Internal.html"><span class="hs-identifier">Data.ByteString.Builder.Internal</span></a><span>
+</span><a name="line-259"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.ByteString.Builder.Prim.html"><span class="hs-identifier">Data.ByteString.Builder.Prim</span></a><span>  </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">P</span><span>
+</span><a name="line-260"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.ByteString.Lazy.Internal.html"><span class="hs-identifier">Data.ByteString.Lazy.Internal</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">L</span><span>
+</span><a name="line-261"></a><span class="hs-keyword">import</span><span>           </span><a href="Data.ByteString.Builder.ASCII.html"><span class="hs-identifier">Data.ByteString.Builder.ASCII</span></a><span>
+</span><a name="line-262"></a><span>
+</span><a name="line-263"></a><span class="hs-keyword">import</span><span>           </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.String.html"><span class="hs-identifier">Data.String</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-264"></a><span class="hs-keyword">import</span><span>           </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/System.IO.html"><span class="hs-identifier">System.IO</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a><span class="hs-special">)</span><span>
+</span><a name="line-265"></a><span class="hs-keyword">import</span><span>           </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.html"><span class="hs-identifier">Foreign</span></a><span>
+</span><a name="line-266"></a><span>
+</span><a name="line-267"></a><span class="hs-comment">-- HADDOCK only imports</span><span>
+</span><a name="line-268"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.ByteString.html"><span class="hs-identifier">Data.ByteString</span></a><span>               </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">S</span><span> </span><span class="hs-special">(</span><a href="Data.ByteString.html#concat"><span class="hs-identifier hs-var">concat</span></a><span class="hs-special">)</span><span>
+</span><a name="line-269"></a><span class="hs-cpp">#if !(MIN_VERSION_base(4,8,0))
+</span><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.Monoid</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">Monoid</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-271"></a><span class="hs-cpp">#endif
+</span><span class="hs-keyword">import</span><span>           </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Foldable.html"><span class="hs-identifier">Data.Foldable</span></a><span>                      </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Foldable.html#foldMap"><span class="hs-identifier hs-var">foldMap</span></a><span class="hs-special">)</span><span>
+</span><a name="line-273"></a><span class="hs-keyword">import</span><span>           </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.List.html"><span class="hs-identifier">Data.List</span></a><span>                          </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.OldList.html#intersperse"><span class="hs-identifier hs-var">intersperse</span></a><span class="hs-special">)</span><span>
+</span><a name="line-274"></a><span>
+</span><a name="line-275"></a><span>
+</span><a name="line-276"></a><span class="hs-comment">-- | Execute a 'Builder' and return the generated chunks as a lazy 'L.ByteString'.</span><span>
+</span><a name="line-277"></a><span class="hs-comment">-- The work is performed lazy, i.e., only when a chunk of the lazy 'L.ByteString'</span><span>
+</span><a name="line-278"></a><span class="hs-comment">-- is forced.</span><span>
+</span><a name="line-279"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">toLazyByteString</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-comment">-- ensure code is shared</span><span>
+</span><a name="line-280"></a><span class="hs-identifier">toLazyByteString</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Lazy.Internal.html#ByteString"><span class="hs-identifier hs-type">L.ByteString</span></a><span>
+</span><a name="line-281"></a><a name="toLazyByteString"><a href="Data.ByteString.Builder.html#toLazyByteString"><span class="hs-identifier">toLazyByteString</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Internal.html#toLazyByteStringWith"><span class="hs-identifier hs-var">toLazyByteStringWith</span></a><span>
+</span><a name="line-282"></a><span>    </span><span class="hs-special">(</span><a href="Data.ByteString.Builder.Internal.html#safeStrategy"><span class="hs-identifier hs-var">safeStrategy</span></a><span> </span><a href="Data.ByteString.Lazy.Internal.html#smallChunkSize"><span class="hs-identifier hs-var">L.smallChunkSize</span></a><span> </span><a href="Data.ByteString.Lazy.Internal.html#defaultChunkSize"><span class="hs-identifier hs-var">L.defaultChunkSize</span></a><span class="hs-special">)</span><span> </span><a href="Data.ByteString.Lazy.Internal.html#Empty"><span class="hs-identifier hs-var">L.Empty</span></a><span>
+</span><a name="line-283"></a><span>
+</span><a name="line-284"></a><span class="hs-comment">{- Not yet stable enough.
+   See note on 'hPut' in Data.ByteString.Builder.Internal
+-}</span><span>
+</span><a name="line-287"></a><span>
+</span><a name="line-288"></a><span class="hs-comment">-- | Output a 'Builder' to a 'Handle'.</span><span>
+</span><a name="line-289"></a><span class="hs-comment">-- The 'Builder' is executed directly on the buffer of the 'Handle'. If the</span><span>
+</span><a name="line-290"></a><span class="hs-comment">-- buffer is too small (or not present), then it is replaced with a large</span><span>
+</span><a name="line-291"></a><span class="hs-comment">-- enough buffer.</span><span>
+</span><a name="line-292"></a><span class="hs-comment">--</span><span>
+</span><a name="line-293"></a><span class="hs-comment">-- It is recommended that the 'Handle' is set to binary and</span><span>
+</span><a name="line-294"></a><span class="hs-comment">-- 'BlockBuffering' mode. See 'hSetBinaryMode' and 'hSetBuffering'.</span><span>
+</span><a name="line-295"></a><span class="hs-comment">--</span><span>
+</span><a name="line-296"></a><span class="hs-comment">-- This function is more efficient than @hPut . 'toLazyByteString'@ because in</span><span>
+</span><a name="line-297"></a><span class="hs-comment">-- many cases no buffer allocation has to be done. Moreover, the results of</span><span>
+</span><a name="line-298"></a><span class="hs-comment">-- several executions of short 'Builder's are concatenated in the 'Handle's</span><span>
+</span><a name="line-299"></a><span class="hs-comment">-- buffer, therefore avoiding unnecessary buffer flushes.</span><span>
+</span><a name="line-300"></a><span class="hs-identifier">hPutBuilder</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-301"></a><a name="hPutBuilder"><a href="Data.ByteString.Builder.html#hPutBuilder"><span class="hs-identifier">hPutBuilder</span></a></a><span> </span><a name="local-6989586621679080673"><a href="#local-6989586621679080673"><span class="hs-identifier">h</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Internal.html#hPut"><span class="hs-identifier hs-var">hPut</span></a><span> </span><a href="#local-6989586621679080673"><span class="hs-identifier hs-var">h</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="Data.ByteString.Builder.Internal.html#putBuilder"><span class="hs-identifier hs-var">putBuilder</span></a><span>
+</span><a name="line-302"></a><span>
+</span><a name="line-303"></a><span>
+</span><a name="line-304"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-305"></a><span class="hs-comment">-- Binary encodings</span><span>
+</span><a name="line-306"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-307"></a><span>
+</span><a name="line-308"></a><span class="hs-comment">-- | Encode a single signed byte as-is.</span><span>
+</span><a name="line-309"></a><span class="hs-comment">--</span><span>
+</span><a name="line-310"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-311"></a><span class="hs-identifier">int8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int8"><span class="hs-identifier hs-type">Int8</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-312"></a><a name="int8"><a href="Data.ByteString.Builder.html#int8"><span class="hs-identifier">int8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int8"><span class="hs-identifier hs-var">P.int8</span></a><span>
+</span><a name="line-313"></a><span>
+</span><a name="line-314"></a><span class="hs-comment">-- | Encode a single unsigned byte as-is.</span><span>
+</span><a name="line-315"></a><span class="hs-comment">--</span><span>
+</span><a name="line-316"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-317"></a><span class="hs-identifier">word8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word8"><span class="hs-identifier hs-type">Word8</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-318"></a><a name="word8"><a href="Data.ByteString.Builder.html#word8"><span class="hs-identifier">word8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word8"><span class="hs-identifier hs-var">P.word8</span></a><span>
+</span><a name="line-319"></a><span>
+</span><a name="line-320"></a><span>
+</span><a name="line-321"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-322"></a><span class="hs-comment">-- Binary little-endian encodings</span><span>
+</span><a name="line-323"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-324"></a><span>
+</span><a name="line-325"></a><span class="hs-comment">-- | Encode an 'Int16' in little endian format.</span><span>
+</span><a name="line-326"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int16LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-327"></a><span class="hs-identifier">int16LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int16"><span class="hs-identifier hs-type">Int16</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-328"></a><a name="int16LE"><a href="Data.ByteString.Builder.html#int16LE"><span class="hs-identifier">int16LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int16LE"><span class="hs-identifier hs-var">P.int16LE</span></a><span>
+</span><a name="line-329"></a><span>
+</span><a name="line-330"></a><span class="hs-comment">-- | Encode an 'Int32' in little endian format.</span><span>
+</span><a name="line-331"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int32LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-332"></a><span class="hs-identifier">int32LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int32"><span class="hs-identifier hs-type">Int32</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-333"></a><a name="int32LE"><a href="Data.ByteString.Builder.html#int32LE"><span class="hs-identifier">int32LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int32LE"><span class="hs-identifier hs-var">P.int32LE</span></a><span>
+</span><a name="line-334"></a><span>
+</span><a name="line-335"></a><span class="hs-comment">-- | Encode an 'Int64' in little endian format.</span><span>
+</span><a name="line-336"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int64LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-337"></a><span class="hs-identifier">int64LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int64"><span class="hs-identifier hs-type">Int64</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-338"></a><a name="int64LE"><a href="Data.ByteString.Builder.html#int64LE"><span class="hs-identifier">int64LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int64LE"><span class="hs-identifier hs-var">P.int64LE</span></a><span>
+</span><a name="line-339"></a><span>
+</span><a name="line-340"></a><span class="hs-comment">-- | Encode a 'Word16' in little endian format.</span><span>
+</span><a name="line-341"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word16LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-342"></a><span class="hs-identifier">word16LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word16"><span class="hs-identifier hs-type">Word16</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-343"></a><a name="word16LE"><a href="Data.ByteString.Builder.html#word16LE"><span class="hs-identifier">word16LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word16LE"><span class="hs-identifier hs-var">P.word16LE</span></a><span>
+</span><a name="line-344"></a><span>
+</span><a name="line-345"></a><span class="hs-comment">-- | Encode a 'Word32' in little endian format.</span><span>
+</span><a name="line-346"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word32LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-347"></a><span class="hs-identifier">word32LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word32"><span class="hs-identifier hs-type">Word32</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-348"></a><a name="word32LE"><a href="Data.ByteString.Builder.html#word32LE"><span class="hs-identifier">word32LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word32LE"><span class="hs-identifier hs-var">P.word32LE</span></a><span>
+</span><a name="line-349"></a><span>
+</span><a name="line-350"></a><span class="hs-comment">-- | Encode a 'Word64' in little endian format.</span><span>
+</span><a name="line-351"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word64LE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-352"></a><span class="hs-identifier">word64LE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word64"><span class="hs-identifier hs-type">Word64</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-353"></a><a name="word64LE"><a href="Data.ByteString.Builder.html#word64LE"><span class="hs-identifier">word64LE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word64LE"><span class="hs-identifier hs-var">P.word64LE</span></a><span>
+</span><a name="line-354"></a><span>
+</span><a name="line-355"></a><span class="hs-comment">-- | Encode a 'Float' in little endian format.</span><span>
+</span><a name="line-356"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">floatLE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-357"></a><span class="hs-identifier">floatLE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Float"><span class="hs-identifier hs-type">Float</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-358"></a><a name="floatLE"><a href="Data.ByteString.Builder.html#floatLE"><span class="hs-identifier">floatLE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#floatLE"><span class="hs-identifier hs-var">P.floatLE</span></a><span>
+</span><a name="line-359"></a><span>
+</span><a name="line-360"></a><span class="hs-comment">-- | Encode a 'Double' in little endian format.</span><span>
+</span><a name="line-361"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">doubleLE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-362"></a><span class="hs-identifier">doubleLE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Double"><span class="hs-identifier hs-type">Double</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-363"></a><a name="doubleLE"><a href="Data.ByteString.Builder.html#doubleLE"><span class="hs-identifier">doubleLE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#doubleLE"><span class="hs-identifier hs-var">P.doubleLE</span></a><span>
+</span><a name="line-364"></a><span>
+</span><a name="line-365"></a><span>
+</span><a name="line-366"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-367"></a><span class="hs-comment">-- Binary big-endian encodings</span><span>
+</span><a name="line-368"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-369"></a><span>
+</span><a name="line-370"></a><span class="hs-comment">-- | Encode an 'Int16' in big endian format.</span><span>
+</span><a name="line-371"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int16BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-372"></a><span class="hs-identifier">int16BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int16"><span class="hs-identifier hs-type">Int16</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-373"></a><a name="int16BE"><a href="Data.ByteString.Builder.html#int16BE"><span class="hs-identifier">int16BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int16BE"><span class="hs-identifier hs-var">P.int16BE</span></a><span>
+</span><a name="line-374"></a><span>
+</span><a name="line-375"></a><span class="hs-comment">-- | Encode an 'Int32' in big endian format.</span><span>
+</span><a name="line-376"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int32BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-377"></a><span class="hs-identifier">int32BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int32"><span class="hs-identifier hs-type">Int32</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-378"></a><a name="int32BE"><a href="Data.ByteString.Builder.html#int32BE"><span class="hs-identifier">int32BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int32BE"><span class="hs-identifier hs-var">P.int32BE</span></a><span>
+</span><a name="line-379"></a><span>
+</span><a name="line-380"></a><span class="hs-comment">-- | Encode an 'Int64' in big endian format.</span><span>
+</span><a name="line-381"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">int64BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-382"></a><span class="hs-identifier">int64BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Int.html#Int64"><span class="hs-identifier hs-type">Int64</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-383"></a><a name="int64BE"><a href="Data.ByteString.Builder.html#int64BE"><span class="hs-identifier">int64BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#int64BE"><span class="hs-identifier hs-var">P.int64BE</span></a><span>
+</span><a name="line-384"></a><span>
+</span><a name="line-385"></a><span class="hs-comment">-- | Encode a 'Word16' in big endian format.</span><span>
+</span><a name="line-386"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word16BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-387"></a><span class="hs-identifier">word16BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word16"><span class="hs-identifier hs-type">Word16</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-388"></a><a name="word16BE"><a href="Data.ByteString.Builder.html#word16BE"><span class="hs-identifier">word16BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word16BE"><span class="hs-identifier hs-var">P.word16BE</span></a><span>
+</span><a name="line-389"></a><span>
+</span><a name="line-390"></a><span class="hs-comment">-- | Encode a 'Word32' in big endian format.</span><span>
+</span><a name="line-391"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word32BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-392"></a><span class="hs-identifier">word32BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word32"><span class="hs-identifier hs-type">Word32</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-393"></a><a name="word32BE"><a href="Data.ByteString.Builder.html#word32BE"><span class="hs-identifier">word32BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word32BE"><span class="hs-identifier hs-var">P.word32BE</span></a><span>
+</span><a name="line-394"></a><span>
+</span><a name="line-395"></a><span class="hs-comment">-- | Encode a 'Word64' in big endian format.</span><span>
+</span><a name="line-396"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">word64BE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-397"></a><span class="hs-identifier">word64BE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Word.html#Word64"><span class="hs-identifier hs-type">Word64</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-398"></a><a name="word64BE"><a href="Data.ByteString.Builder.html#word64BE"><span class="hs-identifier">word64BE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#word64BE"><span class="hs-identifier hs-var">P.word64BE</span></a><span>
+</span><a name="line-399"></a><span>
+</span><a name="line-400"></a><span class="hs-comment">-- | Encode a 'Float' in big endian format.</span><span>
+</span><a name="line-401"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">floatBE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-402"></a><span class="hs-identifier">floatBE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Float"><span class="hs-identifier hs-type">Float</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-403"></a><a name="floatBE"><a href="Data.ByteString.Builder.html#floatBE"><span class="hs-identifier">floatBE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#floatBE"><span class="hs-identifier hs-var">P.floatBE</span></a><span>
+</span><a name="line-404"></a><span>
+</span><a name="line-405"></a><span class="hs-comment">-- | Encode a 'Double' in big endian format.</span><span>
+</span><a name="line-406"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">doubleBE</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-407"></a><span class="hs-identifier">doubleBE</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Double"><span class="hs-identifier hs-type">Double</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-408"></a><a name="doubleBE"><a href="Data.ByteString.Builder.html#doubleBE"><span class="hs-identifier">doubleBE</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.Binary.html#doubleBE"><span class="hs-identifier hs-var">P.doubleBE</span></a><span>
+</span><a name="line-409"></a><span>
+</span><a name="line-410"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-411"></a><span class="hs-comment">-- ASCII encoding</span><span>
+</span><a name="line-412"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-413"></a><span>
+</span><a name="line-414"></a><span class="hs-comment">-- | Char7 encode a 'Char'.</span><span>
+</span><a name="line-415"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">char7</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-416"></a><span class="hs-identifier">char7</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-417"></a><a name="char7"><a href="Data.ByteString.Builder.html#char7"><span class="hs-identifier">char7</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.ASCII.html#char7"><span class="hs-identifier hs-var">P.char7</span></a><span>
+</span><a name="line-418"></a><span>
+</span><a name="line-419"></a><span class="hs-comment">-- | Char7 encode a 'String'.</span><span>
+</span><a name="line-420"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">string7</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-421"></a><span class="hs-identifier">string7</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-422"></a><a name="string7"><a href="Data.ByteString.Builder.html#string7"><span class="hs-identifier">string7</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primMapListFixed"><span class="hs-identifier hs-var">P.primMapListFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.ASCII.html#char7"><span class="hs-identifier hs-var">P.char7</span></a><span>
+</span><a name="line-423"></a><span>
+</span><a name="line-424"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-425"></a><span class="hs-comment">-- ISO/IEC 8859-1 encoding</span><span>
+</span><a name="line-426"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-427"></a><span>
+</span><a name="line-428"></a><span class="hs-comment">-- | Char8 encode a 'Char'.</span><span>
+</span><a name="line-429"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">char8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-430"></a><span class="hs-identifier">char8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-431"></a><a name="char8"><a href="Data.ByteString.Builder.html#char8"><span class="hs-identifier">char8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primFixed"><span class="hs-identifier hs-var">P.primFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.html#char8"><span class="hs-identifier hs-var">P.char8</span></a><span>
+</span><a name="line-432"></a><span>
+</span><a name="line-433"></a><span class="hs-comment">-- | Char8 encode a 'String'.</span><span>
+</span><a name="line-434"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">string8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-435"></a><span class="hs-identifier">string8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-436"></a><a name="string8"><a href="Data.ByteString.Builder.html#string8"><span class="hs-identifier">string8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primMapListFixed"><span class="hs-identifier hs-var">P.primMapListFixed</span></a><span> </span><a href="Data.ByteString.Builder.Prim.html#char8"><span class="hs-identifier hs-var">P.char8</span></a><span>
+</span><a name="line-437"></a><span>
+</span><a name="line-438"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-439"></a><span class="hs-comment">-- UTF-8 encoding</span><span>
+</span><a name="line-440"></a><span class="hs-comment">------------------------------------------------------------------------------</span><span>
+</span><a name="line-441"></a><span>
+</span><a name="line-442"></a><span class="hs-comment">-- | UTF-8 encode a 'Char'.</span><span>
+</span><a name="line-443"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">charUtf8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-444"></a><span class="hs-identifier">charUtf8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-445"></a><a name="charUtf8"><a href="Data.ByteString.Builder.html#charUtf8"><span class="hs-identifier">charUtf8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primBounded"><span class="hs-identifier hs-var">P.primBounded</span></a><span> </span><a href="Data.ByteString.Builder.Prim.html#charUtf8"><span class="hs-identifier hs-var">P.charUtf8</span></a><span>
+</span><a name="line-446"></a><span>
+</span><a name="line-447"></a><span class="hs-comment">-- | UTF-8 encode a 'String'.</span><span>
+</span><a name="line-448"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">stringUtf8</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-449"></a><span class="hs-identifier">stringUtf8</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-450"></a><a name="stringUtf8"><a href="Data.ByteString.Builder.html#stringUtf8"><span class="hs-identifier">stringUtf8</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.Prim.html#primMapListBounded"><span class="hs-identifier hs-var">P.primMapListBounded</span></a><span> </span><a href="Data.ByteString.Builder.Prim.html#charUtf8"><span class="hs-identifier hs-var">P.charUtf8</span></a><span>
+</span><a name="line-451"></a><span>
+</span><a name="line-452"></a><span class="hs-keyword">instance</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-453"></a><span>    </span><a name="local-3458764513820541114"><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.String.html#fromString"><span class="hs-identifier">fromString</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.html#stringUtf8"><span class="hs-identifier hs-var">stringUtf8</span></a><span>
+</span><a name="line-454"></a></pre></body></html>

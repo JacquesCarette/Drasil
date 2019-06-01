@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Module      :  Control.Monad.ST</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Portability :  non-portable (requires universal quantification for runST)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- This library provides support for /strict/ state threads, as</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- described in the PLDI \'94 paper by John Launchbury and Simon Peyton</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Jones /Lazy Functional State Threads/.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- References (variables) that can be used within the @ST@ monad are</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- provided by &quot;Data.STRef&quot;, and arrays are provided by</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- [Data.Array.ST](https://hackage.haskell.org/package/array/docs/Data-Array-ST.html).</span><span>
+</span><a name="line-20"></a><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Control.Monad.ST</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">-- * The 'ST' Monad</span><span>
+</span><a name="line-25"></a><span>        </span><a href="GHC.ST.html#ST"><span class="hs-identifier hs-type">ST</span></a><span class="hs-special">,</span><span>             </span><span class="hs-comment">-- abstract, instance of Functor, Monad, Typeable.</span><span>
+</span><a name="line-26"></a><span>        </span><a href="GHC.ST.html#runST"><span class="hs-identifier hs-var">runST</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>        </span><a href="GHC.ST.html#fixST"><span class="hs-identifier hs-var">fixST</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span>        </span><span class="hs-comment">-- * Converting 'ST' to 'IO'</span><span>
+</span><a name="line-30"></a><span>        </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span class="hs-special">,</span><span>              </span><span class="hs-comment">-- abstract</span><span>
+</span><a name="line-31"></a><span>        </span><a href="GHC.IO.html#stToIO"><span class="hs-identifier hs-var">stToIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span class="hs-keyword">import</span><span> </span><a href="Control.Monad.ST.Imp.html"><span class="hs-identifier">Control.Monad.ST.Imp</span></a><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a></pre></body></html>

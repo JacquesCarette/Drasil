@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CPP
+           , NoImplicitPrelude
+           , ExistentialQuantification
+  #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# OPTIONS_GHC -funbox-strict-fields #-}</span><span>
+</span><a name="line-7"></a><span class="hs-pragma">{-# OPTIONS_HADDOCK hide #-}</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Module      :  GHC.IO.Handle.Types</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow, 1994-2009</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Portability :  non-portable</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- Basic types for the implementation of IO Handles.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.IO.Handle.Types</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-24"></a><span>      </span><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#showHandle"><span class="hs-identifier hs-var">showHandle</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>      </span><a href="GHC.IO.Handle.Types.html#checkHandleInvariants"><span class="hs-identifier hs-var">checkHandleInvariants</span></a><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>      </span><a href="GHC.IO.Handle.Types.html#BufferList"><span class="hs-identifier hs-type">BufferList</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>      </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>      </span><a href="GHC.IO.Handle.Types.html#isReadableHandleType"><span class="hs-identifier hs-var">isReadableHandleType</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#isWritableHandleType"><span class="hs-identifier hs-var">isWritableHandleType</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#isReadWriteHandleType"><span class="hs-identifier hs-var">isReadWriteHandleType</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>      </span><a href="GHC.IO.Handle.Types.html#BufferMode"><span class="hs-identifier hs-type">BufferMode</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>      </span><a href="GHC.IO.Encoding.Types.html#BufferCodec"><span class="hs-identifier hs-type">BufferCodec</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-31"></a><span>      </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-type">NewlineMode</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#nativeNewline"><span class="hs-identifier hs-var">nativeNewline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>      </span><a href="GHC.IO.Handle.Types.html#universalNewlineMode"><span class="hs-identifier hs-var">universalNewlineMode</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#noNewlineTranslation"><span class="hs-identifier hs-var">noNewlineTranslation</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Handle.Types.html#nativeNewlineMode"><span class="hs-identifier hs-var">nativeNewlineMode</span></a><span>
+</span><a name="line-33"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span class="hs-cpp">#undef DEBUG
+</span><span>
+</span><a name="line-37"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-38"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.MVar.html"><span class="hs-identifier">GHC.MVar</span></a><span>
+</span><a name="line-39"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.html"><span class="hs-identifier">GHC.IO</span></a><span>
+</span><a name="line-40"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.Buffer.html"><span class="hs-identifier">GHC.IO.Buffer</span></a><span>
+</span><a name="line-41"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.BufferedIO.html"><span class="hs-identifier">GHC.IO.BufferedIO</span></a><span>
+</span><a name="line-42"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.Encoding.Types.html"><span class="hs-identifier">GHC.IO.Encoding.Types</span></a><span>
+</span><a name="line-43"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IORef.html"><span class="hs-identifier">GHC.IORef</span></a><span>
+</span><a name="line-44"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Show.html"><span class="hs-identifier">GHC.Show</span></a><span>
+</span><a name="line-45"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Read.html"><span class="hs-identifier">GHC.Read</span></a><span>
+</span><a name="line-46"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Word.html"><span class="hs-identifier">GHC.Word</span></a><span>
+</span><a name="line-47"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.Device.html"><span class="hs-identifier">GHC.IO.Device</span></a><span>
+</span><a name="line-48"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Typeable.html"><span class="hs-identifier">Data.Typeable</span></a><span>
+</span><a name="line-49"></a><span class="hs-cpp">#if defined(DEBUG)
+</span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Monad</span><span>
+</span><a name="line-51"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- ---------------------------------------------------------------------------</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- Handle type</span><span>
+</span><a name="line-55"></a><span>
+</span><a name="line-56"></a><span class="hs-comment">--  A Handle is represented by (a reference to) a record</span><span>
+</span><a name="line-57"></a><span class="hs-comment">--  containing the state of the I/O port/device. We record</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--  the following pieces of info:</span><span>
+</span><a name="line-59"></a><span>
+</span><a name="line-60"></a><span class="hs-comment">--    * type (read,write,closed etc.)</span><span>
+</span><a name="line-61"></a><span class="hs-comment">--    * the underlying file descriptor</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--    * buffering mode</span><span>
+</span><a name="line-63"></a><span class="hs-comment">--    * buffer, and spare buffers</span><span>
+</span><a name="line-64"></a><span class="hs-comment">--    * user-friendly name (usually the</span><span>
+</span><a name="line-65"></a><span class="hs-comment">--      FilePath used when IO.openFile was called)</span><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-comment">-- Note: when a Handle is garbage collected, we want to flush its buffer</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- and close the OS file handle, so as to free up a (precious) resource.</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-comment">-- | Haskell defines operations to read and write characters from and to files,</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- represented by values of type @Handle@.  Each value of this type is a</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- /handle/: a record used by the Haskell run-time system to /manage/ I\/O</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- with file system objects.  A handle has at least the following properties:</span><span>
+</span><a name="line-74"></a><span class="hs-comment">--</span><span>
+</span><a name="line-75"></a><span class="hs-comment">--  * whether it manages input or output or both;</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-comment">--  * whether it is /open/, /closed/ or /semi-closed/;</span><span>
+</span><a name="line-78"></a><span class="hs-comment">--</span><span>
+</span><a name="line-79"></a><span class="hs-comment">--  * whether the object is seekable;</span><span>
+</span><a name="line-80"></a><span class="hs-comment">--</span><span>
+</span><a name="line-81"></a><span class="hs-comment">--  * whether buffering is disabled, or enabled on a line or block basis;</span><span>
+</span><a name="line-82"></a><span class="hs-comment">--</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--  * a buffer (whose length may be zero).</span><span>
+</span><a name="line-84"></a><span class="hs-comment">--</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- Most handles will also have a current I\/O position indicating where the next</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- input or output operation will occur.  A handle is /readable/ if it</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- manages only input or both input and output; likewise, it is /writable/ if</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- it manages only output or both input and output.  A handle is /open/ when</span><span>
+</span><a name="line-89"></a><span class="hs-comment">-- first allocated.</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- Once it is closed it can no longer be used for either input or output,</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- though an implementation cannot re-use its storage while references</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- remain to it.  Handles are in the 'Show' and 'Eq' classes.  The string</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- produced by showing a handle is system dependent; it should include</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- enough information to identify the handle for debugging.  A handle is</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- equal according to '==' only to itself; no attempt</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- is made to compare the internal state of different handles for equality.</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span class="hs-keyword">data</span><span> </span><a name="Handle"><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier">Handle</span></a></a><span>
+</span><a name="line-99"></a><span>  </span><span class="hs-glyph">=</span><span> </span><a name="FileHandle"><a href="GHC.IO.Handle.Types.html#FileHandle"><span class="hs-identifier">FileHandle</span></a></a><span>                          </span><span class="hs-comment">-- A normal handle to a file</span><span>
+</span><a name="line-100"></a><span>        </span><a href="GHC.IO.html#FilePath"><span class="hs-identifier hs-type">FilePath</span></a><span>                        </span><span class="hs-comment">-- the file (used for error messages</span><span>
+</span><a name="line-101"></a><span>                                        </span><span class="hs-comment">-- only)</span><span>
+</span><a name="line-102"></a><span>        </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.MVar.html#MVar"><span class="hs-identifier hs-type">MVar</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span class="hs-special">)</span><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="DuplexHandle"><a href="GHC.IO.Handle.Types.html#DuplexHandle"><span class="hs-identifier">DuplexHandle</span></a></a><span>                        </span><span class="hs-comment">-- A handle to a read/write stream</span><span>
+</span><a name="line-105"></a><span>        </span><a href="GHC.IO.html#FilePath"><span class="hs-identifier hs-type">FilePath</span></a><span>                        </span><span class="hs-comment">-- file for a FIFO, otherwise some</span><span>
+</span><a name="line-106"></a><span>                                        </span><span class="hs-comment">--   descriptive string (used for error</span><span>
+</span><a name="line-107"></a><span>                                        </span><span class="hs-comment">--   messages only)</span><span>
+</span><a name="line-108"></a><span>        </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.MVar.html#MVar"><span class="hs-identifier hs-type">MVar</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span class="hs-special">)</span><span>                </span><span class="hs-comment">-- The read side</span><span>
+</span><a name="line-109"></a><span>        </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.MVar.html#MVar"><span class="hs-identifier hs-type">MVar</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span class="hs-special">)</span><span>                </span><span class="hs-comment">-- The write side</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span class="hs-comment">-- NOTES:</span><span>
+</span><a name="line-112"></a><span class="hs-comment">--    * A 'FileHandle' is seekable.  A 'DuplexHandle' may or may not be</span><span>
+</span><a name="line-113"></a><span class="hs-comment">--      seekable.</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span class="hs-comment">-- | @since 4.1.0.0</span><span>
+</span><a name="line-116"></a><span class="hs-keyword">instance</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-117"></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#FileHandle"><span class="hs-identifier hs-var">FileHandle</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679219826"><a href="#local-6989586621679219826"><span class="hs-identifier">h1</span></a></a><span class="hs-special">)</span><span>     </span><a name="local-3458764513820541095"><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3D%3D"><span class="hs-operator">==</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#FileHandle"><span class="hs-identifier hs-var">FileHandle</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679219827"><a href="#local-6989586621679219827"><span class="hs-identifier">h2</span></a></a><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679219826"><span class="hs-identifier hs-var">h1</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a><span> </span><a href="#local-6989586621679219827"><span class="hs-identifier hs-var">h2</span></a><span>
+</span><a name="line-118"></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#DuplexHandle"><span class="hs-identifier hs-var">DuplexHandle</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679219828"><a href="#local-6989586621679219828"><span class="hs-identifier">h1</span></a></a><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-operator">==</span><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#DuplexHandle"><span class="hs-identifier hs-var">DuplexHandle</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679219829"><a href="#local-6989586621679219829"><span class="hs-identifier">h2</span></a></a><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679219828"><span class="hs-identifier hs-var">h1</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a><span> </span><a href="#local-6989586621679219829"><span class="hs-identifier hs-var">h2</span></a><span>
+</span><a name="line-119"></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-operator">==</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-120"></a><span>
+</span><a name="line-121"></a><span class="hs-keyword">data</span><span> </span><a name="Handle__"><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier">Handle__</span></a></a><span>
+</span><a name="line-122"></a><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">forall</span><span> </span><a name="local-6989586621679219820"><a href="#local-6989586621679219820"><span class="hs-identifier">dev</span></a></a><span> </span><a name="local-6989586621679219821"><a href="#local-6989586621679219821"><span class="hs-identifier">enc_state</span></a></a><span> </span><a name="local-6989586621679219822"><a href="#local-6989586621679219822"><span class="hs-identifier">dec_state</span></a></a><span> </span><span class="hs-operator">.</span><span> </span><span class="hs-special">(</span><a href="GHC.IO.Device.html#IODevice"><span class="hs-identifier hs-type">IODevice</span></a><span> </span><a href="#local-6989586621679219820"><span class="hs-identifier hs-type">dev</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.BufferedIO.html#BufferedIO"><span class="hs-identifier hs-type">BufferedIO</span></a><span> </span><a href="#local-6989586621679219820"><span class="hs-identifier hs-type">dev</span></a><span class="hs-special">,</span><span> </span><a href="Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a><span> </span><a href="#local-6989586621679219820"><span class="hs-identifier hs-type">dev</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span>
+</span><a name="line-123"></a><span>    </span><a name="Handle__"><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier">Handle__</span></a></a><span> </span><span class="hs-special">{</span><span>
+</span><a name="line-124"></a><span>      </span><a name="haDevice"><a href="GHC.IO.Handle.Types.html#haDevice"><span class="hs-identifier">haDevice</span></a></a><span>      </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><a href="#local-6989586621679219820"><span class="hs-identifier hs-type">dev</span></a><span class="hs-special">,</span><span>
+</span><a name="line-125"></a><span>      </span><a name="haType"><a href="GHC.IO.Handle.Types.html#haType"><span class="hs-identifier">haType</span></a></a><span>        </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- type (read/write/append etc.)</span><span>
+</span><a name="line-126"></a><span>      </span><a name="haByteBuffer"><a href="GHC.IO.Handle.Types.html#haByteBuffer"><span class="hs-identifier">haByteBuffer</span></a></a><span>  </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Buffer.html#Buffer"><span class="hs-identifier hs-type">Buffer</span></a><span> </span><a href="GHC.Word.html#Word8"><span class="hs-identifier hs-type">Word8</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- See [note Buffering Implementation]</span><span>
+</span><a name="line-127"></a><span>      </span><a name="haBufferMode"><a href="GHC.IO.Handle.Types.html#haBufferMode"><span class="hs-identifier">haBufferMode</span></a></a><span>  </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#BufferMode"><span class="hs-identifier hs-type">BufferMode</span></a><span class="hs-special">,</span><span>
+</span><a name="line-128"></a><span>      </span><a name="haLastDecode"><a href="GHC.IO.Handle.Types.html#haLastDecode"><span class="hs-identifier">haLastDecode</span></a></a><span>  </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679219822"><span class="hs-identifier hs-type">dec_state</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Buffer.html#Buffer"><span class="hs-identifier hs-type">Buffer</span></a><span> </span><a href="GHC.Word.html#Word8"><span class="hs-identifier hs-type">Word8</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-129"></a><span>      </span><a name="haCharBuffer"><a href="GHC.IO.Handle.Types.html#haCharBuffer"><span class="hs-identifier">haCharBuffer</span></a></a><span>  </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Buffer.html#Buffer"><span class="hs-identifier hs-type">Buffer</span></a><span> </span><a href="GHC.IO.Buffer.html#CharBufElem"><span class="hs-identifier hs-type">CharBufElem</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- See [note Buffering Implementation]</span><span>
+</span><a name="line-130"></a><span>      </span><a name="haBuffers"><a href="GHC.IO.Handle.Types.html#haBuffers"><span class="hs-identifier">haBuffers</span></a></a><span>     </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#BufferList"><span class="hs-identifier hs-type">BufferList</span></a><span> </span><a href="GHC.IO.Buffer.html#CharBufElem"><span class="hs-identifier hs-type">CharBufElem</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>  </span><span class="hs-comment">-- spare buffers</span><span>
+</span><a name="line-131"></a><span>      </span><a name="haEncoder"><a href="GHC.IO.Handle.Types.html#haEncoder"><span class="hs-identifier">haEncoder</span></a></a><span>     </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Encoding.Types.html#TextEncoder"><span class="hs-identifier hs-type">TextEncoder</span></a><span> </span><a href="#local-6989586621679219821"><span class="hs-identifier hs-type">enc_state</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-132"></a><span>      </span><a name="haDecoder"><a href="GHC.IO.Handle.Types.html#haDecoder"><span class="hs-identifier">haDecoder</span></a></a><span>     </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Encoding.Types.html#TextDecoder"><span class="hs-identifier hs-type">TextDecoder</span></a><span> </span><a href="#local-6989586621679219822"><span class="hs-identifier hs-type">dec_state</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-133"></a><span>      </span><a name="haCodec"><a href="GHC.IO.Handle.Types.html#haCodec"><span class="hs-identifier">haCodec</span></a></a><span>       </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><a href="GHC.IO.Encoding.Types.html#TextEncoding"><span class="hs-identifier hs-type">TextEncoding</span></a><span class="hs-special">,</span><span>
+</span><a name="line-134"></a><span>      </span><a name="haInputNL"><a href="GHC.IO.Handle.Types.html#haInputNL"><span class="hs-identifier">haInputNL</span></a></a><span>     </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-135"></a><span>      </span><a name="haOutputNL"><a href="GHC.IO.Handle.Types.html#haOutputNL"><span class="hs-identifier">haOutputNL</span></a></a><span>    </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-136"></a><span>      </span><a name="haOtherSide"><a href="GHC.IO.Handle.Types.html#haOtherSide"><span class="hs-identifier">haOtherSide</span></a></a><span>   </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><span class="hs-special">(</span><a href="GHC.MVar.html#MVar"><span class="hs-identifier hs-type">MVar</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span class="hs-special">)</span><span> </span><span class="hs-comment">-- ptr to the write side of a</span><span>
+</span><a name="line-137"></a><span>                                             </span><span class="hs-comment">-- duplex handle.</span><span>
+</span><a name="line-138"></a><span>    </span><span class="hs-special">}</span><span>
+</span><a name="line-139"></a><span>
+</span><a name="line-140"></a><span class="hs-comment">-- we keep a few spare buffers around in a handle to avoid allocating</span><span>
+</span><a name="line-141"></a><span class="hs-comment">-- a new one for each hPutStr.  These buffers are *guaranteed* to be the</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- same size as the main buffer.</span><span>
+</span><a name="line-143"></a><span class="hs-keyword">data</span><span> </span><a name="BufferList"><a href="GHC.IO.Handle.Types.html#BufferList"><span class="hs-identifier">BufferList</span></a></a><span> </span><a name="local-6989586621679219819"><a href="#local-6989586621679219819"><span class="hs-identifier">e</span></a></a><span>
+</span><a name="line-144"></a><span>  </span><span class="hs-glyph">=</span><span> </span><a name="BufferListNil"><a href="GHC.IO.Handle.Types.html#BufferListNil"><span class="hs-identifier">BufferListNil</span></a></a><span>
+</span><a name="line-145"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="BufferListCons"><a href="GHC.IO.Handle.Types.html#BufferListCons"><span class="hs-identifier">BufferListCons</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Buffer.html#RawBuffer"><span class="hs-identifier hs-type">RawBuffer</span></a><span> </span><a href="#local-6989586621679219819"><span class="hs-identifier hs-type">e</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#BufferList"><span class="hs-identifier hs-type">BufferList</span></a><span> </span><a href="#local-6989586621679219819"><span class="hs-identifier hs-type">e</span></a><span class="hs-special">)</span><span>
+</span><a name="line-146"></a><span>
+</span><a name="line-147"></a><span class="hs-comment">--  Internally, we classify handles as being one</span><span>
+</span><a name="line-148"></a><span class="hs-comment">--  of the following:</span><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-keyword">data</span><span> </span><a name="HandleType"><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier">HandleType</span></a></a><span>
+</span><a name="line-151"></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="ClosedHandle"><a href="GHC.IO.Handle.Types.html#ClosedHandle"><span class="hs-identifier">ClosedHandle</span></a></a><span>
+</span><a name="line-152"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="SemiClosedHandle"><a href="GHC.IO.Handle.Types.html#SemiClosedHandle"><span class="hs-identifier">SemiClosedHandle</span></a></a><span>
+</span><a name="line-153"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="ReadHandle"><a href="GHC.IO.Handle.Types.html#ReadHandle"><span class="hs-identifier">ReadHandle</span></a></a><span>
+</span><a name="line-154"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="WriteHandle"><a href="GHC.IO.Handle.Types.html#WriteHandle"><span class="hs-identifier">WriteHandle</span></a></a><span>
+</span><a name="line-155"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="AppendHandle"><a href="GHC.IO.Handle.Types.html#AppendHandle"><span class="hs-identifier">AppendHandle</span></a></a><span>
+</span><a name="line-156"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="ReadWriteHandle"><a href="GHC.IO.Handle.Types.html#ReadWriteHandle"><span class="hs-identifier">ReadWriteHandle</span></a></a><span>
+</span><a name="line-157"></a><span>
+</span><a name="line-158"></a><span class="hs-identifier">isReadableHandleType</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-159"></a><a name="isReadableHandleType"><a href="GHC.IO.Handle.Types.html#isReadableHandleType"><span class="hs-identifier">isReadableHandleType</span></a></a><span> </span><a href="GHC.IO.Handle.Types.html#ReadHandle"><span class="hs-identifier hs-var">ReadHandle</span></a><span>         </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-160"></a><span class="hs-identifier">isReadableHandleType</span><span> </span><a href="GHC.IO.Handle.Types.html#ReadWriteHandle"><span class="hs-identifier hs-var">ReadWriteHandle</span></a><span>    </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-161"></a><span class="hs-identifier">isReadableHandleType</span><span> </span><span class="hs-identifier">_</span><span>                  </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-162"></a><span>
+</span><a name="line-163"></a><span class="hs-identifier">isWritableHandleType</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-164"></a><a name="isWritableHandleType"><a href="GHC.IO.Handle.Types.html#isWritableHandleType"><span class="hs-identifier">isWritableHandleType</span></a></a><span> </span><a href="GHC.IO.Handle.Types.html#AppendHandle"><span class="hs-identifier hs-var">AppendHandle</span></a><span>    </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-165"></a><span class="hs-identifier">isWritableHandleType</span><span> </span><a href="GHC.IO.Handle.Types.html#WriteHandle"><span class="hs-identifier hs-var">WriteHandle</span></a><span>     </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-166"></a><span class="hs-identifier">isWritableHandleType</span><span> </span><a href="GHC.IO.Handle.Types.html#ReadWriteHandle"><span class="hs-identifier hs-var">ReadWriteHandle</span></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-167"></a><span class="hs-identifier">isWritableHandleType</span><span> </span><span class="hs-identifier">_</span><span>               </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-identifier">isReadWriteHandleType</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-170"></a><a name="isReadWriteHandleType"><a href="GHC.IO.Handle.Types.html#isReadWriteHandleType"><span class="hs-identifier">isReadWriteHandleType</span></a></a><span> </span><a href="GHC.IO.Handle.Types.html#ReadWriteHandle"><span class="hs-identifier hs-var">ReadWriteHandle</span></a><span class="hs-special">{</span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-171"></a><span class="hs-identifier">isReadWriteHandleType</span><span> </span><span class="hs-identifier">_</span><span>                 </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-172"></a><span>
+</span><a name="line-173"></a><span class="hs-comment">-- INVARIANTS on Handles:</span><span>
+</span><a name="line-174"></a><span class="hs-comment">--</span><span>
+</span><a name="line-175"></a><span class="hs-comment">--   * A handle *always* has a buffer, even if it is only 1 character long</span><span>
+</span><a name="line-176"></a><span class="hs-comment">--     (an unbuffered handle needs a 1 character buffer in order to support</span><span>
+</span><a name="line-177"></a><span class="hs-comment">--      hLookAhead and hIsEOF).</span><span>
+</span><a name="line-178"></a><span class="hs-comment">--   * In a read Handle, the byte buffer is always empty (we decode when reading)</span><span>
+</span><a name="line-179"></a><span class="hs-comment">--   * In a wriite Handle, the Char buffer is always empty (we encode when writing)</span><span>
+</span><a name="line-180"></a><span class="hs-comment">--</span><span>
+</span><a name="line-181"></a><span class="hs-identifier">checkHandleInvariants</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Handle__"><span class="hs-identifier hs-type">Handle__</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-182"></a><span class="hs-cpp">#if defined(DEBUG)
+</span><span class="hs-identifier">checkHandleInvariants</span><span> </span><span class="hs-identifier">h_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-184"></a><span> </span><span class="hs-identifier">bbuf</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">readIORef</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">haByteBuffer</span><span> </span><span class="hs-identifier">h_</span><span class="hs-special">)</span><span>
+</span><a name="line-185"></a><span> </span><span class="hs-identifier">checkBuffer</span><span> </span><span class="hs-identifier">bbuf</span><span>
+</span><a name="line-186"></a><span> </span><span class="hs-identifier">cbuf</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">readIORef</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">haCharBuffer</span><span> </span><span class="hs-identifier">h_</span><span class="hs-special">)</span><span>
+</span><a name="line-187"></a><span> </span><span class="hs-identifier">checkBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span>
+</span><a name="line-188"></a><span> </span><span class="hs-identifier">when</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">isWriteBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span> </span><span class="hs-operator">&amp;&amp;</span><span> </span><span class="hs-identifier">not</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">isEmptyBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-189"></a><span>   </span><span class="hs-identifier">errorWithoutStackTrace</span><span> </span><span class="hs-special">(</span><span class="hs-string">&quot;checkHandleInvariants: char write buffer non-empty: &quot;</span><span> </span><span class="hs-operator">++</span><span>
+</span><a name="line-190"></a><span>          </span><span class="hs-identifier">summaryBuffer</span><span> </span><span class="hs-identifier">bbuf</span><span> </span><span class="hs-operator">++</span><span> </span><span class="hs-string">&quot;, &quot;</span><span> </span><span class="hs-operator">++</span><span> </span><span class="hs-identifier">summaryBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span class="hs-special">)</span><span>
+</span><a name="line-191"></a><span> </span><span class="hs-identifier">when</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">isWriteBuffer</span><span> </span><span class="hs-identifier">bbuf</span><span> </span><span class="hs-operator">/=</span><span> </span><span class="hs-identifier">isWriteBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span>
+</span><a name="line-192"></a><span>   </span><span class="hs-identifier">errorWithoutStackTrace</span><span> </span><span class="hs-special">(</span><span class="hs-string">&quot;checkHandleInvariants: buffer modes differ: &quot;</span><span> </span><span class="hs-operator">++</span><span>
+</span><a name="line-193"></a><span>          </span><span class="hs-identifier">summaryBuffer</span><span> </span><span class="hs-identifier">bbuf</span><span> </span><span class="hs-operator">++</span><span> </span><span class="hs-string">&quot;, &quot;</span><span> </span><span class="hs-operator">++</span><span> </span><span class="hs-identifier">summaryBuffer</span><span> </span><span class="hs-identifier">cbuf</span><span class="hs-special">)</span><span>
+</span><a name="line-194"></a><span>
+</span><a name="line-195"></a><span class="hs-cpp">#else
+</span><a name="checkHandleInvariants"><a href="GHC.IO.Handle.Types.html#checkHandleInvariants"><span class="hs-identifier">checkHandleInvariants</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-197"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-199"></a><span class="hs-comment">-- ---------------------------------------------------------------------------</span><span>
+</span><a name="line-200"></a><span class="hs-comment">-- Buffering modes</span><span>
+</span><a name="line-201"></a><span>
+</span><a name="line-202"></a><span class="hs-comment">-- | Three kinds of buffering are supported: line-buffering,</span><span>
+</span><a name="line-203"></a><span class="hs-comment">-- block-buffering or no-buffering.  These modes have the following</span><span>
+</span><a name="line-204"></a><span class="hs-comment">-- effects. For output, items are written out, or /flushed/,</span><span>
+</span><a name="line-205"></a><span class="hs-comment">-- from the internal buffer according to the buffer mode:</span><span>
+</span><a name="line-206"></a><span class="hs-comment">--</span><span>
+</span><a name="line-207"></a><span class="hs-comment">--  * /line-buffering/: the entire output buffer is flushed</span><span>
+</span><a name="line-208"></a><span class="hs-comment">--    whenever a newline is output, the buffer overflows,</span><span>
+</span><a name="line-209"></a><span class="hs-comment">--    a 'System.IO.hFlush' is issued, or the handle is closed.</span><span>
+</span><a name="line-210"></a><span class="hs-comment">--</span><span>
+</span><a name="line-211"></a><span class="hs-comment">--  * /block-buffering/: the entire buffer is written out whenever it</span><span>
+</span><a name="line-212"></a><span class="hs-comment">--    overflows, a 'System.IO.hFlush' is issued, or the handle is closed.</span><span>
+</span><a name="line-213"></a><span class="hs-comment">--</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--  * /no-buffering/: output is written immediately, and never stored</span><span>
+</span><a name="line-215"></a><span class="hs-comment">--    in the buffer.</span><span>
+</span><a name="line-216"></a><span class="hs-comment">--</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- An implementation is free to flush the buffer more frequently,</span><span>
+</span><a name="line-218"></a><span class="hs-comment">-- but not less frequently, than specified above.</span><span>
+</span><a name="line-219"></a><span class="hs-comment">-- The output buffer is emptied as soon as it has been written out.</span><span>
+</span><a name="line-220"></a><span class="hs-comment">--</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- Similarly, input occurs according to the buffer mode for the handle:</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-comment">--  * /line-buffering/: when the buffer for the handle is not empty,</span><span>
+</span><a name="line-224"></a><span class="hs-comment">--    the next item is obtained from the buffer; otherwise, when the</span><span>
+</span><a name="line-225"></a><span class="hs-comment">--    buffer is empty, characters up to and including the next newline</span><span>
+</span><a name="line-226"></a><span class="hs-comment">--    character are read into the buffer.  No characters are available</span><span>
+</span><a name="line-227"></a><span class="hs-comment">--    until the newline character is available or the buffer is full.</span><span>
+</span><a name="line-228"></a><span class="hs-comment">--</span><span>
+</span><a name="line-229"></a><span class="hs-comment">--  * /block-buffering/: when the buffer for the handle becomes empty,</span><span>
+</span><a name="line-230"></a><span class="hs-comment">--    the next block of data is read into the buffer.</span><span>
+</span><a name="line-231"></a><span class="hs-comment">--</span><span>
+</span><a name="line-232"></a><span class="hs-comment">--  * /no-buffering/: the next input item is read and returned.</span><span>
+</span><a name="line-233"></a><span class="hs-comment">--    The 'System.IO.hLookAhead' operation implies that even a no-buffered</span><span>
+</span><a name="line-234"></a><span class="hs-comment">--    handle may require a one-character buffer.</span><span>
+</span><a name="line-235"></a><span class="hs-comment">--</span><span>
+</span><a name="line-236"></a><span class="hs-comment">-- The default buffering mode when a handle is opened is</span><span>
+</span><a name="line-237"></a><span class="hs-comment">-- implementation-dependent and may depend on the file system object</span><span>
+</span><a name="line-238"></a><span class="hs-comment">-- which is attached to that handle.</span><span>
+</span><a name="line-239"></a><span class="hs-comment">-- For most implementations, physical files will normally be block-buffered</span><span>
+</span><a name="line-240"></a><span class="hs-comment">-- and terminals will normally be line-buffered.</span><span>
+</span><a name="line-241"></a><span>
+</span><a name="line-242"></a><span class="hs-keyword">data</span><span> </span><a name="BufferMode"><a href="GHC.IO.Handle.Types.html#BufferMode"><span class="hs-identifier">BufferMode</span></a></a><span>
+</span><a name="line-243"></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="NoBuffering"><a href="GHC.IO.Handle.Types.html#NoBuffering"><span class="hs-identifier">NoBuffering</span></a></a><span>  </span><span class="hs-comment">-- ^ buffering is disabled if possible.</span><span>
+</span><a name="line-244"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="LineBuffering"><a href="GHC.IO.Handle.Types.html#LineBuffering"><span class="hs-identifier">LineBuffering</span></a></a><span>
+</span><a name="line-245"></a><span>                </span><span class="hs-comment">-- ^ line-buffering should be enabled if possible.</span><span>
+</span><a name="line-246"></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="BlockBuffering"><a href="GHC.IO.Handle.Types.html#BlockBuffering"><span class="hs-identifier">BlockBuffering</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">)</span><span>
+</span><a name="line-247"></a><span>                </span><span class="hs-comment">-- ^ block-buffering should be enabled if possible.</span><span>
+</span><a name="line-248"></a><span>                </span><span class="hs-comment">-- The size of the buffer is @n@ items if the argument</span><span>
+</span><a name="line-249"></a><span>                </span><span class="hs-comment">-- is 'Just' @n@ and is otherwise implementation-dependent.</span><span>
+</span><a name="line-250"></a><span>   </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-type">Read</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span class="hs-special">)</span><span>
+</span><a name="line-251"></a><span>
+</span><a name="line-252"></a><span class="hs-comment">{-
+[note Buffering Implementation]
+
+Each Handle has two buffers: a byte buffer (haByteBuffer) and a Char
+buffer (haCharBuffer).
+
+[note Buffered Reading]
+
+For read Handles, bytes are read into the byte buffer, and immediately
+decoded into the Char buffer (see
+GHC.IO.Handle.Internals.readTextDevice).  The only way there might be
+some data left in the byte buffer is if there is a partial multi-byte
+character sequence that cannot be decoded into a full character.
+
+Note that the buffering mode (haBufferMode) makes no difference when
+reading data into a Handle.  When reading, we can always just read all
+the data there is available without blocking, decode it into the Char
+buffer, and then provide it immediately to the caller.
+
+[note Buffered Writing]
+
+Characters are written into the Char buffer by e.g. hPutStr.  At the
+end of the operation, or when the char buffer is full, the buffer is
+decoded to the byte buffer (see writeCharBuffer).  This is so that we
+can detect encoding errors at the right point.
+
+Hence, the Char buffer is always empty between Handle operations.
+
+[note Buffer Sizing]
+
+The char buffer is always a default size (dEFAULT_CHAR_BUFFER_SIZE).
+The byte buffer size is chosen by the underlying device (via its
+IODevice.newBuffer).  Hence the size of these buffers is not under
+user control.
+
+There are certain minimum sizes for these buffers imposed by the
+library (but not checked):
+
+ - we must be able to buffer at least one character, so that
+   hLookAhead can work
+
+ - the byte buffer must be able to store at least one encoded
+   character in the current encoding (6 bytes?)
+
+ - when reading, the char buffer must have room for two characters, so
+   that we can spot the \r\n sequence.
+
+How do we implement hSetBuffering?
+
+For reading, we have never used the user-supplied buffer size, because
+there's no point: we always pass all available data to the reader
+immediately.  Buffering would imply waiting until a certain amount of
+data is available, which has no advantages.  So hSetBuffering is
+essentially a no-op for read handles, except that it turns on/off raw
+mode for the underlying device if necessary.
+
+For writing, the buffering mode is handled by the write operations
+themselves (hPutChar and hPutStr).  Every write ends with
+writeCharBuffer, which checks whether the buffer should be flushed
+according to the current buffering mode.  Additionally, we look for
+newlines and flush if the mode is LineBuffering.
+
+[note Buffer Flushing]
+
+** Flushing the Char buffer
+
+We must be able to flush the Char buffer, in order to implement
+hSetEncoding, and things like hGetBuf which want to read raw bytes.
+
+Flushing the Char buffer on a write Handle is easy: it is always empty.
+
+Flushing the Char buffer on a read Handle involves rewinding the byte
+buffer to the point representing the next Char in the Char buffer.
+This is done by
+
+ - remembering the state of the byte buffer *before* the last decode
+
+ - re-decoding the bytes that represent the chars already read from the
+   Char buffer.  This gives us the point in the byte buffer that
+   represents the *next* Char to be read.
+
+In order for this to work, after readTextHandle we must NOT MODIFY THE
+CONTENTS OF THE BYTE OR CHAR BUFFERS, except to remove characters from
+the Char buffer.
+
+** Flushing the byte buffer
+
+The byte buffer can be flushed if the Char buffer has already been
+flushed (see above).  For a read Handle, flushing the byte buffer
+means seeking the device back by the number of bytes in the buffer,
+and hence it is only possible on a seekable Handle.
+
+-}</span><span>
+</span><a name="line-345"></a><span>
+</span><a name="line-346"></a><span class="hs-comment">-- ---------------------------------------------------------------------------</span><span>
+</span><a name="line-347"></a><span class="hs-comment">-- Newline translation</span><span>
+</span><a name="line-348"></a><span>
+</span><a name="line-349"></a><span class="hs-comment">-- | The representation of a newline in the external file or stream.</span><span>
+</span><a name="line-350"></a><span class="hs-keyword">data</span><span> </span><a name="Newline"><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier">Newline</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="LF"><a href="GHC.IO.Handle.Types.html#LF"><span class="hs-identifier">LF</span></a></a><span>    </span><span class="hs-comment">-- ^ '\n'</span><span>
+</span><a name="line-351"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="CRLF"><a href="GHC.IO.Handle.Types.html#CRLF"><span class="hs-identifier">CRLF</span></a></a><span>  </span><span class="hs-comment">-- ^ '\r\n'</span><span>
+</span><a name="line-352"></a><span>             </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-type">Read</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span class="hs-special">)</span><span>
+</span><a name="line-353"></a><span>
+</span><a name="line-354"></a><span class="hs-comment">-- | Specifies the translation, if any, of newline characters between</span><span>
+</span><a name="line-355"></a><span class="hs-comment">-- internal Strings and the external file or stream.  Haskell Strings</span><span>
+</span><a name="line-356"></a><span class="hs-comment">-- are assumed to represent newlines with the '\n' character; the</span><span>
+</span><a name="line-357"></a><span class="hs-comment">-- newline mode specifies how to translate '\n' on output, and what to</span><span>
+</span><a name="line-358"></a><span class="hs-comment">-- translate into '\n' on input.</span><span>
+</span><a name="line-359"></a><span class="hs-keyword">data</span><span> </span><a name="NewlineMode"><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier">NewlineMode</span></a></a><span>
+</span><a name="line-360"></a><span>  </span><span class="hs-glyph">=</span><span> </span><a name="NewlineMode"><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier">NewlineMode</span></a></a><span> </span><span class="hs-special">{</span><span> </span><a name="inputNL"><a href="GHC.IO.Handle.Types.html#inputNL"><span class="hs-identifier">inputNL</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-361"></a><span>                    </span><span class="hs-comment">-- ^ the representation of newlines on input</span><span>
+</span><a name="line-362"></a><span>                  </span><a name="outputNL"><a href="GHC.IO.Handle.Types.html#outputNL"><span class="hs-identifier">outputNL</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span>
+</span><a name="line-363"></a><span>                    </span><span class="hs-comment">-- ^ the representation of newlines on output</span><span>
+</span><a name="line-364"></a><span>                 </span><span class="hs-special">}</span><span>
+</span><a name="line-365"></a><span>             </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-type">Read</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span class="hs-special">)</span><span>
+</span><a name="line-366"></a><span>
+</span><a name="line-367"></a><span class="hs-comment">-- | The native newline representation for the current platform: 'LF'</span><span>
+</span><a name="line-368"></a><span class="hs-comment">-- on Unix systems, 'CRLF' on Windows.</span><span>
+</span><a name="line-369"></a><span class="hs-identifier">nativeNewline</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#Newline"><span class="hs-identifier hs-type">Newline</span></a><span>
+</span><a name="line-370"></a><span class="hs-cpp">#if defined(mingw32_HOST_OS)
+</span><span class="hs-identifier">nativeNewline</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">CRLF</span><span>
+</span><a name="line-372"></a><span class="hs-cpp">#else
+</span><a name="nativeNewline"><a href="GHC.IO.Handle.Types.html#nativeNewline"><span class="hs-identifier">nativeNewline</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#LF"><span class="hs-identifier hs-var">LF</span></a><span>
+</span><a name="line-374"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-376"></a><span class="hs-comment">-- | Map '\r\n' into '\n' on input, and '\n' to the native newline</span><span>
+</span><a name="line-377"></a><span class="hs-comment">-- represetnation on output.  This mode can be used on any platform, and</span><span>
+</span><a name="line-378"></a><span class="hs-comment">-- works with text files using any newline convention.  The downside is</span><span>
+</span><a name="line-379"></a><span class="hs-comment">-- that @readFile &gt;&gt;= writeFile@ might yield a different file.</span><span>
+</span><a name="line-380"></a><span class="hs-comment">--</span><span>
+</span><a name="line-381"></a><span class="hs-comment">-- &gt; universalNewlineMode  = NewlineMode { inputNL  = CRLF,</span><span>
+</span><a name="line-382"></a><span class="hs-comment">-- &gt;                                       outputNL = nativeNewline }</span><span>
+</span><a name="line-383"></a><span class="hs-comment">--</span><span>
+</span><a name="line-384"></a><span class="hs-identifier">universalNewlineMode</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-type">NewlineMode</span></a><span>
+</span><a name="line-385"></a><a name="universalNewlineMode"><a href="GHC.IO.Handle.Types.html#universalNewlineMode"><span class="hs-identifier">universalNewlineMode</span></a></a><span>  </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-var">NewlineMode</span></a><span> </span><span class="hs-special">{</span><span> </span><span class="hs-identifier">inputNL</span><span>  </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#CRLF"><span class="hs-identifier hs-var">CRLF</span></a><span class="hs-special">,</span><span>
+</span><a name="line-386"></a><span>                                      </span><span class="hs-identifier">outputNL</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#nativeNewline"><span class="hs-identifier hs-var">nativeNewline</span></a><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-387"></a><span>
+</span><a name="line-388"></a><span class="hs-comment">-- | Use the native newline representation on both input and output</span><span>
+</span><a name="line-389"></a><span class="hs-comment">--</span><span>
+</span><a name="line-390"></a><span class="hs-comment">-- &gt; nativeNewlineMode  = NewlineMode { inputNL  = nativeNewline</span><span>
+</span><a name="line-391"></a><span class="hs-comment">-- &gt;                                    outputNL = nativeNewline }</span><span>
+</span><a name="line-392"></a><span class="hs-comment">--</span><span>
+</span><a name="line-393"></a><span class="hs-identifier">nativeNewlineMode</span><span>    </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-type">NewlineMode</span></a><span>
+</span><a name="line-394"></a><a name="nativeNewlineMode"><a href="GHC.IO.Handle.Types.html#nativeNewlineMode"><span class="hs-identifier">nativeNewlineMode</span></a></a><span>     </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-var">NewlineMode</span></a><span> </span><span class="hs-special">{</span><span> </span><span class="hs-identifier">inputNL</span><span>  </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#nativeNewline"><span class="hs-identifier hs-var">nativeNewline</span></a><span class="hs-special">,</span><span>
+</span><a name="line-395"></a><span>                                      </span><span class="hs-identifier">outputNL</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#nativeNewline"><span class="hs-identifier hs-var">nativeNewline</span></a><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-396"></a><span>
+</span><a name="line-397"></a><span class="hs-comment">-- | Do no newline translation at all.</span><span>
+</span><a name="line-398"></a><span class="hs-comment">--</span><span>
+</span><a name="line-399"></a><span class="hs-comment">-- &gt; noNewlineTranslation  = NewlineMode { inputNL  = LF, outputNL = LF }</span><span>
+</span><a name="line-400"></a><span class="hs-comment">--</span><span>
+</span><a name="line-401"></a><span class="hs-identifier">noNewlineTranslation</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-type">NewlineMode</span></a><span>
+</span><a name="line-402"></a><a name="noNewlineTranslation"><a href="GHC.IO.Handle.Types.html#noNewlineTranslation"><span class="hs-identifier">noNewlineTranslation</span></a></a><span>  </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#NewlineMode"><span class="hs-identifier hs-var">NewlineMode</span></a><span> </span><span class="hs-special">{</span><span> </span><span class="hs-identifier">inputNL</span><span>  </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#LF"><span class="hs-identifier hs-var">LF</span></a><span class="hs-special">,</span><span> </span><span class="hs-identifier">outputNL</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#LF"><span class="hs-identifier hs-var">LF</span></a><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-403"></a><span>
+</span><a name="line-404"></a><span class="hs-comment">-- ---------------------------------------------------------------------------</span><span>
+</span><a name="line-405"></a><span class="hs-comment">-- Show instance for Handles</span><span>
+</span><a name="line-406"></a><span>
+</span><a name="line-407"></a><span class="hs-comment">-- handle types are 'show'n when printing error msgs, so</span><span>
+</span><a name="line-408"></a><span class="hs-comment">-- we provide a more user-friendly Show instance for it</span><span>
+</span><a name="line-409"></a><span class="hs-comment">-- than the derived one.</span><span>
+</span><a name="line-410"></a><span>
+</span><a name="line-411"></a><span class="hs-comment">-- | @since 4.1.0.0</span><span>
+</span><a name="line-412"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="GHC.IO.Handle.Types.html#HandleType"><span class="hs-identifier hs-type">HandleType</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-413"></a><span>  </span><a name="local-8214565720323806416"><a href="GHC.Show.html#showsPrec"><span class="hs-identifier">showsPrec</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679219825"><a href="#local-6989586621679219825"><span class="hs-identifier">t</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-414"></a><span>    </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679219825"><span class="hs-identifier hs-var">t</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-415"></a><span>      </span><a href="GHC.IO.Handle.Types.html#ClosedHandle"><span class="hs-identifier hs-var">ClosedHandle</span></a><span>      </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;closed&quot;</span><span>
+</span><a name="line-416"></a><span>      </span><a href="GHC.IO.Handle.Types.html#SemiClosedHandle"><span class="hs-identifier hs-var">SemiClosedHandle</span></a><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;semi-closed&quot;</span><span>
+</span><a name="line-417"></a><span>      </span><a href="GHC.IO.Handle.Types.html#ReadHandle"><span class="hs-identifier hs-var">ReadHandle</span></a><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;readable&quot;</span><span>
+</span><a name="line-418"></a><span>      </span><a href="GHC.IO.Handle.Types.html#WriteHandle"><span class="hs-identifier hs-var">WriteHandle</span></a><span>       </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;writable&quot;</span><span>
+</span><a name="line-419"></a><span>      </span><a href="GHC.IO.Handle.Types.html#AppendHandle"><span class="hs-identifier hs-var">AppendHandle</span></a><span>      </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;writable (append)&quot;</span><span>
+</span><a name="line-420"></a><span>      </span><a href="GHC.IO.Handle.Types.html#ReadWriteHandle"><span class="hs-identifier hs-var">ReadWriteHandle</span></a><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;read-writable&quot;</span><span>
+</span><a name="line-421"></a><span>
+</span><a name="line-422"></a><span class="hs-comment">-- | @since 4.1.0.0</span><span>
+</span><a name="line-423"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-424"></a><span>  </span><a name="local-8214565720323806416"><a href="GHC.Show.html#showsPrec"><span class="hs-identifier">showsPrec</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#FileHandle"><span class="hs-identifier hs-var">FileHandle</span></a><span>   </span><a name="local-6989586621679219823"><a href="#local-6989586621679219823"><span class="hs-identifier">file</span></a></a><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span>   </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#showHandle"><span class="hs-identifier hs-var">showHandle</span></a><span> </span><a href="#local-6989586621679219823"><span class="hs-identifier hs-var">file</span></a><span>
+</span><a name="line-425"></a><span>  </span><span class="hs-identifier">showsPrec</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="GHC.IO.Handle.Types.html#DuplexHandle"><span class="hs-identifier hs-var">DuplexHandle</span></a><span> </span><a name="local-6989586621679219824"><a href="#local-6989586621679219824"><span class="hs-identifier">file</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Handle.Types.html#showHandle"><span class="hs-identifier hs-var">showHandle</span></a><span> </span><a href="#local-6989586621679219824"><span class="hs-identifier hs-var">file</span></a><span>
+</span><a name="line-426"></a><span>
+</span><a name="line-427"></a><span class="hs-identifier">showHandle</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IO.html#FilePath"><span class="hs-identifier hs-type">FilePath</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-428"></a><a name="showHandle"><a href="GHC.IO.Handle.Types.html#showHandle"><span class="hs-identifier">showHandle</span></a></a><span> </span><a name="local-6989586621679219830"><a href="#local-6989586621679219830"><span class="hs-identifier">file</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;{handle: &quot;</span><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><a href="#local-6989586621679219830"><span class="hs-identifier hs-var">file</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="GHC.Show.html#showString"><span class="hs-identifier hs-var">showString</span></a><span> </span><span class="hs-string">&quot;}&quot;</span><span>
+</span><a name="line-429"></a><span>
+</span><a name="line-430"></a></pre></body></html>

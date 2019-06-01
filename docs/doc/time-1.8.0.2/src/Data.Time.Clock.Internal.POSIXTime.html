@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Time.Clock.Internal.POSIXTime</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.NominalDiffTime</span></a><span>
+</span><a name="line-4"></a><span>
+</span><a name="line-5"></a><span>
+</span><a name="line-6"></a><span class="hs-comment">-- | 86400 nominal seconds in every day</span><span>
+</span><a name="line-7"></a><span class="hs-identifier">posixDayLength</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html#NominalDiffTime"><span class="hs-identifier hs-type">NominalDiffTime</span></a><span>
+</span><a name="line-8"></a><a name="posixDayLength"><a href="Data.Time.Clock.Internal.POSIXTime.html#posixDayLength"><span class="hs-identifier">posixDayLength</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html#nominalDay"><span class="hs-identifier hs-var">nominalDay</span></a><span>
+</span><a name="line-9"></a><span>
+</span><a name="line-10"></a><span class="hs-comment">-- | POSIX time is the nominal time since 1970-01-01 00:00 UTC</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- To convert from a 'Foreign.C.CTime' or 'System.Posix.EpochTime', use 'realToFrac'.</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-keyword">type</span><span> </span><a name="POSIXTime"><a href="Data.Time.Clock.Internal.POSIXTime.html#POSIXTime"><span class="hs-identifier">POSIXTime</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html#NominalDiffTime"><span class="hs-identifier hs-type">NominalDiffTime</span></a><span>
+</span><a name="line-15"></a></pre></body></html>

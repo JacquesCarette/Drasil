@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#ifdef __HADDOCK_VERSION__
+</span><span class="hs-pragma">{-# OPTIONS_GHC -Wno-unused-imports #-}</span><span>
+</span><a name="line-4"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-6"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  Data.Sequence</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) Ross Paterson 2005</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--                (c) Louis Wasserman 2009</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--                (c) Bertram Felgenhauer, David Feuer, Ross Paterson, and</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--                    Milan Straka 2014</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- License     :  BSD-style</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- = Finite sequences</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- The @'Seq' a@ type represents a finite sequence of values of</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- type @a@.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Sequences generally behave very much like lists.</span><span>
+</span><a name="line-25"></a><span class="hs-comment">--</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- * The class instances for sequences are all based very closely on those for</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- lists.</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- * Many functions in this module have the same names as functions in</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- the &quot;Prelude&quot; or in &quot;Data.List&quot;. In almost all cases, these functions</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- behave analogously. For example, 'filter' filters a sequence in exactly the</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- same way that @&quot;Prelude&quot;.'Prelude.filter'@ filters a list. The only major</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- exception is the 'lookup' function, which is based on the function by</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- that name in &quot;Data.IntMap&quot; rather than the one in &quot;Prelude&quot;.</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- There are two major differences between sequences and lists:</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- * Sequences support a wider variety of efficient operations than</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- do lists. Notably, they offer</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--     * Constant-time access to both the front and the rear with</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--     '&lt;|', '|&gt;', 'viewl', 'viewr'. For recent GHC versions, this can</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--     be done more conveniently using the bidirectional patterns 'Empty',</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--     ':&lt;|', and ':|&gt;'. See the detailed explanation in the \&quot;Pattern synonyms\&quot;</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--     section.</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--     * Logarithmic-time concatenation with '&gt;&lt;'</span><span>
+</span><a name="line-47"></a><span class="hs-comment">--     * Logarithmic-time splitting with 'splitAt', 'take' and 'drop'</span><span>
+</span><a name="line-48"></a><span class="hs-comment">--     * Logarithmic-time access to any element with</span><span>
+</span><a name="line-49"></a><span class="hs-comment">--     'lookup', '!?', 'index', 'insertAt', 'deleteAt', 'adjust'', and 'update'</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">--   Note that sequences are typically /slower/ than lists when using only</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--   operations for which they have the same big-\(O\) complexity: sequences</span><span>
+</span><a name="line-53"></a><span class="hs-comment">--   make rather mediocre stacks!</span><span>
+</span><a name="line-54"></a><span class="hs-comment">--</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- * Whereas lists can be either finite or infinite, sequences are</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- always finite. As a result, a sequence is strict in its</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- length. Ignoring efficiency, you can imagine that 'Seq' is defined</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--</span><span>
+</span><a name="line-59"></a><span class="hs-comment">--     @ data Seq a = Empty | a :&lt;| !(Seq a) @</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">--     This means that many operations on sequences are stricter than</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--     those on lists. For example,</span><span>
+</span><a name="line-63"></a><span class="hs-comment">--</span><span>
+</span><a name="line-64"></a><span class="hs-comment">--     @ (1 : undefined) !! 0 = 1 @</span><span>
+</span><a name="line-65"></a><span class="hs-comment">--</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--     but</span><span>
+</span><a name="line-67"></a><span class="hs-comment">--</span><span>
+</span><a name="line-68"></a><span class="hs-comment">--     @ (1 :&lt;| undefined) `index` 0 = undefined @</span><span>
+</span><a name="line-69"></a><span class="hs-comment">--</span><span>
+</span><a name="line-70"></a><span class="hs-comment">-- Sequences may also be compared to immutable</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- [arrays](https://hackage.haskell.org/package/array)</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- or [vectors](https://hackage.haskell.org/package/vector).</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- Like these structures, sequences support fast indexing,</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- although not as fast. But editing an immutable array or vector,</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- or combining it with another, generally requires copying the</span><span>
+</span><a name="line-76"></a><span class="hs-comment">-- entire structure; sequences generally avoid that, copying only</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- the portion that has changed.</span><span>
+</span><a name="line-78"></a><span class="hs-comment">--</span><span>
+</span><a name="line-79"></a><span class="hs-comment">-- == Detailed performance information</span><span>
+</span><a name="line-80"></a><span class="hs-comment">--</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- An amortized running time is given for each operation, with /n/ referring</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- to the length of the sequence and /i/ being the integral index used by</span><span>
+</span><a name="line-83"></a><span class="hs-comment">-- some operations. These bounds hold even in a persistent (shared) setting.</span><span>
+</span><a name="line-84"></a><span class="hs-comment">--</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- Despite sequences being structurally strict from a semantic standpoint,</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- they are in fact implemented using laziness internally. As a result,</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- many operations can be performed /incrementally/, producing their results</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- as they are demanded. This greatly improves performance in some cases. These</span><span>
+</span><a name="line-89"></a><span class="hs-comment">-- functions include</span><span>
+</span><a name="line-90"></a><span class="hs-comment">--</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- * The 'Functor' methods 'fmap' and '&lt;$', along with 'mapWithIndex'</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- * The 'Applicative' methods '&lt;*&gt;', '*&gt;', and '&lt;*'</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- * The zips: 'zipWith', 'zip', etc.</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- * 'heads' and 'tails'</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- * 'fromFunction', 'replicate', 'intersperse', and 'cycleTaking'</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- * 'reverse'</span><span>
+</span><a name="line-97"></a><span class="hs-comment">-- * 'chunksOf'</span><span>
+</span><a name="line-98"></a><span class="hs-comment">--</span><span>
+</span><a name="line-99"></a><span class="hs-comment">-- Note that the 'Monad' method, '&gt;&gt;=', is not particularly lazy. It will</span><span>
+</span><a name="line-100"></a><span class="hs-comment">-- take time proportional to the sum of the logarithms of the individual</span><span>
+</span><a name="line-101"></a><span class="hs-comment">-- result sequences to produce anything whatsoever.</span><span>
+</span><a name="line-102"></a><span class="hs-comment">--</span><span>
+</span><a name="line-103"></a><span class="hs-comment">-- Several functions take special advantage of sharing to produce</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- results using much less time and memory than one might expect. These</span><span>
+</span><a name="line-105"></a><span class="hs-comment">-- are documented individually for functions, but also include the</span><span>
+</span><a name="line-106"></a><span class="hs-comment">-- methods '&lt;$' and '*&gt;', each of which take time and space proportional</span><span>
+</span><a name="line-107"></a><span class="hs-comment">-- to the logarithm of the size of the result.</span><span>
+</span><a name="line-108"></a><span class="hs-comment">--</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- == Warning</span><span>
+</span><a name="line-110"></a><span class="hs-comment">--</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- The size of a 'Seq' must not exceed @maxBound::Int@. Violation</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- of this condition is not detected and if the size limit is exceeded, the</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- behaviour of the sequence is undefined. This is unlikely to occur in most</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- applications, but some care may be required when using '&gt;&lt;', '&lt;*&gt;', '*&gt;', or</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- '&gt;&gt;', particularly repeatedly and particularly in combination with</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- 'replicate' or 'fromFunction'.</span><span>
+</span><a name="line-117"></a><span class="hs-comment">--</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- == Implementation</span><span>
+</span><a name="line-119"></a><span class="hs-comment">--</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- The implementation uses 2-3 finger trees annotated with sizes,</span><span>
+</span><a name="line-121"></a><span class="hs-comment">-- as described in section 4.2 of</span><span>
+</span><a name="line-122"></a><span class="hs-comment">--</span><span>
+</span><a name="line-123"></a><span class="hs-comment">--    * Ralf Hinze and Ross Paterson,</span><span>
+</span><a name="line-124"></a><span class="hs-comment">--      [\&quot;Finger trees: a simple general-purpose data structure\&quot;]</span><span>
+</span><a name="line-125"></a><span class="hs-comment">--      (http://staff.city.ac.uk/~ross/papers/FingerTree.html),</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--      /Journal of Functional Programming/ 16:2 (2006) pp 197-217.</span><span>
+</span><a name="line-127"></a><span class="hs-comment">--</span><span>
+</span><a name="line-128"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-129"></a><span>
+</span><a name="line-130"></a><span>
+</span><a name="line-131"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Sequence</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-132"></a><span>    </span><span class="hs-comment">-- * Finite sequences</span><span>
+</span><a name="line-133"></a><span class="hs-cpp">#if defined(DEFINE_PATTERN_SYNONYMS)
+</span><span>    </span><a href="Data.Sequence.Internal.html#Seq"><span class="hs-identifier hs-type">Seq</span></a><span> </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#Empty"><span class="hs-identifier hs-var">Empty</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%3A%3C%7C"><span class="hs-operator hs-var">:&lt;|</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%3A%7C%3E"><span class="hs-operator hs-var">:|&gt;</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-135"></a><span>    </span><span class="hs-comment">-- $patterns</span><span>
+</span><a name="line-136"></a><span class="hs-cpp">#else
+</span><span>    </span><span class="hs-identifier">Seq</span><span class="hs-special">,</span><span>
+</span><a name="line-138"></a><span class="hs-cpp">#endif
+</span><span>    </span><span class="hs-comment">-- * Construction</span><span>
+</span><a name="line-140"></a><span>    </span><a href="Data.Sequence.Internal.html#empty"><span class="hs-identifier hs-var">empty</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a</span><span>
+</span><a name="line-141"></a><span>    </span><a href="Data.Sequence.Internal.html#singleton"><span class="hs-identifier hs-var">singleton</span></a><span class="hs-special">,</span><span>      </span><span class="hs-comment">-- :: a -&gt; Seq a</span><span>
+</span><a name="line-142"></a><span>    </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%3C%7C"><span class="hs-operator hs-var">&lt;|</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: a -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-143"></a><span>    </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%7C%3E"><span class="hs-operator hs-var">|&gt;</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; a -&gt; Seq a</span><span>
+</span><a name="line-144"></a><span>    </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%3E%3C"><span class="hs-operator hs-var">&gt;&lt;</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-145"></a><span>    </span><a href="Data.Sequence.Internal.html#fromList"><span class="hs-identifier hs-var">fromList</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: [a] -&gt; Seq a</span><span>
+</span><a name="line-146"></a><span>    </span><a href="Data.Sequence.Internal.html#fromFunction"><span class="hs-identifier hs-var">fromFunction</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: Int -&gt; (Int -&gt; a) -&gt; Seq a</span><span>
+</span><a name="line-147"></a><span>    </span><a href="Data.Sequence.Internal.html#fromArray"><span class="hs-identifier hs-var">fromArray</span></a><span class="hs-special">,</span><span>      </span><span class="hs-comment">-- :: Ix i =&gt; Array i a -&gt; Seq a</span><span>
+</span><a name="line-148"></a><span>    </span><span class="hs-comment">-- ** Repetition</span><span>
+</span><a name="line-149"></a><span>    </span><a href="Data.Sequence.Internal.html#replicate"><span class="hs-identifier hs-var">replicate</span></a><span class="hs-special">,</span><span>      </span><span class="hs-comment">-- :: Int -&gt; a -&gt; Seq a</span><span>
+</span><a name="line-150"></a><span>    </span><a href="Data.Sequence.Internal.html#replicateA"><span class="hs-identifier hs-var">replicateA</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: Applicative f =&gt; Int -&gt; f a -&gt; f (Seq a)</span><span>
+</span><a name="line-151"></a><span>    </span><a href="Data.Sequence.Internal.html#replicateM"><span class="hs-identifier hs-var">replicateM</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: Applicative m =&gt; Int -&gt; m a -&gt; m (Seq a)</span><span>
+</span><a name="line-152"></a><span>    </span><a href="Data.Sequence.Internal.html#cycleTaking"><span class="hs-identifier hs-var">cycleTaking</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-153"></a><span>    </span><span class="hs-comment">-- ** Iterative construction</span><span>
+</span><a name="line-154"></a><span>    </span><a href="Data.Sequence.Internal.html#iterateN"><span class="hs-identifier hs-var">iterateN</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: Int -&gt; (a -&gt; a) -&gt; a -&gt; Seq a</span><span>
+</span><a name="line-155"></a><span>    </span><a href="Data.Sequence.Internal.html#unfoldr"><span class="hs-identifier hs-var">unfoldr</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: (b -&gt; Maybe (a, b)) -&gt; b -&gt; Seq a</span><span>
+</span><a name="line-156"></a><span>    </span><a href="Data.Sequence.Internal.html#unfoldl"><span class="hs-identifier hs-var">unfoldl</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: (b -&gt; Maybe (b, a)) -&gt; b -&gt; Seq a</span><span>
+</span><a name="line-157"></a><span>    </span><span class="hs-comment">-- * Deconstruction</span><span>
+</span><a name="line-158"></a><span>    </span><span class="hs-comment">-- | Additional functions for deconstructing sequences are available</span><span>
+</span><a name="line-159"></a><span>    </span><span class="hs-comment">-- via the 'Foldable' instance of 'Seq'.</span><span>
+</span><a name="line-160"></a><span>
+</span><a name="line-161"></a><span>    </span><span class="hs-comment">-- ** Queries</span><span>
+</span><a name="line-162"></a><span>    </span><a href="Data.Sequence.Internal.html#null"><span class="hs-identifier hs-var">null</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; Bool</span><span>
+</span><a name="line-163"></a><span>    </span><a href="Data.Sequence.Internal.html#length"><span class="hs-identifier hs-var">length</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: Seq a -&gt; Int</span><span>
+</span><a name="line-164"></a><span>    </span><span class="hs-comment">-- ** Views</span><span>
+</span><a name="line-165"></a><span>    </span><a href="Data.Sequence.Internal.html#ViewL"><span class="hs-identifier hs-type">ViewL</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-166"></a><span>    </span><a href="Data.Sequence.Internal.html#viewl"><span class="hs-identifier hs-var">viewl</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a -&gt; ViewL a</span><span>
+</span><a name="line-167"></a><span>    </span><a href="Data.Sequence.Internal.html#ViewR"><span class="hs-identifier hs-type">ViewR</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-168"></a><span>    </span><a href="Data.Sequence.Internal.html#viewr"><span class="hs-identifier hs-var">viewr</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a -&gt; ViewR a</span><span>
+</span><a name="line-169"></a><span>    </span><span class="hs-comment">-- * Scans</span><span>
+</span><a name="line-170"></a><span>    </span><a href="Data.Sequence.Internal.html#scanl"><span class="hs-identifier hs-var">scanl</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: (a -&gt; b -&gt; a) -&gt; a -&gt; Seq b -&gt; Seq a</span><span>
+</span><a name="line-171"></a><span>    </span><a href="Data.Sequence.Internal.html#scanl1"><span class="hs-identifier hs-var">scanl1</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; a -&gt; a) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-172"></a><span>    </span><a href="Data.Sequence.Internal.html#scanr"><span class="hs-identifier hs-var">scanr</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: (a -&gt; b -&gt; b) -&gt; b -&gt; Seq a -&gt; Seq b</span><span>
+</span><a name="line-173"></a><span>    </span><a href="Data.Sequence.Internal.html#scanr1"><span class="hs-identifier hs-var">scanr1</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; a -&gt; a) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-174"></a><span>    </span><span class="hs-comment">-- * Sublists</span><span>
+</span><a name="line-175"></a><span>    </span><a href="Data.Sequence.Internal.html#tails"><span class="hs-identifier hs-var">tails</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a -&gt; Seq (Seq a)</span><span>
+</span><a name="line-176"></a><span>    </span><a href="Data.Sequence.Internal.html#inits"><span class="hs-identifier hs-var">inits</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a -&gt; Seq (Seq a)</span><span>
+</span><a name="line-177"></a><span>    </span><a href="Data.Sequence.Internal.html#chunksOf"><span class="hs-identifier hs-var">chunksOf</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Seq (Seq a)</span><span>
+</span><a name="line-178"></a><span>    </span><span class="hs-comment">-- ** Sequential searches</span><span>
+</span><a name="line-179"></a><span>    </span><a href="Data.Sequence.Internal.html#takeWhileL"><span class="hs-identifier hs-var">takeWhileL</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-180"></a><span>    </span><a href="Data.Sequence.Internal.html#takeWhileR"><span class="hs-identifier hs-var">takeWhileR</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-181"></a><span>    </span><a href="Data.Sequence.Internal.html#dropWhileL"><span class="hs-identifier hs-var">dropWhileL</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-182"></a><span>    </span><a href="Data.Sequence.Internal.html#dropWhileR"><span class="hs-identifier hs-var">dropWhileR</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-183"></a><span>    </span><a href="Data.Sequence.Internal.html#spanl"><span class="hs-identifier hs-var">spanl</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-184"></a><span>    </span><a href="Data.Sequence.Internal.html#spanr"><span class="hs-identifier hs-var">spanr</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-185"></a><span>    </span><a href="Data.Sequence.Internal.html#breakl"><span class="hs-identifier hs-var">breakl</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-186"></a><span>    </span><a href="Data.Sequence.Internal.html#breakr"><span class="hs-identifier hs-var">breakr</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-187"></a><span>    </span><a href="Data.Sequence.Internal.html#partition"><span class="hs-identifier hs-var">partition</span></a><span class="hs-special">,</span><span>      </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-188"></a><span>    </span><a href="Data.Sequence.Internal.html#filter"><span class="hs-identifier hs-var">filter</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-189"></a><span>    </span><span class="hs-comment">-- * Sorting</span><span>
+</span><a name="line-190"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#sort"><span class="hs-identifier hs-var">sort</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Ord a =&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-191"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#sortBy"><span class="hs-identifier hs-var">sortBy</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; a -&gt; Ordering) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-192"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#sortOn"><span class="hs-identifier hs-var">sortOn</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: Ord b =&gt; (a -&gt; b) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-193"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#unstableSort"><span class="hs-identifier hs-var">unstableSort</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: Ord a =&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-194"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#unstableSortBy"><span class="hs-identifier hs-var">unstableSortBy</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: (a -&gt; a -&gt; Ordering) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-195"></a><span>    </span><a href="Data.Sequence.Internal.Sorting.html#unstableSortOn"><span class="hs-identifier hs-var">unstableSortOn</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: Ord b =&gt; (a -&gt; b) -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-196"></a><span>    </span><span class="hs-comment">-- * Indexing</span><span>
+</span><a name="line-197"></a><span>    </span><a href="Data.Sequence.Internal.html#lookup"><span class="hs-identifier hs-var">lookup</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Maybe a</span><span>
+</span><a name="line-198"></a><span>    </span><span class="hs-special">(</span><a href="Data.Sequence.Internal.html#%21%3F"><span class="hs-operator hs-var">!?</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; Int -&gt; Maybe a</span><span>
+</span><a name="line-199"></a><span>    </span><a href="Data.Sequence.Internal.html#index"><span class="hs-identifier hs-var">index</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq a -&gt; Int -&gt; a</span><span>
+</span><a name="line-200"></a><span>    </span><a href="Data.Sequence.Internal.html#adjust"><span class="hs-identifier hs-var">adjust</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (a -&gt; a) -&gt; Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-201"></a><span>    </span><a href="Data.Sequence.Internal.html#adjust%27"><span class="hs-identifier hs-var">adjust'</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: (a -&gt; a) -&gt; Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-202"></a><span>    </span><a href="Data.Sequence.Internal.html#update"><span class="hs-identifier hs-var">update</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: Int -&gt; a -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-203"></a><span>    </span><a href="Data.Sequence.Internal.html#take"><span class="hs-identifier hs-var">take</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-204"></a><span>    </span><a href="Data.Sequence.Internal.html#drop"><span class="hs-identifier hs-var">drop</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-205"></a><span>    </span><a href="Data.Sequence.Internal.html#insertAt"><span class="hs-identifier hs-var">insertAt</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: Int -&gt; a -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-206"></a><span>    </span><a href="Data.Sequence.Internal.html#deleteAt"><span class="hs-identifier hs-var">deleteAt</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-207"></a><span>    </span><a href="Data.Sequence.Internal.html#splitAt"><span class="hs-identifier hs-var">splitAt</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: Int -&gt; Seq a -&gt; (Seq a, Seq a)</span><span>
+</span><a name="line-208"></a><span>    </span><span class="hs-comment">-- ** Indexing with predicates</span><span>
+</span><a name="line-209"></a><span>    </span><span class="hs-comment">-- | These functions perform sequential searches from the left</span><span>
+</span><a name="line-210"></a><span>    </span><span class="hs-comment">-- or right ends of the sequence, returning indices of matching</span><span>
+</span><a name="line-211"></a><span>    </span><span class="hs-comment">-- elements.</span><span>
+</span><a name="line-212"></a><span>    </span><a href="Data.Sequence.Internal.html#elemIndexL"><span class="hs-identifier hs-var">elemIndexL</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: Eq a =&gt; a -&gt; Seq a -&gt; Maybe Int</span><span>
+</span><a name="line-213"></a><span>    </span><a href="Data.Sequence.Internal.html#elemIndicesL"><span class="hs-identifier hs-var">elemIndicesL</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: Eq a =&gt; a -&gt; Seq a -&gt; [Int]</span><span>
+</span><a name="line-214"></a><span>    </span><a href="Data.Sequence.Internal.html#elemIndexR"><span class="hs-identifier hs-var">elemIndexR</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: Eq a =&gt; a -&gt; Seq a -&gt; Maybe Int</span><span>
+</span><a name="line-215"></a><span>    </span><a href="Data.Sequence.Internal.html#elemIndicesR"><span class="hs-identifier hs-var">elemIndicesR</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: Eq a =&gt; a -&gt; Seq a -&gt; [Int]</span><span>
+</span><a name="line-216"></a><span>    </span><a href="Data.Sequence.Internal.html#findIndexL"><span class="hs-identifier hs-var">findIndexL</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Maybe Int</span><span>
+</span><a name="line-217"></a><span>    </span><a href="Data.Sequence.Internal.html#findIndicesL"><span class="hs-identifier hs-var">findIndicesL</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; [Int]</span><span>
+</span><a name="line-218"></a><span>    </span><a href="Data.Sequence.Internal.html#findIndexR"><span class="hs-identifier hs-var">findIndexR</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; Maybe Int</span><span>
+</span><a name="line-219"></a><span>    </span><a href="Data.Sequence.Internal.html#findIndicesR"><span class="hs-identifier hs-var">findIndicesR</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: (a -&gt; Bool) -&gt; Seq a -&gt; [Int]</span><span>
+</span><a name="line-220"></a><span>    </span><span class="hs-comment">-- * Folds</span><span>
+</span><a name="line-221"></a><span>    </span><span class="hs-comment">-- | General folds are available via the 'Foldable' instance of 'Seq'.</span><span>
+</span><a name="line-222"></a><span>    </span><a href="Data.Sequence.Internal.html#foldMapWithIndex"><span class="hs-identifier hs-var">foldMapWithIndex</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: Monoid m =&gt; (Int -&gt; a -&gt; m) -&gt; Seq a -&gt; m</span><span>
+</span><a name="line-223"></a><span>    </span><a href="Data.Sequence.Internal.html#foldlWithIndex"><span class="hs-identifier hs-var">foldlWithIndex</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: (b -&gt; Int -&gt; a -&gt; b) -&gt; b -&gt; Seq a -&gt; b</span><span>
+</span><a name="line-224"></a><span>    </span><a href="Data.Sequence.Internal.html#foldrWithIndex"><span class="hs-identifier hs-var">foldrWithIndex</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: (Int -&gt; a -&gt; b -&gt; b) -&gt; b -&gt; Seq a -&gt; b</span><span>
+</span><a name="line-225"></a><span>    </span><span class="hs-comment">-- * Transformations</span><span>
+</span><a name="line-226"></a><span>    </span><a href="Data.Sequence.Internal.html#mapWithIndex"><span class="hs-identifier hs-var">mapWithIndex</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: (Int -&gt; a -&gt; b) -&gt; Seq a -&gt; Seq b</span><span>
+</span><a name="line-227"></a><span>    </span><a href="Data.Sequence.Internal.html#traverseWithIndex"><span class="hs-identifier hs-var">traverseWithIndex</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: Applicative f =&gt; (Int -&gt; a -&gt; f b) -&gt; Seq a -&gt; f (Seq b)</span><span>
+</span><a name="line-228"></a><span>    </span><a href="Data.Sequence.Internal.html#reverse"><span class="hs-identifier hs-var">reverse</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: Seq a -&gt; Seq a</span><span>
+</span><a name="line-229"></a><span>    </span><a href="Data.Sequence.Internal.html#intersperse"><span class="hs-identifier hs-var">intersperse</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: a -&gt; Seq a -&gt; Seq a</span><span>
+</span><a name="line-230"></a><span>    </span><span class="hs-comment">-- ** Zips and unzip</span><span>
+</span><a name="line-231"></a><span>    </span><a href="Data.Sequence.Internal.html#zip"><span class="hs-identifier hs-var">zip</span></a><span class="hs-special">,</span><span>            </span><span class="hs-comment">-- :: Seq a -&gt; Seq b -&gt; Seq (a, b)</span><span>
+</span><a name="line-232"></a><span>    </span><a href="Data.Sequence.Internal.html#zipWith"><span class="hs-identifier hs-var">zipWith</span></a><span class="hs-special">,</span><span>        </span><span class="hs-comment">-- :: (a -&gt; b -&gt; c) -&gt; Seq a -&gt; Seq b -&gt; Seq c</span><span>
+</span><a name="line-233"></a><span>    </span><a href="Data.Sequence.Internal.html#zip3"><span class="hs-identifier hs-var">zip3</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; Seq b -&gt; Seq c -&gt; Seq (a, b, c)</span><span>
+</span><a name="line-234"></a><span>    </span><a href="Data.Sequence.Internal.html#zipWith3"><span class="hs-identifier hs-var">zipWith3</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: (a -&gt; b -&gt; c -&gt; d) -&gt; Seq a -&gt; Seq b -&gt; Seq c -&gt; Seq d</span><span>
+</span><a name="line-235"></a><span>    </span><a href="Data.Sequence.Internal.html#zip4"><span class="hs-identifier hs-var">zip4</span></a><span class="hs-special">,</span><span>           </span><span class="hs-comment">-- :: Seq a -&gt; Seq b -&gt; Seq c -&gt; Seq d -&gt; Seq (a, b, c, d)</span><span>
+</span><a name="line-236"></a><span>    </span><a href="Data.Sequence.Internal.html#zipWith4"><span class="hs-identifier hs-var">zipWith4</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: (a -&gt; b -&gt; c -&gt; d -&gt; e) -&gt; Seq a -&gt; Seq b -&gt; Seq c -&gt; Seq d -&gt; Seq e</span><span>
+</span><a name="line-237"></a><span>    </span><a href="Data.Sequence.Internal.html#unzip"><span class="hs-identifier hs-var">unzip</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- :: Seq (a, b) -&gt; (Seq a, Seq b)</span><span>
+</span><a name="line-238"></a><span>    </span><a href="Data.Sequence.Internal.html#unzipWith"><span class="hs-identifier hs-var">unzipWith</span></a><span>       </span><span class="hs-comment">-- :: (a -&gt; (b, c)) -&gt; Seq a -&gt; (Seq b, Seq c)</span><span>
+</span><a name="line-239"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-240"></a><span>
+</span><a name="line-241"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Sequence.Internal.html"><span class="hs-identifier">Data.Sequence.Internal</span></a><span>
+</span><a name="line-242"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Sequence.Internal.Sorting.html"><span class="hs-identifier">Data.Sequence.Internal.Sorting</span></a><span>
+</span><a name="line-243"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Prelude.html"><span class="hs-identifier">Prelude</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-244"></a><span class="hs-cpp">#ifdef __HADDOCK_VERSION__
+</span><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Monad.html"><span class="hs-identifier">Control.Monad</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#Monad"><span class="hs-identifier hs-type">Monad</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-246"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Applicative.html"><span class="hs-identifier">Control.Applicative</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#Applicative"><span class="hs-identifier hs-type">Applicative</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-247"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Functor.html"><span class="hs-identifier">Data.Functor</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#Functor"><span class="hs-identifier hs-type">Functor</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-248"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-250"></a><span class="hs-comment">{- $patterns
+
+== Pattern synonyms
+
+Much like lists can be constructed and matched using the
+@:@ and @[]@ constructors, sequences can be constructed and
+matched using the 'Empty', ':&lt;|', and ':|&gt;' pattern synonyms.
+
+=== Note
+
+These patterns are only available with GHC version 8.0 or later,
+and version 8.2 works better with them. When writing for such recent
+versions of GHC, the patterns can be used in place of 'empty',
+'&lt;|', '|&gt;', 'viewl', and 'viewr'.
+
+=== __Pattern synonym examples__
+
+Import the patterns:
+
+@
+import Data.Sequence (Seq (..))
+@
+
+Look at the first three elements of a sequence
+
+@
+getFirst3 :: Seq a -&gt; Maybe (a,a,a)
+getFirst3 (x1 :&lt;| x2 :&lt;| x3 :&lt;| _xs) = Just (x1,x2,x3)
+getFirst3 _ = Nothing
+@
+
+@
+\&gt; getFirst3 ('fromList' [1,2,3,4]) = Just (1,2,3)
+\&gt; getFirst3 ('fromList' [1,2]) = Nothing
+@
+
+Move the last two elements from the end of the first list
+onto the beginning of the second one.
+
+@
+shift2Right :: Seq a -&gt; Seq a -&gt; (Seq a, Seq a)
+shift2Right Empty ys = (Empty, ys)
+shift2Right (Empty :|&gt; x) ys = (Empty, x :&lt;| ys)
+shift2Right (xs :|&gt; x1 :|&gt; x2) = (xs, x1 :&lt;| x2 :&lt;| ys)
+@
+
+@
+\&gt; shift2Right ('fromList' []) ('fromList' [10]) = ('fromList' [], 'fromList' [10])
+\&gt; shift2Right ('fromList' [9]) ('fromList' [10]) = ('fromList' [], 'fromList' [9,10])
+\&gt; shift2Right ('fromList' [8,9]) ('fromList' [10]) = ('fromList' [], 'fromList' [8,9,10])
+\&gt; shift2Right ('fromList' [7,8,9]) ('fromList' [10]) = ('fromList' [7], 'fromList' [8,9,10])
+@
+-}</span><span>
+</span><a name="line-303"></a></pre></body></html>

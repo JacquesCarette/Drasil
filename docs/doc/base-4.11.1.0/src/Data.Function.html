@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.Function</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  Nils Anders Danielsson 2006</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--             ,  Alexander Berntsen     2014</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- License     :  BSD-style (see the LICENSE file in the distribution)</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Simple combinators working solely on and with functions.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Function</span><span>
+</span><a name="line-20"></a><span>  </span><span class="hs-special">(</span><span> </span><span class="hs-comment">-- * &quot;Prelude&quot; re-exports</span><span>
+</span><a name="line-21"></a><span>    </span><a href="GHC.Base.html#id"><span class="hs-identifier hs-var">id</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#const"><span class="hs-identifier hs-var">const</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#flip"><span class="hs-identifier hs-var">flip</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span class="hs-special">)</span><span>
+</span><a name="line-22"></a><span>    </span><span class="hs-comment">-- * Other combinators</span><span>
+</span><a name="line-23"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Function.html#%26"><span class="hs-operator hs-var">&amp;</span></a><span class="hs-special">)</span><span>
+</span><a name="line-24"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Function.html#fix"><span class="hs-identifier hs-var">fix</span></a><span>
+</span><a name="line-25"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Function.html#on"><span class="hs-identifier hs-var">on</span></a><span>
+</span><a name="line-26"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span> </span><span class="hs-special">(</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#id"><span class="hs-identifier hs-var">id</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#const"><span class="hs-identifier hs-var">const</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#flip"><span class="hs-identifier hs-var">flip</span></a><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-29"></a><span>
+</span><a name="line-30"></a><span class="hs-keyword">infixl</span><span> </span><span class="hs-number">0</span><span> </span><span class="hs-special">`</span><a name="on"><a href="Data.Function.html#on"><span class="hs-identifier">on</span></a></a><span class="hs-special">`</span><span>
+</span><a name="line-31"></a><span class="hs-keyword">infixl</span><span> </span><span class="hs-number">1</span><span> </span><a name="%26"><a href="Data.Function.html#%26"><span class="hs-operator">&amp;</span></a></a><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span class="hs-comment">-- | @'fix' f@ is the least fixed point of the function @f@,</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- i.e. the least defined @x@ such that @f x = x@.</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- For example, we can write the factorial function using direct recursion as</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- &gt;&gt;&gt; let fac n = if n &lt;= 1 then 1 else n * fac (n-1) in fac 5</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- 120</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- This uses the fact that Haskell&#8217;s @let@ introduces recursive bindings. We can</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- rewrite this definition using 'fix',</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- &gt;&gt;&gt; fix (\rec n -&gt; if n &lt;= 1 then 1 else n * rec (n-1)) 5</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- 120</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- Instead of making a recursive call, we introduce a dummy parameter @rec@;</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- when used within 'fix', this parameter then refers to 'fix'' argument, hence</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- the recursion is reintroduced.</span><span>
+</span><a name="line-50"></a><span class="hs-identifier">fix</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679044968"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044968"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044968"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-51"></a><a name="fix"><a href="Data.Function.html#fix"><span class="hs-identifier">fix</span></a></a><span> </span><a name="local-6989586621679044969"><a href="#local-6989586621679044969"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679044970"><a href="#local-6989586621679044970"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679044969"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679044970"><span class="hs-identifier hs-var">x</span></a><span> </span><span class="hs-keyword">in</span><span> </span><a href="#local-6989586621679044970"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-52"></a><span>
+</span><a name="line-53"></a><span class="hs-comment">-- | @((==) \`on\` f) x y = f x == f y@</span><span>
+</span><a name="line-54"></a><span class="hs-comment">--</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- Typical usage: @'Data.List.sortBy' ('compare' \`on\` 'fst')@.</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- Algebraic properties:</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- * @(*) \`on\` 'id' = (*)@ (if @(*) &amp;#x2209; {&amp;#x22a5;, 'const' &amp;#x22a5;}@)</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- * @((*) \`on\` f) \`on\` g = (*) \`on\` (f . g)@</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- * @'flip' on f . 'flip' on g = 'flip' on (g . f)@</span><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span class="hs-comment">-- Proofs (so that I don't have to edit the test-suite):</span><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-comment">--   (*) `on` id</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-69"></a><span class="hs-comment">--   \x y -&gt; id x * id y</span><span>
+</span><a name="line-70"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-71"></a><span class="hs-comment">--   \x y -&gt; x * y</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- = { If (*) /= _|_ or const _|_. }</span><span>
+</span><a name="line-73"></a><span class="hs-comment">--   (*)</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span class="hs-comment">--   (*) `on` f `on` g</span><span>
+</span><a name="line-76"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-77"></a><span class="hs-comment">--   ((*) `on` f) `on` g</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-79"></a><span class="hs-comment">--   \x y -&gt; ((*) `on` f) (g x) (g y)</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-81"></a><span class="hs-comment">--   \x y -&gt; (\x y -&gt; f x * f y) (g x) (g y)</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--   \x y -&gt; f (g x) * f (g y)</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-85"></a><span class="hs-comment">--   \x y -&gt; (f . g) x * (f . g) y</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-87"></a><span class="hs-comment">--   (*) `on` (f . g)</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-89"></a><span class="hs-comment">--   (*) `on` f . g</span><span>
+</span><a name="line-90"></a><span>
+</span><a name="line-91"></a><span class="hs-comment">--   flip on f . flip on g</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-93"></a><span class="hs-comment">--   (\h (*) -&gt; (*) `on` h) f . (\h (*) -&gt; (*) `on` h) g</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--   (\(*) -&gt; (*) `on` f) . (\(*) -&gt; (*) `on` g)</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-97"></a><span class="hs-comment">--   \(*) -&gt; (*) `on` g `on` f</span><span>
+</span><a name="line-98"></a><span class="hs-comment">-- = { See above. }</span><span>
+</span><a name="line-99"></a><span class="hs-comment">--   \(*) -&gt; (*) `on` g . f</span><span>
+</span><a name="line-100"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-101"></a><span class="hs-comment">--   (\h (*) -&gt; (*) `on` h) (g . f)</span><span>
+</span><a name="line-102"></a><span class="hs-comment">-- =</span><span>
+</span><a name="line-103"></a><span class="hs-comment">--   flip on (g . f)</span><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span class="hs-identifier">on</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679044965"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044965"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044966"><span class="hs-identifier hs-type">c</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679044967"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044965"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044967"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044967"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044966"><span class="hs-identifier hs-type">c</span></a><span>
+</span><a name="line-106"></a><span class="hs-special">(</span><a name="local-6989586621679044971"><a href="#local-6989586621679044971"><span class="hs-operator">.*.</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-special">`</span><a name="on"><a href="Data.Function.html#on"><span class="hs-identifier">on</span></a></a><span class="hs-special">`</span><span> </span><a name="local-6989586621679044972"><a href="#local-6989586621679044972"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679044973"><a href="#local-6989586621679044973"><span class="hs-identifier">x</span></a></a><span> </span><a name="local-6989586621679044974"><a href="#local-6989586621679044974"><span class="hs-identifier">y</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044972"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679044973"><span class="hs-identifier hs-var">x</span></a><span> </span><a href="#local-6989586621679044971"><span class="hs-operator hs-var">.*.</span></a><span> </span><a href="#local-6989586621679044972"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679044974"><span class="hs-identifier hs-var">y</span></a><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span>
+</span><a name="line-109"></a><span class="hs-comment">-- | '&amp;' is a reverse application operator.  This provides notational</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- convenience.  Its precedence is one higher than that of the forward</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- application operator '$', which allows '&amp;' to be nested in '$'.</span><span>
+</span><a name="line-112"></a><span class="hs-comment">--</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- &gt;&gt;&gt; 5 &amp; (+1) &amp; show</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- &quot;6&quot;</span><span>
+</span><a name="line-115"></a><span class="hs-comment">--</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- @since 4.8.0.0</span><span>
+</span><a name="line-117"></a><span class="hs-special">(</span><span class="hs-operator">&amp;</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679044963"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679044963"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044964"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679044964"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-118"></a><a name="local-6989586621679044975"><a href="#local-6989586621679044975"><span class="hs-identifier">x</span></a></a><span> </span><a name="%26"><a href="Data.Function.html#%26"><span class="hs-operator">&amp;</span></a></a><span> </span><a name="local-6989586621679044976"><a href="#local-6989586621679044976"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679044976"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679044975"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-119"></a><span>
+</span><a name="line-120"></a><span class="hs-comment">-- $setup</span><span>
+</span><a name="line-121"></a><span class="hs-comment">-- &gt;&gt;&gt; import Prelude</span><span>
+</span><a name="line-122"></a></pre></body></html>

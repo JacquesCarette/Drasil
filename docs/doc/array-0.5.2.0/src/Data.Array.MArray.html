@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Module      :  Data.Array.MArray</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Portability :  non-portable (uses Data.Array.Base)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- An overloaded interface to mutable arrays.  For array types which can be</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- used with this interface, see &quot;Data.Array.IO&quot;, &quot;Data.Array.ST&quot;,</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- and &quot;Data.Array.Storable&quot;.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Array.MArray</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-20"></a><span>    </span><span class="hs-comment">-- * Class of mutable array types</span><span>
+</span><a name="line-21"></a><span>    </span><a href="Data.Array.Base.html#MArray"><span class="hs-identifier hs-type">MArray</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: (* -&gt; * -&gt; *) -&gt; * -&gt; (* -&gt; *) -&gt; class</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span>    </span><span class="hs-comment">-- * The @Ix@ class and operations</span><span>
+</span><a name="line-24"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Ix.html"><span class="hs-identifier">Data.Ix</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span>    </span><span class="hs-comment">-- * Constructing mutable arrays</span><span>
+</span><a name="line-27"></a><span>    </span><a href="Data.Array.Base.html#newArray"><span class="hs-identifier hs-var">newArray</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; (i,i) -&gt; e -&gt; m (a i e)</span><span>
+</span><a name="line-28"></a><span>    </span><a href="Data.Array.Base.html#newArray_"><span class="hs-identifier hs-var">newArray_</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; (i,i) -&gt; m (a i e)</span><span>
+</span><a name="line-29"></a><span>    </span><a href="Data.Array.Base.html#newListArray"><span class="hs-identifier hs-var">newListArray</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; (i,i) -&gt; [e] -&gt; m (a i e)</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-comment">-- * Reading and writing mutable arrays</span><span>
+</span><a name="line-32"></a><span>    </span><a href="Data.Array.Base.html#readArray"><span class="hs-identifier hs-var">readArray</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; a i e -&gt; i -&gt; m e</span><span>
+</span><a name="line-33"></a><span>    </span><a href="Data.Array.Base.html#writeArray"><span class="hs-identifier hs-var">writeArray</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; a i e -&gt; i -&gt; e -&gt; m ()</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-comment">-- * Derived arrays</span><span>
+</span><a name="line-36"></a><span>    </span><a href="Data.Array.Base.html#mapArray"><span class="hs-identifier hs-var">mapArray</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (MArray a e' m, MArray a e m, Ix i) =&gt; (e' -&gt; e) -&gt; a i e' -&gt; m (a i e)</span><span>
+</span><a name="line-37"></a><span>    </span><a href="Data.Array.Base.html#mapIndices"><span class="hs-identifier hs-var">mapIndices</span></a><span class="hs-special">,</span><span>   </span><span class="hs-comment">-- :: (MArray a e m, Ix i, Ix j) =&gt; (i,i) -&gt; (i -&gt; j) -&gt; a j e -&gt; m (a i e)</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span>    </span><span class="hs-comment">-- * Deconstructing mutable arrays</span><span>
+</span><a name="line-40"></a><span>    </span><a href="Data.Array.Base.html#getBounds"><span class="hs-identifier hs-var">getBounds</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; a i e -&gt; m (i,i)</span><span>
+</span><a name="line-41"></a><span>    </span><a href="Data.Array.Base.html#getElems"><span class="hs-identifier hs-var">getElems</span></a><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; a i e -&gt; m [e]</span><span>
+</span><a name="line-42"></a><span>    </span><a href="Data.Array.Base.html#getAssocs"><span class="hs-identifier hs-var">getAssocs</span></a><span class="hs-special">,</span><span>    </span><span class="hs-comment">-- :: (MArray a e m, Ix i) =&gt; a i e -&gt; m [(i, e)]</span><span>
+</span><a name="line-43"></a><span>
+</span><a name="line-44"></a><span>    </span><span class="hs-comment">-- * Conversions between mutable and immutable arrays</span><span>
+</span><a name="line-45"></a><span>    </span><a href="Data.Array.Base.html#freeze"><span class="hs-identifier hs-var">freeze</span></a><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- :: (Ix i, MArray a e m, IArray b e) =&gt; a i e -&gt; m (b i e)</span><span>
+</span><a name="line-46"></a><span>    </span><a href="Data.Array.Base.html#thaw"><span class="hs-identifier hs-var">thaw</span></a><span class="hs-special">,</span><span>         </span><span class="hs-comment">-- :: (Ix i, IArray a e, MArray b e m) =&gt; a i e -&gt; m (b i e)</span><span>
+</span><a name="line-47"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Ix.html"><span class="hs-identifier">Data.Ix</span></a><span>
+</span><a name="line-50"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Array.Base.html"><span class="hs-identifier">Data.Array.Base</span></a><span>
+</span><a name="line-51"></a><span class="hs-cpp">#ifdef __HADDOCK__
+</span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data.Array.IArray</span><span>
+</span><a name="line-53"></a><span class="hs-cpp">#endif
+</span></pre></body></html>

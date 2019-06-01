@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  System.Info</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Information about the characteristics of the host </span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- system lucky enough to run your program.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Info</span><span>
+</span><a name="line-20"></a><span>   </span><span class="hs-special">(</span><span>
+</span><a name="line-21"></a><span>       </span><a href="System.Info.html#os"><span class="hs-identifier hs-var">os</span></a><span class="hs-special">,</span><span>
+</span><a name="line-22"></a><span>       </span><a href="System.Info.html#arch"><span class="hs-identifier hs-var">arch</span></a><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>       </span><a href="System.Info.html#compilerName"><span class="hs-identifier hs-var">compilerName</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>       </span><a href="System.Info.html#compilerVersion"><span class="hs-identifier hs-var">compilerVersion</span></a><span>
+</span><a name="line-25"></a><span>   </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Version.html"><span class="hs-identifier">Data.Version</span></a><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span class="hs-comment">-- | The version of 'compilerName' with which the program was compiled</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- or is being interpreted.</span><span>
+</span><a name="line-31"></a><span class="hs-identifier">compilerVersion</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.Version.html#Version"><span class="hs-identifier hs-type">Version</span></a><span>
+</span><a name="line-32"></a><a name="compilerVersion"><a href="System.Info.html#compilerVersion"><span class="hs-identifier">compilerVersion</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Version.html#Version"><span class="hs-identifier hs-var">Version</span></a><span> </span><span class="hs-special">[</span><a href="#local-6989586621679331301"><span class="hs-identifier hs-var">major</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679331302"><span class="hs-identifier hs-var">minor</span></a><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a name="line-33"></a><span>  </span><span class="hs-keyword">where</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679331301"><a href="#local-6989586621679331301"><span class="hs-identifier">major</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679331302"><a href="#local-6989586621679331302"><span class="hs-identifier">minor</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="System.Info.html#compilerVersionRaw"><span class="hs-identifier hs-var">compilerVersionRaw</span></a><span> </span><span class="hs-special">`</span><a href="GHC.Real.html#divMod"><span class="hs-identifier hs-var">divMod</span></a><span class="hs-special">`</span><span> </span><span class="hs-number">100</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span class="hs-cpp">#include &quot;ghcplatform.h&quot;
+</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- | The operating system on which the program is running.</span><span>
+</span><a name="line-38"></a><span class="hs-identifier">os</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-39"></a><a name="os"><a href="System.Info.html#os"><span class="hs-identifier">os</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">HOST_OS</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span class="hs-comment">-- | The machine architecture on which the program is running.</span><span>
+</span><a name="line-42"></a><span class="hs-identifier">arch</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-43"></a><a name="arch"><a href="System.Info.html#arch"><span class="hs-identifier">arch</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">HOST_ARCH</span><span>
+</span><a name="line-44"></a><span>
+</span><a name="line-45"></a><span class="hs-comment">-- | The Haskell implementation with which the program was compiled</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- or is being interpreted.</span><span>
+</span><a name="line-47"></a><span class="hs-identifier">compilerName</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-48"></a><a name="compilerName"><a href="System.Info.html#compilerName"><span class="hs-identifier">compilerName</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-string">&quot;ghc&quot;</span><span>
+</span><a name="line-49"></a><span>
+</span><a name="line-50"></a><span class="hs-identifier">compilerVersionRaw</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-51"></a><a name="compilerVersionRaw"><a href="System.Info.html#compilerVersionRaw"><span class="hs-identifier">compilerVersionRaw</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">__GLASGOW_HASKELL__</span><span>
+</span><a name="line-52"></a></pre></body></html>

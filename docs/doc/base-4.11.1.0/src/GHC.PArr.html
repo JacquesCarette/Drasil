@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE ParallelArrays, MagicHash #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# OPTIONS_GHC -funbox-strict-fields #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# OPTIONS_HADDOCK hide #-}</span><span>
+</span><a name="line-6"></a><span>
+</span><a name="line-7"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Module      :  GHC.PArr</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright   :  (c) 2001-2011 The Data Parallel Haskell team</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- BIG UGLY HACK: The desugarer special cases this module.  Despite the uses of '-XParallelArrays',</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--                the desugarer does not load 'Data.Array.Parallel' into its global state. (Hence,</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--                the present module may not use any other piece of '-XParallelArray' syntax.)</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--                This will be cleaned up when we change the internal represention of '[::]' to not</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--                rely on a wired-in type constructor.</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.PArr</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span class="hs-comment">-- Representation of parallel arrays</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- Vanilla representation of parallel Haskell based on standard GHC arrays that is used if the</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- vectorised is /not/ used.</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- NB: This definition *must* be kept in sync with `TysWiredIn.parrTyCon'!</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--</span><span>
+</span><a name="line-35"></a><span class="hs-keyword">data</span><span> </span><span class="hs-special">[:</span><span class="hs-special">:]</span><span> </span><a name="local-6989586621679024828"><a href="#local-6989586621679024828"><span class="hs-identifier">e</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="PArr"><a href="GHC.PArr.html#PArr"><span class="hs-identifier">PArr</span></a></a><span> </span><span class="hs-glyph">!</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#Array%23"><span class="hs-identifier hs-type">Array#</span></a><span> </span><a href="#local-6989586621679024828"><span class="hs-identifier hs-type">e</span></a><span class="hs-special">)</span><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-keyword">type</span><span> </span><a name="PArr"><a href="GHC.PArr.html#PArr"><span class="hs-identifier">PArr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[:</span><span class="hs-special">:]</span><span>   </span><span class="hs-comment">-- this synonym is to get access to '[::]' without using the special syntax</span><span>
+</span><a name="line-38"></a></pre></body></html>

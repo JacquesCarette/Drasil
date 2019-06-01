@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Foreign.ForeignPtr</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  ffi@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- The 'ForeignPtr' type and operations.  This module is part of the</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Foreign Function Interface (FFI) and will usually be imported via</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- the &quot;Foreign&quot; module.</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- For non-portable support of Haskell finalizers, see the</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- &quot;Foreign.Concurrent&quot; module.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Foreign.ForeignPtr</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">-- * Finalised data pointers</span><span>
+</span><a name="line-25"></a><span>          </span><a href="GHC.ForeignPtr.html#ForeignPtr"><span class="hs-identifier hs-type">ForeignPtr</span></a><span>
+</span><a name="line-26"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#FinalizerPtr"><span class="hs-identifier hs-type">FinalizerPtr</span></a><span>
+</span><a name="line-27"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#FinalizerEnvPtr"><span class="hs-identifier hs-type">FinalizerEnvPtr</span></a><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span>        </span><span class="hs-comment">-- ** Basic operations</span><span>
+</span><a name="line-30"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="Foreign.ForeignPtr.Imp.html#newForeignPtr"><span class="hs-identifier hs-var">newForeignPtr</span></a><span>
+</span><a name="line-31"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#newForeignPtr_"><span class="hs-identifier hs-var">newForeignPtr_</span></a><span>
+</span><a name="line-32"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#addForeignPtrFinalizer"><span class="hs-identifier hs-var">addForeignPtrFinalizer</span></a><span>
+</span><a name="line-33"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="Foreign.ForeignPtr.Imp.html#newForeignPtrEnv"><span class="hs-identifier hs-var">newForeignPtrEnv</span></a><span>
+</span><a name="line-34"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#addForeignPtrFinalizerEnv"><span class="hs-identifier hs-var">addForeignPtrFinalizerEnv</span></a><span>
+</span><a name="line-35"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="Foreign.ForeignPtr.Imp.html#withForeignPtr"><span class="hs-identifier hs-var">withForeignPtr</span></a><span>
+</span><a name="line-36"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#finalizeForeignPtr"><span class="hs-identifier hs-var">finalizeForeignPtr</span></a><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span>        </span><span class="hs-comment">-- ** Low-level operations</span><span>
+</span><a name="line-39"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#touchForeignPtr"><span class="hs-identifier hs-var">touchForeignPtr</span></a><span>
+</span><a name="line-40"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#castForeignPtr"><span class="hs-identifier hs-var">castForeignPtr</span></a><span>
+</span><a name="line-41"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#plusForeignPtr"><span class="hs-identifier hs-var">plusForeignPtr</span></a><span>
+</span><a name="line-42"></a><span>
+</span><a name="line-43"></a><span>        </span><span class="hs-comment">-- ** Allocating managed memory</span><span>
+</span><a name="line-44"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#mallocForeignPtr"><span class="hs-identifier hs-var">mallocForeignPtr</span></a><span>
+</span><a name="line-45"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="GHC.ForeignPtr.html#mallocForeignPtrBytes"><span class="hs-identifier hs-var">mallocForeignPtrBytes</span></a><span>
+</span><a name="line-46"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="Foreign.ForeignPtr.Imp.html#mallocForeignPtrArray"><span class="hs-identifier hs-var">mallocForeignPtrArray</span></a><span>
+</span><a name="line-47"></a><span>        </span><span class="hs-special">,</span><span> </span><a href="Foreign.ForeignPtr.Imp.html#mallocForeignPtrArray0"><span class="hs-identifier hs-var">mallocForeignPtrArray0</span></a><span>
+</span><a name="line-48"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-49"></a><span>
+</span><a name="line-50"></a><span class="hs-keyword">import</span><span> </span><a href="Foreign.ForeignPtr.Imp.html"><span class="hs-identifier">Foreign.ForeignPtr.Imp</span></a><span>
+</span><a name="line-51"></a><span>
+</span><a name="line-52"></a></pre></body></html>

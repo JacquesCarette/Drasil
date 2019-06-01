@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- |</span><span>
+</span><a name="line-2"></a><span class="hs-comment">-- Module      :  GHC.StaticPtr</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- Copyright   :  (C) 2016 I/O Tweag</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-5"></a><span class="hs-comment">--</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Internal definitions needed for compiling static forms.</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span>
+</span><a name="line-13"></a><span class="hs-comment">-- By omitting interface pragmas, we drop the strictness annotations</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- which otherwise would bias GHC to conclude that any code using</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- the static form would fail.</span><span>
+</span><a name="line-16"></a><span class="hs-pragma">{-# OPTIONS_GHC -fomit-interface-pragmas #-}</span><span>
+</span><a name="line-17"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.StaticPtr.Internal</span><span> </span><span class="hs-special">(</span><a href="GHC.StaticPtr.Internal.html#makeStatic"><span class="hs-identifier hs-var">makeStatic</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.StaticPtr.html"><span class="hs-identifier">GHC.StaticPtr</span></a><span class="hs-special">(</span><a href="GHC.StaticPtr.html#StaticPtr"><span class="hs-identifier hs-type">StaticPtr</span></a><span class="hs-special">)</span><span>
+</span><a name="line-20"></a><span>
+</span><a name="line-21"></a><span class="hs-comment">-- 'makeStatic' should never be called by the user.</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- See Note [Grand plan for static forms] in StaticPtrTable.</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span class="hs-identifier">makeStatic</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679385541"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.StaticPtr.html#StaticPtr"><span class="hs-identifier hs-type">StaticPtr</span></a><span> </span><a href="#local-6989586621679385541"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-25"></a><a name="makeStatic"><a href="GHC.StaticPtr.Internal.html#makeStatic"><span class="hs-identifier">makeStatic</span></a></a><span> </span><span class="hs-special">(</span><a name="local-6989586621679385542"><a href="#local-6989586621679385542"><span class="hs-identifier">line</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679385543"><a href="#local-6989586621679385543"><span class="hs-identifier">col</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-26"></a><span>    </span><a href="GHC.Err.html#error"><span class="hs-identifier hs-var">error</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-string">&quot;GHC bug - makeStatic: Unresolved static form at line &quot;</span><span>
+</span><a name="line-27"></a><span>            </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a><span> </span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span> </span><a href="#local-6989586621679385542"><span class="hs-identifier hs-var">line</span></a><span> </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a><span> </span><span class="hs-string">&quot;, column &quot;</span><span> </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a><span> </span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span> </span><a href="#local-6989586621679385543"><span class="hs-identifier hs-var">col</span></a><span> </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a><span> </span><span class="hs-string">&quot;.&quot;</span><span>
+</span><a name="line-28"></a></pre></body></html>

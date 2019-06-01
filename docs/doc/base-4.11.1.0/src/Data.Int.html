@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.Int</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Signed integer types</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Int</span><span>
+</span><a name="line-19"></a><span>  </span><span class="hs-special">(</span><span>
+</span><a name="line-20"></a><span>        </span><span class="hs-comment">-- * Signed integer types</span><span>
+</span><a name="line-21"></a><span>        </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">,</span><span>
+</span><a name="line-22"></a><span>        </span><a href="GHC.Int.html#Int8"><span class="hs-identifier hs-type">Int8</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int16"><span class="hs-identifier hs-type">Int16</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int32"><span class="hs-identifier hs-type">Int32</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int64"><span class="hs-identifier hs-type">Int64</span></a><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">-- * Notes</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span>        </span><span class="hs-comment">-- $notes</span><span>
+</span><a name="line-27"></a><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span> </span><span class="hs-special">(</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Int.html"><span class="hs-identifier">GHC.Int</span></a><span>  </span><span class="hs-special">(</span><span> </span><a href="GHC.Int.html#Int8"><span class="hs-identifier hs-type">Int8</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int16"><span class="hs-identifier hs-type">Int16</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int32"><span class="hs-identifier hs-type">Int32</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Int.html#Int64"><span class="hs-identifier hs-type">Int64</span></a><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-comment">{- $notes
+
+* All arithmetic is performed modulo 2^n, where @n@ is the number of
+  bits in the type.
+
+* For coercing between any two integer types, use 'Prelude.fromIntegral',
+  which is specialized for all the common cases so should be fast
+  enough.  Coercing word types (see &quot;Data.Word&quot;) to and from integer
+  types preserves representation, not sign.
+
+* The rules that hold for 'Prelude.Enum' instances over a
+  bounded type such as 'Int' (see the section of the
+  Haskell report dealing with arithmetic sequences) also hold for the
+  'Prelude.Enum' instances over the various
+  'Int' types defined here.
+
+* Right and left shifts by amounts greater than or equal to the width
+  of the type result in either zero or -1, depending on the sign of
+  the value being shifted.  This is contrary to the behaviour in C,
+  which is undefined; a common interpretation is to truncate the shift
+  count to the width of the type, for example @1 \&lt;\&lt; 32
+  == 1@ in some C implementations.
+-}</span><span>
+</span><a name="line-55"></a><span>
+</span><a name="line-56"></a></pre></body></html>

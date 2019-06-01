@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">1</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CApiFFI #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE NondecreasingIndentation #-}</span><span>
+</span><a name="line-4"></a><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">4</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-7"></a><span>
+</span><a name="line-8"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">8</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Module      :  System.Posix.Unistd</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2002</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Portability :  non-portable (requires POSIX)</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- POSIX miscellaneous stuff, mostly from unistd.h</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.Unistd</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-24"></a><span>    </span><span class="hs-comment">-- * System environment</span><span>
+</span><a name="line-25"></a><span>    </span><span class="hs-identifier">SystemID</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>    </span><span class="hs-identifier">getSystemID</span><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-identifier">SysVar</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-identifier">getSysVar</span><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-comment">-- * Sleeping</span><span>
+</span><a name="line-32"></a><span>    </span><span class="hs-identifier">sleep</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">usleep</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">nanosleep</span><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span>    </span><span class="hs-comment">-- * File synchronisation</span><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-identifier">fileSynchronise</span><span class="hs-special">,</span><span>
+</span><a name="line-36"></a><span>    </span><span class="hs-identifier">fileSynchroniseDataOnly</span><span class="hs-special">,</span><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span>  </span><span class="hs-comment">{-
+    ToDo from unistd.h:
+      confstr,
+      lots of sysconf variables
+
+    -- use Network.BSD
+    gethostid, gethostname
+
+    -- should be in System.Posix.Files?
+    pathconf, fpathconf,
+
+    -- System.Posix.Signals
+    ualarm,
+
+    -- System.Posix.IO
+    read, write,
+
+    -- should be in System.Posix.User?
+    getEffectiveUserName,
+-}</span><span>
+</span><a name="line-58"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-59"></a><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span>
+</span><a name="line-62"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign.C.Error</span><span>
+</span><a name="line-63"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign.C.String</span><span> </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-64"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign.C.Types</span><span>
+</span><a name="line-65"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign</span><span>
+</span><a name="line-66"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.Types</span><span>
+</span><a name="line-67"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.Internals</span><span>
+</span><a name="line-68"></a><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">72</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- System environment (uname())</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span class="hs-keyword">data</span><span> </span><span class="hs-identifier">SystemID</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-76"></a><span>  </span><span class="hs-identifier">SystemID</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-identifier">systemName</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-77"></a><span>           </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">nodeName</span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-78"></a><span>           </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">release</span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-79"></a><span>           </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">version</span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-80"></a><span>           </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">machine</span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">String</span><span>
+</span><a name="line-81"></a><span>           </span><span class="hs-special">}</span><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span class="hs-identifier">getSystemID</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">SystemID</span><span>
+</span><a name="line-84"></a><span class="hs-identifier">getSystemID</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-85"></a><span>  </span><span class="hs-identifier">allocaBytes</span><span> </span><span class="hs-special">(</span><span class="hs-number">390</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">p_sid</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-86"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">87</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-87"></a><span>    </span><span class="hs-identifier">throwErrnoIfMinus1_</span><span> </span><span class="hs-string">&quot;getSystemID&quot;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">c_uname</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-88"></a><span>    </span><span class="hs-identifier">sysN</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">plusPtr</span><span class="hs-special">`</span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-89"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">89</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-90"></a><span>    </span><span class="hs-identifier">node</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">plusPtr</span><span class="hs-special">`</span><span> </span><span class="hs-number">65</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-91"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">90</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-92"></a><span>    </span><span class="hs-identifier">rel</span><span>  </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">plusPtr</span><span class="hs-special">`</span><span> </span><span class="hs-number">130</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-93"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">91</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-94"></a><span>    </span><span class="hs-identifier">ver</span><span>  </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">plusPtr</span><span class="hs-special">`</span><span> </span><span class="hs-number">195</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-95"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">92</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-96"></a><span>    </span><span class="hs-identifier">mach</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">peekCString</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">plusPtr</span><span class="hs-special">`</span><span> </span><span class="hs-number">260</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">p_sid</span><span class="hs-special">)</span><span>
+</span><a name="line-97"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">93</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-98"></a><span>    </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">SystemID</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-identifier">systemName</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">sysN</span><span class="hs-special">,</span><span>
+</span><a name="line-99"></a><span>                       </span><span class="hs-identifier">nodeName</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">node</span><span class="hs-special">,</span><span>
+</span><a name="line-100"></a><span>                       </span><span class="hs-identifier">release</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">rel</span><span class="hs-special">,</span><span>
+</span><a name="line-101"></a><span>                       </span><span class="hs-identifier">version</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">ver</span><span class="hs-special">,</span><span>
+</span><a name="line-102"></a><span>                       </span><span class="hs-identifier">machine</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">mach</span><span>
+</span><a name="line-103"></a><span>                     </span><span class="hs-special">}</span><span class="hs-special">)</span><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">ccall</span><span> </span><span class="hs-keyword">unsafe</span><span> </span><span class="hs-string">&quot;uname&quot;</span><span>
+</span><a name="line-106"></a><span>   </span><span class="hs-identifier">c_uname</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CUtsname</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- sleeping</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span class="hs-comment">-- | Sleep for the specified duration (in seconds).  Returns the time remaining</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- (if the sleep was interrupted by a signal, for example).</span><span>
+</span><a name="line-113"></a><span class="hs-comment">--</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- /GHC Note/: 'Control.Concurrent.threadDelay' is a better choice.  Since GHC</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- uses signals for its internal clock, a call to 'sleep' will usually be</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- interrupted immediately.  That makes 'sleep' unusable in a program compiled</span><span>
+</span><a name="line-117"></a><span class="hs-comment">-- with GHC, unless the RTS timer is disabled (with @+RTS -V0@).  Furthermore,</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- without the @-threaded@ option, 'sleep' will block all other user threads.</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- Even with the @-threaded@ option, 'sleep' requires a full OS thread to</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- itself.  'Control.Concurrent.threadDelay' has none of these shortcomings.</span><span>
+</span><a name="line-121"></a><span class="hs-comment">--</span><span>
+</span><a name="line-122"></a><span class="hs-identifier">sleep</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Int</span><span>
+</span><a name="line-123"></a><span class="hs-identifier">sleep</span><span> </span><span class="hs-number">0</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-number">0</span><span>
+</span><a name="line-124"></a><span class="hs-identifier">sleep</span><span> </span><span class="hs-identifier">secs</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="hs-identifier">r</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">c_sleep</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">secs</span><span class="hs-special">)</span><span class="hs-special">;</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span>
+</span><a name="line-125"></a><span>
+</span><a name="line-126"></a><span class="hs-pragma">{-# WARNING</span><span> </span><span class="hs-pragma">sleep</span><span> </span><span class="hs-pragma">&quot;This function has several shortcomings (see documentation). Please consider using Control.Concurrent.threadDelay instead.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-127"></a><span>
+</span><a name="line-128"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">ccall</span><span> </span><span class="hs-keyword">safe</span><span> </span><span class="hs-string">&quot;sleep&quot;</span><span>
+</span><a name="line-129"></a><span>  </span><span class="hs-identifier">c_sleep</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CUInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CUInt</span><span>
+</span><a name="line-130"></a><span>
+</span><a name="line-131"></a><span class="hs-comment">-- | Sleep for the specified duration (in microseconds).</span><span>
+</span><a name="line-132"></a><span class="hs-comment">--</span><span>
+</span><a name="line-133"></a><span class="hs-comment">-- /GHC Note/: 'Control.Concurrent.threadDelay' is a better choice.</span><span>
+</span><a name="line-134"></a><span class="hs-comment">-- Without the @-threaded@ option, 'usleep' will block all other user</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- threads.  Even with the @-threaded@ option, 'usleep' requires a</span><span>
+</span><a name="line-136"></a><span class="hs-comment">-- full OS thread to itself.  'Control.Concurrent.threadDelay' has</span><span>
+</span><a name="line-137"></a><span class="hs-comment">-- neither of these shortcomings.</span><span>
+</span><a name="line-138"></a><span class="hs-comment">--</span><span>
+</span><a name="line-139"></a><span class="hs-identifier">usleep</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-140"></a><span>
+</span><a name="line-141"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">136</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-142"></a><span class="hs-identifier">usleep</span><span> </span><span class="hs-identifier">usecs</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">nanosleep</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">usecs</span><span> </span><span class="hs-operator">*</span><span> </span><span class="hs-number">1000</span><span class="hs-special">)</span><span>
+</span><a name="line-143"></a><span>
+</span><a name="line-144"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">153</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-145"></a><span>
+</span><a name="line-146"></a><span class="hs-comment">-- | Sleep for the specified duration (in nanoseconds)</span><span>
+</span><a name="line-147"></a><span class="hs-comment">--</span><span>
+</span><a name="line-148"></a><span class="hs-comment">-- /GHC Note/: the comment for 'usleep' also applies here.</span><span>
+</span><a name="line-149"></a><span class="hs-identifier">nanosleep</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Integer</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-150"></a><span>
+</span><a name="line-151"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">161</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-152"></a><span class="hs-identifier">nanosleep</span><span> </span><span class="hs-number">0</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-153"></a><span class="hs-identifier">nanosleep</span><span> </span><span class="hs-identifier">nsecs</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-154"></a><span>  </span><span class="hs-identifier">allocaBytes</span><span> </span><span class="hs-special">(</span><span class="hs-number">16</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">pts1</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-155"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">164</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-156"></a><span>  </span><span class="hs-identifier">allocaBytes</span><span> </span><span class="hs-special">(</span><span class="hs-number">16</span><span class="hs-special">)</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-identifier">pts2</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-157"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">165</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-158"></a><span>     </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">tv_sec0</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">tv_nsec0</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">nsecs</span><span> </span><span class="hs-special">`</span><span class="hs-identifier">divMod</span><span class="hs-special">`</span><span> </span><span class="hs-number">1000000000</span><span>
+</span><a name="line-159"></a><span>     </span><span class="hs-keyword">let</span><span>
+</span><a name="line-160"></a><span>       </span><span class="hs-identifier">loop</span><span> </span><span class="hs-identifier">tv_sec</span><span> </span><span class="hs-identifier">tv_nsec</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-161"></a><span>         </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">pokeByteOff</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span>  </span><span class="hs-identifier">pts1</span><span> </span><span class="hs-identifier">tv_sec</span><span>
+</span><a name="line-162"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">169</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-163"></a><span>         </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">pokeByteOff</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-number">8</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">pts1</span><span> </span><span class="hs-identifier">tv_nsec</span><span>
+</span><a name="line-164"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">170</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-165"></a><span>         </span><span class="hs-identifier">res</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">c_nanosleep</span><span> </span><span class="hs-identifier">pts1</span><span> </span><span class="hs-identifier">pts2</span><span>
+</span><a name="line-166"></a><span>         </span><span class="hs-keyword">if</span><span> </span><span class="hs-identifier">res</span><span> </span><span class="hs-operator">==</span><span> </span><span class="hs-number">0</span><span>
+</span><a name="line-167"></a><span>            </span><span class="hs-keyword">then</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-168"></a><span>            </span><span class="hs-keyword">else</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="hs-identifier">errno</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">getErrno</span><span>
+</span><a name="line-169"></a><span>                    </span><span class="hs-keyword">if</span><span> </span><span class="hs-identifier">errno</span><span> </span><span class="hs-operator">==</span><span> </span><span class="hs-identifier">eINTR</span><span>
+</span><a name="line-170"></a><span>                       </span><span class="hs-keyword">then</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-171"></a><span>                           </span><span class="hs-identifier">tv_sec'</span><span>  </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">peekByteOff</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span class="hs-special">)</span><span>  </span><span class="hs-identifier">pts2</span><span>
+</span><a name="line-172"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">177</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-173"></a><span>                           </span><span class="hs-identifier">tv_nsec'</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">peekByteOff</span><span> </span><span class="hs-identifier">hsc_ptr</span><span> </span><span class="hs-number">8</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">pts2</span><span>
+</span><a name="line-174"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">178</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-175"></a><span>                           </span><span class="hs-identifier">loop</span><span> </span><span class="hs-identifier">tv_sec'</span><span> </span><span class="hs-identifier">tv_nsec'</span><span>
+</span><a name="line-176"></a><span>                       </span><span class="hs-keyword">else</span><span> </span><span class="hs-identifier">throwErrno</span><span> </span><span class="hs-string">&quot;nanosleep&quot;</span><span>
+</span><a name="line-177"></a><span>     </span><span class="hs-identifier">loop</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">tv_sec0</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CTime</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">tv_nsec0</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CTime</span><span class="hs-special">)</span><span>
+</span><a name="line-178"></a><span>
+</span><a name="line-179"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;struct timespec&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-identifier">CTimeSpec</span><span>
+</span><a name="line-180"></a><span>
+</span><a name="line-181"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">capi</span><span> </span><span class="hs-keyword">safe</span><span> </span><span class="hs-string">&quot;HsUnix.h nanosleep&quot;</span><span>
+</span><a name="line-182"></a><span>  </span><span class="hs-identifier">c_nanosleep</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CTimeSpec</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">Ptr</span><span> </span><span class="hs-identifier">CTimeSpec</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-183"></a><span>
+</span><a name="line-184"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">187</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-185"></a><span>
+</span><a name="line-186"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-187"></a><span class="hs-comment">-- System variables</span><span>
+</span><a name="line-188"></a><span>
+</span><a name="line-189"></a><span class="hs-keyword">data</span><span> </span><span class="hs-identifier">SysVar</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">ArgumentLimit</span><span>
+</span><a name="line-190"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">ChildLimit</span><span>
+</span><a name="line-191"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">ClockTick</span><span>
+</span><a name="line-192"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">GroupLimit</span><span>
+</span><a name="line-193"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">OpenFileLimit</span><span>
+</span><a name="line-194"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">PosixVersion</span><span>
+</span><a name="line-195"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">HasSavedIDs</span><span>
+</span><a name="line-196"></a><span>            </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">HasJobControl</span><span>
+</span><a name="line-197"></a><span>        </span><span class="hs-comment">-- ToDo: lots more</span><span>
+</span><a name="line-198"></a><span>
+</span><a name="line-199"></a><span class="hs-identifier">getSysVar</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">SysVar</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Integer</span><span>
+</span><a name="line-200"></a><span class="hs-identifier">getSysVar</span><span> </span><span class="hs-identifier">v</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-201"></a><span>    </span><span class="hs-keyword">case</span><span> </span><span class="hs-identifier">v</span><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-202"></a><span>      </span><span class="hs-identifier">ArgumentLimit</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">0</span><span class="hs-special">)</span><span>
+</span><a name="line-203"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">205</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-204"></a><span>      </span><span class="hs-identifier">ChildLimit</span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">1</span><span class="hs-special">)</span><span>
+</span><a name="line-205"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">206</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-206"></a><span>      </span><span class="hs-identifier">ClockTick</span><span>     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">2</span><span class="hs-special">)</span><span>
+</span><a name="line-207"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">207</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-208"></a><span>      </span><span class="hs-identifier">GroupLimit</span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">3</span><span class="hs-special">)</span><span>
+</span><a name="line-209"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">208</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-210"></a><span>      </span><span class="hs-identifier">OpenFileLimit</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">4</span><span class="hs-special">)</span><span>
+</span><a name="line-211"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">209</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-212"></a><span>      </span><span class="hs-identifier">PosixVersion</span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">29</span><span class="hs-special">)</span><span>
+</span><a name="line-213"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">210</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-214"></a><span>      </span><span class="hs-identifier">HasSavedIDs</span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">8</span><span class="hs-special">)</span><span>
+</span><a name="line-215"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">211</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-216"></a><span>      </span><span class="hs-identifier">HasJobControl</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">sysconf</span><span> </span><span class="hs-special">(</span><span class="hs-number">7</span><span class="hs-special">)</span><span>
+</span><a name="line-217"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">212</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-218"></a><span>
+</span><a name="line-219"></a><span class="hs-identifier">sysconf</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Integer</span><span>
+</span><a name="line-220"></a><span class="hs-identifier">sysconf</span><span> </span><span class="hs-identifier">n</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-221"></a><span>  </span><span class="hs-identifier">r</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">throwErrnoIfMinus1</span><span> </span><span class="hs-string">&quot;getSysVar&quot;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">c_sysconf</span><span> </span><span class="hs-identifier">n</span><span class="hs-special">)</span><span>
+</span><a name="line-222"></a><span>  </span><span class="hs-identifier">return</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">fromIntegral</span><span> </span><span class="hs-identifier">r</span><span class="hs-special">)</span><span>
+</span><a name="line-223"></a><span>
+</span><a name="line-224"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">ccall</span><span> </span><span class="hs-keyword">unsafe</span><span> </span><span class="hs-string">&quot;sysconf&quot;</span><span>
+</span><a name="line-225"></a><span>  </span><span class="hs-identifier">c_sysconf</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CLong</span><span>
+</span><a name="line-226"></a><span>
+</span><a name="line-227"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-228"></a><span class="hs-comment">-- File synchronization</span><span>
+</span><a name="line-229"></a><span>
+</span><a name="line-230"></a><span class="hs-comment">-- | Performs @fsync(2)@ operation on file-descriptor.</span><span>
+</span><a name="line-231"></a><span class="hs-comment">--</span><span>
+</span><a name="line-232"></a><span class="hs-comment">-- Throws 'IOError' (\&quot;unsupported operation\&quot;) if platform does not</span><span>
+</span><a name="line-233"></a><span class="hs-comment">-- provide @fsync(2)@ (use @#if HAVE_FSYNC@ CPP guard to</span><span>
+</span><a name="line-234"></a><span class="hs-comment">-- detect availability).</span><span>
+</span><a name="line-235"></a><span class="hs-comment">--</span><span>
+</span><a name="line-236"></a><span class="hs-comment">-- @since 2.7.1.0</span><span>
+</span><a name="line-237"></a><span class="hs-identifier">fileSynchronise</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Fd</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-238"></a><span>
+</span><a name="line-239"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">233</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-240"></a><span class="hs-identifier">fileSynchronise</span><span> </span><span class="hs-identifier">fd</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-241"></a><span>  </span><span class="hs-identifier">throwErrnoIfMinus1_</span><span> </span><span class="hs-string">&quot;fileSynchronise&quot;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">c_fsync</span><span> </span><span class="hs-identifier">fd</span><span class="hs-special">)</span><span>
+</span><a name="line-242"></a><span>
+</span><a name="line-243"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">capi</span><span> </span><span class="hs-keyword">safe</span><span> </span><span class="hs-string">&quot;unistd.h fsync&quot;</span><span>
+</span><a name="line-244"></a><span>  </span><span class="hs-identifier">c_fsync</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Fd</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-245"></a><span>
+</span><a name="line-246"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">244</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-247"></a><span>
+</span><a name="line-248"></a><span class="hs-comment">-- | Performs @fdatasync(2)@ operation on file-descriptor.</span><span>
+</span><a name="line-249"></a><span class="hs-comment">--</span><span>
+</span><a name="line-250"></a><span class="hs-comment">-- Throws 'IOError' (\&quot;unsupported operation\&quot;) if platform does not</span><span>
+</span><a name="line-251"></a><span class="hs-comment">-- provide @fdatasync(2)@ (use @#if HAVE_FDATASYNC@ CPP guard to</span><span>
+</span><a name="line-252"></a><span class="hs-comment">-- detect availability).</span><span>
+</span><a name="line-253"></a><span class="hs-comment">--</span><span>
+</span><a name="line-254"></a><span class="hs-comment">-- @since 2.7.1.0</span><span>
+</span><a name="line-255"></a><span class="hs-identifier">fileSynchroniseDataOnly</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Fd</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-256"></a><span>
+</span><a name="line-257"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">254</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-258"></a><span class="hs-identifier">fileSynchroniseDataOnly</span><span> </span><span class="hs-identifier">fd</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-259"></a><span>  </span><span class="hs-identifier">throwErrnoIfMinus1_</span><span> </span><span class="hs-string">&quot;fileSynchroniseDataOnly&quot;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">c_fdatasync</span><span> </span><span class="hs-identifier">fd</span><span class="hs-special">)</span><span>
+</span><a name="line-260"></a><span>
+</span><a name="line-261"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">capi</span><span> </span><span class="hs-keyword">safe</span><span> </span><span class="hs-string">&quot;unistd.h fdatasync&quot;</span><span>
+</span><a name="line-262"></a><span>  </span><span class="hs-identifier">c_fdatasync</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Fd</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-263"></a><span>
+</span><a name="line-264"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">265</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Unistd.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-265"></a></pre></body></html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- | This module simply holds deprecated copies of functions from</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Data.Map.Internal.Debug.</span><span>
+</span><a name="line-7"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Map.Internal.DeprecatedShowTree</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.Map.Internal.Debug.html"><span class="hs-identifier">Data.Map.Internal.Debug</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">Debug</span><span>
+</span><a name="line-10"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Map.Internal.html"><span class="hs-identifier">Data.Map.Internal</span></a><span> </span><span class="hs-special">(</span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span class="hs-special">)</span><span>
+</span><a name="line-11"></a><span>
+</span><a name="line-12"></a><span class="hs-comment">-- | /O(n)/. Show the tree that implements the map. The tree is shown</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- in a compressed, hanging format. See 'showTreeWith'.</span><span>
+</span><a name="line-14"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">showTree</span><span> </span><span class="hs-pragma">&quot;'showTree' is now in \&quot;Data.Map.Internal.Debug\&quot;&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-15"></a><span class="hs-identifier">showTree</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="#local-6989586621679119843"><span class="hs-identifier hs-type">k</span></a><span class="hs-special">,</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="#local-6989586621679119844"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679119843"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679119844"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-16"></a><a name="showTree"><a href="Data.Map.Internal.DeprecatedShowTree.html#showTree"><span class="hs-identifier">showTree</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Internal.Debug.html#showTree"><span class="hs-identifier hs-var">Debug.showTree</span></a><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-comment">{- | /O(n)/. The expression (@'showTreeWith' showelem hang wide map@) shows
+ the tree that implements the map. Elements are shown using the @showElem@ function. If @hang@ is
+ 'True', a /hanging/ tree is shown otherwise a rotated tree is shown. If
+ @wide@ is 'True', an extra wide version is shown.
+
+&gt;  Map&gt; let t = fromDistinctAscList [(x,()) | x &lt;- [1..5]]
+&gt;  Map&gt; putStrLn $ showTreeWith (\k x -&gt; show (k,x)) True False t
+&gt;  (4,())
+&gt;  +--(2,())
+&gt;  |  +--(1,())
+&gt;  |  +--(3,())
+&gt;  +--(5,())
+&gt;
+&gt;  Map&gt; putStrLn $ showTreeWith (\k x -&gt; show (k,x)) True True t
+&gt;  (4,())
+&gt;  |
+&gt;  +--(2,())
+&gt;  |  |
+&gt;  |  +--(1,())
+&gt;  |  |
+&gt;  |  +--(3,())
+&gt;  |
+&gt;  +--(5,())
+&gt;
+&gt;  Map&gt; putStrLn $ showTreeWith (\k x -&gt; show (k,x)) False True t
+&gt;  +--(5,())
+&gt;  |
+&gt;  (4,())
+&gt;  |
+&gt;  |  +--(3,())
+&gt;  |  |
+&gt;  +--(2,())
+&gt;     |
+&gt;     +--(1,())
+
+-}</span><span>
+</span><a name="line-54"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">showTreeWith</span><span> </span><span class="hs-pragma">&quot;'showTreeWith' is now in \&quot;Data.Map.Internal.Debug\&quot;&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-55"></a><span class="hs-identifier">showTreeWith</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679119841"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679119842"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679119841"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679119842"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-56"></a><a name="showTreeWith"><a href="Data.Map.Internal.DeprecatedShowTree.html#showTreeWith"><span class="hs-identifier">showTreeWith</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Internal.Debug.html#showTreeWith"><span class="hs-identifier hs-var">Debug.showTreeWith</span></a><span>
+</span><a name="line-57"></a></pre></body></html>

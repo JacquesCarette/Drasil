@@ -1,0 +1,11 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#include &lt;HsDirectoryConfig.h&gt;
+</span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Directory.Internal.Config</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-4"></a><span>
+</span><a name="line-5"></a><span class="hs-identifier">exeExtension</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-6"></a><a name="exeExtension"><a href="System.Directory.Internal.Config.html#exeExtension"><span class="hs-identifier">exeExtension</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">EXE_EXTENSION</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- We avoid using #const_str from hsc because it breaks cross-compilation</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- builds, so we use this ugly workaround where we simply paste the C string</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- literal directly in here.  This will probably break if the EXE_EXTENSION</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- contains strange characters, but hopefully no sane OS would ever do that.</span><span>
+</span><a name="line-11"></a></pre></body></html>

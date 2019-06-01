@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">1</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/DynamicLinker/Module/ByteString.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">2</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/DynamicLinker/Module/ByteString.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-5"></a><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">6</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/DynamicLinker/Module/ByteString.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-7"></a><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  System.Posix.DynamicLinker.Module.ByteString</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) Volker Stolz &lt;vs@foldr.org&gt; 2003</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  vs@foldr.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  non-portable (requires POSIX)</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- DLOpen support, old API</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--  Derived from GModule.chs by M.Weber &amp; M.Chakravarty which is part of c2hs</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--  I left the API more or less the same, mostly the flags are different.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.DynamicLinker.Module.ByteString</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-comment">--  Usage:</span><span>
+</span><a name="line-27"></a><span class="hs-comment">--  ******</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--  Let's assume you want to open a local shared library 'foo' (./libfoo.so)</span><span>
+</span><a name="line-30"></a><span class="hs-comment">--  offering a function</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--    char * mogrify (char*,int)</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--  and invoke str = mogrify(&quot;test&quot;,1):</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--  type Fun = CString -&gt; Int -&gt; IO CString</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--  foreign import dynamic unsafe fun__ :: FunPtr Fun -&gt; Fun</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--  withModule (Just &quot;.&quot;) (&quot;libfoo.so&quot;) [RTLD_NOW] $ \ mod -&gt; do</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--     funptr &lt;- moduleSymbol mod &quot;mogrify&quot;</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--     let fun = fun__ funptr</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--     withCString &quot;test&quot; $ \ str -&gt; do</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--       strptr &lt;- fun str 1</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--       strstr &lt;- peekCString strptr</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--       ...</span><span>
+</span><a name="line-44"></a><span>
+</span><a name="line-45"></a><span>      </span><span class="hs-identifier">Module</span><span>
+</span><a name="line-46"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">moduleOpen</span><span>             </span><span class="hs-comment">-- :: String -&gt; ModuleFlags -&gt; IO Module</span><span>
+</span><a name="line-47"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">moduleSymbol</span><span>           </span><span class="hs-comment">-- :: Source -&gt; String -&gt; IO (FunPtr a)</span><span>
+</span><a name="line-48"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">moduleClose</span><span>            </span><span class="hs-comment">-- :: Module -&gt; IO Bool</span><span>
+</span><a name="line-49"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">moduleError</span><span>            </span><span class="hs-comment">-- :: IO String</span><span>
+</span><a name="line-50"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">withModule</span><span>             </span><span class="hs-comment">-- :: Maybe String</span><span>
+</span><a name="line-51"></a><span>                             </span><span class="hs-comment">-- -&gt; String</span><span>
+</span><a name="line-52"></a><span>                             </span><span class="hs-comment">-- -&gt; [ModuleFlags ]</span><span>
+</span><a name="line-53"></a><span>                             </span><span class="hs-comment">-- -&gt; (Module -&gt; IO a)</span><span>
+</span><a name="line-54"></a><span>                             </span><span class="hs-comment">-- -&gt; IO a</span><span>
+</span><a name="line-55"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">withModule_</span><span>            </span><span class="hs-comment">-- :: Maybe String</span><span>
+</span><a name="line-56"></a><span>                             </span><span class="hs-comment">-- -&gt; String</span><span>
+</span><a name="line-57"></a><span>                             </span><span class="hs-comment">-- -&gt; [ModuleFlags]</span><span>
+</span><a name="line-58"></a><span>                             </span><span class="hs-comment">-- -&gt; (Module -&gt; IO a)</span><span>
+</span><a name="line-59"></a><span>                             </span><span class="hs-comment">-- -&gt; IO ()</span><span>
+</span><a name="line-60"></a><span>    </span><span class="hs-special">)</span><span>
+</span><a name="line-61"></a><span class="hs-keyword">where</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.DynamicLinker.Module</span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">moduleOpen</span><span class="hs-special">)</span><span>
+</span><a name="line-66"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.DynamicLinker.Prim</span><span>
+</span><a name="line-67"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.DynamicLinker.Common</span><span>
+</span><a name="line-68"></a><span>
+</span><a name="line-69"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign</span><span>
+</span><a name="line-70"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.ByteString.FilePath</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-comment">-- Opens a module (EXPORTED)</span><span>
+</span><a name="line-73"></a><span class="hs-comment">--</span><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span class="hs-identifier">moduleOpen</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">RawFilePath</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-identifier">RTLDFlags</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">Module</span><span>
+</span><a name="line-76"></a><span class="hs-identifier">moduleOpen</span><span> </span><span class="hs-identifier">file</span><span> </span><span class="hs-identifier">flags</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-77"></a><span>  </span><span class="hs-identifier">modPtr</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier">withFilePath</span><span> </span><span class="hs-identifier">file</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-glyph">\</span><span> </span><span class="hs-identifier">modAddr</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">c_dlopen</span><span> </span><span class="hs-identifier">modAddr</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">packRTLDFlags</span><span> </span><span class="hs-identifier">flags</span><span class="hs-special">)</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-keyword">if</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">modPtr</span><span> </span><span class="hs-operator">==</span><span> </span><span class="hs-identifier">nullPtr</span><span class="hs-special">)</span><span>
+</span><a name="line-79"></a><span>      </span><span class="hs-keyword">then</span><span> </span><span class="hs-identifier">moduleError</span><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><span class="hs-glyph">\</span><span> </span><span class="hs-identifier">err</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">ioError</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">userError</span><span> </span><span class="hs-special">(</span><span class="hs-string">&quot;dlopen: &quot;</span><span> </span><span class="hs-operator">++</span><span> </span><span class="hs-identifier">err</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-80"></a><span>      </span><span class="hs-keyword">else</span><span> </span><span class="hs-identifier">return</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">Module</span><span> </span><span class="hs-identifier">modPtr</span><span>
+</span><a name="line-81"></a></pre></body></html>

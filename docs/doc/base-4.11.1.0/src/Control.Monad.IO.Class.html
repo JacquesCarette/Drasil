@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- Module      :  Control.Monad.IO.Class</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Copyright   :  (c) Andy Gill 2001,</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--                (c) Oregon Graduate Institute of Science and Technology, 2001</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     :  BSD-style (see the file LICENSE)</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Maintainer  :  R.Paterson@city.ac.uk</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Class of monads based on @IO@.</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Control.Monad.IO.Class</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-17"></a><span>    </span><a href="Control.Monad.IO.Class.html#MonadIO"><span class="hs-identifier hs-type">MonadIO</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-18"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-19"></a><span>
+</span><a name="line-20"></a><span class="hs-comment">-- | Monads in which 'IO' computations may be embedded.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- Any monad built by applying a sequence of monad transformers to the</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- 'IO' monad will be an instance of this class.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Instances should satisfy the following laws, which state that 'liftIO'</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- is a transformer of monads:</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- * @'liftIO' . 'return' = 'return'@</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- * @'liftIO' (m &gt;&gt;= f) = 'liftIO' m &gt;&gt;= ('liftIO' . f)@</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span class="hs-keyword">class</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Monad"><span class="hs-identifier hs-type">Monad</span></a><span> </span><a href="#local-6989586621679336908"><span class="hs-identifier hs-type">m</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a name="MonadIO"><a href="Control.Monad.IO.Class.html#MonadIO"><span class="hs-identifier">MonadIO</span></a></a><span> </span><a name="local-6989586621679336908"><a href="#local-6989586621679336908"><span class="hs-identifier">m</span></a></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-32"></a><span>    </span><span class="hs-comment">-- | Lift a computation from the 'IO' monad.</span><span>
+</span><a name="line-33"></a><span>    </span><a name="liftIO"><a href="Control.Monad.IO.Class.html#liftIO"><span class="hs-identifier">liftIO</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679336909"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679336908"><span class="hs-identifier hs-type">m</span></a><span> </span><a href="#local-6989586621679336909"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span class="hs-comment">-- | @since 4.9.0.0</span><span>
+</span><a name="line-36"></a><span class="hs-keyword">instance</span><span> </span><a href="Control.Monad.IO.Class.html#MonadIO"><span class="hs-identifier hs-type">MonadIO</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-37"></a><span>    </span><a name="local-8214565720324111818"><a href="Control.Monad.IO.Class.html#liftIO"><span class="hs-identifier">liftIO</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#id"><span class="hs-identifier hs-var">id</span></a><span>
+</span><a name="line-38"></a></pre></body></html>

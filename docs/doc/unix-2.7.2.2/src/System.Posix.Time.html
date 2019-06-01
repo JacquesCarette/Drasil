@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CApiFFI #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-3"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 709
+</span><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-5"></a><span class="hs-cpp">#else
+</span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-7"></a><span class="hs-cpp">#endif
+</span><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  System.Posix.Time</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2002</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  non-portable (requires POSIX)</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- POSIX Time support</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.Time</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-23"></a><span>        </span><a href="System.Posix.Time.html#epochTime"><span class="hs-identifier hs-var">epochTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">-- ToDo: lots more from sys/time.h</span><span>
+</span><a name="line-25"></a><span>        </span><span class="hs-comment">-- how much already supported by System.Time?</span><span>
+</span><a name="line-26"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/System.Posix.Types.html"><span class="hs-identifier">System.Posix.Types</span></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.html"><span class="hs-identifier">Foreign</span></a><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.C.html"><span class="hs-identifier">Foreign.C</span></a><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- epochTime</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span class="hs-comment">-- | @epochTime@ calls @time@ to obtain the number of</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--   seconds that have elapsed since the epoch (Jan 01 00:00:00 GMT 1970).</span><span>
+</span><a name="line-37"></a><span class="hs-identifier">epochTime</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/System.Posix.Types.html#EpochTime"><span class="hs-identifier hs-type">EpochTime</span></a><span>
+</span><a name="line-38"></a><a name="epochTime"><a href="System.Posix.Time.html#epochTime"><span class="hs-identifier">epochTime</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.C.Error.html#throwErrnoIfMinus1"><span class="hs-identifier hs-var">throwErrnoIfMinus1</span></a><span> </span><span class="hs-string">&quot;epochTime&quot;</span><span> </span><span class="hs-special">(</span><a href="System.Posix.Time.html#c_time"><span class="hs-identifier hs-var">c_time</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Ptr.html#nullPtr"><span class="hs-identifier hs-var">nullPtr</span></a><span class="hs-special">)</span><span>
+</span><a name="line-39"></a><span>
+</span><a name="line-40"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">capi</span><span> </span><span class="hs-keyword">unsafe</span><span> </span><span class="hs-string">&quot;HsUnix.h time&quot;</span><span>
+</span><a name="line-41"></a><span>  </span><span class="hs-identifier">c_time</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.C.Types.html#CTime"><span class="hs-identifier hs-type">CTime</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Foreign.C.Types.html#CTime"><span class="hs-identifier hs-type">CTime</span></a><span>
+</span><a name="line-42"></a></pre></body></html>

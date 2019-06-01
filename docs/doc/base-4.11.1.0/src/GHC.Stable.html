@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Unsafe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude
+           , MagicHash
+           , UnboxedTuples
+  #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# OPTIONS_HADDOCK hide #-}</span><span>
+</span><a name="line-7"></a><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  GHC.Stable</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow, 1992-2004</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  ffi@haskell.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- Stable pointers.</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Stable</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-23"></a><span>        </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>        </span><a href="GHC.Stable.html#newStablePtr"><span class="hs-identifier hs-var">newStablePtr</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>        </span><a href="GHC.Stable.html#deRefStablePtr"><span class="hs-identifier hs-var">deRefStablePtr</span></a><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>        </span><a href="GHC.Stable.html#freeStablePtr"><span class="hs-identifier hs-var">freeStablePtr</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>        </span><a href="GHC.Stable.html#castStablePtrToPtr"><span class="hs-identifier hs-var">castStablePtrToPtr</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>        </span><a href="GHC.Stable.html#castPtrToStablePtr"><span class="hs-identifier hs-var">castPtrToStablePtr</span></a><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Ptr.html"><span class="hs-identifier">GHC.Ptr</span></a><span>
+</span><a name="line-32"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- Stable Pointers</span><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-comment">{- |
+A /stable pointer/ is a reference to a Haskell expression that is
+guaranteed not to be affected by garbage collection, i.e., it will neither be
+deallocated nor will the value of the stable pointer itself change during
+garbage collection (ordinary references may be relocated during garbage
+collection).  Consequently, stable pointers can be passed to foreign code,
+which can treat it as an opaque reference to a Haskell value.
+
+A value of type @StablePtr a@ is a stable pointer to a Haskell
+expression of type @a@.
+-}</span><span>
+</span><a name="line-48"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsStablePtr&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="StablePtr"><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier">StablePtr</span></a></a><span> </span><a name="local-6989586621679082247"><a href="#local-6989586621679082247"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="StablePtr"><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier">StablePtr</span></a></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#StablePtr%23"><span class="hs-identifier hs-type">StablePtr#</span></a><span> </span><a href="#local-6989586621679082247"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-49"></a><span>
+</span><a name="line-50"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- Create a stable pointer referring to the given Haskell value.</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--</span><span>
+</span><a name="line-53"></a><span class="hs-identifier">newStablePtr</span><span>   </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679082254"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082254"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-54"></a><a name="newStablePtr"><a href="GHC.Stable.html#newStablePtr"><span class="hs-identifier">newStablePtr</span></a></a><span> </span><a name="local-6989586621679082255"><a href="#local-6989586621679082255"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span> </span><a name="local-6989586621679082256"><a href="#local-6989586621679082256"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-55"></a><span>    </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#makeStablePtr%23"><span class="hs-identifier hs-var">makeStablePtr#</span></a><span> </span><a href="#local-6989586621679082255"><span class="hs-identifier hs-var">a</span></a><span> </span><a href="#local-6989586621679082256"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679082257"><a href="#local-6989586621679082257"><span class="hs-identifier">s'</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679082258"><a href="#local-6989586621679082258"><span class="hs-identifier">sp</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679082257"><span class="hs-identifier hs-var">s'</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><a href="#local-6989586621679082258"><span class="hs-identifier hs-var">sp</span></a><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- Obtain the Haskell value referenced by a stable pointer, i.e., the</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- same value that was passed to the corresponding call to</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- 'makeStablePtr'.  If the argument to 'deRefStablePtr' has</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- already been freed using 'freeStablePtr', the behaviour of</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- 'deRefStablePtr' is undefined.</span><span>
+</span><a name="line-63"></a><span class="hs-comment">--</span><span>
+</span><a name="line-64"></a><span class="hs-identifier">deRefStablePtr</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082253"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679082253"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-65"></a><a name="deRefStablePtr"><a href="GHC.Stable.html#deRefStablePtr"><span class="hs-identifier">deRefStablePtr</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><a name="local-6989586621679082259"><a href="#local-6989586621679082259"><span class="hs-identifier">sp</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679082260"><a href="#local-6989586621679082260"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#deRefStablePtr%23"><span class="hs-identifier hs-var">deRefStablePtr#</span></a><span> </span><a href="#local-6989586621679082259"><span class="hs-identifier hs-var">sp</span></a><span> </span><a href="#local-6989586621679082260"><span class="hs-identifier hs-var">s</span></a><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- Dissolve the association between the stable pointer and the Haskell</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- value. Afterwards, if the stable pointer is passed to</span><span>
+</span><a name="line-70"></a><span class="hs-comment">-- 'deRefStablePtr' or 'freeStablePtr', the behaviour is</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- undefined.  However, the stable pointer may still be passed to</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- 'castStablePtrToPtr', but the @'Foreign.Ptr.Ptr' ()@ value returned</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- by 'castStablePtrToPtr', in this case, is undefined (in particular,</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- it may be 'Foreign.Ptr.nullPtr').  Nevertheless, the call</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- to 'castStablePtrToPtr' is guaranteed not to diverge.</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">ccall</span><span> </span><span class="hs-keyword">unsafe</span><span> </span><span class="hs-string">&quot;hs_free_stable_ptr&quot;</span><span> </span><span class="hs-identifier">freeStablePtr</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082263"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-78"></a><span>
+</span><a name="line-79"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- Coerce a stable pointer to an address. No guarantees are made about</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- the resulting value, except that the original stable pointer can be</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- recovered by 'castPtrToStablePtr'.  In particular, the address may not</span><span>
+</span><a name="line-83"></a><span class="hs-comment">-- refer to an accessible memory location and any attempt to pass it to</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- the member functions of the class 'Foreign.Storable.Storable' leads to</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- undefined behaviour.</span><span>
+</span><a name="line-86"></a><span class="hs-comment">--</span><span>
+</span><a name="line-87"></a><span class="hs-identifier">castStablePtrToPtr</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082252"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-88"></a><a name="castStablePtrToPtr"><a href="GHC.Stable.html#castStablePtrToPtr"><span class="hs-identifier">castStablePtrToPtr</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><a name="local-6989586621679082261"><a href="#local-6989586621679082261"><span class="hs-identifier">s</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-var">Ptr</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#unsafeCoerce%23"><span class="hs-identifier hs-var">unsafeCoerce#</span></a><span> </span><a href="#local-6989586621679082261"><span class="hs-identifier hs-var">s</span></a><span class="hs-special">)</span><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span>
+</span><a name="line-91"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- The inverse of 'castStablePtrToPtr', i.e., we have the identity</span><span>
+</span><a name="line-93"></a><span class="hs-comment">--</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- &gt; sp == castPtrToStablePtr (castStablePtrToPtr sp)</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- for any stable pointer @sp@ on which 'freeStablePtr' has</span><span>
+</span><a name="line-97"></a><span class="hs-comment">-- not been executed yet.  Moreover, 'castPtrToStablePtr' may</span><span>
+</span><a name="line-98"></a><span class="hs-comment">-- only be applied to pointers that have been produced by</span><span>
+</span><a name="line-99"></a><span class="hs-comment">-- 'castStablePtrToPtr'.</span><span>
+</span><a name="line-100"></a><span class="hs-comment">--</span><span>
+</span><a name="line-101"></a><span class="hs-identifier">castPtrToStablePtr</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082251"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-102"></a><a name="castPtrToStablePtr"><a href="GHC.Stable.html#castPtrToStablePtr"><span class="hs-identifier">castPtrToStablePtr</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-var">Ptr</span></a><span> </span><a name="local-6989586621679082262"><a href="#local-6989586621679082262"><span class="hs-identifier">a</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#unsafeCoerce%23"><span class="hs-identifier hs-var">unsafeCoerce#</span></a><span> </span><a href="#local-6989586621679082262"><span class="hs-identifier hs-var">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span class="hs-comment">-- | @since 2.1</span><span>
+</span><a name="line-105"></a><span class="hs-keyword">instance</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-type">StablePtr</span></a><span> </span><a href="#local-6989586621679082248"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-106"></a><span>    </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><a name="local-6989586621679082249"><a href="#local-6989586621679082249"><span class="hs-identifier">sp1</span></a></a><span class="hs-special">)</span><span> </span><a name="local-3458764513820541095"><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3D%3D"><span class="hs-operator">==</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Stable.html#StablePtr"><span class="hs-identifier hs-var">StablePtr</span></a><span> </span><a name="local-6989586621679082250"><a href="#local-6989586621679082250"><span class="hs-identifier">sp2</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-107"></a><span>        </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#eqStablePtr%23"><span class="hs-identifier hs-var">eqStablePtr#</span></a><span> </span><a href="#local-6989586621679082249"><span class="hs-identifier hs-var">sp1</span></a><span> </span><a href="#local-6989586621679082250"><span class="hs-identifier hs-var">sp2</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-108"></a><span>           </span><span class="hs-number">0#</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-109"></a><span>           </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-110"></a></pre></body></html>

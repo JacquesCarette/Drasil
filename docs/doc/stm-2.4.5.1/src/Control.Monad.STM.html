@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# OPTIONS_GHC -fno-warn-orphans #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CPP, MagicHash, UnboxedTuples #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 701
+</span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-6"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  Control.Monad.STM</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2004</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  non-portable (requires STM)</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- Software Transactional Memory: a modular composable concurrency</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- abstraction.  See</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--  * /Composable memory transactions/, by Tim Harris, Simon Marlow, Simon</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--    Peyton Jones, and Maurice Herlihy, in</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--    /ACM Conference on Principles and Practice of Parallel Programming/ 2005.</span><span>
+</span><a name="line-24"></a><span class="hs-comment">--    &lt;https://www.microsoft.com/en-us/research/publication/composable-memory-transactions/&gt;</span><span>
+</span><a name="line-25"></a><span class="hs-comment">--</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- This module only defines the 'STM' monad; you probably want to</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- import &quot;Control.Concurrent.STM&quot; (which exports &quot;Control.Monad.STM&quot;).</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-29"></a><span>
+</span><a name="line-30"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Control.Monad.STM</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-31"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#atomically"><span class="hs-identifier hs-var">atomically</span></a><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span class="hs-cpp">#ifdef __GLASGOW_HASKELL__
+</span><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#always"><span class="hs-identifier hs-var">always</span></a><span class="hs-special">,</span><span>
+</span><a name="line-35"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#alwaysSucceeds"><span class="hs-identifier hs-var">alwaysSucceeds</span></a><span class="hs-special">,</span><span>
+</span><a name="line-36"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#retry"><span class="hs-identifier hs-var">retry</span></a><span class="hs-special">,</span><span>
+</span><a name="line-37"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#orElse"><span class="hs-identifier hs-var">orElse</span></a><span class="hs-special">,</span><span>
+</span><a name="line-38"></a><span>        </span><a href="Control.Monad.STM.html#check"><span class="hs-identifier hs-var">check</span></a><span class="hs-special">,</span><span>
+</span><a name="line-39"></a><span class="hs-cpp">#endif
+</span><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#throwSTM"><span class="hs-identifier hs-var">throwSTM</span></a><span class="hs-special">,</span><span>
+</span><a name="line-41"></a><span>        </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#catchSTM"><span class="hs-identifier hs-var">catchSTM</span></a><span>
+</span><a name="line-42"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-43"></a><span>
+</span><a name="line-44"></a><span class="hs-cpp">#ifdef __GLASGOW_HASKELL__
+#if ! (MIN_VERSION_base(4,3,0))
+</span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">GHC.Conc</span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">catchSTM</span><span class="hs-special">)</span><span>
+</span><a name="line-47"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Monad</span><span>    </span><span class="hs-special">(</span><span> </span><span class="hs-identifier">MonadPlus</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-48"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Exception</span><span>
+</span><a name="line-49"></a><span class="hs-cpp">#else
+</span><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.html"><span class="hs-identifier">GHC.Conc</span></a><span>
+</span><a name="line-51"></a><span class="hs-cpp">#endif
+</span><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Exts.html"><span class="hs-identifier">GHC.Exts</span></a><span>
+</span><a name="line-53"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Monad.Fix.html"><span class="hs-identifier">Control.Monad.Fix</span></a><span>
+</span><a name="line-54"></a><span class="hs-cpp">#else
+</span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Sequential.STM</span><span>
+</span><a name="line-56"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-58"></a><span class="hs-cpp">#ifdef __GLASGOW_HASKELL__
+#if ! (MIN_VERSION_base(4,3,0))
+</span><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Applicative</span><span>
+</span><a name="line-61"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Monad</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">ap</span><span class="hs-special">)</span><span>
+</span><a name="line-62"></a><span class="hs-cpp">#endif
+#endif
+</span><span>
+</span><a name="line-65"></a><span>
+</span><a name="line-66"></a><span class="hs-cpp">#ifdef __GLASGOW_HASKELL__
+#if ! (MIN_VERSION_base(4,3,0))
+</span><span class="hs-keyword">instance</span><span> </span><span class="hs-identifier">MonadPlus</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-69"></a><span>  </span><span class="hs-identifier">mzero</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">retry</span><span>
+</span><a name="line-70"></a><span>  </span><span class="hs-identifier">mplus</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">orElse</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-keyword">instance</span><span> </span><span class="hs-identifier">Applicative</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-73"></a><span>  </span><span class="hs-identifier">pure</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">return</span><span>
+</span><a name="line-74"></a><span>  </span><span class="hs-special">(</span><span class="hs-operator">&lt;*&gt;</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">ap</span><span>
+</span><a name="line-75"></a><span>
+</span><a name="line-76"></a><span class="hs-keyword">instance</span><span> </span><span class="hs-identifier">Alternative</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-77"></a><span>  </span><span class="hs-identifier">empty</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">retry</span><span>
+</span><a name="line-78"></a><span>  </span><span class="hs-special">(</span><span class="hs-operator">&lt;|&gt;</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">orElse</span><span>
+</span><a name="line-79"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- | Check that the boolean condition is true and, if not, 'retry'.</span><span>
+</span><a name="line-82"></a><span class="hs-comment">--</span><span>
+</span><a name="line-83"></a><span class="hs-comment">-- In other words, @check b = unless b retry@.</span><span>
+</span><a name="line-84"></a><span class="hs-comment">--</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- @since 2.1.1</span><span>
+</span><a name="line-86"></a><span class="hs-identifier">check</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Bool</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-87"></a><a name="check"><a href="Control.Monad.STM.html#check"><span class="hs-identifier">check</span></a></a><span> </span><a name="local-6989586621679031534"><a href="#local-6989586621679031534"><span class="hs-identifier">b</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><a href="#local-6989586621679031534"><span class="hs-identifier hs-var">b</span></a><span> </span><span class="hs-keyword">then</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">else</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#retry"><span class="hs-identifier hs-var">retry</span></a><span>
+</span><a name="line-88"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-90"></a><span class="hs-cpp">#if ! (MIN_VERSION_base(4,3,0))
+</span><span class="hs-comment">-- |Exception handling within STM actions.</span><span>
+</span><a name="line-92"></a><span class="hs-identifier">catchSTM</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Exception</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">a</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">a</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">a</span><span>
+</span><a name="line-93"></a><span class="hs-identifier">catchSTM</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">m</span><span class="hs-special">)</span><span> </span><span class="hs-identifier">handler</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">catchSTM#</span><span> </span><span class="hs-identifier">m</span><span> </span><span class="hs-identifier">handler'</span><span>
+</span><a name="line-94"></a><span>    </span><span class="hs-keyword">where</span><span>
+</span><a name="line-95"></a><span>      </span><span class="hs-identifier">handler'</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-identifier">fromException</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-96"></a><span>                     </span><span class="hs-identifier">Just</span><span> </span><span class="hs-identifier">e'</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-identifier">handler</span><span> </span><span class="hs-identifier">e'</span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">m'</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">m'</span><span>
+</span><a name="line-97"></a><span>                     </span><span class="hs-identifier">Nothing</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">raiseIO#</span><span> </span><span class="hs-identifier">e</span><span>
+</span><a name="line-98"></a><span>
+</span><a name="line-99"></a><span class="hs-comment">-- | A variant of 'throw' that can only be used within the 'STM' monad.</span><span>
+</span><a name="line-100"></a><span class="hs-comment">--</span><span>
+</span><a name="line-101"></a><span class="hs-comment">-- Throwing an exception in @STM@ aborts the transaction and propagates the</span><span>
+</span><a name="line-102"></a><span class="hs-comment">-- exception.</span><span>
+</span><a name="line-103"></a><span class="hs-comment">--</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- Although 'throwSTM' has a type that is an instance of the type of 'throw', the</span><span>
+</span><a name="line-105"></a><span class="hs-comment">-- two functions are subtly different:</span><span>
+</span><a name="line-106"></a><span class="hs-comment">--</span><span>
+</span><a name="line-107"></a><span class="hs-comment">-- &gt; throw e    `seq` x  ===&gt; throw e</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- &gt; throwSTM e `seq` x  ===&gt; x</span><span>
+</span><a name="line-109"></a><span class="hs-comment">--</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- The first example will cause the exception @e@ to be raised,</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- whereas the second one won\'t.  In fact, 'throwSTM' will only cause</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- an exception to be raised when it is used within the 'STM' monad.</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- The 'throwSTM' variant should be used in preference to 'throw' to</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- raise an exception within the 'STM' monad because it guarantees</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- ordering with respect to other 'STM' operations, whereas 'throw'</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- does not.</span><span>
+</span><a name="line-117"></a><span class="hs-identifier">throwSTM</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Exception</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-identifier">a</span><span>
+</span><a name="line-118"></a><span class="hs-identifier">throwSTM</span><span> </span><span class="hs-identifier">e</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">STM</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">raiseIO#</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">toException</span><span> </span><span class="hs-identifier">e</span><span class="hs-special">)</span><span>
+</span><a name="line-119"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span class="hs-keyword">data</span><span> </span><a name="STMret"><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier">STMret</span></a></a><span> </span><a name="local-6989586621679031526"><a href="#local-6989586621679031526"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="STMret"><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier">STMret</span></a></a><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">State#</span><span> </span><span class="hs-identifier hs-type">RealWorld</span><span class="hs-special">)</span><span> </span><a href="#local-6989586621679031526"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-123"></a><span>
+</span><a name="line-124"></a><span class="hs-identifier">liftSTM</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><a href="#local-6989586621679031533"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">State#</span><span> </span><span class="hs-identifier hs-type">RealWorld</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier hs-type">STMret</span></a><span> </span><a href="#local-6989586621679031533"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-125"></a><a name="liftSTM"><a href="Control.Monad.STM.html#liftSTM"><span class="hs-identifier">liftSTM</span></a></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-var">STM</span></a><span> </span><a name="local-6989586621679031535"><a href="#local-6989586621679031535"><span class="hs-identifier">m</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679031536"><a href="#local-6989586621679031536"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679031535"><span class="hs-identifier hs-var">m</span></a><span> </span><a href="#local-6989586621679031536"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679031537"><a href="#local-6989586621679031537"><span class="hs-identifier">s'</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679031538"><a href="#local-6989586621679031538"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier hs-var">STMret</span></a><span> </span><a href="#local-6989586621679031537"><span class="hs-identifier hs-var">s'</span></a><span> </span><a href="#local-6989586621679031538"><span class="hs-identifier hs-var">r</span></a><span>
+</span><a name="line-126"></a><span>
+</span><a name="line-127"></a><span class="hs-comment">-- | @since 2.3</span><span>
+</span><a name="line-128"></a><span class="hs-keyword">instance</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Monad.Fix.html#MonadFix"><span class="hs-identifier hs-type">MonadFix</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-129"></a><span>  </span><a name="local-3458764513820541103"><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Monad.Fix.html#mfix"><span class="hs-identifier">mfix</span></a></a><span> </span><a name="local-6989586621679031527"><a href="#local-6989586621679031527"><span class="hs-identifier">k</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-var">STM</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679031528"><a href="#local-6989586621679031528"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-130"></a><span>    </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679031529"><a href="#local-6989586621679031529"><span class="hs-identifier">ans</span></a></a><span>        </span><span class="hs-glyph">=</span><span> </span><a href="Control.Monad.STM.html#liftSTM"><span class="hs-identifier hs-var">liftSTM</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679031527"><span class="hs-identifier hs-var">k</span></a><span> </span><a href="#local-6989586621679031530"><span class="hs-identifier hs-var">r</span></a><span class="hs-special">)</span><span> </span><a href="#local-6989586621679031528"><span class="hs-identifier hs-var">s</span></a><span>
+</span><a name="line-131"></a><span>        </span><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier hs-var">STMret</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679031530"><a href="#local-6989586621679031530"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679031529"><span class="hs-identifier hs-var">ans</span></a><span>
+</span><a name="line-132"></a><span>    </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679031529"><span class="hs-identifier hs-var">ans</span></a><span> </span><span class="hs-keyword">of</span><span> </span><a href="Control.Monad.STM.html#STMret"><span class="hs-identifier hs-var">STMret</span></a><span> </span><a name="local-6989586621679031531"><a href="#local-6989586621679031531"><span class="hs-identifier">s'</span></a></a><span> </span><a name="local-6989586621679031532"><a href="#local-6989586621679031532"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679031531"><span class="hs-identifier hs-var">s'</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679031532"><span class="hs-identifier hs-var">x</span></a><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-133"></a></pre></body></html>

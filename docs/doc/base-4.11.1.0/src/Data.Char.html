@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.Char</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  stable</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- The Char type and associated operations.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Char</span><span>
+</span><a name="line-19"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-20"></a><span>      </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span>    </span><span class="hs-comment">-- * Character classification</span><span>
+</span><a name="line-23"></a><span>    </span><span class="hs-comment">-- | Unicode characters are divided into letters, numbers, marks,</span><span>
+</span><a name="line-24"></a><span>    </span><span class="hs-comment">-- punctuation, symbols, separators (including spaces) and others</span><span>
+</span><a name="line-25"></a><span>    </span><span class="hs-comment">-- (including control characters).</span><span>
+</span><a name="line-26"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isControl"><span class="hs-identifier hs-var">isControl</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isSpace"><span class="hs-identifier hs-var">isSpace</span></a><span>
+</span><a name="line-27"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isLower"><span class="hs-identifier hs-var">isLower</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isUpper"><span class="hs-identifier hs-var">isUpper</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isAlpha"><span class="hs-identifier hs-var">isAlpha</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isAlphaNum"><span class="hs-identifier hs-var">isAlphaNum</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isPrint"><span class="hs-identifier hs-var">isPrint</span></a><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isDigit"><span class="hs-identifier hs-var">isDigit</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isOctDigit"><span class="hs-identifier hs-var">isOctDigit</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isHexDigit"><span class="hs-identifier hs-var">isHexDigit</span></a><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Char.html#isLetter"><span class="hs-identifier hs-var">isLetter</span></a><span class="hs-special">,</span><span> </span><a href="Data.Char.html#isMark"><span class="hs-identifier hs-var">isMark</span></a><span class="hs-special">,</span><span> </span><a href="Data.Char.html#isNumber"><span class="hs-identifier hs-var">isNumber</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isPunctuation"><span class="hs-identifier hs-var">isPunctuation</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isSymbol"><span class="hs-identifier hs-var">isSymbol</span></a><span class="hs-special">,</span><span> </span><a href="Data.Char.html#isSeparator"><span class="hs-identifier hs-var">isSeparator</span></a><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-comment">-- ** Subranges</span><span>
+</span><a name="line-32"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isAscii"><span class="hs-identifier hs-var">isAscii</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isLatin1"><span class="hs-identifier hs-var">isLatin1</span></a><span>
+</span><a name="line-33"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isAsciiUpper"><span class="hs-identifier hs-var">isAsciiUpper</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#isAsciiLower"><span class="hs-identifier hs-var">isAsciiLower</span></a><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-comment">-- ** Unicode general categories</span><span>
+</span><a name="line-36"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#GeneralCategory"><span class="hs-identifier hs-type">GeneralCategory</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span>    </span><span class="hs-comment">-- * Case conversion</span><span>
+</span><a name="line-39"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#toUpper"><span class="hs-identifier hs-var">toUpper</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#toLower"><span class="hs-identifier hs-var">toLower</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Unicode.html#toTitle"><span class="hs-identifier hs-var">toTitle</span></a><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span>    </span><span class="hs-comment">-- * Single digit characters</span><span>
+</span><a name="line-42"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Char.html#digitToInt"><span class="hs-identifier hs-var">digitToInt</span></a><span>
+</span><a name="line-43"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#intToDigit"><span class="hs-identifier hs-var">intToDigit</span></a><span>
+</span><a name="line-44"></a><span>
+</span><a name="line-45"></a><span>    </span><span class="hs-comment">-- * Numeric representations</span><span>
+</span><a name="line-46"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span>
+</span><a name="line-47"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Char.html#chr"><span class="hs-identifier hs-var">chr</span></a><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span>    </span><span class="hs-comment">-- * String representations</span><span>
+</span><a name="line-50"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#showLitChar"><span class="hs-identifier hs-var">showLitChar</span></a><span>
+</span><a name="line-51"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#lexLitChar"><span class="hs-identifier hs-var">lexLitChar</span></a><span>
+</span><a name="line-52"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#readLitChar"><span class="hs-identifier hs-var">readLitChar</span></a><span>
+</span><a name="line-53"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-54"></a><span>
+</span><a name="line-55"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-56"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Char.html"><span class="hs-identifier">GHC.Char</span></a><span>
+</span><a name="line-57"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Real.html"><span class="hs-identifier">GHC.Real</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a><span class="hs-special">)</span><span>
+</span><a name="line-58"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Show.html"><span class="hs-identifier">GHC.Show</span></a><span>
+</span><a name="line-59"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Read.html"><span class="hs-identifier">GHC.Read</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Read.html#readLitChar"><span class="hs-identifier hs-var">readLitChar</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#lexLitChar"><span class="hs-identifier hs-var">lexLitChar</span></a><span class="hs-special">)</span><span>
+</span><a name="line-60"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Unicode.html"><span class="hs-identifier">GHC.Unicode</span></a><span>
+</span><a name="line-61"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Num.html"><span class="hs-identifier">GHC.Num</span></a><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span class="hs-comment">-- $setup</span><span>
+</span><a name="line-64"></a><span class="hs-comment">-- Allow the use of Prelude in doctests.</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- &gt;&gt;&gt; import Prelude</span><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-comment">-- | Convert a single digit 'Char' to the corresponding 'Int'.  This</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- function fails unless its argument satisfies 'isHexDigit', but</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- recognises both upper- and lower-case hexadecimal digits (that</span><span>
+</span><a name="line-70"></a><span class="hs-comment">-- is, @\'0\'@..@\'9\'@, @\'a\'@..@\'f\'@, @\'A\'@..@\'F\'@).</span><span>
+</span><a name="line-71"></a><span class="hs-comment">--</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-73"></a><span class="hs-comment">--</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- Characters @\'0\'@ through @\'9\'@ are converted properly to</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- @0..9@:</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- &gt;&gt;&gt; map digitToInt ['0'..'9']</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- [0,1,2,3,4,5,6,7,8,9]</span><span>
+</span><a name="line-79"></a><span class="hs-comment">--</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- Both upper- and lower-case @\'A\'@ through @\'F\'@ are converted</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- as well, to @10..15@.</span><span>
+</span><a name="line-82"></a><span class="hs-comment">--</span><span>
+</span><a name="line-83"></a><span class="hs-comment">-- &gt;&gt;&gt; map digitToInt ['a'..'f']</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- [10,11,12,13,14,15]</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- &gt;&gt;&gt; map digitToInt ['A'..'F']</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- [10,11,12,13,14,15]</span><span>
+</span><a name="line-87"></a><span class="hs-comment">--</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- Anything else throws an exception:</span><span>
+</span><a name="line-89"></a><span class="hs-comment">--</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- &gt;&gt;&gt; digitToInt 'G'</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- *** Exception: Char.digitToInt: not a digit 'G'</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- &gt;&gt;&gt; digitToInt '&#9829;'</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- *** Exception: Char.digitToInt: not a digit '\9829'</span><span>
+</span><a name="line-94"></a><span class="hs-comment">--</span><span>
+</span><a name="line-95"></a><span class="hs-identifier">digitToInt</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-96"></a><a name="digitToInt"><a href="Data.Char.html#digitToInt"><span class="hs-identifier">digitToInt</span></a></a><span> </span><a name="local-6989586621679151382"><a href="#local-6989586621679151382"><span class="hs-identifier">c</span></a></a><span>
+</span><a name="line-97"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a><span> </span><a href="#local-6989586621679151383"><span class="hs-identifier hs-var">dec</span></a><span class="hs-glyph">::</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Word"><span class="hs-identifier hs-type">Word</span></a><span class="hs-special">)</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a><span> </span><span class="hs-number">9</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679151383"><span class="hs-identifier hs-var">dec</span></a><span>
+</span><a name="line-98"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a><span> </span><a href="#local-6989586621679151384"><span class="hs-identifier hs-var">hexl</span></a><span class="hs-glyph">::</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Word"><span class="hs-identifier hs-type">Word</span></a><span class="hs-special">)</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a><span> </span><span class="hs-number">5</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679151384"><span class="hs-identifier hs-var">hexl</span></a><span> </span><a href="GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a><span> </span><span class="hs-number">10</span><span>
+</span><a name="line-99"></a><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a><span> </span><a href="#local-6989586621679151385"><span class="hs-identifier hs-var">hexu</span></a><span class="hs-glyph">::</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Word"><span class="hs-identifier hs-type">Word</span></a><span class="hs-special">)</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a><span> </span><span class="hs-number">5</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679151385"><span class="hs-identifier hs-var">hexu</span></a><span> </span><a href="GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a><span> </span><span class="hs-number">10</span><span>
+</span><a name="line-100"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a href="GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Err.html#errorWithoutStackTrace"><span class="hs-identifier hs-var">errorWithoutStackTrace</span></a><span> </span><span class="hs-special">(</span><span class="hs-string">&quot;Char.digitToInt: not a digit &quot;</span><span> </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a><span> </span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span> </span><a href="#local-6989586621679151382"><span class="hs-identifier hs-var">c</span></a><span class="hs-special">)</span><span> </span><span class="hs-comment">-- sigh</span><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-keyword">where</span><span>
+</span><a name="line-102"></a><span>    </span><a name="local-6989586621679151383"><a href="#local-6989586621679151383"><span class="hs-identifier">dec</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><a href="#local-6989586621679151382"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-glyph">-</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><span class="hs-char">'0'</span><span>
+</span><a name="line-103"></a><span>    </span><a name="local-6989586621679151384"><a href="#local-6989586621679151384"><span class="hs-identifier">hexl</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><a href="#local-6989586621679151382"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-glyph">-</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><span class="hs-char">'a'</span><span>
+</span><a name="line-104"></a><span>    </span><a name="local-6989586621679151385"><a href="#local-6989586621679151385"><span class="hs-identifier">hexu</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><a href="#local-6989586621679151382"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-glyph">-</span><span> </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a><span> </span><span class="hs-char">'A'</span><span>
+</span><a name="line-105"></a><span>
+</span><a name="line-106"></a><span class="hs-comment">-- derived character classifiers</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">-- | Selects alphabetic Unicode characters (lower-case, upper-case and</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- title-case letters, plus letters of caseless scripts and</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- modifiers letters). This function is equivalent to</span><span>
+</span><a name="line-111"></a><span class="hs-comment">-- 'Data.Char.isAlpha'.</span><span>
+</span><a name="line-112"></a><span class="hs-comment">--</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- This function returns 'True' if its argument has one of the</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- following 'GeneralCategory's, or 'False' otherwise:</span><span>
+</span><a name="line-115"></a><span class="hs-comment">--</span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- * 'UppercaseLetter'</span><span>
+</span><a name="line-117"></a><span class="hs-comment">-- * 'LowercaseLetter'</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- * 'TitlecaseLetter'</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- * 'ModifierLetter'</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- * 'OtherLetter'</span><span>
+</span><a name="line-121"></a><span class="hs-comment">--</span><span>
+</span><a name="line-122"></a><span class="hs-comment">-- These classes are defined in the</span><span>
+</span><a name="line-123"></a><span class="hs-comment">-- &lt;http://www.unicode.org/reports/tr44/tr44-14.html#GC_Values_Table Unicode Character Database&gt;,</span><span>
+</span><a name="line-124"></a><span class="hs-comment">-- part of the Unicode standard. The same document defines what is</span><span>
+</span><a name="line-125"></a><span class="hs-comment">-- and is not a \&quot;Letter\&quot;.</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-128"></a><span class="hs-comment">--</span><span>
+</span><a name="line-129"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-130"></a><span class="hs-comment">--</span><span>
+</span><a name="line-131"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter 'a'</span><span>
+</span><a name="line-132"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-133"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter 'A'</span><span>
+</span><a name="line-134"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter '&#955;'</span><span>
+</span><a name="line-136"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-137"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter '0'</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter '%'</span><span>
+</span><a name="line-140"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-141"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter '&#9829;'</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-143"></a><span class="hs-comment">-- &gt;&gt;&gt; isLetter '\31'</span><span>
+</span><a name="line-144"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-145"></a><span class="hs-comment">--</span><span>
+</span><a name="line-146"></a><span class="hs-comment">-- Ensure that 'isLetter' and 'isAlpha' are equivalent.</span><span>
+</span><a name="line-147"></a><span class="hs-comment">--</span><span>
+</span><a name="line-148"></a><span class="hs-comment">-- &gt;&gt;&gt; let chars = [(chr 0)..]</span><span>
+</span><a name="line-149"></a><span class="hs-comment">-- &gt;&gt;&gt; let letters = map isLetter chars</span><span>
+</span><a name="line-150"></a><span class="hs-comment">-- &gt;&gt;&gt; let alphas = map isAlpha chars</span><span>
+</span><a name="line-151"></a><span class="hs-comment">-- &gt;&gt;&gt; letters == alphas</span><span>
+</span><a name="line-152"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-153"></a><span class="hs-comment">--</span><span>
+</span><a name="line-154"></a><span class="hs-identifier">isLetter</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-155"></a><a name="isLetter"><a href="Data.Char.html#isLetter"><span class="hs-identifier">isLetter</span></a></a><span> </span><a name="local-6989586621679151386"><a href="#local-6989586621679151386"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a><span> </span><a href="#local-6989586621679151386"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-156"></a><span>        </span><a href="GHC.Unicode.html#UppercaseLetter"><span class="hs-identifier hs-var">UppercaseLetter</span></a><span>         </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-157"></a><span>        </span><a href="GHC.Unicode.html#LowercaseLetter"><span class="hs-identifier hs-var">LowercaseLetter</span></a><span>         </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-158"></a><span>        </span><a href="GHC.Unicode.html#TitlecaseLetter"><span class="hs-identifier hs-var">TitlecaseLetter</span></a><span>         </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-159"></a><span>        </span><a href="GHC.Unicode.html#ModifierLetter"><span class="hs-identifier hs-var">ModifierLetter</span></a><span>          </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-160"></a><span>        </span><a href="GHC.Unicode.html#OtherLetter"><span class="hs-identifier hs-var">OtherLetter</span></a><span>             </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-161"></a><span>        </span><span class="hs-identifier">_</span><span>                       </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-162"></a><span>
+</span><a name="line-163"></a><span class="hs-comment">-- | Selects Unicode mark characters, for example accents and the</span><span>
+</span><a name="line-164"></a><span class="hs-comment">-- like, which combine with preceding characters.</span><span>
+</span><a name="line-165"></a><span class="hs-comment">--</span><span>
+</span><a name="line-166"></a><span class="hs-comment">-- This function returns 'True' if its argument has one of the</span><span>
+</span><a name="line-167"></a><span class="hs-comment">-- following 'GeneralCategory's, or 'False' otherwise:</span><span>
+</span><a name="line-168"></a><span class="hs-comment">--</span><span>
+</span><a name="line-169"></a><span class="hs-comment">-- * 'NonSpacingMark'</span><span>
+</span><a name="line-170"></a><span class="hs-comment">-- * 'SpacingCombiningMark'</span><span>
+</span><a name="line-171"></a><span class="hs-comment">-- * 'EnclosingMark'</span><span>
+</span><a name="line-172"></a><span class="hs-comment">--</span><span>
+</span><a name="line-173"></a><span class="hs-comment">-- These classes are defined in the</span><span>
+</span><a name="line-174"></a><span class="hs-comment">-- &lt;http://www.unicode.org/reports/tr44/tr44-14.html#GC_Values_Table Unicode Character Database&gt;,</span><span>
+</span><a name="line-175"></a><span class="hs-comment">-- part of the Unicode standard. The same document defines what is</span><span>
+</span><a name="line-176"></a><span class="hs-comment">-- and is not a \&quot;Mark\&quot;.</span><span>
+</span><a name="line-177"></a><span class="hs-comment">--</span><span>
+</span><a name="line-178"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-179"></a><span class="hs-comment">--</span><span>
+</span><a name="line-180"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-181"></a><span class="hs-comment">--</span><span>
+</span><a name="line-182"></a><span class="hs-comment">-- &gt;&gt;&gt; isMark 'a'</span><span>
+</span><a name="line-183"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-184"></a><span class="hs-comment">-- &gt;&gt;&gt; isMark '0'</span><span>
+</span><a name="line-185"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-186"></a><span class="hs-comment">--</span><span>
+</span><a name="line-187"></a><span class="hs-comment">-- Combining marks such as accent characters usually need to follow</span><span>
+</span><a name="line-188"></a><span class="hs-comment">-- another character before they become printable:</span><span>
+</span><a name="line-189"></a><span class="hs-comment">--</span><span>
+</span><a name="line-190"></a><span class="hs-comment">-- &gt;&gt;&gt; map isMark &quot;o&#768;&quot;</span><span>
+</span><a name="line-191"></a><span class="hs-comment">-- [False,True]</span><span>
+</span><a name="line-192"></a><span class="hs-comment">--</span><span>
+</span><a name="line-193"></a><span class="hs-comment">-- Puns are not necessarily supported:</span><span>
+</span><a name="line-194"></a><span class="hs-comment">--</span><span>
+</span><a name="line-195"></a><span class="hs-comment">-- &gt;&gt;&gt; isMark '&#10003;'</span><span>
+</span><a name="line-196"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-197"></a><span class="hs-comment">--</span><span>
+</span><a name="line-198"></a><span class="hs-identifier">isMark</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-199"></a><a name="isMark"><a href="Data.Char.html#isMark"><span class="hs-identifier">isMark</span></a></a><span> </span><a name="local-6989586621679151387"><a href="#local-6989586621679151387"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a><span> </span><a href="#local-6989586621679151387"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-200"></a><span>        </span><a href="GHC.Unicode.html#NonSpacingMark"><span class="hs-identifier hs-var">NonSpacingMark</span></a><span>          </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-201"></a><span>        </span><a href="GHC.Unicode.html#SpacingCombiningMark"><span class="hs-identifier hs-var">SpacingCombiningMark</span></a><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-202"></a><span>        </span><a href="GHC.Unicode.html#EnclosingMark"><span class="hs-identifier hs-var">EnclosingMark</span></a><span>           </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-203"></a><span>        </span><span class="hs-identifier">_</span><span>                       </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-204"></a><span>
+</span><a name="line-205"></a><span class="hs-comment">-- | Selects Unicode numeric characters, including digits from various</span><span>
+</span><a name="line-206"></a><span class="hs-comment">-- scripts, Roman numerals, et cetera.</span><span>
+</span><a name="line-207"></a><span class="hs-comment">--</span><span>
+</span><a name="line-208"></a><span class="hs-comment">-- This function returns 'True' if its argument has one of the</span><span>
+</span><a name="line-209"></a><span class="hs-comment">-- following 'GeneralCategory's, or 'False' otherwise:</span><span>
+</span><a name="line-210"></a><span class="hs-comment">--</span><span>
+</span><a name="line-211"></a><span class="hs-comment">-- * 'DecimalNumber'</span><span>
+</span><a name="line-212"></a><span class="hs-comment">-- * 'LetterNumber'</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- * 'OtherNumber'</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--</span><span>
+</span><a name="line-215"></a><span class="hs-comment">-- These classes are defined in the</span><span>
+</span><a name="line-216"></a><span class="hs-comment">-- &lt;http://www.unicode.org/reports/tr44/tr44-14.html#GC_Values_Table Unicode Character Database&gt;,</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- part of the Unicode standard. The same document defines what is</span><span>
+</span><a name="line-218"></a><span class="hs-comment">-- and is not a \&quot;Number\&quot;.</span><span>
+</span><a name="line-219"></a><span class="hs-comment">--</span><span>
+</span><a name="line-220"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-221"></a><span class="hs-comment">--</span><span>
+</span><a name="line-222"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-223"></a><span class="hs-comment">--</span><span>
+</span><a name="line-224"></a><span class="hs-comment">-- &gt;&gt;&gt; isNumber 'a'</span><span>
+</span><a name="line-225"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-226"></a><span class="hs-comment">-- &gt;&gt;&gt; isNumber '%'</span><span>
+</span><a name="line-227"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-228"></a><span class="hs-comment">-- &gt;&gt;&gt; isNumber '3'</span><span>
+</span><a name="line-229"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-230"></a><span class="hs-comment">--</span><span>
+</span><a name="line-231"></a><span class="hs-comment">-- ASCII @\'0\'@ through @\'9\'@ are all numbers:</span><span>
+</span><a name="line-232"></a><span class="hs-comment">--</span><span>
+</span><a name="line-233"></a><span class="hs-comment">-- &gt;&gt;&gt; and $ map isNumber ['0'..'9']</span><span>
+</span><a name="line-234"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-235"></a><span class="hs-comment">--</span><span>
+</span><a name="line-236"></a><span class="hs-comment">-- Unicode Roman numerals are \&quot;numbers\&quot; as well:</span><span>
+</span><a name="line-237"></a><span class="hs-comment">--</span><span>
+</span><a name="line-238"></a><span class="hs-comment">-- &gt;&gt;&gt; isNumber '&#8552;'</span><span>
+</span><a name="line-239"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-240"></a><span class="hs-comment">--</span><span>
+</span><a name="line-241"></a><span class="hs-identifier">isNumber</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-242"></a><a name="isNumber"><a href="Data.Char.html#isNumber"><span class="hs-identifier">isNumber</span></a></a><span> </span><a name="local-6989586621679151388"><a href="#local-6989586621679151388"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a><span> </span><a href="#local-6989586621679151388"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-243"></a><span>        </span><a href="GHC.Unicode.html#DecimalNumber"><span class="hs-identifier hs-var">DecimalNumber</span></a><span>           </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-244"></a><span>        </span><a href="GHC.Unicode.html#LetterNumber"><span class="hs-identifier hs-var">LetterNumber</span></a><span>            </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-245"></a><span>        </span><a href="GHC.Unicode.html#OtherNumber"><span class="hs-identifier hs-var">OtherNumber</span></a><span>             </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-246"></a><span>        </span><span class="hs-identifier">_</span><span>                       </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-247"></a><span>
+</span><a name="line-248"></a><span class="hs-comment">-- | Selects Unicode space and separator characters.</span><span>
+</span><a name="line-249"></a><span class="hs-comment">--</span><span>
+</span><a name="line-250"></a><span class="hs-comment">-- This function returns 'True' if its argument has one of the</span><span>
+</span><a name="line-251"></a><span class="hs-comment">-- following 'GeneralCategory's, or 'False' otherwise:</span><span>
+</span><a name="line-252"></a><span class="hs-comment">--</span><span>
+</span><a name="line-253"></a><span class="hs-comment">-- * 'Space'</span><span>
+</span><a name="line-254"></a><span class="hs-comment">-- * 'LineSeparator'</span><span>
+</span><a name="line-255"></a><span class="hs-comment">-- * 'ParagraphSeparator'</span><span>
+</span><a name="line-256"></a><span class="hs-comment">--</span><span>
+</span><a name="line-257"></a><span class="hs-comment">-- These classes are defined in the</span><span>
+</span><a name="line-258"></a><span class="hs-comment">-- &lt;http://www.unicode.org/reports/tr44/tr44-14.html#GC_Values_Table Unicode Character Database&gt;,</span><span>
+</span><a name="line-259"></a><span class="hs-comment">-- part of the Unicode standard. The same document defines what is</span><span>
+</span><a name="line-260"></a><span class="hs-comment">-- and is not a \&quot;Separator\&quot;.</span><span>
+</span><a name="line-261"></a><span class="hs-comment">--</span><span>
+</span><a name="line-262"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-263"></a><span class="hs-comment">--</span><span>
+</span><a name="line-264"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-265"></a><span class="hs-comment">--</span><span>
+</span><a name="line-266"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator 'a'</span><span>
+</span><a name="line-267"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-268"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator '6'</span><span>
+</span><a name="line-269"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-270"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator ' '</span><span>
+</span><a name="line-271"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-272"></a><span class="hs-comment">--</span><span>
+</span><a name="line-273"></a><span class="hs-comment">-- Warning: newlines and tab characters are not considered</span><span>
+</span><a name="line-274"></a><span class="hs-comment">-- separators.</span><span>
+</span><a name="line-275"></a><span class="hs-comment">--</span><span>
+</span><a name="line-276"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator '\n'</span><span>
+</span><a name="line-277"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-278"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator '\t'</span><span>
+</span><a name="line-279"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-280"></a><span class="hs-comment">--</span><span>
+</span><a name="line-281"></a><span class="hs-comment">-- But some more exotic characters are (like HTML's @&amp;nbsp;@):</span><span>
+</span><a name="line-282"></a><span class="hs-comment">--</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- &gt;&gt;&gt; isSeparator '\160'</span><span>
+</span><a name="line-284"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-285"></a><span class="hs-comment">--</span><span>
+</span><a name="line-286"></a><span class="hs-identifier">isSeparator</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-287"></a><a name="isSeparator"><a href="Data.Char.html#isSeparator"><span class="hs-identifier">isSeparator</span></a></a><span> </span><a name="local-6989586621679151389"><a href="#local-6989586621679151389"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a><span> </span><a href="#local-6989586621679151389"><span class="hs-identifier hs-var">c</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-288"></a><span>        </span><a href="GHC.Unicode.html#Space"><span class="hs-identifier hs-var">Space</span></a><span>                   </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-289"></a><span>        </span><a href="GHC.Unicode.html#LineSeparator"><span class="hs-identifier hs-var">LineSeparator</span></a><span>           </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-290"></a><span>        </span><a href="GHC.Unicode.html#ParagraphSeparator"><span class="hs-identifier hs-var">ParagraphSeparator</span></a><span>      </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-291"></a><span>        </span><span class="hs-identifier">_</span><span>                       </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-292"></a><span>
+</span><a name="line-293"></a></pre></body></html>

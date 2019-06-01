@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE MagicHash #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.Unique</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  non-portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- An abstract interface to a unique symbol generator.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Unique</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-19"></a><span>   </span><span class="hs-comment">-- * Unique objects</span><span>
+</span><a name="line-20"></a><span>   </span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a><span class="hs-special">,</span><span>
+</span><a name="line-21"></a><span>   </span><a href="Data.Unique.html#newUnique"><span class="hs-identifier hs-var">newUnique</span></a><span class="hs-special">,</span><span>
+</span><a name="line-22"></a><span>   </span><a href="Data.Unique.html#hashUnique"><span class="hs-identifier hs-var">hashUnique</span></a><span>
+</span><a name="line-23"></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-24"></a><span>
+</span><a name="line-25"></a><span class="hs-keyword">import</span><span> </span><a href="System.IO.Unsafe.html"><span class="hs-identifier">System.IO.Unsafe</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.Unsafe.html#unsafePerformIO"><span class="hs-identifier hs-var">unsafePerformIO</span></a><span class="hs-special">)</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Num.html"><span class="hs-identifier">GHC.Num</span></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="Data.IORef.html"><span class="hs-identifier">Data.IORef</span></a><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span class="hs-comment">-- | An abstract unique object.  Objects of type 'Unique' may be</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- compared for equality and ordering and hashed into 'Int'.</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- &gt;&gt;&gt; :{</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- do x &lt;- newUnique</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--    print (x == x)</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--    y &lt;- newUnique</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--    print (x == y)</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- :}</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-42"></a><span class="hs-keyword">newtype</span><span> </span><a name="Unique"><a href="Data.Unique.html#Unique"><span class="hs-identifier">Unique</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Unique"><a href="Data.Unique.html#Unique"><span class="hs-identifier">Unique</span></a></a><span> </span><a href="../integer-gmp-1.0.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Integer.Type.html#Integer"><span class="hs-identifier hs-type">Integer</span></a><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">)</span><span>
+</span><a name="line-43"></a><span>
+</span><a name="line-44"></a><span class="hs-identifier">uniqSource</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="../integer-gmp-1.0.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Integer.Type.html#Integer"><span class="hs-identifier hs-type">Integer</span></a><span>
+</span><a name="line-45"></a><a name="uniqSource"><a href="Data.Unique.html#uniqSource"><span class="hs-identifier">uniqSource</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Unsafe.html#unsafePerformIO"><span class="hs-identifier hs-var">unsafePerformIO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IORef.html#newIORef"><span class="hs-identifier hs-var">newIORef</span></a><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span>
+</span><a name="line-46"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">uniqSource</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-47"></a><span>
+</span><a name="line-48"></a><span class="hs-comment">-- | Creates a new object of type 'Unique'.  The value returned will</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- not compare equal to any other value of type 'Unique' returned by</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- previous calls to 'newUnique'.  There is no limit on the number of</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- times 'newUnique' may be called.</span><span>
+</span><a name="line-52"></a><span class="hs-identifier">newUnique</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a><span>
+</span><a name="line-53"></a><a name="newUnique"><a href="Data.Unique.html#newUnique"><span class="hs-identifier">newUnique</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-54"></a><span>  </span><a name="local-6989586621679334658"><a href="#local-6989586621679334658"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="Data.IORef.html#atomicModifyIORef%27"><span class="hs-identifier hs-var">atomicModifyIORef'</span></a><span> </span><a href="Data.Unique.html#uniqSource"><span class="hs-identifier hs-var">uniqSource</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679334656"><a href="#local-6989586621679334656"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679334657"><a href="#local-6989586621679334657"><span class="hs-identifier">z</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679334656"><span class="hs-identifier hs-var">x</span></a><a href="GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a><span class="hs-number">1</span><span> </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679334657"><span class="hs-identifier hs-var">z</span></a><span class="hs-special">,</span><a href="#local-6989586621679334657"><span class="hs-identifier hs-var">z</span></a><span class="hs-special">)</span><span>
+</span><a name="line-55"></a><span>  </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a><span> </span><a href="#local-6989586621679334658"><span class="hs-identifier hs-var">r</span></a><span class="hs-special">)</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">-- SDM (18/3/2010): changed from MVar to STM.  This fixes</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--  1. there was no async exception protection</span><span>
+</span><a name="line-59"></a><span class="hs-comment">--  2. there was a space leak (now new value is strict)</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--  3. using atomicModifyIORef would be slightly quicker, but can</span><span>
+</span><a name="line-61"></a><span class="hs-comment">--     suffer from adverse scheduling issues (see #3838)</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--  4. also, the STM version is faster.</span><span>
+</span><a name="line-63"></a><span>
+</span><a name="line-64"></a><span class="hs-comment">-- SDM (30/4/2012): changed to IORef using atomicModifyIORef.  Reasons:</span><span>
+</span><a name="line-65"></a><span class="hs-comment">--  1. STM version could not be used inside unsafePerformIO, if it</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--     happened to be poked inside an STM transaction.</span><span>
+</span><a name="line-67"></a><span class="hs-comment">--  2. IORef version can be used with unsafeIOToSTM inside STM,</span><span>
+</span><a name="line-68"></a><span class="hs-comment">--     because if the transaction retries then we just get a new</span><span>
+</span><a name="line-69"></a><span class="hs-comment">--     Unique.</span><span>
+</span><a name="line-70"></a><span class="hs-comment">--  3. IORef version is very slightly faster.</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span class="hs-comment">-- IGL (08/06/2013): changed to using atomicModifyIORef' instead.</span><span>
+</span><a name="line-73"></a><span class="hs-comment">--  This feels a little safer, from the point of view of not leaking</span><span>
+</span><a name="line-74"></a><span class="hs-comment">--  memory, but the resulting core is identical.</span><span>
+</span><a name="line-75"></a><span>
+</span><a name="line-76"></a><span class="hs-comment">-- | Hashes a 'Unique' into an 'Int'.  Two 'Unique's may hash to the</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- same value, although in practice this is unlikely.  The 'Int'</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- returned makes a good hash key.</span><span>
+</span><a name="line-79"></a><span class="hs-identifier">hashUnique</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-80"></a><a name="hashUnique"><a href="Data.Unique.html#hashUnique"><span class="hs-identifier">hashUnique</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a><span> </span><a name="local-6989586621679334659"><a href="#local-6989586621679334659"><span class="hs-identifier">i</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#I%23"><span class="hs-identifier hs-var">I#</span></a><span> </span><span class="hs-special">(</span><a href="../integer-gmp-1.0.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Integer.Type.html#hashInteger"><span class="hs-identifier hs-var">hashInteger</span></a><span> </span><a href="#local-6989586621679334659"><span class="hs-identifier hs-var">i</span></a><span class="hs-special">)</span><span>
+</span><a name="line-81"></a></pre></body></html>

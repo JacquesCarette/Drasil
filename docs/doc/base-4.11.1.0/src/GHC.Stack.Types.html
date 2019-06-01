@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE ConstraintKinds   #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE ImplicitParams    #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE KindSignatures    #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LANGUAGE PolyKinds         #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LANGUAGE RankNTypes        #-}</span><span>
+</span><a name="line-7"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy       #-}</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-pragma">{-# OPTIONS_HADDOCK hide #-}</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- we hide this module from haddock to enforce GHC.Stack as the main</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- access point.</span><span>
+</span><a name="line-12"></a><span>
+</span><a name="line-13"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Module      :  GHC.Stack.Types</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2015</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- License     :  see libraries/ghc-prim/LICENSE</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- type definitions for implicit call-stacks.</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Use &quot;GHC.Stack&quot; from the base package instead of importing this</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- module directly.</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Stack.Types</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-comment">-- * Implicit call stacks</span><span>
+</span><a name="line-31"></a><span>    </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#HasCallStack"><span class="hs-identifier hs-type">HasCallStack</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>    </span><a href="GHC.Stack.Types.html#emptyCallStack"><span class="hs-identifier hs-var">emptyCallStack</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#freezeCallStack"><span class="hs-identifier hs-var">freezeCallStack</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#fromCallSiteList"><span class="hs-identifier hs-var">fromCallSiteList</span></a><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span>    </span><a href="GHC.Stack.Types.html#getCallStack"><span class="hs-identifier hs-var">getCallStack</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#pushCallStack"><span class="hs-identifier hs-var">pushCallStack</span></a><span class="hs-special">,</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-comment">-- * Source locations</span><span>
+</span><a name="line-36"></a><span>    </span><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-37"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-comment">{-
+Ideally these would live in GHC.Stack but sadly they can't due to this
+import cycle,
+
+    Module imports form a cycle:
+           module &#8216;GHC.Base&#8217; (libraries/base/GHC/Base.hs)
+          imports &#8216;GHC.Err&#8217; (libraries/base/GHC/Err.hs)
+    which imports &#8216;GHC.Stack&#8217; (libraries/base/dist-install/build/GHC/Stack.hs)
+    which imports &#8216;GHC.Base&#8216; (libraries/base/GHC/Base.hs)
+-}</span><span>
+</span><a name="line-49"></a><span>
+</span><a name="line-50"></a><span class="hs-keyword">import</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html"><span class="hs-identifier">GHC.Classes</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">)</span><span>
+</span><a name="line-51"></a><span class="hs-keyword">import</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html"><span class="hs-identifier">GHC.Types</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">)</span><span>
+</span><a name="line-52"></a><span>
+</span><a name="line-53"></a><span class="hs-comment">-- Make implicit dependency known to build system</span><span>
+</span><a name="line-54"></a><span class="hs-keyword">import</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Tuple.html"><span class="hs-identifier">GHC.Tuple</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-55"></a><span class="hs-keyword">import</span><span> </span><a href="../integer-gmp-1.0.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Integer.html"><span class="hs-identifier">GHC.Integer</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-comment">----------------------------------------------------------------------</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- Explicit call-stacks built via ImplicitParams</span><span>
+</span><a name="line-59"></a><span class="hs-comment">----------------------------------------------------------------------</span><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-comment">-- | Request a CallStack.</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- NOTE: The implicit parameter @?callStack :: CallStack@ is an</span><span>
+</span><a name="line-64"></a><span class="hs-comment">-- implementation detail and __should not__ be considered part of the</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- 'CallStack' API, we may decide to change the implementation in the</span><span>
+</span><a name="line-66"></a><span class="hs-comment">-- future.</span><span>
+</span><a name="line-67"></a><span class="hs-comment">--</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-69"></a><span class="hs-keyword">type</span><span> </span><a name="HasCallStack"><a href="GHC.Stack.Types.html#HasCallStack"><span class="hs-identifier">HasCallStack</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="">?callStack</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span class="hs-special">)</span><span>
+</span><a name="line-70"></a><span>
+</span><a name="line-71"></a><span class="hs-comment">-- | 'CallStack's are a lightweight method of obtaining a</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- partial call-stack at any point in the program.</span><span>
+</span><a name="line-73"></a><span class="hs-comment">--</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- A function can request its call-site with the 'HasCallStack' constraint.</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- For example, we can define</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- putStrLnWithCallStack :: HasCallStack =&gt; String -&gt; IO ()</span><span>
+</span><a name="line-79"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-80"></a><span class="hs-comment">--</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- as a variant of @putStrLn@ that will get its call-site and print it,</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- along with the string given as argument. We can access the</span><span>
+</span><a name="line-83"></a><span class="hs-comment">-- call-stack inside @putStrLnWithCallStack@ with 'GHC.Stack.callStack'.</span><span>
+</span><a name="line-84"></a><span class="hs-comment">--</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- putStrLnWithCallStack :: HasCallStack =&gt; String -&gt; IO ()</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- putStrLnWithCallStack msg = do</span><span>
+</span><a name="line-88"></a><span class="hs-comment">--   putStrLn msg</span><span>
+</span><a name="line-89"></a><span class="hs-comment">--   putStrLn (prettyCallStack callStack)</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-91"></a><span class="hs-comment">--</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- Thus, if we call @putStrLnWithCallStack@ we will get a formatted call-stack</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- alongside our string.</span><span>
+</span><a name="line-94"></a><span class="hs-comment">--</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- &gt;&gt;&gt; putStrLnWithCallStack &quot;hello&quot;</span><span>
+</span><a name="line-97"></a><span class="hs-comment">-- hello</span><span>
+</span><a name="line-98"></a><span class="hs-comment">-- CallStack (from HasCallStack):</span><span>
+</span><a name="line-99"></a><span class="hs-comment">--   putStrLnWithCallStack, called at &lt;interactive&gt;:2:1 in interactive:Ghci1</span><span>
+</span><a name="line-100"></a><span class="hs-comment">--</span><span>
+</span><a name="line-101"></a><span class="hs-comment">--</span><span>
+</span><a name="line-102"></a><span class="hs-comment">-- GHC solves 'HasCallStack' constraints in three steps:</span><span>
+</span><a name="line-103"></a><span class="hs-comment">--</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- 1. If there is a 'CallStack' in scope -- i.e. the enclosing function</span><span>
+</span><a name="line-105"></a><span class="hs-comment">--    has a 'HasCallStack' constraint -- GHC will append the new</span><span>
+</span><a name="line-106"></a><span class="hs-comment">--    call-site to the existing 'CallStack'.</span><span>
+</span><a name="line-107"></a><span class="hs-comment">--</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- 2. If there is no 'CallStack' in scope -- e.g. in the GHCi session</span><span>
+</span><a name="line-109"></a><span class="hs-comment">--    above -- and the enclosing definition does not have an explicit</span><span>
+</span><a name="line-110"></a><span class="hs-comment">--    type signature, GHC will infer a 'HasCallStack' constraint for the</span><span>
+</span><a name="line-111"></a><span class="hs-comment">--    enclosing definition (subject to the monomorphism restriction).</span><span>
+</span><a name="line-112"></a><span class="hs-comment">--</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- 3. If there is no 'CallStack' in scope and the enclosing definition</span><span>
+</span><a name="line-114"></a><span class="hs-comment">--    has an explicit type signature, GHC will solve the 'HasCallStack'</span><span>
+</span><a name="line-115"></a><span class="hs-comment">--    constraint for the singleton 'CallStack' containing just the</span><span>
+</span><a name="line-116"></a><span class="hs-comment">--    current call-site.</span><span>
+</span><a name="line-117"></a><span class="hs-comment">--</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- 'CallStack's do not interact with the RTS and do not require compilation</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- with @-prof@. On the other hand, as they are built up explicitly via the</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- 'HasCallStack' constraints, they will generally not contain as much</span><span>
+</span><a name="line-121"></a><span class="hs-comment">-- information as the simulated call-stacks maintained by the RTS.</span><span>
+</span><a name="line-122"></a><span class="hs-comment">--</span><span>
+</span><a name="line-123"></a><span class="hs-comment">-- A 'CallStack' is a @[(String, SrcLoc)]@. The @String@ is the name of</span><span>
+</span><a name="line-124"></a><span class="hs-comment">-- function that was called, the 'SrcLoc' is the call-site. The list is</span><span>
+</span><a name="line-125"></a><span class="hs-comment">-- ordered with the most recently called function at the head.</span><span>
+</span><a name="line-126"></a><span class="hs-comment">--</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- NOTE: The intrepid user may notice that 'HasCallStack' is just an</span><span>
+</span><a name="line-128"></a><span class="hs-comment">-- alias for an implicit parameter @?callStack :: CallStack@. This is an</span><span>
+</span><a name="line-129"></a><span class="hs-comment">-- implementation detail and __should not__ be considered part of the</span><span>
+</span><a name="line-130"></a><span class="hs-comment">-- 'CallStack' API, we may decide to change the implementation in the</span><span>
+</span><a name="line-131"></a><span class="hs-comment">-- future.</span><span>
+</span><a name="line-132"></a><span class="hs-comment">--</span><span>
+</span><a name="line-133"></a><span class="hs-comment">-- @since 4.8.1.0</span><span>
+</span><a name="line-134"></a><span class="hs-keyword">data</span><span> </span><a name="CallStack"><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier">CallStack</span></a></a><span>
+</span><a name="line-135"></a><span>  </span><span class="hs-glyph">=</span><span> </span><a name="EmptyCallStack"><a href="GHC.Stack.Types.html#EmptyCallStack"><span class="hs-identifier">EmptyCallStack</span></a></a><span>
+</span><a name="line-136"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="PushCallStack"><a href="GHC.Stack.Types.html#PushCallStack"><span class="hs-identifier">PushCallStack</span></a></a><span> </span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span> </span><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-137"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="FreezeCallStack"><a href="GHC.Stack.Types.html#FreezeCallStack"><span class="hs-identifier">FreezeCallStack</span></a></a><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-138"></a><span>    </span><span class="hs-comment">-- ^ Freeze the stack at the given @CallStack@, preventing any further</span><span>
+</span><a name="line-139"></a><span>    </span><span class="hs-comment">-- call-sites from being pushed onto it.</span><span>
+</span><a name="line-140"></a><span>
+</span><a name="line-141"></a><span>  </span><span class="hs-comment">-- See Note [Overview of implicit CallStacks]</span><span>
+</span><a name="line-142"></a><span>
+</span><a name="line-143"></a><span class="hs-comment">-- | Extract a list of call-sites from the 'CallStack'.</span><span>
+</span><a name="line-144"></a><span class="hs-comment">--</span><span>
+</span><a name="line-145"></a><span class="hs-comment">-- The list is ordered by most recent call.</span><span>
+</span><a name="line-146"></a><span class="hs-comment">--</span><span>
+</span><a name="line-147"></a><span class="hs-comment">-- @since 4.8.1.0</span><span>
+</span><a name="line-148"></a><span class="hs-identifier">getCallStack</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a name="line-149"></a><a name="getCallStack"><a href="GHC.Stack.Types.html#getCallStack"><span class="hs-identifier">getCallStack</span></a></a><span> </span><a name="local-6989586621679017364"><a href="#local-6989586621679017364"><span class="hs-identifier">stk</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679017364"><span class="hs-identifier hs-var">stk</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-150"></a><span>  </span><a href="GHC.Stack.Types.html#EmptyCallStack"><span class="hs-identifier hs-var">EmptyCallStack</span></a><span>            </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a name="line-151"></a><span>  </span><a href="GHC.Stack.Types.html#PushCallStack"><span class="hs-identifier hs-var">PushCallStack</span></a><span> </span><a name="local-6989586621679017365"><a href="#local-6989586621679017365"><span class="hs-identifier">fn</span></a></a><span> </span><a name="local-6989586621679017366"><a href="#local-6989586621679017366"><span class="hs-identifier">loc</span></a></a><span> </span><a name="local-6989586621679017367"><a href="#local-6989586621679017367"><span class="hs-identifier">stk'</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679017365"><span class="hs-identifier hs-var">fn</span></a><span class="hs-special">,</span><a href="#local-6989586621679017366"><span class="hs-identifier hs-var">loc</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">:</span><span> </span><a href="GHC.Stack.Types.html#getCallStack"><span class="hs-identifier hs-var">getCallStack</span></a><span> </span><a href="#local-6989586621679017367"><span class="hs-identifier hs-var">stk'</span></a><span>
+</span><a name="line-152"></a><span>  </span><a href="GHC.Stack.Types.html#FreezeCallStack"><span class="hs-identifier hs-var">FreezeCallStack</span></a><span> </span><a name="local-6989586621679017368"><a href="#local-6989586621679017368"><span class="hs-identifier">stk'</span></a></a><span>      </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#getCallStack"><span class="hs-identifier hs-var">getCallStack</span></a><span> </span><a href="#local-6989586621679017368"><span class="hs-identifier hs-var">stk'</span></a><span>
+</span><a name="line-153"></a><span>
+</span><a name="line-154"></a><span class="hs-comment">-- | Convert a list of call-sites to a 'CallStack'.</span><span>
+</span><a name="line-155"></a><span class="hs-comment">--</span><span>
+</span><a name="line-156"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-157"></a><span class="hs-identifier">fromCallSiteList</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-158"></a><a name="fromCallSiteList"><a href="GHC.Stack.Types.html#fromCallSiteList"><span class="hs-identifier">fromCallSiteList</span></a></a><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><a name="local-6989586621679017369"><a href="#local-6989586621679017369"><span class="hs-identifier">fn</span></a></a><span class="hs-special">,</span><a name="local-6989586621679017370"><a href="#local-6989586621679017370"><span class="hs-identifier">loc</span></a></a><span class="hs-special">)</span><span class="hs-glyph">:</span><a name="local-6989586621679017371"><a href="#local-6989586621679017371"><span class="hs-identifier">cs</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Stack.Types.html#PushCallStack"><span class="hs-identifier hs-var">PushCallStack</span></a><span> </span><a href="#local-6989586621679017369"><span class="hs-identifier hs-var">fn</span></a><span> </span><a href="#local-6989586621679017370"><span class="hs-identifier hs-var">loc</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Stack.Types.html#fromCallSiteList"><span class="hs-identifier hs-var">fromCallSiteList</span></a><span> </span><a href="#local-6989586621679017371"><span class="hs-identifier hs-var">cs</span></a><span class="hs-special">)</span><span>
+</span><a name="line-159"></a><span class="hs-identifier">fromCallSiteList</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>            </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Stack.Types.html#EmptyCallStack"><span class="hs-identifier hs-var">EmptyCallStack</span></a><span>
+</span><a name="line-160"></a><span>
+</span><a name="line-161"></a><span class="hs-comment">-- Note [Definition of CallStack]</span><span>
+</span><a name="line-162"></a><span class="hs-comment">-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><span>
+</span><a name="line-163"></a><span class="hs-comment">-- CallStack is defined very early in base because it is</span><span>
+</span><a name="line-164"></a><span class="hs-comment">-- used by error and undefined. At this point in the dependency graph,</span><span>
+</span><a name="line-165"></a><span class="hs-comment">-- we do not have enough functionality to (conveniently) write a nice</span><span>
+</span><a name="line-166"></a><span class="hs-comment">-- pretty-printer for CallStack. The sensible place to define the</span><span>
+</span><a name="line-167"></a><span class="hs-comment">-- pretty-printer would be GHC.Stack, which is the main access point,</span><span>
+</span><a name="line-168"></a><span class="hs-comment">-- but unfortunately GHC.Stack imports GHC.Exception, which *needs*</span><span>
+</span><a name="line-169"></a><span class="hs-comment">-- the pretty-printer. So the CallStack type and functions are split</span><span>
+</span><a name="line-170"></a><span class="hs-comment">-- between three modules:</span><span>
+</span><a name="line-171"></a><span class="hs-comment">--</span><span>
+</span><a name="line-172"></a><span class="hs-comment">-- 1. GHC.Stack.Types: defines the type and *simple* functions</span><span>
+</span><a name="line-173"></a><span class="hs-comment">-- 2. GHC.Exception: defines the pretty-printer</span><span>
+</span><a name="line-174"></a><span class="hs-comment">-- 3. GHC.Stack: exports everything and acts as the main access point</span><span>
+</span><a name="line-175"></a><span>
+</span><a name="line-176"></a><span>
+</span><a name="line-177"></a><span class="hs-comment">-- | Push a call-site onto the stack.</span><span>
+</span><a name="line-178"></a><span class="hs-comment">--</span><span>
+</span><a name="line-179"></a><span class="hs-comment">-- This function has no effect on a frozen 'CallStack'.</span><span>
+</span><a name="line-180"></a><span class="hs-comment">--</span><span>
+</span><a name="line-181"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-182"></a><span class="hs-identifier">pushCallStack</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-183"></a><a name="pushCallStack"><a href="GHC.Stack.Types.html#pushCallStack"><span class="hs-identifier">pushCallStack</span></a></a><span> </span><span class="hs-special">(</span><a name="local-6989586621679017372"><a href="#local-6989586621679017372"><span class="hs-identifier">fn</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679017373"><a href="#local-6989586621679017373"><span class="hs-identifier">loc</span></a></a><span class="hs-special">)</span><span> </span><a name="local-6989586621679017374"><a href="#local-6989586621679017374"><span class="hs-identifier">stk</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679017374"><span class="hs-identifier hs-var">stk</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-184"></a><span>  </span><a href="GHC.Stack.Types.html#FreezeCallStack"><span class="hs-identifier hs-var">FreezeCallStack</span></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679017374"><span class="hs-identifier hs-var">stk</span></a><span>
+</span><a name="line-185"></a><span>  </span><span class="hs-identifier">_</span><span>                 </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#PushCallStack"><span class="hs-identifier hs-var">PushCallStack</span></a><span> </span><a href="#local-6989586621679017372"><span class="hs-identifier hs-var">fn</span></a><span> </span><a href="#local-6989586621679017373"><span class="hs-identifier hs-var">loc</span></a><span> </span><a href="#local-6989586621679017374"><span class="hs-identifier hs-var">stk</span></a><span>
+</span><a name="line-186"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">pushCallStack</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-187"></a><span>
+</span><a name="line-188"></a><span>
+</span><a name="line-189"></a><span class="hs-comment">-- | The empty 'CallStack'.</span><span>
+</span><a name="line-190"></a><span class="hs-comment">--</span><span>
+</span><a name="line-191"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-192"></a><span class="hs-identifier">emptyCallStack</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-193"></a><a name="emptyCallStack"><a href="GHC.Stack.Types.html#emptyCallStack"><span class="hs-identifier">emptyCallStack</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Stack.Types.html#EmptyCallStack"><span class="hs-identifier hs-var">EmptyCallStack</span></a><span>
+</span><a name="line-194"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">emptyCallStack</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-195"></a><span>
+</span><a name="line-196"></a><span>
+</span><a name="line-197"></a><span class="hs-comment">-- | Freeze a call-stack, preventing any further call-sites from being appended.</span><span>
+</span><a name="line-198"></a><span class="hs-comment">--</span><span>
+</span><a name="line-199"></a><span class="hs-comment">-- prop&gt; pushCallStack callSite (freezeCallStack callStack) = freezeCallStack callStack</span><span>
+</span><a name="line-200"></a><span class="hs-comment">--</span><span>
+</span><a name="line-201"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-202"></a><span class="hs-identifier">freezeCallStack</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Stack.Types.html#CallStack"><span class="hs-identifier hs-type">CallStack</span></a><span>
+</span><a name="line-203"></a><a name="freezeCallStack"><a href="GHC.Stack.Types.html#freezeCallStack"><span class="hs-identifier">freezeCallStack</span></a></a><span> </span><a name="local-6989586621679017375"><a href="#local-6989586621679017375"><span class="hs-identifier">stk</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Stack.Types.html#FreezeCallStack"><span class="hs-identifier hs-var">FreezeCallStack</span></a><span> </span><a href="#local-6989586621679017375"><span class="hs-identifier hs-var">stk</span></a><span>
+</span><a name="line-204"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">freezeCallStack</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-205"></a><span>
+</span><a name="line-206"></a><span>
+</span><a name="line-207"></a><span class="hs-comment">-- | A single location in the source code.</span><span>
+</span><a name="line-208"></a><span class="hs-comment">--</span><span>
+</span><a name="line-209"></a><span class="hs-comment">-- @since 4.8.1.0</span><span>
+</span><a name="line-210"></a><span class="hs-keyword">data</span><span> </span><a name="SrcLoc"><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier">SrcLoc</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="SrcLoc"><a href="GHC.Stack.Types.html#SrcLoc"><span class="hs-identifier">SrcLoc</span></a></a><span>
+</span><a name="line-211"></a><span>  </span><span class="hs-special">{</span><span> </span><a name="srcLocPackage"><a href="GHC.Stack.Types.html#srcLocPackage"><span class="hs-identifier">srcLocPackage</span></a></a><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span>
+</span><a name="line-212"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocModule"><a href="GHC.Stack.Types.html#srcLocModule"><span class="hs-identifier">srcLocModule</span></a></a><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span>
+</span><a name="line-213"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocFile"><a href="GHC.Stack.Types.html#srcLocFile"><span class="hs-identifier">srcLocFile</span></a></a><span>      </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span>
+</span><a name="line-214"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocStartLine"><a href="GHC.Stack.Types.html#srcLocStartLine"><span class="hs-identifier">srcLocStartLine</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-215"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocStartCol"><a href="GHC.Stack.Types.html#srcLocStartCol"><span class="hs-identifier">srcLocStartCol</span></a></a><span>  </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-216"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocEndLine"><a href="GHC.Stack.Types.html#srcLocEndLine"><span class="hs-identifier">srcLocEndLine</span></a></a><span>   </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-217"></a><span>  </span><span class="hs-special">,</span><span> </span><a name="srcLocEndCol"><a href="GHC.Stack.Types.html#srcLocEndCol"><span class="hs-identifier">srcLocEndCol</span></a></a><span>    </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-218"></a><span>  </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span>
+</span><a name="line-219"></a></pre></body></html>

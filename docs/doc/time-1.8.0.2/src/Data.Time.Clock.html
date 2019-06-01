@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Types and functions for UTC and UT1</span><span>
+</span><a name="line-2"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Time.Clock</span><span>
+</span><a name="line-3"></a><span class="hs-special">(</span><span>
+</span><a name="line-4"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Time.Clock.Internal.UniversalTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.UniversalTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-5"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Time.Clock.Internal.DiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.DiffTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-6"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Time.Clock.Internal.UTCTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.UTCTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-7"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.NominalDiffTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-8"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Time.Clock.Internal.UTCDiff.html"><span class="hs-identifier">Data.Time.Clock.Internal.UTCDiff</span></a><span class="hs-special">,</span><span>
+</span><a name="line-9"></a><span>    </span><a href="Data.Time.Clock.POSIX.html#getCurrentTime"><span class="hs-identifier hs-var">getCurrentTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-10"></a><span>    </span><a href="Data.Time.Clock.Internal.SystemTime.html#getTime_resolution"><span class="hs-identifier hs-var">getTime_resolution</span></a><span>
+</span><a name="line-11"></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-12"></a><span>
+</span><a name="line-13"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.UniversalTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.UniversalTime</span></a><span>
+</span><a name="line-14"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.DiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.DiffTime</span></a><span>
+</span><a name="line-15"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.SystemTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.SystemTime</span></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.UTCDiff.html"><span class="hs-identifier">Data.Time.Clock.Internal.UTCDiff</span></a><span>
+</span><a name="line-17"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.NominalDiffTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.NominalDiffTime</span></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.Internal.UTCTime.html"><span class="hs-identifier">Data.Time.Clock.Internal.UTCTime</span></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Clock.POSIX.html"><span class="hs-identifier">Data.Time.Clock.POSIX</span></a><span>
+</span><a name="line-20"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.Format.Parse.html"><span class="hs-identifier">Data.Time.Format.Parse</span></a><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-21"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.LocalTime.html"><span class="hs-identifier">Data.Time.LocalTime</span></a><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-22"></a></pre></body></html>

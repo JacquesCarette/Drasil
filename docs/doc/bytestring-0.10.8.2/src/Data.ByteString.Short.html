@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 701
+</span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-4"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Module      : Data.ByteString.Short</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Copyright   : (c) Duncan Coutts 2012-2013</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- License     : BSD-style</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Maintainer  : duncan@community.haskell.org</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Stability   : stable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Portability : ghc only</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- A compact representation suitable for storing short byte strings in memory.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- In typical use cases it can be imported alongside &quot;Data.ByteString&quot;, e.g.</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- &gt; import qualified Data.ByteString       as B</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- &gt; import qualified Data.ByteString.Short as B</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- &gt;          (ShortByteString, toShort, fromShort)</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Other 'ShortByteString' operations clash with &quot;Data.ByteString&quot; or &quot;Prelude&quot;</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- functions however, so they should be imported @qualified@ with a different</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- alias e.g.</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- &gt; import qualified Data.ByteString.Short as B.Short</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.ByteString.Short</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-comment">-- * The @ShortByteString@ type</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#ShortByteString"><span class="hs-identifier hs-type">ShortByteString</span></a><span class="hs-special">,</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-comment">-- ** Memory overhead</span><span>
+</span><a name="line-36"></a><span>    </span><span class="hs-comment">-- | With GHC, the memory overheads are as follows, expressed in words and</span><span>
+</span><a name="line-37"></a><span>    </span><span class="hs-comment">-- in bytes (words are 4 and 8 bytes on 32 or 64bit machines respectively).</span><span>
+</span><a name="line-38"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-39"></a><span>    </span><span class="hs-comment">-- * 'ByteString' unshared: 9 words; 36 or 72 bytes.</span><span>
+</span><a name="line-40"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span>    </span><span class="hs-comment">-- * 'ByteString' shared substring: 5 words; 20 or 40 bytes.</span><span>
+</span><a name="line-42"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-43"></a><span>    </span><span class="hs-comment">-- * 'ShortByteString': 4 words; 16 or 32 bytes.</span><span>
+</span><a name="line-44"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span>    </span><span class="hs-comment">-- For the string data itself, both 'ShortByteString' and 'ByteString' use</span><span>
+</span><a name="line-46"></a><span>    </span><span class="hs-comment">-- one byte per element, rounded up to the nearest word. For example,</span><span>
+</span><a name="line-47"></a><span>    </span><span class="hs-comment">-- including the overheads, a length 10 'ShortByteString' would take</span><span>
+</span><a name="line-48"></a><span>    </span><span class="hs-comment">-- @16 + 12 = 28@ bytes on a 32bit platform and @32 + 16 = 48@ bytes on a</span><span>
+</span><a name="line-49"></a><span>    </span><span class="hs-comment">-- 64bit platform.</span><span>
+</span><a name="line-50"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span>    </span><span class="hs-comment">-- These overheads can all be reduced by 1 word (4 or 8 bytes) when the</span><span>
+</span><a name="line-52"></a><span>    </span><span class="hs-comment">-- 'ShortByteString' or 'ByteString' is unpacked into another constructor.</span><span>
+</span><a name="line-53"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-54"></a><span>    </span><span class="hs-comment">-- For example:</span><span>
+</span><a name="line-55"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-56"></a><span>    </span><span class="hs-comment">-- &gt; data ThingId = ThingId {-# UNPACK #-} !Int</span><span>
+</span><a name="line-57"></a><span>    </span><span class="hs-comment">-- &gt;                        {-# UNPACK #-} !ShortByteString</span><span>
+</span><a name="line-58"></a><span>    </span><span class="hs-comment">--</span><span>
+</span><a name="line-59"></a><span>    </span><span class="hs-comment">-- This will take @1 + 1 + 3@ words (the @ThingId@ constructor +</span><span>
+</span><a name="line-60"></a><span>    </span><span class="hs-comment">-- unpacked @Int@ + unpacked @ShortByteString@), plus the words for the</span><span>
+</span><a name="line-61"></a><span>    </span><span class="hs-comment">-- string data.</span><span>
+</span><a name="line-62"></a><span>
+</span><a name="line-63"></a><span>    </span><span class="hs-comment">-- ** Heap fragmentation</span><span>
+</span><a name="line-64"></a><span>    </span><span class="hs-comment">-- | With GHC, the 'ByteString' representation uses /pinned/ memory,</span><span>
+</span><a name="line-65"></a><span>    </span><span class="hs-comment">-- meaning it cannot be moved by the GC. This is usually the right thing to</span><span>
+</span><a name="line-66"></a><span>    </span><span class="hs-comment">-- do for larger strings, but for small strings using pinned memory can</span><span>
+</span><a name="line-67"></a><span>    </span><span class="hs-comment">-- lead to heap fragmentation which wastes space. The 'ShortByteString'</span><span>
+</span><a name="line-68"></a><span>    </span><span class="hs-comment">-- type (and the @Text@ type from the @text@ package) use /unpinned/ memory</span><span>
+</span><a name="line-69"></a><span>    </span><span class="hs-comment">-- so they do not contribute to heap fragmentation. In addition, with GHC,</span><span>
+</span><a name="line-70"></a><span>    </span><span class="hs-comment">-- small unpinned strings are allocated in the same way as normal heap</span><span>
+</span><a name="line-71"></a><span>    </span><span class="hs-comment">-- allocations, rather than in a separate pinned area.</span><span>
+</span><a name="line-72"></a><span>
+</span><a name="line-73"></a><span>    </span><span class="hs-comment">-- * Conversions</span><span>
+</span><a name="line-74"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#toShort"><span class="hs-identifier hs-var">toShort</span></a><span class="hs-special">,</span><span>
+</span><a name="line-75"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#fromShort"><span class="hs-identifier hs-var">fromShort</span></a><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#pack"><span class="hs-identifier hs-var">pack</span></a><span class="hs-special">,</span><span>
+</span><a name="line-77"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#unpack"><span class="hs-identifier hs-var">unpack</span></a><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>
+</span><a name="line-79"></a><span>    </span><span class="hs-comment">-- * Other operations</span><span>
+</span><a name="line-80"></a><span>    </span><a href="Data.ByteString.Short.Internal.html#empty"><span class="hs-identifier hs-var">empty</span></a><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Short.Internal.html#null"><span class="hs-identifier hs-var">null</span></a><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Short.Internal.html#length"><span class="hs-identifier hs-var">length</span></a><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Short.Internal.html#index"><span class="hs-identifier hs-var">index</span></a><span class="hs-special">,</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-82"></a><span>
+</span><a name="line-83"></a><span class="hs-keyword">import</span><span> </span><a href="Data.ByteString.Short.Internal.html"><span class="hs-identifier">Data.ByteString.Short.Internal</span></a><span>
+</span><a name="line-84"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Prelude.html"><span class="hs-identifier">Prelude</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-85"></a><span>
+</span><a name="line-86"></a></pre></body></html>

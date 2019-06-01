@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE MagicHash #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LANGUAGE StandaloneDeriving #-}</span><span>
+</span><a name="line-7"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Module      :  System.Posix.Types</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2002</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Portability :  non-portable (requires POSIX)</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- POSIX data types: Haskell equivalents of the types defined by the</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- @\&lt;sys\/types.h&gt;@ C header on a POSIX system.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-23"></a><span class="hs-cpp">#include &quot;HsBaseConfig.h&quot;
+</span><span>
+</span><a name="line-25"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.Types</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span>  </span><span class="hs-comment">-- * POSIX data types</span><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span>  </span><span class="hs-comment">-- ** Platform differences</span><span>
+</span><a name="line-30"></a><span>  </span><span class="hs-comment">-- | This module contains platform specific information about types.</span><span>
+</span><a name="line-31"></a><span>  </span><span class="hs-comment">--   __/As such the types presented on this page reflect the platform</span><span>
+</span><a name="line-32"></a><span>  </span><span class="hs-comment">--   on which the documentation was generated and may not coincide with</span><span>
+</span><a name="line-33"></a><span>  </span><span class="hs-comment">--   the types on your platform./__</span><span>
+</span><a name="line-34"></a><span class="hs-cpp">#if defined(HTYPE_DEV_T)
+</span><span>  </span><a href="System.Posix.Types.html#CDev"><span class="hs-identifier hs-type">CDev</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-36"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_INO_T)
+</span><span>  </span><a href="System.Posix.Types.html#CIno"><span class="hs-identifier hs-type">CIno</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-39"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_MODE_T)
+</span><span>  </span><a href="System.Posix.Types.html#CMode"><span class="hs-identifier hs-type">CMode</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-42"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_OFF_T)
+</span><span>  </span><a href="System.Posix.Types.html#COff"><span class="hs-identifier hs-type">COff</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-45"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_PID_T)
+</span><span>  </span><a href="System.Posix.Types.html#CPid"><span class="hs-identifier hs-type">CPid</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-48"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_SSIZE_T)
+</span><span>  </span><a href="System.Posix.Types.html#CSsize"><span class="hs-identifier hs-type">CSsize</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-51"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-53"></a><span class="hs-cpp">#if defined(HTYPE_GID_T)
+</span><span>  </span><a href="System.Posix.Types.html#CGid"><span class="hs-identifier hs-type">CGid</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-55"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_NLINK_T)
+</span><span>  </span><a href="System.Posix.Types.html#CNlink"><span class="hs-identifier hs-type">CNlink</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-58"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_UID_T)
+</span><span>  </span><a href="System.Posix.Types.html#CUid"><span class="hs-identifier hs-type">CUid</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-61"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_CC_T)
+</span><span>  </span><a href="System.Posix.Types.html#CCc"><span class="hs-identifier hs-type">CCc</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-64"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_SPEED_T)
+</span><span>  </span><a href="System.Posix.Types.html#CSpeed"><span class="hs-identifier hs-type">CSpeed</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_TCFLAG_T)
+</span><span>  </span><a href="System.Posix.Types.html#CTcflag"><span class="hs-identifier hs-type">CTcflag</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-70"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_RLIM_T)
+</span><span>  </span><a href="System.Posix.Types.html#CRLim"><span class="hs-identifier hs-type">CRLim</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-73"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_BLKSIZE_T)
+</span><span>  </span><a href="System.Posix.Types.html#CBlkSize"><span class="hs-identifier hs-type">CBlkSize</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-76"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_BLKCNT_T)
+</span><span>  </span><a href="System.Posix.Types.html#CBlkCnt"><span class="hs-identifier hs-type">CBlkCnt</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_CLOCKID_T)
+</span><span>  </span><a href="System.Posix.Types.html#CClockId"><span class="hs-identifier hs-type">CClockId</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-82"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_FSBLKCNT_T)
+</span><span>  </span><a href="System.Posix.Types.html#CFsBlkCnt"><span class="hs-identifier hs-type">CFsBlkCnt</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-85"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_FSFILCNT_T)
+</span><span>  </span><a href="System.Posix.Types.html#CFsFilCnt"><span class="hs-identifier hs-type">CFsFilCnt</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_ID_T)
+</span><span>  </span><a href="System.Posix.Types.html#CId"><span class="hs-identifier hs-type">CId</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_KEY_T)
+</span><span>  </span><a href="System.Posix.Types.html#CKey"><span class="hs-identifier hs-type">CKey</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-94"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_TIMER_T)
+</span><span>  </span><a href="System.Posix.Types.html#CTimer"><span class="hs-identifier hs-type">CTimer</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-97"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-99"></a><span>  </span><a href="System.Posix.Types.html#Fd"><span class="hs-identifier hs-type">Fd</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-100"></a><span>
+</span><a name="line-101"></a><span>  </span><span class="hs-comment">-- See Note [Exporting constructors of marshallable foreign types]</span><span>
+</span><a name="line-102"></a><span>  </span><span class="hs-comment">-- in Foreign.Ptr for why the constructors for these newtypes are</span><span>
+</span><a name="line-103"></a><span>  </span><span class="hs-comment">-- exported.</span><span>
+</span><a name="line-104"></a><span>
+</span><a name="line-105"></a><span class="hs-cpp">#if defined(HTYPE_NLINK_T)
+</span><span>  </span><a href="System.Posix.Types.html#LinkCount"><span class="hs-identifier hs-type">LinkCount</span></a><span class="hs-special">,</span><span>
+</span><a name="line-107"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_UID_T)
+</span><span>  </span><a href="System.Posix.Types.html#UserID"><span class="hs-identifier hs-type">UserID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-110"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_GID_T)
+</span><span>  </span><a href="System.Posix.Types.html#GroupID"><span class="hs-identifier hs-type">GroupID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-113"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-115"></a><span>  </span><a href="System.Posix.Types.html#ByteCount"><span class="hs-identifier hs-type">ByteCount</span></a><span class="hs-special">,</span><span>
+</span><a name="line-116"></a><span>  </span><a href="System.Posix.Types.html#ClockTick"><span class="hs-identifier hs-type">ClockTick</span></a><span class="hs-special">,</span><span>
+</span><a name="line-117"></a><span>  </span><a href="System.Posix.Types.html#EpochTime"><span class="hs-identifier hs-type">EpochTime</span></a><span class="hs-special">,</span><span>
+</span><a name="line-118"></a><span>  </span><a href="System.Posix.Types.html#FileOffset"><span class="hs-identifier hs-type">FileOffset</span></a><span class="hs-special">,</span><span>
+</span><a name="line-119"></a><span>  </span><a href="System.Posix.Types.html#ProcessID"><span class="hs-identifier hs-type">ProcessID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-120"></a><span>  </span><a href="System.Posix.Types.html#ProcessGroupID"><span class="hs-identifier hs-type">ProcessGroupID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-121"></a><span>  </span><a href="System.Posix.Types.html#DeviceID"><span class="hs-identifier hs-type">DeviceID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-122"></a><span>  </span><a href="System.Posix.Types.html#FileID"><span class="hs-identifier hs-type">FileID</span></a><span class="hs-special">,</span><span>
+</span><a name="line-123"></a><span>  </span><a href="System.Posix.Types.html#FileMode"><span class="hs-identifier hs-type">FileMode</span></a><span class="hs-special">,</span><span>
+</span><a name="line-124"></a><span>  </span><a href="System.Posix.Types.html#Limit"><span class="hs-identifier hs-type">Limit</span></a><span>
+</span><a name="line-125"></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-126"></a><span>
+</span><a name="line-127"></a><span class="hs-keyword">import</span><span> </span><a href="Foreign.html"><span class="hs-identifier">Foreign</span></a><span>
+</span><a name="line-128"></a><span class="hs-keyword">import</span><span> </span><a href="Foreign.C.html"><span class="hs-identifier">Foreign.C</span></a><span>
+</span><a name="line-129"></a><span class="hs-comment">-- import Data.Bits</span><span>
+</span><a name="line-130"></a><span>
+</span><a name="line-131"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-132"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Enum.html"><span class="hs-identifier">GHC.Enum</span></a><span>
+</span><a name="line-133"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Num.html"><span class="hs-identifier">GHC.Num</span></a><span>
+</span><a name="line-134"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Real.html"><span class="hs-identifier">GHC.Real</span></a><span>
+</span><a name="line-135"></a><span class="hs-comment">-- import GHC.Prim</span><span>
+</span><a name="line-136"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Read.html"><span class="hs-identifier">GHC.Read</span></a><span>
+</span><a name="line-137"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Show.html"><span class="hs-identifier">GHC.Show</span></a><span>
+</span><a name="line-138"></a><span>
+</span><a name="line-139"></a><span class="hs-cpp">#include &quot;CTypes.h&quot;
+</span><span>
+</span><a name="line-141"></a><span class="hs-cpp">#if defined(HTYPE_DEV_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CDev</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_DEV_T</span><span class="hs-special">)</span><span>
+</span><a name="line-143"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_INO_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CIno</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_INO_T</span><span class="hs-special">)</span><span>
+</span><a name="line-146"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_MODE_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CMode</span><span class="hs-special">,</span><span class="hs-identifier">mode_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_MODE_T</span><span class="hs-special">)</span><span>
+</span><a name="line-149"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_OFF_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">COff</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_OFF_T</span><span class="hs-special">)</span><span>
+</span><a name="line-152"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_PID_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CPid</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_PID_T</span><span class="hs-special">)</span><span>
+</span><a name="line-155"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-157"></a><span class="hs-cpp">#if defined(HTYPE_SSIZE_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CSsize</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_SSIZE_T</span><span class="hs-special">)</span><span>
+</span><a name="line-159"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-161"></a><span class="hs-cpp">#if defined(HTYPE_GID_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CGid</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_GID_T</span><span class="hs-special">)</span><span>
+</span><a name="line-163"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_NLINK_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CNlink</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_NLINK_T</span><span class="hs-special">)</span><span>
+</span><a name="line-166"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-168"></a><span class="hs-cpp">#if defined(HTYPE_UID_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CUid</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_UID_T</span><span class="hs-special">)</span><span>
+</span><a name="line-170"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_CC_T)
+</span><span class="hs-identifier">ARITHMETIC_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CCc</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_CC_T</span><span class="hs-special">)</span><span>
+</span><a name="line-173"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_SPEED_T)
+</span><span class="hs-identifier">ARITHMETIC_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CSpeed</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_SPEED_T</span><span class="hs-special">)</span><span>
+</span><a name="line-176"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_TCFLAG_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CTcflag</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_TCFLAG_T</span><span class="hs-special">)</span><span>
+</span><a name="line-179"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_RLIM_T)
+</span><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">CRLim</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_RLIM_T</span><span class="hs-special">)</span><span>
+</span><a name="line-182"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-184"></a><span class="hs-cpp">#if defined(HTYPE_BLKSIZE_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-186"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CBlkSize</span><span class="hs-special">,</span><span class="hs-identifier">blksize_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_BLKSIZE_T</span><span class="hs-special">)</span><span>
+</span><a name="line-187"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_BLKCNT_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-190"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CBlkCnt</span><span class="hs-special">,</span><span class="hs-identifier">blkcnt_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_BLKCNT_T</span><span class="hs-special">)</span><span>
+</span><a name="line-191"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_CLOCKID_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-194"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CClockId</span><span class="hs-special">,</span><span class="hs-identifier">clockid_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_CLOCKID_T</span><span class="hs-special">)</span><span>
+</span><a name="line-195"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_FSBLKCNT_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-198"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CFsBlkCnt</span><span class="hs-special">,</span><span class="hs-identifier">fsblkcnt_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_FSBLKCNT_T</span><span class="hs-special">)</span><span>
+</span><a name="line-199"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_FSFILCNT_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-202"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CFsFilCnt</span><span class="hs-special">,</span><span class="hs-identifier">fsfilcnt_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_FSFILCNT_T</span><span class="hs-special">)</span><span>
+</span><a name="line-203"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_ID_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-206"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CId</span><span class="hs-special">,</span><span class="hs-identifier">id_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_ID_T</span><span class="hs-special">)</span><span>
+</span><a name="line-207"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_KEY_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-210"></a><span class="hs-identifier">INTEGRAL_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CKey</span><span class="hs-special">,</span><span class="hs-identifier">key_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_KEY_T</span><span class="hs-special">)</span><span>
+</span><a name="line-211"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_TIMER_T)
+</span><span class="hs-comment">-- | @since 4.10.0.0</span><span>
+</span><a name="line-214"></a><span class="hs-identifier">OPAQUE_TYPE_WITH_CTYPE</span><span class="hs-special">(</span><span class="hs-identifier">CTimer</span><span class="hs-special">,</span><span class="hs-identifier">timer_t</span><span class="hs-special">,</span><span class="hs-identifier">HTYPE_TIMER_T</span><span class="hs-special">)</span><span>
+</span><a name="line-215"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- Make an Fd type rather than using CInt everywhere</span><span>
+</span><a name="line-218"></a><span class="hs-identifier">INTEGRAL_TYPE</span><span class="hs-special">(</span><span class="hs-identifier">Fd</span><span class="hs-special">,</span><span class="hs-identifier">CInt</span><span class="hs-special">)</span><span>
+</span><a name="line-219"></a><span>
+</span><a name="line-220"></a><span class="hs-comment">-- nicer names, and backwards compatibility with POSIX library:</span><span>
+</span><a name="line-221"></a><span class="hs-cpp">#if defined(HTYPE_NLINK_T)
+</span><span class="hs-keyword">type</span><span> </span><a name="LinkCount"><a href="System.Posix.Types.html#LinkCount"><span class="hs-identifier">LinkCount</span></a></a><span>      </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CNlink"><span class="hs-identifier hs-type">CNlink</span></a><span>
+</span><a name="line-223"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_UID_T)
+</span><span class="hs-keyword">type</span><span> </span><a name="UserID"><a href="System.Posix.Types.html#UserID"><span class="hs-identifier">UserID</span></a></a><span>         </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CUid"><span class="hs-identifier hs-type">CUid</span></a><span>
+</span><a name="line-226"></a><span class="hs-cpp">#endif
+#if defined(HTYPE_GID_T)
+</span><span class="hs-keyword">type</span><span> </span><a name="GroupID"><a href="System.Posix.Types.html#GroupID"><span class="hs-identifier">GroupID</span></a></a><span>        </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CGid"><span class="hs-identifier hs-type">CGid</span></a><span>
+</span><a name="line-229"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-231"></a><span class="hs-keyword">type</span><span> </span><a name="ByteCount"><a href="System.Posix.Types.html#ByteCount"><span class="hs-identifier">ByteCount</span></a></a><span>      </span><span class="hs-glyph">=</span><span> </span><a href="Foreign.C.Types.html#CSize"><span class="hs-identifier hs-type">CSize</span></a><span>
+</span><a name="line-232"></a><span class="hs-keyword">type</span><span> </span><a name="ClockTick"><a href="System.Posix.Types.html#ClockTick"><span class="hs-identifier">ClockTick</span></a></a><span>      </span><span class="hs-glyph">=</span><span> </span><a href="Foreign.C.Types.html#CClock"><span class="hs-identifier hs-type">CClock</span></a><span>
+</span><a name="line-233"></a><span class="hs-keyword">type</span><span> </span><a name="EpochTime"><a href="System.Posix.Types.html#EpochTime"><span class="hs-identifier">EpochTime</span></a></a><span>      </span><span class="hs-glyph">=</span><span> </span><a href="Foreign.C.Types.html#CTime"><span class="hs-identifier hs-type">CTime</span></a><span>
+</span><a name="line-234"></a><span class="hs-keyword">type</span><span> </span><a name="DeviceID"><a href="System.Posix.Types.html#DeviceID"><span class="hs-identifier">DeviceID</span></a></a><span>       </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CDev"><span class="hs-identifier hs-type">CDev</span></a><span>
+</span><a name="line-235"></a><span class="hs-keyword">type</span><span> </span><a name="FileID"><a href="System.Posix.Types.html#FileID"><span class="hs-identifier">FileID</span></a></a><span>         </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CIno"><span class="hs-identifier hs-type">CIno</span></a><span>
+</span><a name="line-236"></a><span class="hs-keyword">type</span><span> </span><a name="FileMode"><a href="System.Posix.Types.html#FileMode"><span class="hs-identifier">FileMode</span></a></a><span>       </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CMode"><span class="hs-identifier hs-type">CMode</span></a><span>
+</span><a name="line-237"></a><span class="hs-keyword">type</span><span> </span><a name="ProcessID"><a href="System.Posix.Types.html#ProcessID"><span class="hs-identifier">ProcessID</span></a></a><span>      </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CPid"><span class="hs-identifier hs-type">CPid</span></a><span>
+</span><a name="line-238"></a><span class="hs-keyword">type</span><span> </span><a name="FileOffset"><a href="System.Posix.Types.html#FileOffset"><span class="hs-identifier">FileOffset</span></a></a><span>     </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#COff"><span class="hs-identifier hs-type">COff</span></a><span>
+</span><a name="line-239"></a><span class="hs-keyword">type</span><span> </span><a name="ProcessGroupID"><a href="System.Posix.Types.html#ProcessGroupID"><span class="hs-identifier">ProcessGroupID</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="System.Posix.Types.html#CPid"><span class="hs-identifier hs-type">CPid</span></a><span>
+</span><a name="line-240"></a><span class="hs-keyword">type</span><span> </span><a name="Limit"><a href="System.Posix.Types.html#Limit"><span class="hs-identifier">Limit</span></a></a><span>          </span><span class="hs-glyph">=</span><span> </span><a href="Foreign.C.Types.html#CLong"><span class="hs-identifier hs-type">CLong</span></a><span>
+</span><a name="line-241"></a></pre></body></html>

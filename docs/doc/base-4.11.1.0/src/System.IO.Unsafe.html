@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Unsafe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  System.IO.Unsafe</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- \&quot;Unsafe\&quot; IO operations.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.IO.Unsafe</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-19"></a><span>   </span><span class="hs-comment">-- * Unsafe 'System.IO.IO' operations</span><span>
+</span><a name="line-20"></a><span>   </span><a href="GHC.IO.Unsafe.html#unsafePerformIO"><span class="hs-identifier hs-var">unsafePerformIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-21"></a><span>   </span><a href="GHC.IO.Unsafe.html#unsafeDupablePerformIO"><span class="hs-identifier hs-var">unsafeDupablePerformIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-22"></a><span>   </span><a href="GHC.IO.Unsafe.html#unsafeInterleaveIO"><span class="hs-identifier hs-var">unsafeInterleaveIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>   </span><a href="System.IO.Unsafe.html#unsafeFixIO"><span class="hs-identifier hs-var">unsafeFixIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.html"><span class="hs-identifier">GHC.IO</span></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IORef.html"><span class="hs-identifier">GHC.IORef</span></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Exception.html"><span class="hs-identifier">GHC.Exception</span></a><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><a href="Control.Exception.html"><span class="hs-identifier">Control.Exception</span></a><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | A slightly faster version of `System.IO.fixIO` that may not be</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- safe to use with multiple threads.  The unsafety arises when used</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- like this:</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- &gt;  unsafeFixIO $ \r -&gt; do</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- &gt;     forkIO (print r)</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- &gt;     return (...)</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- In this case, the child thread will receive a @NonTermination@</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- exception instead of waiting for the value of @r@ to be computed.</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- @since 4.5.0.0</span><span>
+</span><a name="line-44"></a><span class="hs-identifier">unsafeFixIO</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679287347"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287347"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287347"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-45"></a><a name="unsafeFixIO"><a href="System.IO.Unsafe.html#unsafeFixIO"><span class="hs-identifier">unsafeFixIO</span></a></a><span> </span><a name="local-6989586621679287348"><a href="#local-6989586621679287348"><span class="hs-identifier">k</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-46"></a><span>  </span><a name="local-6989586621679287349"><a href="#local-6989586621679287349"><span class="hs-identifier">ref</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="GHC.IORef.html#newIORef"><span class="hs-identifier hs-var">newIORef</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Exception.html#throw"><span class="hs-identifier hs-var">throw</span></a><span> </span><a href="Control.Exception.Base.html#NonTermination"><span class="hs-identifier hs-var">NonTermination</span></a><span class="hs-special">)</span><span>
+</span><a name="line-47"></a><span>  </span><a name="local-6989586621679287350"><a href="#local-6989586621679287350"><span class="hs-identifier">ans</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="GHC.IO.Unsafe.html#unsafeDupableInterleaveIO"><span class="hs-identifier hs-var">unsafeDupableInterleaveIO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IORef.html#readIORef"><span class="hs-identifier hs-var">readIORef</span></a><span> </span><a href="#local-6989586621679287349"><span class="hs-identifier hs-var">ref</span></a><span class="hs-special">)</span><span>
+</span><a name="line-48"></a><span>  </span><a name="local-6989586621679287351"><a href="#local-6989586621679287351"><span class="hs-identifier">result</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="#local-6989586621679287348"><span class="hs-identifier hs-var">k</span></a><span> </span><a href="#local-6989586621679287350"><span class="hs-identifier hs-var">ans</span></a><span>
+</span><a name="line-49"></a><span>  </span><a href="GHC.IORef.html#writeIORef"><span class="hs-identifier hs-var">writeIORef</span></a><span> </span><a href="#local-6989586621679287349"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="#local-6989586621679287351"><span class="hs-identifier hs-var">result</span></a><span>
+</span><a name="line-50"></a><span>  </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679287351"><span class="hs-identifier hs-var">result</span></a><span>
+</span><a name="line-51"></a></pre></body></html>

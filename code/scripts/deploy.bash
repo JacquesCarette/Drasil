@@ -1,5 +1,6 @@
 SOURCE_BRANCH="con_dep"
 DEPLOY_BRANCH="gh-pages"
+SOURCE_BRANCH="con_dep"
 DEPLOY_FOLDER="deploy"
 BUILD_NUMBER_FILE=".build-num"
 
@@ -29,6 +30,11 @@ if [ -z "$BOT_TOKEN" ]; then
   exit 1
 fi
 
+if [ -z "$BOT_EMAIL" ]; then
+  echo "Assuming dummy email"
+  BOT_EMAIL="drasil-bot@local"
+fi
+
 source "$ALL_FUNCTIONS_FILE"
 
 copy_docs() {
@@ -55,8 +61,9 @@ try_deploy() {
 
   echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
   copy_docs
+  echo "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Drasil</title></head><body>Missing real index.</body></html>" > index.html
 
-  git config user.email "drasil-bot@local"
+  git config user.email "$BOT_EMAIL"
   git config user.name "drasil-bot"
   git add -A .
   # We overwrite history because the artifacts we keep in here are moderately large and woiuld pollute history otherwise.

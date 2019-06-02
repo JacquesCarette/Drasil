@@ -3,12 +3,31 @@ if [ -z "$DEPLOY_FOLDER" ]; then
 	exit 1
 fi
 
+if [ -z "$BUILD_FOLDER" ]; then
+	echo "Missing BUILD_FOLDER."
+	exit 1
+fi
+
 if [ -z "$GRAPH_FOLDER" ]; then
 	echo "Missing GRAPH_FOLDER."
 	exit 1
 fi
 
+if [ -z "$DEPLOY_CODE_PATH_KV_SEP" ]; then
+	echo "Missing DEPLOY_CODE_PATH_KV_SEP."
+	exit 1
+fi
+
+if [ -z "$MAKE" ]; then
+	echo "Missing MAKE. Did you invoke this with \`make deploy(_lite)\`?"
+	exit 1
+fi
+
 DOC_DEST=docs/
+SRS_DEST=srs/
+EXAMPLE_DEST=examples/
+CUR_DIR="$PWD/"
+
 
 copy_docs() {
   DOC_DIR=$(stack path | grep local-doc-root | cut -d":" -f2 | sed -e "s/^ //")/
@@ -17,12 +36,41 @@ copy_docs() {
   cp -r "$DOC_DIR". "$DOC_DEST"
 }
 
+copy_datafiles() {
+	echo "FIXME: Drasil should copy needed images and resources to the appropriate output directory to avoid needing the entirety of datafiles (for HTML)."
+	rm -r datafiles  >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
+	mkdir -p datafiles
+	cp -r "$CUR_DIR"datafiles/. datafiles/
+}
+
 copy_graphs() {
   rm -r "$GRAPH_FOLDER" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
-  cp -r ../"$GRAPH_FOLDER". "$GRAPH_FOLDER"
+  cp -r "$CUR_DIR$GRAPH_FOLDER". "$GRAPH_FOLDER"
 }
+
+copy_examples() {
+	for example in "$CUR_DIR$BUILD_FOLDER"*; do
+		example_name=$(basename $example)
+		mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
+		if [ -d "$example/"SRS ]; then
+			cp "$example/"SRS/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
+		fi
+		if [ -d "$example/"Website/ ]; then
+			cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
+		fi
+		if [ -d "$example/"src ]; then
+			# We don't expose code in deploy. It's more conveneient to link to GitHub's directory
+			# We place a stub file which Hakyll will replace.
+			echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
+		fi
+	done
+}
+
 
 cd "$DEPLOY_FOLDER"
 copy_docs
 copy_graphs
+copy_datafiles
+copy_examples
 echo "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Drasil</title></head><body>Missing real index.</body></html>" > index.html
+cd "$CUR_DIR"

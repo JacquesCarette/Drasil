@@ -30,6 +30,7 @@ desktop.ini
 /code/build
 /code/logs
 /code/graphs
+/code/deploy
 *.synctex.gz
 *.pyc
 __pycache__

@@ -53,7 +53,7 @@ CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME)
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -74,6 +74,8 @@ LOG_FOLDER = $(LOG_FOLDER_NAME)/
 SCRIPT_FOLDER = scripts/
 GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
+DEPLOY_FOLDER_NAME = deploy
+DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 
 # make command line options
 #  GHC debug options
@@ -186,6 +188,19 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_S
 
 code: $(CODE_EXAMPLES)
 
+deploy_lite:
+	mkdir -p $(DEPLOY_FOLDER)
+	DEPLOY_FOLDER=$(DEPLOY_FOLDER) GRAPH_FOLDER=$(GRAPH_FOLDER) "$(SHELL)" $(SCRIPT_FOLDER)deploy_stage.sh
+
+# This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
+# dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
+# files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
+# everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
+# what `deploy.bash` calls. 
+deploy: graphs docs tex
+	$(MAKE) deploy_lite
+
+
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -r "./$*"
@@ -194,4 +209,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy deploy_lite all $(ALL_EXPANDED_TARGETS)

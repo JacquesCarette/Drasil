@@ -1,4 +1,5 @@
-module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
+module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
+  eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
@@ -83,7 +84,7 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1,
+  eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
   eBalanceOnWtrDerivDesc3 w_mass htCap_W,
   eBalanceOnWtrDerivDesc4 eq2,
@@ -91,27 +92,34 @@ eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc6 eq3 eq4,
   eBalanceOnWtrDerivDesc7 eq5]
 
-eBalanceOnWtrDerivDesc1 :: [Sentence]
-eBalanceOnWtrDerivDesc1 = [S "To find the", phrase rOfChng `sOf` (E $ sy temp_W) `sC`
+eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> [Sentence]
+eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf` (E $ sy temp_W) `sC`
   S "we look at the", phrase energy, S "balance on" +:+. phrase water, S "The",
   phrase vol, S "being considered" `isThe` (phrase vol `sOf` phrase water), S "in the",
   phrase tank, (E $ sy w_vol) `sC` S "which has", phrase mass +:+. ((E $ sy w_mass) `sAnd`
   phrase heatCapSpec `sC` (E $ sy htCap_W)), at_start heatTrans, S "occurs in the",
   phrase water, S "from the", phrase coil, S "as", (E $ sy ht_flux_C),
-  sParen (makeRef2S dd1HtFluxC) `sAnd` S "from the", phrase water, S "into the PCM as",
-  (E $ sy ht_flux_P) `sC` sParen (makeRef2S dd2HtFluxP), S "over areas" +:+.
-  ((E $ sy coil_SA) `sAnd` (E $ sy pcm_SA) `sC` S "respectively"), S "The thermal flux",
-  S "is constant over", (E $ sy coil_SA) `sC` S "since", phrase temp `ofThe`
-  phrase coil, S "is assumed to not vary along its length", sParen (makeRef2S assumpTHCCoL) `sC`
-  EmptyS `andThe` S "thermal flux is constant over", (E $ sy pcm_SA) `sC`
-  S "since", phrase temp `ofThe` S "PCM is the same throughout its", phrase vol,
-  sParen (makeRef2S assumpTPCAV) `andThe` phrase water, S "is fully mixed" +:+.
-  sParen (makeRef2S assumpCWTAT), S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
+  sParen (makeRef2S dd1HtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
-  S "is made that no internal heat is generated" +:+. (sParen (makeRef2S assumpNIHGBWP) `sC`
+  S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
   (E $ sy vol_ht_gen $= 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
   makeRef2S rocTempSimp, S "can be written as"]
+
+htTransEnd :: Sentence
+htTransEnd = foldlSent_ [S " " `sAnd` S "from the", phrase water, S "into the PCM as",
+  (E $ sy ht_flux_P), sParen (makeRef2S dd2HtFluxP)]
+
+overAreas :: Sentence
+overAreas = S "over areas" +:+ ((E $ sy coil_SA) `sAnd` (E $ sy pcm_SA) `sC` S "respectively")
+
+extraAssumps :: Sentence
+extraAssumps = foldlSent [S "The thermal flux is constant over", (E $ sy coil_SA) `sC`
+  S "since", phrase temp `ofThe` phrase coil, S "is assumed to not vary along its length",
+  sParen (makeRef2S assumpTHCCoL) `sC` EmptyS `andThe` S "thermal flux is constant over",
+  (E $ sy pcm_SA) `sC` S "since", phrase temp `ofThe` S "PCM is the same throughout its",
+  phrase vol, sParen (makeRef2S assumpTPCAV) `andThe` phrase water, S "is fully mixed" +:+
+  sParen (makeRef2S assumpCWTAT)]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 dd2 =

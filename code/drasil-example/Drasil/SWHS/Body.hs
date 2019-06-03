@@ -14,12 +14,11 @@ import Utils.Drasil
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 
-import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
+  Field(..), Fields, LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
+  ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..),
@@ -45,7 +44,7 @@ import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
@@ -73,9 +72,9 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
-import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, nfRequirements)
+import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
+  nfRequirements, propsDeriv)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
   ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
   pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
@@ -124,7 +123,7 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
-  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon)
+  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
   (this_si ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
@@ -192,7 +191,7 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
@@ -240,7 +239,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [dataConTable1, inputInitQuantsTblabled]
+labCon = [dataConTable1, inputInitQuantsTable]
 
 sec :: [Section]
 sec = extractSection srs'

@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
@@ -40,6 +40,7 @@ import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
+
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.Software.Products (compPro, prodtcon)
@@ -51,7 +52,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..), AuxConstntSec(AuxConsProg),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
@@ -71,9 +72,8 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
+import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
@@ -89,8 +89,8 @@ import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
-import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
-import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
+import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
+import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
@@ -171,7 +171,7 @@ mkSRS = [RefSec $ RefProg intro
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
@@ -202,14 +202,14 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
 concIns =
- reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
 section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTblabled, dataConstTable1]
+labCon = [inputInitQuantsTable, dataConstTable1]
 
 sec :: [Section]
 sec = extractSection srs
@@ -252,7 +252,7 @@ symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermoco
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
-  ++ map nw [abs_tol, rel_tol, cons_tol])
+  ++ map nw [abs_tol, rel_tol, cons_tol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
   this_si label refBy dataDefn iMods genDef theory
   concIns section labCon
@@ -478,7 +478,7 @@ traceInstaModel = ["IM1", "IM2"]
 traceInstaModelRef = map makeRef2S [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRef2S reqs
+traceFuncReqRef = map makeRef2S funcReqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?

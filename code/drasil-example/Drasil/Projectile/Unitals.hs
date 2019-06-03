@@ -4,8 +4,6 @@ import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
 
-import Data.Drasil.SentenceStructures (foldlSent)
-
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, iSpeed, position)
 

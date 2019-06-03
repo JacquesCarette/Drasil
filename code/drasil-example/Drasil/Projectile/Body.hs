@@ -27,7 +27,6 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.People (samCrawford)
 import Data.Drasil.Phrase (for'')
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 
 import qualified Data.Map as Map
 

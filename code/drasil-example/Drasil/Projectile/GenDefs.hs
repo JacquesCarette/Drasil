@@ -7,8 +7,6 @@ import Utils.Drasil
 
 import Data.Drasil.Quantities.Physics (fSpeed, iSpeed, ixVel, scalarAccel, time, xAccel, xDist, yAccel, yVel)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent)
-
 import Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, equalHeights)
 import Drasil.Projectile.DataDefs (speedY)
 import Drasil.Projectile.Unitals (launAngle)

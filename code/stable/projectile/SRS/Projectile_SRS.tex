@@ -300,27 +300,27 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \\ \midrule \\
 Label & IsShort
 \\ \midrule \\
-Input & ${d_{target}}$, $d$
+Input & ${r_{target}}$, ${r_{x}}$
 \\ \midrule \\
 Output & $isShort$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d>0
+                    {r_{x}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isShort={d_{target}}>d
+           isShort={r_{target}}>{r_{x}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$isShort$ is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d$ is the launch distance (m)}
+              \item{${r_{target}}$ is the target distance (m)}
+              \item{${r_{x}}$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -340,27 +340,27 @@ RefBy &
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${d_{target}}$, $d$
+Input & ${r_{target}}$, ${r_{x}}$
 \\ \midrule \\
-Output & ${d_{offset}}$
+Output & ${r_{offset}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d>0
+                    {r_{x}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {d_{offset}}=|{d_{target}}-d|
+           {r_{offset}}=|{r_{target}}-{r_{x}}|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{offset}}$ is the offset between the target distance and the launch distance (m)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d$ is the launch distance (m)}
+              \item{${r_{offset}}$ is the offset between the target distance and the launch distance (m)}
+              \item{${r_{target}}$ is the target distance (m)}
+              \item{${r_{x}}$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -380,27 +380,27 @@ RefBy &
 \\ \midrule \\
 Label & IsHit
 \\ \midrule \\
-Input & ${d_{offset}}$, ${d_{target}}$
+Input & ${r_{offset}}$, ${r_{target}}$
 \\ \midrule \\
 Output & $isHit$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{offset}}>0
+                    {r_{offset}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isHit={d_{offset}}<\frac{1}{50} {d_{target}}
+           isHit={r_{offset}}<\frac{1}{50} {r_{target}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$isHit$ is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)}
-              \item{${d_{offset}}$ is the offset between the target distance and the launch distance (m)}
-              \item{${d_{target}}$ is the target distance (m)}
+              \item{${r_{offset}}$ is the offset between the target distance and the launch distance (m)}
+              \item{${r_{target}}$ is the target distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 

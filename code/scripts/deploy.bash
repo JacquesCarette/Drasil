@@ -1,7 +1,7 @@
 SOURCE_BRANCH="con_dep"
 DEPLOY_BRANCH="gh-pages"
 SOURCE_BRANCH="con_dep"
-DEPLOY_FOLDER="deploy"
+DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
 
 if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
@@ -55,6 +55,11 @@ try_deploy() {
   echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
   cd "$CUR_DIR"
   make deploy_lite DEPLOY_FOLDER="$DEPLOY_FOLDER"
+  MAKE_RET=$?
+  if [ $MAKE_RET != 0 ]; then
+    echo "Making the deploy folder failed! Failing deploy."
+    return $MAKE_RET
+  fi
   cd "$DEPLOY_FOLDER"
 
   git config user.email "$BOT_EMAIL"

@@ -31,6 +31,8 @@ desktop.ini
 /code/logs
 /code/graphs
 /code/deploy
+/code/website/_cache
+/code/website/_site
 *.synctex.gz
 *.pyc
 __pycache__

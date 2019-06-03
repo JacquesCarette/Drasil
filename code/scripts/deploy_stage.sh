@@ -66,11 +66,26 @@ copy_examples() {
 	done
 }
 
+build_website() {
+	cd "$CUR_DIR"website
+	make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER"
+	RET=$?
+	if [ $RET != 0 ]; then
+		echo "Build Failed. Bailing."
+		exit 1
+	fi
+	cd "$CUR_DIR$DEPLOY_FOLDER"
+	cp -r "$CUR_DIR"website/_site/. .
+
+	# src stubs were consumed by site generator; safe to delete those.
+	rm "$EXAMPLE_DEST"*/src
+}
+
 
 cd "$DEPLOY_FOLDER"
 copy_docs
 copy_graphs
 copy_datafiles
 copy_examples
-echo "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Drasil</title></head><body>Missing real index.</body></html>" > index.html
+build_website
 cd "$CUR_DIR"

@@ -62,6 +62,9 @@ before_install:
 install:
 # Build dependencies
 - stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/stack.yaml
+# Build dependencies for deploy because cache is already stored by the time deploy runs
+# which would otherwise mean website dependencies would have to be installed every deploy build.
+- stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/website/stack.yaml
 
 script:
  - ci_export_funcs

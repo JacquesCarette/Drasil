@@ -42,7 +42,7 @@ renderBuildName ext p o (BPack a) = renderBuildName ext p o BPackName <> makeS(p
 renderBuildName ext p o (BWithExt a e) = renderBuildName ext p o a <> if includeExt o then renderExt ext e else makeS ""
 
 renderExt :: [String] -> Ext -> MakeString
-renderExt e CodeExt = makeS $ head e
+renderExt e CodeExt = makeS $ last e
 renderExt _ (OtherExt e) = e
 
 getMainModule :: [(Doc, Label, Bool)] -> Label
@@ -51,7 +51,7 @@ getMainModule c = mainName $ filter tripThird c
         mainName _ = error "Expected a single main module."
 
 getCompilerInput :: BuildDependencies -> [String] -> ([(Doc, Label, Bool)], Label) -> Code -> [MakeString]
-getCompilerInput BcSource e _ a = map makeS $ filter (endswith $ head e) $ map fst $ unCode a
+getCompilerInput BcSource e _ a = map makeS $ filter (endswith $ last e) $ map fst $ unCode a
 getCompilerInput (BcSingle n) e p _ = [renderBuildName e p nameOpts n]
 
 

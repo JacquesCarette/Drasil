@@ -71,5 +71,5 @@ genCode chs spec = do
   where genLangCode Java = genCall Java [unJC]
         genLangCode Python = genCall Python [unPC]
         genLangCode CSharp = genCall CSharp [unCSC]
-        genLangCode Cpp = genCall Cpp [unSrc, unHdr]
+        genLangCode Cpp = genCall Cpp [unHdr, unSrc]
         genCall lng unRepr = generateCode lng unRepr $ generator chs spec

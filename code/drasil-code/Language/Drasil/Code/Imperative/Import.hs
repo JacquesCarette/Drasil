@@ -116,7 +116,7 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (head unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
+     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
             map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
             C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
      setCurrentDirectory workingDir
@@ -150,7 +150,7 @@ getExt :: Lang -> [Label]
 getExt Java = [".java"]
 getExt Python = [".py"]
 getExt CSharp = [".cs"]
-getExt Cpp = [".cpp", ".hpp"]
+getExt Cpp = [".hpp", ".cpp"]
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"

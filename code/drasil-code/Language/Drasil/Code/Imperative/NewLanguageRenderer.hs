@@ -1,7 +1,7 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.NewLanguageRenderer (
     -- * Common Syntax
-    classDec, dot, doubleSlash, forLabel, new, observerListName, Terminator(..),
+    classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
     packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
@@ -32,8 +32,9 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label, Library)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, angles,blank,
-    doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,vmap)
+import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
+    angles,blank, doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,
+    vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -54,8 +55,6 @@ new = text "new"
 
 observerListName :: Label
 observerListName = "observerList"
-
-data Terminator = Semi | Empty
 
 ----------------------------------
 -- Functions for rendering code --

@@ -45,7 +45,7 @@ renderExt e CodeExt = makeS $ last e
 renderExt _ (OtherExt e) = e
 
 getMainModule :: [ModData] -> Label
-getMainModule c = mainName $ filter isMain c
+getMainModule c = mainName $ filter isMainMod c
   where mainName [MD a _ _] = a
         mainName _ = error "Expected a single main module."
 

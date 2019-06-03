@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.New (Label,
     SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
     ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
     StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (
     fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
     intTypeDocD, floatTypeDocD, typeDocD, voidDocD, constructDocD, 
     paramListDocD, methodListDocD, ifCondDocD, stratDocD, assignDocD, 
@@ -29,8 +29,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, blank, oneTab,
-  vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, liftPairFst)
+import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
+  blank, oneTab, vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, 
+  liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -58,7 +59,7 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
     type RenderFile PythonCode = ModData
-    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
+    fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
     top _ = return pytop
     bottom = return empty
 

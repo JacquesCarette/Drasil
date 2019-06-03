@@ -1,12 +1,11 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (Pair(..), ModData(..), md,
-    blank,oneTabbed,oneTab,verticalComma,
-    angles,doubleQuotedText,capitalize,
-    himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, 
-    mapPairSnd, tripFst, tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, 
-    liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
-    liftPairFst, liftTripFst, liftTrip
+module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
+    ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
+    blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
+    himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
+    liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
+    lift3Pair, lift4Pair, liftPairFst
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label)
@@ -23,10 +22,24 @@ class Pair p where
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
 
-data ModData = MD {name :: Label, isMain :: Bool, doc :: Doc}
+data Terminator = Semi | Empty
+
+data ScopeTag = Pub | Priv deriving Eq
+
+data ModData = MD {name :: Label, isMainMod :: Bool, modDoc :: Doc}
 
 md :: Label -> Bool -> Doc -> ModData
 md = MD
+
+data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, mthdDoc :: Doc}
+
+mthd :: Bool -> ScopeTag -> Doc -> MethodData
+mthd = MthD 
+
+data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, destructSts :: (Doc, Terminator)}
+
+svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd = SVD
 
 blank :: Doc
 blank = text ""
@@ -77,15 +90,6 @@ mapPairFst f (a, c) = (f a, c)
 mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
 mapPairSnd f (c, b) = (c, f b)
 
-tripFst :: (a, b, c) -> a
-tripFst (c, _, _) = c
-
-tripSnd :: (a, b, c) -> b
-tripSnd (_, n, _) = n
-
-tripThird :: (a, b, c) -> c
-tripThird (_, _, b) = b
-
 liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> f d -> f e
 liftA4 f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
 
@@ -121,9 +125,3 @@ liftPair (a, b) = liftA2 (,) a b
 
 liftPairFst :: Functor f => (f a, b) -> f (a, b)
 liftPairFst (c, n) = fmap (, n) c
-
-liftTripFst :: Functor f => (f a, b, c) -> f (a, b, c)
-liftTripFst (c, n, b) = fmap (flip (flip (,,) n) b) c
-
-liftTrip :: Applicative f => (f a, f b, f c) -> f (a, b, c)
-liftTrip (c, n, b) = liftA3 (,,) c n b

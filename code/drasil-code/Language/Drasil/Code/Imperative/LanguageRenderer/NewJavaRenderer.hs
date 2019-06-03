@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.New (Label,
     MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
     NameOpts(NameOpts), packSep)
-import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..), 
+import Language.Drasil.Code.Imperative.NewLanguageRenderer ( 
     packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
     multiStateDocD, blockDocD, bodyDocD, outDocD, printFileDocD, boolTypeDocD,
     intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
     setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, angles, oneTab,
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPairFst)
+import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
+  angles, oneTab, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  lift3Pair, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -73,7 +73,7 @@ instance PackageSym JavaCode where
 
 instance RenderSym JavaCode where
     type RenderFile JavaCode = ModData
-    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
+    fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
     top _ = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 

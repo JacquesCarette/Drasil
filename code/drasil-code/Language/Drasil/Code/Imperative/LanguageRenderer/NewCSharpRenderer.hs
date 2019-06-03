@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.New (Label,
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
   printFileDocD, boolTypeDocD, 
@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
   setterName, setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, oneTab, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPairFst)
+import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
+  oneTab,  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
+  lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -67,7 +67,7 @@ instance PackageSym CSharpCode where
 
 instance RenderSym CSharpCode where
     type RenderFile CSharpCode = ModData
-    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
+    fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
     top _ = liftA2 cstop endStatement (include "")
     bottom = return empty
 

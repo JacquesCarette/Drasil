@@ -369,7 +369,7 @@ makeList (Simple items)      = itemize     $ vcat $ simItem items
 makeList (Desc items)        = description $ vcat $ simItem items
 makeList (Unordered items)   = itemize     $ vcat $ map plItem items
 makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
-makeList (Definitions items) = symbDescription $ vcat $ def_item items
+makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
 plItem :: (ItemType,Maybe Label) -> D
 plItem (i, l) = mlref l <> pItem i
@@ -390,8 +390,8 @@ simItem = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
   where sp_item (Flat s) = spec s
         sp_item (Nested t s) = vcat [spec t, makeList s]
 
-def_item :: [(Spec, ItemType,Maybe Label)] -> [D]
-def_item = map (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_item y))
+defItem :: [(Spec, ItemType,Maybe Label)] -> [D]
+defItem = map (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_item y))
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------

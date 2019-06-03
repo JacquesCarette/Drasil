@@ -1,8 +1,9 @@
 module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Documentation (material_, property)
-import Data.Drasil.Phrase (compoundNC)
 
 physicalcon :: [ConceptChunk]
 physicalcon = [gaseous, liquid, solid, ctrOfMass, density, specWeight, mass,

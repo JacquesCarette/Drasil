@@ -55,7 +55,7 @@ cite x y z = let s = noSpaces z in Cite x y s (shortname' s)
 -- Implicitly uses the EntryID as the chunk i.
 cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
 cArticle aut t journ yr opt = cite Article 
-  ((author aut) : (title t) : (journal journ) : (year yr) : opt)
+  (author aut : title t : journal journ : year yr : opt)
 
 -- | Book citation requires author or editor, title, publisher, year.
 -- Optional fields can be volume or number, series, address, edition, month, and note.

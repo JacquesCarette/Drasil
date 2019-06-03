@@ -18,8 +18,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
-import Data.Drasil.Utils (fmtU, foldle1)
+import Data.Drasil.Utils (fmtU)
 
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]
@@ -57,7 +56,7 @@ transMotDesc = foldlSent [S "The above equation expresses the total",
   S "assumed that there is no damping", makeRef2S assumpDI,
   S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S ctrOfMassDD]
 
-transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
+transMotLeg = foldlSent_ $ map defList transMotLegTerms
 
 {-- Rotational Motion --}
 
@@ -88,7 +87,7 @@ rotMotDesc = foldlSent_ [S "The above equation for the total angular acceleratio
   S "currently assumed that there is no damping", makeRef2S assumpDI,
   S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S assumpAD]
 
-rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
+rotMotLeg = foldlSent_ $ map defList rotMotLegTerms
 
 {-- 2D Collision --}
 
@@ -139,7 +138,7 @@ defList :: (Quantity a, MayHaveUnit a) => a -> Sentence
 defList thing = foldlSent [(ch thing), S "is the", (phrase thing),
   sParen (fmtU EmptyS thing)]
 
-col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms
+col2DLeg = foldlSent_ $ map defList col2DLegTerms
   
 
 {--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 

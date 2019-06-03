@@ -1,5 +1,4 @@
-module Drasil.GamePhysics.Requirements (funcReqsContent, 
-  funcReqs, nonfuncReqs, propsDeriv, requirements) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv, requirements) where
 
 import Language.Drasil hiding (Vector, organization)
 import Drasil.DocLang (mkEnumSimpleD, reqF)
@@ -11,9 +10,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
   output_, physicalConstraint, physicalSim, property, requirement, srs,
   traceyMatrix, unlikelyChg)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
-
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSP)
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)
@@ -40,10 +36,7 @@ requirements = reqF [funcReqsSection, nonfuncReqsSection]
 -----------------------------------
 
 funcReqsSection :: Section
-funcReqsSection = SRS.funcReq funcReqsContent []
-
-funcReqsContent :: [Contents]
-funcReqsContent = (mkEnumSimpleD funcReqs)
+funcReqsSection = SRS.funcReq (mkEnumSimpleD funcReqs) []
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.

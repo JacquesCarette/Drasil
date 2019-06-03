@@ -53,7 +53,7 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 build :: String -> Document -> Doc
 build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
-  html (headTag (linkCSS fn $$ title (title_spec t) $$
+  html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
@@ -87,10 +87,10 @@ print = foldr (($$) . printLO) empty
 -----------------------------------------------------------------
 -- | Renders the title of the document. Different than body rendering
 -- because newline can't be rendered in an HTML title.
-title_spec :: Spec -> Doc
-title_spec (a :+: b) = title_spec a <> title_spec b
-title_spec HARDNL    = empty
-title_spec s         = p_spec s
+titleSpec :: Spec -> Doc
+titleSpec (a :+: b) = titleSpec a <> titleSpec b
+titleSpec HARDNL    = empty
+titleSpec s         = p_spec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: Spec -> Doc

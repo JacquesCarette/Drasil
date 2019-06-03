@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Physics (twoD)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3)
+import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3)
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
 import Drasil.SSP.Unitals (constF, coords, fs, fsMin, intNormForce, 
@@ -43,7 +43,7 @@ readAndStore = cic "readAndStore" ( foldlSent [
 
 verifyInput = cic "verifyInput" ( foldlSent [
   S "Verify that the", plural inDatum, S "lie within the",
-  plural physicalConstraint, S "shown in", makeRef2S data_constraint_Table2])
+  plural physicalConstraint, S "shown in", makeRef2S dataConstraintTable2])
   "Verify-Input" funcReqDom
 
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
@@ -57,7 +57,7 @@ determineCritSlip = cic "determineCritSlip" ( foldlSent [
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
   S "Verify that the", phrase fsMin `sAnd` phrase crtSlpSrf, S "satisfy the",
-  plural physicalConstraint, S "shown in", makeRef2S data_constraint_Table3])
+  plural physicalConstraint, S "shown in", makeRef2S dataConstraintTable3])
   "Verify-Output" funcReqDom
 
 displayInput = cic "displayInput" ( foldlSent [

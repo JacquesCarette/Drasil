@@ -22,7 +22,7 @@ import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
 import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
-  demand, dimlessLoad, gTF, glassType, glassTypeFactors, glassType, 
+  demand, dimlessLoad, gTF, glassTypeCon, glassTypeFactors, glassType, 
   lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, riskFun, sdfTol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
@@ -121,7 +121,7 @@ glaTyFacEq :: Expr
 glaTyFacEq = (case_ (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType))
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
-glaTyFacHelper result condition = (int result, (sy glassType) $= str condition)
+glaTyFacHelper result condition = (int result, (sy glassTypeCon) $= str condition)
 
 glaTyFacQD :: QDefinition
 glaTyFacQD = mkQuantDef gTF glaTyFacEq

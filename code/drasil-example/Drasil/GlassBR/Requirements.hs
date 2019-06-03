@@ -26,7 +26,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL,
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glassType, 
+import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glassTypeCon, 
   isSafeLR, isSafePb, loadSF, nomThick, notSafe, pbTol, plateLen, plateWidth, 
   safeMessage, sdx, sdy, sdz, tNT)
 
@@ -63,7 +63,7 @@ inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
     requiredInputs :: [QuantityDict]
     requiredInputs = (map qw [plateLen, plateWidth, charWeight])
       ++ (map qw [pbTol, tNT]) ++ (map qw [sdx, sdy, sdz])
-      ++ (map qw [glassType, nomThick])
+      ++ (map qw [glassTypeCon, nomThick])
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",

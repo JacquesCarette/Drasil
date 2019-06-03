@@ -56,7 +56,7 @@ inputsWUncrtn = [aspectRatio, pbTol, tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = [glassType, nomThick]
+inputsNoUncrtn = [glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
@@ -109,8 +109,8 @@ nomThick = cuc "nomThick"
 -- but the problem is still the Capitalization issue with new 
 -- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
-glassTypeCon  = cvc "glassType" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glassType (map (getAccStr . snd) glassType))
+glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+ 
+    displayConstrntsAsSet glassTypeCon (map (getAccStr . snd) glassType))
   lG ({-DiscreteS (map (getAccStr . snd) glassType)-} String)
   [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 
@@ -278,7 +278,7 @@ tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
 
 
 terms :: [ConceptChunk]
-terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
@@ -293,7 +293,7 @@ aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 annealedGl    = cc' annealed
   (foldlSent [S "A flat, monolithic, glass lite which has uniform thickness where",
   S "the residual surface stresses are almost zero, as defined in", makeCiteS astm2016])
-aspectRatio   = cc aR
+aspectRatioCon   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
@@ -421,7 +421,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
   eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatioCon]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 

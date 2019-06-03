@@ -61,7 +61,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
   unlikelyChgsCon)
-import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
+import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (inputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
@@ -144,7 +144,7 @@ mkSRS = [RefSec $ RefProg intro
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
-            [data_constraint_Table2, data_constraint_Table3]
+            [dataConstraintTable2, dataConstraintTable3]
           , CorrSolnPpties propsDeriv
           ]
         ],

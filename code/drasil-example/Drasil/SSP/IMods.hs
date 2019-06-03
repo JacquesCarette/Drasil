@@ -21,7 +21,7 @@ import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL,
   assumpES, assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
-import Drasil.SSP.DataCons (data_constraint_Table3)
+import Drasil.SSP.DataCons (dataConstraintTable3)
 import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, 
   intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
@@ -602,7 +602,7 @@ crtSlpIdRel = (sy fsMin) $= (apply (sy minFunction) [sy slopeDist,
 crtSlpIdDesc :: Sentence
 crtSlpIdDesc = foldlSent [S "The", phrase minFunction, S "must enforce the",
   plural constraint, S "on the", phrase crtSlpSrf, S "expressed in" +:+.
-  (makeRef2S assumpSSC `sAnd` makeRef2S data_constraint_Table3), 
+  (makeRef2S assumpSSC `sAnd` makeRef2S dataConstraintTable3), 
   S "The sizes of", ch waterDist `sAnd` ch waterHght +:+. 
   S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `sAnd` 
   ch slopeHght +:+. (S "must be equal" `sAnd` S "at least 2"),

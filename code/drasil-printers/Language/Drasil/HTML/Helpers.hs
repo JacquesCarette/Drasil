@@ -64,8 +64,8 @@ data Variation = Class | Id
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrap_gen Class a empty
 
-wrapAux :: String -> [String] -> Doc -> Doc
-wrapAux a = wrap_genAux hcat Class a empty
+wrap' :: String -> [String] -> Doc -> Doc
+wrap' a = wrap_genAux hcat Class a empty
 
 -- | Helper for wrapping HTML tags.
 -- The forth argument provides class names for the CSS.
@@ -126,13 +126,13 @@ image f c wp =
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag
-em = wrapAux "em" []
+em = wrap' "em" []
 -- | Superscript tag
-sup = wrapAux "sup" []
+sup = wrap' "sup" []
 -- | Subscript tag
-sub = wrapAux "sub" []
+sub = wrap' "sub" []
 -- | Bold tag
-bold = wrapAux "b" []
+bold = wrap' "b" []
 
 article_title, author :: Doc -> Doc
 -- | Title header

@@ -153,7 +153,7 @@ pExpr (Int i)        = text $ show i
 pExpr (Str s)        = text s
 pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
 pExpr (Case ps)      = cases ps pExpr
-pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> p_matrix a <> text "</table>"
+pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
@@ -221,10 +221,10 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
-p_matrix :: [[Expr]] -> Doc
-p_matrix [] = text ""
-p_matrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
-p_matrix (x:xs) = p_matrix [x] <> p_matrix xs
+pMatrix :: [[Expr]] -> Doc
+pMatrix [] = text ""
+pMatrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
+pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
 
 p_in :: [Expr] -> Doc
 p_in [] = text ""

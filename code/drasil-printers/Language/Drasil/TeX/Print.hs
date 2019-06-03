@@ -104,7 +104,7 @@ pExpr (Int i)    = show i
 pExpr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
 pExpr (Div n d) = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
 pExpr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
 pExpr (Row [x]) = brace $ pExpr x -- a bit of a hack...
 pExpr (Row l) = concatMap pExpr l
 pExpr (Ident s) = s
@@ -174,10 +174,10 @@ fence _ Abs = "|"
 fence _ Norm = "||"
 
 -- | For printing Matrix
-p_matrix :: [[Expr]] -> String
-p_matrix [] = ""
-p_matrix [x] = p_in x
-p_matrix (x:xs) = p_matrix [x] ++ "\\\\\n" ++ p_matrix xs
+pMatrix :: [[Expr]] -> String
+pMatrix [] = ""
+pMatrix [x] = p_in x
+pMatrix (x:xs) = pMatrix [x] ++ "\\\\\n" ++ pMatrix xs
 
 p_in :: [Expr] -> String
 p_in [] = ""

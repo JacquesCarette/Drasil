@@ -32,43 +32,43 @@ tMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLoad, qw tm_lRe, qw tm_demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand)] [] [makeCite astm2009] 
+   [relToQD locSymbMap lrIsSafe_RC] [sy is_safeLoad $= sy tm_lRe $> sy tm_demand] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
-   where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
+   where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                            [] []
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
-  lrIsSafeDesc ( (sy is_safeLoad) $= (sy tm_lRe) $> (sy tm_demand))
+  lrIsSafeDesc (sy is_safeLoad $= sy tm_lRe $> sy tm_demand)
 
 lrIsSafeDesc :: Sentence
-lrIsSafeDesc = tModDesc (is_safeLoad) s ending
+lrIsSafeDesc = tModDesc is_safeLoad s ending
   where 
-    s = ((ch is_safeProb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLoad))
-    ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
-      sParen (S "also called capacity") `sC` (ch tm_demand) +:+ sParen (S "also referred as the" +:+ 
-      (titleize demandq)) `isThe` (demandq ^. defn)
+    s = ch is_safeProb +:+ sParen (S "from" +:+ makeRef2S pbIsSafe) `sAnd` ch is_safeLoad
+    ending = short lResistance `isThe` phrase lResistance +:+ 
+      sParen (S "also called capacity") `sC` ch tm_demand +:+ sParen (S "also referred as the" +:+ 
+      titleize demandq) `isThe` (demandq ^. defn)
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
   [qw is_safeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafe_RC] [(sy is_safeProb) $= (sy probFail) $< (sy pbTolfail)] [] [makeCite astm2009]
+  [relToQD locSymbMap pbIsSafe_RC] [sy is_safeProb $= sy probFail $< sy pbTolfail] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
-  where locSymbMap = cdb (thisSymbols) ([] :: [IdeaDict]) symb
+  where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
                           ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
                           [] []
 
 pbIsSafe_RC :: RelationConcept
 pbIsSafe_RC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
-  pbIsSafeDesc ((sy is_safeProb) $= (sy probFail) $< (sy pbTolfail))
+  pbIsSafeDesc (sy is_safeProb $= sy probFail $< sy pbTolfail)
 
 pbIsSafeDesc :: Sentence
-pbIsSafeDesc = tModDesc (is_safeProb) s ending
+pbIsSafeDesc = tModDesc is_safeProb s ending
   where 
-    s = (ch is_safeProb) `sAnd` (ch is_safeLoad) +:+ sParen (S "from" +:+
-      (makeRef2S lrIsSafe))
-    ending = ((ch probFail) `isThe` (phrase probFail)) `sC` (ch pbTolfail) `isThe` (phrase pbTolfail) 
+    s = ch is_safeProb `sAnd` ch is_safeLoad +:+ sParen (S "from" +:+
+      makeRef2S lrIsSafe)
+    ending = (ch probFail `isThe` phrase probFail) `sC` ch pbTolfail `isThe` phrase pbTolfail 
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

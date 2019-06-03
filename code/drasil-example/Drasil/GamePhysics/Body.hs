@@ -754,7 +754,7 @@ traceMatTabDefnModel :: LabelledContent
 traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table 
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
-  traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
+  traceMatTabDefnModelRow) (showingCxnBw traceyMatrix (titleize' item `sAnd`
   S "Other" +:+ titleize' section_)) True
 
 -----------------------------------

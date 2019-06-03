@@ -144,8 +144,8 @@ author a        = divTag ["author"] (h 2 a)
 divTag :: [String] -> Doc -> Doc
 divTag = wrap "div"
 
-span_tag :: [String] -> Doc -> Doc
-span_tag = wrap "span"
+spanTag :: [String] -> Doc -> Doc
+spanTag = wrap "span"
 
 indent :: Doc -> Doc
 indent = nest 0
@@ -153,16 +153,16 @@ indent = nest 0
 -- | Create and markup fractions
 fraction :: Doc -> Doc -> Doc
 fraction a b =
-  divTag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+  divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps p_expr = span_tag ["casebr"] (text "{") $$ divTag ["cases"] 
+cases ps p_expr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
                   (makeCases ps p_expr)
 
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) p_expr = span_tag [] (p_expr (fst p) <> text " , " <>
-                          span_tag ["case"] (p_expr (snd p))) $$
+makeCases (p:ps) p_expr = spanTag [] (p_expr (fst p) <> text " , " <>
+                          spanTag ["case"] (p_expr (snd p))) $$
                           makeCases ps p_expr

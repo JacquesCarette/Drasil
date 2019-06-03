@@ -1,46 +1,46 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.NewLanguageRenderer (
-    -- * Common Syntax
-    classDec, dot, doubleSlash, forLabel, new, observerListName,
-    
-    -- * Default Functions available for use in renderers
-    packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
-    printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
-    voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
-    methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
-    switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
-    plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
-    varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
-    commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
-    sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
-    lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', 
-    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-    acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, equalOpDocD, 
-    notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-    lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-    moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
-    litTrueD, litFalseD, litCharD, litFloatD, litIntD,
-    litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
-    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-    inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-    objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD,
-    castDocD, sizeDocD, listAccessDocD, listSetDocD, 
-    objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
-    dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
-    getterName, setterName, setMain, setEmpty, statementsToStateVars
+  -- * Common Syntax
+  classDec, dot, doubleSlash, forLabel, new, observerListName,
+  
+  -- * Default Functions available for use in renderers
+  packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
+  printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
+  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
+  methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
+  switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
+  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
+  varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
+  commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
+  sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
+  lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', 
+  cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
+  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD,
+  litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
+  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD,
+  castDocD, sizeDocD, listAccessDocD, listSetDocD, 
+  objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
+  dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
+  getterName, setterName, setMain, setEmpty, statementsToStateVars
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-    angles,blank, doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,
-    vmap)
+  angles,blank, doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,
+  vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
-    brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
-    integer, semi, equals, braces, int, comma, colon, hcat)
+  brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
+  integer, semi, equals, braces, int, comma, colon, hcat)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -65,10 +65,10 @@ packageDocD n end (MD l b m) = md l b (vibcat [text "package" <+> text n <> end,
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [
-    t,
-    m,
-    b]
-    
+  t,
+  m,
+  b]
+
 -- fileNameD :: Module -> String
 -- fileNameD _ = moduleName
 
@@ -85,32 +85,32 @@ moduleDocD cs = vibcat (map fst cs)
 
 classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc
 classDocD n p inherit s vs fs = vcat [
-    s <+> classDec <+> text n <+> baseClass <+> lbrace, 
-    oneTabbed [
-        vs,
-        blank,
-        fs],
-    rbrace]
-    where baseClass = case p of Nothing -> empty
-                                Just pn -> inherit <+> text pn
+  s <+> classDec <+> text n <+> baseClass <+> lbrace, 
+  oneTabbed [
+    vs,
+    blank,
+    fs],
+  rbrace]
+  where baseClass = case p of Nothing -> empty
+                              Just pn -> inherit <+> text pn
 
 enumDocD :: Label -> Doc -> Doc -> Doc
 enumDocD n es s = vcat [
-    s <+> text "enum" <+> text n <+> lbrace,
-    oneTab es,
-    rbrace]
+  s <+> text "enum" <+> text n <+> lbrace,
+  oneTab es,
+  rbrace]
 
 enumElementsDocD :: [Label] -> Bool -> Doc
 enumElementsDocD es enumsEqualInts = vcat $
-    zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
-    where nums = [0..length es - 1]
-          equalsInt i = if enumsEqualInts then equals <+> int i else empty 
-          interComma i = if i < length es - 1 then text "," else empty
+  zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
+  where nums = [0..length es - 1]
+        equalsInt i = if enumsEqualInts then equals <+> int i else empty 
+        interComma i = if i < length es - 1 then text "," else empty
 
 enumElementsDocD' :: [Label] -> Doc
 enumElementsDocD' es = vcat $
-    zipWith (\e i -> text e <+> equals <+> int i) es nums
-        where nums = [0..length es - 1]
+  zipWith (\e i -> text e <+> equals <+> int i) es nums
+    where nums = [0..length es - 1]
 
 -- Groupings --
 
@@ -191,13 +191,13 @@ paramListDocD = hicat (text ", ")
 
 methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
-    s <+> p <+> t <+> text n <> parens ps <+> lbrace,
-    oneTab b,
-    rbrace]
+  s <+> p <+> t <+> text n <> parens ps <+> lbrace,
+  oneTab b,
+  rbrace]
 
 methodListDocD :: [(Doc, Bool)] -> Doc
 methodListDocD ms = vibcat methods
-    where methods = filter (not . isEmpty) (map fst ms)
+  where methods = filter (not . isEmpty) (map fst ms)
 
 -- StateVar --
 
@@ -215,74 +215,74 @@ alwaysDel = 4
 ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [((Doc, Maybe String), Doc)] -> Doc
 ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
 ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
-    let ifSect ((v, _), b) = vcat [
-            text "if" <+> parens v <+> ifStart,
-            oneTab b,
-            blockEnd]
-        elseIfSect ((v, _), b) = vcat [
-            elseIf <+> parens v <+> ifStart,
-            oneTab b,
-            blockEnd]
-        elseSect = if isEmpty elseBody then empty else vcat [
-            text "else" <+> ifStart,
-            oneTab elseBody,
-            blockEnd]
-    in vcat [
-        ifSect c,
-        vmap elseIfSect cs,
-        elseSect]
+  let ifSect ((v, _), b) = vcat [
+        text "if" <+> parens v <+> ifStart,
+        oneTab b,
+        blockEnd]
+      elseIfSect ((v, _), b) = vcat [
+        elseIf <+> parens v <+> ifStart,
+        oneTab b,
+        blockEnd]
+      elseSect = if isEmpty elseBody then empty else vcat [
+        text "else" <+> ifStart,
+        oneTab elseBody,
+        blockEnd]
+  in vcat [
+    ifSect c,
+    vmap elseIfSect cs,
+    elseSect]
 
 switchDocD :: (Doc, Terminator) -> (Doc, Maybe String) -> Doc -> [((Doc, Maybe String), Doc)] -> Doc
 switchDocD breakState (v, _) defBody cs = 
-    let caseDoc ((l, _), result) = vcat [
-            text "case" <+> l <> colon,
-            oneTabbed [
-                result,
-                fst breakState]]
-        defaultSection = vcat [
-            text "default" <> colon,
-            oneTabbed [
-                defBody,
-                fst breakState]]
-    in vcat [
-        text "switch" <> parens v <+> lbrace,
+  let caseDoc ((l, _), result) = vcat [
+        text "case" <+> l <> colon,
         oneTabbed [
-            vmap caseDoc cs,
-            defaultSection],
-        rbrace]
+          result,
+          fst breakState]]
+      defaultSection = vcat [
+        text "default" <> colon,
+        oneTabbed [
+          defBody,
+          fst breakState]]
+  in vcat [
+      text "switch" <> parens v <+> lbrace,
+      oneTabbed [
+        vmap caseDoc cs,
+        defaultSection],
+      rbrace]
 
 -- These signatures wont be quite so horrendous if/when we pass language options
 -- (blockStart, etc.) in as shared environment
 forDocD :: Doc -> Doc -> (Doc, Terminator) -> (Doc, Maybe String) -> (Doc, Terminator) -> Doc -> Doc
 forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
-    forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) <+> blockStart,
-    oneTab b,
-    blockEnd]
+  forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) <+> blockStart,
+  oneTab b,
+  blockEnd]
 
 forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
 forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b = vcat [
-    iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+> blockStart,
-    oneTab b,
-    blockEnd]
+  iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+> blockStart,
+  oneTab b,
+  blockEnd]
 
 whileDocD :: Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
 whileDocD blockStart blockEnd (v, _) b = vcat [
-    text "while" <+> parens v <+> blockStart,
-    oneTab b,
-    blockEnd]
+  text "while" <+> parens v <+> blockStart,
+  oneTab b,
+  blockEnd]
 
 tryCatchDocD :: Doc -> Doc -> Doc 
 tryCatchDocD tb cb = vcat [
-    text "try" <+> lbrace,
-    oneTab tb,
-    rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") <+> lbrace,
-    oneTab cb,
-    rbrace]
+  text "try" <+> lbrace,
+  oneTab tb,
+  rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") <+> lbrace,
+  oneTab cb,
+  rbrace]
 
 stratDocD :: Doc -> (Doc, Terminator) -> Doc
 stratDocD b resultState = vcat [
-    b,
-    fst resultState]
+  b,
+  fst resultState]
 
 -- Statements --
 
@@ -330,7 +330,7 @@ freeDocD (v, _) = text "delete" <+> v
 
 throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
-    parens errMsg
+  parens errMsg
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)
@@ -541,7 +541,7 @@ notNullDocD = binOpDocD
 
 listIndexExistsDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 listIndexExistsDocD greater (lst, _) (index, _) = parens (lst <> 
-    text ".Length" <+> greater <+> index) 
+  text ".Length" <+> greater <+> index) 
 
 -- Functions --
 
@@ -605,14 +605,14 @@ endCommentLabel = "End"
 
 addCommentsDocD :: Label -> Doc -> Doc -> Doc
 addCommentsDocD c cStart b = vcat [
-    commentDelimit c cStart,
-    b,
-    endCommentDelimit c cStart]
+  commentDelimit c cStart,
+  b,
+  endCommentDelimit c cStart]
 
 commentDelimit :: Label -> Doc -> Doc
 commentDelimit c cStart = 
-    let com = cStart <> text (" " ++ c ++ " ")
-    in com <> text (dashes (render com) commentLength)
+  let com = cStart <> text (" " ++ c ++ " ")
+  in com <> text (dashes (render com) commentLength)
 
 endCommentDelimit :: Label -> Doc -> Doc
 endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)

@@ -1,11 +1,11 @@
 {-# LANGUAGE TupleSections #-}
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
-    ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-    blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
-    himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
-    liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
-    lift3Pair, lift4Pair, liftPairFst
+  ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
+  blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
+  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
+  liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
+  lift3Pair, lift4Pair, liftPairFst
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label)

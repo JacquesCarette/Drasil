@@ -65,25 +65,25 @@ wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrap_gen Class a empty
 
 wrap' :: String -> [String] -> Doc -> Doc
-wrap' a = wrap_genAux hcat Class a empty
+wrap' a = wrapGen' hcat Class a empty
 
 -- | Helper for wrapping HTML tags.
 -- The forth argument provides class names for the CSS.
-wrap_genAux :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_genAux sepf _ s _ [] = \x -> 
+wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrapGen' sepf _ s _ [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
   in sepf [tb s, indent x, tb $ '/':s]
-wrap_genAux sepf Class s _ ts = \x ->
+wrapGen' sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++ c ++ " class=\"" ++ foldr1 (++) (intersperse " " ts) ++ "\">"
   in let te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s]
-wrap_genAux sepf Id s ti _ = \x ->
+wrapGen' sepf Id s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s] 
 
 wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_gen = wrap_genAux cat
+wrap_gen = wrapGen' cat
 
 
 -- | Helper for wrapping attributes in a tag.

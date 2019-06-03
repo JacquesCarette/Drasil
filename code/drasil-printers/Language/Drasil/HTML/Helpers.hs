@@ -136,13 +136,13 @@ bold = wrapAux "b" []
 
 articleTitle, author :: Doc -> Doc
 -- | Title header
-articleTitle t = div_tag ["title"]  (h 1 t)
+articleTitle t = divTag ["title"]  (h 1 t)
 -- | Author header
-author a        = div_tag ["author"] (h 2 a)
+author a        = divTag ["author"] (h 2 a)
 
 -- | Div tag wrapper
-div_tag :: [String] -> Doc -> Doc
-div_tag = wrap "div"
+divTag :: [String] -> Doc -> Doc
+divTag = wrap "div"
 
 span_tag :: [String] -> Doc -> Doc
 span_tag = wrap "span"
@@ -153,11 +153,11 @@ indent = nest 0
 -- | Create and markup fractions
 fraction :: Doc -> Doc -> Doc
 fraction a b =
-  div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+  divTag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps p_expr = span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
+cases ps p_expr = span_tag ["casebr"] (text "{") $$ divTag ["cases"] 
                   (makeCases ps p_expr)
 
 -- | Build case expressions              

@@ -15,7 +15,7 @@ import qualified Language.Drasil as L (People, Person,
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
-  caption, cases, div_tag, em, fraction, h, headTag, html, image, li, ol, pa,
+  caption, cases, divTag, em, fraction, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
@@ -63,9 +63,9 @@ build fn (Document t a c) =
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
-printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
+printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
-                                 div_tag ts (vcat (map printLO layoutObs))
+                                 divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ p_spec contents
 printLO (EqnBlock contents)    = p_spec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
@@ -277,10 +277,10 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) = div_tag ["list"] $
+makeList (Simple items) = divTag ["list"] $
   vcat $ map (\(b,e,l) -> pa $ mlref l $ p_spec b <> text ": "
   <> p_item e) items
-makeList (Desc items)   = div_tag ["list"] $
+makeList (Desc items)   = divTag ["list"] $
   vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ p_spec b
   <> text ": " <> p_item e) items
 makeList (Ordered items) = ol ["list"] (vcat $ map

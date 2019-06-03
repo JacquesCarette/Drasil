@@ -102,7 +102,7 @@ checkSi = collectUnits symbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
+symbols = pi_ : map dqdWr units ++ map dqdWr constraints
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -112,9 +112,9 @@ resourcePath = "../../../datafiles/NoPCM/"
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
-  (map qw [abs_tol, rel_tol, cons_tol])
+symbolsAll = map qw symbols ++ map qw specParamValList ++ 
+  map qw [coil_SA_max] ++ map qw [tau_W] ++ map qw [eta] ++
+  map qw [abs_tol, rel_tol, cons_tol]
 
 units :: [UnitaryConceptDict]
 units = map ucw [density, tau, in_SA, out_SA,
@@ -149,7 +149,7 @@ mkSRS = [RefSec $ RefProg intro
   [IPurpose $ purpDoc progName,
   IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
     water),
-  IChar [] ((charReader1 htTransTheo) ++ (charReader2 M.de)) [],
+  IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
@@ -178,7 +178,7 @@ mkSRS = [RefSec $ RefProg intro
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2)) [],
+  map UlC traceIntro2) [],
   AuxConstntSec $ AuxConsProg progName auxCons,
   Bibliography]
 
@@ -226,10 +226,10 @@ si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
-  _outputs = (map qw [temp_W, w_E]),     --outputs
+  _inputs = map qw constraints ++ map qw [temp_W, w_E], --inputs ++ outputs?
+  _outputs = map qw [temp_W, w_E],     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = map cnstrw constraints ++ map cnstrw [temp_W, w_E], --constrained
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
@@ -244,10 +244,10 @@ code = codeSpec si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 srs :: Document
-srs = mkDoc mkSRS (for) si
+srs = mkDoc mkSRS for si
 
 symbMap :: ChunkDB
-symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermocon
+symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
@@ -525,7 +525,7 @@ trace1IM2 = []
 traceTable1 :: LabelledContent
 traceTable1 = llcc (makeTabRef "TraceyRI") $
   Table (EmptyS : traceRowHeader1)
-  (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
+  (makeTMatrix traceRowHeader1 traceColumns1 traceRow1)
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True
 
@@ -564,7 +564,7 @@ trace2R6 = ["IM2"]
 traceTable2 :: LabelledContent
 traceTable2 = llcc (makeTabRef "TraceyRIs") $ Table
   (EmptyS : traceRowHeader2)
-  (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
+  (makeTMatrix traceColHeader2 traceColumns2 traceRow2)
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True
 

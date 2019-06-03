@@ -17,6 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
   (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -38,7 +39,6 @@ import Data.Maybe (fromMaybe, maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
-import Text.PrettyPrint.HughesPJ (Doc)
 import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
@@ -110,7 +110,7 @@ publicMethod mt l pl st v u = do
   genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
-  ([(Doc, Label, Bool)], Label)] -> State repr -> IO ()
+  ([ModData], Label)] -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)

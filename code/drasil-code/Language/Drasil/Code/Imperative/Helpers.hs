@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (Pair(..),
+module Language.Drasil.Code.Imperative.Helpers (Pair(..), ModData(..), md,
     blank,oneTabbed,oneTab,verticalComma,
     angles,doubleQuotedText,capitalize,
     himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, 
@@ -8,6 +8,8 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..),
     liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, 
     liftPairFst, liftTripFst, liftTrip
 ) where
+
+import Language.Drasil.Code.Imperative.New (Label)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -20,6 +22,11 @@ class Pair p where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
+
+data ModData = MD {name :: Label, isMain :: Bool, doc :: Doc}
+
+md :: Label -> Bool -> Doc -> ModData
+md = MD
 
 blank :: Doc
 blank = text ""

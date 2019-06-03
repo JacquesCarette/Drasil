@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
   setterName, setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (oneTab, tripFst, tripSnd, 
-  tripThird, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
-  lift4Pair, liftPairFst, liftTripFst)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, oneTab, 
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPairFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -62,12 +62,12 @@ instance Monad CSharpCode where
     CSC x >>= f = f x
 
 instance PackageSym CSharpCode where
-    type Package CSharpCode = ([(Doc, Label, Bool)], Label)
+    type Package CSharpCode = ([ModData], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym CSharpCode where
-    type RenderFile CSharpCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCSC code, tripThird $ unCSC code)
+    type RenderFile CSharpCode = ModData
+    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
     top _ = liftA2 cstop endStatement (include "")
     bottom = return empty
 
@@ -506,13 +506,8 @@ instance ClassSym CSharpCode where
     pubClass n p = buildClass n p public
 
 instance ModuleSym CSharpCode where
-    -- Label is module name
-    -- Bool is True if the method is a main method, False otherwise
-    type Module CSharpCode = (Doc, Label, Bool)
-    buildModule n _ vs ms cs = 
-        if null vs && null ms then 
-            liftTripFst (liftList moduleDocD cs, n, any (snd . unCSC) cs) else
-            liftTripFst (liftList moduleDocD (pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs), n, any (snd . unCSC) ms || any (snd . unCSC) cs)
+    type Module CSharpCode = ModData
+    buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs else pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs))
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

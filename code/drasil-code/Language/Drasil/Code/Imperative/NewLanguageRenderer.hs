@@ -32,8 +32,8 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label, Library)
-import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,
-    oneTab,capitalize,oneTabbed,hicat,vibcat,vmap)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, angles,blank,
+    doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -61,8 +61,8 @@ data Terminator = Semi | Empty
 -- Functions for rendering code --
 ----------------------------------
 
-packageDocD :: Label -> Doc -> (Doc, Label, Bool) -> (Doc, Label, Bool)
-packageDocD n end (m, l, b) = (vibcat [text "package" <+> text n <> end, m], l, b)
+packageDocD :: Label -> Doc -> ModData -> ModData
+packageDocD n end (MD l b m) = md l b (vibcat [text "package" <+> text n <> end, m])
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [

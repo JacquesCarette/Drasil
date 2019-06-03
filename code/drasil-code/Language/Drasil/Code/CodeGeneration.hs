@@ -8,17 +8,18 @@ module Language.Drasil.Code.CodeGeneration (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.New
+import Language.Drasil.Code.Imperative.Helpers (ModData(..))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code and extensions
-makeCode :: [[(Doc, Label, Bool)]] -> [Label] -> Code
+makeCode :: [[ModData]] -> [Label] -> Code
 makeCode files exts = Code
-    [(name, contents) | (contents, name, _) <- concat [map (applyExt ext) files' | (files', ext) <- zip files exts]]
+    [(nm, contents) | (MD nm _ contents) <- concat [map (applyExt ext) files' | (files', ext) <- zip files exts]]
 
-applyExt :: Label -> (Doc, Label, Bool) -> (Doc, Label, Bool)
-applyExt ext (d, n, b) = (d, n ++ ext, b)
+applyExt :: Label -> ModData -> ModData
+applyExt ext (MD n b d) = MD (n ++ ext) b d
 
 ------------------
 -- IO Functions --

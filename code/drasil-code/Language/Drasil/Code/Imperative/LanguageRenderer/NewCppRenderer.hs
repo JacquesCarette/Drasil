@@ -35,7 +35,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, 
     dot, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
     getterName, setterName, setEmpty)
-import Language.Drasil.Code.Imperative.Helpers (Pair(..), 
+import Language.Drasil.Code.Imperative.Helpers (Pair(..), ModData(..), md,
   angles, blank, doubleQuotedText, oneTab, oneTabbed, mapPairFst, mapPairSnd, 
   tripFst, tripSnd, tripThird, vibcat, liftA4, liftA5, liftA6, liftA8, liftList,
   lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst, liftTripFst, 
@@ -63,11 +63,11 @@ unHdr :: CppCode CppSrcCode CppHdrCode a -> a
 unHdr (CPPC _ (CPPHC a)) = a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
-    type Package (p CppSrcCode CppHdrCode) = ([(Doc, Label, Bool)], Label)
+    type Package (p CppSrcCode CppHdrCode) = ([ModData], Label)
     packMods n ms = pair (packMods n (map pfst ms)) (packMods n (map psnd ms))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
-    type RenderFile (p CppSrcCode CppHdrCode) = (Doc, Label, Bool)
+    type RenderFile (p CppSrcCode CppHdrCode) = ModData
     fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
     top m = pair (top $ pfst m) (top $ psnd m)
     bottom = pair bottom bottom
@@ -477,9 +477,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
     pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) (pubClass n p (map psnd vs) (map psnd fs))
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
-    -- Label is module name
-    -- Bool is True if the method is a main method, False otherwise
-    type Module (p CppSrcCode CppHdrCode) = (Doc, Label, Bool)
+    type Module (p CppSrcCode CppHdrCode) = ModData
     buildModule n l vs ms cs = pair (buildModule n l (map pfst vs) (map pfst ms) (map pfst cs)) (buildModule n l (map psnd vs) (map psnd ms) (map psnd cs))
 
 -----------------
@@ -500,12 +498,12 @@ instance Monad CppSrcCode where
     CPPSC x >>= f = f x
 
 instance PackageSym CppSrcCode where
-    type Package CppSrcCode = ([(Doc, Label, Bool)], Label)
+    type Package CppSrcCode = ([ModData], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym CppSrcCode where
-    type RenderFile CppSrcCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPSC code, tripThird $ unCPPSC code)
+    type RenderFile CppSrcCode = ModData
+    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
     top m = liftA3 cppstop m (list dynamic) endStatement
     bottom = return empty
 
@@ -971,10 +969,8 @@ instance ClassSym CppSrcCode where
     pubClass n p = buildClass n p public
 
 instance ModuleSym CppSrcCode where
-    -- Label is module name
-    -- Bool is True if the method is a main method, False otherwise
-    type Module CppSrcCode = (Doc, Label, Bool)
-    buildModule n l _ ms cs = liftTripFst (liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then return blank else return empty) (liftList methodListDocD (map (fmap (\(d,b,_) -> (d,b))) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && any (not . isEmpty . tripFst . unCPPSC) ms then return blank else return empty) (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPSC) cs || any (tripSnd . unCPPSC) ms)
+    type Module CppSrcCode = ModData
+    buildModule n l _ ms cs = fmap (md n (any (snd . unCPPSC) cs || any (tripSnd . unCPPSC) ms)) (liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then return blank else return empty) (liftList methodListDocD (map (fmap (\(d,b,_) -> (d,b))) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && any (not . isEmpty . tripFst . unCPPSC) ms then return blank else return empty) (liftList vibcat (map (fmap fst) cs)))
 
 -----------------
 -- Header File --
@@ -994,13 +990,13 @@ instance Monad CppHdrCode where
     CPPHC x >>= f = f x
 
 instance PackageSym CppHdrCode where
-    type Package CppHdrCode = ([(Doc, Label, Bool)], Label)
+    type Package CppHdrCode = ([ModData], Label)
     packMods n ms = liftPairFst (sequence mods, n)
-        where mods = filter (not . isEmpty . tripFst . unCPPHC) ms
+        where mods = filter (not . isEmpty . doc . unCPPHC) ms
 
 instance RenderSym CppHdrCode where
-    type RenderFile CppHdrCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (if isEmpty (tripFst (unCPPHC code)) then return empty else liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unCPPHC code, tripThird $ unCPPHC code)
+    type RenderFile CppHdrCode = ModData
+    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (if isEmpty (doc (unCPPHC code)) then return empty else liftA3 fileDoc' (top code) (fmap doc code) bottom)
     top m = liftA3 cpphtop m (list dynamic) endStatement
     bottom = return $ text "#endif"
 
@@ -1409,10 +1405,8 @@ instance ClassSym CppHdrCode where
     pubClass n p = buildClass n p public
 
 instance ModuleSym CppHdrCode where
-    -- Label is module name
-    -- Bool is True if the method is a main method, False otherwise
-    type Module CppHdrCode = (Doc, Label, Bool)
-    buildModule n l _ ms cs = liftTripFst (if all (isEmpty . fst . unCPPHC) cs && all (isEmpty . tripFst . unCPPHC) ms then return empty else liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPHC) cs then return blank else return empty) (liftList methodListDocD methods) (if (any (not . isEmpty . fst . unCPPHC) cs || (all (isEmpty . fst . unCPPHC) cs && not (null l))) && any (not . isEmpty . tripFst . unCPPHC) ms then return blank else return empty)  (liftList vibcat (map (fmap fst) cs)), n, any (snd . unCPPHC) cs || any (snd . unCPPHC) methods)
+    type Module CppHdrCode = ModData
+    buildModule n l _ ms cs = fmap (md n (any (snd . unCPPHC) cs || any (snd . unCPPHC) methods)) (if all (isEmpty . fst . unCPPHC) cs && all (isEmpty . tripFst . unCPPHC) ms then return empty else liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . isEmpty . fst . unCPPHC) cs then return blank else return empty) (liftList methodListDocD methods) (if (any (not . isEmpty . fst . unCPPHC) cs || (all (isEmpty . fst . unCPPHC) cs && not (null l))) && any (not . isEmpty . tripFst . unCPPHC) ms then return blank else return empty)  (liftList vibcat (map (fmap fst) cs)))
         where methods = map (fmap (\(d, m, _) -> (d, m))) ms
 
 data ScopeTag = Pub | Priv deriving Eq
@@ -1429,8 +1423,8 @@ enumsEqualInts = False
 cppHeaderExt :: Label
 cppHeaderExt = ".hpp"
 
-cppstop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc
-cppstop (_, n, b) lst end = vcat [
+cppstop :: ModData -> Doc -> Doc -> Doc
+cppstop (MD n b _) lst end = vcat [
     if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
     if b then empty else blank,
     inc <+> angles (text "algorithm"),
@@ -1449,8 +1443,8 @@ cppstop (_, n, b) lst end = vcat [
     usingNameSpace "std" (Just "ofstream") end]
     where inc = text "#include"
 
-cpphtop :: (Doc, Label, Bool) -> Doc -> Doc -> Doc
-cpphtop (_, n, _) lst end = vcat [
+cpphtop :: ModData -> Doc -> Doc -> Doc
+cpphtop (MD n _ _) lst end = vcat [
     text "#ifndef" <+> text n <> text "_h",
     text "#define" <+> text n <> text "_h",
     blank,

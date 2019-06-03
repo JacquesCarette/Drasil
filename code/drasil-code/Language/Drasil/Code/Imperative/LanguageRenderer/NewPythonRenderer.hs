@@ -29,9 +29,8 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
     addCommentsDocD, callFuncParamList, getterName, setterName)
-import Language.Drasil.Code.Imperative.Helpers (blank, oneTab, vibcat, tripFst, 
-  tripSnd, tripThird, liftA4, liftA5, liftList, lift1List, lift4Pair, 
-  liftPairFst, liftTripFst)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, blank, oneTab,
+  vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -54,12 +53,12 @@ instance Monad PythonCode where
     PC x >>= f = f x
 
 instance PackageSym PythonCode where
-    type Package PythonCode = ([(Doc, Label, Bool)], Label)
+    type Package PythonCode = ([ModData], Label)
     packMods n ms = liftPairFst (sequence ms, n)
 
 instance RenderSym PythonCode where
-    type RenderFile PythonCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unPC code, tripThird $ unPC code)
+    type RenderFile PythonCode = ModData
+    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
     top _ = return pytop
     bottom = return empty
 
@@ -484,8 +483,8 @@ instance ClassSym PythonCode where
     pubClass n p = buildClass n p public
 
 instance ModuleSym PythonCode where
-    type Module PythonCode = (Doc, Label, Bool)
-    buildModule n ls vs fs cs = liftTripFst (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs), n, any (snd . unPC) fs || any (snd . unPC) cs)
+    type Module PythonCode = ModData
+    buildModule n ls vs fs cs = fmap (md n (any (snd . unPC) fs || any (snd . unPC) cs)) (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs))
 
 -- convenience
 imp, incl, initName :: Label

@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (Terminator(..),
     dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
     doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
     setMain, setEmpty, statementsToStateVars)
-import Language.Drasil.Code.Imperative.Helpers (angles, oneTab, tripFst, 
-  tripSnd, tripThird, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
-  lift3Pair, lift4Pair, liftPairFst, liftTripFst)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..), md, angles, oneTab,
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -68,12 +68,12 @@ instance Monad JavaCode where
     JC x >>= f = f x
 
 instance PackageSym JavaCode where
-    type Package JavaCode = ([(Doc, Label, Bool)], Label)
+    type Package JavaCode = ([ModData], Label)
     packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) ms, n)
 
 instance RenderSym JavaCode where
-    type RenderFile JavaCode = (Doc, Label, Bool)
-    fileDoc code = liftTripFst (liftA3 fileDoc' (top code) (fmap tripFst code) bottom, tripSnd $ unJC code, tripThird $ unJC code)
+    type RenderFile JavaCode = ModData
+    fileDoc code = liftA3 md (fmap name code) (fmap isMain code) (liftA3 fileDoc' (top code) (fmap doc code) bottom)
     top _ = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
@@ -513,13 +513,8 @@ instance ClassSym JavaCode where
     pubClass n p = buildClass n p public
 
 instance ModuleSym JavaCode where
-    -- Label is module name
-    -- Bool is True if the method is a main method, False otherwise
-    type Module JavaCode = (Doc, Label, Bool)
-    buildModule n _ vs ms cs = 
-        if null vs && null ms then 
-            liftTripFst (liftList moduleDocD cs, n, any (snd . unJC) cs) else
-            liftTripFst (liftList moduleDocD (pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs), n, any (snd . unJC) ms || any (snd . unJC) cs)
+    type Module JavaCode = ModData
+    buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs else pubClass n Nothing (map (liftA4 statementsToStateVars public static endStatement) vs) ms : cs))
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

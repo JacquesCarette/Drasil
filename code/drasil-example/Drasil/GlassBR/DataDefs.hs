@@ -15,14 +15,14 @@ import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.SentenceStructures (foldlSent)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
+import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
 import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, charWeight,
-  demand, dimlessLoad, gTF, glassType, glassTypeFactors, glass_type, 
+import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
+  demand, dimlessLoad, gTF, glassType, glassTypeFactors, glassType, 
   lDurFac, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
   plateLen, plateWidth, riskFun, sdfTol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
@@ -92,8 +92,8 @@ loadDF = dd loadDFQD [makeCite astm2009] [{-derivation-}] "loadDurFactor" [makeR
 
 strDisFacEq :: Expr
 -- strDisFacEq = apply (sy stressDistFac)
---   [sy dimlessLoad, sy aspect_ratio]
-strDisFacEq = apply (asExpr' interpZ) [Str "SDF.txt", sy aspect_ratio, sy dimlessLoad]
+--   [sy dimlessLoad, sy aspectRatio]
+strDisFacEq = apply (asExpr' interpZ) [Str "SDF.txt", sy aspectRatio, sy dimlessLoad]
   
 strDisFacQD :: QDefinition
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
@@ -121,7 +121,7 @@ glaTyFacEq :: Expr
 glaTyFacEq = (case_ (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType))
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
-glaTyFacHelper result condition = (int result, (sy glass_type) $= str condition)
+glaTyFacHelper result condition = (int result, (sy glassType) $= str condition)
 
 glaTyFacQD :: QDefinition
 glaTyFacQD = mkQuantDef gTF glaTyFacEq
@@ -147,7 +147,7 @@ dimLL = dd dimLLQD ([makeCite astm2009, makeCiteInfo campidelli $ Equation [7]])
 
 tolPreEq :: Expr
 --tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspect_ratio, sy sdfTol]
+tolPreEq = apply (asExpr' interpY) [Str "SDF.txt", sy aspectRatio, sy sdfTol]
 
 tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPreEq
@@ -188,10 +188,10 @@ aspRatEq :: Expr
 aspRatEq = (sy plateLen) / (sy plateWidth)
 
 aspRatQD :: QDefinition
-aspRatQD = mkQuantDef aspect_ratio aspRatEq
+aspRatQD = mkQuantDef aspectRatio aspRatEq
 
 aspRat :: DataDefinition
-aspRat = dd aspRatQD [makeCite astm2009] [{-derivation-}] "aspect_ratio" [aGrtrThanB]
+aspRat = dd aspRatQD [makeCite astm2009] [{-derivation-}] "aspectRatio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
@@ -237,88 +237,87 @@ calofDemand = dd calofDemandQD [makeCite astm2009] [{-derivation-}] "calofDemand
 --Additional Notes--
 calofDemandDesc :: Sentence
 calofDemandDesc = 
-  foldlSent [(ch demand `sOr` phrase demandq) `sC`
-  S "is the", (demandq ^. defn), 
-  S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), sParen (ch standOffDist) `sAnd`
-  (ch eqTNTWeight), S "as" +:+. plural parameter, 
-  (ch eqTNTWeight), S "is defined in" +:+.
-  makeRef2S eqTNTWDD, (ch standOffDist) `isThe`
+  foldlSent [ch demand `sC` EmptyS `sOr` phrase demandq `sC` S "is the",
+  (demandq ^. defn), S "obtained from", makeRef2S demandVsSDFig,
+  S "by interpolation using", (phrase standOffDist), sParen (ch standOffDist) 
+  `sAnd` (ch eqTNTWeight), S "as" +:+. plural parameter, (ch eqTNTWeight),
+  S "is defined in" +:+. makeRef2S eqTNTWDD, (ch standOffDist) `isThe`
   (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
 
 capacityS :: [Sentence]
-capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
+capacityS = [ch lRe +:+ S "is the" +:+. (phrase lRe `sC` S "which is also called capacity") +:+
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
   makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
   makeRef2S glaTyFac, makeRef2S assumpGL, makeRef2S glaTyFac, makeRef2S nonFL]
 
 
 glassBreak :: Sentence
-glassBreak = (ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+
-  makeRef2S risk)
+glassBreak = ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+.
+  makeRef2S risk
 
 aGrtrThanB :: Sentence
-aGrtrThanB = (ch plateLen `sC` ch plateWidth +:+ 
+aGrtrThanB = ch plateLen `sAnd` ch plateWidth +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (sy plateLen $>= sy plateWidth)))
+  sParen (E (sy plateLen $>= sy plateWidth))
 
 anGlass :: Sentence
-anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
+anGlass = getAcc annealed +:+ S "is" +:+ phrase annealed +:+. S "glass"
 
 arRef :: Sentence
-arRef = (ch aspect_ratio +:+ S "is the" +:+ phrase aspect_ratio +:+.
-  S "defined in" +:+ makeRef2S aspRat)
+arRef = ch aspectRatio +:+ S "is the" +:+ phrase aspectRatio +:+
+  S "defined in" +:+. makeRef2S aspRat
 
 ftGlass :: Sentence
-ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
+ftGlass = getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+. S "glass"
 
 hRef :: Sentence
-hRef = (ch minThick +:+ S "is the" +:+ phrase minThick `sC` 
-  S "which is based on the nominal thicknesses as shown in" +:+. makeRef2S hFromt)
+hRef = ch minThick +:+ S "is the" +:+ phrase minThick `sC` 
+  S "which is based on the nominal thicknesses as shown in" +:+. makeRef2S hFromt
 
 hsGlass :: Sentence
-hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
+hsGlass = getAcc heatS +:+ S "is" +:+ phrase heatS +:+. S "glass"
 
 ldfRef :: Sentence
-ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef2S loadDF)
+ldfRef = ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef2S loadDF
 
 pbTolUsr :: Sentence
-pbTolUsr = (ch pbTol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
-  phrase user)
+pbTolUsr = ch pbTol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
+  phrase user
 
 jRef :: Sentence
-jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defined in" +:+. 
-  makeRef2S strDisFac)
+jRef = ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defined in" +:+. 
+  makeRef2S strDisFac
 
 hMin :: Sentence
-hMin = (ch nomThick +:+ S "is a function that maps from the nominal thickness"
-  +:+ sParen (ch minThick) +:+ S "to the" +:+. phrase minThick)
+hMin = ch nomThick +:+ S "is a function that maps from the nominal thickness"
+  +:+ sParen (ch minThick) +:+ S "to the" +:+. phrase minThick
 
 qHtTlExtra :: Sentence
-qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
-  +:+ ch sdfTol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
-  +:+ titleize' calculation `sOf` ch sdfTol `sAnd` ch aspect_ratio +:+ 
-  S "are defined in" +:+. makeRef2S tolStrDisFac `sAnd` makeRef2S aspRat `sC` S "respectively")
+qHtTlExtra = ch tolLoad +:+ S "is the tolerable load which is obtained from" +:+
+  makeRef2S dimlessloadVsARFig +:+ S "using" +:+ ch sdfTol `sAnd` phrase aspectRatio +:+
+  S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize' calculation `sOf`
+  ch sdfTol `sAnd` ch aspectRatio +:+ S "are defined in" +:+. (makeRef2S tolStrDisFac `sAnd`
+  makeRef2S aspRat `sC` S "respectively")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef2S tolPre)
+qHtTlTolRef = ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef2S tolPre
 
 qRef :: Sentence
-qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef2S calofDemand)
+qRef = ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef2S calofDemand
 
 gtfRef :: Sentence
-gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef2S glaTyFac))
+gtfRef = ch gTF +:+ S "is the" +:+ phrase gTF `sC` S "as given by" +:+. makeRef2S glaTyFac
 
 qHtRef :: Sentence
-qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef2S dimLL)
+qHtRef = ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef2S dimLL
 
 jRef2 :: Sentence
-jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
-  S "which is obtained by" +:+ S "interpolating from" +:+ plural datum +:+. 
-  S "shown in Figure 7")
+jRef2 = ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
+  S "which is obtained by" +:+ S "interpolating from" +:+ plural datum +:+
+  S "shown in" +:+. makeRef2S dimlessloadVsARFig
 
 jtolRelToPbtol :: Sentence
-jtolRelToPbtol = (ch sdfTol +:+ S " is calculated with reference to " +:+. ch pbTol)
+jtolRelToPbtol = ch sdfTol +:+ S " is calculated with reference to " +:+. ch pbTol
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL)
+glassLiteRef = ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S assumpGL

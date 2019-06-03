@@ -17,8 +17,6 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
   latentHeat, meltPt, boilPt, sensHeat, heatCapSpec)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-  foldlList, foldlSent)
 import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)

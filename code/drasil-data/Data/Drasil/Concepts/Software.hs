@@ -1,8 +1,8 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
+import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
-import Data.Drasil.SentenceStructures (foldlSent)
 import Control.Lens ((^.))
 
 softwarecon :: [ConceptChunk]

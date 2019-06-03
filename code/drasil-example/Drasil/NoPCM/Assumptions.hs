@@ -11,8 +11,6 @@ import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt)
 import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
 
-import Data.Drasil.SentenceStructures (foldlSent)
-
 import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)
 import Drasil.SWHS.Concepts (tank, water)

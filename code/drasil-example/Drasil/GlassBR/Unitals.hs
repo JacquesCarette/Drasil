@@ -3,14 +3,14 @@ module Drasil.GlassBR.Unitals where --whole file is used
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Theory.Drasil (mkQuantDef)
+import Utils.Drasil
 
 import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (compoundNC)
-import Data.Drasil.SentenceStructures (FoldType(..), SepType(Comma),
-  displayConstrntsAsSet, foldlList, foldlSent, foldlsC)
+import Data.Drasil.SentenceStructures (displayConstrntsAsSet)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
@@ -37,8 +37,8 @@ constrained = (map cnstrw inputsWUncrtn) ++
   (map cnstrw inputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
-aspect_ratio, pbTol, tNT :: UncertainChunk
-glass_type, nomThick :: ConstrainedChunk
+aspectRatio, pbTol, tNT :: UncertainChunk
+glassTypeCon, nomThick :: ConstrainedChunk
 
 {--}
 
@@ -52,11 +52,11 @@ inputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: [UncertainChunk]
-inputsWUncrtn = [aspect_ratio, pbTol, tNT]
+inputsWUncrtn = [aspectRatio, pbTol, tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = [glass_type, nomThick]
+inputsNoUncrtn = [glassType, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
@@ -73,7 +73,7 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspect_ratio = uvc "aspect_ratio" (aR ^. term)
+aspectRatio = uvc "aspectRatio" (aR ^. term)
   (Atomic "AR") Real
   [ physc $ UpFrom (Inc, 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
@@ -109,8 +109,8 @@ nomThick = cuc "nomThick"
 -- but the problem is still the Capitalization issue with new 
 -- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
-glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glass_type (map (getAccStr . snd) glassType))
+glassTypeCon  = cvc "glassType" (nounPhraseSent $ S "glass type" +:+ 
+    displayConstrntsAsSet glassType (map (getAccStr . snd) glassType))
   lG ({-DiscreteS (map (getAccStr . snd) glassType)-} String)
   [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 
@@ -284,7 +284,7 @@ terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStren
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion]
 
-aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,

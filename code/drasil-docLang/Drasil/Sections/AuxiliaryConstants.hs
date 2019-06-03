@@ -2,9 +2,9 @@ module Drasil.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF) where
 
 import Language.Drasil
+import Utils.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))

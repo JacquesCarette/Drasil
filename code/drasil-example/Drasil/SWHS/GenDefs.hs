@@ -16,8 +16,6 @@ import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
   temp)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlSent, foldlSentCol)
 import Data.Drasil.Units.Thermodynamics (thermalFlux)
 import Data.Drasil.Utils (unwrap, weave)
 

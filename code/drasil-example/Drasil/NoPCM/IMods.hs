@@ -13,7 +13,6 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec,
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Concepts (water, tank)

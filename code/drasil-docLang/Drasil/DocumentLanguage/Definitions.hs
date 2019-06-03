@@ -25,9 +25,9 @@ import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
   theoryModelTable, vars, _sysinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
   TheoryModel, inCons, outCons, imOutput, imInputs)
+import Utils.Drasil
 
 import Data.Drasil.Utils (eqUnR')
-import Data.Drasil.SentenceStructures (SepType(Comma), FoldType(List), foldlList, foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 

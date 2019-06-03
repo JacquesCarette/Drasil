@@ -23,7 +23,6 @@ library
     , Drasil.Sections.Introduction
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.Requirements
-    , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.TableOfAbbAndAcronyms

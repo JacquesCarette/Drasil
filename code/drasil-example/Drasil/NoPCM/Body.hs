@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
@@ -40,8 +40,9 @@ import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
+
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, foldlSent, foldlSP)
+import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
@@ -49,30 +50,30 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import qualified Drasil.DocLang.SRS as SRS (probDesc, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..), DocSection(..),
+  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..), AuxConstntSec(AuxConsProg),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
+  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  termDefnF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmtF, physSystDescriptionLabel, generateTraceMap')
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceIntro2, traceTrailing)
+import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
+  physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
+  sysCntxtRespIntro, traceIntro2, traceTrailing, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (propsDerivNoPCM, nfRequirements)
+import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coilHTCMax, coilHTCMin, coilSA, 
   coilSAMax, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
   htCapW, htCapWMax, htCapWMin, htTransCoeff, inSA, outSA, 
@@ -88,8 +89,8 @@ import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
-import qualified Drasil.NoPCM.IMods as NoPCM(iMods)
-import Drasil.NoPCM.Requirements (funcReqsList, reqs, dataConstListIn)
+import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
+import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (tempInit)
 
 -- This defines the standard units used throughout the document
@@ -127,7 +128,7 @@ constraints =  [coilSA, htCapW, coilHTC, tempInit,
   timeFinal, tankLength, tempC, wDensity, diam]
   -- watE, tempW
 
-probDescription, termAndDefn, physSystDescription, goalStates, specParamVal :: Section
+probDescription, termAndDefn, physSystDescription, goalStates :: Section
 
 
 -------------------
@@ -150,7 +151,11 @@ mkSRS = [RefSec $ RefProg intro
     water),
   IChar [] ((charReader1 htTransTheo) ++ (charReader2 M.de)) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
-  Verbatim genSystDesc,
+  GSDSec $ GSDProg2 
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    , UsrChars [userChars progName]
+    , SystCons [] []
+    ],
   SSDSec $
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
@@ -166,15 +171,16 @@ mkSRS = [RefSec $ RefProg intro
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  (map UlC traceIntro2)) []] ++
-  map Verbatim [specParamVal] ++ [Bibliography]
+  (map UlC traceIntro2)) [],
+  AuxConstntSec $ AuxConsProg progName auxCons,
+  Bibliography]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -196,14 +202,14 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
 concIns =
- reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
 section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTblabled, dataConstTable1]
+labCon = [inputInitQuantsTable, dataConstTable1]
 
 sec :: [Section]
 sec = extractSection srs
@@ -246,7 +252,7 @@ symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermoco
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
-  ++ map nw [absTol, relTol, consTol])
+  ++ map nw [absTol, relTol, consTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
   thisSi label refBy dataDefn iMods genDef theory
   concIns section labCon
@@ -472,7 +478,7 @@ traceInstaModel = ["IM1", "IM2"]
 traceInstaModelRef = map makeRef2S [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRef2S reqs
+traceFuncReqRef = map makeRef2S funcReqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?
@@ -610,12 +616,10 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
 
-specParamValListb :: [QDefinition]
-specParamValListb = [tankLengthMin, tankLengthMax,
+auxCons :: [QDefinition]
+auxCons = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, htCapWMin, htCapWMax, coilHTCMin,
   coilHTCMax, timeFinalMax]
-
-specParamVal = valsOfAuxConstantsF progName specParamValListb
 
 ------------
 --REFERENCES

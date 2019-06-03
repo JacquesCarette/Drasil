@@ -14,21 +14,20 @@ import Utils.Drasil
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 
-import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
+  Field(..), Fields, LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
+  ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  dataConstraintUncertainty, genSysF, intro, mkDoc,
+  GSDSec(..), GSDSub(..),
+  dataConstraintUncertainty, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
   traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
   getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, sysCont,
-  unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
@@ -45,7 +44,7 @@ import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
-import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
@@ -54,8 +53,7 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSPCol, showingCxnBw)
+import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
@@ -74,9 +72,9 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
-import Drasil.SWHS.Requirements (dataConTable1, funcReqs, funcReqsList, propsDeriv, nfRequirements)
+import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
+  nfRequirements, propsDeriv)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
   pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
@@ -125,7 +123,7 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
-  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon)
+  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
   (thisSi ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
@@ -173,7 +171,11 @@ mkSRS = [RefSec $ RefProg intro [
      IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
-  Verbatim genSystDesc,
+  GSDSec $ GSDProg2 
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    , UsrChars [userChars progName]
+    , SystCons [] []
+    ],
   SSDSec $
     SSDProg [SSDSubVerb probDescription
       , SSDSolChSpec $ SCSProg
@@ -189,7 +191,7 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgsList,
@@ -198,8 +200,8 @@ mkSRS = [RefSec $ RefProg intro [
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++
   [LlC traceFig1, LlC traceFig2]) [],
-    AuxConstntSec $ AuxConsProg progName specParamValList,
-    Bibliography]
+  AuxConstntSec $ AuxConsProg progName specParamValList,
+  Bibliography]
 
 code :: CodeSpec
 code = codeSpec si [inputMod]
@@ -237,7 +239,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [dataConTable1, inputInitQuantsTblabled]
+labCon = [dataConTable1, inputInitQuantsTable]
 
 sec :: [Section]
 sec = extractSection srs'
@@ -302,21 +304,9 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-genSystDesc :: Section
-genSystDesc = genSysF [systCont] (userCharContents progName) [] []
--- First empty list is the list of constraints
-
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-
-systCont :: Section
-systCont = SRS.sysCont [systCContents progName, LlC sysContextFig, systCIntro 
-  progName user, systContRespBullets] []
-
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
-  resp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -386,6 +376,15 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
 
 goalStates :: Section
 goalStates = goalStmtF (goalStateIntro tempC tempW tempPCM) goalStateList
+
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
+goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
+  S "the" +:+ phrase tempcm,
+  S "the material" +:+ plural property]
+
+-- 2 examples include this paragraph, 2 don't. The "givens" would need to be
+-- abstracted out if this paragraph were to be abstracted out.
 
 goalStateList :: [Contents]
 goalStateList = mkEnumSimpleD goals
@@ -837,8 +836,8 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 -- 3.1 : System Context --
 --------------------------
 
-systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef2S sysContextFig, S "shows the" +:+. phrase sysCont, 
+sysCntxtDesc :: CI -> Contents
+sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -846,16 +845,20 @@ systCContents pro = foldlSP [makeRef2S sysContextFig, S "shows the" +:+. phrase 
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sysContextFig :: LabelledContent
-sysContextFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sysContextFig +: EmptyS, titleize sysCont])
+sysCntxtFig :: LabelledContent
+sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
   $ resourcePath ++ "SystemContextFigure.png"
 
-systCIntro :: CI -> NamedChunk -> Contents
-systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
-  S "The only external interaction is through the", phrase us +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase us `sAnd`
+sysCntxtRespIntro :: CI -> Contents
+sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
+  S "The only external interaction is through the", phrase user +:+.
+  S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
   S "the", phrase system, S "are as follows"]
+
+systContRespBullets :: Contents
+systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
+  resp]
 
 -- User Responsibilities --
 userResp :: NamedChunk -> NamedChunk -> ItemType
@@ -889,10 +892,10 @@ resp = Nested (short progName +: S "Responsibilities")
 -- 3.2 : User Characteristics --
 --------------------------------
 
-userCharContents :: CI -> Contents
-userCharContents pro = foldlSP [S "The end", phrase user, S "of",
+userChars :: CI -> Contents
+userChars pro = foldlSP [S "The end", phrase user `sOf`
   short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize Doc.physics]
+  S "Level 1 Calculus" `sAnd` titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.
@@ -953,21 +956,6 @@ figTank = llcc (makeFigRef "Tank") $ fig (
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
-
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
-goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
-  S "the" +:+ phrase tempcm,
-  S "the material" +:+ plural property]
-
--- 2 examples include this paragraph, 2 don't. The "givens" would need to be
--- abstracted out if this paragraph were to be abstracted out.
-
--- List structure is repeated between examples. (For all of these lists I am
--- imagining the potential for something like what was done with the lists in
--- MG, where you define goals, assumptions, physical system components, etc. in
--- separate files, import them and pass them as arguments to some "makeSRS"
--- function and the rest is automated.)
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --

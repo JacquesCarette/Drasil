@@ -7,21 +7,21 @@ import Language.Drasil.Space (RealInterval(..))
 
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
-names (AssocA _ l)   = concatMap names l
-names (AssocB _ l)   = concatMap names l
-names (Deriv _ a b) = b : names a
-names (C c)         = [c]
-names (Int _)       = []
-names (Dbl _)       = []
-names (Str _)       = []
-names (FCall f x)   = names f ++ (concatMap names x)
-names (Case ls)     = (concatMap (names . fst) ls) ++ concatMap (names . snd) ls
-names (UnaryOp _ u) = names u
-names (BinaryOp _ a b)  = names a ++ names b
-names (Operator _ _ e)  = names e
-names (IsIn  a _)   = names a
-names (Matrix a)    = concatMap (concatMap names) a
-names (RealI c b)   = c : namesRI b
+names (AssocA _ l)     = concatMap names l
+names (AssocB _ l)     = concatMap names l
+names (Deriv _ a b)    = b : names a
+names (C c)            = [c]
+names (Int _)          = []
+names (Dbl _)          = []
+names (Str _)          = []
+names (FCall f x)      = names f ++ concatMap names x
+names (Case ls)        = concatMap (names . fst) ls ++ concatMap (names . snd) ls
+names (UnaryOp _ u)    = names u
+names (BinaryOp _ a b) = names a ++ names b
+names (Operator _ _ e) = names e
+names (IsIn  a _)      = names a
+names (Matrix a)       = concatMap (concatMap names) a
+names (RealI c b)      = c : namesRI b
 
 namesRI :: RealInterval Expr Expr -> [String]
 namesRI (Bounded (_,il) (_,iu)) = names il ++ names iu
@@ -32,21 +32,21 @@ namesRI (UpFrom (_,il))     = names il
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
 names' :: Expr -> [String]
-names' (AssocA _ l)   = concatMap names' l
-names' (AssocB _ l)   = concatMap names' l
-names' (Deriv _ a b) = b : names' a
-names' (C c)         = [c]
-names' (Int _)       = []
-names' (Dbl _)       = []
-names' (Str _)       = []
-names' (FCall _ x)   = concatMap names' x
-names' (Case ls)     = (concatMap (names' . fst) ls) ++ concatMap (names' . snd) ls
-names' (UnaryOp _ u) = names' u
-names' (BinaryOp _ a b)  = names' a ++ names' b
-names' (Operator _ _ e)  = names' e
-names' (IsIn  a _)   = names' a
-names' (Matrix a)    = concatMap (concatMap names') a
-names' (RealI c b)   = c : namesRI' b
+names' (AssocA _ l)     = concatMap names' l
+names' (AssocB _ l)     = concatMap names' l
+names' (Deriv _ a b)    = b : names' a
+names' (C c)            = [c]
+names' (Int _)          = []
+names' (Dbl _)          = []
+names' (Str _)          = []
+names' (FCall _ x)      = concatMap names' x
+names' (Case ls)        = concatMap (names' . fst) ls ++ concatMap (names' . snd) ls
+names' (UnaryOp _ u)    = names' u
+names' (BinaryOp _ a b) = names' a ++ names' b
+names' (Operator _ _ e) = names' e
+names' (IsIn  a _)      = names' a
+names' (Matrix a)       = concatMap (concatMap names') a
+names' (RealI c b)      = c : namesRI' b
 
 namesRI' :: RealInterval Expr Expr -> [String]
 namesRI' (Bounded il iu) = names' (snd il) ++ names' (snd iu)

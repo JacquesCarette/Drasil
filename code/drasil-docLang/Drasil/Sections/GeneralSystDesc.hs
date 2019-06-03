@@ -5,7 +5,6 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_)
-import Data.Drasil.SentenceStructures (foldlSP)
 import qualified Drasil.DocLang.SRS as SRS (genSysDes, userChar, sysCon, sysCont)
 
 -- wrapper for general system description

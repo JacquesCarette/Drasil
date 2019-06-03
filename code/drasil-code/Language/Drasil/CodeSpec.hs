@@ -238,8 +238,7 @@ modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
 modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
-                        ++ [ ("get_input", "InputFormat"),
-                             ("derived_values", "DerivedValues"),
+                        ++ [ ("derived_values", "DerivedValues"),
                              ("input_constraints", "InputConstraints"),
                              ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"

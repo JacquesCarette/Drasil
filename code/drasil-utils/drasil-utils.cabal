@@ -11,6 +11,7 @@ library
 
   other-modules:
      Utils.Drasil.Fold
+   , Utils.Drasil.Phrase
    , Utils.Drasil.Sentence
 
   Build-Depends:

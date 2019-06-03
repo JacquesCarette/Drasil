@@ -1,4 +1,5 @@
-module Data.Drasil.Phrase where
+module Utils.Drasil.Phrase where
+
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
@@ -123,11 +124,11 @@ theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWord
 -- /Does not preserve abbreviations/
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 compoundNC t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
+  (t1 ^. uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
   
 compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 compoundNC' t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
+  (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
   
 compoundNC'' :: (NamedIdea a, NamedIdea b) => 
   (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
@@ -144,8 +145,7 @@ compoundNCPlPl = compoundNC'' D.pluralNP D.pluralNP
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC''' f1 t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
+  (t1 ^. uid ++ t2 ^. uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
 compoundNCP1 = compoundNC''' D.pluralNP
-

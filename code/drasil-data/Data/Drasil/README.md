@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: June 3, 2019
 --------------------------------------------------
 
 **Concepts**
@@ -23,9 +23,6 @@ Constraints.hs
 
 People.hs
   - Contains author names for our examples
-
-Phrase.hs
-  - Contains functions for building `Noun Phrase`s
 
 README.md
   - This file

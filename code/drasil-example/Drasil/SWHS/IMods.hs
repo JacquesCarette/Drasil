@@ -14,7 +14,8 @@ import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec,
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
-  assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
+  assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
+  assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
@@ -101,12 +102,12 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp
     `isThe` (phrase vo `sOf` phrase wt), S "in the", phrase tk, (E $ sy wvo) `sC`
     S "which has", phrase ms +:+. ((E $ sy wms) `sAnd` phrase hcs `sC` (E $ sy hw)),
     at_start ht, S "occurs in the", phrase wt, S "from the", phrase cl, S "as",
-    (E $ sy hfc) `sAnd` S "from the", phrase wt, S "into the PCM as", (E $ sy hfp) `sC`
-    S "over areas" +:+. ((E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively"),
+    (E $ sy hfc), sParen (makeRef2S dd1HtFluxC) `sAnd` S "from the", phrase wt, S "into the PCM as", (E $ sy hfp) `sC`
+    sParen (makeRef2S dd2HtFluxP), S "over areas" +:+. ((E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively"),
     S "The thermal flux is constant over", (E $ sy cs) `sC` S "since", S "temperature" `ofThe`
-    phrase cl, S "is assumed to not vary along its length" `sC` EmptyS `andThe`
+    phrase cl, S "is assumed to not vary along its length", sParen (makeRef2S assumpTHCCoL) `sC` EmptyS `andThe`
     S "thermal flux is constant over", (E $ sy ps) `sC` S "since the temperature of the PCM",
-    S "is the same throughout its", phrase vo `andThe` phrase wt +:+. S "is fully mixed",
+    S "is the same throughout its", phrase vo, sParen (makeRef2S assumpTPCAV) `andThe` phrase wt, S "is fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
     S "No", phrase ht, S "occurs to", S "outside" `ofThe` phrase tk `sC`
     S "since it has been assumed to be perfectly insulated" +:+.
     sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,

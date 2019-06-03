@@ -727,12 +727,12 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 </p>
 <p>
 <div id="assumpCWTAT">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
 <div id="assumpTPCAV">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
@@ -757,7 +757,7 @@ Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is con
 </p>
 <p>
 <div id="assumpTHCCoL">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
@@ -1295,7 +1295,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </p>
 </td>
 </tr>
@@ -1367,7 +1367,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </p>
 </td>
 </tr>
@@ -1748,7 +1748,7 @@ Energy balance on water to find the temperature of the water
 </div>
 <p class="paragraph">Derivation of the energy balance on water:</p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> and from the water into the PCM as <em>q<sub>P</sub></em>, over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length, and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume and the water is fully mixed. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>) and from the water into the PCM as <em>q<sub>P</sub></em>, (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>) over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -3045,7 +3045,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td>X</td>
 <td>X</td>
@@ -3477,7 +3477,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3551,7 +3551,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td>X</td>
 <td>X</td>

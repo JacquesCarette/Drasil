@@ -365,14 +365,14 @@ makeEquation contents = toEqn (spec contents)
 -----------------------------------------------------------------
 
 makeList :: ListType -> D
-makeList (Simple items)      = itemize     $ vcat $ sim_item items
-makeList (Desc items)        = description $ vcat $ sim_item items
-makeList (Unordered items)   = itemize     $ vcat $ map pl_item items
-makeList (Ordered items)     = enumerate   $ vcat $ map pl_item items
+makeList (Simple items)      = itemize     $ vcat $ simItem items
+makeList (Desc items)        = description $ vcat $ simItem items
+makeList (Unordered items)   = itemize     $ vcat $ map plItem items
+makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
 makeList (Definitions items) = symbDescription $ vcat $ def_item items
 
-pl_item :: (ItemType,Maybe Label) -> D
-pl_item (i, l) = mlref l <> pItem i
+plItem :: (ItemType,Maybe Label) -> D
+plItem (i, l) = mlref l <> pItem i
 
 lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
 lspec (S s) = pure $ text s
@@ -385,8 +385,8 @@ pItem :: ItemType -> D
 pItem (Flat s) = item $ spec s
 pItem (Nested t s) = vcat [item $ spec t, makeList s]
 
-sim_item :: [(Spec,ItemType,Maybe Label)] -> [D]
-sim_item = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
+simItem :: [(Spec,ItemType,Maybe Label)] -> [D]
+simItem = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
   where sp_item (Flat s) = spec s
         sp_item (Nested t s) = vcat [spec t, makeList s]
 

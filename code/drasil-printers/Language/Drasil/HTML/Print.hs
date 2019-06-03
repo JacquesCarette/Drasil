@@ -279,26 +279,26 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = divTag ["list"] $
   vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
-  <> p_item e) items
+  <> pItem e) items
 makeList (Desc items)   = divTag ["list"] $
   vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b
-  <> text ": " <> p_item e) items
+  <> text ": " <> pItem e) items
 makeList (Ordered items) = ol ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ p_item i) items)
+  (li . \(i,l) -> mlref l $ pItem i) items)
 makeList (Unordered items) = ul ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ p_item i) items)
+  (li . \(i,l) -> mlref l $ pItem i) items)
 makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
   vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
-  <+> p_item e) items
+  <+> pItem e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
 mlref = maybe id $ refwrap . pSpec
 
 -- | Helper for rendering list items
-p_item :: ItemType -> Doc
-p_item (Flat s)     = pSpec s
-p_item (Nested s l) = vcat [pSpec s, makeList l]
+pItem :: ItemType -> Doc
+pItem (Flat s)     = pSpec s
+pItem (Nested s l) = vcat [pSpec s, makeList l]
 
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------

@@ -372,7 +372,7 @@ makeList (Ordered items)     = enumerate   $ vcat $ map pl_item items
 makeList (Definitions items) = symbDescription $ vcat $ def_item items
 
 pl_item :: (ItemType,Maybe Label) -> D
-pl_item (i, l) = mlref l <> p_item i
+pl_item (i, l) = mlref l <> pItem i
 
 lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
 lspec (S s) = pure $ text s
@@ -381,9 +381,9 @@ lspec r = spec r
 mlref :: Maybe Label -> D
 mlref = maybe empty $ (<>) (pure $ text "\\phantomsection") . label . lspec
 
-p_item :: ItemType -> D
-p_item (Flat s) = item $ spec s
-p_item (Nested t s) = vcat [item $ spec t, makeList s]
+pItem :: ItemType -> D
+pItem (Flat s) = item $ spec s
+pItem (Nested t s) = vcat [item $ spec t, makeList s]
 
 sim_item :: [(Spec,ItemType,Maybe Label)] -> [D]
 sim_item = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)

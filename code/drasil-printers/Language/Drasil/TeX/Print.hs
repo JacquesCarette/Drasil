@@ -176,13 +176,13 @@ fence _ Norm = "||"
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> String
 pMatrix [] = ""
-pMatrix [x] = p_in x
+pMatrix [x] = pIn x
 pMatrix (x:xs) = pMatrix [x] ++ "\\\\\n" ++ pMatrix xs
 
-p_in :: [Expr] -> String
-p_in [] = ""
-p_in [x] = pExpr x
-p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
+pIn :: [Expr] -> String
+pIn [] = ""
+pIn [x] = pExpr x
+pIn (x:xs) = pIn [x] ++ " & " ++ pIn xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"

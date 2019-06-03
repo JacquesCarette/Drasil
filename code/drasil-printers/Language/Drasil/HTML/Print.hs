@@ -223,13 +223,13 @@ fence _     Norm  = "||"
 
 pMatrix :: [[Expr]] -> Doc
 pMatrix [] = text ""
-pMatrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
+pMatrix [x] = text "<tr>" <> pIn x <> text "</tr>\n"
 pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
 
-p_in :: [Expr] -> Doc
-p_in [] = text ""
-p_in [x] = text "<td>" <> pExpr x <> text "</td>"
-p_in (x:xs) = p_in [x] <> p_in xs
+pIn :: [Expr] -> Doc
+pIn [] = text ""
+pIn [x] = text "<td>" <> pExpr x <> text "</td>"
+pIn (x:xs) = pIn [x] <> pIn xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

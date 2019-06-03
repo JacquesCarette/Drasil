@@ -10,8 +10,6 @@ import Drasil.SSP.Unitals (baseHydroForce, effCohesion, fricAngle, intNormForce,
   surfHydroForce, surfLoad, xi, zcoord)
 import Drasil.SSP.References (morgenstern1965)
 
-import Data.Drasil.SentenceStructures (foldlSent)
-
 import Data.Drasil.Concepts.Documentation (analysis, assumpDom, assumption, 
   condition, constant, effect, interface)
 import Data.Drasil.Concepts.Physics (force, position, stress, twoD)

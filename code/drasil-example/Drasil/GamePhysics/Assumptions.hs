@@ -1,14 +1,14 @@
 module Drasil.GamePhysics.Assumptions where
 
 import Language.Drasil hiding (organization)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
-import Data.Drasil.SentenceStructures (FoldType(..), SepType(..),
-  foldlList, foldlSent)
-import Drasil.GamePhysics.Concepts (twoD)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
   cartesian, rightHand, collision, joint, damping, force, friction)
 import qualified Data.Drasil.Concepts.Math as CM (constraint)
+
+import Drasil.GamePhysics.Concepts (twoD)
 
 assumptions :: [ConceptInstance]
 assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,

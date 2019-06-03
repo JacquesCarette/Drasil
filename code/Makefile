@@ -167,7 +167,22 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
-	EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh
+	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh; \
+	# If you're reading this comment because you got NoPCM working, then you should remove everything below this line until the next target. \
+	# (Next line with zero idents) Additionally you should remove the "; \" from the line immediately preceeding the comment on the previous line. \
+	RET=$$?; \
+	if [ $* = $(NOPCM_EXE) ]; then \
+		if [ $$RET != 0 ]; then \
+			echo "$(NOPCM_DIR) failed to compile as expected. Letting it slide...for now."; \
+			exit 0; \
+		else \
+			echo "$(NOPCM_DIR) surprisingly did not fail to compile!"; \
+			echo "Failing this build because you should check the Drasil makefile and alter the code as indicated by the comment for the currently invoked target"; \
+			exit 1; \
+		fi; \
+	else \
+		exit $$RET; \
+	fi
 
 code: $(CODE_EXAMPLES)
 

@@ -11,7 +11,9 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
   helperRefs)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                               -- Vector - Name conflict (defined in file)
+                                                     -- Vector - Name conflict (defined in file)
+import Utils.Drasil
+
 import Language.Drasil.Utils (sortBySymbol)
 import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
   termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
@@ -40,7 +42,6 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
-import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -52,10 +53,9 @@ type DocKind = Sentence
 
 type DocDesc = [DocSection]
 
--- | Document sections are either Verbatim, Reference, Introduction, or Specific
+-- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!)
-data DocSection = Verbatim Section
-                | RefSec RefSec
+data DocSection = RefSec RefSec
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
@@ -214,7 +214,7 @@ data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] 
 {--}
 
 -- | Off-The-Shelf Solutions section 
-data ExistingSolnSec = ExistSolnVerb Section | ExistSolnProg [Contents]
+newtype ExistingSolnSec = ExistSolnProg [Contents]
 
 {--}
 
@@ -237,7 +237,6 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si = map doit
   where
     doit :: DocSection -> Section
-    doit (Verbatim s)        = s
     doit (RefSec rs)         = mkRefSec si rs
     doit (IntroSec is)       = mkIntroSec si is
     doit (StkhldrSec sts)    = mkStkhldrSec sts
@@ -518,7 +517,6 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
 mkExistingSolnSec :: ExistingSolnSec -> Section
-mkExistingSolnSec (ExistSolnVerb s) = s
 mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
 
 {--}

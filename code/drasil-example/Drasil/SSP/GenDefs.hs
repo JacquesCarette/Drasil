@@ -18,14 +18,14 @@ import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
   constant, definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.Concepts.Physics (distance, twoD, weight)
+import Data.Drasil.Concepts.Physics (twoD, weight)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.PhysicalProperties (specWeight)
 import Data.Drasil.Quantities.Physics (displacement, force, height, 
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, getTandS)
+import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,

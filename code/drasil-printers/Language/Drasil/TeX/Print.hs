@@ -257,7 +257,7 @@ spec a@(s :+: t) = s' <> t'
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pure $ text $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
-spec (Sy s) = p_unit s
+spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref Internal r sn) = snref r $ spec sn
@@ -280,8 +280,8 @@ symbolNeeds L.Corners{}           = Math
 symbolNeeds (L.Atop _ _)          = Math
 symbolNeeds L.Empty               = Curr
 
-p_unit :: L.USymb -> D
-p_unit (L.US ls) = formatu t b
+pUnit :: L.USymb -> D
+pUnit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
@@ -300,18 +300,18 @@ p_unit (L.US ls) = formatu t b
     p_symb n = let cn = symbolNeeds n in switch (const cn) $ pure $ text $ symbol n
 
 {-
-p_unit :: L.USymb -> D
-p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
-p_unit (UName n) =
+pUnit :: L.USymb -> D
+pUnit (UName (Concat s)) = foldl (<>) empty $ map (pUnit . UName) s
+pUnit (UName n) =
   let cn = symbolNeeds n in
   switch (const cn) (pure $ text $ symbol n)
-p_unit (UProd l) = foldr (<>) empty (map p_unit l)
-p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) = toMath $
+pUnit (UProd l) = foldr (<>) empty (map pUnit l)
+pUnit (UPow n p) = toMath $ superscript (pUnit n) (pure $ text $ show p)
+pUnit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    UProd _  -> fraction (p_unit n) (parens $ p_unit d)
-    UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
-    _        -> fraction (p_unit n) (p_unit d)
+    UProd _  -> fraction (pUnit n) (parens $ pUnit d)
+    UDiv _ _ -> fraction (pUnit n) (parens $ pUnit d)
+    _        -> fraction (pUnit n) (pUnit d)
 -}
 
 -----------------------------------------------------------------

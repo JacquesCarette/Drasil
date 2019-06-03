@@ -62,7 +62,7 @@ h n       | n < 1 = error "Illegal header (too small)"
 data Variation = Class | Id
 
 wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrap_gen Class a empty
+wrap a = wrapGen Class a empty
 
 wrapAux :: String -> [String] -> Doc -> Doc
 wrapAux a = wrapGen' hcat Class a empty
@@ -82,8 +82,8 @@ wrapGen' sepf Id s ti _ = \x ->
       te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s] 
 
-wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_gen = wrapGen' cat
+wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrapGen = wrapGen' cat
 
 
 -- | Helper for wrapping attributes in a tag.
@@ -99,7 +99,7 @@ caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrap_gen Id "div") [""]
+refwrap = flip (wrapGen Id "div") [""]
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc

@@ -14,7 +14,7 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (article_title, author, ba, body, bold,
+import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
   caption, cases, div_tag, em, fraction, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
@@ -57,7 +57,7 @@ build fn (Document t a c) =
   text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
-  body (article_title (p_spec t) $$ author (p_spec a)
+  body (articleTitle (p_spec t) $$ author (p_spec a)
   $$ print c
   ))
 

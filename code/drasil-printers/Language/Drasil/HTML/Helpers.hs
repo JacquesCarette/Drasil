@@ -134,9 +134,9 @@ sub = wrapAux "sub" []
 -- | Bold tag
 bold = wrapAux "b" []
 
-article_title, author :: Doc -> Doc
+articleTitle, author :: Doc -> Doc
 -- | Title header
-article_title t = div_tag ["title"]  (h 1 t)
+articleTitle t = div_tag ["title"]  (h 1 t)
 -- | Author header
 author a        = div_tag ["author"] (h 2 a)
 

@@ -10,12 +10,12 @@ import Language.Drasil hiding (Expr)
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr)
 
-html, head_tag, body, title, paragraph, code, tr, th, td, figure,
+html, headTag, body, title, paragraph, code, tr, th, td, figure,
   figcaption, li, pa, ba :: Doc -> Doc
 -- | HTML tag wrapper
 html       = wrap "html" []
 -- | Head tag wrapper
-head_tag   = wrap "head" []
+headTag   = wrap "head" []
 -- | Body tag wrapper
 body       = wrap "body" []
 -- | Title tag wrapper

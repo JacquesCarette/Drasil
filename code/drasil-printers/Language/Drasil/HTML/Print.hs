@@ -15,7 +15,7 @@ import qualified Language.Drasil as L (People, Person,
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (article_title, author, ba, body, bold,
-  caption, cases, div_tag, em, fraction, h, head_tag, html, image, li, ol, pa,
+  caption, cases, div_tag, em, fraction, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
@@ -53,7 +53,7 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 build :: String -> Document -> Doc
 build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
-  html (head_tag (linkCSS fn $$ title (title_spec t) $$
+  html (headTag (linkCSS fn $$ title (title_spec t) $$
   text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$

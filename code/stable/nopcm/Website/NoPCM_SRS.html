@@ -1383,7 +1383,7 @@ This section provides the functional requirements, the tasks and behaviours that
 <div class="list">
 <p>
 <div id="inputInitQuants">
-Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the tank parameters, material properties and initial conditions.
 </div>
 </p>
 <p>
@@ -1419,77 +1419,79 @@ Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in
 </div>
 </p>
 </div>
-<div id="Table:Input-Variable-Requirements">
+<div id="Table:ReqInputs">
 <table class="table">
 <tr>
 <th>Symbol</th>
-<th>Unit</th>
 <th>Description</th>
-</tr>
-<tr>
-<td><em>L</em></td>
-<td>m</td>
-<td>length of tank</td>
-</tr>
-<tr>
-<td><em>D</em></td>
-<td>m</td>
-<td>diameter of tank</td>
+<th>Units</th>
 </tr>
 <tr>
 <td><em>A<sub>C</sub></em></td>
+<td>Heating coil surface area</td>
 <td>m<sup>2</sup></td>
-<td>heating coil surface area</td>
-</tr>
-<tr>
-<td><em>T<sub>C</sub></em></td>
-<td>&deg;C</td>
-<td>temperature of the heating coil</td>
-</tr>
-<tr>
-<td><em>ρ<sub>W</sub></em></td>
-<td>kg/m<sup>3</sup></td>
-<td>density of water</td>
-</tr>
-<tr>
-<td><em>C<sub>W</sub></em></td>
-<td>J/(kg&sdot;&deg;C)</td>
-<td>specific heat capacity of water</td>
-</tr>
-<tr>
-<td><em>h<sub>C</sub></em></td>
-<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-<td>
-convective heat transfer coefficient between coil and water
-</td>
-</tr>
-<tr>
-<td><em>T<sub>init</sub></em></td>
-<td>&deg;C</td>
-<td>initial temperature</td>
-</tr>
-<tr>
-<td><em>t<sub>final</sub></em></td>
-<td>s</td>
-<td>final time</td>
 </tr>
 <tr>
 <td><em>A<sub>tol</sub></em></td>
+<td>Absolute tolerance</td>
 <td>--</td>
-<td>absolute tolerance</td>
-</tr>
-<tr>
-<td><em>R<sub>tol</sub></em></td>
-<td>--</td>
-<td>relative tolerance</td>
 </tr>
 <tr>
 <td><em>C<sub>tol</sub></em></td>
+<td>Relative tolerance for conservation of energy</td>
 <td>--</td>
-<td>relative tolerance for conservation of energy</td>
+</tr>
+<tr>
+<td><em>C<sub>W</sub></em></td>
+<td>Specific heat capacity of water</td>
+<td>J/(kg&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>D</em></td>
+<td>Diameter of tank</td>
+<td>m</td>
+</tr>
+<tr>
+<td><em>h<sub>C</sub></em></td>
+<td>
+Convective heat transfer coefficient between coil and water
+</td>
+<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>L</em></td>
+<td>Length of tank</td>
+<td>m</td>
+</tr>
+<tr>
+<td><em>R<sub>tol</sub></em></td>
+<td>Relative tolerance</td>
+<td>--</td>
+</tr>
+<tr>
+<td><em>T<sub>C</sub></em></td>
+<td>Temperature of the heating coil</td>
+<td>&deg;C</td>
+</tr>
+<tr>
+<td><em>t<sub>final</sub></em></td>
+<td>Final time</td>
+<td>s</td>
+</tr>
+<tr>
+<td><em>T<sub>init</sub></em></td>
+<td>Initial temperature</td>
+<td>&deg;C</td>
+</tr>
+<tr>
+<td><em>ρ<sub>W</sub></em></td>
+<td>Density of water</td>
+<td>kg/m<sup>3</sup></td>
 </tr>
 </table>
-<p class="caption">Input Variable Requirements</p>
+<p class="caption">
+Required Inputs following <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>
+</p>
 </div>
 </div>
 </div>
@@ -1637,9 +1639,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
-<td>
-<a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>
-</td>
+<td><a href=#Table:ReqInputs>Table:ReqInputs</a></td>
 <td></td>
 <td>X</td>
 <td></td>

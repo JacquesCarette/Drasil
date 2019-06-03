@@ -98,27 +98,27 @@ data OpenClose = Open | Close
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
-p_expr :: Expr -> String
-p_expr (Dbl d)    = showEFloat Nothing d ""
-p_expr (Int i)    = show i
-p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
-p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
-p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
-p_expr (Row l) = concatMap p_expr l
-p_expr (Ident s) = s
-p_expr (Spec s) = unPL $ L.special s
---p_expr (Gr g) = unPL $ greek g
-p_expr (Sub e) = "_" ++ brace (p_expr e)
-p_expr (Sup e) = "^" ++ brace (p_expr e)
-p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
-p_expr (MO o) = p_ops o
-p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
-p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
-p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
-p_expr (Spc Thin) = "\\,"
-p_expr (Sqrt e)  = "\\sqrt{" ++ p_expr e ++ "}"
+pExpr :: Expr -> String
+pExpr (Dbl d)    = showEFloat Nothing d ""
+pExpr (Int i)    = show i
+pExpr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
+pExpr (Div n d) = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
+pExpr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
+pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+pExpr (Row [x]) = brace $ pExpr x -- a bit of a hack...
+pExpr (Row l) = concatMap pExpr l
+pExpr (Ident s) = s
+pExpr (Spec s) = unPL $ L.special s
+--pExpr (Gr g) = unPL $ greek g
+pExpr (Sub e) = "_" ++ brace (pExpr e)
+pExpr (Sup e) = "^" ++ brace (pExpr e)
+pExpr (Over Hat s)     = "\\hat{" ++ pExpr s ++ "}"
+pExpr (MO o) = p_ops o
+pExpr (Fenced l r m)    = fence Open l ++ pExpr m ++ fence Close r
+pExpr (Font Bold e) = "\\mathbf{" ++ pExpr e ++ "}"
+pExpr (Font Emph e) = pExpr e -- Emph is ignored here because we're in Math mode
+pExpr (Spc Thin) = "\\,"
+pExpr (Sqrt e)  = "\\sqrt{" ++ pExpr e ++ "}"
 
 p_ops :: Ops -> String
 p_ops IsIn     = "\\in{}"
@@ -181,12 +181,12 @@ p_matrix (x:xs) = p_matrix [x] ++ "\\\\\n" ++ p_matrix xs
 
 p_in :: [Expr] -> String
 p_in [] = ""
-p_in [x] = p_expr x
+p_in [x] = pExpr x
 p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases [p]    = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
+cases [p]    = pExpr (fst p) ++ ", & " ++ pExpr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 -----------------------------------------------------------------
@@ -220,7 +220,7 @@ makeTable lls r bool t =
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (`notElem` dontCount) $ p_expr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength EmptyS    = 0
@@ -255,7 +255,7 @@ spec a@(s :+: t) = s' <> t'
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
-spec (E ex) = toMath $ pure $ text $ p_expr ex
+spec (E ex) = toMath $ pure $ text $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
@@ -411,21 +411,21 @@ makeFigure r c f wp =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 -- p_op :: Functional -> Expr -> String
--- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
--- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
+-- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (pExpr x))
+-- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (pExpr x)
 -- p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
---   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
+--   brace (pExpr x ++ "d" ++ symbol wrtc) -- HACK alert.
 -- 
 -- makeBound :: Maybe ((Symbol, Expr),Expr) -> String
--- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
---                               "^" ++ brace (p_expr hi)
+-- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ pExpr v)) ++
+--                               "^" ++ brace (pExpr hi)
 -- makeBound Nothing = ""
 -- 
 -- makeIBound :: (Maybe Expr, Maybe Expr) -> String
--- makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
---                                    "^" ++ brace (p_expr high)
--- makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
--- makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+-- makeIBound (Just low, Just high) = "_" ++ brace (pExpr low) ++
+--                                    "^" ++ brace (pExpr high)
+-- makeIBound (Just low, Nothing)   = "_" ++ brace (pExpr low)
+-- makeIBound (Nothing, Just high)  = "^" ++ brace (pExpr high)
 -- makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------

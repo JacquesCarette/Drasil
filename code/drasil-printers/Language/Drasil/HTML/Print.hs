@@ -94,7 +94,7 @@ titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
-pSpec (E e)             = em $ p_expr e
+pSpec (E e)             = em $ pExpr e
 pSpec (a :+: b)         = pSpec a <> pSpec b
 pSpec (S s)             = text s
 pSpec (Sy s)            = text $ uSymb s
@@ -147,26 +147,26 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 
 -- | Renders expressions in the HTML (called by multiple functions)
-p_expr :: Expr -> Doc
-p_expr (Dbl d)        = text $ showEFloat Nothing d ""
-p_expr (Int i)        = text $ show i
-p_expr (Str s)        = text s
-p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
-p_expr (Case ps)      = cases ps p_expr
-p_expr (Mtx a)        = text "<table class=\"matrix\">\n" <> p_matrix a <> text "</table>"
-p_expr (Row l)        = hcat $ map p_expr l
-p_expr (Ident s)      = text s
-p_expr (Spec s)       = text $ unPH $ L.special s
---p_expr (Gr g)         = unPH $ greek g
-p_expr (Sub e)        = sub $ p_expr e
-p_expr (Sup e)        = sup $ p_expr e
-p_expr (Over Hat s)   = p_expr s <> text "&#770;"
-p_expr (MO o)         = text $ p_ops o
-p_expr (Fenced l r e) = text (fence Open l) <> p_expr e <> text (fence Close r)
-p_expr (Font Bold e)  = bold $ p_expr e
-p_expr (Font Emph e)  = text "<em>" <> p_expr e <> text "</em>" -- FIXME
-p_expr (Spc Thin)     = text "&#8239;"
-p_expr (Sqrt e)       = text "&radic;(" <> p_expr e <> text ")"
+pExpr :: Expr -> Doc
+pExpr (Dbl d)        = text $ showEFloat Nothing d ""
+pExpr (Int i)        = text $ show i
+pExpr (Str s)        = text s
+pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
+pExpr (Case ps)      = cases ps pExpr
+pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> p_matrix a <> text "</table>"
+pExpr (Row l)        = hcat $ map pExpr l
+pExpr (Ident s)      = text s
+pExpr (Spec s)       = text $ unPH $ L.special s
+--pExpr (Gr g)         = unPH $ greek g
+pExpr (Sub e)        = sub $ pExpr e
+pExpr (Sup e)        = sup $ pExpr e
+pExpr (Over Hat s)   = pExpr s <> text "&#770;"
+pExpr (MO o)         = text $ p_ops o
+pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
+pExpr (Font Bold e)  = bold $ pExpr e
+pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
+pExpr (Spc Thin)     = text "&#8239;"
+pExpr (Sqrt e)       = text "&radic;(" <> pExpr e <> text ")"
 
 p_ops :: Ops -> String
 p_ops IsIn     = "&thinsp;&isin;&thinsp;"
@@ -228,7 +228,7 @@ p_matrix (x:xs) = p_matrix [x] <> p_matrix xs
 
 p_in :: [Expr] -> Doc
 p_in [] = text ""
-p_in [x] = text "<td>" <> p_expr x <> text "</td>"
+p_in [x] = text "<td>" <> pExpr x <> text "</td>"
 p_in (x:xs) = p_in [x] <> p_in xs
 
 -----------------------------------------------------------------

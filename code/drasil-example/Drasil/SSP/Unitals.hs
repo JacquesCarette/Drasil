@@ -13,8 +13,8 @@ import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
-import Data.Drasil.Quantities.Physics (acceleration, force, gravitationalAccel,
-  weight)
+import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
+  gravitationalAccel, torque, weight)
 
 
 symbols :: [DefinedQuantityDict]
@@ -39,6 +39,8 @@ accel = acceleration
 genericMass = mass
 gravAccel = gravitationalAccel
 dens = density
+genericR = displacement
+genericT = torque
 
 -------------
 -- HELPERS --
@@ -184,24 +186,24 @@ coords = cuc' "(x,y)"
 
 units :: [UnitaryConceptDict]
 units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
+  genericSpWght, gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
   zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
   shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
   baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol]
+  effectiveStress, effNormStress, dryVol, satVol, waterVol, rotForce, momntArm]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
+  gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
   critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
   shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
   baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
   surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
-  satVol, waterVol :: UnitalChunk
+  satVol, waterVol, rotForce, momntArm :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -326,7 +328,7 @@ midpntHght = uc' "h_i" (cn "y-direction heights of slices")
   "surface, at the x-direction midpoint of the slice")
   (vec lH) metre
 
-momntOfBdy = uc' "M" (cn' "net moment") ("a measure of the tendency of " ++
+momntOfBdy = uc' "M" (cn' "moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
@@ -335,15 +337,13 @@ porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
   
 shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
-sliceHght = uc' "h_z,i" (cn "heights of centers of slices")
-  ("the heights in the y-direction from the base of each slice to the " ++
-  "center of the slice")
+sliceHght = uc' "h_z,i" (cn "heights of interslice normal forces")
+  "the heights in the y-direction of the interslice normal forces on each slice"
   (sub (vec lH) lZ) metre
 
-sliceHghtW = uc' "h_z,w,i" (cn "heights halfway to water table")
-  ("the heights in the y-direction from the base of each slice halfway to " ++
-  "the water table")
-  (sub (vec lH) (Atomic "z,w")) metre
+sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
+  ("the heights in the y-direction from the base of each slice to the water" ++
+  "table") (sub (vec lH) (Atomic "z,w")) metre
 
 nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
   ("values for each slice that sum together to form the numerator of the " ++
@@ -355,10 +355,10 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) (Atomic "den")) newton
 
-fx = uc' "fx" (cn "x-component of the net force") ""
+fx = uc' "fx" (cn "x-component of the force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") ""
+fy = uc' "fy" (cn "y-component of the force") ""
   (sub cF lY) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
@@ -389,7 +389,13 @@ satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied 
 
 waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
 
+rotForce = uc' "F_rot" (cn "force causing rotation") 
+  "a force in the direction of rotation" (sub cF (Atomic "rot")) newton
   
+momntArm = uc' "r" (cn' "length of the moment arm") 
+  "distance between a force causing rotation and the axis of rotation"
+  lR metre
+
 ----------------------
 -- Unitless Symbols --
 ----------------------

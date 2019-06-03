@@ -57,22 +57,22 @@ build fn (Document t a c) =
   text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
-  body (articleTitle (p_spec t) $$ author (p_spec a)
+  body (articleTitle (pSpec t) $$ author (pSpec a)
   $$ print c
   ))
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
+printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents)   = paragraph $ p_spec contents
-printLO (EqnBlock contents)    = p_spec contents
-printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
-printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
+printLO (Paragraph contents)   = paragraph $ pSpec contents
+printLO (EqnBlock contents)    = pSpec contents
+printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
+printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
+printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
+printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 
@@ -90,24 +90,24 @@ print = foldr (($$) . printLO) empty
 titleSpec :: Spec -> Doc
 titleSpec (a :+: b) = titleSpec a <> titleSpec b
 titleSpec HARDNL    = empty
-titleSpec s         = p_spec s
+titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
-p_spec :: Spec -> Doc
-p_spec (E e)             = em $ p_expr e
-p_spec (a :+: b)         = p_spec a <> p_spec b
-p_spec (S s)             = text s
-p_spec (Sy s)            = text $ uSymb s
-p_spec (Sp s)            = text $ unPH $ L.special s
-p_spec HARDNL            = text "<br />"
-p_spec (Ref Internal r a)      = reflink     r $ p_spec a
-p_spec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
-p_spec (Ref Cite2    r a)      = reflinkInfo r (text r) (p_spec a) -- no difference for citations?
-p_spec (Ref External r a)      = reflinkURI  r $ p_spec a
-p_spec EmptyS             = text "" -- Expected in the output
-p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
--- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
--- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+pSpec :: Spec -> Doc
+pSpec (E e)             = em $ p_expr e
+pSpec (a :+: b)         = pSpec a <> pSpec b
+pSpec (S s)             = text s
+pSpec (Sy s)            = text $ uSymb s
+pSpec (Sp s)            = text $ unPH $ L.special s
+pSpec HARDNL            = text "<br />"
+pSpec (Ref Internal r a)      = reflink     r $ pSpec a
+pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
+pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
+pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
+pSpec EmptyS             = text "" -- Expected in the output
+pSpec (Quote q)          = text "&quot;" <> pSpec q <> text "&quot;"
+-- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
+-- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
@@ -247,10 +247,10 @@ makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
-makeHeaderCols = vcat . map (th . p_spec)
+makeHeaderCols = vcat . map (th . pSpec)
 
 -- | Helper for creating table columns
-makeColumns = vcat . map (td . p_spec)
+makeColumns = vcat . map (td . pSpec)
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
@@ -278,27 +278,27 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ p_spec b <> text ": "
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
   <> p_item e) items
 makeList (Desc items)   = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ p_spec b
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b
   <> text ": " <> p_item e) items
 makeList (Ordered items) = ol ["list"] (vcat $ map
   (li . \(i,l) -> mlref l $ p_item i) items)
 makeList (Unordered items) = ul ["list"] (vcat $ map
   (li . \(i,l) -> mlref l $ p_item i) items)
 makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> li $ mlref l $ p_spec b <> text " is the"
+  vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
   <+> p_item e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ refwrap . p_spec
+mlref = maybe id $ refwrap . pSpec
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc
-p_item (Flat s)     = p_spec s
-p_item (Nested s l) = vcat [p_spec s, makeList l]
+p_item (Flat s)     = pSpec s
+p_item (Nested s l) = vcat [pSpec s, makeList l]
 
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
@@ -391,59 +391,59 @@ useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: CiteField -> Doc
-bookMLA (Address   s) = p_spec s <> text ":"
+bookMLA (Address   s) = pSpec s <> text ":"
 bookMLA (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
-bookMLA (Series    s) = dot $ em $ p_spec s
-bookMLA (Title     s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Series    s) = dot $ em $ pSpec s
+bookMLA (Title     s) = dot $ em $ pSpec s --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume    s) = comm $ text $ "vol. " ++ show s
-bookMLA (Publisher s) = comm $ p_spec s
-bookMLA (Author    p) = dot $ p_spec (rendPeople' p)
+bookMLA (Publisher s) = comm $ pSpec s
+bookMLA (Author    p) = dot $ pSpec (rendPeople' p)
 bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (BookTitle s) = dot $ em $ p_spec s
-bookMLA (Journal   s) = comm $ em $ p_spec s
+bookMLA (BookTitle s) = dot $ em $ pSpec s
+bookMLA (Journal   s) = comm $ em $ pSpec s
 bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
 bookMLA (Pages [a,b]) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Pages     _) = error "Page range specified is empty or has more than two items"
-bookMLA (Note      s) = p_spec s
+bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
-bookMLA (School    s) = comm $ p_spec s
+bookMLA (School    s) = comm $ pSpec s
 --bookMLA (Thesis     t)  = comm $ show t
---bookMLA (URL        s)  = dot $ p_spec s
-bookMLA (HowPublished (Verb s)) = comm $ p_spec s
-bookMLA (HowPublished (URL s))  = dot $ p_spec s
-bookMLA  (Editor     p)    = comm $ text "Edited by " <> p_spec (foldlList (map (S . L.nameStr) p))
+--bookMLA (URL        s)  = dot $ pSpec s
+bookMLA (HowPublished (Verb s)) = comm $ pSpec s
+bookMLA (HowPublished (URL s))  = dot $ pSpec s
+bookMLA  (Editor     p)    = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
 bookMLA (Chapter _)       = text ""
-bookMLA (Institution i)   = comm $ p_spec i
-bookMLA (Organization i)  = comm $ p_spec i
+bookMLA (Institution i)   = comm $ pSpec i
+bookMLA (Organization i)  = comm $ pSpec i
 bookMLA (Month m)         = comm $ text $ show m
-bookMLA (Type t)          = comm $ p_spec t
+bookMLA (Type t)          = comm $ pSpec t
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
-bookAPA (Author   p) = p_spec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
+bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages     [n])  = dot $ text $ show n
 bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
+bookAPA (Editor   p)  = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
-bookChicago (Author   p) = p_spec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
+bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago p@(Pages  _) = bookAPA p
-bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
+bookChicago (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
 artclMLA :: CiteField -> Doc
-artclMLA (Title s) = doubleQuotes $ dot $ p_spec s
+artclMLA (Title s) = doubleQuotes $ dot $ pSpec s
 artclMLA i         = bookMLA i
 
 artclAPA :: CiteField -> Doc
-artclAPA (Title  s)  = dot $ p_spec s
+artclAPA (Title  s)  = dot $ pSpec s
 artclAPA (Volume n)  = em $ text $ show n
 artclAPA (Number  n) = comm $ text $ paren $ show n
 artclAPA i           = bookAPA i

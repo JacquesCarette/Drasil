@@ -271,14 +271,14 @@ escapeChars :: Char -> String
 escapeChars '_' = "\\_"
 escapeChars c = [c]
 
-symbol_needs :: L.Symbol -> MathContext
-symbol_needs (L.Atomic _)          = Text
-symbol_needs (L.Special _)         = Math
-symbol_needs (L.Concat [])         = Math
-symbol_needs (L.Concat (s:_))      = symbol_needs s
-symbol_needs L.Corners{}           = Math
-symbol_needs (L.Atop _ _)          = Math
-symbol_needs L.Empty               = Curr
+symbolNeeds :: L.Symbol -> MathContext
+symbolNeeds (L.Atomic _)          = Text
+symbolNeeds (L.Special _)         = Math
+symbolNeeds (L.Concat [])         = Math
+symbolNeeds (L.Concat (s:_))      = symbolNeeds s
+symbolNeeds L.Corners{}           = Math
+symbolNeeds (L.Atop _ _)          = Math
+symbolNeeds L.Empty               = Curr
 
 p_unit :: L.USymb -> D
 p_unit (L.US ls) = formatu t b
@@ -297,13 +297,13 @@ p_unit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbol_needs n in switch (const cn) $ pure $ text $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pure $ text $ symbol n
 
 {-
 p_unit :: L.USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
-  let cn = symbol_needs n in
+  let cn = symbolNeeds n in
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)

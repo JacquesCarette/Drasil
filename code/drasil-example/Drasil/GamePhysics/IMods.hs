@@ -39,7 +39,7 @@ transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = sy accI $= (deriv (apply1 velI QP.time) QP.time)
+transMotRel = sy accI $= deriv (apply1 velI QP.time) QP.time
   $= sy QP.gravitationalAccel + (apply1 forceI QP.time / sy massI)
 
 
@@ -50,7 +50,7 @@ transMotDesc = foldlSent [S "The above equation expresses the total",
   makeRef2S assumpOT, makeRef2S assumpOD, S "i as the sum of",
   phrase QP.gravitationalAccel,
   S "(GD3) and", phrase QP.acceleration, S "due to applied",
-  (phrase QP.force), S "Fi(t) (T1). The resultant outputs are",
+  phrase QP.force, S "Fi(t) (T1). The resultant outputs are",
   S "then obtained from this equation using", makeRef2S linDispDD,
   makeRef2S linVelDD +:+. makeRef2S linAccDD, S" It is currently",
   S "assumed that there is no damping", makeRef2S assumpDI,

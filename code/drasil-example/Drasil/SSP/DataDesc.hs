@@ -8,7 +8,7 @@ inputMod :: Mod
 inputMod = Mod "InputFormat" [inputData]
 
 inputData :: Func
-inputData = funcData "get_inputs" [
+inputData = funcData "get_input" [
 {- --FIXME: unfinished. Needs more inputs? 
     --Needs way to think of (x,y) as two seperate things
     --number of layers, layer direction

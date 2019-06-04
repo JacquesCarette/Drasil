@@ -5,12 +5,12 @@ import Language.Drasil
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tmNoRefs)
+import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
   mass_1, mass_2, rOB, sqrDist, velB, velO)
 
-import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 

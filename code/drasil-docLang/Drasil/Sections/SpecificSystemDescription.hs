@@ -30,8 +30,7 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSP, foldlSent)
-import Data.Drasil.Utils (foldle, fmtPhys, fmtSfwr, fmtU, getRVal, mkTableFromColumns, typUncr)
+import Data.Drasil.Utils (fmtPhys, fmtSfwr, fmtU, getRVal, mkTableFromColumns, typUncr)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -68,7 +67,7 @@ termDefnF end otherContents = SRS.termAndDefn (intro:otherContents) []
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst (intro:otherContents) []
-  where intro = mkParagraph $ foldle (+:+) (+:) EmptyS
+  where intro = mkParagraph $ foldlSentCol
                 [S "The", phrase physicalSystem, S "of", progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", 
                 plural element]

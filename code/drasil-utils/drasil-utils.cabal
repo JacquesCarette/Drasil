@@ -10,7 +10,8 @@ library
     Utils.Drasil
 
   other-modules:
-    Utils.Drasil.Sentence
+     Utils.Drasil.Fold
+   , Utils.Drasil.Sentence
 
   Build-Depends:
     base >= 4.7,

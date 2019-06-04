@@ -83,7 +83,7 @@ verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
 
 calcTransOverTimeDesc = requirementS QP.position QP.velocity 
-  (S "acted upon by a" +:+ (phrase QP.force))
+  (S "acted upon by a" +:+ phrase QP.force)
 
 calcRotOverTimeDesc = requirementS' QM.orientation QP.angularVelocity
 

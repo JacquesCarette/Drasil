@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (
   fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, floatTypeDocD, typeDocD, voidDocD, constructDocD, 
   paramListDocD, methodListDocD, ifCondDocD, stratDocD, assignDocD, 
-  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, mkSt,
+  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD,
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD',
   sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
   unExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 

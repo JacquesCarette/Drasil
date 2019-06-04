@@ -292,7 +292,7 @@ instance Selector CSharpCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal $ empty)
+  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists l i = mkVal <$> liftA3 listIndexExistsDocD greaterOp l i

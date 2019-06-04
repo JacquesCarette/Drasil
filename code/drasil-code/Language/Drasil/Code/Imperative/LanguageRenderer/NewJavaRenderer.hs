@@ -25,10 +25,10 @@ import Language.Drasil.Code.Imperative.NewLanguageRenderer (
   stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
   varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+  commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', mkVal, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, defaultCharD, 
   defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
@@ -144,7 +144,7 @@ instance ControlBlockSym JavaCode where
     (strError l "RunStrategy called on non-existent strategy") 
     (liftA2 (flip stratDocD) (state resultState)) 
     (Map.lookup l (Map.fromList strats))
-    where resultState = maybe (return (empty, Empty)) asgState av
+    where resultState = maybe (return (mkStNoEnd empty)) asgState av
           asgState v = maybe (strError l 
             "Attempt to assign null return to a Value") (assign v) rv
           strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
@@ -220,7 +220,7 @@ instance ValueSym JavaCode where
   var n = return (varDocD n, Just n)
   extVar l n = return (extVarDocD l n, Just $ l ++ "." ++ n)
   self = return (selfDocD, Just "this")
-  arg n = liftPairFst (liftA2 argDocD (litInt n) argsList, Nothing)
+  arg n = mkVal <$> liftA2 argDocD (litInt n) argsList
   enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
   enumVar = var
   objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ 
@@ -230,67 +230,66 @@ instance ValueSym JavaCode where
   n `listOf` t = listVar n t
   iterVar = var
   
-  inputFunc = return (parens (text "new Scanner(System.in)"), Nothing)
-  argsList = return (text "args", Nothing)
+  inputFunc = return (mkVal $ parens (text "new Scanner(System.in)"))
+  argsList = return (mkVal $ text "args")
 
   valName (JC (v, s)) = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression JavaCode where
-  (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
-  (#/^) v = liftPairFst (liftA2 unOpDocD sqrtOp v, Nothing)
-  (#|) v = liftPairFst (liftA2 unOpDocD absOp v, Nothing)
-  (#+) v1 v2 = liftPairFst (liftA3 binOpDocD plusOp v1 v2, Nothing)
-  (#-) v1 v2 = liftPairFst (liftA3 binOpDocD minusOp v1 v2, Nothing)
-  (#*) v1 v2 = liftPairFst (liftA3 binOpDocD multOp v1 v2, Nothing)
-  (#/) v1 v2 = liftPairFst (liftA3 binOpDocD divideOp v1 v2, Nothing)
-  (#%) v1 v2 = liftPairFst (liftA3 binOpDocD moduloOp v1 v2, Nothing)
-  (#^) v1 v2 = liftPairFst (liftA3 binOpDocD' powerOp v1 v2, Nothing)
+  (#~) = liftA2 unExpr negateOp
+  (#/^) = liftA2 unExpr sqrtOp
+  (#|) = liftA2 unExpr absOp
+  (#+) = liftA3 binExpr plusOp
+  (#-) = liftA3 binExpr minusOp
+  (#*) = liftA3 binExpr multOp
+  (#/) = liftA3 binExpr divideOp
+  (#%) = liftA3 binExpr moduloOp
+  (#^) = liftA3 binExpr' powerOp
 
-  log v = liftPairFst (liftA2 unOpDocD logOp v, Nothing)
-  ln v = liftPairFst (liftA2 unOpDocD lnOp v, Nothing)
-  exp v = liftPairFst (liftA2 unOpDocD expOp v, Nothing)
-  sin v = liftPairFst (liftA2 unOpDocD sinOp v, Nothing)
-  cos v = liftPairFst (liftA2 unOpDocD cosOp v, Nothing)
-  tan v = liftPairFst (liftA2 unOpDocD tanOp v, Nothing)
+  log = liftA2 unExpr logOp
+  ln = liftA2 unExpr lnOp
+  exp = liftA2 unExpr expOp
+  sin = liftA2 unExpr sinOp
+  cos = liftA2 unExpr cosOp
+  tan = liftA2 unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin v = liftPairFst (liftA2 unOpDocD asinOp v, Nothing)
-  arccos v = liftPairFst (liftA2 unOpDocD acosOp v, Nothing)
-  arctan v = liftPairFst (liftA2 unOpDocD atanOp v, Nothing)
-  floor v = liftPairFst (liftA2 unOpDocD floorOp v, Nothing)
-  ceil v = liftPairFst (liftA2 unOpDocD ceilOp v, Nothing)
+  arcsin = liftA2 unExpr asinOp
+  arccos = liftA2 unExpr acosOp
+  arctan = liftA2 unExpr atanOp
+  floor = liftA2 unExpr floorOp
+  ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) v = liftPairFst (liftA2 unOpDocD notOp v, Nothing)
-  (?&&) v1 v2 = liftPairFst (liftA3 binOpDocD andOp v1 v2, Nothing)
-  (?||) v1 v2 = liftPairFst (liftA3 binOpDocD orOp v1 v2, Nothing)
+  (?!) = liftA2 unExpr notOp
+  (?&&) = liftA3 binExpr andOp
+  (?||) = liftA3 binExpr orOp
 
-  (?<) v1 v2 = liftPairFst (liftA3 binOpDocD lessOp v1 v2, Nothing)
-  (?<=) v1 v2 = liftPairFst (liftA3 binOpDocD lessEqualOp v1 v2, Nothing)
-  (?>) v1 v2 = liftPairFst (liftA3 binOpDocD greaterOp v1 v2, Nothing)
-  (?>=) v1 v2 = liftPairFst (liftA3 binOpDocD greaterEqualOp v1 v2, Nothing)
-  (?==) v1 v2 = liftPairFst (liftA3 binOpDocD equalOp v1 v2, Nothing)
-  (?!=) v1 v2 = liftPairFst (liftA3 binOpDocD notEqualOp v1 v2, Nothing)
+  (?<) = liftA3 binExpr lessOp
+  (?<=) = liftA3 binExpr lessEqualOp
+  (?>) = liftA3 binExpr greaterOp
+  (?>=) = liftA3 binExpr greaterEqualOp
+  (?==) = liftA3 binExpr equalOp
+  (?!=) = liftA3 binExpr notEqualOp
   
 instance ValueExpression JavaCode where
-  inlineIf b v1 v2 = liftPairFst (liftA3 inlineIfDocD b v1 v2, Nothing)
-  funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
+  inlineIf b v1 v2 = mkVal <$> liftA3 inlineIfDocD b v1 v2
+  funcApp n vs = mkVal <$> liftList (funcAppDocD n) vs
   selfFuncApp = funcApp
-  extFuncApp l n vs = liftPairFst (liftList (extFuncAppDocD l n) vs, Nothing)
-  stateObj t vs = liftPairFst (liftA2 stateObjDocD t 
-    (liftList callFuncParamList vs), Nothing)
+  extFuncApp l n vs = mkVal <$> liftList (extFuncAppDocD l n) vs
+  stateObj t vs = mkVal <$> liftA2 stateObjDocD t 
+    (liftList callFuncParamList vs)
   extStateObj _ = stateObj
-  listStateObj t vs = liftPairFst (liftA3 listStateObjDocD listObj t 
-    (liftList callFuncParamList vs), Nothing)
+  listStateObj t vs = mkVal <$> liftA3 listStateObjDocD listObj t 
+    (liftList callFuncParamList vs)
 
   exists = notNull
-  notNull v = liftPairFst (liftA3 notNullDocD notEqualOp v (var "null"), 
-    Nothing)
+  notNull v = mkVal <$> liftA3 notNullDocD notEqualOp v (var "null")
 
 instance Selector JavaCode where
-  objAccess v f = liftPairFst (liftA2 objAccessDocD v f, Nothing)
+  objAccess v f = mkVal <$> liftA2 objAccessDocD v f
   ($.) = objAccess
 
   objMethodCall o f ps = objAccess o (func f ps)
@@ -298,18 +297,18 @@ instance Selector JavaCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (empty, Nothing)
+  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
-  listIndexExists l i = liftPairFst (liftA3 jListIndexExists greaterOp l i, 
-    Nothing)
+  listIndexExists l i = mkVal <$> liftA3 jListIndexExists greaterOp l i
+
   argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
 
   indexOf l v = objAccess l (fmap funcDocD (funcApp "indexOf" [v]))
 
   stringEqual v1 str = objAccess v1 (func "equals" [str])
 
-  castObj f v = liftPairFst (liftA2 castObjDocD f v, Nothing)
+  castObj f v = mkVal <$> liftA2 castObjDocD f v
   castStrToFloat v = funcApp "Double.parseDouble" [v]
 
 instance FunctionSym JavaCode where
@@ -350,45 +349,43 @@ instance SelectorFunction JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  assign v1 v2 = liftPairFst (liftA2 assignDocD v1 v2, Semi)
+  assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
   (&=) = assign
   (&.=) l = assign (var l)
   (&=.) v l = assign v (var l)
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&.-=) l v = l &.= (var l #- v)
-  (&+=) v1 v2 = liftPairFst (liftA2 plusEqualsDocD v1 v2, Semi)
+  (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
   (&.+=) l v = var l &+= v
-  (&++) v = liftPairFst (fmap plusPlusDocD v, Semi)
+  (&++) v = mkSt <$> fmap plusPlusDocD v
   (&.++) l = (&++) (var l)
   (&~-) v = v &= (v #- litInt 1)
   (&.~-) l = (&~-) (var l)
 
-  varDec l t = liftPairFst (fmap (varDecDocD l) t, Semi)
-  varDecDef l t v = liftPairFst (liftA2 (varDecDefDocD l) t v, Semi)
-  listDec l n t = liftPairFst (liftA2 (listDecDocD l) (litInt n) t, Semi) -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-  listDecDef l t vs = liftPairFst (liftA2 (jListDecDef l) t (liftList 
-    callFuncParamList vs), Semi)
-  objDecDef l t v = liftPairFst (liftA2 (objDecDefDocD l) t v, Semi)
-  objDecNew l t vs = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t vs), 
-    Semi)
+  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
+  listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+  listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
+    callFuncParamList vs)
+  objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
+  objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
   extObjDecNew l _ = objDecNew l
-  objDecNewVoid l t = liftPairFst (liftA2 (objDecDefDocD l) t (stateObj t []),
-    Semi)
+  objDecNewVoid l t = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t [])
   extObjDecNewVoid l _ = objDecNewVoid l
-  constDecDef l t v = liftPairFst (liftA2 (jConstDecDef l) t v, Semi)
+  constDecDef l t v = mkSt <$> liftA2 (jConstDecDef l) t v
 
-  print _ v = liftPairFst (liftA2 outDocD printFunc v, Semi)
-  printLn _ v = liftPairFst (liftA2 outDocD printLnFunc v, Semi)
-  printStr s = liftPairFst (liftA2 outDocD printFunc (litString s), Semi)
-  printStrLn s = liftPairFst (liftA2 outDocD printLnFunc (litString s), Semi)
+  print _ v = mkSt <$> liftA2 outDocD printFunc v
+  printLn _ v = mkSt <$> liftA2 outDocD printLnFunc v
+  printStr s = mkSt <$> liftA2 outDocD printFunc (litString s)
+  printStrLn s = mkSt <$> liftA2 outDocD printLnFunc (litString s)
 
-  printFile f _ v = liftPairFst (liftA2 outDocD (printFileFunc f) v, Semi)
-  printFileLn f _ v = liftPairFst (liftA2 outDocD (printFileLnFunc f) v, Semi)
-  printFileStr f s = liftPairFst (liftA2 outDocD (printFileFunc f) 
-    (litString s), Semi)
-  printFileStrLn f s = liftPairFst (liftA2 outDocD (printFileLnFunc f) 
-    (litString s), Semi)
+  printFile f _ v = mkSt <$> liftA2 outDocD (printFileFunc f) v
+  printFileLn f _ v = mkSt <$> liftA2 outDocD (printFileLnFunc f) v
+  printFileStr f s = mkSt <$> liftA2 outDocD (printFileFunc f) 
+    (litString s)
+  printFileStrLn f s = mkSt <$> liftA2 outDocD (printFileLnFunc f) 
+    (litString s)
 
   printList t v = multi [state (printStr "["), 
     for (varDecDef "i" int (litInt 0)) (var "i" ?< 
@@ -415,51 +412,51 @@ instance StatementSym JavaCode where
     state (printFile f t (v $. listAccess ((v $. listSize) #- litInt 1))), 
     printFileStrLn f "]"]
 
-  getIntInput v = liftPairFst (liftA3 jInput' (return $ text "Integer.parseInt")
-    v inputFunc, Semi)
-  getFloatInput v = liftPairFst (liftA3 jInput' (return $ 
-    text "Double.parseDouble") v inputFunc, Semi)
-  getBoolInput v = liftPairFst (liftA3 jInput (return $ text "nextBoolean()") v 
-    inputFunc, Semi)
-  getStringInput v = liftPairFst (liftA3 jInput (return $ text "nextLine()") v 
-    inputFunc, Semi)
-  getCharInput _ = return (empty, Empty)
-  discardInput = liftPairFst (fmap jDiscardInput inputFunc, Semi)
-  getIntFileInput f v = liftPairFst (liftA3 jInput' (return $ 
-    text "Integer.parseInt") v f, Semi)
-  getFloatFileInput f v = liftPairFst (liftA3 jInput' (return $ 
-    text "Double.parseDouble") v f, Semi)
-  getBoolFileInput f v = liftPairFst (liftA3 jInput (return $
-    text "nextBoolean()") v f, Semi)
-  getStringFileInput f v = liftPairFst (liftA3 jInput (return $ 
-    text "nextLine()") v f, Semi)
-  getCharFileInput _ _ = return (empty, Empty)
-  discardFileInput f = liftPairFst (fmap jDiscardInput f, Semi)
+  getIntInput v = mkSt <$> liftA3 jInput' (return $ text "Integer.parseInt")
+    v inputFunc
+  getFloatInput v = mkSt <$> liftA3 jInput' (return $ 
+    text "Double.parseDouble") v inputFunc
+  getBoolInput v = mkSt <$> liftA3 jInput (return $ text "nextBoolean()") v 
+    inputFunc
+  getStringInput v = mkSt <$> liftA3 jInput (return $ text "nextLine()") v 
+    inputFunc
+  getCharInput _ = return (mkStNoEnd empty)
+  discardInput = mkSt <$> fmap jDiscardInput inputFunc
+  getIntFileInput f v = mkSt <$> liftA3 jInput' (return $ 
+    text "Integer.parseInt") v f
+  getFloatFileInput f v = mkSt <$> liftA3 jInput' (return $ 
+    text "Double.parseDouble") v f
+  getBoolFileInput f v = mkSt <$> liftA3 jInput (return $
+    text "nextBoolean()") v f
+  getStringFileInput f v = mkSt <$> liftA3 jInput (return $ 
+    text "nextLine()") v f
+  getCharFileInput _ _ = return (mkStNoEnd empty)
+  discardFileInput f = mkSt <$> fmap jDiscardInput f
 
-  openFileR f n = liftPairFst (liftA2 jOpenFileR f n, Semi)
-  openFileW f n = liftPairFst (liftA3 jOpenFileWorA f n litFalse, Semi)
-  openFileA f n = liftPairFst (liftA3 jOpenFileWorA f n litTrue, Semi)
+  openFileR f n = mkSt <$> liftA2 jOpenFileR f n
+  openFileW f n = mkSt <$> liftA3 jOpenFileWorA f n litFalse
+  openFileA f n = mkSt <$> liftA3 jOpenFileWorA f n litTrue
   closeFile f = valState $ objMethodCall f "close" []
 
   getFileInputLine f v = v &= f $. func "nextLine" []
   discardFileLine f = valState $ f $. func "nextLine" []
-  stringSplit d vnew s = liftPairFst (liftA3 jStringSplit vnew 
+  stringSplit d vnew s = mkSt <$> liftA3 jStringSplit vnew 
     (listType dynamic string) 
-    (funcApp "Arrays.asList" [s $. func "split" [litString [d]]]), Semi)
+    (funcApp "Arrays.asList" [s $. func "split" [litString [d]]])
 
-  break = return (breakDocD, Semi)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = return (continueDocD, Semi)
+  break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+  continue = return (mkSt continueDocD)
 
-  returnState v = liftPairFst (fmap returnDocD v, Semi)
-  returnVar l = liftPairFst (fmap returnDocD (var l), Semi)
+  returnState v = mkSt <$> fmap returnDocD v
+  returnVar l = mkSt <$> fmap returnDocD (var l)
 
-  valState v = liftPairFst (fmap fst v, Semi)
+  valState v = mkSt <$> fmap fst v
 
-  comment cmt = liftPairFst (fmap (commentDocD cmt) commentStart, Empty)
+  comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
   free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
 
-  throw errMsg = liftPairFst (fmap jThrowDoc (litString errMsg), Semi)
+  throw errMsg = mkSt <$> fmap jThrowDoc (litString errMsg)
 
   initState fsmName initialState = varDecDef fsmName string 
     (litString initialState)
@@ -475,24 +472,24 @@ instance StatementSym JavaCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym JavaCode where
-  ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
-    bs, Empty)
+  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
+    bs
   ifNoElse bs = ifCond bs $ body []
-  switch v cs c = liftPairFst (lift3Pair switchDocD (state break) v c cs, Empty)
+  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
   switchAsIf v cs = ifCond cases
     where cases = map (\(l, b) -> (v ?== l, b)) cs
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
-  for sInit vGuard sUpdate b = liftPairFst (liftA6 forDocD blockStart blockEnd 
-    (loopState sInit) vGuard (loopState sUpdate) b, Empty)
+  for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
+    (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef i int initv) (var i ?< finalv)
     (i &.+= stepv)
-  forEach l t v b = liftPairFst (liftA7 (forEachDocD l) blockStart blockEnd
-    iterForEachLabel iterInLabel t v b, Empty)
-  while v b = liftPairFst (liftA4 whileDocD blockStart blockEnd v b, Empty)
+  forEach l t v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd
+    iterForEachLabel iterInLabel t v b
+  while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = liftPairFst (liftA2 jTryCatch tb cb, Empty)
+  tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
   checkState l = switch (var l)
   notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) 

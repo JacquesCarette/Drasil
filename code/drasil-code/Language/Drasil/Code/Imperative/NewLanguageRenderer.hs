@@ -13,23 +13,24 @@ module Language.Drasil.Code.Imperative.NewLanguageRenderer (
   switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
   plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
   varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
-  commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', 
-  negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
-  logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
-  cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD,
-  litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
-  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD,
-  castDocD, sizeDocD, listAccessDocD, listSetDocD, 
-  objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
-  dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
-  getterName, setterName, setMain, setEmpty, statementsToStateVars
+  commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, notOpDocD, 
+  notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', 
+  logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD,
+  sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, 
+  asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, 
+  unExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, 
+  binOpDocD', binExpr, binExpr', mkVal, litTrueD, litFalseD, litCharD, 
+  litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
+  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, 
+  listSetDocD, objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, addCommentsDocD, 
+  callFuncParamList, getterName, setterName, setMain, setEmpty, 
+  statementsToStateVars
 ) where
 
 import Language.Drasil.Code.Imperative.New (Label, Library)
@@ -346,6 +347,12 @@ getTermDoc :: Terminator -> Doc
 getTermDoc Semi = semi
 getTermDoc Empty = empty
 
+mkSt :: Doc -> (Doc, Terminator)
+mkSt s = (s, Semi)
+
+mkStNoEnd :: Doc -> (Doc, Terminator)
+mkStNoEnd s = (s, Empty)
+
 -- Unary Operators --
 
 notOpDocD :: Doc
@@ -426,6 +433,9 @@ atanOpDocD' = text "math.atan"
 unOpDocD :: Doc -> (Doc, Maybe String) -> Doc
 unOpDocD op (v, _) = op <> parens v
 
+unExpr :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String)
+unExpr u v = mkVal $ unOpDocD u v
+
 -- Binary Operators --
 
 equalOpDocD :: Doc
@@ -475,6 +485,15 @@ binOpDocD op (v1, _) (v2, _) = parens (v1 <+> op <+> v2)
 
 binOpDocD' :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 binOpDocD' op (v1, _) (v2, _) = op <> parens (v1 <> comma <+> v2)
+  
+binExpr :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String)
+binExpr b v1 v2 = mkVal $ binOpDocD b v1 v2
+
+binExpr' :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String)
+binExpr' b v1 v2 = mkVal $ binOpDocD' b v1 v2
+
+mkVal :: Doc -> (Doc, Maybe String)
+mkVal v = (v, Nothing)
 
 -- Literals --
 

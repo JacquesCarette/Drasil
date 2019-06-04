@@ -17,7 +17,7 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 
-import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
+import qualified Data.Drasil.Quantities.Physics as QP angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy, momentOfInertia)

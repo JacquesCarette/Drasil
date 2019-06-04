@@ -69,11 +69,11 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding") (
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent
   [S "Includes programs that provide externally visible behaviour of the", 
-  S "system as specified in the", (phrase srs),
-  (sParen $ short srs), S "documents. This module",
+  S "system as specified in the", phrase srs,
+  sParen $ short srs, S "documents. This module",
   S "serves as a communication layer between the hardware-hiding module",
   S "and the software decision module. The programs in this module will need",
-  S "to change if there are changes in the", (short srs)])
+  S "to change if there are changes in the", short srs])
 
 modControl :: ConceptChunk
 modControl = dcc "modControl" (cn' "control") "Provides the main program."

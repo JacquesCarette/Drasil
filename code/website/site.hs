@@ -84,9 +84,14 @@ main = do
   -- (sometimes correct) assumptions.
   travisRepoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "TRAVIS_REPO_SLUG"
   travisCommit <- fromMaybe "master" <$> lookupEnv "TRAVIS_COMMIT"
+  -- Next two are metadata used to produce the footer.
+  travisBuildNumber <- fromMaybe "0" <$> lookupEnv "TRAVIS_BUILD_NUMBER"
+  travisBuildId <- lookupEnv "TRAVIS_BUILD_ID"
 
   let repoCommitRoot = "https://github.com/" ++ travisRepoSlug ++ "/tree/" ++ travisCommit ++ "/"
   let docsPath = docsRoot ++ "index.html"
+
+  let travisBuildPath = "https://travis-ci.org/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
@@ -110,6 +115,10 @@ main = do
         let indexCtx = listField "examples" (mkExampleCtx exampleRoot srsDir) (mapM makeItem examples) <>
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
+                       field "buildNumber" (return . const travisBuildNumber) <>
+                       field "buildUrl" (return . const travisBuildPath) <>
+                       field "commit" (return . const travisCommit) <>
+                       field "commitUrl" (return . const repoCommitRoot) <>
                        defaultContext
 
         getResourceBody >>=

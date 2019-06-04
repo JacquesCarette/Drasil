@@ -6,7 +6,7 @@ import Utils.Drasil
 
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Concepts.Documentation (goal, solution)
+import Data.Drasil.Concepts.Documentation (goal, output_, solution)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
@@ -239,7 +239,7 @@ balPCMDesc_note :: Sentence
 balPCMDesc_note = foldlSent [
   (E (sy temp_melt_P)) `sC` (E (sy time_final)) `sC` (E (sy temp_init)) `sC`
   (E (sy pcm_HTC)) `sC` (E (sy pcm_mass)) `sC` (E (sy htCap_S_P)) `sC`
-  (E (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
+  (E (sy htCap_S_P)), S "from" +:+. sParen (makeRef2S eBalanceOnWtr),
   S "The input is constrained so that", (E (sy temp_init $< sy temp_melt_P)),
   sParen (makeRef2S assumpPIS),
   (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy time_final)) `sC`
@@ -250,10 +250,10 @@ balPCMDesc_note = foldlSent [
   S "from", (makeRef2S eBalanceOnWtr) `sC`
   S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
-  (E (sy temp_melt_P)) `sC`
-  (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
-  S ") is determined as part of the heat energy in the PCM, as given in" +:+.
+  (E (sy temp_melt_P)) `sC` S "even with the heating (or cooling)" `sC`
+  S "until the phase change has occurred for all of the material; that is as long as",
+  E (0 $< sy melt_frac $< 1), sParen (S "from" +:+ makeRef2S dd4MeltFrac),
+  S "is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
@@ -295,12 +295,12 @@ eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass1
   [S "To find the", phrase roc `sOf` (E $ sy tempP) `sC` S "we look at the",
    phrase en, S "balance on the" +:+. S "PCM", S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
-   S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `sAnd` S "the",
+   S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `andThe`
    phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,
    S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
-   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
+   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. phrase output_,
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
-   (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
+   (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0) `sC` S "the equation for",
    makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: DataDefinition -> UnitalChunk -> [Sentence]

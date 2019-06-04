@@ -21,7 +21,7 @@ physicsTMs = [newtonSL]
 newtonSL :: TheoryModel
 newtonSL = tmNoRefs (cw newtonSLRC)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] []
+  [] [sy QP.force $= sy QPP.mass * sy QP.acceleration] []
   "NewtonSecLawMot" [newtonSLDesc]
 
 newtonSLRC :: RelationConcept
@@ -29,15 +29,15 @@ newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc newtonSLRel
 
 newtonSLRel :: Relation
-newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
+newtonSLRel = sy QP.force $= sy QPP.mass * sy QP.acceleration
 
 newtonSLDesc :: Sentence
-newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
-  (sParen $ Sy $ unit_symb QP.force), S "on a", phrase body,
-  S "is proportional to the", (phrase QP.acceleration),
-  (ch QP.acceleration), (sParen $ Sy $ unit_symb QP.acceleration),
-  S "of the", phrase body `sC` S "where", (ch QPP.mass), 
-  (sParen $ Sy $ unit_symb QPP.mass), S "denotes", (phrase QPP.mass) `ofThe` 
+newtonSLDesc = foldlSent [S "The net", phrase QP.force, ch QP.force,
+  sParen $ Sy $ unit_symb QP.force, S "on a", phrase body,
+  S "is proportional to the", phrase QP.acceleration,
+  ch QP.acceleration, sParen $ Sy $ unit_symb QP.acceleration,
+  S "of the", phrase body `sC` S "where", ch QPP.mass, 
+  sParen $ Sy $ unit_symb QPP.mass, S "denotes", phrase QPP.mass `ofThe` 
   phrase body, S "as the", phrase constant `sOf` S "proportionality"]
 
 --

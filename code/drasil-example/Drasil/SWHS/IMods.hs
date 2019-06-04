@@ -162,7 +162,7 @@ eBalanceOnWtrDerivEqn2 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $
 eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
-  ((sy pcm_mass) * (sy pcm_SA) / 
+  ((sy pcm_HTC) * (sy pcm_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_W) - (sy temp_PCM))
 
 eBalanceOnWtrDerivEqn4 = 

@@ -87,7 +87,7 @@ deploy:
   skip_cleanup: true
   script: bash scripts/deploy_wrapper.bash
   on:
-    branch: con_dep
+    branch: master
 
 notifications:
   email:

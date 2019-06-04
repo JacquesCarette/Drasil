@@ -1,12 +1,11 @@
-SOURCE_BRANCH="con_dep"
+SOURCE_BRANCH="master"
 DEPLOY_BRANCH="gh-pages"
-SOURCE_BRANCH="con_dep"
 DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
 COMMIT_HASH_FILE=".commit-hash"
 
-if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
-  echo "Deployment only occurs for push builds."
+if [[ "$TRAVIS_EVENT_TYPE" != "cron" && "$TRAVIS_EVENT_TYPE" != "api" ]]; then
+  echo "Deployment only occurs for cron (or api -- manually run) builds."
   exit 0
 fi
 

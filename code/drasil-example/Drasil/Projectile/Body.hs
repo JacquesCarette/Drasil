@@ -17,7 +17,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(SSDSec), Field
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, datum, general, goalStmt, information, input_, model, output_,
   physicalSystem, problemDescription, problem,  section_,
   solutionCharacteristic, specification, srs, symbol_, system)
-import Data.Drasil.Concepts.Math (angle, equation)
+import Data.Drasil.Concepts.Math (angle, equation, perp)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
 import Data.Drasil.Concepts.Software (program)
@@ -78,7 +78,7 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
-  (nw projectileTitle : nw mass : nw twoD : map nw [angle, equation, program] ++
+  (nw projectileTitle : nw mass : nw twoD : map nw [angle, equation, perp, program] ++
     map nw [datum, general, information, input_, model, output_, physicalSystem, problemDescription,
     problem, section_, solutionCharacteristic, specification, symbol_, system] ++
     map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++

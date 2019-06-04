@@ -41,12 +41,21 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is in 2D.
-\item[pointMass:\phantomsection\label{pointMass}]The projectile is a point mass.
-\item[equalHeights:\phantomsection\label{equalHeights}]The heights of the launcher and target are equal. \hyperref[GD:airTime]{GD: airTime}.
-\item[accelZeroX:\phantomsection\label{accelZeroX}]Acceleration is zero in the x-direction. \hyperref[GD:distanceRefined]{GD: distanceRefined}.
-\item[accelGravityY:\phantomsection\label{accelGravityY}]Acceleration in the y-direction is only caused by gravity. \hyperref[GD:distance]{GD: distance}.
-\item[ignoreCurvature:\phantomsection\label{ignoreCurvature}]The effects of the Earth's curvature are ignored.
+\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used.
+\item[yAxisPerpend:\phantomsection\label{yAxisPerpend}]The y-axis is perpendicular to the x-axis.
+\item[rightHandAxes:\phantomsection\label{rightHandAxes}]The axes are defined using a right-handed coordinate system.
+\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[GD:airTime]{GD: airTime}.
+\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis. \hyperref[GD:airTime]{GD: airTime}.
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target.
+\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant.
+\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[GD:distanceRefined]{GD: distanceRefined}.
+\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[GD:distance]{GD: distance}.
+\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
+\item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
+\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass.
+\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected.
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile.
+\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -164,7 +173,7 @@ Source & --
 RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
+Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[launchOrigin]{A: launchOrigin} and \hyperref[targetXAxis]{A: targetXAxis}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -188,7 +197,7 @@ Description & \begin{symbDescription}
               \item{${a_{x}}$ is the x-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[accelGravityY]{A: accelGravityY}
+Notes & \hyperref[accelYGravity]{A: accelYGravity}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -218,7 +227,7 @@ Description & \begin{symbDescription}
               \item{${a_{y}}$ is the y-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[accelZeroX]{A: accelZeroX}
+Notes & \hyperref[accelXZero]{A: accelXZero}
 \\ \midrule \\
 Source & --
 \\ \midrule \\

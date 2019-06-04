@@ -59,34 +59,75 @@ twoDMotion: The projectile motion is in 2D.
 </div>
 </p>
 <p>
+<div id="cartSyst">
+cartSyst: A Cartesian coordinate system is used.
+</div>
+</p>
+<p>
+<div id="yAxisPerpend">
+yAxisPerpend: The y-axis is perpendicular to the x-axis.
+</div>
+</p>
+<p>
+<div id="rightHandAxes">
+rightHandAxes: The axes are defined using a right-handed coordinate system.
+</div>
+</p>
+<p>
+<div id="launchOrigin">
+launchOrigin: The launcher is coincident with the origin. <a href=#GD:airTime>GD: airTime</a>.
+</div>
+</p>
+<p>
+<div id="targetXAxis">
+targetXAxis: The target lies on the x-axis. <a href=#GD:airTime>GD: airTime</a>.
+</div>
+</p>
+<p>
+<div id="posXDirection">
+posXDirection: The positive x-direction is from the launcher to the target.
+</div>
+</p>
+<p>
+<div id="constAccel">
+constAccel: The acceleration is constant.
+</div>
+</p>
+<p>
+<div id="accelXZero">
+accelXZero: The acceleration in the x-direction is zero. <a href=#GD:distanceRefined>GD: distanceRefined</a>.
+</div>
+</p>
+<p>
+<div id="accelYGravity">
+accelYGravity: The acceleration in the y-direction is the acceleration due to gravity. <a href=#GD:distance>GD: distance</a>.
+</div>
+</p>
+<p>
+<div id="neglectDrag">neglectDrag: Air drag is neglected.</div>
+</p>
+<p>
+<div id="constMass">
+constMass: The mass of the projectile is constant.
+</div>
+</p>
+<p>
 <div id="pointMass">
-pointMass: The projectile is a point mass.
+pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass.
 </div>
 </p>
 <p>
-<div id="equalHeights">
-equalHeights: The heights of the launcher and target are equal. <a href=#GD:airTime>GD: airTime</a>.
-</div>
-</p>
-<p>
-<div id="accelZeroX">
-accelZeroX: Acceleration is zero in the x-direction. <a href=#GD:distanceRefined>GD: distanceRefined</a>.
-</div>
-</p>
-<p>
-<div id="accelGravityY">
-accelGravityY: Acceleration in the y-direction is only caused by gravity. <a href=#GD:distance>GD: distance</a>.
-</div>
-</p>
-<p>
-<div id="ignoreCurvature">
-ignoreCurvature: The effects of the Earth's curvature are ignored.
+<div id="neglectCurv">
+neglectCurv: The distance is small enough that the curvature of the Earth can be neglected.
 </div>
 </p>
 <p>
 <div id="freeFlight">
 freeFlight: The flight is free; there are no collisions during the trajectory of the projectile.
 </div>
+</p>
+<p>
+<div id="timeStartZero">timeStartZero: Time starts at zero.</div>
 </p>
 </div>
 </div>
@@ -277,7 +318,7 @@ This section collects the laws and equations that will be used to build the inst
 </table>
 </div>
 <p class="paragraph">
-Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:finalSpeed>GD: finalSpeed</a> It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#equalHeights>A: equalHeights</a>).
+Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:finalSpeed>GD: finalSpeed</a> It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#launchOrigin>A: launchOrigin</a> and <a href=#targetXAxis>A: targetXAxis</a>).
 </p>
 <div id="GD:distance">
 <table class="gdefn">
@@ -323,7 +364,7 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <th>Notes</th>
 <td>
 <p class="paragraph">
-<a href=#accelGravityY>A: accelGravityY</a>
+<a href=#accelYGravity>A: accelYGravity</a>
 </p>
 </td>
 </tr>
@@ -384,7 +425,7 @@ Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:fina
 <tr>
 <th>Notes</th>
 <td>
-<p class="paragraph"><a href=#accelZeroX>A: accelZeroX</a></p>
+<p class="paragraph"><a href=#accelXZero>A: accelXZero</a></p>
 </td>
 </tr>
 <tr>

@@ -7,7 +7,7 @@ import Utils.Drasil
 
 import Data.Drasil.Quantities.Physics (fSpeed, iSpeed, ixVel, scalarAccel, time, xAccel, xDist, yAccel, yVel)
 
-import Drasil.Projectile.Assumptions (accelGravityY, accelZeroX, equalHeights)
+import Drasil.Projectile.Assumptions (accelYGravity, accelXZero, launchOrigin, targetXAxis)
 import Drasil.Projectile.DataDefs (speedY)
 import Drasil.Projectile.Unitals (launAngle)
 
@@ -39,11 +39,11 @@ airTimeDeriv = foldlSent [at_start airTimeGD, S "is derived from" +:+.
   makeRef2S speedY `sAnd` makeRef2S finalSpeedGD, S "It also comes from the",
   S "fact that the", phrase yVel, S "at the maximum height is zero" `sAnd`
   S "that the maximum height is the halfway point of the trajectory",
-  sParen (S "from" +:+ makeRef2S equalHeights)]
+  sParen (S "from" +:+ makeRef2S launchOrigin `sAnd` makeRef2S targetXAxis)]
 
 ----------
 distanceGD :: GenDefn
-distanceGD = gdNoRefs distanceRC (getUnit xDist) [{-Derivation-}] "distance" [makeRef2S accelGravityY]
+distanceGD = gdNoRefs distanceRC (getUnit xDist) [{-Derivation-}] "distance" [makeRef2S accelYGravity]
 
 distanceRC :: RelationConcept
 distanceRC = makeRC "distanceRC" (nounPhraseSP "distance in the x-direction") EmptyS distanceRel
@@ -53,7 +53,7 @@ distanceRel = sy xDist $= sy ixVel * sy time + BinaryOp Frac (sy xAccel * square
 
 ----------
 distanceRefinedGD :: GenDefn
-distanceRefinedGD = gdNoRefs distanceRefinedRC (getUnit xDist) [distanceRefinedDeriv] "distanceRefined" [makeRef2S accelZeroX]
+distanceRefinedGD = gdNoRefs distanceRefinedRC (getUnit xDist) [distanceRefinedDeriv] "distanceRefined" [makeRef2S accelXZero]
 
 distanceRefinedRC :: RelationConcept
 distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "distance in the x-direction (refined)") EmptyS distanceRefinedRel

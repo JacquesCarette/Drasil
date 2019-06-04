@@ -1,7 +1,4 @@
 <h2>Drasil - Generate All the Things!</h2>
-$if(docsUrl)-$
-<h4><a href="$docsUrl$">Haskell Documentation</a></h4>
-$-endif$
 <ul>
 $-for(examples)$
   <li>$name$ Artifacts<br>
@@ -16,6 +13,9 @@ $-for(examples)$
   </li>$sep-$
 $endfor$
 </ul>
+$if(docsUrl)-$
+<h4><a href="$docsUrl$">Haskell Documentation</a></h4>
+$-endif$
 Package Dependencies
 <ul>
   $-for(graphs)$

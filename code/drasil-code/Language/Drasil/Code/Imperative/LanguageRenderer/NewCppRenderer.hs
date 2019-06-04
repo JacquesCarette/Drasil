@@ -654,16 +654,14 @@ instance StateTypeSym CppSrcCode where
   iterator t = fmap cppIterTypeDoc (listType dynamic t)
 
 instance ControlBlockSym CppSrcCode where
-  runStrategy l strats rv av = case Map.lookup l (Map.fromList strats) of 
-    Nothing -> error $ "Strategy '" ++ l ++ 
-      "': RunStrategy called on non-existent strategy."
-    Just b  -> liftA2 stratDocD b (state resultState)
-    where resultState = case av of Nothing    -> return (empty, Empty)
-                                   Just vari  -> asgState vari
-          asgState v = case rv of Nothing  -> error $ "Strategy '" ++ l ++ 
-                                    "': Attempt to assign null return to a " ++
-                                    "Value."
-                                  Just res -> assign v res
+  runStrategy l strats rv av = maybe
+    (strError l "RunStrategy called on non-existent strategy") 
+    (liftA2 (flip stratDocD) (state resultState)) 
+    (Map.lookup l (Map.fromList strats))
+    where resultState = maybe (return (empty, Empty)) asgState av
+          asgState v = maybe (strError l 
+            "Attempt to assign null return to a Value") (assign v) rv
+          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
   listSlice t vnew vold b e s = 
     let l_temp = "temp"

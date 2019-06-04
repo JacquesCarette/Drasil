@@ -126,16 +126,14 @@ instance StateTypeSym PythonCode where
   iterator _ = error "Iterator-type variables do not exist in Python"
 
 instance ControlBlockSym PythonCode where
-  runStrategy l strats rv av = case Map.lookup l (Map.fromList strats) of 
-    Nothing -> error $ "Strategy '" ++ l ++ 
-      "': RunStrategy called on non-existent strategy."
-    Just b  -> liftA2 stratDocD b (state resultState)
-    where resultState = case av of Nothing    -> return (empty, Empty)
-                                   Just vari  -> asgState vari
-          asgState v = case rv of Nothing  -> error $ "Strategy '" ++ l ++ 
-                                    "': Attempt to assign null return to a " ++
-                                    "Value."
-                                  Just res -> assign v res
+  runStrategy l strats rv av = maybe
+    (strError l "RunStrategy called on non-existent strategy") 
+    (liftA2 (flip stratDocD) (state resultState)) 
+    (Map.lookup l (Map.fromList strats))
+    where resultState = maybe (return (empty, Empty)) asgState av
+          asgState v = maybe (strError l 
+            "Attempt to assign null return to a Value") (assign v) rv
+          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
   listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)

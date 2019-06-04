@@ -15,11 +15,11 @@ import Drasil.Projectile.Concepts (launcher, projectile, target)
 assumptions :: [ConceptInstance]
 assumptions = [twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin,
   targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  constMass, pointMass, neglectCurv, freeFlight, timeStartZero]
+  constMass, pointMass, freeFlight, timeStartZero]
 
 twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin, targetXAxis,
   posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, constMass,
-  pointMass, neglectCurv, freeFlight, timeStartZero :: ConceptInstance
+  pointMass, freeFlight, timeStartZero :: ConceptInstance
 twoDMotion      = cic "twoDMotion"      twoDMotionDesc      "twoDMotion"      assumpDom
 cartSyst        = cic "cartSyst"        cartSystDesc        "cartSyst"        assumpDom
 yAxisPerpend    = cic "yAxisPerpend"    yAxisPerpendDesc    "yAxisPerpend"    assumpDom
@@ -33,7 +33,6 @@ accelYGravity   = cic "accelYGravity"   accelYGravityDesc   "accelYGravity"   as
 neglectDrag     = cic "neglectDrag"     neglectDragDesc     "neglectDrag"     assumpDom
 constMass       = cic "constMass"       constMassDesc       "constMass"       assumpDom
 pointMass       = cic "pointMass"       pointMassDesc       "pointMass"       assumpDom
-neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     assumpDom
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
 
@@ -77,10 +76,6 @@ constMassDesc = phrase mass `ofThe'` phrase projectile `sIs` S "constant."
 pointMassDesc :: Sentence
 pointMassDesc = (S "size" `sAnd` S "shape") `ofThe'` phrase projectile `sAre`
                 S "negligible" `sC` S "so that it can be modelled as a point" +:+. phrase mass
-
-neglectCurvDesc :: Sentence
-neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
-                  (S "curvature" `ofThe` S "Earth can be neglected")
 
 freeFlightDesc :: Sentence
 freeFlightDesc = S "The flight is free; there" `sAre` S "no" +:+ plural collision +:+

@@ -123,7 +123,8 @@ generateCode l unRepr g =
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g
 
-genPackage :: (PackageSym repr) => String -> Reader (State repr) (repr (Package repr))
+genPackage :: (PackageSym repr) => String -> Reader (State repr) 
+  (repr (Package repr))
 genPackage n = packMods n <$> genFiles
 
 genFiles :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
@@ -153,7 +154,8 @@ getExt CSharp = [".cs"]
 getExt Cpp = [".hpp", ".cpp"]
 
 getRunnable :: Lang -> Runnable
-getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) jNameOpts "java"
+getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java"
 getRunnable Python = interpMM "python"
 getRunnable CSharp = nativeBinary
 getRunnable Cpp = nativeBinary
@@ -205,7 +207,8 @@ genInputClass = do
       vals         = map (getDefaultValue . codeType) ins
   asgs <- zipWithM assign' varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
-    [ constructor "InputParameters" [] (body [block (initLogFileVar (logKind g) ++ asgs)]) ]
+    [ constructor "InputParameters" [] (body [block (initLogFileVar (logKind g) 
+    ++ asgs)]) ]
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
   (repr (Method repr))
@@ -448,7 +451,8 @@ variable s' = do
         (repr (Value repr))
       doit s | member s mm =
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-             | s `elem` map codeName (inputs cs) = return $ var "inParams" $-> var s
+             | s `elem` map codeName (inputs cs) = return $ var "inParams" $-> 
+               var s
              | otherwise                         = return $ var s
   doit s'
   
@@ -472,7 +476,8 @@ getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      ps = map (\y -> (paramFunc $ codeType y) (codeName y) (convType $ codeType y))
+      ps = map (\y -> (paramFunc $ codeType y) (codeName y) (convType $ 
+        codeType y))
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
               csSubIns)
       paramFunc (C.List _) = pointerParam
@@ -548,7 +553,8 @@ convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ codeSpec g))
+  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ 
+    codeSpec g))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
@@ -559,7 +565,8 @@ convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
-convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) (convExpr b) -- hack to deal with string equality
+convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) 
+  (convExpr b) -- hack to deal with string equality
 convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
@@ -754,8 +761,8 @@ genDataFunc nameTitle ddef = do
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
           return [forRange l_j (litInt 0) (castObj (cast int float)
-            (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) (litInt 1)
-            ( bodyStatements pat )]
+            (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
+            (litInt 1) ( bodyStatements pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
           return [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
@@ -805,9 +812,9 @@ genDataFunc nameTitle ddef = do
         getIndex (_:xs) l p = getIndex xs l p
         getIndex [] _ _ = error "getIndex called with empty index list"
         ---------------
-        checkIndex :: (RenderSym repr) => [Ind] -> Integer-> repr (Value repr) ->
-          repr (Value repr) -> repr (Value repr) -> C.CodeType ->
-          [repr (Statement repr)]
+        checkIndex :: (RenderSym repr) => [Ind] -> Integer-> 
+          repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+          C.CodeType -> [repr (Statement repr)]
         checkIndex [] _ _ _ _ _ = []
         checkIndex (Explicit i : is) n l p v s =
           while (listSizeAccess v ?<= litInt i) (bodyStatements [ 

@@ -59,7 +59,8 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
+    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = return pytop
   bottom = return empty
 
@@ -125,14 +126,19 @@ instance StateTypeSym PythonCode where
   iterator _ = error "Iterator-type variables do not exist in Python"
 
 instance ControlBlockSym PythonCode where
-  runStrategy l strats rv av = 
-    case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
-                                               Just b  -> liftA2 stratDocD b (state resultState)
+  runStrategy l strats rv av = case Map.lookup l (Map.fromList strats) of 
+    Nothing -> error $ "Strategy '" ++ l ++ 
+      "': RunStrategy called on non-existent strategy."
+    Just b  -> liftA2 stratDocD b (state resultState)
     where resultState = case av of Nothing    -> return (empty, Empty)
-                                   Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
-                                                            Just res -> assign vari res
+                                   Just vari  -> asgState vari
+          asgState v = case rv of Nothing  -> error $ "Strategy '" ++ l ++ 
+                                    "': Attempt to assign null return to a " ++
+                                    "Value."
+                                  Just res -> assign v res
 
-  listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
+  listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
+    (getVal e) (getVal s)
     where getVal Nothing = return (empty, Nothing)
           getVal (Just v) = v
 
@@ -196,8 +202,10 @@ instance ValueSym PythonCode where
   arg n = liftPairFst (liftA2 argDocD (litInt (n + 1)) argsList, Nothing)
   enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
   enumVar = var
-  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ valName v)
-  objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Just $ "self." ++ n)
+  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ 
+    valName v)
+  objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Just $ "self." ++
+    n)
   listVar n _ = var n
   n `listOf` t = listVar n t
   iterVar = var
@@ -205,7 +213,8 @@ instance ValueSym PythonCode where
   inputFunc = return (text "input()", Nothing)  -- raw_input() for < Python 3.0
   argsList = return (text "sys.argv", Nothing)
 
-  valName (PC (v, s)) = fromMaybe (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
+  valName (PC (v, s)) = fromMaybe 
+    (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression PythonCode where
   (#~) v = liftPairFst (liftA2 unOpDocD negateOp v, Nothing)
@@ -250,8 +259,10 @@ instance ValueExpression PythonCode where
   funcApp n vs = liftPairFst (liftList (funcAppDocD n) vs, Nothing)
   selfFuncApp = funcApp
   extFuncApp l n vs = liftPairFst (liftList (extFuncAppDocD l n) vs, Nothing)
-  stateObj t vs = liftPairFst (liftA2 pyStateObj t (liftList callFuncParamList vs), Nothing)
-  extStateObj l t vs = liftPairFst (liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs), Nothing)
+  stateObj t vs = liftPairFst (liftA2 pyStateObj t (liftList callFuncParamList 
+    vs), Nothing)
+  extStateObj l t vs = liftPairFst (liftA2 (pyExtStateObj l) t (liftList 
+    callFuncParamList vs), Nothing)
   listStateObj t _ = liftPairFst (t, Nothing)
 
   exists v = v ?!= var "None"
@@ -334,7 +345,8 @@ instance StatementSym PythonCode where
   varDec _ _ = return (empty, Empty)
   varDecDef l _ v = liftPairFst (fmap (pyVarDecDef l) v, Empty)
   listDec l _ t = liftPairFst (fmap (pyListDec l) (listType static t), Empty)
-  listDecDef l _ vs = liftPairFst (fmap (pyListDecDef l) (liftList callFuncParamList vs), Empty)
+  listDecDef l _ vs = liftPairFst (fmap (pyListDecDef l) (liftList 
+    callFuncParamList vs), Empty)
   objDecDef = varDecDef
   objDecNew l t vs = varDecDef l t (stateObj t vs)
   extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
@@ -342,13 +354,17 @@ instance StatementSym PythonCode where
   extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
   constDecDef = varDecDef
 
-  print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") (return (empty, Nothing)), Empty)
-  printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty) (return (empty, Nothing)), Empty)
+  print _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end=''") 
+    (return (empty, Nothing)), Empty)
+  printLn _ v = liftPairFst (liftA4 pyOut printFunc v (return empty)
+    (return (empty, Nothing)), Empty)
   printStr s = print string (litString s)
   printStrLn s = printLn string (litString s)
 
-  printFile f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", end='', file=") f, Empty)
-  printFileLn f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ text ", file=") f, Empty)
+  printFile f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ 
+    text ", end='', file=") f, Empty)
+  printFileLn f _ v = liftPairFst (liftA4 pyOut printFunc v (return $ 
+    text ", file=") f, Empty)
   printFileStr f s = printFile f string (litString s)
   printFileStrLn f s = printFileLn f string (litString s)
 
@@ -366,7 +382,8 @@ instance StatementSym PythonCode where
   getIntFileInput f v = v &= funcApp "int" [objMethodCall f "readline" []]
   getFloatFileInput f v = v &= funcApp "float" [objMethodCall f "readline" []]
   getBoolFileInput f v =  v &= (objMethodCall f "readline" [] ?!= litString "0")
-  getStringFileInput f v = v &= objMethodCall (objMethodCall f "readline" []) "rstrip" []
+  getStringFileInput f v = v &= objMethodCall (objMethodCall f "readline" []) 
+    "rstrip" []
   getCharFileInput f v = v &= objMethodCall f "readline" []
   discardFileInput f = valState (objMethodCall f "readline" [])
 
@@ -394,7 +411,8 @@ instance StatementSym PythonCode where
 
   throw errMsg = liftPairFst (fmap pyThrow (litString errMsg), Empty)
 
-  initState fsmName initialState = varDecDef fsmName string (litString initialState)
+  initState fsmName initialState = varDecDef fsmName string 
+    (litString initialState)
   changeState fsmName toState = fsmName &.= litString toState
 
   initObserverList = listDecDef observerListName
@@ -407,7 +425,8 @@ instance StatementSym PythonCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
-  ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs, Empty)
+  ifCond bs b = liftPairFst (lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b 
+    bs, Empty)
   ifNoElse bs = ifCond bs $ body []
   switch = switchAsIf
   switchAsIf v cs = ifCond cases
@@ -415,15 +434,19 @@ instance ControlStatementSym PythonCode where
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
-  for _ _ _ _ = error "Classic for loops not available in Python, please use forRange, forEach, or while instead"
-  forRange i initv finalv stepv b = liftPairFst (liftA5 (pyForRange i) iterInLabel initv finalv stepv b, Empty)
-  forEach l _ v b = liftPairFst (liftA4 (pyForEach l) iterForEachLabel iterInLabel v b, Empty)
+  for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
+    "use forRange, forEach, or while instead"
+  forRange i initv finalv stepv b = liftPairFst (liftA5 (pyForRange i) 
+    iterInLabel initv finalv stepv b, Empty)
+  forEach l _ v b = liftPairFst (liftA4 (pyForEach l) iterForEachLabel 
+    iterInLabel v b, Empty)
   while v b = liftPairFst (liftA2 pyWhile v b, Empty)
 
   tryCatch tb cb = liftPairFst (liftA2 pyTryCatch tb cb, Empty)
 
   checkState l = switch (var l)
-  notifyObservers fn t ps = forRange index initv (listSizeAccess obsList) (litInt 1) notify
+  notifyObservers fn t ps = forRange index initv (listSizeAccess obsList) 
+    (litInt 1) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
@@ -451,10 +474,12 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = (Doc, Bool)
-  method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList paramListDocD ps) b, False)
+  method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList 
+    paramListDocD ps) b, False)
   getMethod n c t = method (getterName n) c public dynamic t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic void [stateParam paramLbl t] setBody
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic
+    void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic
@@ -463,7 +488,8 @@ instance MethodSym PythonCode where
   destructor _ _ = error "Destructors not allowed in Python"
 
 
-  function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList paramListDocD ps) b, False)
+  function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
+    paramListDocD ps) b, False)
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -475,17 +501,22 @@ instance StateVarSym PythonCode where
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
-  buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList methodListDocD fs), any (snd . unPC) fs)
+  buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList 
+    methodListDocD fs), any (snd . unPC) fs)
     where pname = case p of Nothing -> return empty
                             Just pn -> return $ parens (text pn)
-  enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es), False)
+  enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ 
+    enumElementsDocD' es), False)
   mainClass _ _ fs = liftPairFst (liftList methodListDocD fs, True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls vs fs cs = fmap (md n (any (snd . unPC) fs || any (snd . unPC) cs)) (liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList (map state vs)) (liftList methodListDocD fs) (liftList pyModuleClassList cs))
+  buildModule n ls vs fs cs = fmap (md n (any (snd . unPC) fs || 
+    any (snd . unPC) cs)) (liftA4 pyModule (liftList pyModuleImportList (map 
+    include ls)) (liftList pyModuleVarList (map state vs)) (liftList 
+    methodListDocD fs) (liftList pyModuleClassList cs))
 
 -- convenience
 imp, incl, initName :: Label
@@ -514,8 +545,10 @@ pyStateObj t vs = t <> parens vs
 pyExtStateObj :: Label -> Doc -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
-pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
-pyInlineIf (c, _) (v1, _) (v2, _) = parens $ v1 <+> text "if" <+> c <+> text "else" <+> v2
+pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
+  (Doc, Maybe String) -> Doc
+pyInlineIf (c, _) (v1, _) (v2, _) = parens $ v1 <+> text "if" <+> c <+> 
+  text "else" <+> v2
 
 pyListPopAccess :: (Doc, Maybe String) -> Doc -> Doc
 pyListPopAccess (v, _) f = v <+> equals <+> f
@@ -555,9 +588,11 @@ pyThrow (errMsg, _) = text "raise" <+> text "Exception" <> parens errMsg
 pyListAccess :: (Doc, Maybe String) -> Doc
 pyListAccess (v, _) = brackets v
 
-pyForRange :: Label -> Doc ->  (Doc, Maybe String) ->  (Doc, Maybe String) ->  (Doc, Maybe String) -> Doc -> Doc
+pyForRange :: Label -> Doc ->  (Doc, Maybe String) ->  (Doc, Maybe String) ->
+  (Doc, Maybe String) -> Doc -> Doc
 pyForRange i inLabel (initv, _) (finalv, _) (stepv, _) b = vcat [
-  forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
+  forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> 
+    text ", " <> finalv <> text ", " <> stepv) <> colon,
   oneTab b]
 
 pyForEach :: Label -> Doc -> Doc ->  (Doc, Maybe String) -> Doc -> Doc
@@ -577,7 +612,8 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
   oneTab catchB]
 
-pyListSlice :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
+pyListSlice :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
+  (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 pyListSlice (vnew, _) (vold, _) (b, _) (e, _) (s, _) = vnew <+> equals <+> 
   vold <> brackets (b <> colon <> e <> colon <> s)
 

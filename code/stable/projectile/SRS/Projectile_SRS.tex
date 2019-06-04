@@ -29,7 +29,7 @@ This section first presents the problem description, which gives a high-level vi
 A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the angle and velocity of the projectile, the goal statements are:
+Given the angle and speed of the projectile, the goal statements are:
 \begin{itemize}
 \item[calcLandingPosition:\phantomsection\label{calcPosition}]Calculate the landing position of the projectile.
 \end{itemize}
@@ -108,22 +108,22 @@ This section collects the laws and equations that will be used to build the inst
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:finalVelocity}
+\toprule \textbf{Refname} & \textbf{GD:finalSpeed}
 \phantomsection 
-\label{GD:finalVelocity}
+\label{GD:finalSpeed}
 \\ \midrule \\
-Label & Final velocity
+Label & Final speed
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{f}}={v_{i}}+\mathbf{a} t
+           {v_{f}}={v_{i}}+a t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{f}}$ is the final velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${v_{f}}$ is the final speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
@@ -147,14 +147,14 @@ Label & Air time
 Units & s
 \\ \midrule \\
 Equation & \begin{displaymath}
-           t=\frac{2 {v_{i}} \sin\left(θ\right)}{|\mathbf{a}|}
+           t=\frac{2 {v_{i}} \sin\left(θ\right)}{{a_{y}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
-              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{${a_{y}}$ is the y-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -164,7 +164,7 @@ Source & --
 RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Air time is derived from \hyperref[DD:velY]{DD: velY}. and \hyperref[GD:finalVelocity]{GD: finalVelocity} It also comes from the fact that the velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
+Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[equalHeights]{A: equalHeights}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -173,19 +173,19 @@ Air time is derived from \hyperref[DD:velY]{DD: velY}. and \hyperref[GD:finalVel
 \phantomsection 
 \label{GD:distance}
 \\ \midrule \\
-Label & Distance
+Label & Distance in the x-direction
 \\ \midrule \\
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           r={v_{i}} t+\frac{\mathbf{a} t^{2}}{2}
+           {r_{x}}={v_{i,x}} t+\frac{{a_{x}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$r$ is the distance (m)}
-              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${r_{x}}$ is the distance in the x-direction (m)}
+              \item{${v_{i,x}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{x}}$ is the x-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelGravityY]{A: accelGravityY}
@@ -203,19 +203,19 @@ RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \phantomsection 
 \label{GD:distanceRefined}
 \\ \midrule \\
-Label & Distance (refined)
+Label & Distance in the x-direction (refined)
 \\ \midrule \\
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           r=\frac{2 {v_{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{|\mathbf{a}|}
+           {r_{x}}=\frac{2 {v_{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{{a_{y}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$r$ is the distance (m)}
-              \item{${v_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${r_{x}}$ is the distance in the x-direction (m)}
+              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{${a_{y}}$ is the y-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[accelZeroX]{A: accelZeroX}
@@ -225,7 +225,7 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Distance (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
+Distance in the x-direction (refined) is derived from \hyperref[GD:airTime]{GD: airTime} and \hyperref[GD:distance]{GD: distance}.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -233,9 +233,9 @@ This section collects and defines all the data needed to build the instance mode
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:velX}
+\toprule \textbf{Refname} & \textbf{DD:speedX}
 \phantomsection 
-\label{DD:velX}
+\label{DD:speedX}
 \\ \midrule \\
 Label & X-component of velocity
 \\ \midrule \\
@@ -244,13 +244,13 @@ Symbol & ${v_{x}}$
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{x}}=\mathbf{v} \cos\left(θ\right)
+           {v_{x}}=v \cos\left(θ\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${v_{x}}$ is the x-component of velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -262,9 +262,9 @@ RefBy &
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:velY}
+\toprule \textbf{Refname} & \textbf{DD:speedY}
 \phantomsection 
-\label{DD:velY}
+\label{DD:speedY}
 \\ \midrule \\
 Label & Y-component of velocity
 \\ \midrule \\
@@ -273,13 +273,13 @@ Symbol & ${v_{y}}$
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{y}}=\mathbf{v} \sin\left(θ\right)
+           {v_{y}}=v \sin\left(θ\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${v_{y}}$ is the y-component of velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the angle of projectile (${}^{\circ}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -300,27 +300,27 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \\ \midrule \\
 Label & IsShort
 \\ \midrule \\
-Input & ${d_{target}}$, $d$
+Input & ${r_{target}}$, ${r_{x}}$
 \\ \midrule \\
 Output & $isShort$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d>0
+                    {r_{x}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isShort={d_{target}}>d
+           isShort={r_{target}}>{r_{x}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$isShort$ is the variable that is assigned true when the target distance is greater than the projectile distance (Unitless)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d$ is the distance of projectile (m)}
+              \item{$isShort$ is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)}
+              \item{${r_{target}}$ is the target distance (m)}
+              \item{${r_{x}}$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -340,27 +340,27 @@ RefBy &
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${d_{target}}$, $d$
+Input & ${r_{target}}$, ${r_{x}}$
 \\ \midrule \\
-Output & ${d_{offset}}$
+Output & ${r_{offset}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d>0
+                    {r_{x}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {d_{offset}}=|{d_{target}}-d|
+           {r_{offset}}=|{r_{target}}-{r_{x}}|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{offset}}$ is the the offset between the target distance and the distance of the projectile (Unitless)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d$ is the distance of projectile (m)}
+              \item{${r_{offset}}$ is the offset between the target distance and the launch distance (m)}
+              \item{${r_{target}}$ is the target distance (m)}
+              \item{${r_{x}}$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -380,27 +380,27 @@ RefBy &
 \\ \midrule \\
 Label & IsHit
 \\ \midrule \\
-Input & ${d_{offset}}$, ${d_{target}}$
+Input & ${r_{offset}}$, ${r_{target}}$
 \\ \midrule \\
 Output & $isHit$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{offset}}>0
+                    {r_{offset}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{target}}>0
+                    {r_{target}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isHit={d_{offset}}<\frac{1}{50} {d_{target}}
+           isHit={r_{offset}}<\frac{1}{50} {r_{target}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$isHit$ is the variable that is assigned true when the projectile distance is within a degree of tolerance of the target distance (Unitless)}
-              \item{${d_{offset}}$ is the the offset between the target distance and the distance of the projectile (Unitless)}
-              \item{${d_{target}}$ is the target distance (m)}
+              \item{$isHit$ is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)}
+              \item{${r_{offset}}$ is the offset between the target distance and the launch distance (m)}
+              \item{${r_{target}}$ is the target distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 

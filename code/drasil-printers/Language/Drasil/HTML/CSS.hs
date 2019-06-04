@@ -85,9 +85,12 @@ makeCSS _ = vcat [
   text ".list {text-align: left;}",
   vcat [
     text "figure {",
-    text "max-width: 100%;",
     text "text-align: center;",
-    text "font-style: bold;",
+    text "font-weight: bold;",
+    text "}"],
+  vcat [
+    text "figure > img {",
+    text "max-width: 100%;",
     text "}"],
   vcat [
     text ".matrix {",

@@ -1,49 +1,47 @@
-module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space
-  , cartesian, rightHand, restitutionCoef, acceleration, pressure
-  , momentOfInertia, force, impulseS, impulseV, displacement
-  , gravitationalAccel, gravitationalConst, position, distance
-  , time, torque, weight, fbd, angular, linear, tension, compression, stress
-  , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
-  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
-  ) where
+module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.IdeaDicts (physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.SentenceStructures (sOf)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
-  momentOfInertia, force, impulseS, impulseV, displacement,
-  gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
-  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, cohesion, isotropy, kEnergy]
-
+physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
+  cohesion, collision, compression, damping, displacement, distance, elasticity,
+  energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
+  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint,
+  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
+  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
+  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
+  yDist, yVel, xAccel, yAccel]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
-rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
-  momentOfInertia, force, impulseS, impulseV, displacement,
-  gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, weight, fbd, linear, angular, tension, compression, stress, 
-  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure,cohesion, isotropy, kEnergy :: ConceptChunk
+acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
+  collision, compression, damping, displacement, distance, elasticity, energy,
+  fbd, force, friction, gravitationalAccel, fSpeed, fVel, gravitationalConst,
+  impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy, linAccel,
+  linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
+  restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed, strain,
+  stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
+  yVel, xAccel, yAccel :: ConceptChunk
 
   -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
 twoD, threeD :: CI
+twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
+threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
 velocity     = dccWDS "velocity" (cnIES "velocity")
   (S "The rate of change of a body's" +:+ (phrase position))
+speed        = dccWDS "speed" (cn' "speed")
+  (S "The magnitude of the" +:+ phrase velocity +:+ S "vector")
 friction     = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
 elasticity   = dcc "elasticity" (cnIES "elasticity") 
@@ -73,7 +71,9 @@ kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
-  (S "The rate of change of a body's" +:+ (phrase velocity))
+  (S "The rate of change of a body's" +:+ phrase velocity)
+scalarAccel  = dccWDS "scalarAccel" (cn' "scalar acceleration")
+  (S "The magnitude of the " +:+ phrase acceleration +:+ S "vector")
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "The change in" +:+ (position ^. defn))
 force        = dcc "force" (cn' "force")
@@ -94,6 +94,26 @@ compression  = dccWDS "compression" (cn' "compression")
 
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+
+-- Some variants of distance, speed, velocity, and scalar acceleration
+-- FIXME: Complete all variants?
+-- FIXME: Pull out commonalities?
+
+xDist = dccWDS "xDist" (cn "distance in the x-direction") (at_start distance +:+ S "in the x-direction")
+yDist = dccWDS "yDist" (cn "distance in the y-direction") (at_start distance +:+ S "in the y-direction")
+
+fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
+iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
+
+fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
+iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
+xVel = dccWDS "xVel" (cn "x-component of velocity") (S "The x-component of" +:+ phrase velocity)
+yVel = dccWDS "yVel" (cn "y-component of velocity") (S "The y-component of" +:+ phrase velocity)
+
+ixVel = dccWDS "ixVel" (cn "x-component of initial velocity") (S "The x-component of initial" +:+ phrase velocity)
+
+xAccel = dccWDS "xScalAcc" (cn "x-component of acceleration") (S "The x-component of" +:+ phrase acceleration)
+yAccel = dccWDS "yScalAcc" (cn "y-component of acceleration") (S "The y-component of" +:+ phrase acceleration)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 
@@ -159,7 +179,3 @@ cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
-
-twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
-
-threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]

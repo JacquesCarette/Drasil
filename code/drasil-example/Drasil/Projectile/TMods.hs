@@ -1,4 +1,4 @@
-module Drasil.Projectile.TMods (tMods) where
+module Drasil.Projectile.TMods (tMods, accelerationTM, velocityTM) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)

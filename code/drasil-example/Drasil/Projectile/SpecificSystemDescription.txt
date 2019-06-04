@@ -20,8 +20,8 @@ Goal Statments
 1) Calculate the landing position of the projectile.
 
 Theoretical Models
-1) v = ds/dt
-2) a = dv/dt
+1) v = ds/dt (vectors)
+2) a = dv/dt (vectors)
 
 General Definitions
 1) v_f = v_i + a*t

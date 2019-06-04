@@ -5,15 +5,16 @@ module Drasil.SSP.DataDefs (dataDefns, intersliceWtrF, angleA, angleB, lengthB,
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Quantities.Math as QM (pi_)
-import Data.Drasil.SentenceStructures (foldlSent, sAnd)
-import Drasil.SSP.Defs (slice)
+import Data.Drasil.Theories.Physics (torqueDD)
+
 import Drasil.SSP.Assumptions (assumpSBSBISL)
-import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, 
-  huston2008)
+import Drasil.SSP.Defs (slice)
+import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
   fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
@@ -26,8 +27,8 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 
 dataDefns :: [DataDefinition]
 dataDefns = [intersliceWtrF, angleA, angleB, lengthB, 
-  lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
-  nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
+  lengthLb, slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
+  convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
 

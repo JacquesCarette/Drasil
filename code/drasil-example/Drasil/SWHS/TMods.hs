@@ -3,6 +3,7 @@ module Drasil.SWHS.TMods (tMods, consThermE, sensHtE, sensHtE_template, latentHt
 import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tm)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
@@ -16,8 +17,6 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
   latentHeat, meltPt, boilPt, sensHeat, heatCapSpec)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-  foldlList, foldlSent, isThe, sAnd)
 import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)

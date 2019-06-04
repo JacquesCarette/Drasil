@@ -2,10 +2,12 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
-    acceleration, displacement, distance, energy, force, gravitationalAccel, 
-    gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
-    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity, weight, kEnergy)
+import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
+  acceleration, displacement, distance, energy, force, gravitationalAccel, 
+  gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
+  momentOfInertia, position, pressure, restitutionCoef, scalarAccel, speed,
+  time, torque, velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, xDist,
+  xVel, yDist, yVel, xAccel, yAccel, ixVel)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -14,15 +16,19 @@ restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqd' CP.restitutionCoef (const $ sub cC cR) Real Nothing
 
 physicscon :: [UnitalChunk]
-physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
-  distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
-  impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity, weight, kEnergy]
+physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, 
+  displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
+  impulseS, impulseV, linearAccel, linearDisplacement, linearVelocity,
+  momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
+  velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, xDist, xVel,
+  yDist, yVel, xAccel, yAccel]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, pressure, time, torque, velocity, weight, kEnergy :: UnitalChunk
+  position, pressure, scalarAccel, speed, time, torque, velocity, weight, kEnergy,
+  fVel, iVel, fSpeed, iSpeed, ixVel, xDist, xVel, yDist, yVel, xAccel,
+  yAccel :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
@@ -43,7 +49,29 @@ linearVelocity       = uc CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic "
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 position             = uc CP.position (vec lP) metre
 pressure             = uc CP.pressure lP pascal
+speed                = uc CP.speed lV velU
+scalarAccel          = uc CP.scalarAccel lA accelU
 time                 = uc CP.time lT second
 torque               = uc CP.torque lTau torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
+
+-- Variants of distance, speed, and scalar acceleration
+-- FIXME: Add variants of vector forms?
+-- FIXME: Pull out commonalities?
+
+xDist = uc CP.xDist (sub lR lX) metre
+yDist = uc CP.yDist (sub lR lY) metre
+
+fSpeed = uc CP.fSpeed (sub lV lF) velU
+iSpeed = uc CP.iSpeed (sub lV lI) velU
+
+fVel = uc CP.fVel (sub (vec lV) lF) velU
+iVel = uc CP.iVel (sub (vec lV) lI) velU
+xVel = uc CP.xVel (sub      lV  lX) velU
+yVel = uc CP.yVel (sub      lV  lY) velU
+
+ixVel = uc CP.ixVel (sub lV $ Concat [lI, Atomic ",", lX]) velU
+
+xAccel = uc CP.xAccel (sub lA lX) accelU
+yAccel = uc CP.yAccel (sub lA lY) accelU

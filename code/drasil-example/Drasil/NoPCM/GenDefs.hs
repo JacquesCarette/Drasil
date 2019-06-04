@@ -2,6 +2,7 @@ module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -12,8 +13,6 @@ import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSentCol, ofThe, sAnd)
 import Data.Drasil.Utils (weave)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)

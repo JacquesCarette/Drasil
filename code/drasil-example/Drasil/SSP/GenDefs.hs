@@ -6,6 +6,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd)
+import Utils.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
@@ -13,19 +14,20 @@ import Data.Drasil.Utils (weave)
 
 import Data.Drasil.SI_Units (metre, newton)
 
-import Data.Drasil.Concepts.Documentation (analysis, assumption, constant, 
-  definition, method_, value)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
+  constant, definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.Concepts.Physics (distance, twoD, weight)
-import Data.Drasil.Quantities.Physics (force)
-import Data.Drasil.Theories.Physics (weightGD)
+import Data.Drasil.Concepts.Physics (distance, pressure, twoD, weight)
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+import Data.Drasil.Quantities.Physics (displacement, force, torque)
+import Data.Drasil.Theories.Physics (weightGD, torqueDD)
 
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlSentCol, 
-  getTandS, isThe, ofThe, sAnd, sIs, sOf, andThe)
+import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
-  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE)
+  assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
+  assumpHFSM)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
   slcHeight, stressDD, ratioVariation)
@@ -35,12 +37,12 @@ import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, effCohesion, fricAngle, fs, genericA, intNormForce, intShrForce, 
-  index, inxi, inxiM1, midpntHght, mobShrI, momntOfBdy, normToShear, nrmFSubWat,
-  satWeight, scalFunc, shearFNoIntsl, shrResI, shrResI, shrStress, totNrmForce, 
-  shearRNoIntsl, shrResI, slcWght, slipHght, slopeHght, surfHydroForce,
-  surfAngle, watrForce, waterHght, waterWeight, dryVol, satVol, waterVol, 
-  zcoord)
+  dryWeight, earthqkLoadFctr, effCohesion, fricAngle, fs, genericA, genericSpWght, impLoadAngle, intNormForce, intShrForce, 
+  index, inxi, inxiM1, midpntHght, mobShrI, momntArm, momntOfBdy, normToShear, 
+  nrmFSubWat, rotForce, satWeight, scalFunc, shearFNoIntsl, shrResI, shrResI, 
+  shrStress, totNrmForce, shearRNoIntsl, shrResI, slcWght, sliceHght, sliceHghtW, slipHght,
+  slopeHght, surfHydroForce, surfAngle, surfLoad, watrForce, waterHght, waterWeight, 
+  dryVol, satVol, waterVol, yi, zcoord)
 
 ---------------------------
 --  General Definitions  --
@@ -69,7 +71,7 @@ mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
   [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
-momentEqlGD  = gd momentEql  (Just newton)           [momEql_deriv]  
+momentEqlGD  = gd momentEql  (Just newton)           momEqlDeriv
   [makeCite chen2005]                      "momentEql"   [momEql_desc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
@@ -257,12 +259,12 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel -- genDef6Label
 
 momEql_rel :: Relation
-momEql_rel = 0 $= momExpr (\ x y -> x -
+momEql_rel = 0 $= momExpr (\ x y -> x +
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
-  makeRef2S equilibrium, S "for the" +:+. phrase momntOfBdy, ch baseWthX,
+  makeRef2S equilibrium, S "for the net" +:+. phrase momntOfBdy, ch baseWthX,
   S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch midpntHght, S "is defined in", 
@@ -270,9 +272,187 @@ momEql_desc = foldlSent [S "This", phrase equation, S "satisfies",
   makeRef2S srfWtrFGD `sC` S "and", ch surfAngle, S "is defined in", 
   makeRef2S angleB]
 
-momEql_deriv :: Sentence
-momEql_deriv = foldlSent_ [at_start momentEql, S "is derived from the free",
-  S "body diagram of" +:+. makeRef2S (SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+momEqlDeriv :: Derivation
+momEqlDeriv = weave [momEqlDerivSentences, momEqlDerivEqns]
+
+momEqlDerivSentences :: [Sentence]
+momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence, 
+  momEqlDerivMomentSentence, momEqlDerivNormaliSentence, 
+  momEqlDerivNormaliM1Sentence, momEqlDerivWateriSentence, 
+  momEqlDerivWateriM1Sentence, momEqlDerivSheariSentence, 
+  momEqlDerivSheariM1Sentence, momEqlDerivSeismicIntSentence, 
+  momEqlDerivSeismicSentence, momEqlDerivSeismicWSentence, 
+  momEqlDerivHydroSentence, momEqlDerivExtSentence, momEqlDerivFinalSentence]
+
+momEqlDerivEqns :: [Sentence]
+momEqlDerivEqns = map E [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
+  momEqlDerivNormaliEqn, momEqlDerivNormaliM1Eqn, momEqlDerivWateriEqn, 
+  momEqlDerivWateriM1Eqn, momEqlDerivSheariEqn, 
+  momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
+  momEqlDerivSeismicEqn, momEqlDerivSeismicWEqn,
+  momEqlDerivHydroEqn, momEqlDerivExtEqn, 
+  momEqlDerivFinalEqn]
+
+momEqlDerivTorqueSentence, momEqlDerivMomentSentence,
+  momEqlDerivNormaliSentence, momEqlDerivNormaliM1Sentence, 
+  momEqlDerivWateriSentence, momEqlDerivWateriM1Sentence, 
+  momEqlDerivSheariSentence, momEqlDerivSheariM1Sentence, 
+  momEqlDerivSeismicIntSentence, momEqlDerivSeismicSentence, 
+  momEqlDerivSeismicWSentence, momEqlDerivHydroSentence, 
+  momEqlDerivExtSentence, momEqlDerivFinalSentence :: [Sentence]
+
+momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
+  momEqlDerivNormaliEqn, momEqlDerivNormaliM1Eqn, momEqlDerivWateriEqn, 
+  momEqlDerivWateriM1Eqn, momEqlDerivSheariEqn, 
+  momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
+  momEqlDerivSeismicEqn, momEqlDerivSeismicWEqn,
+  momEqlDerivHydroEqn, momEqlDerivExtEqn, 
+  momEqlDerivFinalEqn :: Expr
+
+momEqlDerivTorqueSentence = [at_start momntOfBdy, S "is equal to", 
+  phrase torque `sC` S "so the", phrase equation, S "from", makeRef2S torqueDD,
+  S "will be used to calculate", plural momntOfBdy]
+
+momEqlDerivMomentSentence = [S "Considering one dimension, with",
+  plural momntOfBdy, S "in the clockwise direction as positive and", 
+  plural momntOfBdy, S "in the counterclockwise direction as negative" `sC`
+  S "and replacing the", phrase torque, S "symbol with the", phrase momntOfBdy, 
+  S "symbol, the", phrase equation, S "simplifies to"]
+
+momEqlDerivNormaliSentence = [S "where", ch rotForce, S "is the", 
+  phrase rotForce `sAnd` ch momntArm, S "is the", phrase momntArm `sC`
+  S "or the distance between the", phrase force, S "and the axis about" +:+.
+  S "which the rotation acts",
+  S "To represent the", phrase momentEqlGD `sC` S "the", plural momntOfBdy,
+  S "from each", phrase force, S "acting on a", phrase slice +:+. 
+  S "must be considered and added together", S "The", plural force,
+  S "acting on a", phrase slice, S "are all shown in" +:+.
+  makeRef2S fig_forceacting,
+  S "The midpoint of the base of a", phrase slice, S "is considered as the",
+  S "axis of rotation, from which the", phrase momntArm +:+. S "is measured",
+  S "Considering first the", phrase intrslce, phrase normForce,
+  S "acting on", phrase slice, S "interface", ch index `sC` S "the", 
+  phrase momntOfBdy, S "is negative because the", phrase force, 
+  S "tends to rotate the", phrase slice, S "in a counterclockwise",
+  S "direction" `sC` S "and the", phrase momntArm, S "is", S "height" `ofThe`
+  phrase force, S "plus the difference in height between the base at", 
+  phrase slice, S "interface", ch index `andThe` S "base at the midpoint of",
+  phrase slice +:+. ch index, 
+  S "Thus, the", phrase momntOfBdy, S "is expressed as"]
+
+momEqlDerivNormaliM1Sentence = [S "For the", E (sy index - 1) :+: S "th",
+  phrase slice, S "interface, the", phrase momntOfBdy, S "is similar but in",
+  S "the opposite direction"]
+
+momEqlDerivWateriSentence = [S "Next, the", phrase intrslce, S "normal water",
+  phrase force +:+. S "is considered", S "This", phrase force, S "is zero at",
+  S "height" `ofThe` phrase waterTable `sC` S "then increases linearly towards",
+  S "base" `ofThe` phrase slice, S "due to the increasing water" +:+.
+  phrase pressure, S "For such a triangular distribution, the resultant", 
+  phrase force +:+. S "acts at one-third of the height", S "Thus, for the",
+  phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice, 
+  S "interface", ch index `sC` S "the", phrase momntOfBdy, S "is" ]
+
+momEqlDerivWateriM1Sentence = [S "The", phrase momntOfBdy, S "for the",
+  phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice,
+  S "interface", E (sy index - 1), S "is"]
+
+momEqlDerivSheariSentence = [S "The", phrase intrslce, phrase shearForce, 
+  S "at", phrase slice, S "interface", ch index, S "tends to rotate in the",
+  S "clockwise direction, and the", phrase momntArm, S "is the", phrase len, 
+  S "from the", phrase slice, S "edge to the", phrase slice, S "midpoint" `sC`
+  S "equivalent to half of", S "width" `ofThe` phrase slice `sC` S "so the",
+  phrase momntOfBdy +:+. S "is"]
+
+momEqlDerivSheariM1Sentence = [S "The", phrase intrslce, phrase shearForce,
+  S "at", phrase slice, S "interface", E (sy index - 1), S "also tends to",
+  S "rotate in the clockwise direction, and has the same", phrase momntArm `sC`
+  S "so the", phrase momntOfBdy, S "is"]
+
+-- FIXME: Once differentials are expressible in Expr (issue #1407), change "sy yi" to the differential dy. "ch yi" actually means y and should stay as-is.
+momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
+  S "entire height of the" +:+. phrase slice, S "For each horizontal segment",
+  S "of the", phrase slice `sC` S "the seismic", phrase force, S "is",
+  E (sy earthqkLoadFctr * inxi slcWght), S "where", E (inxi slcWght),
+  S "can be expressed as", E (sy genericSpWght * inxi baseWthX * sy yi),
+  S "using", makeRef2S weightGD, S "where", E (sy yi), S "is the height of" +:+.
+  S "the segment under consideration", S "The corresponding", phrase momntArm, 
+  S "is", ch yi `sC` S "the height from the base of the", phrase slice +:+.
+  S "to the segment under consideration", S "In reality, the", plural force, 
+  S "near the surface of the", phrase soil, S "mass are slightly different",
+  S "due to the slope of the surface, but this difference is assumed to be",
+  S "negligible" +:+. sParen (makeRef2S assumpNESSS), S "The resultant",
+  phrase momntOfBdy, S "from the", plural force, S "on all of the segments",
+  S "with an equivalent resultant", phrase momntArm, S "is determined by",
+  S "taking the integral over the", phrase slice +:+. S "height", S "The",
+  plural force, S "tend to rotate in the counterclockwise direction, so the",
+  phrase momntOfBdy, S "is negative"]
+
+momEqlDerivSeismicSentence = [S "Solving the definite integral yields"]
+
+momEqlDerivSeismicWSentence = [S "Using", makeRef2S weightGD, 
+  S "again to express", E (sy genericSpWght * inxi baseWthX * inxi midpntHght),
+  S "as", E (inxi slcWght) `sC` S "the", phrase momntOfBdy, S "is"]
+
+momEqlDerivHydroSentence = [S "The surface hydrostatic", phrase force, 
+  S "acts into the midpoint of the surface of the", phrase slice +:+.
+  sParen (makeRef2S assumpHFSM),
+  S "Thus, the vertical", phrase component, S "of the", phrase force,
+  S "acts directly towards the point of rotation, and has a",
+  phrase momntOfBdy +:+. S "of zero", S "The horizontal", phrase component, 
+  S "of the", phrase force, S "tends to rotate in a clockwise direction" `sAnd` 
+  S "the", phrase momntArm, S "is the entire height of the" +:+. phrase slice,
+  S "Thus, the", phrase momntOfBdy, S "is"]
+
+momEqlDerivExtSentence = [S "The external", phrase force, S "again acts into",
+  S "midpoint" `ofThe` phrase slice, S "surface, so the vertical", 
+  phrase component, S "does not contribute to the", phrase momntOfBdy `sC`
+  S "and the", phrase momntArm, S "is again the entire height of the" +:+.
+  phrase slice, S "The", phrase momntOfBdy, S "is"]
+
+momEqlDerivFinalSentence = [S "The base hydrostatic", phrase force `sAnd`
+  phrase slice, phrase weight, S "both act in the direction of the point of",
+  S "rotation", sParen (makeRef2S assumpHFSM) `sC` S "therefore both have", plural momntOfBdy +:+. S "of zero",
+  S "Thus, all of the", plural momntOfBdy +:+. S "have been determined",
+  S "The", phrase momentEqlGD, S "is then represented by the sum of all",
+  plural momntOfBdy]
+
+momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
+
+momEqlDerivMomentEqn = sy momntOfBdy $= sy rotForce * sy momntArm
+
+momEqlDerivNormaliEqn = negate (inxi intNormForce) * (inxi sliceHght +
+  (inxi baseWthX / 2) * tan (inxi baseAngle))
+
+momEqlDerivNormaliM1Eqn = inxiM1 intNormForce * (inxiM1 sliceHght -
+  (inxi baseWthX / 2) * tan (inxi baseAngle))
+
+momEqlDerivWateriEqn = negate (inxi watrForce) * ((1/3) * inxi sliceHghtW +
+  (inxi baseWthX / 2) * tan (inxi baseAngle))
+
+momEqlDerivWateriM1Eqn = inxiM1 watrForce * ((1/3) * inxiM1 sliceHghtW +
+  (inxi baseWthX / 2) * tan (inxi baseAngle))
+
+momEqlDerivSheariEqn = inxi intShrForce * (inxi baseWthX / 2)
+
+momEqlDerivSheariM1Eqn = inxiM1 intShrForce * (inxi baseWthX / 2)
+
+momEqlDerivSeismicIntEqn = negate $ defint (eqSymb yi) 0 (inxi midpntHght) 
+  (sy earthqkLoadFctr * sy genericSpWght * inxi baseWthX * sy yi)
+
+momEqlDerivSeismicEqn = negate $ sy earthqkLoadFctr * sy genericSpWght * 
+  inxi baseWthX * (inxi midpntHght $^ 2 / 2)
+
+momEqlDerivSeismicWEqn = negate $ sy earthqkLoadFctr * inxi slcWght * 
+  (inxi midpntHght / 2)
+
+momEqlDerivHydroEqn = inxi surfHydroForce * sin (inxi surfAngle) * 
+  inxi midpntHght
+
+momEqlDerivExtEqn = inxi surfLoad * sin (inxi impLoadAngle) * inxi midpntHght
+
+momEqlDerivFinalEqn = 0 $= momExpr (\ x y -> x +
+  (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 --
 

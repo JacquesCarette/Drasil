@@ -5,6 +5,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
@@ -15,8 +16,6 @@ import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
   temp)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
 import Data.Drasil.Units.Thermodynamics (thermalFlux)
 import Data.Drasil.Utils (unwrap, weave)
 

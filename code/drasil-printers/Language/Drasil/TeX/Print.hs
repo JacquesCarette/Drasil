@@ -79,13 +79,13 @@ symbol (L.Special s) = unPL $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
-symbol (L.Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
+symbol (L.Corners [] [] [x] [] s) = brace $ symbol s ++ "^" ++ brace (symbol x)
+symbol (L.Corners [] [] [] [x] s) = brace $ symbol s ++ "_" ++ brace (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of Corners (general)"
-symbol (L.Atop f s) = sFormat f s
-symbol (L.Empty)    = ""
+symbol (L.Atop f s)               = sFormat f s
+symbol L.Empty                    = ""
 
 sFormat :: L.Decoration -> L.Symbol -> String
 sFormat L.Hat    s = "\\hat{" ++ symbol s ++ "}"
@@ -223,7 +223,7 @@ specLength (S x)     = length x
 specLength (E x)     = length $ filter (`notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
-specLength (EmptyS)  = 0
+specLength EmptyS    = 0
 specLength _         = 0
 
 dontCount :: String
@@ -245,7 +245,7 @@ needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
 needs Ref{}            = Text
-needs (EmptyS)         = Text
+needs EmptyS           = Text
 needs (Quote _)        = Text
 
 -- print all Spec through here
@@ -337,7 +337,7 @@ makeDefTable sm ps l = vcat [
   pure (text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> pure (text "}"), --shortname instead of refname?
   pure (text "\\phantomsection "), label l,
   makeDRows sm ps,
-  pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
+  pure $ dbs <+> text "\\bottomrule \\end{tabular}"
   ]
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
@@ -445,8 +445,7 @@ makeGraph ps w h c l =
            pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
            pure $ text "node [style = \"n\"];"
          ]
-     ++  map (\(a,b) -> (q a) <> pure (text " -> ") <> (q b) <>
-                pure (text ";")) ps
+     ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
      ++  [ pure $ text "}",
            pure $ text "\\end{dot2tex}",
            pure $ text "\\end{tikzpicture}",

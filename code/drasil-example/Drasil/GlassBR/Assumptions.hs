@@ -4,12 +4,11 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
   constant, practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
-  WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
@@ -31,11 +30,11 @@ assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC
 assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom
 assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom
 assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)     "standardValues"      Doc.assumpDom
+assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)      "standardValues"      Doc.assumpDom
 assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
 assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac) "ldfConstant"         Doc.assumpDom
+assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac)         "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",

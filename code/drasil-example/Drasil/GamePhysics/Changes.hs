@@ -5,9 +5,9 @@ module Drasil.GamePhysics.Changes where
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimpleD)
 import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
+import Utils.Drasil
 
-import Data.Drasil.SentenceStructures (chgsStart, foldlSent, foldlSP, maybeChanged,
-  maybeExpanded, sAnd)
+import Data.Drasil.SentenceStructures (chgsStart, maybeChanged, maybeExpanded)
 import Data.Drasil.Concepts.Documentation as Doc (section_, likelyChg, unlikelyChg,
   physics, game, library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)

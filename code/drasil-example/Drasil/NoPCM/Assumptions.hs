@@ -1,6 +1,7 @@
 module Drasil.NoPCM.Assumptions where --all of this file is exported
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
 
@@ -9,8 +10,6 @@ import Data.Drasil.Quantities.Thermodynamics (boilPt, meltPt)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
-
-import Data.Drasil.SentenceStructures (foldlSent, sAnd, isThe)
 
 import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)

@@ -1,6 +1,7 @@
 module Drasil.SWHS.Changes where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
@@ -15,7 +16,7 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat,
   thermalConductor)
 import Data.Drasil.Quantities.Physics (energy)
 
-import Data.Drasil.SentenceStructures (chgsStart, foldlSent, sAnd, ofThe)
+import Data.Drasil.SentenceStructures (chgsStart)
 
 --------------------------------
 -- Section 6 : LIKELY CHANGES --

@@ -27,7 +27,7 @@ A system is needed to efficiently and correctly predict the landing position of 
 <div class="subsubsection">
 <h3>Goal Statements</h3>
 <p class="paragraph">
-Given the angle and velocity of the projectile, the goal statements are:
+Given the angle and speed of the projectile, the goal statements are:
 </p>
 <div class="list">
 <p>
@@ -179,11 +179,11 @@ This section focuses on the general equations and laws that Projectile is based 
 <p class="paragraph">
 This section collects the laws and equations that will be used to build the instance models.
 </p>
-<div id="GD:finalVelocity">
+<div id="GD:finalSpeed">
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Final velocity</p></td>
+<td><p class="paragraph">Final speed</p></td>
 </tr>
 <tr>
 <th>Units</th>
@@ -193,7 +193,7 @@ This section collects the laws and equations that will be used to build the inst
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>v<sub>f</sub> = v<sub>i</sub>&plus;<b>a</b>&#8239;t</em>
+<em>v<sub>f</sub> = v<sub>i</sub>&plus;a&#8239;t</em>
 </div>
 </td>
 </tr>
@@ -201,9 +201,9 @@ This section collects the laws and equations that will be used to build the inst
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>v<sub>f</sub></em> is the final velocity (m/s)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>v<sub>f</sub></em> is the final speed (m/s)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
+<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
 <li><em>t</em> is the time (s)</li>
 </ul>
 </td>
@@ -240,7 +240,7 @@ This section collects the laws and equations that will be used to build the inst
 <div class="equation">
 <em>t = <div class="fraction">
         <span class="fup">2&#8239;v<sub>i</sub>&#8239;sin(θ)</span>
-        <span class="fdn">|<b>a</b>|</span>
+        <span class="fdn">a<sub>y</sub></span>
         </div></em>
 </div>
 </td>
@@ -250,9 +250,11 @@ This section collects the laws and equations that will be used to build the inst
 <td>
 <ul class="hide-list-style-no-indent">
 <li><em>t</em> is the time (s)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
-<li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
+<li><em>θ</em> is the launch angle (&deg;)</li>
+<li>
+<em>a<sub>y</sub></em> is the y-component of acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -275,13 +277,13 @@ This section collects the laws and equations that will be used to build the inst
 </table>
 </div>
 <p class="paragraph">
-Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVelocity>GD: finalVelocity</a> It also comes from the fact that the velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#equalHeights>A: equalHeights</a>).
+Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:finalSpeed>GD: finalSpeed</a> It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#equalHeights>A: equalHeights</a>).
 </p>
 <div id="GD:distance">
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Distance</p></td>
+<td><p class="paragraph">Distance in the x-direction</p></td>
 </tr>
 <tr>
 <th>Units</th>
@@ -291,10 +293,12 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>r = v<sub>i</sub>&#8239;t&plus;<div class="fraction">
-                                   <span class="fup"><b>a</b>&#8239;t<sup>2</sup></span>
-                                   <span class="fdn">2</span>
-                                   </div></em>
+<em>r<sub>x</sub> = v<sub>i,x</sub>&#8239;t&plus;<div class="fraction">
+                                                 <span class="fup">
+                                                 a<sub>x</sub>&#8239;t<sup>2</sup>
+                                                 </span>
+                                                 <span class="fdn">2</span>
+                                                 </div></em>
 </div>
 </td>
 </tr>
@@ -302,10 +306,16 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>r</em> is the distance (m)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
+<li>
+<em>r<sub>x</sub></em> is the distance in the x-direction (m)
+</li>
+<li>
+<em>v<sub>i,x</sub></em> is the x-component of initial velocity (m/s)
+</li>
 <li><em>t</em> is the time (s)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>a<sub>x</sub></em> is the x-component of acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -335,7 +345,9 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Distance (refined)</p></td>
+<td>
+<p class="paragraph">Distance in the x-direction (refined)</p>
+</td>
 </tr>
 <tr>
 <th>Units</th>
@@ -345,12 +357,12 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>r = <div class="fraction">
-        <span class="fup">
-        2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-        </span>
-        <span class="fdn">|<b>a</b>|</span>
-        </div></em>
+<em>r<sub>x</sub> = <div class="fraction">
+                    <span class="fup">
+                    2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                    </span>
+                    <span class="fdn">a<sub>y</sub></span>
+                    </div></em>
 </div>
 </td>
 </tr>
@@ -358,10 +370,14 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>r</em> is the distance (m)</li>
-<li><em>v<sub>i</sub></em> is the initial velocity (m/s)</li>
-<li><em>θ</em> is the angle of projectile (&deg;)</li>
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>r<sub>x</sub></em> is the distance in the x-direction (m)
+</li>
+<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
+<li><em>θ</em> is the launch angle (&deg;)</li>
+<li>
+<em>a<sub>y</sub></em> is the y-component of acceleration (m/s<sup>2</sup>)
+</li>
 </ul>
 </td>
 </tr>
@@ -382,7 +398,7 @@ Air time is derived from <a href=#DD:velY>DD: velY</a>. and <a href=#GD:finalVel
 </table>
 </div>
 <p class="paragraph">
-Distance (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a href=#GD:distance>GD: distance</a>.
+Distance in the x-direction (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a href=#GD:distance>GD: distance</a>.
 </p>
 </div>
 </div>
@@ -392,7 +408,7 @@ Distance (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a hr
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:velX">
+<div id="DD:speedX">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -409,9 +425,7 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation">
-<em>v<sub>x</sub> = <b>v</b>&#8239;cos(θ)</em>
-</div>
+<div class="equation"><em>v<sub>x</sub> = v&#8239;cos(θ)</em></div>
 </td>
 </tr>
 <tr>
@@ -421,8 +435,8 @@ This section collects and defines all the data needed to build the instance mode
 <li>
 <em>v<sub>x</sub></em> is the x-component of velocity (m/s)
 </li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
-<li><em>θ</em> is the angle of projectile (&deg;)</li>
+<li><em>v</em> is the speed (m/s)</li>
+<li><em>θ</em> is the launch angle (&deg;)</li>
 </ul>
 </td>
 </tr>
@@ -436,7 +450,7 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 </table>
 </div>
-<div id="DD:velY">
+<div id="DD:speedY">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -453,9 +467,7 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation">
-<em>v<sub>y</sub> = <b>v</b>&#8239;sin(θ)</em>
-</div>
+<div class="equation"><em>v<sub>y</sub> = v&#8239;sin(θ)</em></div>
 </td>
 </tr>
 <tr>
@@ -465,8 +477,8 @@ This section collects and defines all the data needed to build the instance mode
 <li>
 <em>v<sub>y</sub></em> is the y-component of velocity (m/s)
 </li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
-<li><em>θ</em> is the angle of projectile (&deg;)</li>
+<li><em>v</em> is the speed (m/s)</li>
+<li><em>θ</em> is the launch angle (&deg;)</li>
 </ul>
 </td>
 </tr>
@@ -500,7 +512,9 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>d<sub>target</sub></em>, <em>d</em></p>
+<p class="paragraph">
+<em>r<sub>target</sub></em>, <em>r<sub>x</sub></em>
+</p>
 </td>
 </tr>
 <tr>
@@ -511,9 +525,11 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
-<div class="equation"><em>d&thinsp;&gt;&thinsp;0</em></div>
+<div class="equation">
+<em>r<sub>x</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
 </td>
 </tr>
 <tr>
@@ -524,7 +540,7 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>isShort = d<sub>target</sub>&thinsp;&gt;&thinsp;d</em>
+<em>isShort = r<sub>target</sub>&thinsp;&gt;&thinsp;r<sub>x</sub></em>
 </div>
 </td>
 </tr>
@@ -533,10 +549,10 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>isShort</em> is the variable that is assigned true when the target distance is greater than the projectile distance (Unitless)
+<em>isShort</em> is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
-<li><em>d</em> is the distance of projectile (m)</li>
+<li><em>r<sub>target</sub></em> is the target distance (m)</li>
+<li><em>r<sub>x</sub></em> is the launch distance (m)</li>
 </ul>
 </td>
 </tr>
@@ -563,20 +579,24 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>d<sub>target</sub></em>, <em>d</em></p>
+<p class="paragraph">
+<em>r<sub>target</sub></em>, <em>r<sub>x</sub></em>
+</p>
 </td>
 </tr>
 <tr>
 <th>Output</th>
-<td><p class="paragraph"><em>d<sub>offset</sub></em></p></td>
+<td><p class="paragraph"><em>r<sub>offset</sub></em></p></td>
 </tr>
 <tr>
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
-<div class="equation"><em>d&thinsp;&gt;&thinsp;0</em></div>
+<div class="equation">
+<em>r<sub>x</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
 </td>
 </tr>
 <tr>
@@ -587,7 +607,7 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>d<sub>offset</sub> = |d<sub>target</sub>&minus;d|</em>
+<em>r<sub>offset</sub> = |r<sub>target</sub>&minus;r<sub>x</sub>|</em>
 </div>
 </td>
 </tr>
@@ -596,10 +616,10 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>d<sub>offset</sub></em> is the the offset between the target distance and the distance of the projectile (Unitless)
+<em>r<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
-<li><em>d</em> is the distance of projectile (m)</li>
+<li><em>r<sub>target</sub></em> is the target distance (m)</li>
+<li><em>r<sub>x</sub></em> is the launch distance (m)</li>
 </ul>
 </td>
 </tr>
@@ -627,7 +647,7 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Input</th>
 <td>
 <p class="paragraph">
-<em>d<sub>offset</sub></em>, <em>d<sub>target</sub></em>
+<em>r<sub>offset</sub></em>, <em>r<sub>target</sub></em>
 </p>
 </td>
 </tr>
@@ -639,10 +659,10 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
+<em>r<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 </td>
 </tr>
@@ -654,10 +674,10 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>isHit = d<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
+<em>isHit = r<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
                                                   <span class="fup">1</span>
                                                   <span class="fdn">50</span>
-                                                  </div>&#8239;d<sub>target</sub></em>
+                                                  </div>&#8239;r<sub>target</sub></em>
 </div>
 </td>
 </tr>
@@ -666,12 +686,12 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Pr
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>isHit</em> is the variable that is assigned true when the projectile distance is within a degree of tolerance of the target distance (Unitless)
+<em>isHit</em> is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)
 </li>
 <li>
-<em>d<sub>offset</sub></em> is the the offset between the target distance and the distance of the projectile (Unitless)
+<em>r<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
+<li><em>r<sub>target</sub></em> is the target distance (m)</li>
 </ul>
 </td>
 </tr>

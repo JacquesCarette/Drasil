@@ -68,7 +68,8 @@ copy_examples() {
 
 build_website() {
 	cd "$CUR_DIR"website
-	make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER"
+	make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
+	SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
 	RET=$?
 	if [ $RET != 0 ]; then
 		echo "Build Failed. Bailing."

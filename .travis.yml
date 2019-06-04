@@ -62,9 +62,6 @@ before_install:
 install:
 # Build dependencies
 - stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/stack.yaml
-# Build dependencies for deploy because cache is already stored by the time deploy runs
-# which would otherwise mean website dependencies would have to be installed every deploy build.
-- stack --no-terminal --install-ghc test --only-dependencies --stack-yaml code/website/stack.yaml
 
 script:
  - ci_export_funcs
@@ -81,6 +78,8 @@ script:
      ci_fstep "CI: Code" make code
  - >-
      ci_fstep "CI: Docs" make docs haddockArgs=\"--no-haddock-deps --no-haddock-hyperlink-source\"
+ - >-
+     ci_fstep "CI: Deploy" sh scripts/maybe_test_deploy.sh
  - python3 scripts/pr_label_update.py
 
 deploy:

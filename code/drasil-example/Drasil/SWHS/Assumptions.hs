@@ -65,14 +65,14 @@ assumpS1, assumpS2, assumpS3, assumpS4, assumpS5, assumpS6, assumpS7,
 assumpS14 :: Sentence -> Sentence
 
 assumpS1 = foldlSent [
-  S "The only form of", phrase energy, S "that is",
-  S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermalEnergy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mechEnergy `sC` S "are assumed to be negligible"]
-assumpS2 = foldlSent [
-  S "All", phrase CT.heatTrans, S "coefficients are constant over", phrase time]
+  S "The only form" `sOf` phrase energy, S "that" `sIs`
+  S "relevant for this" +:+. (phrase problem `sIs` phrase CT.thermalEnergy),
+  S "All other forms" `sOf` phrase energy `sC` S "such as",
+  phrase mechEnergy `sC` S "are assumed to be negligible"]
+assumpS2 = foldlSent [S "All", phrase CT.heatTrans, S "coefficients" `sAre`
+                      S "constant over", phrase time]
 assumpS3 = foldlSent [
-  S "The", phrase water, S "in the", phrase tank,
+  S "The", phrase water `sIn` S "the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank]
 assumpS4 = foldlSent [
@@ -83,15 +83,15 @@ assumpS5 = foldlSent [
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol]
 assumpS6 = foldlSent [
-  S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
-  phrase htCap_L_P, S "have no spatial variation; that",
+  S "The", foldlList Comma List [phrase htCap_W, phrase htCap_S_P,
+  phrase htCap_L_P], S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
   phrase vol]
 assumpS7 = foldlSent [
   CT.lawConvCooling ^. defn, S "applies between the",
   phrase coil `andThe` phrase water]
 assumpS8 = foldlSent [
-  S "The", phrase temp_C, S "is constant over", phrase time]
+  S "The", phrase temp_C `sIs` S "constant over", phrase time]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length"]
 assumpS10 = foldlSent [
@@ -104,8 +104,7 @@ assumpS11 = foldlSent [
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)"
   `toThe` phrase temp_C]
-assumpS12 = foldlSent [
-  phrase temp_init `ofThe'` phrase water `sAnd` S "the",
+assumpS12 = foldlSent [phrase temp_init `ofThe'` phrase water `andThe`
   short phsChgMtrl `isThe` S "same"]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
@@ -118,7 +117,7 @@ assumpS14 mat = foldlSent [
   phrase meltPt `sOf` phrase water `sC` S "or rise above its",
   phrase boilPt]
 assumpS15 = foldlSent [
-  S "The", phrase tank, S "is", phrase perfect_insul,
+  S "The", phrase tank `sIs` phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
   phrase tank]
 assumpS16 = foldlSent [
@@ -129,7 +128,7 @@ assumpS17 = foldlSent [
   (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
   S "due to", phrase CT.melting, S "is negligible"]
 assumpS18 = foldlSent [
-  S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
+  S "The", short phsChgMtrl `sIs` S "either in a", liquid ^. defn,
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn]
 assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric" `sC` S "so the",

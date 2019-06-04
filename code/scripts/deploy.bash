@@ -3,6 +3,7 @@ DEPLOY_BRANCH="gh-pages"
 SOURCE_BRANCH="con_dep"
 DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
+COMMIT_HASH_FILE=".commit-hash"
 
 if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
   echo "Deployment only occurs for push builds."
@@ -52,7 +53,15 @@ try_deploy() {
     return 0
   fi
 
+  CLONED_HASH=$(cat "$COMMIT_HASH_FILE")
+
+  if [ $CLONED_HASH = $TRAVIS_COMMIT ]; then
+    echo "Deploy would be from same hash as current. Skipping it."
+    return 0
+  fi
+
   echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
+  echo $TRAVIS_COMMIT > "$COMMIT_HASH_FILE"
   cd "$CUR_DIR"
   make deploy_lite DEPLOY_FOLDER="$DEPLOY_FOLDER"
   MAKE_RET=$?

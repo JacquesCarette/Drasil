@@ -673,15 +673,10 @@ instance ControlBlockSym CppSrcCode where
     in
       block [
         listDec l_temp 0 t,
-        for (varDecDef l_i int (getB b)) (v_i ?< getE e) (getS s v_i)
+        for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
+          (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess v_i)),
         vnew &= v_temp]
-        where getB Nothing = litInt 0
-              getB (Just n) = n
-              getE Nothing = vold $. listSize
-              getE (Just n) = n
-              getS Nothing v = (&++) v
-              getS (Just n) v = v &+= n
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = Doc

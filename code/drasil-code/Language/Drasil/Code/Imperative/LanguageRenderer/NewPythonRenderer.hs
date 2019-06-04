@@ -139,8 +139,7 @@ instance ControlBlockSym PythonCode where
 
   listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
-    where getVal Nothing = return (empty, Nothing)
-          getVal (Just v) = v
+    where getVal = fromMaybe (return (empty, Nothing))
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = Doc

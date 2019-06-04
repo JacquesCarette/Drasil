@@ -157,18 +157,12 @@ instance ControlBlockSym JavaCode where
         l_i = "i_temp"
         v_i = var l_i
     in
-      body [
-        block [listDec l_temp 0 t,
-          for (varDecDef l_i int (getB b)) (v_i ?< getE e) (getS s v_i)
-            (oneLiner $ valState $ v_temp $. listAppend 
-              (vold $. listAccess v_i)),
-          vnew &= v_temp]]
-    where getB Nothing = litInt 0
-          getB (Just n) = n
-          getE Nothing = vold $. listSize
-          getE (Just n) = n
-          getS Nothing v = (&++) v
-          getS (Just n) v = v &+= n
+      block [
+        listDec l_temp 0 t,
+        for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
+          (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
+          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess v_i)),
+        vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = Doc

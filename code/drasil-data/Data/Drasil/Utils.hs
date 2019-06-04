@@ -59,12 +59,12 @@ typUncr x = found (uncVal x) (uncPrec x)
 
 -- | outputs sentence with % attached to it
 addPercent :: Show a => a -> Sentence
-addPercent num = (S (show num) :+: Percent)
+addPercent num = S (show num) :+: Percent
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
 zipSentList acc _ []           = acc
-zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
+zipSentList acc [] r           = acc ++ map (EmptyS:) r
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
@@ -80,7 +80,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- co
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
   let l' = filter (any (not . isEmpty) . snd) l in 
-  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
+  (map fst l', transpose $ map (map replaceEmptyS . snd) l')
   where
     isEmpty       EmptyS = True
     isEmpty       _      = False
@@ -131,7 +131,7 @@ weave :: [[a]] -> [a]
 weave = concat . transpose
 
 -- | get a unit symbol if there is one
-unwrap :: (Maybe UnitDefn) -> Sentence
+unwrap :: Maybe UnitDefn -> Sentence
 unwrap (Just a) = Sy $ usymb a
 unwrap Nothing  = EmptyS
 

@@ -1,11 +1,9 @@
-module Language.Drasil.Utils (sortBySymbol, sortBySymbolTuple) where
+module Utils.Drasil.Misc (sortBySymbol, sortBySymbolTuple) where
+
+import Language.Drasil
 
 import Data.Function (on)
 import Data.List (sortBy)
-
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
-import Language.Drasil.Symbol (compsy)
-import Language.Drasil.Stages (Stage(Implementation))
 
 -- Sorts a list of HasSymbols by Symbol
 sortBySymbol :: (HasSymbol a) => [a] -> [a]

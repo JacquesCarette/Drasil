@@ -17,7 +17,6 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Language.Drasil.Utils (sortBySymbol)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,

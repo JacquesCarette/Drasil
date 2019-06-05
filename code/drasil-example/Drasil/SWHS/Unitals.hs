@@ -500,16 +500,16 @@ htCap_L_P_max = mkQuantDef (unitary "htCap_L_P_max"
 -- Used in Constraint 9
 htFusion_min = mkQuantDef (unitary "htFusion_min"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational) 0 --FIXME: 0 is placeholder value. 
+  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational) 0 
 
 htFusion_max = mkQuantDef (unitary "htFusion_max"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational) 0 --FIXME: 0 is placeholder value. 
+  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational) 1000000 
 
 -- Used in Constraint 10
 coil_SA_max = mkQuantDef (unitary "coil_SA_max"
   (nounPhraseSP "maximum surface area of coil")
-  (sup (eqSymb coil_SA) (Atomic "max")) m_2 Rational) 0 --FIXME: 0 is placeholder value. 
+  (sup (eqSymb coil_SA) (Atomic "max")) m_2 Rational) 100000
 
 -- Used in Constraint 12
 w_density_min = mkQuantDef (unitary "w_density_min"

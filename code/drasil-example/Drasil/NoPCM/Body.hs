@@ -72,13 +72,11 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
+import Drasil.SWHS.Unitals (coil_HTC, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
-  tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
-  temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, unitalChuncks,
-  abs_tol, rel_tol, cons_tol)
+  htCap_W, htTransCoeff, in_SA, out_SA, tank_length, tank_vol, tau, tau_W, 
+  temp_C, temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, 
+  w_density, w_E, w_mass, w_vol, unitalChuncks, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -177,7 +175,7 @@ mkSRS = [RefSec $ RefProg intro
   TraceabilitySec $
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2)) [],
-  AuxConstntSec $ AuxConsProg progName auxCons,
+  AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
 label :: TraceMap
@@ -613,11 +611,6 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
-
-auxCons :: [QDefinition]
-auxCons = [tank_length_min, tank_length_max,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max]
 
 ------------
 --REFERENCES

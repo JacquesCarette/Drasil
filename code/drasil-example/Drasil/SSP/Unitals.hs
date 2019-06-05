@@ -18,8 +18,8 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, force,
 
 
 symbols :: [DefinedQuantityDict]
-symbols = (map dqdWr inputs) ++ (map dqdWr outputs) ++ 
-  (map dqdWr units) ++ (map dqdWr unitless)
+symbols = map dqdWr inputs ++ map dqdWr outputs ++ 
+  map dqdWr units ++ map dqdWr unitless
 
 ---------------------------
 -- Imported UnitalChunks --

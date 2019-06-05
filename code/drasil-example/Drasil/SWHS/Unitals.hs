@@ -449,17 +449,15 @@ cons_tol = uvc "cons_tol"
 specParamValList :: [QDefinition]
 specParamValList = [tank_length_min, tank_length_max,
   pcm_density_min, pcm_density_max, w_density_min, w_density_max,
-  htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
-  pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux]
+  htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max, htFusion_min, 
+  htFusion_max, coil_SA_max, htCap_W_min, htCap_W_max, coil_HTC_min, 
+  coil_HTC_max, pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux]
 
 tank_length_min, tank_length_max, pcm_density_min, 
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
-  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
-  pcm_HTC_max, time_final_max, frac_min_aux :: QDefinition
-
-htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
+  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max, htFusion_min, htFusion_max, 
+  coil_SA_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, 
+  pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux :: QDefinition
 
 -- Used in Constraint 1
 tank_length_min = mkQuantDef (unitary "tank_length_min"
@@ -500,18 +498,18 @@ htCap_L_P_max = mkQuantDef (unitary "htCap_L_P_max"
   (sub (eqSymb htCap_L_P) (Atomic "max")) UT.heatCapSpec Rational) 5000
 
 -- Used in Constraint 9
-htFusion_min = unitary "htFusion_min"
+htFusion_min = mkQuantDef (unitary "htFusion_min"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational
+  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational) 0 --FIXME: 0 is placeholder value. 
 
-htFusion_max = unitary "htFusion_max"
+htFusion_max = mkQuantDef (unitary "htFusion_max"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational
+  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational) 0 --FIXME: 0 is placeholder value. 
 
 -- Used in Constraint 10
-coil_SA_max = unitary "coil_SA_max"
+coil_SA_max = mkQuantDef (unitary "coil_SA_max"
   (nounPhraseSP "maximum surface area of coil")
-  (sup (eqSymb coil_SA) (Atomic "max")) m_2 Rational
+  (sup (eqSymb coil_SA) (Atomic "max")) m_2 Rational) 0 --FIXME: 0 is placeholder value. 
 
 -- Used in Constraint 12
 w_density_min = mkQuantDef (unitary "w_density_min"

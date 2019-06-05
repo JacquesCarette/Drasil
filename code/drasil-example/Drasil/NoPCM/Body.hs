@@ -77,7 +77,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
+  w_density_max, w_density_min, w_E, w_mass, w_vol, unitalChuncks,
   abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
@@ -89,7 +89,7 @@ import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
-import Drasil.NoPCM.Unitals (temp_init)
+import Drasil.NoPCM.Unitals (temp_init, specParamValList)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -228,7 +228,7 @@ si = SI {
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
   _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
-  _constants = [],
+  _constants = specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB

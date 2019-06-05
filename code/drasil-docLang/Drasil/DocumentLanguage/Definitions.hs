@@ -27,8 +27,6 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants)
   TheoryModel, inCons, outCons, imOutput, imInputs)
 import Utils.Drasil
 
-import Data.Drasil.Utils (eqUnR')
-
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
 -- | Synonym for a list of 'Field'

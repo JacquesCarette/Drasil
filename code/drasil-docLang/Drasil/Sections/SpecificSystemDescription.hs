@@ -29,7 +29,6 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Utils (fmtPhys, fmtSfwr, fmtU, getRVal, mkTableFromColumns, typUncr)
 
 import qualified Drasil.DocLang.SRS as SRS
 

@@ -119,7 +119,7 @@ velVecDerivSent :: Sentence
 velVecDerivSent = vecDeriv [velocity, acceleration] rectVelGD
 
 velVecDerivEqn :: Expr
-velVecDerivEqn = sy velocity $= vec2D (sy xVel) (sy yVel) $=
+velVecDerivEqn = getVec velocity $=
     vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel + sy yConstAccel * sy time)
 
 ----------
@@ -143,7 +143,7 @@ posVecDerivSent :: Sentence
 posVecDerivSent = vecDeriv [position, velocity, acceleration] rectPosGD
 
 posVecDerivEqn :: Expr
-posVecDerivEqn = sy position $= vec2D (sy xPos) (sy xPos) $=
+posVecDerivEqn = getVec position $=
     vec2D (sy ixPos + sy ixVel * sy time + sy xConstAccel * square (sy time) / 2)
           (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
 
@@ -152,23 +152,22 @@ vecDeriv :: [UnitalChunk] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSent_ [
   S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 
-  (map (\c -> foldlSent_ [S "the", phrase c, phrase vector, S "as", E (sy c $= vec2D (getX c) (getY c))]) vecs),
+  (map (\c -> foldlSent_ [S "the", phrase c, phrase vector, S "as", E (getVec c)]) vecs),
   S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
-  phrase QP.constAccel `sIs` S "represented as" +:+. E (sy QP.constAccel $= vec2D (sy xConstAccel) (sy yConstAccel)),
+  phrase QP.constAccel `sIs` S "represented as" +:+. E (getVec QP.constAccel),
   S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate +:
   (S "direction" `sC` S "to yield")]
-    where
-      getX :: UnitalChunk -> Expr
-      getX x =
-        if x == position then sy xPos
-        else if x == velocity then sy xVel
-        else if x == acceleration then sy xAccel
-        else error "Not implemented in getX"
-      getY :: UnitalChunk -> Expr
-      getY y =
-        if y == position then sy yPos
-        else if y == velocity then sy yVel
-        else if y == acceleration then sy yAccel
-        else error "Not implemented in getY"
+
+-- Helper for making vector with x- and y-components
+getVec :: UnitalChunk -> Expr
+getVec c = sy c $= vec2D ((sy . fst) comps) ((sy . snd) comps)
+  where
+    comps
+      | c == position      = (xPos,        yPos)
+      | c == velocity      = (xVel,        yVel)
+      | c == iVel          = (ixVel,       iyVel)
+      | c == acceleration  = (xAccel,      yAccel)
+      | c == QP.constAccel = (xConstAccel, yConstAccel)
+      | otherwise          = error "Not implemented in getVec"

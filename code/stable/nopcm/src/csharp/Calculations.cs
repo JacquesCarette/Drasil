@@ -9,10 +9,6 @@ namespace SWHS {
         public static double func_q_C(InputParameters inParams, double t) {
             return inParams.h_C * (inParams.T_C - func_T_W(t));
         }
-        
-        public static double func_q_C(InputParameters inParams, double t) {
-            return inParams.h_C * (inParams.T_C - func_T_W(t));
-        }
     }
 }
 

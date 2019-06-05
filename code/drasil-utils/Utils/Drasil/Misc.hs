@@ -1,14 +1,11 @@
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, enumBullet,
-  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
-  getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, noRefsLT, sortBySymbol, sortBySymbolTuple,
-  typUncr, unwrap, weave, zipFTable', zipSentList) where
+  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent,
+  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs,
+  noRefsLT, sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave,
+  zipFTable', zipSentList) where
 
 import Language.Drasil
 
-import Utils.Drasil.Fold (foldConstraints)
-
-import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
 import Data.List (elem, sortBy, transpose)
@@ -29,37 +26,18 @@ eqUnR e lbl = llcc lbl $ EqnBlock e
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
 
--- | concantenates number to abbreviation
--- should not be exported
-enumWithAbbrev :: Integer -> Sentence -> [Sentence]
-enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
-
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
+mkEnumAbbrevList s t l = zip [t :+: (S $ show x) | x <- [s..]] $ map Flat l
 
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ unwrap (getUnit u)
-
--- | formats physical constraints
-fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
-
--- | formats software constraints
-fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
-
--- | gets a reasonable or typical value from a Constrained chunk
-getRVal :: (HasUID c, HasReasVal c) => c -> Expr
-getRVal c = uns (c ^. reasVal)
-  where uns (Just e) = e
-        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | extracts the typical uncertainty to be displayed from something that has an uncertainty
 typUncr :: HasUncertainty c => c -> Sentence
@@ -79,7 +57,6 @@ zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
-
 zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
 zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 

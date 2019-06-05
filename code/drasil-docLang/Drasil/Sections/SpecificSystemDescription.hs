@@ -32,6 +32,7 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import qualified Drasil.DocLang.SRS as SRS
 
+import Control.Lens ((^.))
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: [Section] -> Section
@@ -211,6 +212,11 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
             (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
             S "Input Data Constraints"
+  where
+    getRVal c = uns (c ^. reasVal)
+      where uns (Just e) = e
+            uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
+
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
@@ -218,3 +224,11 @@ outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst)] "OutDataConstraints" $
             S "Output Data Constraints"
+
+-- | formats physical constraints
+fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
+
+-- | formats software constraints
+fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)

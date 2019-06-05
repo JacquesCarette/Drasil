@@ -1,10 +1,11 @@
 module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Phrase (compoundNC, compoundNCPlPh, compoundNCPlPl)
 import Data.Drasil.IdeaDicts
 
 algorithm :: ConceptChunk

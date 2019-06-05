@@ -1,10 +1,11 @@
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number)
-import Control.Lens ((^.))
 import Data.Drasil.IdeaDicts
+import Utils.Drasil
 
-import Data.Drasil.Phrase(of_)
+import Control.Lens ((^.))
+
 mathcon :: [ConceptChunk]
 mathcon = [angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 

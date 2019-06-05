@@ -15,11 +15,11 @@ namespace SWHS {
         public static double t_step;
         public static double ρ_W;
         public static double D;
-        public static double T_W;
-        public static double E_W;
         public static double A_tol;
         public static double R_tol;
         public static double C_tol;
+        public static double T_W;
+        public static double E_W;
         
         public static void derived_values() {
         }

@@ -12,11 +12,11 @@ T_C = 0.0
 t_step = 0.0
 ρ_W = 0.0
 D = 0.0
-T_W = 0.0
-E_W = 0.0
 A_tol = 0.0
 R_tol = 0.0
 C_tol = 0.0
+T_W = 0.0
+E_W = 0.0
 
 def derived_values():
     None

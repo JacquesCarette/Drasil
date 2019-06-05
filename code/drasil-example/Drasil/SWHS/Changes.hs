@@ -37,7 +37,7 @@ likeChgUTP = cic "likeChgUTP" (
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart assumpTHCCoT (S "The"), phrase temp_C, S "will change over",
-  (S "course" `ofThe` S "day, depending"), S "on the", phrase energy,
+  S "course" `ofThe` S "day, depending", S "on the", phrase energy,
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (

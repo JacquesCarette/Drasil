@@ -600,15 +600,17 @@ For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMo
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:speedX">
+<div id="DD:speedIX">
 <table class="ddefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">X-component of velocity</p></td>
+<td><p class="paragraph">X-component of initial velocity</p></td>
 </tr>
 <tr>
 <th>Symbol</th>
-<td><p class="paragraph"><em>v<sub>x</sub></em></p></td>
+<td>
+<p class="paragraph"><em>v<sub>x</sub><sup>i</sup></em></p>
+</td>
 </tr>
 <tr>
 <th>Units</th>
@@ -617,7 +619,9 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation"><em>v<sub>x</sub> = v&#8239;cos(θ)</em></div>
+<div class="equation">
+<em>v<sub>x</sub><sup>i</sup> = |<b>v</b><sup>i</sup>|&#8239;cos(θ)</em>
+</div>
 </td>
 </tr>
 <tr>
@@ -625,9 +629,11 @@ This section collects and defines all the data needed to build the instance mode
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>v<sub>x</sub></em> is the x-component of velocity (m/s)
+<em>v<sub>x</sub><sup>i</sup></em> is the x-component of initial velocity (m/s)
 </li>
-<li><em>v</em> is the speed (m/s)</li>
+<li>
+<em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
+</li>
 <li><em>θ</em> is the launch angle (&deg;)</li>
 </ul>
 </td>
@@ -642,15 +648,17 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 </table>
 </div>
-<div id="DD:speedY">
+<div id="DD:speedIY">
 <table class="ddefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Y-component of velocity</p></td>
+<td><p class="paragraph">Y-component of initial velocity</p></td>
 </tr>
 <tr>
 <th>Symbol</th>
-<td><p class="paragraph"><em>v<sub>y</sub></em></p></td>
+<td>
+<p class="paragraph"><em>v<sub>y</sub><sup>i</sup></em></p>
+</td>
 </tr>
 <tr>
 <th>Units</th>
@@ -659,7 +667,9 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Equation</th>
 <td>
-<div class="equation"><em>v<sub>y</sub> = v&#8239;sin(θ)</em></div>
+<div class="equation">
+<em>v<sub>y</sub><sup>i</sup> = |<b>v</b><sup>i</sup>|&#8239;sin(θ)</em>
+</div>
 </td>
 </tr>
 <tr>
@@ -667,9 +677,11 @@ This section collects and defines all the data needed to build the instance mode
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>v<sub>y</sub></em> is the y-component of velocity (m/s)
+<em>v<sub>y</sub><sup>i</sup></em> is the y-component of initial velocity (m/s)
 </li>
-<li><em>v</em> is the speed (m/s)</li>
+<li>
+<em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
+</li>
 <li><em>θ</em> is the launch angle (&deg;)</li>
 </ul>
 </td>

@@ -17,7 +17,6 @@ import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
   temp)
 
 import Data.Drasil.Units.Thermodynamics (thermalFlux)
-import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
   assumpDWPCoV, assumpSHECoV)

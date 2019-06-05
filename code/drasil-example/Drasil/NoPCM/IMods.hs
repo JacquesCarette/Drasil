@@ -13,8 +13,6 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec,
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.Utils (unwrap, weave)
-
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.IMods (heatEInWtr)

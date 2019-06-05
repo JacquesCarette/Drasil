@@ -6,8 +6,6 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
-import Data.Drasil.Utils (weave)
-
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
   definition, first, goal, method_, physical, problem, 

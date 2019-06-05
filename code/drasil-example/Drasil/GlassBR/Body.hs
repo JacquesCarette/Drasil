@@ -56,8 +56,6 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
   derived)
 import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,
   tAndDWSym, underConsidertn)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
-  makeTMatrix, noRefs)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,

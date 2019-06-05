@@ -13,8 +13,6 @@ import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec)
 
-import Data.Drasil.Utils (weave)
-
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)
 import Drasil.SWHS.Concepts (gauss_div)

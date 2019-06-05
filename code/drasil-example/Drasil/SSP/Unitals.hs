@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
-  gravitationalAccel, torque, weight)
+  gravitationalAccel, height, pressure, torque, weight)
 
 
 symbols :: [DefinedQuantityDict]
@@ -39,6 +39,8 @@ accel = acceleration
 genericMass = mass
 gravAccel = gravitationalAccel
 dens = density
+genericH = height
+genericP = pressure
 genericR = displacement
 genericT = torque
 
@@ -186,24 +188,26 @@ coords = cuc' "(x,y)"
 
 units :: [UnitaryConceptDict]
 units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
-  zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
+  genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT, 
+  nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, slipDist, 
+  mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
+  shearRNoIntsl, slcWght, watrForce, intShrForce, baseHydroForce, 
+  surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol, rotForce, momntArm]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
-  critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
+  gravAccel, dens, genericH, genericP, genericR, genericT, nrmShearNum, 
+  nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear,
+  mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, 
+  watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
+  surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
-  satVol, waterVol, rotForce, momntArm :: UnitalChunk
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol, 
+  satVol, rotForce, momntArm :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -323,6 +327,10 @@ baseLngth = uc' "l_b,i" (cn "total base lengths of slices")
   "in the direction parallel to the slope of the base of each slice"
   (sub (vec lEll) lB) metre
 
+surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
+  "in the direction parallel to the slope of the surface of each slice"
+  (sub (vec lEll) lS) metre
+
 midpntHght = uc' "h_i" (cn "y-direction heights of slices")
   ("heights in the y-direction from the base of each slice to the slope " ++
   "surface, at the x-direction midpoint of the slice")
@@ -386,8 +394,6 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress") "" (prime $ sub lS
 dryVol = uc' "V_dry" (cn "volumes of dry soil") "amount of space occupied by dry soil for each slice" (sub (vec cV) (Atomic "dry")) m_3
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied by saturated soil for each slice" (sub (vec cV) (Atomic "sat")) m_3
-
-waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
 
 rotForce = uc' "F_rot" (cn "force causing rotation") 
   "a force in the direction of rotation" (sub cF (Atomic "rot")) newton

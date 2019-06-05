@@ -6,14 +6,15 @@ import Utils.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd, 
   mkQuantDef, tmNoRefs)
 import Data.Drasil.Utils (weave)
-import Data.Drasil.Concepts.Documentation (body, component, constant, value)
-import Data.Drasil.Concepts.Math (vector)
+import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
+  value)
+import Data.Drasil.Concepts.Math (equation, vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  displacement, force, gravitationalAccel, torque, weight)
+  displacement, force, gravitationalAccel, height, pressure, torque, weight)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -102,6 +103,29 @@ weightDerivSpecWeightEqn :: Expr
 weightDerivSpecWeightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
 
 --
+
+hsPressureGD :: GenDefn
+hsPressureGD = gd hsPressureRC (getUnit QP.pressure) [{-Derivation-}]   
+  [hsPressureSrc] "hsPressure" [hsPressureNotes]
+
+hsPressureRC :: RelationConcept
+hsPressureRC = makeRC "hsPressure" (nounPhraseSP "hydrostatic pressure") 
+  hsPressureNotes hsPressureEqn
+
+hsPressureEqn :: Relation
+hsPressureEqn = sy QP.pressure $= sy QPP.specWeight * sy QP.height
+
+hsPressureSrc :: Reference
+hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
+  shortname' "Definition of Pressure"
+
+hsPressureNotes :: Sentence
+hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
+  S "Bernoulli's" +:+ phrase equation +:+ S "for a slow moving fluid" +:+
+  S "through a porous" +:+. phrase material_
+
+--
+
 torqueDD :: DataDefinition
 torqueDD = ddNoRefs torque [{-- Derivation --}] "torque"
   [torqueDesc] 

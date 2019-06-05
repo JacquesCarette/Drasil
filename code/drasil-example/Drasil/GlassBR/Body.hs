@@ -52,7 +52,6 @@ import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,

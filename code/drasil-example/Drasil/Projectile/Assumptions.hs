@@ -7,18 +7,19 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumpDom)
 import Data.Drasil.Concepts.Math (perp)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (acceleration, cartesian, collision, rightHand, time, twoD)
+import Data.Drasil.Concepts.Physics (acceleration, cartesian, collision,
+  distance, rightHand, time, twoD)
 
 import Drasil.Projectile.Concepts (launcher, projectile, target)
 
 assumptions :: [ConceptInstance]
 assumptions = [twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin,
   targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  constMass, pointMass, freeFlight, timeStartZero]
+  constMass, pointMass, freeFlight, neglectCurv, timeStartZero]
 
 twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin, targetXAxis,
   posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, constMass,
-  pointMass, freeFlight, timeStartZero :: ConceptInstance
+  pointMass, freeFlight, neglectCurv, timeStartZero :: ConceptInstance
 twoDMotion      = cic "twoDMotion"      twoDMotionDesc      "twoDMotion"      assumpDom
 cartSyst        = cic "cartSyst"        cartSystDesc        "cartSyst"        assumpDom
 yAxisPerpend    = cic "yAxisPerpend"    yAxisPerpendDesc    "yAxisPerpend"    assumpDom
@@ -33,6 +34,7 @@ neglectDrag     = cic "neglectDrag"     neglectDragDesc     "neglectDrag"     as
 constMass       = cic "constMass"       constMassDesc       "constMass"       assumpDom
 pointMass       = cic "pointMass"       pointMassDesc       "pointMass"       assumpDom
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
+neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     assumpDom
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
 
 twoDMotionDesc :: Sentence
@@ -79,6 +81,10 @@ pointMassDesc = (S "size" `sAnd` S "shape") `ofThe'` phrase projectile `sAre`
 freeFlightDesc :: Sentence
 freeFlightDesc = S "The flight is free; there" `sAre` S "no" +:+ plural collision +:+
                  S "during" +:+. (S "trajectory" `ofThe` phrase projectile)
+
+neglectCurvDesc :: Sentence
+neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
+                  (S "curvature" `ofThe` S "Earth can be neglected")
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = at_start time +:+. S "starts at zero"

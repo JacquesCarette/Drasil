@@ -46,8 +46,8 @@ eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
-balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
-  (((sy temp_C) - (apply1 temp_W time)))
+balWtr_Rel = deriv (sy temp_W) time $= 1 / sy tau_W *
+  (sy temp_C - apply1 temp_W time)
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -69,7 +69,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
   S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
-  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
+  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns]
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
@@ -91,9 +91,9 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass
     (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulated", 
-    (sParen (makeRef2S ass11)), S ". Assuming no volumetric", 
+    sParen (makeRef2S ass11), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
-    (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
+    sParen (makeRef2S ass16) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
      makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
@@ -101,32 +101,32 @@ eBalanceOnWtrDerivDesc2 dd =
   [S "Using", makeRef2S dd, S ", this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
-eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", (E eq) `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", E eq `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
 eBalanceOnWtrDerivDesc4 eq = 
   [S "Setting"] ++ eq ++ [S ", Equation (4) can be written in its final form as"]
 
 eq1:: Expr
-eq1 = (sy w_mass) * (sy htCap_W)
+eq1 = sy w_mass * sy htCap_W
 
 eq2:: [Sentence]
 eq2 = [ch tau_W, S "=", ch w_mass, ch htCap_W, S "/", ch coil_HTC, ch coil_SA]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-eBalanceOnWtrDerivEqn1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy ht_flux_C) * (sy coil_SA)
+eBalanceOnWtrDerivEqn1 = sy w_mass * sy htCap_W * deriv (sy temp_W) time $= 
+  sy ht_flux_C * sy coil_SA
 
-eBalanceOnWtrDerivEqn2 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))
+eBalanceOnWtrDerivEqn2 = sy w_mass * sy htCap_W * deriv (sy temp_W) time $= 
+  sy coil_HTC * sy coil_SA *  (sy temp_C - sy temp_W)
 
-eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
+eBalanceOnWtrDerivEqn3 = deriv (sy temp_W) time $= 
+  (sy coil_HTC * sy coil_SA / 
+  (sy w_mass * sy htCap_W)) *  (sy temp_C - sy temp_W)
 
 eBalanceOnWtrDerivEqn4 =  
-  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
+  deriv (sy temp_W) time $= 1 / sy tau_W * (sy temp_C - sy temp_W)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

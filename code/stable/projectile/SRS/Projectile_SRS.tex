@@ -40,14 +40,14 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
-\item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is in 2D. \hyperref[GD:velVec]{GD: velVec}.
-\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used. \hyperref[GD:velVec]{GD: velVec}.
+\item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is in 2D. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
+\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[yAxisPerpend:\phantomsection\label{yAxisPerpend}]The y-axis is perpendicular to the x-axis.
 \item[rightHandAxes:\phantomsection\label{rightHandAxes}]The axes are defined using a right-handed coordinate system.
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[GD:airTime]{GD: airTime}.
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis. \hyperref[GD:airTime]{GD: airTime}.
 \item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target.
-\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant. \hyperref[GD:velVec]{GD: velVec}.
+\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[GD:distance]{GD: distance}.
 \item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
@@ -143,13 +143,13 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos} \hyp
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $\mathbf{v}$ and the acceleration is $\mathbf{a}$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}_{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $\mathbf{v}$ and the acceleration is $\mathbf{a}$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 \begin{displaymath}
 {a^{c}}=\frac{d\,\mathbf{v}}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{\mathbf{v}_{i}}}^{\mathbf{v}}{1}\,d\mathbf{v}=\int_{0}^{t}{{a^{c}}}\,dt
+\int_{{\mathbf{v}^{i}}}^{\mathbf{v}}{1}\,d\mathbf{v}=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
@@ -168,13 +168,13 @@ Label & Rectilinear position as a function of time for constant acceleration
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{p}={p_{i}}+{\mathbf{v}_{i}} t+\frac{\left({a^{c}} t\right)^{2}}{2}
+           \mathbf{p}={p^{i}}+{\mathbf{v}^{i}} t+\frac{{a^{c}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
-              \item{${p_{i}}$ is the initial position (m)}
-              \item{${\mathbf{v}_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${p^{i}}$ is the initial position (m)}
+              \item{${\mathbf{v}^{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -183,25 +183,25 @@ Notes &
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:posVec]{GD: posVec}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear position:
-From \hyperref[TM:velocity]{TM: velocity}, using the symbols ${a^{c}}$ for constant acceleration, ${\mathbf{v}_{i}}$ for initial velocity, and ${p_{i}}$ for initial position we have:.
+From \hyperref[TM:velocity]{TM: velocity}, using the symbols ${a^{c}}$ for constant acceleration, ${\mathbf{v}^{i}}$ for initial velocity, and ${p^{i}}$ for initial position we have:.
 \begin{displaymath}
 \mathbf{v}=\frac{d\,\mathbf{p}}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{p_{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{\mathbf{v}}\,dt
+\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{\mathbf{v}}\,dt
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD: rectVel} we can replace $\mathbf{v}$:
 \begin{displaymath}
-\int_{{p_{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{\mathbf{v}_{i}}+{a^{c}} t}\,dt
+\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{\mathbf{v}^{i}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
-\mathbf{p}={p_{i}}+{\mathbf{v}_{i}} t+\frac{\left({a^{c}} t\right)^{2}}{2}
+\mathbf{p}={p^{i}}+{\mathbf{v}^{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
 \par~
 
@@ -217,18 +217,18 @@ Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{v}=\begin{bmatrix}
-{{v_{x}}^{i}}+{{a^{c}}_{x}} t\\
-{{v_{y}}^{i}}+{{a^{c}}_{y}} t
+{{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
+{{v_{y}}^{i}}+{{a_{y}}^{c}} t
 \end{bmatrix}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{v_{x}}^{i}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{${{a^{c}}_{x}}$ is the x-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${{a_{x}}^{c}}$ is the x-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{${{a^{c}}_{y}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${{a_{y}}^{c}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -238,17 +238,17 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Detailed derivation of rectilinear position:
+Detailed derivation of velocity vector:
 For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoDMotion} and \hyperref[cartSyst]{A: cartSyst}), we can represent the velocity vector as $\mathbf{v}=\begin{bmatrix}
 {v_{x}}\\
 {v_{y}}
 \end{bmatrix}$ and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
 {a_{x}}\\
 {a_{y}}
-\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}). Let us represent the constant acceleration as $\begin{bmatrix}
-{{a^{c}}_{x}}\\
-{{a^{c}}_{y}}
-\end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}_{i}}=\begin{bmatrix}
+\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration is represented as ${a^{c}}=\begin{bmatrix}
+{{a_{x}}^{c}}\\
+{{a_{y}}^{c}}
+\end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
 {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
 \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate direction, to yield:
@@ -257,8 +257,71 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 {v_{x}}\\
 {v_{y}}
 \end{bmatrix}=\begin{bmatrix}
-{{v_{x}}^{i}}+{{a^{c}}_{x}} t\\
-{{v_{y}}^{i}}+{{a^{c}}_{y}} t
+{{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
+{{v_{y}}^{i}}+{{a_{y}}^{c}} t
+\end{bmatrix}
+\end{displaymath}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:posVec}
+\phantomsection 
+\label{GD:posVec}
+\\ \midrule \\
+Label & Position vector as a function of time
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{p}=\begin{bmatrix}
+{{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
+{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
+\end{bmatrix}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{p}$ is the position (m)}
+              \item{${{p_{x}}^{i}}$ is the x-component of initial position ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{v_{x}}^{i}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{${{a_{x}}^{c}}$ is the x-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${{p_{y}}^{i}}$ is the y-component of initial position ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{a_{y}}^{c}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Detailed derivation of position vector:
+For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoDMotion} and \hyperref[cartSyst]{A: cartSyst}), we can represent the position vector as $\mathbf{p}=\begin{bmatrix}
+{p_{x}}\\
+{p_{y}}
+\end{bmatrix}$, the velocity vector as $\mathbf{v}=\begin{bmatrix}
+{v_{x}}\\
+{v_{y}}
+\end{bmatrix}$ and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
+{a_{x}}\\
+{a_{y}}
+\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration is represented as ${a^{c}}=\begin{bmatrix}
+{{a_{x}}^{c}}\\
+{{a_{y}}^{c}}
+\end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
+{{v_{x}}^{i}}\\
+{{v_{y}}^{i}}
+\end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate direction, to yield:
+\begin{displaymath}
+\mathbf{p}=\begin{bmatrix}
+{p_{x}}\\
+{p_{x}}
+\end{bmatrix}=\begin{bmatrix}
+{{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
+{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
 \end{bmatrix}
 \end{displaymath}
 \par~

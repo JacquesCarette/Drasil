@@ -55,12 +55,12 @@ This section simplifies the original problem and helps in developing the theoret
 <div class="list">
 <p>
 <div id="twoDMotion">
-twoDMotion: The projectile motion is in 2D. <a href=#GD:velVec>GD: velVec</a>.
+twoDMotion: The projectile motion is in 2D. <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
 </div>
 </p>
 <p>
 <div id="cartSyst">
-cartSyst: A Cartesian coordinate system is used. <a href=#GD:velVec>GD: velVec</a>.
+cartSyst: A Cartesian coordinate system is used. <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
 </div>
 </p>
 <p>
@@ -90,7 +90,7 @@ posXDirection: The positive x-direction is from the launcher to the target.
 </p>
 <p>
 <div id="constAccel">
-constAccel: The acceleration is constant. <a href=#GD:velVec>GD: velVec</a>.
+constAccel: The acceleration is constant. <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
 </div>
 </p>
 <p>
@@ -278,7 +278,7 @@ Rectilinear velocity as a function of time for constant acceleration
 Detailed derivation of rectilinear velocity:
 </p>
 <p class="paragraph">
-Assume we have rectilinear motion of a particle (of negligible size and shape <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em><b>v</b></em> and the acceleration is <em><b>a</b></em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sub>i</sub></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em><b>v</b></em> and the acceleration is <em><b>a</b></em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sup>i</sup></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
 </p>
 <div class="equation">
 <em>a<sup>c</sup> = <div class="fraction">
@@ -288,7 +288,7 @@ Assume we have rectilinear motion of a particle (of negligible size and shape <a
 </div>
 <p class="paragraph">Rearranging and integrating, we have:</p>
 <div class="equation">
-<em>&int;<sub><b>v</b><sub>i</sub></sub><sup><b>v</b></sup>1&#8239;d<b>v</b> = &int;<sub>0</sub><sup>t</sup>a<sup>c</sup>&#8239;dt</em>
+<em>&int;<sub><b>v</b><sup>i</sup></sub><sup><b>v</b></sup>1&#8239;d<b>v</b> = &int;<sub>0</sub><sup>t</sup>a<sup>c</sup>&#8239;dt</em>
 </div>
 <p class="paragraph">Performing the integration, we have:</p>
 <div class="equation">
@@ -312,9 +312,9 @@ Rectilinear position as a function of time for constant acceleration
 <th>Equation</th>
 <td>
 <div class="equation">
-<em><b>p</b> = p<sub>i</sub>&plus;<b>v</b><sub>i</sub>&#8239;t&plus;<div class="fraction">
+<em><b>p</b> = p<sup>i</sup>&plus;<b>v</b><sup>i</sup>&#8239;t&plus;<div class="fraction">
                                                                     <span class="fup">
-                                                                    (a<sup>c</sup>&#8239;t)<sup>2</sup>
+                                                                    a<sup>c</sup>&#8239;t<sup>2</sup>
                                                                     </span>
                                                                     <span class="fdn">2</span>
                                                                     </div></em>
@@ -326,9 +326,9 @@ Rectilinear position as a function of time for constant acceleration
 <td>
 <ul class="hide-list-style-no-indent">
 <li><em><b>p</b></em> is the position (m)</li>
-<li><em>p<sub>i</sub></em> is the initial position (m)</li>
+<li><em>p<sup>i</sup></em> is the initial position (m)</li>
 <li>
-<em><b>v</b><sub>i</sub></em> is the initial velocity (m/s)
+<em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
 </li>
 <li><em>t</em> is the time (s)</li>
 <li>
@@ -347,7 +347,9 @@ Rectilinear position as a function of time for constant acceleration
 </tr>
 <tr>
 <th>RefBy</th>
-<td><p class="paragraph"></p></td>
+<td>
+<p class="paragraph"><a href=#GD:posVec>GD: posVec</a>.</p>
+</td>
 </tr>
 </table>
 </div>
@@ -355,7 +357,7 @@ Rectilinear position as a function of time for constant acceleration
 Detailed derivation of rectilinear position:
 </p>
 <p class="paragraph">
-From <a href=#TM:velocity>TM: velocity</a>, using the symbols <em>a<sup>c</sup></em> for constant acceleration, <em><b>v</b><sub>i</sub></em> for initial velocity, and <em>p<sub>i</sub></em> for initial position we have:.
+From <a href=#TM:velocity>TM: velocity</a>, using the symbols <em>a<sup>c</sup></em> for constant acceleration, <em><b>v</b><sup>i</sup></em> for initial velocity, and <em>p<sup>i</sup></em> for initial position we have:.
 </p>
 <div class="equation">
 <em><b>v</b> = <div class="fraction">
@@ -365,19 +367,19 @@ From <a href=#TM:velocity>TM: velocity</a>, using the symbols <em>a<sup>c</sup><
 </div>
 <p class="paragraph">Rearranging and integrating, we have:</p>
 <div class="equation">
-<em>&int;<sub>p<sub>i</sub></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup><b>v</b>&#8239;dt</em>
+<em>&int;<sub>p<sup>i</sup></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup><b>v</b>&#8239;dt</em>
 </div>
 <p class="paragraph">
 From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em><b>v</b></em>:
 </p>
 <div class="equation">
-<em>&int;<sub>p<sub>i</sub></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup><b>v</b><sub>i</sub>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
+<em>&int;<sub>p<sup>i</sup></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup><b>v</b><sup>i</sup>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
 </div>
 <p class="paragraph">Performing the integration, we have:</p>
 <div class="equation">
-<em><b>p</b> = p<sub>i</sub>&plus;<b>v</b><sub>i</sub>&#8239;t&plus;<div class="fraction">
+<em><b>p</b> = p<sup>i</sup>&plus;<b>v</b><sup>i</sup>&#8239;t&plus;<div class="fraction">
                                                                     <span class="fup">
-                                                                    (a<sup>c</sup>&#8239;t)<sup>2</sup>
+                                                                    a<sup>c</sup>&#8239;t<sup>2</sup>
                                                                     </span>
                                                                     <span class="fdn">2</span>
                                                                     </div></em>
@@ -399,8 +401,8 @@ From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em><b>v</b></em>:
 <td>
 <div class="equation">
 <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sup>c</sup><sub>x</sub>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sup>c</sup><sub>y</sub>&#8239;t</td></tr>
+<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
+<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
 </table></em>
 </div>
 </td>
@@ -414,14 +416,14 @@ From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em><b>v</b></em>:
 <em>v<sub>x</sub><sup>i</sup></em> is the x-component of initial velocity (m/s)
 </li>
 <li>
-<em>a<sup>c</sup><sub>x</sub></em> is the x-component of constant acceleration (m/s<sup>2</sup>)
+<em>a<sub>x</sub><sup>c</sup></em> is the x-component of constant acceleration (m/s<sup>2</sup>)
 </li>
 <li><em>t</em> is the time (s)</li>
 <li>
 <em>v<sub>y</sub><sup>i</sup></em> is the y-component of initial velocity (m/s)
 </li>
 <li>
-<em>a<sup>c</sup><sub>y</sub></em> is the y-component of constant acceleration (m/s<sup>2</sup>)
+<em>a<sub>y</sub><sup>c</sup></em> is the y-component of constant acceleration (m/s<sup>2</sup>)
 </li>
 </ul>
 </td>
@@ -440,9 +442,7 @@ From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em><b>v</b></em>:
 </tr>
 </table>
 </div>
-<p class="paragraph">
-Detailed derivation of rectilinear position:
-</p>
+<p class="paragraph">Detailed derivation of velocity vector:</p>
 <p class="paragraph">
 For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = <table class="matrix">
 <tr><td>v<sub>x</sub></td></tr>
@@ -450,10 +450,10 @@ For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMo
 </table></em> and the acceleration vector as <em><b>a</b> = <table class="matrix">
 <tr><td>a<sub>x</sub></td></tr>
 <tr><td>a<sub>y</sub></td></tr>
-</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>). Let us represent the constant acceleration as <em><table class="matrix">
-<tr><td>a<sup>c</sup><sub>x</sub></td></tr>
-<tr><td>a<sup>c</sup><sub>y</sub></td></tr>
-</table></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sub>i</sub> = <table class="matrix">
+</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration is represented as <em>a<sup>c</sup> = <table class="matrix">
+<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
+<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
+</table></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
 <tr><td>v<sub>x</sub><sup>i</sup></td></tr>
 <tr><td>v<sub>y</sub><sup>i</sup></td></tr>
 </table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate direction, to yield:
@@ -463,8 +463,128 @@ For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMo
 <tr><td>v<sub>x</sub></td></tr>
 <tr><td>v<sub>y</sub></td></tr>
 </table> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sup>c</sup><sub>x</sub>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sup>c</sup><sub>y</sub>&#8239;t</td></tr>
+<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
+<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
+</table></em>
+</div>
+<div id="GD:posVec">
+<table class="gdefn">
+<tr>
+<th>Label</th>
+<td>
+<p class="paragraph">Position vector as a function of time</p>
+</td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">m</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em><b>p</b> = <table class="matrix">
+<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
+                                                                                                                    <span class="fup">
+                                                                                                                    a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
+                                                                                                                    </span>
+                                                                                                                    <span class="fdn">
+                                                                                                                    2
+                                                                                                                    </span>
+                                                                                                                    </div></td></tr>
+<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
+                                                                                                                                                                                                                   <span class="fup">
+                                                                                                                                                                                                                   a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
+                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                   <span class="fdn">
+                                                                                                                                                                                                                   2
+                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                   </div></td></tr>
+</table></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li><em><b>p</b></em> is the position (m)</li>
+<li>
+<em>p<sub>x</sub><sup>i</sup></em> is the x-component of initial position (m/s)
+</li>
+<li>
+<em>v<sub>x</sub><sup>i</sup></em> is the x-component of initial velocity (m/s)
+</li>
+<li><em>t</em> is the time (s)</li>
+<li>
+<em>a<sub>x</sub><sup>c</sup></em> is the x-component of constant acceleration (m/s<sup>2</sup>)
+</li>
+<li>
+<em>p<sub>y</sub><sup>i</sup></em> is the y-component of initial position (m/s)
+</li>
+<li>
+<em>v<sub>y</sub><sup>i</sup></em> is the y-component of initial velocity (m/s)
+</li>
+<li>
+<em>a<sub>y</sub><sup>c</sup></em> is the y-component of constant acceleration (m/s<sup>2</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td><p class="paragraph"></p></td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
+</tr>
+</table>
+</div>
+<p class="paragraph">Detailed derivation of position vector:</p>
+<p class="paragraph">
+For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the position vector as <em><b>p</b> = <table class="matrix">
+<tr><td>p<sub>x</sub></td></tr>
+<tr><td>p<sub>y</sub></td></tr>
+</table></em>, the velocity vector as <em><b>v</b> = <table class="matrix">
+<tr><td>v<sub>x</sub></td></tr>
+<tr><td>v<sub>y</sub></td></tr>
+</table></em> and the acceleration vector as <em><b>a</b> = <table class="matrix">
+<tr><td>a<sub>x</sub></td></tr>
+<tr><td>a<sub>y</sub></td></tr>
+</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration is represented as <em>a<sup>c</sup> = <table class="matrix">
+<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
+<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
+</table></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
+<tr><td>v<sub>x</sub><sup>i</sup></td></tr>
+<tr><td>v<sub>y</sub><sup>i</sup></td></tr>
+</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate direction, to yield:
+</p>
+<div class="equation">
+<em><b>p</b> = <table class="matrix">
+<tr><td>p<sub>x</sub></td></tr>
+<tr><td>p<sub>x</sub></td></tr>
+</table> = <table class="matrix">
+<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
+                                                                                                                                                                                                                      <span class="fup">
+                                                                                                                                                                                                                      a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
+                                                                                                                                                                                                                      </span>
+                                                                                                                                                                                                                      <span class="fdn">
+                                                                                                                                                                                                                      2
+                                                                                                                                                                                                                      </span>
+                                                                                                                                                                                                                      </div></td></tr>
+<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
+                                                                                                                                                                                                                                                                                                                     <span class="fup">
+                                                                                                                                                                                                                                                                                                                     a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
+                                                                                                                                                                                                                                                                                                                     </span>
+                                                                                                                                                                                                                                                                                                                     <span class="fdn">
+                                                                                                                                                                                                                                                                                                                     2
+                                                                                                                                                                                                                                                                                                                     </span>
+                                                                                                                                                                                                                                                                                                                     </div></td></tr>
 </table></em>
 </div>
 <div id="GD:airTime">

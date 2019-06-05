@@ -8,7 +8,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
   linAccel, linDisp, linVelo, momentOfInertia, position, pressure, restitutionCoef,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
   fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel, iyVel, 
-  xConstAccel, yConstAccel)
+  xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -23,14 +23,14 @@ physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration,
   linearDisplacement, linearVelocity, momentOfInertia, position, pressure,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
   fSpeed, iSpeed, ixVel, iyVel, xDist, xVel, yDist, yVel, xAccel, yAccel, xConstAccel,
-  yConstAccel]
+  yConstAccel, xPos, yPos, ixPos, iyPos]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, constAccel,
   displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
   height, impulseS, impulseV, iPos, linearAccel, linearDisplacement, linearVelocity,
   momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
   velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, iyVel, xDist, xVel,
-  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel :: UnitalChunk
+  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
@@ -67,13 +67,18 @@ weight               = uc CP.weight cW newton
 xDist = uc CP.xDist (sub lR lX) metre
 yDist = uc CP.yDist (sub lR lY) metre
 
-iPos = uc CP.iPos (sub lP lI) metre
+iPos = uc CP.iPos (sup lP lI) metre
+xPos = uc CP.xPos (sub lP lX) metre
+yPos = uc CP.yPos (sub lP lY) metre
+
+ixPos = uc CP.ixPos (sup (sub lP lX) lI) velU
+iyPos = uc CP.iyPos (sup (sub lP lY) lI) velU
 
 fSpeed = uc CP.fSpeed (sub lV lF) velU
 iSpeed = uc CP.iSpeed (sub lV lI) velU
 
-fVel = uc CP.fVel (sub (vec lV) lF) velU
-iVel = uc CP.iVel (sub (vec lV) lI) velU
+fVel = uc CP.fVel (sup (vec lV) lF) velU
+iVel = uc CP.iVel (sup (vec lV) lI) velU
 xVel = uc CP.xVel (sub      lV  lX) velU
 yVel = uc CP.yVel (sub      lV  lY) velU
 
@@ -83,5 +88,5 @@ iyVel = uc CP.iyVel (sup (sub lV lY) lI) velU
 xAccel = uc CP.xAccel (sub lA lX) accelU
 yAccel = uc CP.yAccel (sub lA lY) accelU
 
-xConstAccel = uc CP.xConstAccel (sub (sup lA lC) lX) accelU
-yConstAccel = uc CP.yConstAccel (sub (sup lA lC) lY) accelU
+xConstAccel = uc CP.xConstAccel (sup (sub lA lX) lC) accelU
+yConstAccel = uc CP.yConstAccel (sup (sub lA lY) lC) accelU

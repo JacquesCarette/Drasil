@@ -10,8 +10,8 @@ import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, fSpeed, iPos, iSpeed,
-  iVel, ixVel, iyVel, position, time, velocity, xAccel, xConstAccel, xDist, xVel,
-  yAccel, yConstAccel, yVel)
+  iVel, ixPos, ixVel, iyPos, iyVel, position, time, velocity, xAccel, xConstAccel, xDist,
+  xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 
 import Data.Drasil.Utils (weave)
@@ -23,7 +23,7 @@ import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 import Drasil.Projectile.Unitals (launAngle)
 
 genDefns :: [GenDefn]
-genDefns = [rectVelGD, rectPosGD, velVecGD, airTimeGD, distanceGD, distanceRefinedGD]
+genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD, airTimeGD, distanceGD, distanceRefinedGD]
 
 ----------
 rectVelGD :: GenDefn
@@ -75,7 +75,7 @@ rectPosRC = makeRC "rectPosRC" (nounPhraseSP "rectilinear position as a function
             EmptyS rectPosRel
 
 rectPosRel :: Relation
-rectPosRel = sy position $= sy iPos + sy iVel * sy time + square (sy QP.constAccel * sy time) / 2
+rectPosRel = sy position $= sy iPos + sy iVel * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
 rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase position :+: S ":") :
@@ -115,25 +115,61 @@ velVecRel :: Relation
 velVecRel = sy velocity $= vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel + sy yConstAccel * sy time)
 
 velVecDeriv :: Derivation
-velVecDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase position :+: S ":") :
-               [velVecDerivSent, E velVecDerivEqn]
+velVecDeriv = [S "Detailed derivation" `sOf` phrase velocity +:+ phrase vector :+: S ":",
+               velVecDerivSent, E velVecDerivEqn]
 
 velVecDerivSent :: Sentence
 velVecDerivSent = foldlSent_ [
   S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
   S "we can represent the", phrase velocity, phrase vector, S "as",
   E (sy velocity $= vec2D (sy xVel) (sy yVel)) `andThe` phrase acceleration,
-  phrase vector, S "as" +:+. E (sy acceleration $= vec2D (sy xAccel) (sy yAccel)), S "The",
-  phrase acceleration `sIs` S "assumed to be constant" +:+. sParen (makeRef2S constAccel),
-  S "Let us represent the", phrase QP.constAccel, S "as" +:+.
-  E (vec2D (sy xConstAccel) (sy yConstAccel)), S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
-  S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
-  phrase cartesian `sC` makeRef2S rectVelGD, S "can be applied to each", phrase coordinate +:
+  phrase vector, S "as" +:+. E (sy acceleration $= vec2D (sy xAccel) (sy yAccel)),
+  S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
+  phrase QP.constAccel `sIs` S "represented as" +:+. E (sy QP.constAccel $= vec2D (sy xConstAccel) (sy yConstAccel)),
+  S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs` S "represented by" +:+.
+  E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a", phrase cartesian `sC`
+  makeRef2S rectVelGD, S "can be applied to each", phrase coordinate +:
   (S "direction" `sC` S "to yield")]
 
 velVecDerivEqn :: Expr
 velVecDerivEqn = sy velocity $= vec2D (sy xVel) (sy yVel) $=
     vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel + sy yConstAccel * sy time)
+
+----------
+posVecGD :: GenDefn
+posVecGD = gdNoRefs posVecRC (getUnit position) posVecDeriv "posVec" [EmptyS]
+
+posVecRC :: RelationConcept
+posVecRC = makeRC "posVecRC" (nounPhraseSP "position vector as a function of time")
+            EmptyS posVecRel
+
+posVecRel :: Relation
+posVecRel = sy position $= vec2D
+              (sy ixPos + sy ixVel * sy time + sy xConstAccel * square (sy time) / 2)
+              (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
+
+posVecDeriv :: Derivation
+posVecDeriv = [S "Detailed derivation" `sOf` phrase position +:+ phrase vector :+: S ":",
+               posVecDerivSent, E posVecDerivEqn]
+
+posVecDerivSent :: Sentence
+posVecDerivSent = foldlSent_ [
+  S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
+  S "we can represent the", phrase position, phrase vector, S "as",
+  E (sy position $= vec2D (sy xPos) (sy yPos)) `sC` S "the", phrase velocity,
+  phrase vector, S "as", E (sy velocity $= vec2D (sy xVel) (sy yVel)) `andThe`
+  phrase acceleration, phrase vector, S "as" +:+. E (sy acceleration $= vec2D (sy xAccel) (sy yAccel)),
+  S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
+  phrase QP.constAccel `sIs` S "represented as" +:+. E (sy QP.constAccel $= vec2D (sy xConstAccel) (sy yConstAccel)),
+  S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
+  S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
+  phrase cartesian `sC` makeRef2S rectPosGD, S "can be applied to each", phrase coordinate +:
+  (S "direction" `sC` S "to yield")]
+
+posVecDerivEqn :: Expr
+posVecDerivEqn = sy position $= vec2D (sy xPos) (sy xPos) $=
+    vec2D (sy ixPos + sy ixVel * sy time + sy xConstAccel * square (sy time) / 2)
+          (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
 
 ----------
 airTimeGD :: GenDefn

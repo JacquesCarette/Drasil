@@ -10,20 +10,17 @@ import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, fSpeed, iPos, iSpeed,
-  iVel, ixPos, ixVel, iyPos, iyVel, position, time, velocity, xAccel, xConstAccel, xDist,
+  iVel, ixPos, ixVel, iyPos, iyVel, position, time, velocity, xAccel, xConstAccel,
   xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 
 import Data.Drasil.Utils (weave)
 
-import Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
-  constAccel, launchOrigin, pointMass, targetXAxis, twoDMotion)
-import Drasil.Projectile.DataDefs (speedY)
+import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, twoDMotion)
 import Drasil.Projectile.TMods (accelerationTM, velocityTM)
-import Drasil.Projectile.Unitals (launAngle)
 
 genDefns :: [GenDefn]
-genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD, airTimeGD, distanceGD, distanceRefinedGD]
+genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
@@ -170,45 +167,3 @@ posVecDerivEqn :: Expr
 posVecDerivEqn = sy position $= vec2D (sy xPos) (sy xPos) $=
     vec2D (sy ixPos + sy ixVel * sy time + sy xConstAccel * square (sy time) / 2)
           (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
-
-----------
-airTimeGD :: GenDefn
-airTimeGD = gdNoRefs airTimeRC (getUnit time) [airTimeDeriv] "airTime" [EmptyS]
-
-airTimeRC :: RelationConcept
-airTimeRC = makeRC "airTimeR" (nounPhraseSP "air time") EmptyS airTimeRel
-
-airTimeRel :: Relation
-airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy launAngle)) (sy yAccel)
-
-airTimeDeriv :: Sentence
-airTimeDeriv = foldlSent [at_start airTimeGD `sIs` S "derived from" +:+.
-  makeRef2S speedY `sAnd` makeRef2S rectVelGD, S "It also comes from the",
-  S "fact that the", phrase yVel, S "at the maximum height is zero" `sAnd`
-  S "that the maximum height" `sIs` S "halfway point" `ofThe` S "trajectory",
-  sParen (S "from" +:+ makeRef2S launchOrigin `sAnd` makeRef2S targetXAxis)]
-
-----------
-distanceGD :: GenDefn
-distanceGD = gdNoRefs distanceRC (getUnit xDist) [{-Derivation-}] "distance" [makeRef2S accelYGravity]
-
-distanceRC :: RelationConcept
-distanceRC = makeRC "distanceRC" (nounPhraseSP "distance in the x-direction") EmptyS distanceRel
-
-distanceRel :: Relation
-distanceRel = sy xDist $= sy ixVel * sy time + BinaryOp Frac (sy xAccel * square (sy time)) 2
-
-----------
-distanceRefinedGD :: GenDefn
-distanceRefinedGD = gdNoRefs distanceRefinedRC (getUnit xDist) [distanceRefinedDeriv] "distanceRefined" [makeRef2S accelXZero]
-
-distanceRefinedRC :: RelationConcept
-distanceRefinedRC = makeRC "distanceRefinedRC" (nounPhraseSP "distance in the x-direction (refined)") EmptyS distanceRefinedRel
-
-distanceRefinedRel :: Relation
-distanceRefinedRel = sy xDist $= BinaryOp Frac (2 * square (sy iSpeed) * sin (sy launAngle) *
-                      cos (sy launAngle)) (sy yAccel)
-
-distanceRefinedDeriv :: Sentence
-distanceRefinedDeriv = foldlSent [at_start distanceRefinedGD, S "is derived from",
-  foldlList Comma List $ map makeRef2S [airTimeGD, distanceGD]]

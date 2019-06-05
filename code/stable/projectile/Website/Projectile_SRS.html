@@ -75,12 +75,12 @@ rightHandAxes: The axes are defined using a right-handed coordinate system.
 </p>
 <p>
 <div id="launchOrigin">
-launchOrigin: The launcher is coincident with the origin. <a href=#GD:airTime>GD: airTime</a>.
+launchOrigin: The launcher is coincident with the origin.
 </div>
 </p>
 <p>
 <div id="targetXAxis">
-targetXAxis: The target lies on the x-axis. <a href=#GD:airTime>GD: airTime</a>.
+targetXAxis: The target lies on the x-axis.
 </div>
 </p>
 <p>
@@ -95,12 +95,12 @@ constAccel: The acceleration is constant. <a href=#GD:velVec>GD: velVec</a> <a h
 </p>
 <p>
 <div id="accelXZero">
-accelXZero: The acceleration in the x-direction is zero. <a href=#GD:distanceRefined>GD: distanceRefined</a>.
+accelXZero: The acceleration in the x-direction is zero.
 </div>
 </p>
 <p>
 <div id="accelYGravity">
-accelYGravity: The acceleration in the y-direction is the acceleration due to gravity. <a href=#GD:distance>GD: distance</a>.
+accelYGravity: The acceleration in the y-direction is the acceleration due to gravity.
 </div>
 </p>
 <p>
@@ -268,7 +268,7 @@ Rectilinear velocity as a function of time for constant acceleration
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#GD:velVec>GD: velVec</a> <a href=#GD:rectPos>GD: rectPos</a> <a href=#GD:airTime>GD: airTime</a>.
+<a href=#GD:velVec>GD: velVec</a> <a href=#GD:rectPos>GD: rectPos</a>.
 </p>
 </td>
 </tr>
@@ -587,182 +587,6 @@ For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMo
                                                                                                                                                                                                                                                                                                                      </div></td></tr>
 </table></em>
 </div>
-<div id="GD:airTime">
-<table class="gdefn">
-<tr>
-<th>Label</th>
-<td><p class="paragraph">Air time</p></td>
-</tr>
-<tr>
-<th>Units</th>
-<td><p class="paragraph">s</p></td>
-</tr>
-<tr>
-<th>Equation</th>
-<td>
-<div class="equation">
-<em>t = <div class="fraction">
-        <span class="fup">2&#8239;v<sub>i</sub>&#8239;sin(θ)</span>
-        <span class="fdn">a<sub>y</sub></span>
-        </div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>Description</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li><em>t</em> is the time (s)</li>
-<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
-<li><em>θ</em> is the launch angle (&deg;)</li>
-<li>
-<em>a<sub>y</sub></em> is the y-component of acceleration (m/s<sup>2</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>Notes</th>
-<td><p class="paragraph"></p></td>
-</tr>
-<tr>
-<th>Source</th>
-<td><p class="paragraph">--</p></td>
-</tr>
-<tr>
-<th>RefBy</th>
-<td>
-<p class="paragraph">
-<a href=#GD:distanceRefined>GD: distanceRefined</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<p class="paragraph">
-Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:rectVel>GD: rectVel</a> It also comes from the fact that the y-component of velocity the at the maximum height is zero and that the maximum height is halfway point of the trajectory (from <a href=#launchOrigin>A: launchOrigin</a> and <a href=#targetXAxis>A: targetXAxis</a>).
-</p>
-<div id="GD:distance">
-<table class="gdefn">
-<tr>
-<th>Label</th>
-<td><p class="paragraph">Distance in the x-direction</p></td>
-</tr>
-<tr>
-<th>Units</th>
-<td><p class="paragraph">m</p></td>
-</tr>
-<tr>
-<th>Equation</th>
-<td>
-<div class="equation">
-<em>r<sub>x</sub> = v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                           <span class="fup">
-                                                           a<sub>x</sub>&#8239;t<sup>2</sup>
-                                                           </span>
-                                                           <span class="fdn">2</span>
-                                                           </div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>Description</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>r<sub>x</sub></em> is the distance in the x-direction (m)
-</li>
-<li>
-<em>v<sub>x</sub><sup>i</sup></em> is the x-component of initial velocity (m/s)
-</li>
-<li><em>t</em> is the time (s)</li>
-<li>
-<em>a<sub>x</sub></em> is the x-component of acceleration (m/s<sup>2</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>Notes</th>
-<td>
-<p class="paragraph">
-<a href=#accelYGravity>A: accelYGravity</a>
-</p>
-</td>
-</tr>
-<tr>
-<th>Source</th>
-<td><p class="paragraph">--</p></td>
-</tr>
-<tr>
-<th>RefBy</th>
-<td>
-<p class="paragraph">
-<a href=#GD:distanceRefined>GD: distanceRefined</a>.
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="GD:distanceRefined">
-<table class="gdefn">
-<tr>
-<th>Label</th>
-<td>
-<p class="paragraph">Distance in the x-direction (refined)</p>
-</td>
-</tr>
-<tr>
-<th>Units</th>
-<td><p class="paragraph">m</p></td>
-</tr>
-<tr>
-<th>Equation</th>
-<td>
-<div class="equation">
-<em>r<sub>x</sub> = <div class="fraction">
-                    <span class="fup">
-                    2&#8239;v<sub>i</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-                    </span>
-                    <span class="fdn">a<sub>y</sub></span>
-                    </div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>Description</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>r<sub>x</sub></em> is the distance in the x-direction (m)
-</li>
-<li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
-<li><em>θ</em> is the launch angle (&deg;)</li>
-<li>
-<em>a<sub>y</sub></em> is the y-component of acceleration (m/s<sup>2</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>Notes</th>
-<td>
-<p class="paragraph"><a href=#accelXZero>A: accelXZero</a></p>
-</td>
-</tr>
-<tr>
-<th>Source</th>
-<td><p class="paragraph">--</p></td>
-</tr>
-<tr>
-<th>RefBy</th>
-<td><p class="paragraph"></p></td>
-</tr>
-</table>
-</div>
-<p class="paragraph">
-Distance in the x-direction (refined) is derived from <a href=#GD:airTime>GD: airTime</a> and <a href=#GD:distance>GD: distance</a>.
-</p>
 </div>
 </div>
 <div id="Sec:DDs">
@@ -851,9 +675,7 @@ This section collects and defines all the data needed to build the instance mode
 </tr>
 <tr>
 <th>RefBy</th>
-<td>
-<p class="paragraph"><a href=#GD:airTime>GD: airTime</a>.</p>
-</td>
+<td><p class="paragraph"></p></td>
 </tr>
 </table>
 </div>

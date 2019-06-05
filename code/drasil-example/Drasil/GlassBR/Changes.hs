@@ -44,7 +44,7 @@ calcInternalBlastRiskDesc mainConcept = foldlSent [chgsStart assumpES (S "The"),
   phrase mainConcept, S "In the future,", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-varValsOfmkEDesc = foldlSent [(makeRef2S assumpSV) `sC` (chgsStart assumpLDFC (S "Currently, the")),
+varValsOfmkEDesc = foldlSent [makeRef2S assumpSV `sC` chgsStart assumpLDFC (S "Currently, the"),
   plural value, S "for", foldlList Comma List (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future, these", plural value, S "can be changed to",

@@ -103,7 +103,7 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 nmFEq_deriv :: Sentence
 nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
   S "body diagram of", makeRef2S fig_forceacting, S "in", 
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 bsShrFEq :: RelationConcept
@@ -125,7 +125,7 @@ bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 bShFEq_deriv :: Sentence
 bShFEq_deriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
   S "body diagram of", makeRef2S fig_forceacting, S "in", 
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 shrResEqn :: Expr
@@ -220,11 +220,11 @@ resShearWO = makeRC "resShearWO"
 
 resShearWO_rel :: Relation
 resShearWO_rel = inxi shearRNoIntsl $= 
-  (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle))) *
-  (cos (inxi baseAngle)) + (negate (inxi watrForce) + (inxiM1 watrForce) + 
-  (inxi surfHydroForce) * sin (inxi surfAngle)) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
-  (inxi baseLngth)
+  ((inxi slcWght + inxi surfHydroForce * cos (inxi surfAngle)) *
+  cos (inxi baseAngle) + (negate (inxi watrForce) + inxiM1 watrForce + 
+  inxi surfHydroForce * sin (inxi surfAngle)) * sin (inxi baseAngle) -
+  inxi baseHydroForce) * tan (inxi fricAngle) + inxi effCohesion *
+  inxi baseLngth
 
 resShearWO_desc :: Sentence
 resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
@@ -243,9 +243,9 @@ mobShearWO = makeRC "mobShearWO"
   (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWO_desc mobShearWO_rel
 
 mobShearWO_rel :: Relation
-mobShearWO_rel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
-  (cos (inxi surfAngle))) * (sin (inxi baseAngle)) - (negate (inxi watrForce) + 
-  (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle)) * (cos (inxi baseAngle))
+mobShearWO_rel = inxi shearFNoIntsl $= (inxi slcWght + inxi surfHydroForce *
+  cos (inxi surfAngle)) * sin (inxi baseAngle) - (negate (inxi watrForce) + 
+  inxiM1 watrForce + inxi surfHydroForce * sin (inxi surfAngle)) * cos (inxi baseAngle)
 
 mobShearWO_desc :: Sentence
 mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 

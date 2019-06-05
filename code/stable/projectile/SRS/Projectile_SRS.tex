@@ -126,12 +126,12 @@ Label & Rectilinear velocity as a function of time for constant acceleration
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{f}}={v_{i}}+{a^{c}} t
+           v={v^{i}}+{a^{c}} t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v_{f}}$ is the final speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \end{symbDescription}
@@ -144,17 +144,17 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${v_{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 \begin{displaymath}
 {a^{c}}=\frac{d\,v}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{v_{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
+\int_{{v^{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
-{v_{f}}={v_{i}}+{a^{c}} t
+v={v^{i}}+{a^{c}} t
 \end{displaymath}
 \par~
 
@@ -169,13 +169,13 @@ Label & Rectilinear position as a function of time for constant acceleration
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           p={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
+           p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$p$ is the scalar position (m)}
               \item{${p^{i}}$ is the initial position (m)}
-              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -198,11 +198,11 @@ Rearranging and integrating, we have:
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
 \begin{displaymath}
-\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v_{i}}+{a^{c}} t}\,dt
+\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{i}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
-p={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
+p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
 \par~
 
@@ -246,7 +246,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$ and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
 {a_{x}}\\
 {a_{y}}
-\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration is represented as ${a^{c}}=\begin{bmatrix}
+\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
 {{a_{x}}^{c}}\\
 {{a_{y}}^{c}}
 \end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
@@ -309,7 +309,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$, and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
 {a_{x}}\\
 {a_{y}}
-\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration is represented as ${a^{c}}=\begin{bmatrix}
+\end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
 {{a_{x}}^{c}}\\
 {{a_{y}}^{c}}
 \end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}

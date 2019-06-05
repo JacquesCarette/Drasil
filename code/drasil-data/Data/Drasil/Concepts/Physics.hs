@@ -9,8 +9,8 @@ import Data.Drasil.Concepts.Documentation (property, value)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
-  cohesion, collision, compression, constAccel, damping, displacement, distance,
+physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
+  collision, compression, constAccel, constAccelV, damping, displacement, distance,
   elasticity, energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
   gravitationalConst, height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel,
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
@@ -21,8 +21,8 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
-acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
-  collision, compression, constAccel, damping, displacement, distance, elasticity,
+acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion, collision,
+  compression, constAccel, constAccelV, damping, displacement, distance, elasticity,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
   height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
@@ -125,6 +125,7 @@ iyVel = dccWDS "iyVel" (cn "y-component of initial velocity") (S "The y-componen
 xAccel = dccWDS "xScalAcc" (cn "x-component of acceleration") (S "The x-component" `sOf` phrase acceleration)
 yAccel = dccWDS "yScalAcc" (cn "y-component of acceleration") (S "The y-component" `sOf` phrase acceleration)
 
+constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
 xConstAccel = dccWDS "xConstAccel" (cn "x-component of constant acceleration") (S "The x-component" `sOf` phrase constAccel)
 yConstAccel = dccWDS "yConstAccel" (cn "y-component of constant acceleration") (S "The y-component" `sOf` phrase constAccel)
 

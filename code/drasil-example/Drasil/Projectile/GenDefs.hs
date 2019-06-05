@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 
-import Data.Drasil.Quantities.Physics (acceleration, fSpeed, iPos, iSpeed,
+import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, scalarPos, speed,
   time, velocity, xAccel, xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
@@ -24,30 +24,24 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gdNoRefs rectVelRC (getUnit fSpeed) rectVelDeriv "rectVel" [EmptyS]
+rectVelGD = gdNoRefs rectVelRC (getUnit speed) rectVelDeriv "rectVel" [EmptyS]
 
 rectVelRC :: RelationConcept
 rectVelRC = makeRC "rectVelRC" (nounPhraseSP "rectilinear velocity as a function of time for constant acceleration")
             EmptyS rectVelRel
 
 rectVelRel :: Relation
-rectVelRel = sy fSpeed $= sy iSpeed + sy QP.constAccel * sy time
+rectVelRel = sy speed $= sy iSpeed + sy QP.constAccel * sy time
 
 rectVelDeriv :: Derivation
 rectVelDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase velocity :+: S ":") :
                weave [rectVelDerivSents, map E rectVelDerivEqns]
 
 rectVelDerivSents :: [Sentence]
-rectVelDerivSents = [rectVelDerivSent1, rectVelDerivSent2, rectVelDerivSent3]
-
-rectVelDerivSent1, rectVelDerivSent2, rectVelDerivSent3 :: Sentence
-rectVelDerivSent1 = rectDeriv velocity acceleration motSent iVel accelerationTM
+rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
   where
     motSent = S "The motion" `sIn` makeRef2S accelerationTM `sIs` S "now one-dimensional with a" +:+
               phrase QP.constAccel `sC` S "represented by" +:+. E (sy QP.constAccel)
-
-rectVelDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
-rectVelDerivSent3 = S "Performing the integration" `sC` S "we" +: S "have"
 
 rectVelDerivEqns :: [Expr]
 rectVelDerivEqns = [rectVelDerivEqn1, rectVelDerivEqn2, rectVelRel]
@@ -73,15 +67,10 @@ rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase positio
                weave [rectPosDerivSents, map E rectPosDerivEqns]
 
 rectPosDerivSents :: [Sentence]
-rectPosDerivSents = [rectPosDerivSent1, rectPosDerivSent2, rectPosDerivSent3, rectPosDerivSent4]
-
-rectPosDerivSent1, rectPosDerivSent2, rectPosDerivSent3, rectPosDerivSent4 :: Sentence
-rectPosDerivSent1 = rectDeriv position velocity motSent iPos velocityTM
-  where
-    motSent = S "The motion" `sIn` makeRef2S velocityTM `sIs` S "now one-dimensional."
-rectPosDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
-rectPosDerivSent3 = S "From" +:+ makeRef2S rectVelGD +:+ S "we can replace" +: E (sy speed)
-rectPosDerivSent4 = S "Performing the integration" `sC` S "we" +: S "have"
+rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
+  rearrAndIntSent, replaceFromGDSent rectVelGD speed, performIntSent]
+    where
+      motSent = S "The motion" `sIn` makeRef2S velocityTM `sIs` S "now one-dimensional."
 
 rectPosDerivEqns :: [Expr]
 rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, rectPosRel]
@@ -159,6 +148,13 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
       | c == iVel         = E (sy iSpeed)
       | otherwise         = error "Not implemented in getScalar"
 
+rearrAndIntSent, performIntSent :: Sentence
+rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
+performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
+
+replaceFromGDSent :: GenDefn -> UnitalChunk -> Sentence
+replaceFromGDSent gdef c = S "From" +:+ makeRef2S gdef +:+ S "we can replace" +: E (sy c)
+
 -- Helper for making vector derivations
 vecDeriv :: [UnitalChunk] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSent_ [
@@ -166,7 +162,7 @@ vecDeriv vecs gdef = foldlSent_ [
   S "we can represent" +:+. foldlList Comma List 
   (map (\c -> foldlSent_ [S "the", phrase c, phrase vector, S "as", E (getVec c)]) vecs),
   S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
-  phrase QP.constAccel `sIs` S "represented as" +:+. E (getVec QP.constAccel),
+  phrase constAccelV `sIs` S "represented as" +:+. E (getVec constAccelV),
   S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate +:
@@ -177,9 +173,9 @@ getVec :: UnitalChunk -> Expr
 getVec c = sy c $= vec2D ((sy . fst) comps) ((sy . snd) comps)
   where
     comps
-      | c == position      = (xPos,        yPos)
-      | c == velocity      = (xVel,        yVel)
-      | c == iVel          = (ixVel,       iyVel)
-      | c == acceleration  = (xAccel,      yAccel)
-      | c == QP.constAccel = (xConstAccel, yConstAccel)
-      | otherwise          = error "Not implemented in getVec"
+      | c == position     = (xPos,        yPos)
+      | c == velocity     = (xVel,        yVel)
+      | c == iVel         = (ixVel,       iyVel)
+      | c == acceleration = (xAccel,      yAccel)
+      | c == constAccelV  = (xConstAccel, yConstAccel)
+      | otherwise         = error "Not implemented in getVec"

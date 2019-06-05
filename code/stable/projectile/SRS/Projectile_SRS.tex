@@ -52,7 +52,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity.
 \item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
 \item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
-\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel}.
+\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile.
 \item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected.
 \item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero.
@@ -107,7 +107,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:rectPos]{GD: rectPos}.
+RefBy & \hyperref[GD:rectPos]{GD: rectPos} \hyperref[GD:rectPos]{GD: rectPos}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
@@ -169,11 +169,11 @@ Label & Rectilinear position as a function of time for constant acceleration
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{p}={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
+           p={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{p}$ is the position (m)}
+              \item{$p$ is the scalar position (m)}
               \item{${p^{i}}$ is the initial position (m)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
@@ -188,21 +188,21 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear position:
-From \hyperref[TM:velocity]{TM: velocity}, using the symbols ${a^{c}}$ for constant acceleration, ${\mathbf{v}^{i}}$ for initial velocity, and ${p^{i}}$ for initial position we have:.
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
 \begin{displaymath}
-v=\frac{d\,\mathbf{p}}{d\,t}
+v=\frac{d\,p}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{v}\,dt
+\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
 \begin{displaymath}
-\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{v_{i}}+{a^{c}} t}\,dt
+\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v_{i}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
-\mathbf{p}={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
+p={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
 \par~
 

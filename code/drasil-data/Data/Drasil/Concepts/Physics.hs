@@ -14,8 +14,8 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   elasticity, energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
   gravitationalConst, height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel,
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
-  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
-  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
+  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, scalarPos, 
+  space, speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
   yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos]
 
 physicCon' :: [CI]
@@ -26,9 +26,9 @@ acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
   height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
-  strain, stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
-  yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos :: ConceptChunk
+  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, scalarPos, space,
+  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
+  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos :: ConceptChunk
 
 twoD, threeD :: CI
 twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
@@ -68,6 +68,8 @@ kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
    S "a body possess due to its motion.")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
+scalarPos  = dccWDS "scalarPos" (cn' "scalar position")
+  (S "The magnitude of the " +:+ phrase position +:+ S "vector")
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "The rate of change of a body's" +:+ phrase velocity)
 scalarAccel  = dccWDS "scalarAccel" (cn' "scalar acceleration")

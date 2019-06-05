@@ -6,8 +6,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
   acceleration, constAccel, displacement, distance, energy, force,
   gravitationalAccel, gravitationalConst, height, impulseS, impulseV, iPos,
   linAccel, linDisp, linVelo, momentOfInertia, position, pressure, restitutionCoef,
-  scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
-  fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel, iyVel, 
+  scalarAccel, scalarPos, speed, time, torque, velocity, weight, kEnergy, fVel,
+  iVel, fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel, iyVel,
   xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -21,14 +21,14 @@ physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration,
   constAccel, displacement, distance, energy, force, gravitationalAccel,
   gravitationalConst, height, impulseS, impulseV, iPos, linearAccel,
   linearDisplacement, linearVelocity, momentOfInertia, position, pressure,
-  scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
-  fSpeed, iSpeed, ixVel, iyVel, xDist, xVel, yDist, yVel, xAccel, yAccel, xConstAccel,
-  yConstAccel, xPos, yPos, ixPos, iyPos]
+  scalarAccel, scalarPos, speed, time, torque, velocity, weight, kEnergy, fVel,
+  iVel, fSpeed, iSpeed, ixVel, iyVel, xDist, xVel, yDist, yVel, xAccel, yAccel,
+  xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, constAccel,
   displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
   height, impulseS, impulseV, iPos, linearAccel, linearDisplacement, linearVelocity,
-  momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
+  momentOfInertia, position, pressure, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, iyVel, xDist, xVel,
   yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos :: UnitalChunk
 
@@ -55,6 +55,7 @@ position             = uc CP.position (vec lP) metre
 pressure             = uc CP.pressure lP pascal
 speed                = uc CP.speed lV velU
 scalarAccel          = uc CP.scalarAccel lA accelU
+scalarPos            = uc CP.scalarPos lP metre
 time                 = uc CP.time lT second
 torque               = uc CP.torque lTau torqueU
 velocity             = uc CP.velocity (vec lV) velU

@@ -113,7 +113,7 @@ constMass: The mass of the projectile is constant.
 </p>
 <p>
 <div id="pointMass">
-pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. <a href=#GD:rectVel>GD: rectVel</a>.
+pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectPos>GD: rectPos</a>.
 </div>
 </p>
 <p>
@@ -213,7 +213,9 @@ This section focuses on the general equations and laws that Projectile is based 
 <tr>
 <th>RefBy</th>
 <td>
-<p class="paragraph"><a href=#GD:rectPos>GD: rectPos</a>.</p>
+<p class="paragraph">
+<a href=#GD:rectPos>GD: rectPos</a> <a href=#GD:rectPos>GD: rectPos</a>.
+</p>
 </td>
 </tr>
 </table>
@@ -317,12 +319,12 @@ Rectilinear position as a function of time for constant acceleration
 <th>Equation</th>
 <td>
 <div class="equation">
-<em><b>p</b> = p<sup>i</sup>&plus;v<sub>i</sub>&#8239;t&plus;<div class="fraction">
-                                                             <span class="fup">
-                                                             a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                             </span>
-                                                             <span class="fdn">2</span>
-                                                             </div></em>
+<em>p = p<sup>i</sup>&plus;v<sub>i</sub>&#8239;t&plus;<div class="fraction">
+                                                      <span class="fup">
+                                                      a<sup>c</sup>&#8239;t<sup>2</sup>
+                                                      </span>
+                                                      <span class="fdn">2</span>
+                                                      </div></em>
 </div>
 </td>
 </tr>
@@ -330,7 +332,7 @@ Rectilinear position as a function of time for constant acceleration
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em><b>p</b></em> is the position (m)</li>
+<li><em>p</em> is the scalar position (m)</li>
 <li><em>p<sup>i</sup></em> is the initial position (m)</li>
 <li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
 <li><em>t</em> is the time (s)</li>
@@ -360,32 +362,32 @@ Rectilinear position as a function of time for constant acceleration
 Detailed derivation of rectilinear position:
 </p>
 <p class="paragraph">
-From <a href=#TM:velocity>TM: velocity</a>, using the symbols <em>a<sup>c</sup></em> for constant acceleration, <em><b>v</b><sup>i</sup></em> for initial velocity, and <em>p<sup>i</sup></em> for initial position we have:.
+Assume we have rectilinear motion of a particle (of negligible size and shape <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
 </p>
 <div class="equation">
 <em>v = <div class="fraction">
-        <span class="fup">d&#8239;<b>p</b></span>
+        <span class="fup">d&#8239;p</span>
         <span class="fdn">d&#8239;t</span>
         </div></em>
 </div>
 <p class="paragraph">Rearranging and integrating, we have:</p>
 <div class="equation">
-<em>&int;<sub>p<sup>i</sup></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup>v&#8239;dt</em>
+<em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v&#8239;dt</em>
 </div>
 <p class="paragraph">
 From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v</em>:
 </p>
 <div class="equation">
-<em>&int;<sub>p<sup>i</sup></sub><sup><b>p</b></sup>1&#8239;d<b>p</b> = &int;<sub>0</sub><sup>t</sup>v<sub>i</sub>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
+<em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v<sub>i</sub>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
 </div>
 <p class="paragraph">Performing the integration, we have:</p>
 <div class="equation">
-<em><b>p</b> = p<sup>i</sup>&plus;v<sub>i</sub>&#8239;t&plus;<div class="fraction">
-                                                             <span class="fup">
-                                                             a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                             </span>
-                                                             <span class="fdn">2</span>
-                                                             </div></em>
+<em>p = p<sup>i</sup>&plus;v<sub>i</sub>&#8239;t&plus;<div class="fraction">
+                                                      <span class="fup">
+                                                      a<sup>c</sup>&#8239;t<sup>2</sup>
+                                                      </span>
+                                                      <span class="fdn">2</span>
+                                                      </div></em>
 </div>
 <div id="GD:velVec">
 <table class="gdefn">

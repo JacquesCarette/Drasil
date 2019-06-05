@@ -77,7 +77,7 @@ rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
 
 rocTempSimp_rel :: Relation
-rocTempSimp_rel = (sy QPP.mass) * (sy QT.heatCapSpec) *
+rocTempSimp_rel = sy QPP.mass * sy QT.heatCapSpec *
   deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
   sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 
@@ -142,7 +142,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  (foldlList Comma List assumps) `sC` S "we have"]
+  foldlList Comma List assumps `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
@@ -150,27 +150,27 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+s4_2_3_eq1 = negate (int_all (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
+  int_all (eqSymb vol) (sy vol_ht_gen) $=
+  int_all (eqSymb vol) (sy density
+  * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+s4_2_3_eq2 = negate (int_all (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
+  int_all (eqSymb vol) (sy vol_ht_gen) $= 
+  int_all (eqSymb vol)
+  (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+s4_2_3_eq3 = sy ht_flux_in * sy in_SA - sy ht_flux_out *
+  sy out_SA + sy vol_ht_gen * sy vol $= 
+  int_all (eqSymb vol) (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-s4_2_3_eq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+s4_2_3_eq4 = sy density * sy QT.heatCapSpec * sy vol * deriv
+  (sy QT.temp) time $= sy ht_flux_in * sy in_SA - sy ht_flux_out *
+  sy out_SA + sy vol_ht_gen * sy vol
 
-s4_2_3_eq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+s4_2_3_eq5 = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
+  time $= sy ht_flux_in * sy in_SA - sy ht_flux_out
+  * sy out_SA + sy vol_ht_gen * sy vol
 
 roc_temp_simp_deriv_eqns :: [Expr]
 roc_temp_simp_deriv_eqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,

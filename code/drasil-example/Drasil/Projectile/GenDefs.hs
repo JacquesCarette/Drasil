@@ -6,19 +6,19 @@ import Theory.Drasil (GenDefn, gdNoRefs)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (symbol_)
-import Data.Drasil.Quantities.Physics (acceleration, constAccel, fSpeed,
-  iSpeed, iVel, ixVel, time, velocity, xAccel, xDist, yAccel, yVel)
+import Data.Drasil.Quantities.Physics (acceleration, constAccel, fSpeed, iPos,
+  iSpeed, iVel, ixVel, position, time, velocity, xAccel, xDist, yAccel, yVel)
 
 import Data.Drasil.Utils (weave)
 
 import Drasil.Projectile.Assumptions (accelYGravity, accelXZero, launchOrigin,
   pointMass, targetXAxis)
 import Drasil.Projectile.DataDefs (speedY)
-import Drasil.Projectile.TMods (accelerationTM)
+import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 import Drasil.Projectile.Unitals (launAngle)
 
 genDefns :: [GenDefn]
-genDefns = [rectVelGD, airTimeGD, distanceGD, distanceRefinedGD]
+genDefns = [rectVelGD, rectPosGD, airTimeGD, distanceGD, distanceRefinedGD]
 
 ----------
 rectVelGD :: GenDefn
@@ -58,7 +58,45 @@ rectVelDerivEqns = [rectVelDerivEqn1, rectVelDerivEqn2, rectVelRel]
 
 rectVelDerivEqn1, rectVelDerivEqn2 :: Expr
 rectVelDerivEqn1 = sy constAccel $= deriv (sy velocity) time
-rectVelDerivEqn2 = defint (eqSymb velocity) (sy iVel) (sy velocity) 1 $= defint (eqSymb time) 0 (sy time) (sy constAccel)
+rectVelDerivEqn2 = defint (eqSymb velocity) (sy iVel) (sy velocity) 1 $=
+                   defint (eqSymb time) 0 (sy time) (sy constAccel)
+
+----------
+rectPosGD :: GenDefn
+rectPosGD = gdNoRefs rectPosRC (getUnit position) rectPosDeriv "rectPos" [EmptyS]
+
+rectPosRC :: RelationConcept
+rectPosRC = makeRC "rectPosRC" (nounPhraseSP "rectilinear position as a function of time for constant acceleration")
+            EmptyS rectPosRel
+
+rectPosRel :: Relation
+rectPosRel = sy position $= sy iPos + sy iVel * sy time + square (sy constAccel * sy time) / 2
+
+rectPosDeriv :: Derivation
+rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase position :+: S ":") :
+               weave [rectPosDerivSents, map E rectPosDerivEqns]
+
+rectPosDerivSents :: [Sentence]
+rectPosDerivSents = [rectPosDerivSent1, rectPosDerivSent2, rectPosDerivSent3, rectPosDerivSent4]
+
+rectPosDerivSent1, rectPosDerivSent2, rectPosDerivSent3, rectPosDerivSent4 :: Sentence
+rectPosDerivSent1 = foldlSent [
+  S "From", makeRef2S velocityTM `sC` S "using the", plural symbol_,
+  foldlList Comma List (map (\x -> E (sy x) +:+ S "for" +:+ phrase x)
+    [constAccel, iVel, iPos]) +: S "we have"]
+rectPosDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
+rectPosDerivSent3 = S "From" +:+ makeRef2S rectVelGD +:+ S "we can replace" +: E (sy velocity)
+rectPosDerivSent4 = S "Performing the integration" `sC` S "we" +: S "have"
+
+rectPosDerivEqns :: [Expr]
+rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, rectPosRel]
+
+rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
+rectPosDerivEqn1 = sy velocity $= deriv (sy position) time
+rectPosDerivEqn2 = defint (eqSymb position) (sy iPos) (sy position) 1 $=
+                   defint (eqSymb time) 0 (sy time) (sy velocity)
+rectPosDerivEqn3 = defint (eqSymb position) (sy iPos) (sy position) 1 $=
+                   defint (eqSymb time) 0 (sy time) (sy iVel + sy constAccel * sy time)
 
 ----------
 airTimeGD :: GenDefn

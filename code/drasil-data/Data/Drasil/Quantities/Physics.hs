@@ -4,8 +4,8 @@ import Language.Drasil
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
   acceleration, constAccel, displacement, distance, energy, force,
-  gravitationalAccel, gravitationalConst, height, impulseS, impulseV, linAccel,
-  linDisp, linVelo, momentOfInertia, position, pressure, restitutionCoef,
+  gravitationalAccel, gravitationalConst, height, impulseS, impulseV, iPos,
+  linAccel, linDisp, linVelo, momentOfInertia, position, pressure, restitutionCoef,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
   fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
@@ -18,14 +18,14 @@ restitutionCoef = dqd' CP.restitutionCoef (const $ sub cC cR) Real Nothing
 physicscon :: [UnitalChunk]
 physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration, 
   constAccel, displacement, distance, energy, force, gravitationalAccel,
-  gravitationalConst, height, impulseS, impulseV, linearAccel,
+  gravitationalConst, height, impulseS, impulseV, iPos, linearAccel,
   linearDisplacement, linearVelocity, momentOfInertia, position, pressure,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
   fSpeed, iSpeed, ixVel, xDist, xVel, yDist, yVel, xAccel, yAccel]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, constAccel,
   displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
-  height, impulseS, impulseV, linearAccel, linearDisplacement, linearVelocity,
+  height, impulseS, impulseV, iPos, linearAccel, linearDisplacement, linearVelocity,
   momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
   velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, xDist, xVel,
   yDist, yVel, xAccel, yAccel :: UnitalChunk
@@ -64,6 +64,8 @@ weight               = uc CP.weight cW newton
 
 xDist = uc CP.xDist (sub lR lX) metre
 yDist = uc CP.yDist (sub lR lY) metre
+
+iPos = uc CP.iPos (sub lP lI) metre
 
 fSpeed = uc CP.fSpeed (sub lV lF) velU
 iSpeed = uc CP.iSpeed (sub lV lI) velU

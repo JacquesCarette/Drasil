@@ -12,7 +12,7 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   cohesion, collision, compression, constAccel, damping, displacement, distance,
   elasticity, energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
-  gravitationalConst, height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel,
+  gravitationalConst, height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
   position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
   speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
@@ -24,7 +24,7 @@ physicCon' = [twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   collision, compression, constAccel, damping, displacement, distance, elasticity,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
-  height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy,
+  height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel, joint, kEnergy,
   linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
   pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
   strain, stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
@@ -101,6 +101,8 @@ height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+
 
 xDist = dccWDS "xDist" (cn "distance in the x-direction") (at_start distance +:+ S "in the x-direction")
 yDist = dccWDS "yDist" (cn "distance in the y-direction") (at_start distance +:+ S "in the y-direction")
+
+iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")

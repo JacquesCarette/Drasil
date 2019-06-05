@@ -106,7 +106,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:rectPos]{GD: rectPos}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
@@ -139,7 +139,7 @@ Notes &
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:airTime]{GD: airTime}.
+RefBy & \hyperref[GD:rectPos]{GD: rectPos} \hyperref[GD:airTime]{GD: airTime}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
@@ -154,6 +154,54 @@ Rearranging and integrating, we have:
 Performing the integration, we have:
 \begin{displaymath}
 {v_{f}}={v_{i}}+{a_{c}} t
+\end{displaymath}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:rectPos}
+\phantomsection 
+\label{GD:rectPos}
+\\ \midrule \\
+Label & Rectilinear position as a function of time for constant acceleration
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{p}={p_{i}}+{\mathbf{v}_{i}} t+\frac{\left({a_{c}} t\right)^{2}}{2}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{p}$ is the position (m)}
+              \item{${p_{i}}$ is the initial position (m)}
+              \item{${\mathbf{v}_{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{${a_{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Detailed derivation of rectilinear position:
+From \hyperref[TM:velocity]{TM: velocity}, using the symbols ${a_{c}}$ for constant acceleration, ${\mathbf{v}_{i}}$ for initial velocity, and ${p_{i}}$ for initial position we have:.
+\begin{displaymath}
+\mathbf{v}=\frac{d\,\mathbf{p}}{d\,t}
+\end{displaymath}
+Rearranging and integrating, we have:
+\begin{displaymath}
+\int_{{p_{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{\mathbf{v}}\,dt
+\end{displaymath}
+From \hyperref[GD:rectVel]{GD: rectVel} we can replace $\mathbf{v}$:
+\begin{displaymath}
+\int_{{p_{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{\mathbf{v}_{i}}+{a_{c}} t}\,dt
+\end{displaymath}
+Performing the integration, we have:
+\begin{displaymath}
+\mathbf{p}={p_{i}}+{\mathbf{v}_{i}} t+\frac{\left({a_{c}} t\right)^{2}}{2}
 \end{displaymath}
 \par~
 

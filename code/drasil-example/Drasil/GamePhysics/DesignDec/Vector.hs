@@ -117,7 +117,7 @@ vectProject = funcDef "vectProject" [vV1, vV2] (Vect Rational)
     FRet (FCall (asExpr vectMult) 
       [
         vV2,
-        (FCall (asExpr vectDot) [vV1, vV2] / FCall (asExpr vectDot) [vV2, vV2])
+        FCall (asExpr vectDot) [vV1, vV2] / FCall (asExpr vectDot) [vV2, vV2]
       ]
     )
   ]

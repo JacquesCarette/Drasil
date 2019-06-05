@@ -12,8 +12,8 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   cohesion, collision, compression, damping, displacement, distance, elasticity,
   energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
-  gravitationalConst, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint,
-  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
+  gravitationalConst, height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel,
+  joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
   position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
   speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
   yDist, yVel, xAccel, yAccel]
@@ -23,14 +23,12 @@ physicCon' = [twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
   collision, compression, damping, displacement, distance, elasticity, energy,
-  fbd, force, friction, gravitationalAccel, fSpeed, fVel, gravitationalConst,
-  impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy, linAccel,
-  linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, pressure,
-  restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed, strain,
-  stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
+  fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
+  height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy,
+  linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
+  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
+  strain, stress, tension, time, torque, velocity, weight, xDist, xVel, yDist,
   yVel, xAccel, yAccel :: ConceptChunk
-
-  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
 
 twoD, threeD :: CI
 twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
@@ -94,6 +92,8 @@ compression  = dccWDS "compression" (cn' "compression")
 
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
+  S "above a reference point for a point of interest.")
 
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?

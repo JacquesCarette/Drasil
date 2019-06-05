@@ -1,6 +1,6 @@
 module Drasil.SSP.DataDefs (dataDefns, intersliceWtrF, angleA, angleB, lengthB,
-  lengthLb, slcHeight, stressDD, ratioVariation, convertFunc1, convertFunc2, 
-  nrmForceSumDD, watForceSumDD) where 
+  lengthLb, lengthLs, slcHeight, stressDD, ratioVariation, convertFunc1, 
+  convertFunc2, nrmForceSumDD, watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -18,16 +18,16 @@ import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008
 import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
   fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
   mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
-  slopeHght, surfAngle, totStress, nrmForceSum, watForceSum, sliceHghtRight,
-  sliceHghtLeft, waterHght, waterWeight, watrForce)
+  slopeHght, surfAngle, surfLngth, totStress, nrmForceSum, watForceSum, 
+  sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
 ------------------------
 
 dataDefns :: [DataDefinition]
-dataDefns = [intersliceWtrF, angleA, angleB, lengthB, 
-  lengthLb, slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
+dataDefns = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
+  slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
@@ -117,6 +117,24 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 lengthLbNotes :: Sentence
 lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
   makeRef2S lengthB `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+
+--
+
+lengthLs :: DataDefinition
+lengthLs = dd lengthLsQD [makeCite fredlund1977] [{-Derivation-}] "lengthLs"
+  [lengthLsNotes]--Notes
+--FIXME: fill empty lists in
+
+lengthLsQD :: QDefinition
+lengthLsQD = mkQuantDef surfLngth lengthLsEqn
+
+lengthLsEqn :: Expr
+lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
+
+lengthLsNotes :: Sentence
+lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
+  makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
+  
 
 --DD9
 

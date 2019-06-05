@@ -1,12 +1,12 @@
 module Drasil.Projectile.Concepts where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.IdeaDicts (physics)
 
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, speed)
-import Data.Drasil.Phrase (compoundNC)
 
 concepts :: [NamedChunk]
 concepts = [launch, launchAngle, launchDist, launchSpeed, launcher, projectile, targetDist, target]

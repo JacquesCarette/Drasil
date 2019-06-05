@@ -7,7 +7,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
   gravitationalAccel, gravitationalConst, height, impulseS, impulseV, iPos,
   linAccel, linDisp, linVelo, momentOfInertia, position, pressure, restitutionCoef,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
-  fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel)
+  fSpeed, iSpeed, xDist, xVel, yDist, yVel, xAccel, yAccel, ixVel, iyVel, 
+  xConstAccel, yConstAccel)
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -21,20 +22,21 @@ physicscon = [angularAccel, angularDisplacement, angularVelocity, acceleration,
   gravitationalConst, height, impulseS, impulseV, iPos, linearAccel,
   linearDisplacement, linearVelocity, momentOfInertia, position, pressure,
   scalarAccel, speed, time, torque, velocity, weight, kEnergy, fVel, iVel,
-  fSpeed, iSpeed, ixVel, xDist, xVel, yDist, yVel, xAccel, yAccel]
+  fSpeed, iSpeed, ixVel, iyVel, xDist, xVel, yDist, yVel, xAccel, yAccel, xConstAccel,
+  yConstAccel]
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, constAccel,
   displacement, distance, energy, force, gravitationalAccel, gravitationalConst,
   height, impulseS, impulseV, iPos, linearAccel, linearDisplacement, linearVelocity,
   momentOfInertia, position, pressure, scalarAccel, speed, time, torque,
-  velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, xDist, xVel,
-  yDist, yVel, xAccel, yAccel :: UnitalChunk
+  velocity, weight, kEnergy, fVel, iVel, fSpeed, iSpeed, ixVel, iyVel, xDist, xVel,
+  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
 angularVelocity      = uc CP.angVelo lOmega angVelU
 acceleration         = uc CP.acceleration (vec lA) accelU
-constAccel           = uc CP.constAccel (sub lA lC) accelU
+constAccel           = uc CP.constAccel (sup lA lC) accelU
 displacement         = uc CP.displacement (vec lR) metre
 distance             = uc CP.distance lR metre
 energy               = uc CP.energy cE joule
@@ -75,7 +77,11 @@ iVel = uc CP.iVel (sub (vec lV) lI) velU
 xVel = uc CP.xVel (sub      lV  lX) velU
 yVel = uc CP.yVel (sub      lV  lY) velU
 
-ixVel = uc CP.ixVel (sub lV $ Concat [lI, Atomic ",", lX]) velU
+ixVel = uc CP.ixVel (sup (sub lV lX) lI) velU
+iyVel = uc CP.iyVel (sup (sub lV lY) lI) velU
 
 xAccel = uc CP.xAccel (sub lA lX) accelU
 yAccel = uc CP.yAccel (sub lA lY) accelU
+
+xConstAccel = uc CP.xConstAccel (sub (sup lA lC) lX) accelU
+yConstAccel = uc CP.yConstAccel (sub (sup lA lC) lY) accelU

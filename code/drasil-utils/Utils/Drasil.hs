@@ -4,7 +4,11 @@ module Utils.Drasil (
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC,
   -- Misc
-  sortBySymbol, sortBySymbolTuple,
+  addPercent, bulletFlat, bulletNested, enumBullet, enumBulletU, enumSimple,
+  enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU, getRVal, itemRefToSent,
+  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs,
+  noRefsLT, sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave,
+  zipFTable', zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',

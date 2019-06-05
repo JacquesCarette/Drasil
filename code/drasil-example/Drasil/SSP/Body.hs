@@ -54,7 +54,6 @@ import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
-import Data.Drasil.Phrase (for)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 

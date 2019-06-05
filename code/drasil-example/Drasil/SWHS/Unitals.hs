@@ -23,12 +23,12 @@ import Drasil.SWHS.Concepts (water)
 import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrained
+symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 
 symbolsAll :: [QuantityDict]
-symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
-  (map qw [htFusion_min, htFusion_max, coil_SA_max]) ++
-  (map qw [abs_tol, rel_tol, cons_tol])
+symbolsAll = map qw symbols ++ map qw specParamValList ++
+  map qw [htFusion_min, htFusion_max, coil_SA_max] ++
+  map qw [abs_tol, rel_tol, cons_tol]
 
 -- Symbols with Units --
 
@@ -168,7 +168,7 @@ w_vol = uc' "w_vol" (vol `of_` water)
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
-  (Concat [cDelta, (eqSymb temp)]) centigrade
+  (Concat [cDelta, eqSymb temp]) centigrade
 
 tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time"
@@ -258,7 +258,7 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tank_vol),
-   sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tank_vol))] 
+   sfwrc $ UpFrom (Inc, sy frac_min * sy tank_vol)] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 

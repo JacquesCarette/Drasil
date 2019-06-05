@@ -276,10 +276,11 @@ pcm_SA = uqc "pcm_SA"
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5
-pcm_density = uqc "pcm_density" (nounPhraseSP "density of PCM")
+pcm_density = uq (cuc'' "pcm_density" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
-  (sub (eqSymb density) cP) densityU Rational
-  [ physc $ Bounded (Exc, sy pcm_density_min) (Exc, sy pcm_density_max)] (dbl 1007) defaultUncrt
+  (staged (sub (eqSymb density) cP) (sub (Atomic "rho") cP)) densityU Rational
+  [ physc $ Bounded (Exc, sy pcm_density_min) (Exc, sy pcm_density_max)] 
+  (dbl 1007)) defaultUncrt
 
 -- Constraint 6
 temp_melt_P = uqc "temp_melt_P"
@@ -334,11 +335,11 @@ temp_C = uqc "temp_C" (nounPhraseSP "temperature of the heating coil")
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
-w_density = uqc "w_density" (density `of_` water)
+w_density = uq (cuc'' "w_density" (density `of_` water)
   "Mass per unit volume of water"
-  (sub (eqSymb density) cW) densityU Rational
+  (staged (sub (eqSymb density) cW) (sub (Atomic "rho") cW)) densityU Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000)) defaultUncrt
 
 -- Constraint 13
 htCap_W = uqc "htCap_W" (heatCapSpec `of_` water)

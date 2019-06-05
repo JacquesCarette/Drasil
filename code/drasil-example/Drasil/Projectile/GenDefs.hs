@@ -5,24 +5,60 @@ import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
 import Utils.Drasil
 
-import Data.Drasil.Quantities.Physics (fSpeed, iSpeed, ixVel, scalarAccel, time, xAccel, xDist, yAccel, yVel)
+import Data.Drasil.Concepts.Documentation (symbol_)
+import Data.Drasil.Quantities.Physics (acceleration, constAccel, fSpeed,
+  iSpeed, iVel, ixVel, time, velocity, xAccel, xDist, yAccel, yVel)
 
-import Drasil.Projectile.Assumptions (accelYGravity, accelXZero, launchOrigin, targetXAxis)
+import Data.Drasil.Utils (weave)
+
+import Drasil.Projectile.Assumptions (accelYGravity, accelXZero, launchOrigin,
+  pointMass, targetXAxis)
 import Drasil.Projectile.DataDefs (speedY)
+import Drasil.Projectile.TMods (accelerationTM)
 import Drasil.Projectile.Unitals (launAngle)
 
 genDefns :: [GenDefn]
-genDefns = [finalSpeedGD, airTimeGD, distanceGD, distanceRefinedGD]
+genDefns = [rectVelGD, airTimeGD, distanceGD, distanceRefinedGD]
 
 ----------
-finalSpeedGD :: GenDefn
-finalSpeedGD = gdNoRefs finalSpeedRC (getUnit fSpeed) [{-Derivation-}] "finalSpeed" [EmptyS]
+rectVelGD :: GenDefn
+rectVelGD = gdNoRefs rectVelRC (getUnit fSpeed) rectVelDeriv "rectVel" [EmptyS]
 
-finalSpeedRC :: RelationConcept
-finalSpeedRC = makeRC "finalSpeedRC" (nounPhraseSP "final speed") EmptyS finalSpeedRel
+rectVelRC :: RelationConcept
+rectVelRC = makeRC "rectVelRC" (nounPhraseSP "rectilinear velocity as a function of time for constant acceleration")
+            EmptyS rectVelRel
 
-finalSpeedRel :: Relation
-finalSpeedRel = sy fSpeed $= sy iSpeed + sy scalarAccel * sy time
+rectVelRel :: Relation
+rectVelRel = sy fSpeed $= sy iSpeed + sy constAccel * sy time
+
+rectVelDeriv :: Derivation
+rectVelDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase velocity :+: S ":") :
+               weave [rectVelDerivSents, map E rectVelDerivEqns]
+
+rectVelDerivSents :: [Sentence]
+rectVelDerivSents = [rectVelDerivSent1, rectVelDerivSent2, rectVelDerivSent3]
+
+rectVelDerivSent1, rectVelDerivSent2, rectVelDerivSent3 :: Sentence
+rectVelDerivSent1 = foldlSent_ [
+  S "Assume we have rectilinear motion" `sOf` S "a particle",
+  sParen (S "of negligible size" `sAnd` S "shape" +:+ makeRef2S pointMass) :+:
+  S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
+  (phrase velocity `sIs` E (sy velocity) `andThe` phrase acceleration `sIs`
+  E (sy acceleration)), S "The motion" `sIn` makeRef2S accelerationTM `sIs`
+  S "now one-dimensional with a", phrase constAccel `sC` S "represented by" +:+.
+  E (sy constAccel), S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
+  S "represented by" +:+. E (sy iVel), S "From", makeRef2S accelerationTM `sC`
+  S "using the above", plural symbol_ +: S "we have"]
+
+rectVelDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
+rectVelDerivSent3 = S "Performing the integration" `sC` S "we" +: S "have"
+
+rectVelDerivEqns :: [Expr]
+rectVelDerivEqns = [rectVelDerivEqn1, rectVelDerivEqn2, rectVelRel]
+
+rectVelDerivEqn1, rectVelDerivEqn2 :: Expr
+rectVelDerivEqn1 = sy constAccel $= deriv (sy velocity) time
+rectVelDerivEqn2 = defint (eqSymb velocity) (sy iVel) (sy velocity) 1 $= defint (eqSymb time) 0 (sy time) (sy constAccel)
 
 ----------
 airTimeGD :: GenDefn
@@ -35,10 +71,10 @@ airTimeRel :: Relation
 airTimeRel = sy time $= BinaryOp Frac (2 * sy iSpeed * sin (sy launAngle)) (sy yAccel)
 
 airTimeDeriv :: Sentence
-airTimeDeriv = foldlSent [at_start airTimeGD, S "is derived from" +:+.
-  makeRef2S speedY `sAnd` makeRef2S finalSpeedGD, S "It also comes from the",
+airTimeDeriv = foldlSent [at_start airTimeGD `sIs` S "derived from" +:+.
+  makeRef2S speedY `sAnd` makeRef2S rectVelGD, S "It also comes from the",
   S "fact that the", phrase yVel, S "at the maximum height is zero" `sAnd`
-  S "that the maximum height is the halfway point of the trajectory",
+  S "that the maximum height" `sIs` S "halfway point" `ofThe` S "trajectory",
   sParen (S "from" +:+ makeRef2S launchOrigin `sAnd` makeRef2S targetXAxis)]
 
 ----------

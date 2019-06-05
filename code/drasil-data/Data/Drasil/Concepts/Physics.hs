@@ -10,8 +10,8 @@ import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
-  cohesion, collision, compression, damping, displacement, distance, elasticity,
-  energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
+  cohesion, collision, compression, constAccel, damping, displacement, distance,
+  elasticity, energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
   gravitationalConst, height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
   position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space,
@@ -22,8 +22,8 @@ physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
-  collision, compression, damping, displacement, distance, elasticity, energy,
-  fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
+  collision, compression, constAccel, damping, displacement, distance, elasticity,
+  energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
   height, impulseS, impulseV, isotropy, iSpeed, iVel, ixVel, joint, kEnergy,
   linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
   pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, space, speed,
@@ -125,6 +125,8 @@ angVelo = dcc "angularVelocity"
 angAccel = dcc "angularAcceleration"
   (compoundPhrase' (angular ^. term) (acceleration ^. term))
   "The rate of change of angular velocity"
+constAccel = dcc "constantAcceleration"
+  (cn "constant acceleration") "A one-dimensional acceleration that is constant"
 linDisp = dcc "linearDisplacement" 
   (compoundPhrase' (linear ^. term) (displacement ^. term)) 
   "Movement in one direction along a single axis"

@@ -1,5 +1,5 @@
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, assumptions,
-  launchOrigin, targetXAxis) where
+  launchOrigin, pointMass, targetXAxis) where
 
 import Language.Drasil
 import Utils.Drasil

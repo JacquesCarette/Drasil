@@ -113,7 +113,7 @@ constMass: The mass of the projectile is constant.
 </p>
 <p>
 <div id="pointMass">
-pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass.
+pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. <a href=#GD:rectVel>GD: rectVel</a>.
 </div>
 </p>
 <p>
@@ -133,6 +133,47 @@ freeFlight: The flight is free; there are no collisions during the trajectory of
 <p class="paragraph">
 This section focuses on the general equations and laws that Projectile is based on.
 </p>
+<div id="TM:acceleration">
+<table class="tdefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Acceleration</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em><b>a</b> = <div class="fraction">
+               <span class="fup">d&#8239;<b>v</b></span>
+               <span class="fdn">d&#8239;t</span>
+               </div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
+<li><em>t</em> is the time (s)</li>
+<li><em><b>v</b></em> is the velocity (m/s)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td>
+<p class="paragraph">
+<a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectVel>GD: rectVel</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
 <div id="TM:velocity">
 <table class="tdefn">
 <tr>
@@ -170,43 +211,6 @@ This section focuses on the general equations and laws that Projectile is based 
 </tr>
 </table>
 </div>
-<div id="TM:acceleration">
-<table class="tdefn">
-<tr>
-<th>Label</th>
-<td><p class="paragraph">Acceleration</p></td>
-</tr>
-<tr>
-<th>Equation</th>
-<td>
-<div class="equation">
-<em><b>a</b> = <div class="fraction">
-               <span class="fup">d&#8239;<b>v</b></span>
-               <span class="fdn">d&#8239;t</span>
-               </div></em>
-</div>
-</td>
-</tr>
-<tr>
-<th>Description</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
-<li><em>t</em> is the time (s)</li>
-<li><em><b>v</b></em> is the velocity (m/s)</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>Source</th>
-<td><p class="paragraph">--</p></td>
-</tr>
-<tr>
-<th>RefBy</th>
-<td><p class="paragraph"></p></td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div id="Sec:GDs">
@@ -215,11 +219,15 @@ This section focuses on the general equations and laws that Projectile is based 
 <p class="paragraph">
 This section collects the laws and equations that will be used to build the instance models.
 </p>
-<div id="GD:finalSpeed">
+<div id="GD:rectVel">
 <table class="gdefn">
 <tr>
 <th>Label</th>
-<td><p class="paragraph">Final speed</p></td>
+<td>
+<p class="paragraph">
+Rectilinear velocity as a function of time for constant acceleration
+</p>
+</td>
 </tr>
 <tr>
 <th>Units</th>
@@ -229,7 +237,7 @@ This section collects the laws and equations that will be used to build the inst
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>v<sub>f</sub> = v<sub>i</sub>&plus;a&#8239;t</em>
+<em>v<sub>f</sub> = v<sub>i</sub>&plus;a<sub>c</sub>&#8239;t</em>
 </div>
 </td>
 </tr>
@@ -239,7 +247,9 @@ This section collects the laws and equations that will be used to build the inst
 <ul class="hide-list-style-no-indent">
 <li><em>v<sub>f</sub></em> is the final speed (m/s)</li>
 <li><em>v<sub>i</sub></em> is the initial speed (m/s)</li>
-<li><em>a</em> is the scalar acceleration (m/s<sup>2</sup>)</li>
+<li>
+<em>a<sub>c</sub></em> is the constant acceleration (m/s<sup>2</sup>)
+</li>
 <li><em>t</em> is the time (s)</li>
 </ul>
 </td>
@@ -259,6 +269,26 @@ This section collects the laws and equations that will be used to build the inst
 </td>
 </tr>
 </table>
+</div>
+<p class="paragraph">
+Detailed derivation of rectilinear velocity:
+</p>
+<p class="paragraph">
+Assume we have rectilinear motion of a particle (of negligible size and shape <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em><b>v</b></em> and the acceleration is <em><b>a</b></em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sub>c</sub></em>. The initial velocity (at <em>t = 0</em>) is represented by <em><b>v</b><sub>i</sub></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
+</p>
+<div class="equation">
+<em>a<sub>c</sub> = <div class="fraction">
+                    <span class="fup">d&#8239;<b>v</b></span>
+                    <span class="fdn">d&#8239;t</span>
+                    </div></em>
+</div>
+<p class="paragraph">Rearranging and integrating, we have:</p>
+<div class="equation">
+<em>&int;<sub><b>v</b><sub>i</sub></sub><sup><b>v</b></sup>1&#8239;d<b>v</b> = &int;<sub>0</sub><sup>t</sup>a<sub>c</sub>&#8239;dt</em>
+</div>
+<p class="paragraph">Performing the integration, we have:</p>
+<div class="equation">
+<em>v<sub>f</sub> = v<sub>i</sub>&plus;a<sub>c</sub>&#8239;t</em>
 </div>
 <div id="GD:airTime">
 <table class="gdefn">
@@ -313,7 +343,7 @@ This section collects the laws and equations that will be used to build the inst
 </table>
 </div>
 <p class="paragraph">
-Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:finalSpeed>GD: finalSpeed</a> It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from <a href=#launchOrigin>A: launchOrigin</a> and <a href=#targetXAxis>A: targetXAxis</a>).
+Air time is derived from <a href=#DD:speedY>DD: speedY</a>. and <a href=#GD:rectVel>GD: rectVel</a> It also comes from the fact that the y-component of velocity the at the maximum height is zero and that the maximum height is halfway point of the trajectory (from <a href=#launchOrigin>A: launchOrigin</a> and <a href=#targetXAxis>A: targetXAxis</a>).
 </p>
 <div id="GD:distance">
 <table class="gdefn">

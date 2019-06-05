@@ -52,13 +52,38 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[GD:distance]{GD: distance}.
 \item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
 \item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
-\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass.
+\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel}.
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile.
 \item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that Projectile is based on.
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:acceleration}
+\phantomsection 
+\label{TM:acceleration}
+\\ \midrule \\
+Label & Acceleration
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{a}=\frac{d\,\mathbf{v}}{d\,t}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectVel]{GD: rectVel}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -84,31 +109,6 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:acceleration}
-\phantomsection 
-\label{TM:acceleration}
-\\ \midrule \\
-Label & Acceleration
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \mathbf{a}=\frac{d\,\mathbf{v}}{d\,t}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & --
-\\ \midrule \\
-RefBy & 
-\\ \bottomrule \end{tabular}
-\end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -116,22 +116,22 @@ This section collects the laws and equations that will be used to build the inst
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:finalSpeed}
+\toprule \textbf{Refname} & \textbf{GD:rectVel}
 \phantomsection 
-\label{GD:finalSpeed}
+\label{GD:rectVel}
 \\ \midrule \\
-Label & Final speed
+Label & Rectilinear velocity as a function of time for constant acceleration
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{f}}={v_{i}}+a t
+           {v_{f}}={v_{i}}+{a_{c}} t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${v_{f}}$ is the final speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${a_{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
@@ -142,6 +142,19 @@ Source & --
 RefBy & \hyperref[GD:airTime]{GD: airTime}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+Detailed derivation of rectilinear velocity:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $\mathbf{v}$ and the acceleration is $\mathbf{a}$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a_{c}}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}_{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+\begin{displaymath}
+{a_{c}}=\frac{d\,\mathbf{v}}{d\,t}
+\end{displaymath}
+Rearranging and integrating, we have:
+\begin{displaymath}
+\int_{{\mathbf{v}_{i}}}^{\mathbf{v}}{1}\,d\mathbf{v}=\int_{0}^{t}{{a_{c}}}\,dt
+\end{displaymath}
+Performing the integration, we have:
+\begin{displaymath}
+{v_{f}}={v_{i}}+{a_{c}} t
+\end{displaymath}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -172,7 +185,7 @@ Source & --
 RefBy & \hyperref[GD:distanceRefined]{GD: distanceRefined}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:finalSpeed]{GD: finalSpeed} It also comes from the fact that the y-component of velocity at the maximum height is zero and that the maximum height is the halfway point of the trajectory (from \hyperref[launchOrigin]{A: launchOrigin} and \hyperref[targetXAxis]{A: targetXAxis}).
+Air time is derived from \hyperref[DD:speedY]{DD: speedY}. and \hyperref[GD:rectVel]{GD: rectVel} It also comes from the fact that the y-component of velocity the at the maximum height is zero and that the maximum height is halfway point of the trajectory (from \hyperref[launchOrigin]{A: launchOrigin} and \hyperref[targetXAxis]{A: targetXAxis}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}

@@ -41,8 +41,8 @@ consThermE_rc = makeRC "consThermE_rc"
   (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
 
 consThermERel :: Relation
-consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
-  (sy density) * (sy heatCapSpec) * (pderiv (sy temp) time)
+consThermERel = negate (sy gradient) $. sy thFluxVect + sy vol_ht_gen $=
+  sy density * sy heatCapSpec * pderiv (sy temp) time
 
 -- the second argument is a 'ShortName'...
 consThemESrc :: Reference
@@ -93,14 +93,14 @@ sensHtESrc = makeURI "sensHtESrc"
   shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Relation
-sensHtEEqn pChange = (sy sensHeat) $= case pChange of
+sensHtEEqn pChange = sy sensHeat $= case pChange of
   Liquid -> liquidFormula
-  AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
-      ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<
-      (sy boilPt))), ((sy htCap_V) * (sy mass) *
-      (sy deltaT), ((sy boilPt) $< (sy temp)))]
+  AllPhases -> case_ [(sy htCap_S * sy mass * sy deltaT,
+      sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
+      sy boilPt), (sy htCap_V * sy mass *
+      sy deltaT, sy boilPt $< sy temp)]
   where
-    liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
+    liquidFormula = sy htCap_L * sy mass * sy deltaT
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -127,7 +127,7 @@ sensHtEdesc = foldlSent [
   ch temp :+: S "=" :+: ch boilPt,
   S "or", ch temp :+: S "=" +:+. ch meltPt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef2S latentHtE) `sC` at_start latentHeat,
+  makeRef2S latentHtE `sC` at_start latentHeat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -172,7 +172,7 @@ latentHtEdesc = foldlSent [
   phrase phaseChange, S "is not complete. The status of",
   S "the", phrase phaseChange,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef2S dd3HtFusion) :+: S ".",
+  makeRef2S dd3HtFusion :+: S ".",
   ch meltPt `sAnd` ch boilPt, S "are the",
   phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

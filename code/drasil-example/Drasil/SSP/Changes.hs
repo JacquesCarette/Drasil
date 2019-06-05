@@ -63,7 +63,7 @@ unlikelyChg2AO =   cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 ucNASLODesc, uc2AODesc :: Sentence
 
 ucNASLODesc = foldlSent [S "Changes related to",
-  (makeRef2S assumpINSFL), S "are not possible due to the dependency",
+  makeRef2S assumpINSFL, S "are not possible due to the dependency",
   S "of the", plural calculation, S "on the linear relationship between",
   phrase intNormForce `sAnd` phrase intShrForce]
 

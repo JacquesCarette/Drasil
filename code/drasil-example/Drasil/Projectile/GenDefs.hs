@@ -10,8 +10,8 @@ import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (cartesian, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, fSpeed, iPos, iSpeed,
-  iVel, ixPos, ixVel, iyPos, iyVel, position, time, velocity, xAccel, xConstAccel,
-  xPos, xVel, yAccel, yConstAccel, yPos, yVel)
+  iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, speed, time,
+  velocity, xAccel, xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 
 import Data.Drasil.Utils (weave)
@@ -45,11 +45,11 @@ rectVelDerivSent1 = foldlSent_ [
   S "Assume we have rectilinear motion" `sOf` S "a particle",
   sParen (S "of negligible size" `sAnd` S "shape" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
-  (phrase velocity `sIs` E (sy velocity) `andThe` phrase acceleration `sIs`
-  E (sy acceleration)), S "The motion" `sIn` makeRef2S accelerationTM `sIs`
+  (phrase velocity `sIs` E (sy speed) `andThe` phrase acceleration `sIs`
+  E (sy scalarAccel)), S "The motion" `sIn` makeRef2S accelerationTM `sIs`
   S "now one-dimensional with a", phrase QP.constAccel `sC` S "represented by" +:+.
   E (sy QP.constAccel), S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
-  S "represented by" +:+. E (sy iVel), S "From", makeRef2S accelerationTM `sC`
+  S "represented by" +:+. E (sy iSpeed), S "From", makeRef2S accelerationTM `sC`
   S "using the above", plural symbol_ +: S "we have"]
 
 rectVelDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
@@ -59,8 +59,8 @@ rectVelDerivEqns :: [Expr]
 rectVelDerivEqns = [rectVelDerivEqn1, rectVelDerivEqn2, rectVelRel]
 
 rectVelDerivEqn1, rectVelDerivEqn2 :: Expr
-rectVelDerivEqn1 = sy QP.constAccel $= deriv (sy velocity) time
-rectVelDerivEqn2 = defint (eqSymb velocity) (sy iVel) (sy velocity) 1 $=
+rectVelDerivEqn1 = sy QP.constAccel $= deriv (sy speed) time
+rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
                    defint (eqSymb time) 0 (sy time) (sy QP.constAccel)
 
 ----------
@@ -72,7 +72,7 @@ rectPosRC = makeRC "rectPosRC" (nounPhraseSP "rectilinear position as a function
             EmptyS rectPosRel
 
 rectPosRel :: Relation
-rectPosRel = sy position $= sy iPos + sy iVel * sy time + sy QP.constAccel * square (sy time) / 2
+rectPosRel = sy position $= sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
 rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase position :+: S ":") :
@@ -87,18 +87,18 @@ rectPosDerivSent1 = foldlSent [
   foldlList Comma List (map (\x -> E (sy x) +:+ S "for" +:+ phrase x)
     [QP.constAccel, iVel, iPos]) +: S "we have"]
 rectPosDerivSent2 = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
-rectPosDerivSent3 = S "From" +:+ makeRef2S rectVelGD +:+ S "we can replace" +: E (sy velocity)
+rectPosDerivSent3 = S "From" +:+ makeRef2S rectVelGD +:+ S "we can replace" +: E (sy speed)
 rectPosDerivSent4 = S "Performing the integration" `sC` S "we" +: S "have"
 
 rectPosDerivEqns :: [Expr]
 rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, rectPosRel]
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
-rectPosDerivEqn1 = sy velocity $= deriv (sy position) time
+rectPosDerivEqn1 = sy speed $= deriv (sy position) time
 rectPosDerivEqn2 = defint (eqSymb position) (sy iPos) (sy position) 1 $=
-                   defint (eqSymb time) 0 (sy time) (sy velocity)
+                   defint (eqSymb time) 0 (sy time) (sy speed)
 rectPosDerivEqn3 = defint (eqSymb position) (sy iPos) (sy position) 1 $=
-                   defint (eqSymb time) 0 (sy time) (sy iVel + sy QP.constAccel * sy time)
+                   defint (eqSymb time) 0 (sy time) (sy iSpeed + sy QP.constAccel * sy time)
 
 ----------
 velVecGD :: GenDefn

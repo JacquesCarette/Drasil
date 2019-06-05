@@ -143,13 +143,13 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $\mathbf{v}$ and the acceleration is $\mathbf{a}$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${v_{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 \begin{displaymath}
-{a^{c}}=\frac{d\,\mathbf{v}}{d\,t}
+{a^{c}}=\frac{d\,v}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{\mathbf{v}^{i}}}^{\mathbf{v}}{1}\,d\mathbf{v}=\int_{0}^{t}{{a^{c}}}\,dt
+\int_{{v_{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
@@ -168,13 +168,13 @@ Label & Rectilinear position as a function of time for constant acceleration
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{p}={p^{i}}+{\mathbf{v}^{i}} t+\frac{{a^{c}} t^{2}}{2}
+           \mathbf{p}={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \item{${p^{i}}$ is the initial position (m)}
-              \item{${\mathbf{v}^{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -189,19 +189,19 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}.
 Detailed derivation of rectilinear position:
 From \hyperref[TM:velocity]{TM: velocity}, using the symbols ${a^{c}}$ for constant acceleration, ${\mathbf{v}^{i}}$ for initial velocity, and ${p^{i}}$ for initial position we have:.
 \begin{displaymath}
-\mathbf{v}=\frac{d\,\mathbf{p}}{d\,t}
+v=\frac{d\,\mathbf{p}}{d\,t}
 \end{displaymath}
 Rearranging and integrating, we have:
 \begin{displaymath}
-\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{\mathbf{v}}\,dt
+\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{v}\,dt
 \end{displaymath}
-From \hyperref[GD:rectVel]{GD: rectVel} we can replace $\mathbf{v}$:
+From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
 \begin{displaymath}
-\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{\mathbf{v}^{i}}+{a^{c}} t}\,dt
+\int_{{p^{i}}}^{\mathbf{p}}{1}\,d\mathbf{p}=\int_{0}^{t}{{v_{i}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have:
 \begin{displaymath}
-\mathbf{p}={p^{i}}+{\mathbf{v}^{i}} t+\frac{{a^{c}} t^{2}}{2}
+\mathbf{p}={p^{i}}+{v_{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
 \par~
 

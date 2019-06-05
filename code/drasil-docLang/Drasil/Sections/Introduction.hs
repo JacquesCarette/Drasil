@@ -13,8 +13,7 @@ import Data.Drasil.Concepts.Documentation as Doc (characteristic, decision,
   user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-  foldlList, foldlsC, foldlSP, refineChain)
+import Data.Drasil.SentenceStructures (refineChain)
 
 -----------------------
 --     Constants     --

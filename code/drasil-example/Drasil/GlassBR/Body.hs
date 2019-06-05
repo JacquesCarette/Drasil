@@ -17,7 +17,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), SCSSub(..),
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -52,12 +52,10 @@ import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, showingCxnBw,
-  tAndDOnly, tAndDWAcc, tAndDWSym, underConsidertn)
+import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,
+  tAndDWSym, underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs)
   
@@ -72,8 +70,7 @@ import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, nonfuncReqs,
-  inputGlassPropsTable, propsDeriv)
+import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -121,7 +118,7 @@ section :: [Section]
 section = sec
 
 labelledCon :: [LabelledContent]
-labelledCon = [inputGlassPropsTable, demandVsSDFig, dimlessloadVsARFig]
+labelledCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 sec :: [Section]
 sec = extractSection srs
@@ -178,7 +175,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsList,
+    FReqsSub funcReqs funcReqsTables,
     NonFReqsSub nonfuncReqs
   ],
   LCsSec' $ LCsProg' likelyChgs,

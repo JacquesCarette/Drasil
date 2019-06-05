@@ -4,7 +4,7 @@ import math
 import InputParameters
 
 
-def func_get_inputs(filename, inParams):
+def func_get_input(filename, inParams):
     lines = []
     linetokens = []
     infile = open(filename, "r")

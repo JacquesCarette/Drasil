@@ -20,11 +20,12 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..),
   dataConstraintUncertainty, goalStmtF, intro, mkDoc,
   mkEnumSimpleD, probDescF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
+  tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
+  getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -53,9 +54,6 @@ import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
-import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List),
-  foldlSP, foldlSent, foldlSent_, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
@@ -74,14 +72,12 @@ import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, nonFuncReqs, inputDataTable,
-  inputsToOutputTable, propsDeriv)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   constrained, inputs, outputs, symbols)
 
 --type declarations for sections--
-aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
@@ -152,14 +148,15 @@ mkSRS = [RefSec $ RefProg intro
           ]
         ],
     ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqList,
+    FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
   LCsSec $ LCsProg likelyChanges_SRS,
   UCsSec $ UCsProg unlikelyChanges_SRS,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],
-  Verbatim aux_cons, Bibliography]
+  AuxConstntSec $ AuxConsProg ssp [],
+  Bibliography]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -190,8 +187,7 @@ sec = extractSection srs
 
 labCon :: [LabelledContent]
 labCon = [fig_physsyst, fig_indexconv, fig_forceacting, 
-  data_constraint_Table2, data_constraint_Table3, inputDataTable, 
-  inputsToOutputTable]
+  data_constraint_Table2, data_constraint_Table3] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -535,9 +531,6 @@ slopeVert = verticesConst $ phrase slope
 -- SECTION 5 --
 
 -- SECTION 5.1 --
-funcReqList :: [Contents]
-funcReqList = (mkEnumSimpleD funcReqs) ++
-  [LlC inputDataTable, LlC inputsToOutputTable]
 
 -- SECTION 5.2 --
 
@@ -545,7 +538,7 @@ funcReqList = (mkEnumSimpleD funcReqs) ++
 --Likely Changes is automatically generated
 
 -- SECTION 7 --
-aux_cons = valsOfAuxConstantsF ssa []
+-- Table of aux consts is automatically generated
 
 -- References --
 -- automatically generated

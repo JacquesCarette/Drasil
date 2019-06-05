@@ -1,9 +1,10 @@
 module Data.Drasil.Concepts.Education where
 
 import Language.Drasil hiding (year)
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Documentation as Doc (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)
-import Data.Drasil.Phrase (compoundNC)
 
 educon :: [NamedChunk]
 educon = [calculus, civil, degree_, engineering, structural, mechanics,

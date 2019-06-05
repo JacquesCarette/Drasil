@@ -9,7 +9,7 @@ inputMod :: Mod
 inputMod = Mod "InputFormat" [inputData]
 
 inputData :: Func
-inputData = funcData "get_inputs"
+inputData = funcData "get_input"
   [ junkLine,
     singleton tank_length,
     junkLine,

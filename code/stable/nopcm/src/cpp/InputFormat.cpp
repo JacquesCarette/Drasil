@@ -17,7 +17,7 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-void func_get_inputs(string filename, InputParameters &inParams) {
+void func_get_input(string filename, InputParameters &inParams) {
     ifstream infile;
     string line;
     vector<string> lines(0);

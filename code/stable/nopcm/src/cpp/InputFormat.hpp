@@ -12,6 +12,6 @@ using std::ofstream;
 
 
 
-void func_get_inputs(string filename, InputParameters &inParams);
+void func_get_input(string filename, InputParameters &inParams);
 
 #endif

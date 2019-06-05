@@ -15,12 +15,12 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  LCsSec(..), UCsSec(..), generateTraceMap',
+  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), generateTraceMap',
   dataConstraintUncertainty, goalStmtF,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, termDefnF,
-  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  traceMGF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, generateTraceTable, solutionLabel)
 
@@ -39,9 +39,7 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi)
-import Data.Drasil.Phrase (for')
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, showingCxnBw)
+import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
@@ -54,15 +52,15 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity,
 import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
-import Drasil.GamePhysics.Assumptions(assumptions)
+import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
  likelyChangesListwithIntro, likelyChangesList')
-import Drasil.GamePhysics.Concepts (chipmunk, acronyms, twoD)
+import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqsContent, funcReqs, nonfuncReqs,
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs,
     propsDeriv, requirements)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -107,16 +105,16 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub funcReqsContent,
+      FReqsSub funcReqs [],
       NonFReqsSub nonfuncReqs
     ],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
-    ExistingSolnSec $ ExistSolnVerb offTheShelfSolutions,
+    ExistingSolnSec $ ExistSolnProg offShelfSols,
     TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
       traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
       (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
-    Verbatim valuesOfAuxiliaryConstatnts,
+    AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -382,7 +380,8 @@ probDescIntro = foldlSP
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `sAnd` S "high quality",
   plural physLib, S "available to be used for", phrase consumer, plural product_ +:+. 
-  sParen (makeRef2S offTheShelfSolutions), S "By creating a simple, lightweight, fast and portable",
+  sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])),
+  S "By creating a simple, lightweight, fast and portable",
   getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` phrase game,
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   plural product_, S "will be produced"]
@@ -492,28 +491,25 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
 -----------------------------------------
 
-offTheShelfSolutions :: Section
-offTheShelfSolutionsIntro, off_the_shelf_solutions_2dlist, 
-  offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist :: Contents
+offShelfSols :: [Contents]
+offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
+                offShelfSolsMid,   offShelfSols3DList]
 
-offTheShelfSolutions = SRS.offShelfSol [offTheShelfSolutionsIntro, 
-  off_the_shelf_solutions_2dlist, offTheShelfSolutionsMid, off_the_shelf_solutions_3dlist] []
+offShelfSolsIntro, offShelfSols2DList, 
+  offShelfSolsMid, offShelfSols3DList :: Contents
 
-offTheShelfSolutionsIntro = offTheShelfSolutionsIntroParam probDescription physLib
+offShelfSolsIntro = mkParagraph $ foldlSentCol 
+  [S "As mentioned in", makeRef2S probDescription `sC`
+  S "there already exist free", phrase openSource, phrase game +:+.
+  plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 
-offTheShelfSolutionsIntroParam :: NamedIdea n => Section -> n -> Contents
-offTheShelfSolutionsIntroParam problmDescSec lib = mkParagraph $ foldlSentCol 
-  [S "As mentioned in", (makeRef2S problmDescSec) `sC`
-  S "there already exist free", (phrase openSource), (phrase game) +:+.
-  (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
-
-off_the_shelf_solutions_2dlist = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
+offShelfSols2DList = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
 
-offTheShelfSolutionsMid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
-        S "3D", (phrase game), (plural physLib), S "include:"]
+offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
+  getAcc threeD, phrase game, plural physLib, S "include:"]
 
-off_the_shelf_solutions_3dlist = LlC $ enumBullet solutionLabel [
+offShelfSols3DList = LlC $ enumBullet solutionLabel [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
   (S "Newton Game Dynamics: http://newtondynamics.com/")]
@@ -763,9 +759,6 @@ traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --
 -----------------------------------
-
-valuesOfAuxiliaryConstatnts :: Section
-valuesOfAuxiliaryConstatnts = valsOfAuxConstantsF chipmunk []
 
 ----------------
 -- REFERENCES --

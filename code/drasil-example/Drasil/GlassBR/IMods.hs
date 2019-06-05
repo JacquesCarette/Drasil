@@ -14,7 +14,6 @@ import Drasil.GlassBR.Unitals (charWeight, demand, demandq, plateLen, plateWidth
   standOffDist, isSafePb, isSafeLR, lRe, pbTol, probBr)
 
 import Data.Drasil.Concepts.Documentation (goal)
-import Data.Drasil.SentenceStructures (foldlSent)
 
 iMods :: [InstanceModel]
 iMods = [pbIsSafe, lrIsSafe]

@@ -9,7 +9,7 @@ import java.util.Vector;
 
 public class InputFormat {
     
-    public static void func_get_inputs(String filename, InputParameters inParams) throws Exception {
+    public static void func_get_input(String filename, InputParameters inParams) throws Exception {
         Scanner infile;
         String line;
         Vector<String> lines = new Vector<String>(0);

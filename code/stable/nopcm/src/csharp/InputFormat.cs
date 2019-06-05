@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace SWHS {
     public class InputFormat {
         
-        public static void func_get_inputs(string filename, InputParameters inParams) {
+        public static void func_get_input(string filename, InputParameters inParams) {
             StreamReader infile;
             string line;
             List<string> lines = new List<string>(0);

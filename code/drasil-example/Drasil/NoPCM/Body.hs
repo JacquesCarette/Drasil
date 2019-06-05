@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (constraints, section, sec)
+import Language.Drasil hiding (section, sec)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
@@ -72,12 +72,11 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
-  coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
-  tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
-  temp_env, temp_W, thFluxVect, time_final, time_final_max, timeStep, 
-  vol_ht_gen, w_density, w_density_max, w_density_min, w_E, w_mass, w_vol, 
+import Drasil.SWHS.Unitals (coil_HTC_max, coil_HTC_min, 
+  coil_SA_max, deltaT, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
+  htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, tank_length_max, 
+  tank_length_min, tank_vol, tau, tau_W, temp_env, temp_W, thFluxVect, 
+  time_final_max, vol_ht_gen, w_density_max, w_density_min, w_E, w_mass, w_vol, 
   specParamValList, unitalChuncks, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions
@@ -88,8 +87,8 @@ import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
-import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
-import Drasil.NoPCM.Unitals (temp_init)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
+import Drasil.NoPCM.Unitals (inputs, constrained)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -100,7 +99,7 @@ checkSi = collectUnits symbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
+symbols = pi_ : (map dqdWr units) ++ (map dqdWr constrained)
  ++ map dqdWr [temp_W, w_E]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -111,7 +110,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++ 
   (map qw [abs_tol, rel_tol, cons_tol])
 
 units :: [UnitaryConceptDict]
@@ -120,11 +119,6 @@ units = map ucw [density, tau, in_SA, out_SA,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W, QT.sensHeat]
-
-constraints :: [UncertQ]
-constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
-  time_final, tank_length, temp_C, timeStep, w_density, diam]
-  -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates :: Section
 
@@ -224,11 +218,10 @@ si = SI {
   _concepts = symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [temp_W, w_E] ++ 
-    map qw [abs_tol, rel_tol, cons_tol]), --inputs ++ outputs?
+  _inputs = inputs ++ map qw [temp_W, w_E], --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = (map cnstrw constrained ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
@@ -418,7 +411,7 @@ sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase mater
 --TODO: Implement physical properties of a substance
 
 dataConstTable1 :: LabelledContent
-dataConstTable1 = inDataConstTbl dataConstListIn
+dataConstTable1 = inDataConstTbl constrained
 -- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
   -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]

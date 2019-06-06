@@ -21,7 +21,7 @@ namespace SWHS {
             infile.ReadLine();
             inParams.T_C = Double.Parse(infile.ReadLine());
             infile.ReadLine();
-            inParams.ρ_W = Double.Parse(infile.ReadLine());
+            inParams.rho_W = Double.Parse(infile.ReadLine());
             infile.ReadLine();
             inParams.C_W = Double.Parse(infile.ReadLine());
             infile.ReadLine();

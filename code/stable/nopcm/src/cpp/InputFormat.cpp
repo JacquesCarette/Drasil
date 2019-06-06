@@ -36,7 +36,7 @@ void func_get_input(string filename, InputParameters &inParams, double τ, doubl
     infile >> inParams.T_C;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> inParams.ρ_W;
+    infile >> inParams.rho_W;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.C_W;

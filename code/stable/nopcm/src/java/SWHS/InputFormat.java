@@ -24,7 +24,7 @@ public class InputFormat {
         infile.nextLine();
         inParams.T_C = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        inParams.ρ_W = Double.parseDouble(infile.nextLine());
+        inParams.rho_W = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.C_W = Double.parseDouble(infile.nextLine());
         infile.nextLine();

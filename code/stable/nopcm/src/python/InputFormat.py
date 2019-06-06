@@ -17,7 +17,7 @@ def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
     infile.readline()
     inParams.T_C = float(infile.readline())
     infile.readline()
-    inParams.ρ_W = float(infile.readline())
+    inParams.rho_W = float(infile.readline())
     infile.readline()
     inParams.C_W = float(infile.readline())
     infile.readline()

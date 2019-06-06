@@ -12,8 +12,7 @@ import Drasil.DocLang (mkInputPropsTable)
 
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, htCap_W, tank_length,
-  tau_W, temp_C, time_final, w_density, w_mass, w_vol, abs_tol, rel_tol, cons_tol)
+import Drasil.SWHS.Unitals (diam, tank_length, tau_W, w_density, w_mass, w_vol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (inputs)

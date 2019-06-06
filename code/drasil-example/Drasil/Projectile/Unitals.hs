@@ -31,7 +31,7 @@ quantDicts = [isShort, offset, isHit]
 ---
 launAngle, launDist, launDur, launSpeed, targDist :: ConstrConcept
 launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [gtZeroConstr] (dbl 1)
-launDist  = constrained' (dqd' launDistConcept  (symbol xDist)                     Real (Just metre))  [gtZeroConstr] (dbl 1)
+launDist  = constrained' (dqd' launDistConcept  (const $ Concat [lD, Atomic "'"])  Real (Just metre))  [gtZeroConstr] (dbl 1)
 launDur   = constrained' (dqd' launDurConcept   (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
 launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (dbl 1)
 targDist  = constrained' (dqd' targDistConcept  (const $ sub lR $ Atomic "target") Real (Just metre))  [gtZeroConstr] (dbl 1)

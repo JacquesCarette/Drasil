@@ -9,18 +9,18 @@ import Data.Drasil.Utils (weave)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation)
-import Data.Drasil.Quantities.Physics (gravitationalAccel, iSpeed, iyPos, iyVel,
-  time, yConstAccel, yPos)
+import Data.Drasil.Quantities.Physics (distance, gravitationalAccel, iSpeed,
+  ixPos, ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
-import Drasil.Projectile.Assumptions (accelYGravity, launchOrigin, targetXAxis)
+import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin, targetXAxis)
 import Drasil.Projectile.Concepts (projectile, target)
-import Drasil.Projectile.DataDefs (speedIY)
+import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (isHit, isShort, launAngle, launDist,
   launDur, launSpeed, offset, targDist)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, shortIM, offsetIM, hitIM]
+iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
 
 ---
 timeIM :: InstanceModel
@@ -49,8 +49,6 @@ timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   eqnFromSource (sy yConstAccel $= - sy gravitationalAccel) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
-  where
-    eqnFromSource a b = E a +:+ sParen (makeRef2S b)
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase projectile, S "lands" `sC` S "we want to find the", E (sy time), 
   phrase value, sParen (E (sy launDur)), S "where", E (sy yPos $= 0) +:+.
@@ -70,6 +68,50 @@ timeDerivEqn2 = sy iyVel * sy launDur - sy gravitationalAccel * square (sy launD
 timeDerivEqn3 = sy iyVel - sy gravitationalAccel * sy launDur / 2 $= 0
 timeDerivEqn4 = sy launDur $= 2 * sy iyVel / sy gravitationalAccel
 timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+
+---
+distanceIM :: InstanceModel
+distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
+  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw launDist)
+  [sy launDist $> 0] distanceDeriv "calOfLandingDist" [distanceDesc]
+
+distanceExpr :: Expr
+distanceExpr = sy launDist $= 2 * square (sy iSpeed) * sin (sy launAngle) *
+                                cos (sy launAngle) / sy gravitationalAccel
+
+distanceRC :: RelationConcept
+distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance") distanceDesc distanceExpr
+
+distanceDesc :: Sentence
+distanceDesc = EmptyS
+
+distanceDeriv :: Derivation
+distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDist)) :
+               weave [distanceDerivSents, map E distanceDerivEqns]
+
+distanceDerivSents :: [Sentence]
+distanceDerivSents = [distanceDerivSent1, distanceDerivSent2,
+                      replaceFromDDSent speedIX ixVel, distanceDerivSent3]
+
+distanceDerivSent1, distanceDerivSent2, distanceDerivSent3 :: Sentence
+distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
+  foldlList Comma List [eqnFromSource (sy ixPos $= 0) launchOrigin,
+  eqnFromSource (sy xConstAccel $= 0) accelXZero],
+  S "Substituting these", plural value, S "into the x-direction" `sOf`
+  makeRef2S posVecGD, S "gives us"]
+distanceDerivSent2 = foldlSentCol [S "To find the vertical", phrase distance,
+  S "travelled" `sC` S "we want to find the", E (sy xPos), phrase value,
+  sParen (E (sy launDist)), S "at", phrase launDur,
+  sParen (S "from" +:+ makeRef2S timeIM)]
+distanceDerivSent3 = S "Rearranging this" +:+ phrase equation +: S "gives us"
+
+distanceDerivEqns :: [Expr]
+distanceDerivEqns = [distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3, distanceExpr]
+
+distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3 :: Expr
+distanceDerivEqn1 = sy xPos $= sy ixVel * sy time
+distanceDerivEqn2 = sy launDist $= sy ixVel * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+distanceDerivEqn3 = sy launDist $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 ---
 shortIM :: InstanceModel
@@ -114,3 +156,6 @@ hitDesc = EmptyS
 -- FIXME: Pull to drasil-utils in Misc
 replaceFromDDSent :: DataDefinition -> UnitalChunk -> Sentence
 replaceFromDDSent ddef c = S "From" +:+ makeRef2S ddef +:+ S "we can replace" +: E (sy c)
+
+eqnFromSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
+eqnFromSource a b = E a +:+ sParen (makeRef2S b)

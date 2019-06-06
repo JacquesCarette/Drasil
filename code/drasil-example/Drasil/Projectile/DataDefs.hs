@@ -1,4 +1,4 @@
-module Drasil.Projectile.DataDefs (dataDefns, speedIY) where
+module Drasil.Projectile.DataDefs (dataDefns, speedIX, speedIY) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil

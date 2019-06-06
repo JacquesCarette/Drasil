@@ -44,11 +44,11 @@ This section simplifies the original problem and helps in developing the theoret
 \item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[yAxisPerpend:\phantomsection\label{yAxisPerpend}]The y-axis is perpendicular to the x-axis.
 \item[rightHandAxes:\phantomsection\label{rightHandAxes}]The axes are defined using a right-handed coordinate system.
-\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
+\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
 \item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target.
 \item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero.
+\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
 \item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
 \item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
@@ -296,7 +296,7 @@ Notes &
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
+RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of position vector:
@@ -354,7 +354,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -429,7 +429,7 @@ Notes &
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of launch duration:
@@ -457,13 +457,73 @@ t'=\frac{2 {v^{i}} \sin\left(θ\right)}{g}
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:calOfLandingDist}
+\phantomsection 
+\label{IM:calOfLandingDist}
+\\ \midrule \\
+Label & Calculation of landing distance
+\\ \midrule \\
+Input & ${v^{i}}$, $θ$
+\\ \midrule \\
+Output & $d'$
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {v^{i}}>0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0<θ<90
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     d'>0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           d'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$d'$ is the launch distance (m)}
+              \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Detailed derivation of launch distance:
+We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{x}}^{c}}=0$ (\hyperref[accelXZero]{A: accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
+\begin{displaymath}
+{p_{x}}={{v_{x}}^{i}} t
+\end{displaymath}
+To find the vertical distance travelled, we want to find the ${p_{x}}$ value ($d'$) at launch duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
+\begin{displaymath}
+d'=\frac{{{v_{x}}^{i}}\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+\end{displaymath}
+From \hyperref[DD:speedIX]{DD: speedIX} we can replace ${{v_{x}}^{i}}$:
+\begin{displaymath}
+d'=\frac{{v^{i}} \cos\left(θ\right)\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+\end{displaymath}
+Rearranging this equation gives us:
+\begin{displaymath}
+d'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+\end{displaymath}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:shortIM}
 \phantomsection 
 \label{IM:shortIM}
 \\ \midrule \\
 Label & IsShort
 \\ \midrule \\
-Input & ${r_{target}}$, ${r_{x}}$
+Input & ${r_{target}}$, $d'$
 \\ \midrule \\
 Output & $isShort$
 \\ \midrule \\
@@ -471,19 +531,19 @@ Input Constraints & \begin{displaymath}
                     {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {r_{x}}>0
+                    d'>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isShort={r_{target}}>{r_{x}}
+           isShort={r_{target}}>d'
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$isShort$ is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)}
               \item{${r_{target}}$ is the target distance (m)}
-              \item{${r_{x}}$ is the launch distance (m)}
+              \item{$d'$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -503,7 +563,7 @@ RefBy &
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${r_{target}}$, ${r_{x}}$
+Input & ${r_{target}}$, $d'$
 \\ \midrule \\
 Output & ${r_{offset}}$
 \\ \midrule \\
@@ -511,19 +571,19 @@ Input Constraints & \begin{displaymath}
                     {r_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {r_{x}}>0
+                    d'>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {r_{offset}}=|{r_{target}}-{r_{x}}|
+           {r_{offset}}=|{r_{target}}-d'|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${r_{offset}}$ is the offset between the target distance and the launch distance (m)}
               \item{${r_{target}}$ is the target distance (m)}
-              \item{${r_{x}}$ is the launch distance (m)}
+              \item{$d'$ is the launch distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 

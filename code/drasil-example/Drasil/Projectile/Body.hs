@@ -8,17 +8,17 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(SSDSec), Field(..), Fields,
-  InclUnits(IncludeUnits), ProblemDescription(PDProg),
-  SCSSub(Assumptions, DDs, GDs, IMs, TMs), SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  Verbosity(Verbose),
+import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc, DocSection(SSDSec),
+  Field(..), Fields, InclUnits(IncludeUnits), ProblemDescription(PDProg),
+  SCSSub(Assumptions, DDs, GDs, IMs, TMs), SSDSec(..),
+  SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
   generateTraceMap, generateTraceMap', goalStmtF, mkDoc, mkEnumSimpleD)
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, coordinate,
   datum, general, goalStmt, information, input_, model, output_,
-  physicalSystem, problemDescription, problem,  section_,
-  solutionCharacteristic, specification, srs, symbol_, system)
-import Data.Drasil.Concepts.Math (angle, equation, perp, vector)
+  physicalSystem, problemDescription, problem, section_,
+  solutionCharacteristic, specification, srs, symbol_, system, value)
+import Data.Drasil.Concepts.Math (angle, constraint, equation, perp, vector)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
 import Data.Drasil.Concepts.Software (program)
@@ -52,7 +52,7 @@ mkSRS = [
         , TMs [] (Label : stdFields) tMods
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
+        , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
         ]
       ]
   ]
@@ -78,9 +78,9 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
-  (nw projectileTitle : nw mass : nw twoD : map nw [angle, equation, perp, program, vector] ++
+  (nw projectileTitle : nw mass : nw twoD : map nw [angle, constraint, equation, perp, program, vector] ++
     map nw [coordinate, datum, general, information, input_, model, output_, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification, symbol_, system] ++
+    problem, section_, solutionCharacteristic, specification, symbol_, system, value] ++
     map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++
     map nw concepts ++ map nw physicscon ++ map nw physicCon ++ unitalIdeas)
   [assumpDom] ([] :: [UnitDefn]) label refBy

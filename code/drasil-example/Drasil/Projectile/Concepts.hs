@@ -14,7 +14,8 @@ concepts = [launch, launchAngle, launchDist, launchSpeed, launcher, projectile, 
 projectileTitle :: CI
 projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
 
-launch, launchAngle, launchDist, launchSpeed, launcher, projectile, targetDist, target :: NamedChunk
+duration, launch, launchAngle, launchDist, launchDur, launchSpeed, launcher, projectile, targetDist, target :: NamedChunk
+duration   = nc "duration"   (nounPhraseSP "duration")
 launch     = nc "launch"     (nounPhraseSP "launch") -- FIXME: Used as adjective
 launcher   = nc "launcher"   (nounPhraseSP "launcher")
 projectile = nc "projectile" (nounPhraseSP "projectile")
@@ -22,5 +23,6 @@ target     = nc "target"     (nounPhraseSP "target")
 
 launchAngle = compoundNC launch angle
 launchDist  = compoundNC launch distance
+launchDur   = compoundNC launch duration
 launchSpeed = compoundNC launch speed
 targetDist  = compoundNC target distance

@@ -1,4 +1,4 @@
-module Drasil.Projectile.GenDefs (genDefns) where
+module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
@@ -152,6 +152,7 @@ rearrAndIntSent, performIntSent :: Sentence
 rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
 performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
 
+-- FIXME: Pull to drasil-utils in Misc
 replaceFromGDSent :: GenDefn -> UnitalChunk -> Sentence
 replaceFromGDSent gdef c = S "From" +:+ makeRef2S gdef +:+ S "we can replace" +: E (sy c)
 

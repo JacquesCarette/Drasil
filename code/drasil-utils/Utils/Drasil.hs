@@ -6,8 +6,8 @@ module Utils.Drasil (
   -- Misc
   addPercent, bulletFlat, bulletNested, enumBullet, enumBulletU, enumSimple,
   enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent, makeListRef, makeTMatrix,
-  mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT, sortBySymbol,
-  sortBySymbolTuple, typUncr, unwrap, weave, zipFTable', zipSentList,
+  mkEnumAbbrevList, mkTableFromColumns, noRefs, sortBySymbol,
+  sortBySymbolTuple, typUncr, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',

@@ -1,8 +1,7 @@
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent,
   makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs,
-  noRefsLT, sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave,
-  zipFTable', zipSentList) where
+  sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 
@@ -14,11 +13,11 @@ import Data.List (elem, sortBy, transpose)
 sortBySymbol :: (HasSymbol a) => [a] -> [a]
 sortBySymbol = sortBy compareBySymbol
 
-compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
-compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
-
 sortBySymbolTuple :: (HasSymbol a) => [(a, b)] -> [(a, b)]
 sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
+
+compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
+compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
@@ -56,13 +55,11 @@ zipSentList acc _ []           = acc
 zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
--- | traceability matrices row from a list of rows and a list of columns
-zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
-zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
-
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
+  where
+    zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 
 -- | Helper for making a table from a columns
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])

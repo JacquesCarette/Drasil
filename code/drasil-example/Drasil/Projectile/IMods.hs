@@ -9,8 +9,8 @@ import Data.Drasil.Utils (weave)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation)
-import Data.Drasil.Quantities.Physics (iSpeed, iyPos, iyVel, scalarAccel, time,
-  yConstAccel, yPos)
+import Data.Drasil.Quantities.Physics (gravitationalAccel, iSpeed, iyPos, iyVel,
+  time, yConstAccel, yPos)
 
 import Drasil.Projectile.Assumptions (accelYGravity, launchOrigin, targetXAxis)
 import Drasil.Projectile.Concepts (projectile, target)
@@ -30,7 +30,7 @@ timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  timeDesc $ sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy scalarAccel
+  timeDesc $ sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 timeDesc :: Sentence
 timeDesc = EmptyS
@@ -46,7 +46,7 @@ timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnFromSource (sy iyPos $= 0) launchOrigin,
-  eqnFromSource (sy yConstAccel $= - sy scalarAccel) accelYGravity],
+  eqnFromSource (sy yConstAccel $= - sy gravitationalAccel) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
   where
@@ -65,11 +65,11 @@ timeDerivEqns :: [Expr]
 timeDerivEqns = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5]
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5 :: Expr
-timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy scalarAccel * square (sy time) / 2
-timeDerivEqn2 = sy iyVel * sy launDur - sy scalarAccel * square (sy launDur) / 2 $= 0
-timeDerivEqn3 = sy iyVel - sy scalarAccel * sy launDur / 2 $= 0
-timeDerivEqn4 = sy launDur $= 2 * sy iyVel / sy scalarAccel
-timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy scalarAccel
+timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy gravitationalAccel * square (sy time) / 2
+timeDerivEqn2 = sy iyVel * sy launDur - sy gravitationalAccel * square (sy launDur) / 2 $= 0
+timeDerivEqn3 = sy iyVel - sy gravitationalAccel * sy launDur / 2 $= 0
+timeDerivEqn4 = sy launDur $= 2 * sy iyVel / sy gravitationalAccel
+timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 ---
 shortIM :: InstanceModel

@@ -415,14 +415,14 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           t'=\frac{2 {v^{i}} \sin\left(θ\right)}{a}
+           t'=\frac{2 {v^{i}} \sin\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$t'$ is the launch duration (s)}
               \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
-              \item{$a$ is the scalar acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -433,25 +433,25 @@ RefBy &
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of launch duration:
-We know that ${{p_{y}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{y}}^{c}}=-a$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
+We know that ${{p_{y}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{y}}^{c}}=-g$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 \begin{displaymath}
-{p_{y}}={{v_{y}}^{i}} t-\frac{a t^{2}}{2}
+{p_{y}}={{v_{y}}^{i}} t-\frac{g t^{2}}{2}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value ($t'$) where ${p_{y}}=0$ (since the target is on the x-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
 \begin{displaymath}
-{{v_{y}}^{i}} t'-\frac{a t'^{2}}{2}=0
+{{v_{y}}^{i}} t'-\frac{g t'^{2}}{2}=0
 \end{displaymath}
 Divide by $t'$ (with the constraint $t'>0$) to get:
 \begin{displaymath}
-{{v_{y}}^{i}}-\frac{a t'}{2}=0
+{{v_{y}}^{i}}-\frac{g t'}{2}=0
 \end{displaymath}
 Solving for $t'$ gives us:
 \begin{displaymath}
-t'=\frac{2 {{v_{y}}^{i}}}{a}
+t'=\frac{2 {{v_{y}}^{i}}}{g}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD: speedIY} we can replace ${{v_{y}}^{i}}$:
 \begin{displaymath}
-t'=\frac{2 {v^{i}} \sin\left(θ\right)}{a}
+t'=\frac{2 {v^{i}} \sin\left(θ\right)}{g}
 \end{displaymath}
 \par~
 

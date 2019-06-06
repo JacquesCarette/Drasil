@@ -7,8 +7,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, iSpeed, position)
 
-import Data.Drasil.Quantities.Physics (xDist)
-
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, second)
 import Data.Drasil.Units.Physics (velU)
@@ -34,7 +32,7 @@ launAngle = constrained' (dqd' launAngleConcept (const lTheta)                  
 launDist  = constrained' (dqd' launDistConcept  (const $ Concat [lD, Atomic "'"])  Real (Just metre))  [gtZeroConstr] (dbl 1)
 launDur   = constrained' (dqd' launDurConcept   (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
 launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (dbl 1)
-targDist  = constrained' (dqd' targDistConcept  (const $ sub lR $ Atomic "target") Real (Just metre))  [gtZeroConstr] (dbl 1)
+targDist  = constrained' (dqd' targDistConcept  (const $ sub lD $ Atomic "target") Real (Just metre))  [gtZeroConstr] (dbl 1)
 
 launDistConcept :: ConceptChunk
 launDistConcept = cc' launchDist
@@ -67,7 +65,7 @@ isShort = vc "isShort"
 offset :: QuantityDict
 offset = vcUnit "offset"
   (nounPhraseSent (S "offset between the" +:+ phrase targetDist `andThe` phrase launchDist))
-  (sub lR $ Atomic "offset") Real metre
+  (sub lD $ Atomic "offset") Real metre
 
 isHit :: QuantityDict
 isHit = vc "isHit"

@@ -958,7 +958,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>r<sub>target</sub></em>, <em>d'</em></p>
+<p class="paragraph"><em>d<sub>target</sub></em>, <em>d'</em></p>
 </td>
 </tr>
 <tr>
@@ -969,7 +969,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation"><em>d'&thinsp;&gt;&thinsp;0</em></div>
 </td>
@@ -982,7 +982,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>isShort = r<sub>target</sub>&thinsp;&gt;&thinsp;d'</em>
+<em>isShort = d<sub>target</sub>&thinsp;&gt;&thinsp;d'</em>
 </div>
 </td>
 </tr>
@@ -993,7 +993,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <li>
 <em>isShort</em> is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)
 </li>
-<li><em>r<sub>target</sub></em> is the target distance (m)</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
 <li><em>d'</em> is the launch distance (m)</li>
 </ul>
 </td>
@@ -1021,18 +1021,18 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>r<sub>target</sub></em>, <em>d'</em></p>
+<p class="paragraph"><em>d<sub>target</sub></em>, <em>d'</em></p>
 </td>
 </tr>
 <tr>
 <th>Output</th>
-<td><p class="paragraph"><em>r<sub>offset</sub></em></p></td>
+<td><p class="paragraph"><em>d<sub>offset</sub></em></p></td>
 </tr>
 <tr>
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation"><em>d'&thinsp;&gt;&thinsp;0</em></div>
 </td>
@@ -1045,7 +1045,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>r<sub>offset</sub> = |r<sub>target</sub>&minus;d'|</em>
+<em>d<sub>offset</sub> = |d<sub>target</sub>&minus;d'|</em>
 </div>
 </td>
 </tr>
@@ -1054,9 +1054,9 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>r<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
+<em>d<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
 </li>
-<li><em>r<sub>target</sub></em> is the target distance (m)</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
 <li><em>d'</em> is the launch distance (m)</li>
 </ul>
 </td>
@@ -1085,7 +1085,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input</th>
 <td>
 <p class="paragraph">
-<em>r<sub>offset</sub></em>, <em>r<sub>target</sub></em>
+<em>d<sub>offset</sub></em>, <em>d<sub>target</sub></em>
 </p>
 </td>
 </tr>
@@ -1097,10 +1097,10 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>r<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
+<em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation">
-<em>r<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 </td>
 </tr>
@@ -1112,10 +1112,10 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>isHit = r<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
+<em>isHit = d<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
                                                   <span class="fup">1</span>
                                                   <span class="fdn">50</span>
-                                                  </div>&#8239;r<sub>target</sub></em>
+                                                  </div>&#8239;d<sub>target</sub></em>
 </div>
 </td>
 </tr>
@@ -1127,9 +1127,9 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <em>isHit</em> is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)
 </li>
 <li>
-<em>r<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
+<em>d<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
 </li>
-<li><em>r<sub>target</sub></em> is the target distance (m)</li>
+<li><em>d<sub>target</sub></em> is the target distance (m)</li>
 </ul>
 </td>
 </tr>

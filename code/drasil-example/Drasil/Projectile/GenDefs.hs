@@ -4,6 +4,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gdNoRefs)
 import Utils.Drasil
+import Data.Drasil.Utils (fromReplace, weave)
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (vector)
@@ -13,8 +14,6 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, scalarPos, speed,
   time, velocity, xAccel, xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
-
-import Data.Drasil.Utils (weave)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, twoDMotion)
 import Drasil.Projectile.TMods (accelerationTM, velocityTM)
@@ -68,7 +67,7 @@ rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +:+ phrase positio
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
-  rearrAndIntSent, replaceFromGDSent rectVelGD speed, performIntSent]
+  rearrAndIntSent, fromReplace rectVelGD speed, performIntSent]
     where
       motSent = S "The motion" `sIn` makeRef2S velocityTM `sIs` S "now one-dimensional."
 
@@ -142,10 +141,6 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
 rearrAndIntSent, performIntSent :: Sentence
 rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
 performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
-
--- FIXME: Pull to drasil-utils in Misc
-replaceFromGDSent :: GenDefn -> UnitalChunk -> Sentence
-replaceFromGDSent gdef c = S "From" +:+ makeRef2S gdef +:+ S "we can replace" +: E (sy c)
 
 -- Helper for making vector derivations
 vecDeriv :: [UnitalChunk] -> GenDefn -> Sentence

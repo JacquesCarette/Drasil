@@ -3,7 +3,8 @@ module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
   getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, noRefsLT,
-  typUncr, unwrap, weave, zipFTable', zipSentList) where
+  typUncr, unwrap, weave, zipFTable', zipSentList,
+  eqnWSource, fromReplace) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -17,6 +18,14 @@ eqUnR e lbl = llcc lbl $ EqnBlock e
 
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
+
+-- | takes an expression and a referable and outputs as a Sentence "expression (source)"
+eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
+eqnWSource a b = E a +:+ sParen (makeRef2S b)
+
+-- | takes a referable and a HasSymbol and outputs as a Sentence "From source we can replace symbol"
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: E (sy c)
 
 -- | concantenates number to abbreviation
 -- should not be exported

@@ -3,9 +3,9 @@ module Drasil.Projectile.IMods (iMods) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, InstanceModel, imNoDerivNoRefs, imNoRefs)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs)
 import Utils.Drasil
-import Data.Drasil.Utils (weave)
+import Data.Drasil.Utils (eqnWSource, fromReplace, weave)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation)
@@ -41,12 +41,12 @@ timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDur)) :
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
-                  timeDerivSent4, replaceFromDDSent speedIY iyVel]
+                  timeDerivSent4, fromReplace speedIY iyVel]
 
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List [eqnFromSource (sy iyPos $= 0) launchOrigin,
-  eqnFromSource (sy yConstAccel $= - sy gravitationalAccel) accelYGravity],
+  foldlList Comma List [eqnWSource (sy iyPos $= 0) launchOrigin,
+  eqnWSource (sy yConstAccel $= - sy gravitationalAccel) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
@@ -91,12 +91,12 @@ distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDist)) :
 
 distanceDerivSents :: [Sentence]
 distanceDerivSents = [distanceDerivSent1, distanceDerivSent2,
-                      replaceFromDDSent speedIX ixVel, distanceDerivSent3]
+                      fromReplace speedIX ixVel, distanceDerivSent3]
 
 distanceDerivSent1, distanceDerivSent2, distanceDerivSent3 :: Sentence
 distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List [eqnFromSource (sy ixPos $= 0) launchOrigin,
-  eqnFromSource (sy xConstAccel $= 0) accelXZero],
+  foldlList Comma List [eqnWSource (sy ixPos $= 0) launchOrigin,
+  eqnWSource (sy xConstAccel $= 0) accelXZero],
   S "Substituting these", plural value, S "into the x-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 distanceDerivSent2 = foldlSentCol [S "To find the vertical", phrase distance,
@@ -151,11 +151,3 @@ hitRC = makeRC "hitRC" (nounPhraseSP "isHit")
   
 hitDesc :: Sentence
 hitDesc = EmptyS
-
--- Helpers
--- FIXME: Pull to drasil-utils in Misc
-replaceFromDDSent :: DataDefinition -> UnitalChunk -> Sentence
-replaceFromDDSent ddef c = S "From" +:+ makeRef2S ddef +:+ S "we can replace" +: E (sy c)
-
-eqnFromSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
-eqnFromSource a b = E a +:+ sParen (makeRef2S b)

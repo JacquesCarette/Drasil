@@ -95,14 +95,10 @@ velVecRel = sy velocity $= vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel
 
 velVecDeriv :: Derivation
 velVecDeriv = [S "Detailed derivation" `sOf` phrase velocity +:+ phrase vector :+: S ":",
-               velVecDerivSent, E velVecDerivEqn]
+               velVecDerivSent, E velVecRel]
 
 velVecDerivSent :: Sentence
 velVecDerivSent = vecDeriv [velocity, acceleration] rectVelGD
-
-velVecDerivEqn :: Expr
-velVecDerivEqn = getVec velocity $=
-    vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel + sy yConstAccel * sy time)
 
 ----------
 posVecGD :: GenDefn
@@ -119,15 +115,10 @@ posVecRel = sy position $= vec2D
 
 posVecDeriv :: Derivation
 posVecDeriv = [S "Detailed derivation" `sOf` phrase position +:+ phrase vector :+: S ":",
-               posVecDerivSent, E posVecDerivEqn]
+               posVecDerivSent, E posVecRel]
 
 posVecDerivSent :: Sentence
 posVecDerivSent = vecDeriv [position, velocity, acceleration] rectPosGD
-
-posVecDerivEqn :: Expr
-posVecDerivEqn = getVec position $=
-    vec2D (sy ixPos + sy ixVel * sy time + sy xConstAccel * square (sy time) / 2)
-          (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
 
 -- Helper for making rectilinear derivations
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
@@ -166,8 +157,8 @@ vecDeriv vecs gdef = foldlSent_ [
   phrase constAccelV `sIs` S "represented as" +:+. E (getVec constAccelV),
   S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
-  phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate +:
-  (S "direction" `sC` S "to yield")]
+  phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`
+  S "the", phrase (head vecs), phrase vector +: S "to yield"]
 
 -- Helper for making vector with x- and y-components
 getVec :: UnitalChunk -> Expr

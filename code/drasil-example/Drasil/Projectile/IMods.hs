@@ -12,7 +12,8 @@ import Data.Drasil.Concepts.Math (constraint, equation)
 import Data.Drasil.Quantities.Physics (distance, gravitationalAccel, iSpeed,
   ixPos, ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
-import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin, targetXAxis)
+import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
+  posXDirection, targetXAxis)
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.GenDefs (posVecGD)
@@ -26,14 +27,14 @@ iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw launDur)
-  [sy launDur $> 0] timeDeriv "calOfLandingTime" [timeDesc]
+  [sy launDur $> 0] timeDeriv "calOfLandingTime" [timeNotes]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  timeDesc $ sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+  timeNotes $ sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
-timeDesc :: Sentence
-timeDesc = EmptyS
+timeNotes :: Sentence
+timeNotes = EmptyS
 
 timeDeriv :: Derivation
 timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDur)) :
@@ -73,17 +74,17 @@ timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitatio
 distanceIM :: InstanceModel
 distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw landPos)
-  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [distanceDesc]
+  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [distanceNotes]
 
 distanceExpr :: Expr
 distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
                                 cos (sy launAngle) / sy gravitationalAccel
 
 distanceRC :: RelationConcept
-distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance") distanceDesc distanceExpr
+distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance") distanceNotes distanceExpr
 
-distanceDesc :: Sentence
-distanceDesc = EmptyS
+distanceNotes :: Sentence
+distanceNotes = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
 
 distanceDeriv :: Derivation
 distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
@@ -117,37 +118,37 @@ distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed
 shortIM :: InstanceModel
 shortIM = imNoDerivNoRefs shortRC [qw targPos, qw landPos]
   [sy targPos $> 0, sy landPos $> 0] (qw isShort) []
-  "shortIM" [shortDesc]
+  "shortIM" [shortNotes]
 
 shortRC :: RelationConcept
 shortRC = makeRC "shortRC" (nounPhraseSP "isShort") 
-  shortDesc $ sy isShort $= sy targPos $> sy landPos
+  shortNotes $ sy isShort $= sy targPos $> sy landPos
   
-shortDesc :: Sentence
-shortDesc = EmptyS
+shortNotes :: Sentence
+shortNotes = EmptyS
 
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
   [sy targPos $> 0, sy landPos $> 0] (qw offset) []
-  "offsetIM" [offsetDesc]
+  "offsetIM" [offsetNotes]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  offsetDesc $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
+  offsetNotes $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
   
-offsetDesc :: Sentence
-offsetDesc = EmptyS
+offsetNotes :: Sentence
+offsetNotes = EmptyS
 
 ---
 hitIM :: InstanceModel
 hitIM = imNoDerivNoRefs hitRC [qw offset, qw targPos]
   [sy offset $> 0, sy targPos $> 0] (qw isHit) []
-  "hitIM" [hitDesc]
+  "hitIM" [hitNotes]
 
 hitRC :: RelationConcept
 hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  hitDesc $ sy isHit $= sy offset $< (0.02 * sy targPos)
+  hitNotes $ sy isHit $= sy offset $< (0.02 * sy targPos)
   
-hitDesc :: Sentence
-hitDesc = EmptyS
+hitNotes :: Sentence
+hitNotes = EmptyS

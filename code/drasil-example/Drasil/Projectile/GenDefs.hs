@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   time, velocity, xAccel, xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 
-import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, twoDMotion)
+import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 
 genDefns :: [GenDefn]
@@ -126,9 +126,9 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   sParen (S "of negligible size" `sAnd` S "shape" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
   (phrase c1 `sIs` getScalar c1 `andThe` phrase c2 `sIs` getScalar c2), motSent,
-  S "The", phrase initc, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
-  S "represented by" +:+. getScalar initc, S "From", makeRef2S ctm `sC`
-  S "using the above", plural symbol_ +: S "we have"]
+  S "The", phrase initc, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+
+  makeRef2S timeStartZero) `sIs` S "represented by" +:+. getScalar initc,
+  S "From", makeRef2S ctm `sC` S "using the above", plural symbol_ +: S "we have"]
   where
     getScalar c
       | c == position     = E (sy scalarPos)

@@ -41,12 +41,12 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
 \begin{itemize}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is in 2D. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
+\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[yAxisPerpend:\phantomsection\label{yAxisPerpend}]The y-axis is perpendicular to the x-axis.
 \item[rightHandAxes:\phantomsection\label{rightHandAxes}]The axes are defined using a right-handed coordinate system.
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target.
+\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[constAccel]{A: constAccel}.
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[constAccel]{A: constAccel}.
@@ -54,8 +54,8 @@ This section simplifies the original problem and helps in developing the theoret
 \item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
 \item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. \hyperref[constAccel]{A: constAccel}.
-\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected.
-\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero.
+\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. \hyperref[targetXAxis]{A: targetXAxis} \hyperref[cartSyst]{A: cartSyst}.
+\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -144,7 +144,7 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 \begin{displaymath}
 {a^{c}}=\frac{d\,v}{d\,t}
 \end{displaymath}
@@ -188,7 +188,7 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear position:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
 \begin{displaymath}
 v=\frac{d\,p}{d\,t}
 \end{displaymath}
@@ -483,7 +483,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & 
+Notes & The constraint $p'>0$ is from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\

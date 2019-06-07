@@ -1,5 +1,6 @@
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
-  assumptions, constAccel, launchOrigin, pointMass, targetXAxis, twoDMotion) where
+  assumptions, constAccel, launchOrigin, pointMass, posXDirection, targetXAxis,
+  timeStartZero, twoDMotion) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -41,7 +42,7 @@ twoDMotionDesc :: Sentence
 twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` S "in" +:+. getAcc twoD
 
 cartSystDesc :: Sentence
-cartSystDesc = S "A" +:+. (phrase cartesian `sIs` S "used")
+cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 yAxisPerpendDesc :: Sentence
 yAxisPerpendDesc = S "The y-axis" `sIs` phrase perp `toThe` S "x-axis."
@@ -53,7 +54,7 @@ launchOriginDesc :: Sentence
 launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
 
 targetXAxisDesc :: Sentence
-targetXAxisDesc = S "The" +:+ phrase target +:+. S "lies on the x-axis"
+targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the x-axis" +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 posXDirectionDesc :: Sentence
 posXDirectionDesc = S "The positive x-direction" `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)

@@ -353,7 +353,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]Newton's law of convective cooling applies between the water and the PCM. \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}.
 \item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. \hyperref[likeChgDT]{LC: Discharging-Tank} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]The initial temperature of the water and the PCM is the same. \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}.
+\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]The initial temperature of the water and the PCM is the same. \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}.
 \item[PCM-Initially-Solid:\phantomsection\label{assumpPIS}]The simulation will start with the PCM in a solid state. \hyperref[IM:heatEInPCM]{IM: heatEInPCM} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States} \hyperref[IM:heatEInWtr]{IM: heatEInWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]The tank is perfectly insulated so that there is no heat loss from the tank. \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
@@ -793,7 +793,7 @@ Notes & ${T_{P}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
-RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
+RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
@@ -865,7 +865,11 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE. is satisfied The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}). ${{τ_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).
+Notes & ${T_{W}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
+        The input constraint ${T_{init}}\leq{}{{T_{melt}}^{P}}$ comes from \hyperref[assumpPIS]{A: PCM-Initially-Solid}.
+        The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$. $ϕ$ (from \hyperref[DD:melt.frac]{DD: melt\_frac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
+        ${{τ_{P}}^{S}}$ is calculated in \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}.
+        ${{τ_{P}}^{L}}$ is calculated in \hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}.
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -1198,7 +1202,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpTEO]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

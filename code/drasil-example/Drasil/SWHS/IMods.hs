@@ -8,7 +8,7 @@ import Utils.Drasil
 import Data.Drasil.SentenceStructures (follows)
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
-  goal, solution, term_)
+  goal, input_, solution, term_)
 import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
@@ -56,11 +56,12 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
 
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [[E (sy temp_PCM) `sIs` S "defined by", makeRef2S eBalanceOnPCM],
-  [S "The input", phrase constraint, E $ sy temp_init $<= sy temp_C, S "comes from", makeRef2S assumpCTNOD],
-  [E (sy tau_W) `sIs` S "calculated from" +:+ S "FIXME: Missing DD Issue 1484"],
-  [E (sy eta) `sIs` S "calculated from" +:+ S "FIXME: Missing DD Issue 1484"],
-  [S "The initial", plural condition, S "for the" +:+ (getAcc ode `sAre` 
-  E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP)],
+  [S "The", phrase input_, phrase constraint, E $ sy temp_init $<= sy temp_C,
+   S "comes from", makeRef2S assumpCTNOD],
+  [E (sy tau_W) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
+  [E (sy eta) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
+  [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
+   E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`
   phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
   sParen (unwrap $ getUnit temp_W), S "where", E 0, sParen (unwrap $ getUnit temp_W) `sAnd`
@@ -204,7 +205,7 @@ eBalanceOnPCM = im eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [sy temp_init $< sy temp_melt_P] (qw temp_PCM)
    [0 $<= sy time $<= sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
-   "eBalanceOnPCM" [balPCMDesc_note]
+   "eBalanceOnPCM" balPCMDescNotes
 
 eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
@@ -234,36 +235,20 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit tau_S_P),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
-balPCMDesc_note :: Sentence
-balPCMDesc_note = foldlSent [
-  (E (sy temp_melt_P)) `sC` (E (sy time_final)) `sC` (E (sy temp_init)) `sC`
-  (E (sy pcm_HTC)) `sC` (E (sy pcm_mass)) `sC` (E (sy htCap_S_P)) `sC`
-  (E (sy htCap_S_P)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
-  S "The input is constrained so that", (E (sy temp_init $< sy temp_melt_P)),
-  sParen (makeRef2S assumpPIS),
-  (E (sy temp_PCM)) `sC` (E (0 $< sy time $< sy time_final)) `sC`
-  (S "with initial conditions")
-  `sC` (E (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC`
-  (S "FIXME t_w(0) = t_p(0)") `sC`
-  makeRef2S assumpSITWP `sC` (S "and"), (E (sy temp_W)),
-  S "from", (makeRef2S eBalanceOnWtr) `sC`
-  S "such that the following governing" +:+. getAcc ode `sIs` S "satisfied",
-  S "The temperature remains constant at",
-  (E (sy temp_melt_P)) `sC`
-  (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E (0 $< sy melt_frac $< 1)), S "(from", makeRef2S dd4MeltFrac,
-  S ") is determined as part of the heat energy in the PCM, as given in" +:+.
-  sParen (makeRef2S heatEInPCM),
-  -- Addition based on smiths manual version.
-  (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
-  
-  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_L_P),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
+balPCMDescNotes :: [Sentence]
+balPCMDescNotes = map foldlSent [
+  [E (sy temp_W) `sIs` S "defined by", makeRef2S eBalanceOnWtr],
+  [S "The", phrase input_, phrase constraint, E $ sy temp_init $<= sy temp_melt_P,
+   S "comes from", makeRef2S assumpPIS],
+  [S "The", phrase temp, S "remains constant at", (E $ sy temp_melt_P) `sC`
+   S "even with the heating", sParen (S "or cooling") `sC` S "until the",
+   phrase phaseChange, S "has occurred for all" `sOf` S "the material; that" `sIs`
+   S "as long as" +:+. E (0 $< sy melt_frac $< 1), E $ sy melt_frac,
+   sParen (S "from" +:+ makeRef2S dd4MeltFrac) `sIs`
+   S "determined as part" `sOf` S "the", phrase heat, phrase energy `sIn`
+   S "the", getAcc phsChgMtrl `sC` S "as given" `sIn` sParen (makeRef2S heatEInPCM)],
+  [E (sy tau_S_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceSolidPCM],
+  [E (sy tau_L_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceLiquidPCM]]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

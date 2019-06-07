@@ -12,8 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
 import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
-  heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp,
-  thermalEnergy)
+  heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
@@ -393,11 +392,11 @@ heatEInPCM = imNoDeriv heatEInPCM_rc [qw temp_melt_P, qw time_final, qw temp_ini
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [sy temp_init $< sy temp_melt_P] (qw pcm_E)
   [0 $<= sy time $<= sy time_final] [makeCite koothoor2013]
-  "heatEInPCM" [htPCMDesc]
+  "heatEInPCM" htPCMNotes
 
 heatEInPCM_rc :: RelationConcept
 heatEInPCM_rc = makeRC "heatEInPCM_rc" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel
+  EmptyS htPCM_Rel
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
@@ -414,37 +413,34 @@ htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
         case4 = (sy pcm_initMltE + (apply1 latentE_P time),
           real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
 
-htPCMDesc :: Sentence
-htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:+.
-  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcm_E `sIs` ((phrase change `sIn`
-  phrase thermalEnergy) `ofThe` short phsChgMtrl), S "relative" `toThe`
-  phrase energy, S "at the", phrase temp_init, sParen (ch temp_init) +:+.
-  unwrap (getUnit pcm_initMltE), ch pcm_E, S "for the", phrase solid,
-  short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat :+:
-  S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
-  ch htCap_S_P, sParen (unwrap $ getUnit htCap_S_P) `andThe` phrase change, S "in the",
-  short phsChgMtrl, phrase temp, S "from the", phrase temp_init +:+.
-  sParen (unwrap $ getUnit temp_init), ch pcm_E, S "for the melted", short phsChgMtrl,
-  sParen (E (sy temp_PCM $> sy pcm_initMltE)), S "is found using", makeRef2S sensHtE,
-  S "for", phrase sensHeat, S "of the" +:+. phrase liquid, short phsChgMtrl,
-  S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC` S "plus" +:+.
-  ((phrase energy +:+ S "required to melt all") `ofThe` short phsChgMtrl), S "The", phrase energy,
-  S "when", phrase melting, S "starts" `sIs` ch pcm_initMltE +:+. sParen (unwrap $ getUnit pcm_initMltE),
-  S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
-  E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
-  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
-  ch htCap_L_P, sParen (unwrap $ getUnit htCap_L_P) `andThe` phrase change `sIn`
-  phrase temp `sIs` E (sy temp_PCM - sy temp_melt_P) +:+.
-  sParen (unwrap $ getUnit temp_melt_P), ch pcm_E, S "during", phrase melting, S "of the",
-  short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
-  phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcm_initMltE, S "plus the",
-  phrase latentHeat, phrase energy, S "added" `toThe` short phsChgMtrl `sC`
-  ch latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the", phrase time, S "when",
-  phrase melting, S "began", ch t_init_melt +:+. sParen (unwrap $ getUnit t_init_melt),
-  S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
-  S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
-  phrase solid `sOr` phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
-  sParen (makeRef2S assumpPIS)]
+htPCMNotes :: [Sentence]
+htPCMNotes = map foldlSent [
+  [S "The above", phrase equation `sIs` S "derived using",
+  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE)],
+  [ch pcm_E, S "for the", phrase solid, short phsChgMtrl, S "is found using",
+   makeRef2S sensHtE, S "for", phrase sensHeat :+: S "ing, with",
+   phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC` ch htCap_S_P,
+   sParen (unwrap $ getUnit htCap_S_P) `andThe` phrase change, S "in the",
+   short phsChgMtrl, phrase temp, S "from the", phrase temp_init, sParen (unwrap $ getUnit temp_init)],
+  [ch pcm_E, S "for the melted", short phsChgMtrl, sParen (E (sy temp_PCM $> sy pcm_initMltE)),
+   S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat, S "of the", phrase liquid,
+   short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
+   S "plus", (phrase energy +:+ S "required to melt all") `ofThe` short phsChgMtrl], 
+  [S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
+   E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE),
+   sParen (S "from" +:+ makeRef2S dd3HtFusion)],
+  [S "The", phrase change `sIn` phrase temp `sIs` E (sy temp_PCM - sy temp_melt_P),
+   sParen (unwrap $ getUnit temp_melt_P)],
+  [ch pcm_E, S "during", phrase melting, S "of the", short phsChgMtrl,
+   S "is found using the", phrase energy, S "required at", S "instant" +:+
+   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcm_initMltE, S "plus the",
+   phrase latentHeat, phrase energy, S "added" `toThe` short phsChgMtrl `sC`
+   ch latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the", phrase time, S "when",
+   phrase melting, S "began", ch t_init_melt, sParen (unwrap $ getUnit t_init_melt)],
+  [S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
+   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
+   phrase solid `sOr` phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
+   sParen (makeRef2S assumpPIS)]]
 
 -----------
 -- Intro --

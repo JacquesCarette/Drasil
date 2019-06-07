@@ -226,13 +226,16 @@ frac_min = dqd' (dcc "frac_min"
 -----------------
 
 constrained ::[ConstrConcept]
-constrained = map cnstrw' inputs ++ map cnstrw' outputs
+constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
 
 -- Input Constraints
-inputs :: [UncertQ]
-inputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
+inputs :: [QuantityDict]
+inputs = map qw inputConstraints ++ map qw [abs_tol, rel_tol]
+
+inputConstraints :: [UncertQ]
+inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,

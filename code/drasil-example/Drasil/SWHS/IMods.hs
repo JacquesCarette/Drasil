@@ -5,9 +5,10 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
+import Data.Drasil.SentenceStructures (follows)
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.Concepts.Documentation (assumption, goal, solution)
-import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
+import Data.Drasil.Concepts.Documentation (assumption, condition, constraint, goal, solution)
+import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp,
@@ -53,25 +54,18 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
-  `sC` (E $ sy temp_C) `sC` (E $ sy temp_PCM), S "from" +:+.
-  sParen (makeRef2S eBalanceOnPCM), S "The input is constrained so that" +:+.
-  (E $ sy temp_init $<= (sy temp_C)), sParen (makeRef2S assumpCTNOD),
-  (E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
-  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
-  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tau_W),
-  (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant" +:+. sParen (S "dimensionless"),
-  S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
-  sParen (unwrap $ getUnit temp_W), S "where", E 0,
-  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
-  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boilPt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef2S assumpWAL `sC` makeRef2S assumpAPT)]
+balWtrDesc = foldlSent [E $ sy temp_PCM, S "is defined by" +:+. makeRef2S eBalanceOnPCM,
+  S "The input", phrase constraint, E $ sy temp_init $<= sy temp_C, S "comes from" +:+.
+  makeRef2S assumpCTNOD, E $ sy tau_W, S "is calculated from" +:+. S "FIXME: Missing DD #1484",
+  E $ sy eta, S "is calculated from" +:+. S "FIXME: Missing DD #1484",
+  S "The initial", plural condition, S "for the" +:+. (getAcc ode `sAre` 
+  E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP),
+  S "The", getAcc ode, S "applies as long as the", phrase water `sIs`
+  S "in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
+  sParen (unwrap $ getUnit temp_W), S "where", E 0, sParen (unwrap $ getUnit temp_W) `sAnd`
+  (E 100), sParen (unwrap $ getUnit temp_W) `sAre` S "the", phrase melting `sAnd`
+  plural boilPt `sOf` phrase water `sC` S "respectively",
+  sParen (S "from" +:+ makeRef2S assumpWAL `sAnd` makeRef2S assumpAPT)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -145,7 +139,7 @@ eBalanceOnWtrDerivDesc6 eq33 eq44 =
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
 eBalanceOnWtrDerivDesc7 eq55 = 
-  [S "Finally, factoring out", (E eq55), S ", we are left with the governing ODE for",
+  [S "Finally, factoring out", (E eq55), S ", we are left with the governing", getAcc ode, S "for",
   sParen (makeRef2S eBalanceOnWtr)]
 
 eq2 :: [Sentence]
@@ -256,7 +250,7 @@ balPCMDesc_note = foldlSent [
   (S "FIXME t_w(0) = t_p(0)") `sC`
   makeRef2S assumpSITWP `sC` (S "and"), (E (sy temp_W)),
   S "from", (makeRef2S eBalanceOnWtr) `sC`
-  S "such that the following governing ODE is satisfied.",
+  S "such that the following governing" +:+. getAcc ode `sIs` S "satisfied",
   S "The temperature remains constant at",
   (E (sy temp_melt_P)) `sC`
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),

@@ -192,7 +192,7 @@ This section focuses on the general equations and laws that Projectile is based 
 <td>
 <div class="equation">
 <em><b>v</b> = <div class="fraction">
-               <span class="fup">d&#8239;<b>r</b></span>
+               <span class="fup">d&#8239;<b>p</b></span>
                <span class="fdn">d&#8239;t</span>
                </div></em>
 </div>
@@ -204,7 +204,7 @@ This section focuses on the general equations and laws that Projectile is based 
 <ul class="hide-list-style-no-indent">
 <li><em><b>v</b></em> is the velocity (m/s)</li>
 <li><em>t</em> is the time (s)</li>
-<li><em><b>r</b></em> is the displacement (m)</li>
+<li><em><b>p</b></em> is the position (m)</li>
 </ul>
 </td>
 </tr>
@@ -848,7 +848,7 @@ From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i<
 </tr>
 <tr>
 <th>Output</th>
-<td><p class="paragraph"><em>d'</em></p></td>
+<td><p class="paragraph"><em>p'</em></p></td>
 </tr>
 <tr>
 <th>Input Constraints</th>
@@ -864,14 +864,14 @@ From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i<
 <tr>
 <th>Output Constraints</th>
 <td>
-<div class="equation"><em>d'&thinsp;&gt;&thinsp;0</em></div>
+<div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
 </td>
 </tr>
 <tr>
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>d' = <div class="fraction">
+<em>p' = <div class="fraction">
          <span class="fup">
          2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
          </span>
@@ -884,7 +884,7 @@ From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i<
 <th>Description</th>
 <td>
 <ul class="hide-list-style-no-indent">
-<li><em>d'</em> is the launch distance (m)</li>
+<li><em>p'</em> is the landing position (m)</li>
 <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
 <li><em>θ</em> is the launch angle (&deg;)</li>
 <li>
@@ -907,7 +907,7 @@ From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i<
 </tr>
 </table>
 </div>
-<p class="paragraph">Detailed derivation of launch distance:</p>
+<p class="paragraph">Detailed derivation of landing position:</p>
 <p class="paragraph">
 We know that <em>p<sub>x</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>x</sub><sup>c</sup> = 0</em> (<a href=#accelXZero>A: accelXZero</a>). Substituting these values into the x-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
 </p>
@@ -915,10 +915,10 @@ We know that <em>p<sub>x</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: la
 <em>p<sub>x</sub> = v<sub>x</sub><sup>i</sup>&#8239;t</em>
 </div>
 <p class="paragraph">
-To find the vertical distance travelled, we want to find the <em>p<sub>x</sub></em> value (<em>d'</em>) at launch duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
+To find the horizontal distance travelled, we want to find the <em>p<sub>x</sub></em> value (<em>p'</em>) at launch duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
 </p>
 <div class="equation">
-<em>d' = <div class="fraction">
+<em>p' = <div class="fraction">
          <span class="fup">
          v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
          </span>
@@ -929,7 +929,7 @@ To find the vertical distance travelled, we want to find the <em>p<sub>x</sub></
 From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i</sup></em>:
 </p>
 <div class="equation">
-<em>d' = <div class="fraction">
+<em>p' = <div class="fraction">
          <span class="fup">
          v<sup>i</sup>&#8239;cos(θ)&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
          </span>
@@ -938,7 +938,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 </div>
 <p class="paragraph">Rearranging this equation gives us:</p>
 <div class="equation">
-<em>d' = <div class="fraction">
+<em>p' = <div class="fraction">
          <span class="fup">
          2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
          </span>
@@ -954,7 +954,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>d<sub>target</sub></em>, <em>d'</em></p>
+<p class="paragraph"><em>p<sub>target</sub></em>, <em>p'</em></p>
 </td>
 </tr>
 <tr>
@@ -965,9 +965,9 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
-<div class="equation"><em>d'&thinsp;&gt;&thinsp;0</em></div>
+<div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
 </td>
 </tr>
 <tr>
@@ -978,7 +978,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>isShort = d<sub>target</sub>&thinsp;&gt;&thinsp;d'</em>
+<em>isShort = p<sub>target</sub>&thinsp;&gt;&thinsp;p'</em>
 </div>
 </td>
 </tr>
@@ -987,10 +987,10 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>isShort</em> is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)
+<em>isShort</em> is the variable that is assigned true when the target position is greater than the landing position (Unitless)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
-<li><em>d'</em> is the launch distance (m)</li>
+<li><em>p<sub>target</sub></em> is the target position (m)</li>
+<li><em>p'</em> is the landing position (m)</li>
 </ul>
 </td>
 </tr>
@@ -1017,7 +1017,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <tr>
 <th>Input</th>
 <td>
-<p class="paragraph"><em>d<sub>target</sub></em>, <em>d'</em></p>
+<p class="paragraph"><em>p<sub>target</sub></em>, <em>p'</em></p>
 </td>
 </tr>
 <tr>
@@ -1028,9 +1028,9 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input Constraints</th>
 <td>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
-<div class="equation"><em>d'&thinsp;&gt;&thinsp;0</em></div>
+<div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
 </td>
 </tr>
 <tr>
@@ -1041,7 +1041,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Equation</th>
 <td>
 <div class="equation">
-<em>d<sub>offset</sub> = |d<sub>target</sub>&minus;d'|</em>
+<em>d<sub>offset</sub> = |p<sub>target</sub>&minus;p'|</em>
 </div>
 </td>
 </tr>
@@ -1050,10 +1050,10 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>d<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
+<em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
-<li><em>d'</em> is the launch distance (m)</li>
+<li><em>p<sub>target</sub></em> is the target position (m)</li>
+<li><em>p'</em> is the landing position (m)</li>
 </ul>
 </td>
 </tr>
@@ -1081,7 +1081,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <th>Input</th>
 <td>
 <p class="paragraph">
-<em>d<sub>offset</sub></em>, <em>d<sub>target</sub></em>
+<em>d<sub>offset</sub></em>, <em>p<sub>target</sub></em>
 </p>
 </td>
 </tr>
@@ -1096,7 +1096,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 <div class="equation">
-<em>d<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+<em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
 </div>
 </td>
 </tr>
@@ -1111,7 +1111,7 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <em>isHit = d<sub>offset</sub>&thinsp;&lt;&thinsp;<div class="fraction">
                                                   <span class="fup">1</span>
                                                   <span class="fdn">50</span>
-                                                  </div>&#8239;d<sub>target</sub></em>
+                                                  </div>&#8239;p<sub>target</sub></em>
 </div>
 </td>
 </tr>
@@ -1120,12 +1120,12 @@ From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i<
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>isHit</em> is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)
+<em>isHit</em> is the variable that is assigned true when the landing position is within a degree of tolerance of the target position (Unitless)
 </li>
 <li>
-<em>d<sub>offset</sub></em> is the offset between the target distance and the launch distance (m)
+<em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
 </li>
-<li><em>d<sub>target</sub></em> is the target distance (m)</li>
+<li><em>p<sub>target</sub></em> is the target position (m)</li>
 </ul>
 </td>
 </tr>

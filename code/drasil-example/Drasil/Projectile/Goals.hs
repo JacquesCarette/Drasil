@@ -4,12 +4,13 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
-import Data.Drasil.Concepts.Physics (position)
+
+import Drasil.Projectile.Concepts (landingPos, projectile)
 
 goals :: [ConceptInstance]
 goals = [calcPosition]
 
 calcPosition :: ConceptInstance
 calcPosition = cic "calcPosition" 
-  (S "Calculate" +:+. ((S "landing" +:+ phrase position) `ofThe` S "projectile"))
+  (S "Calculate" +:+. (phrase landingPos `ofThe` phrase projectile))
   "calcLandingPosition" goalStmtDom

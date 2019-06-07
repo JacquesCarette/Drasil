@@ -6,23 +6,23 @@ import Utils.Drasil
 import Data.Drasil.IdeaDicts (physics)
 
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, speed)
+import Data.Drasil.Concepts.Physics (distance, position, speed)
 
 concepts :: [NamedChunk]
-concepts = [launch, launchAngle, launchDist, launchSpeed, launcher, projectile, targetDist, target]
+concepts = [landingPos, launch, launchAngle, launchSpeed, launcher, projectile, target, targetPos]
 
 projectileTitle :: CI
 projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
 
-duration, launch, launchAngle, launchDist, launchDur, launchSpeed, launcher, projectile, targetDist, target :: NamedChunk
+duration, landingPos, launch, launchAngle, launchDur, launchSpeed, launcher, projectile, target, targetPos :: NamedChunk
 duration   = nc "duration"   (nounPhraseSP "duration")
 launch     = nc "launch"     (nounPhraseSP "launch") -- FIXME: Used as adjective
 launcher   = nc "launcher"   (nounPhraseSP "launcher")
 projectile = nc "projectile" (nounPhraseSP "projectile")
 target     = nc "target"     (nounPhraseSP "target")
 
+landingPos  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
 launchAngle = compoundNC launch angle
-launchDist  = compoundNC launch distance
 launchDur   = compoundNC launch duration
 launchSpeed = compoundNC launch speed
-targetDist  = compoundNC target distance
+targetPos   = compoundNC target position

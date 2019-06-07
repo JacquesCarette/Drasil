@@ -96,13 +96,13 @@ RefBy & \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectVel]{GD: rectVel}.
 Label & Velocity
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{v}=\frac{d\,\mathbf{r}}{d\,t}
+           \mathbf{v}=\frac{d\,\mathbf{p}}{d\,t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -459,7 +459,7 @@ Label & Calculation of landing distance
 \\ \midrule \\
 Input & ${v^{i}}$, $θ$
 \\ \midrule \\
-Output & $d'$
+Output & $p'$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {v^{i}}>0
@@ -469,15 +469,15 @@ Input Constraints & \begin{displaymath}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     d'>0
+                     p'>0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           d'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           p'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$d'$ is the launch distance (m)}
+              \item{$p'$ is the landing position (m)}
               \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
@@ -490,22 +490,22 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Detailed derivation of launch distance:
+Detailed derivation of landing position:
 We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{x}}^{c}}=0$ (\hyperref[accelXZero]{A: accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 \begin{displaymath}
 {p_{x}}={{v_{x}}^{i}} t
 \end{displaymath}
-To find the vertical distance travelled, we want to find the ${p_{x}}$ value ($d'$) at launch duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
+To find the horizontal distance travelled, we want to find the ${p_{x}}$ value ($p'$) at launch duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 \begin{displaymath}
-d'=\frac{{{v_{x}}^{i}}\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+p'=\frac{{{v_{x}}^{i}}\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD: speedIX} we can replace ${{v_{x}}^{i}}$:
 \begin{displaymath}
-d'=\frac{{v^{i}} \cos\left(θ\right)\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+p'=\frac{{v^{i}} \cos\left(θ\right)\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
 \end{displaymath}
 Rearranging this equation gives us:
 \begin{displaymath}
-d'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+p'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
 \par~
 
@@ -517,27 +517,27 @@ d'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \\ \midrule \\
 Label & IsShort
 \\ \midrule \\
-Input & ${d_{target}}$, $d'$
+Input & ${p_{target}}$, $p'$
 \\ \midrule \\
 Output & $isShort$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {p_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d'>0
+                    p'>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isShort={d_{target}}>d'
+           isShort={p_{target}}>p'
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$isShort$ is the variable that is assigned true when the target distance is greater than the launch distance (Unitless)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d'$ is the launch distance (m)}
+              \item{$isShort$ is the variable that is assigned true when the target position is greater than the landing position (Unitless)}
+              \item{${p_{target}}$ is the target position (m)}
+              \item{$p'$ is the landing position (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -557,27 +557,27 @@ RefBy &
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${d_{target}}$, $d'$
+Input & ${p_{target}}$, $p'$
 \\ \midrule \\
 Output & ${d_{offset}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {d_{target}}>0
+                    {p_{target}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    d'>0
+                    p'>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {d_{offset}}=|{d_{target}}-d'|
+           {d_{offset}}=|{p_{target}}-p'|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{offset}}$ is the offset between the target distance and the launch distance (m)}
-              \item{${d_{target}}$ is the target distance (m)}
-              \item{$d'$ is the launch distance (m)}
+              \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
+              \item{${p_{target}}$ is the target position (m)}
+              \item{$p'$ is the landing position (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 
@@ -597,7 +597,7 @@ RefBy &
 \\ \midrule \\
 Label & IsHit
 \\ \midrule \\
-Input & ${d_{offset}}$, ${d_{target}}$
+Input & ${d_{offset}}$, ${p_{target}}$
 \\ \midrule \\
 Output & $isHit$
 \\ \midrule \\
@@ -605,19 +605,19 @@ Input Constraints & \begin{displaymath}
                     {d_{offset}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{target}}>0
+                    {p_{target}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isHit={d_{offset}}<\frac{1}{50} {d_{target}}
+           isHit={d_{offset}}<\frac{1}{50} {p_{target}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$isHit$ is the variable that is assigned true when the launch distance is within a degree of tolerance of the target distance (Unitless)}
-              \item{${d_{offset}}$ is the offset between the target distance and the launch distance (m)}
-              \item{${d_{target}}$ is the target distance (m)}
+              \item{$isHit$ is the variable that is assigned true when the landing position is within a degree of tolerance of the target position (Unitless)}
+              \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
+              \item{${p_{target}}$ is the target position (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 

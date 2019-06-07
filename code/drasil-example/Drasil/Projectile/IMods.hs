@@ -16,8 +16,8 @@ import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin, t
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.Unitals (isHit, isShort, launAngle, launDist,
-  launDur, launSpeed, offset, targDist)
+import Drasil.Projectile.Unitals (isHit, isShort, launAngle, landPos,
+  launDur, launSpeed, offset, targPos)
 
 iMods :: [InstanceModel]
 iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
@@ -72,11 +72,11 @@ timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitatio
 ---
 distanceIM :: InstanceModel
 distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw launDist)
-  [sy launDist $> 0] distanceDeriv "calOfLandingDist" [distanceDesc]
+  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw landPos)
+  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [distanceDesc]
 
 distanceExpr :: Expr
-distanceExpr = sy launDist $= 2 * square (sy iSpeed) * sin (sy launAngle) *
+distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
                                 cos (sy launAngle) / sy gravitationalAccel
 
 distanceRC :: RelationConcept
@@ -86,7 +86,7 @@ distanceDesc :: Sentence
 distanceDesc = EmptyS
 
 distanceDeriv :: Derivation
-distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDist)) :
+distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
                weave [distanceDerivSents, map E distanceDerivEqns]
 
 distanceDerivSents :: [Sentence]
@@ -99,9 +99,9 @@ distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
   eqnWSource (sy xConstAccel $= 0) accelXZero],
   S "Substituting these", plural value, S "into the x-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
-distanceDerivSent2 = foldlSentCol [S "To find the vertical", phrase distance,
+distanceDerivSent2 = foldlSentCol [S "To find the horizontal", phrase distance,
   S "travelled" `sC` S "we want to find the", E (sy xPos), phrase value,
-  sParen (E (sy launDist)), S "at", phrase launDur,
+  sParen (E (sy landPos)), S "at", phrase launDur,
   sParen (S "from" +:+ makeRef2S timeIM)]
 distanceDerivSent3 = S "Rearranging this" +:+ phrase equation +: S "gives us"
 
@@ -110,44 +110,44 @@ distanceDerivEqns = [distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3, di
 
 distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3 :: Expr
 distanceDerivEqn1 = sy xPos $= sy ixVel * sy time
-distanceDerivEqn2 = sy launDist $= sy ixVel * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
-distanceDerivEqn3 = sy launDist $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+distanceDerivEqn2 = sy landPos $= sy ixVel * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 ---
 shortIM :: InstanceModel
-shortIM = imNoDerivNoRefs shortRC [qw targDist, qw launDist]
-  [sy targDist $> 0, sy launDist $> 0] (qw isShort) []
+shortIM = imNoDerivNoRefs shortRC [qw targPos, qw landPos]
+  [sy targPos $> 0, sy landPos $> 0] (qw isShort) []
   "shortIM" [shortDesc]
 
 shortRC :: RelationConcept
 shortRC = makeRC "shortRC" (nounPhraseSP "isShort") 
-  shortDesc $ sy isShort $= sy targDist $> sy launDist
+  shortDesc $ sy isShort $= sy targPos $> sy landPos
   
 shortDesc :: Sentence
 shortDesc = EmptyS
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs offsetRC [qw targDist, qw launDist]
-  [sy targDist $> 0, sy launDist $> 0] (qw offset) []
+offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
+  [sy targPos $> 0, sy landPos $> 0] (qw offset) []
   "offsetIM" [offsetDesc]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  offsetDesc $ sy offset $= UnaryOp Abs (sy targDist - sy launDist)
+  offsetDesc $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
   
 offsetDesc :: Sentence
 offsetDesc = EmptyS
 
 ---
 hitIM :: InstanceModel
-hitIM = imNoDerivNoRefs hitRC [qw offset, qw targDist]
-  [sy offset $> 0, sy targDist $> 0] (qw isHit) []
+hitIM = imNoDerivNoRefs hitRC [qw offset, qw targPos]
+  [sy offset $> 0, sy targPos $> 0] (qw isHit) []
   "hitIM" [hitDesc]
 
 hitRC :: RelationConcept
 hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  hitDesc $ sy isHit $= sy offset $< (0.02 * sy targDist)
+  hitDesc $ sy isHit $= sy offset $< (0.02 * sy targPos)
   
 hitDesc :: Sentence
 hitDesc = EmptyS

@@ -2,7 +2,7 @@ module Drasil.Projectile.TMods (tMods, accelerationTM, velocityTM) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)
-import Data.Drasil.Quantities.Physics (acceleration, displacement, time, velocity)
+import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity)
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
@@ -22,11 +22,11 @@ accelerationRel = sy acceleration $= deriv (sy velocity) time
 
 velocityTM :: TheoryModel
 velocityTM = tmNoRefs (cw velocityRC)
-  [qw velocity, qw displacement, qw time] ([] :: [ConceptChunk])
+  [qw velocity, qw position, qw time] ([] :: [ConceptChunk])
   [] [velocityRel] [] "velocity" []
 
 velocityRC :: RelationConcept
 velocityRC = makeRC "velocityRC" (cn' "velocity") EmptyS velocityRel
 
 velocityRel :: Relation
-velocityRel = sy velocity $= deriv (sy displacement) time
+velocityRel = sy velocity $= deriv (sy position) time

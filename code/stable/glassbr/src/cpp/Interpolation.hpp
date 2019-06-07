@@ -1,4 +1,3 @@
-#include "ReadTable.hpp"
 #ifndef Interpolation_h
 #define Interpolation_h
 
@@ -10,13 +9,13 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-
+#include "ReadTable.hpp"
 
 double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x);
 
 int func_find(vector<double> &arr, double v);
 
-vector<double> func_extractColumn(vector< vector<double> > &mat, int j);
+vector<double> func_extractColumn(vector<vector<double>> &mat, int j);
 
 double func_interpY(string filename, double x, double z);
 

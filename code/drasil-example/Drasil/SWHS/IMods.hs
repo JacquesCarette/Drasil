@@ -1,20 +1,22 @@
-module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
+module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
+  eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Concepts.Documentation (goal, solution)
+import Data.Drasil.Concepts.Documentation (assumption, goal, solution, output_)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp,
   thermalEnergy)
+import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
-  assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT)
+  assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
+  assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
@@ -82,8 +84,7 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng tempW energy water vol wVol mass wMass heatCapSpec
-    htCapW heatTrans coil htFluxC coilSA pcmSA tank htFluxP surface volHtGen,
+  eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
   eBalanceOnWtrDerivDesc3 wMass htCapW,
   eBalanceOnWtrDerivDesc4 eq2,
@@ -91,31 +92,38 @@ eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc6 eq3 eq4,
   eBalanceOnWtrDerivDesc7 eq5]
 
-eBalanceOnWtrDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> 
-  ConceptChunk -> UnitalChunk -> ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> 
-  ConceptChunk -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
-  UnitalChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp su vhg =
-  [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
-   phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered"
-   `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has",
-   (phrase ms `sOf` phrase wt) +:+.
-   ((E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw)),
-    (E $ sy hfc), S "represents the", phrase ht, S "into the", phrase wt,
-    S "from the", (phrase cl `sAnd` (E $ sy hfp)), S "represents the", phrase ht,
-    S "into the PCM from", phrase wt `sC` S "over", phrase cl, phrase su,
-    S "area and", phrase phaseChange, S "material", phrase su, S "area of",
-    (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
-    S "occurs to", S "outside" `ofThe` phrase tk `sC`
-    S "since it has been assumed to be perfectly insulated",
-    sParen (makeRef2S assumpPIT) :+: S ". Assuming no volumetric",
-    S "heat generation per unit", phrase vo +:+.
-    (sParen (makeRef2S assumpNIHGBWP) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
-     makeRef2S rocTempSimp, S "can be written as"]
+eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> [Sentence]
+eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf` (E $ sy tempW) `sC`
+  S "we look at the", phrase energy, S "balance on" +:+. phrase water, S "The",
+  phrase vol, S "being considered" `isThe` (phrase vol `sOf` phrase water), S "in the",
+  phrase tank, (E $ sy wVol) `sC` S "which has", phrase mass +:+. ((E $ sy wMass) `sAnd`
+  phrase heatCapSpec `sC` (E $ sy htCapW)), atStart heatTrans, S "occurs in the",
+  phrase water, S "from the", phrase coil, S "as", (E $ sy htFluxC),
+  sParen (makeRef2S dd1HtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
+  phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
+  sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
+  S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
+  (E $ sy volHtGen $= 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
+  makeRef2S rocTempSimp, S "can be written as"]
+
+htTransEnd :: Sentence
+htTransEnd = foldlSent_ [S " " `sAnd` S "from the", phrase water, S "into the PCM as",
+  (E $ sy htFluxP), sParen (makeRef2S dd2HtFluxP)]
+
+overAreas :: Sentence
+overAreas = S "over areas" +:+ ((E $ sy coilSA) `sAnd` (E $ sy pcmSA) `sC` S "respectively")
+
+extraAssumps :: Sentence
+extraAssumps = foldlSent [S "The thermal flux is constant over", (E $ sy coilSA) `sC`
+  S "since", phrase temp `ofThe` phrase coil, S "is assumed to not vary along its length",
+  sParen (makeRef2S assumpTHCCoL) `sC` EmptyS `andThe` S "thermal flux is constant over",
+  (E $ sy pcmSA) `sC` S "since", phrase temp `ofThe` S "PCM is the same throughout its",
+  phrase vol, sParen (makeRef2S assumpTPCAV) `andThe` phrase water, S "is fully mixed" +:+
+  sParen (makeRef2S assumpCWTAT)]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 dd2 =
-  [S "Using", makeRef2S dd1, S "and", makeRef2S dd2, S "for", 
+  [S "Using", makeRef2S dd1 `sAnd` makeRef2S dd2, S "for", 
   (E $ sy dd1) `sAnd` (E $ sy dd2),
   S "respectively, this can be written as"]
 
@@ -162,7 +170,7 @@ eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCapW) * (deriv (sy tempW) time) $=
 eBalanceOnWtrDerivEqn3 = (deriv (sy tempW) time) $= 
   ((sy coilHTC) * (sy coilSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy tempW)) -
-  ((sy pcmMass) * (sy pcmSA) / 
+  ((sy pcmHTC) * (sy pcmSA) / 
   ((sy wMass) * (sy htCapW))) *  ((sy tempW) - (sy tempPCM))
 
 eBalanceOnWtrDerivEqn4 = 
@@ -239,7 +247,7 @@ balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
   (E (sy tempMeltP)) `sC` (E (sy timeFinal)) `sC` (E (sy tempInit)) `sC`
   (E (sy pcmHTC)) `sC` (E (sy pcmMass)) `sC` (E (sy htCapSP)) `sC`
-  (E (sy htCapSP)), S "form" +:+. sParen (makeRef2S eBalanceOnWtr),
+  (E (sy htCapSP)), S "from" +:+. sParen (makeRef2S eBalanceOnWtr),
   S "The input is constrained so that", (E (sy tempInit $< sy tempMeltP)),
   sParen (makeRef2S assumpPIS),
   (E (sy tempPCM)) `sC` (E (0 $< sy time $< sy timeFinal)) `sC`
@@ -250,10 +258,10 @@ balPCMDescNote = foldlSent [
   S "from", (makeRef2S eBalanceOnWtr) `sC`
   S "such that the following governing ODE is satisfied.",
   S "The temperature remains constant at",
-  (E (sy tempMeltP)) `sC`
-  (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E (0 $< sy meltFrac $< 1)), S "(from", makeRef2S dd4MeltFrac,
-  S ") is determined as part of the heat energy in the PCM, as given in" +:+.
+  (E (sy tempMeltP)) `sC` S "even with the heating (or cooling)" `sC`
+  S "until the phase change has occurred for all of the material; that is as long as",
+  E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S dd4MeltFrac),
+  S "is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
   (E $ (sy tauSP) $= ((sy pcmMass) * (sy htCapSP)) /
@@ -295,12 +303,12 @@ eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass1
   [S "To find the", phrase roc `sOf` (E $ sy tempP) `sC` S "we look at the",
    phrase en, S "balance on the" +:+. S "PCM", S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
-   S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `sAnd` S "the",
+   S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `andThe`
    phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,
    S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
-   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
+   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. phrase output_,
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
-   (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
+   (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0) `sC` S "the equation for",
    makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: DataDefinition -> UnitalChunk -> [Sentence]
@@ -388,16 +396,16 @@ htWtrRel = (apply1 watE time) $= (sy htCapW) * (sy wMass) *
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+. 
-  makeRef2S sensHtE, ch watE `isThe` phrase change, S "in", 
-  phrase thermalEnergy, S "of the", phrase liquid, phrase water, 
-  S "relative to the", phrase energy, S "at the initial", phrase temp, 
+  makeRef2S sensHtE, ch watE `sIs` ((phrase change `sIn`
+  phrase thermalEnergy) `ofThe` phrase liquid), phrase water, 
+  S "relative" `toThe` phrase energy, S "at the initial", phrase temp, 
   sParen (ch tempInit) +:+. sParen (unwrap $ getUnit pcmInitMltE), 
-  (ch htCapW) `isThe` phrase heatCapSpec, S "of", phrase liquid, phrase water,
-  sParen (unwrap $ getUnit htCapSP) `sAnd` (ch wMass) `isThe` phrase mass, 
-  S "of the", phrase water +:+. sParen (unwrap $ getUnit wMass), S "The", 
-  phrase change, S "in", phrase temp, S "is the difference between the", 
+  (ch htCapW) `isThe` phrase heatCapSpec `sOf` phrase liquid, phrase water,
+  sParen (unwrap $ getUnit htCapSP) `sAnd` (ch wMass) `sIs` (phrase mass `ofThe`
+  phrase water) +:+. sParen (unwrap $ getUnit wMass), S "The", 
+  phrase change `sIn` phrase temp `isThe` S "difference between the", 
   phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
-  (ch tempW) `sAnd` S "the", phrase tempInit `sC` ch tempInit +:+.
+  (ch tempW) `andThe` phrase tempInit `sC` ch tempInit +:+.
   sParen (unwrap $ getUnit tempInit), S "This", phrase equation,
   S "applies as long as", (E $ realInterval tempW (Bounded (Exc,0) (Exc,100)))
   :+: unwrap (getUnit tempW), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
@@ -432,35 +440,35 @@ htPCMRel = sy pcmE $= case_ [case1, case2, case3, case4]
           realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 htPCMDesc :: Sentence
-htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
-  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcmE `isThe` phrase change,
-  S "in", phrase thermalEnergy, S "of the", short phsChgMtrl, S "relative to the",
+htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:+.
+  (makeRef2S sensHtE `sAnd` makeRef2S latentHtE), ch pcmE `sIs` ((phrase change `sIn`
+  phrase thermalEnergy) `ofThe` short phsChgMtrl), S "relative" `toThe`
   phrase energy, S "at the", phrase tempInit, sParen (ch tempInit) +:+.
   unwrap (getUnit pcmInitMltE), ch pcmE, S "for the", phrase solid,
-  short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat,
+  short phsChgMtrl, S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat :+:
   S "ing, with", phrase heatCapSpec `ofThe` phrase solid, short phsChgMtrl `sC`
-  ch htCapSP, sParen (unwrap $ getUnit htCapSP), S "and the", phrase change, S "in the",
+  ch htCapSP, sParen (unwrap $ getUnit htCapSP) `andThe` phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase tempInit +:+.
   sParen (unwrap $ getUnit tempInit), ch pcmE, S "for the melted", short phsChgMtrl,
   sParen (E (sy tempPCM $> sy pcmInitMltE)), S "is found using", makeRef2S sensHtE,
   S "for", phrase sensHeat, S "of the" +:+. phrase liquid, short phsChgMtrl,
-  S "plus the", phrase energy, S "when", phrase melting, S "starts, plus the", phrase energy,
-  S "required to melt all of the", short phsChgMtrl, S "The", phrase energy, S "when",
-  phrase melting, S "starts is", ch pcmInitMltE +:+. sParen (unwrap $ getUnit pcmInitMltE),
-  S "The", phrase energy, S "required to melt all of the", short phsChgMtrl, S "is",
+  S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC` S "plus" +:+.
+  ((phrase energy +:+ S "required to melt all") `ofThe` short phsChgMtrl), S "The", phrase energy,
+  S "when", phrase melting, S "starts" `sIs` ch pcmInitMltE +:+. sParen (unwrap $ getUnit pcmInitMltE),
+  S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE) +:+.
-  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe` phrase liquid, short phsChgMtrl,
-  S "is", ch htCapLP, sParen (unwrap $ getUnit htCapLP) `sAnd` S "the", phrase change,
-  S "in", phrase temp, S "is", E (sy tempPCM - sy tempMeltP) +:+.
+  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
+  ch htCapLP, sParen (unwrap $ getUnit htCapLP) `andThe` phrase change `sIn`
+  phrase temp `sIs` E (sy tempPCM - sy tempMeltP) +:+.
   sParen (unwrap $ getUnit tempMeltP), ch pcmE, S "during", phrase melting, S "of the",
   short phsChgMtrl, S "is found using the", phrase energy, S "required at", S "instant" +:+
   phrase melting `ofThe` short phsChgMtrl, S "begins" `sC` ch pcmInitMltE, S "plus the",
-  phrase latentHeat, phrase energy, S "added to the", short phsChgMtrl `sC`
+  phrase latentHeat, phrase energy, S "added" `toThe` short phsChgMtrl `sC`
   ch latentEP, sParen (unwrap $ getUnit latentEP), S "since the", phrase time, S "when",
   phrase melting, S "began", ch tInitMelt +:+. sParen (unwrap $ getUnit tInitMelt),
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
-  phrase solid, S "or", phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
+  phrase solid `sOr` phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
   sParen (makeRef2S assumpPIS)]
 
 -----------

@@ -2,8 +2,6 @@ from __future__ import print_function
 import sys
 import math
 
-
-
 class InputParameters:
     def __init__(self):
         self.a = 0.0

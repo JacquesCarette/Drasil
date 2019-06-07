@@ -4,21 +4,22 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class OutputFormat {
     
     public static void write_output(Boolean is_safePb, Boolean is_safeLR, double P_b) throws Exception {
-        PrintWriter outfile;
-        outfile = new PrintWriter("output.txt");
-        outfile.print("is_safePb = ");
-        outfile.println(is_safePb);
-        outfile.print("is_safeLR = ");
-        outfile.println(is_safeLR);
-        outfile.print("P_b = ");
-        outfile.println(P_b);
-        outfile.close();
+        PrintWriter outputfile;
+        outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
+        outputfile.print("is_safePb = ");
+        outputfile.println(is_safePb);
+        outputfile.print("is_safeLR = ");
+        outputfile.println(is_safeLR);
+        outputfile.print("P_b = ");
+        outputfile.println(P_b);
+        outputfile.close();
     }
 }
 

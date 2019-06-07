@@ -5,24 +5,22 @@ import Theory.Drasil (DataDefinition, InstanceModel, im)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goal)
-import Data.Drasil.Concepts.Math (equation, rOfChng)
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boilPt, heatCapSpec, 
-  heatTrans)
+import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 
-import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Concepts (water, tank)
+import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
-import Drasil.SWHS.IMods (heatEInWtr)
+import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (tempW, tempC, tauW, wMass, htCapW, coilHTC, 
-  coilSA, tempInit, timeFinal, wVol, htFluxC, volHtGen)
-import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
-import Drasil.NoPCM.GenDefs (rocTempSimp)
+  coilSA, tempInit, timeFinal, htFluxC)
+
+import Drasil.NoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
 
 iMods :: [InstanceModel]
@@ -73,28 +71,10 @@ eBalanceOnWtrDeriv =
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng tempW energy water vol wVol mass wMass heatCapSpec
-    htCapW heatTrans htFluxC coilSA tank assumpCTNTD assumpNIHGBW volHtGen,
+  eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ (E $ sy coilSA)) EmptyS assumpNIHGBW,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]
-
-eBalanceOnWtrDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
-  UnitalChunk -> UncertQ -> ConceptChunk -> ConceptInstance -> ConceptInstance -> UnitalChunk -> [Sentence]
-eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass16 vhg =
-  [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
-   phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
-   `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
-   (E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw), 
-    S ". Heat transfer occurs in the", phrase wt, S "from the coil as", 
-    (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
-    S "occurs to", S "outside" `ofThe` phrase tk `sC` 
-    S "since it has been assumed to be perfectly insulated", 
-    (sParen (makeRef2S ass11)), S ". Assuming no volumetric", 
-    S "heat generation per unit", phrase vo,
-    (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
-     makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd =

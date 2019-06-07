@@ -582,7 +582,7 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 </p>
 <p>
 <div id="assumpCTNTD">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. <a href=#likeChgDT>LC: Discharging-Tank</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. <a href=#likeChgDT>LC: Discharging-Tank</a>.
 </div>
 </p>
 <p>
@@ -592,7 +592,7 @@ Water-Always-Liquid: The operating temperature range of the system is such that 
 </p>
 <p>
 <div id="assumpPIT">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. <a href=#likeChgTLH>LC: Tank-Lose-Heat</a>.
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. <a href=#likeChgTLH>LC: Tank-Lose-Heat</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
@@ -993,7 +993,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </p>
 </td>
 </tr>
@@ -1112,7 +1112,7 @@ Energy balance on water to find the temperature of the water
 </div>
 <p class="paragraph">Derivation of the energy balance on water:</p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpCTNTD>A: Charging-Tank-No-Temp-Discharge</a>) . Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em> . Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1588,11 +1588,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></th>
 <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
 <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
-<th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
 <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
 <th><a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a></th>
+<th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#likeChgTLH>LC: Tank-Lose-Heat</a></th>
 <th><a href=#TM:consThermE>TM: consThermE</a></th>
 <th>
@@ -1690,7 +1690,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1714,8 +1714,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1738,8 +1738,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1761,8 +1761,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1786,8 +1786,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1808,10 +1808,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -1834,7 +1834,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -1854,8 +1854,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1902,8 +1902,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1926,8 +1926,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1946,11 +1946,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1968,8 +1968,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1993,8 +1993,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2056,11 +2056,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -2101,10 +2101,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 <td></td>
 <td></td>

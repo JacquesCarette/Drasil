@@ -4,16 +4,17 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class InputFormat {
     
     public static void func_get_input(String filename, InputParameters inParams, double τ, double A_tol, double R_tol, double C_tol) throws Exception {
         Scanner infile;
         String line;
-        Vector<String> lines = new Vector<String>(0);
-        Vector<String> linetokens = new Vector<String>(0);
+        ArrayList<String> lines = new ArrayList<String>(0);
+        ArrayList<String> linetokens = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         infile.nextLine();
         inParams.L = Double.parseDouble(infile.nextLine());

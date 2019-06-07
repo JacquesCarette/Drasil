@@ -200,6 +200,13 @@ Interslice Normal Forces: per meter in the z-direction exerted between each pair
 <td>N/m</td>
 </tr>
 <tr>
+<td><em>h</em></td>
+<td>
+Height: The distance above a reference point for a point of interest.
+</td>
+<td>m</td>
+</tr>
+<tr>
 <td><em><b>H</b></em></td>
 <td>
 Interslice Normal Water Forces: per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices
@@ -295,6 +302,11 @@ Effective Normal Forces: per meter in the z-direction for each slice of a soil s
 Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure
 </td>
 <td>N</td>
+</tr>
+<tr>
+<td><em>p</em></td>
+<td>Pressure: A force exerted over an area</td>
+<td>Pa</td>
 </tr>
 <tr>
 <td><em><b>P</b></em></td>
@@ -396,13 +408,6 @@ Volumes of Dry Soil: amount of space occupied by dry soil for each slice
 <td><em><b>V</b><sub>sat</sub></em></td>
 <td>
 Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice
-</td>
-<td>m<sup>3</sup></td>
-</tr>
-<tr>
-<td><em><b>V</b><sub>wat</sub></em></td>
-<td>
-Volumes of Water: amount of space occupied by water for each slice
 </td>
 <td>m<sup>3</sup></td>
 </tr>
@@ -654,6 +659,13 @@ Imposed Load Angles: between the external force acting into the surface of each 
 <td><em><b>ℓ</b><sub>b</sub></em></td>
 <td>
 Total Base Lengths of Slices: in the direction parallel to the slope of the base of each slice
+</td>
+<td>m</td>
+</tr>
+<tr>
+<td><em><b>ℓ</b><sub>s</sub></em></td>
+<td>
+Surface Lengths of Slices: in the direction parallel to the slope of the surface of each slice
 </td>
 <td>m</td>
 </tr>
@@ -1081,7 +1093,7 @@ Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface 
 </p>
 <p>
 <div id="assumpHFSM">
-Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:momentEql>GD: momentEql</a>.
+Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. <a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
 </div>
 </p>
 </div>
@@ -2184,7 +2196,7 @@ The base hydrostatic force and slice weight both act in the direction of the poi
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+<a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:momentEql>GD: momentEql</a>.
 </p>
 </td>
 </tr>
@@ -2343,6 +2355,56 @@ For the case where the water table is between the slope surface and slip surface
                                                       <span class="fdn">2</span>
                                                       </div>&#8239;((<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ<sub>dry</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub>)</em>
 </div>
+<div id="GD:hsPressure">
+<table class="gdefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Hydrostatic pressure</p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">Pa</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td><div class="equation"><em>p = γ&#8239;h</em></div></td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li><em>p</em> is the pressure (Pa)</li>
+<li><em>γ</em> is the specific weight (N/m<sup>3</sup>)</li>
+<li><em>h</em> is the height (m)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td>
+<p class="paragraph">
+This equation is derived from Bernoulli's equation for a slow moving fluid through a porous material.
+</p>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td>
+<p class="paragraph">
+<a href="https://en.wikipedia.org/wiki/Pressure">Definition of Pressure</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td>
+<p class="paragraph">
+<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+</p>
+</td>
+</tr>
+</table>
+</div>
 <div id="GD:baseWtrF">
 <table class="gdefn">
 <tr>
@@ -2357,28 +2419,28 @@ For the case where the water table is between the slope surface and slip surface
 <th>Equation</th>
 <td>
 <div class="equation">
-<em><b>U</b><sub>b,i</sub> = <b>b</b><sub>i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
-                                                                            <span class="fup">
-                                                                            1
-                                                                            </span>
-                                                                            <span class="fdn">
-                                                                            2
-                                                                            </span>
-                                                                            </div>&#8239;<span class="casebr">
-                                                                                         {
-                                                                                         </span>
-                                                                                         <div class="cases">
-                                                                                         <span>
-                                                                                         <b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub> , <span class="case">
-                                                                                                                                                                                                                                <b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
-                                                                                                                                                                                                                                </span>
-                                                                                         </span>
-                                                                                         <span>
-                                                                                         0 , <span class="case">
-                                                                                             <b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub> &and; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
-                                                                                             </span>
-                                                                                         </span>
-                                                                                         </div></em>
+<em><b>U</b><sub>b,i</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                                                                              <span class="fup">
+                                                                              1
+                                                                              </span>
+                                                                              <span class="fdn">
+                                                                              2
+                                                                              </span>
+                                                                              </div>&#8239;<span class="casebr">
+                                                                                           {
+                                                                                           </span>
+                                                                                           <div class="cases">
+                                                                                           <span>
+                                                                                           <b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub> , <span class="case">
+                                                                                                                                                                                                                                  <b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
+                                                                                                                                                                                                                                  </span>
+                                                                                           </span>
+                                                                                           <span>
+                                                                                           0 , <span class="case">
+                                                                                               <b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i</sub> &and; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
+                                                                                               </span>
+                                                                                           </span>
+                                                                                           </div></em>
 </div>
 </td>
 </tr>
@@ -2390,7 +2452,9 @@ For the case where the water table is between the slope surface and slip surface
 <em><b>U</b><sub>b</sub></em> is the base hydrostatic forces (N/m)
 </li>
 <li><em>i</em> is the index (Unitless)</li>
-<li><em><b>b</b></em> is the base width of slices (m)</li>
+<li>
+<em><b>ℓ</b><sub>b</sub></em> is the total base lengths of slices (m)
+</li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </li>
@@ -2407,7 +2471,7 @@ For the case where the water table is between the slope surface and slip surface
 <th>Notes</th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+This equation is based on the assumption that the base of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2428,22 +2492,33 @@ This equation is based on the assumption that the base of a slice is a straight 
 </table>
 </div>
 <p class="paragraph">
-The base hydrostatic forces come from the weight of the water above the base of each slice. Substituting values for water into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
+The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from <a href=#GD:hsPressure>GD: hsPressure</a> is:
+</p>
+<div class="equation"><em>p = γ&#8239;h</em></div>
+<p class="paragraph">
+The specific weight in this case is the unit weight of water <em>γ<sub>w</sub></em>. The height in this case is the height from the slice base to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (<a href=#assumpHFSM>A: Hydrostatic-Force-Slice-Midpoint</a>). The height at the midpoint is the average of the height at slice interface <em>i</em> and the height at slice interface <em>i&minus;1</em>:
 </p>
 <div class="equation">
-<em><b>U</b><sub>b,i</sub> = <b>V</b><sub>wat,i</sub>&#8239;γ<sub>w</sub></em>
+<em><div class="fraction">
+    <span class="fup">1</span>
+    <span class="fdn">2</span>
+    </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slip surface at one edge and above the height of the slip surface at the other edge is assumed not to occur (<a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a>). In the case where the height of the water table is below the height of the slip surface, the area of the water is zero. In the case where the height of the water table is above the height of the slip surface, the water forms a trapezoid on top of the slip surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slip surface for the edges of the slice, and the length between them is the width of the slice. Thus, the base hydrostatic forces are defined as:
+Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the base hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to base hydrostatic forces by multiplying by the corresponding length of the slice base <em><b>ℓ</b><sub>b,i</sub></em>, assuming the water table does not intersect a slice base except at a slice edge (<a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a>). Thus, in the case where the height of the water table is above the height of the slip surface, the base hydrostatic forces are defined as:
 </p>
 <div class="equation">
-<em><b>U</b><sub>b,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
-                                                        <span class="fup">1</span>
-                                                        <span class="fdn">2</span>
-                                                        </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>w</sub></em>
+<em><b>U</b><sub>b,i</sub> = <b>ℓ</b><sub>b,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                                                                              <span class="fup">
+                                                                              1
+                                                                              </span>
+                                                                              <span class="fdn">
+                                                                              2
+                                                                              </span>
+                                                                              </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-This equation is a rearrangement of the non-zero case of <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+This equation is the non-zero case of <a href=#GD:baseWtrF>GD: baseWtrF</a>. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
 </p>
 <div id="GD:srfWtrF">
 <table class="gdefn">
@@ -2459,28 +2534,28 @@ This equation is a rearrangement of the non-zero case of <a href=#GD:baseWtrF>GD
 <th>Equation</th>
 <td>
 <div class="equation">
-<em><b>U</b><sub>t,i</sub> = <b>b</b><sub>i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
-                                                                            <span class="fup">
-                                                                            1
-                                                                            </span>
-                                                                            <span class="fdn">
-                                                                            2
-                                                                            </span>
-                                                                            </div>&#8239;<span class="casebr">
-                                                                                         {
-                                                                                         </span>
-                                                                                         <div class="cases">
-                                                                                         <span>
-                                                                                         <b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub> , <span class="case">
-                                                                                                                                                                                                                                  <b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
-                                                                                                                                                                                                                                  </span>
-                                                                                         </span>
-                                                                                         <span>
-                                                                                         0 , <span class="case">
-                                                                                             <b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i</sub> &and; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
-                                                                                             </span>
-                                                                                         </span>
-                                                                                         </div></em>
+<em><b>U</b><sub>t,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                                                                              <span class="fup">
+                                                                              1
+                                                                              </span>
+                                                                              <span class="fdn">
+                                                                              2
+                                                                              </span>
+                                                                              </div>&#8239;<span class="casebr">
+                                                                                           {
+                                                                                           </span>
+                                                                                           <div class="cases">
+                                                                                           <span>
+                                                                                           <b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub> , <span class="case">
+                                                                                                                                                                                                                                    <b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
+                                                                                                                                                                                                                                    </span>
+                                                                                           </span>
+                                                                                           <span>
+                                                                                           0 , <span class="case">
+                                                                                               <b>y</b><sub>wt,i</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i</sub> &and; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&le;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
+                                                                                               </span>
+                                                                                           </span>
+                                                                                           </div></em>
 </div>
 </td>
 </tr>
@@ -2492,7 +2567,9 @@ This equation is a rearrangement of the non-zero case of <a href=#GD:baseWtrF>GD
 <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
 </li>
 <li><em>i</em> is the index (Unitless)</li>
-<li><em><b>b</b></em> is the base width of slices (m)</li>
+<li>
+<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
+</li>
 <li>
 <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </li>
@@ -2509,7 +2586,7 @@ This equation is a rearrangement of the non-zero case of <a href=#GD:baseWtrF>GD
 <th>Notes</th>
 <td>
 <p class="paragraph">
-This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+This equation is based on the assumption that the surface of a slice is a straight line (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). <em><b>ℓ</b><sub>s</sub></em> is defined in <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -2530,22 +2607,33 @@ This equation is based on the assumption that the surface of a slice is a straig
 </table>
 </div>
 <p class="paragraph">
-The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
+The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from <a href=#GD:hsPressure>GD: hsPressure</a> is:
+</p>
+<div class="equation"><em>p = γ&#8239;h</em></div>
+<p class="paragraph">
+The specific weight in this case is the unit weight of water <em>γ<sub>w</sub></em>. The height in this case is the height from the slice surface to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (<a href=#assumpHFSM>A: Hydrostatic-Force-Slice-Midpoint</a>). The height at the midpoint is the average of the height at slice interface <em>i</em> and the height at slice interface <em>i&minus;1</em>:
 </p>
 <div class="equation">
-<em><b>U</b><sub>t,i</sub> = <b>V</b><sub>wat,i</sub>&#8239;γ<sub>w</sub></em>
+<em><div class="fraction">
+    <span class="fup">1</span>
+    <span class="fdn">2</span>
+    </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slope surface at one edge and above the height of the slope surface at the other edge is assumed not to occur (<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>). In the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
+Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the surface hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to surface hydrostatic forces by multiplying by the corresponding length of the slice surface <em><b>ℓ</b><sub>s,i</sub></em>, assuming the water table does not intersect a slice surface except at a slice edge (<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>). Thus, in the case where the height of the water table is above the height of the slope surface, the surface hydrostatic forces are defined as:
 </p>
 <div class="equation">
-<em><b>U</b><sub>t,i</sub> = <b>b</b><sub>i</sub>&#8239;<div class="fraction">
-                                                        <span class="fup">1</span>
-                                                        <span class="fdn">2</span>
-                                                        </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)&#8239;γ<sub>w</sub></em>
+<em><b>U</b><sub>t,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                                                                              <span class="fup">
+                                                                              1
+                                                                              </span>
+                                                                              <span class="fdn">
+                                                                              2
+                                                                              </span>
+                                                                              </div>&#8239;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slope,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slope,i&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
-This equation is a rearrangement of the non-zero case of <a href=#GD:srfWtrF>GD: srfWtrF</a>.
+This equation is the non-zero case of <a href=#GD:srfWtrF>GD: srfWtrF</a>. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
 </p>
 </div>
 </div>
@@ -2773,7 +2861,7 @@ This equation is based on the assumption that the surface of a slice is a straig
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
+<a href=#GD:resShearWO>GD: resShearWO</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#GD:normForcEq>GD: normForcEq</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#GD:mobShearWO>GD: mobShearWO</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#GD:bsShrFEq>GD: bsShrFEq</a>.
 </p>
 </td>
 </tr>
@@ -2823,7 +2911,7 @@ This equation is based on the assumption that the surface of a slice is a straig
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#GD:srfWtrF>GD: srfWtrF</a> <a href=#GD:sliceWght>GD: sliceWght</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLb>DD: lengthLb</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
+<a href=#GD:sliceWght>GD: sliceWght</a> <a href=#IM:nrmShrForNum>IM: nrmShrForNum</a> <a href=#IM:nrmShrForDen>IM: nrmShrForDen</a> <a href=#GD:momentEql>GD: momentEql</a> <a href=#DD:lengthLs>DD: lengthLs</a> <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2882,8 +2970,65 @@ This equation is based on the assumption that the surface of a slice is a straig
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a>.
+<a href=#GD:resShr>GD: resShr</a> <a href=#GD:resShearWO>GD: resShearWO</a> <a href=#GD:mobShr>GD: mobShr</a> <a href=#GD:baseWtrF>GD: baseWtrF</a>.
 </p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:lengthLs">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Surface lengths of slices</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em><b>ℓ</b><sub>s</sub></em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">m</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em><b>ℓ</b><sub>s</sub> = <b>b</b><sub>i</sub>&#8239;sec(<b>β</b><sub>i</sub>)</em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>ℓ</b><sub>s</sub></em> is the surface lengths of slices (m)
+</li>
+<li><em><b>b</b></em> is the base width of slices (m)</li>
+<li><em>i</em> is the index (Unitless)</li>
+<li><em><b>β</b></em> is the surface angles (&deg;)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Notes</th>
+<td>
+<p class="paragraph">
+<em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a> and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td>
+<p class="paragraph"><a href=#fredlund1977>fredlund1977</a></p>
+</td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td>
+<p class="paragraph"><a href=#GD:srfWtrF>GD: srfWtrF</a>.</p>
 </td>
 </tr>
 </table>
@@ -4936,15 +5081,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#UC_2donly>UC: 2D-Analysis-Only</a></th>
 <th><a href=#IM:nrmShrFor>IM: nrmShrFor</a></th>
 <th><a href=#GD:mobShr>GD: mobShr</a></th>
+<th><a href=#GD:srfWtrF>GD: srfWtrF</a></th>
+<th><a href=#GD:baseWtrF>GD: baseWtrF</a></th>
 <th><a href=#GD:normShrR>GD: normShrR</a></th>
 <th>
 <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>
 </th>
-<th><a href=#GD:srfWtrF>GD: srfWtrF</a></th>
 <th><a href=#GD:sliceWght>GD: sliceWght</a></th>
 <th><a href=#GD:resShr>GD: resShr</a></th>
 <th><a href=#GD:effNormF>GD: effNormF</a></th>
-<th><a href=#GD:baseWtrF>GD: baseWtrF</a></th>
 <th><a href=#TM:mcShrStrgth>TM: mcShrStrgth</a></th>
 <th><a href=#DD:slcHeight>DD: slcHeight</a></th>
 <th><a href=#DD:angleB>DD: angleB</a></th>
@@ -4955,6 +5100,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>
 </th>
 <th><a href=#IM:nrmShrForDen>IM: nrmShrForDen</a></th>
+<th><a href=#DD:lengthLs>DD: lengthLs</a></th>
 <th><a href=#displayGraph>FR: Display-Graph</a></th>
 <th>
 <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>
@@ -4979,6 +5125,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>
 </td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5071,6 +5218,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:intersliceWtrF>DD: intersliceWtrF</a></td>
@@ -5081,6 +5229,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5169,6 +5318,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td>
@@ -5184,6 +5334,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5267,6 +5418,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td>
@@ -5276,6 +5428,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5365,6 +5518,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#Table:ReqInputs>Table:ReqInputs</a></td>
@@ -5382,6 +5536,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5461,6 +5616,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpENSL>A: Effective-Norm-Stress-Large</a></td>
@@ -5482,6 +5638,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5557,6 +5714,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpFOS>A: Factor-of-Safety</a></td>
@@ -5580,6 +5738,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5630,7 +5789,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5680,9 +5840,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td></td>
-<td>X</td>
-<td>X</td>
 <td></td>
+<td></td>
+<td>X</td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5755,6 +5916,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpPSC>A: Plane-Strain-Conditions</a></td>
@@ -5778,13 +5940,14 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td>X</td>
+<td>X</td>
 <td></td>
 <td></td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
-<td>X</td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5828,17 +5991,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
 <td>X</td>
 <td>X</td>
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
+<td></td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5901,6 +6065,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpSL>A: Surface-Load</a></td>
@@ -5949,6 +6114,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpSLH>A: Soil-Layer-Homogeneous</a></td>
@@ -5975,17 +6141,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 <td>X</td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6000,6 +6167,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#assumpSLI>A: Soil-Layers-Isotropic</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6048,6 +6216,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#assumpSP>A: Soil-Properties</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6141,6 +6310,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a></td>
@@ -6165,12 +6335,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
 <td>X</td>
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6212,9 +6383,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6262,8 +6434,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
-<td>X</td>
 <td></td>
 <td></td>
 <td>X</td>
@@ -6274,6 +6444,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td>X</td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6309,12 +6482,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td>X</td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6371,6 +6545,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -6429,9 +6604,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#IM:crtSlpId>IM: crtSlpId</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6517,6 +6694,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6565,6 +6743,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6576,6 +6755,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#displayInput>FR: Display-Input</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6663,6 +6843,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6713,6 +6894,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -6724,6 +6906,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#TM:effStress>TM: effStress</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6817,6 +7000,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:ratioVariation>DD: ratioVariation</a></td>
@@ -6840,21 +7024,22 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -6913,6 +7098,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#IM:fctSfty>IM: fctSfty</a></td>
@@ -6935,6 +7121,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7009,6 +7196,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a></td>
@@ -7041,6 +7229,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7105,11 +7294,62 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href=#GD:hsPressure>GD: hsPressure</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td>
 <a href=#Table:inputsToOutputTable>Table:inputsToOutputTable</a>
 </td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7194,6 +7434,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td>X</td>
@@ -7227,6 +7468,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -7253,7 +7495,57 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
+<td><a href=#DD:lengthLs>DD: lengthLs</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td><a href=#TM:mcShrStrgth>TM: mcShrStrgth</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7347,6 +7639,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#GD:mobShr>GD: mobShr</a></td>
@@ -7362,6 +7655,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7443,8 +7737,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7494,6 +7790,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7587,6 +7884,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#GD:normShrR>GD: normShrR</a></td>
@@ -7609,6 +7907,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7683,6 +7982,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#IM:nrmShrForNum>IM: nrmShrForNum</a></td>
@@ -7705,6 +8005,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7770,6 +8071,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td>X</td>
@@ -7794,6 +8096,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7875,9 +8178,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#DD:stress>DD: stress</a></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7971,6 +8276,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#GD:srfWtrF>GD: srfWtrF</a></td>
@@ -7994,9 +8300,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -8067,6 +8374,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href=#GD:weight>GD: weight</a></td>
@@ -8092,11 +8400,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
-<td>X</td>
 <td></td>
 <td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>

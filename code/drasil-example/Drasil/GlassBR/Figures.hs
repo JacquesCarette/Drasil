@@ -8,7 +8,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
   requirement, section_, sysCont, traceyMatrix)
 
-import Data.Drasil.Phrase (the)
 import Data.Drasil.SentenceStructures (showingCxnBw)
 
 import Drasil.GlassBR.Concepts (aR, stdOffDist)

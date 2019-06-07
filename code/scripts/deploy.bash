@@ -1,14 +1,16 @@
+SOURCE_BRANCH="master"
 DEPLOY_BRANCH="gh-pages"
-DEPLOY_FOLDER="deploy"
+DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
+COMMIT_HASH_FILE=".commit-hash"
 
-if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
-  echo "Deployment only occurs for push builds."
+if [[ "$TRAVIS_EVENT_TYPE" != "cron" && "$TRAVIS_EVENT_TYPE" != "api" ]]; then
+  echo "Deployment only occurs for cron (or api -- manually run) builds."
   exit 0
 fi
 
-if [ "$TRAVIS_BRANCH" != "master" ]; then
-  echo "Only perform deploys for master."
+if [ "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
+  echo "Only perform deploys for $SOURCE_BRANCH."
   echo "Skipping."
   exit 0
 fi
@@ -28,17 +30,15 @@ if [ -z "$BOT_TOKEN" ]; then
   exit 1
 fi
 
+if [ -z "$BOT_EMAIL" ]; then
+  echo "Assuming dummy email"
+  BOT_EMAIL="drasil-bot@local"
+fi
+
 source "$ALL_FUNCTIONS_FILE"
 
-copy_docs() {
-  rm -r docs
-  DOC_DIR=$(stack path | grep local-doc-root | cut -d":" -f2 | sed -e "s/^ //")/
-  mkdir -p docs
-  cp -r "$DOC_DIR" docs
-}
-
 try_deploy() {
-  git clone --quiet --branch="$DEPLOY_BRANCH"  --depth=1 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
+  git clone --quiet --branch="$DEPLOY_BRANCH" --depth=5 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
   if [ $? = 1 ]; then
     echo "Clone failed. Bailing."
     exit 1
@@ -52,19 +52,34 @@ try_deploy() {
     return 0
   fi
 
-  echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
-  copy_docs
+  CLONED_HASH=$(cat "$COMMIT_HASH_FILE")
 
-  git config user.email "drasil-bot@local"
+  if [ $CLONED_HASH = $TRAVIS_COMMIT ]; then
+    echo "Deploy would be from same hash as current. Skipping it."
+    return 0
+  fi
+
+  echo $TRAVIS_BUILD_NUMBER > "$BUILD_NUMBER_FILE"
+  echo $TRAVIS_COMMIT > "$COMMIT_HASH_FILE"
+  cd "$CUR_DIR"
+  make deploy_lite DEPLOY_FOLDER="$DEPLOY_FOLDER"
+  MAKE_RET=$?
+  if [ $MAKE_RET != 0 ]; then
+    echo "Making the deploy folder failed! Failing deploy."
+    return $MAKE_RET
+  fi
+  cd "$DEPLOY_FOLDER"
+
+  git config user.email "$BOT_EMAIL"
   git config user.name "drasil-bot"
   git add -A .
   # We overwrite history because the artifacts we keep in here are moderately large and woiuld pollute history otherwise.
-  git commit -q --amend --allow-empty --reset-author -m "drasil-bot deploy of master@$TRAVIS_COMMIT"
-  git push --force-with-lease --quiet "https://$BOT_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_BRANCH" >/dev/null 2>&1
+  git commit -q --allow-empty -m "drasil-bot deploy of $SOURCE_BRANCH@$TRAVIS_COMMIT"
+  git push --quiet "https://$BOT_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_BRANCH"
   PUSH_RET=$?
   # Perform some cleanup so we can (optionally retry)
   cd "$CUR_DIR"
-  rm -r "$DEPLOY_FOLDER"
+  rm -rf "$DEPLOY_FOLDER"
   # git push returns >0 if push fails (i.e. we would need to force push)
   return $PUSH_RET
 }

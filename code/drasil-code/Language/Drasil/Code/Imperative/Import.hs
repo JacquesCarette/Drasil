@@ -1,27 +1,36 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
-import Language.Drasil hiding (int)
+import Language.Drasil hiding (int, ($.), log, ln, exp,
+  sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char,
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
   Float, Object, String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
-  Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
-import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
+import Language.Drasil.Code.Imperative.New (Label,
+  PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
+  BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
+  mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
-import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
-import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode, makeLangConfig)
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
-  codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
+import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+  (jNameOpts)
+import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
+  codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
+  programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit), 
   Entry(JunkEntry, ListEntry, Entry), LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, getInputs)
 
-import Prelude hiding (log, exp, const)
+import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
@@ -30,9 +39,10 @@ import Data.Maybe (fromMaybe, maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
+import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
-data State = State {
+data State repr = State {
   codeSpec :: CodeSpec,
   inStruct :: Structure,
   logName :: String,
@@ -40,28 +50,37 @@ data State = State {
   commented :: Comments,
   currentModule :: String,
 
-  sfwrCBody :: Expr -> Body,
-  physCBody :: Expr -> Body
+  sfwrCBody :: (RenderSym repr) => Expr -> repr (Body repr),
+  physCBody :: (RenderSym repr) => Expr -> repr (Body repr)
 }
 
 -- function to choose how to deal with
 -- 1. constraints
 -- 2. how to structure the input "module"
 -- 3. logging assignments
-chooseConstr :: ConstraintBehaviour -> Expr -> Body
+chooseConstr :: (RenderSym repr) => ConstraintBehaviour -> Expr -> repr
+  (Body repr)
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
-chooseInStructure :: Structure -> Reader State [Module]
+chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
+  [repr (Module repr)]
 chooseInStructure Loose   = genInputModNoClass
 chooseInStructure AsClass = genInputModClass
 
-chooseLogging :: Logging -> (Value -> Value -> Reader State Statement)
+chooseLogging :: (RenderSym repr) => Logging -> (repr (Value repr) -> 
+  repr (Value repr) -> Reader (State repr) (repr (Statement repr)))
 chooseLogging LogVar = loggedAssign
 chooseLogging LogAll = loggedAssign
-chooseLogging _      = \x y -> return $ I.assign x y
+chooseLogging _      = \x y -> return $ assign x y
 
-generator :: Choices -> CodeSpec -> State
+initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
+initLogFileVar LogVar = [varDec "outfile" outfile]
+initLogFileVar LogAll = [varDec "outfile" outfile]
+initLogFileVar _ = []
+
+
+generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
 generator chs spec = State {
   -- constants
   codeSpec = spec,
@@ -77,34 +96,41 @@ generator chs spec = State {
   physCBody = chooseConstr $ onPhysConstraint chs
 }
 
-assign :: Value -> Value -> Reader State Statement
-assign x y = do
+assign' :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) ->
+  Reader (State repr) (repr (Statement repr))
+assign' x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method
-publicMethod mt l pl u = do
+publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> [repr
+  (Parameter repr)] -> [repr (StateType repr)] -> [Label] -> Reader (State repr)
+  [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
+publicMethod mt l pl st v u = do
   g <- ask
-  genMethodCall Public Static (commented g) (logKind g) mt l pl u
+  genMethodCall public static (commented g) (logKind g) mt l pl st v u
 
-generateCode :: Choices -> State -> IO ()
-generateCode chs g =
+generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
+  ([ModData], Label)] -> State repr -> IO ()
+generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
-     mapM_ (\x -> do
-          createDirectoryIfMissing False (getDir x)
-          setCurrentDirectory (getDir x)
-          when (x == Java) $ createDirectoryIfMissing False prog
-          let config = makeLangConfig (getLabel x) $ Options Nothing Nothing Nothing $
-                       Just "Code"
-          createCodeFiles $ makeBuild (unAbs absCode) config $ C.Code $
-            map (if x == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode config absCode
-          setCurrentDirectory workingDir) $ lang chs
+     createDirectoryIfMissing False (getDir l)
+     setCurrentDirectory (getDir l)
+     when (l == Java) $ createDirectoryIfMissing False prog
+     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
+            map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
+            C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
+     setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
-        modules = runReader genModules g
-        absCode = toAbsCode prog modules
+        pckg = runReader (genPackage prog) g
 
-genModules :: Reader State [Module]
+genPackage :: (PackageSym repr) => String -> Reader (State repr) 
+  (repr (Package repr))
+genPackage n = packMods n <$> genFiles
+
+genFiles :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
+genFiles = map fileDoc <$> genModules
+
+genModules :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
 genModules = do
   g <- ask
   let s = codeSpec g
@@ -115,53 +141,77 @@ genModules = do
   return $ mn : inp ++ out ++ moddef
 
 -- private utilities used in generateCode
-getLabel, getDir :: Lang -> String
-getLabel Cpp = cppLabel
-getLabel CSharp = cSharpLabel
-getLabel Java = javaLabel
-getLabel Python = pythonLabel
+getDir :: Lang -> String
 getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
+
+getExt :: Lang -> [Label]
+getExt Java = [".java"]
+getExt Python = [".py"]
+getExt CSharp = [".cs"]
+getExt Cpp = [".hpp", ".cpp"]
+
+getRunnable :: Lang -> Runnable
+getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java"
+getRunnable Python = interpMM "python"
+getRunnable CSharp = nativeBinary
+getRunnable Cpp = nativeBinary
+
+getBuildConfig :: Lang -> Maybe BuildConfig
+getBuildConfig Java = buildSingle (\i _ -> asFragment "javac" : i) $
+  inCodePackage mainModuleFile
+getBuildConfig Python = Nothing
+getBuildConfig CSharp = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
+  asFragment "-out:" P.<> o] ++ i
+getBuildConfig Cpp = buildAll $ \i o -> cppCompiler : i ++ map asFragment
+  ["--std=c++11", "-o"] ++ [o]
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])
 
 ------- INPUT ----------
 
-genInputModClass :: Reader State [Module]
+genInputModClass :: (RenderSym repr) => Reader (State repr) 
+  [repr (Module repr)]
 genInputModClass =
   sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
              genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
-             genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
+             genModule "InputConstraints" (Just $ liftS genInputConstraints)
+               Nothing
            ]
 
-genInputModNoClass :: Reader State [Module]
+genInputModNoClass :: (RenderSym repr) => Reader (State repr)
+  [repr (Module repr)]
 genInputModNoClass = do
   g <- ask
   let ins = inputs $ codeSpec g
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
   return [ buildModule "InputParameters" []
-           (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
+           (map (\x -> varDecDef (codeName x) (convType $ codeType x)
+             (getDefaultValue $ codeType x)) ins)
            [inpDer , inpConstr]
            []
          ]
 
-genInputClass :: Reader State Class
+genInputClass :: (RenderSym repr) => Reader (State repr) (repr (Class repr))
 genInputClass = do
   g <- ask
   let ins          = inputs $ codeSpec g
       inputVars    =
-          map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
-      varsList     = map svToVar inputVars
-      vals         = map (defaultValue' . convType . codeType) ins
-  asgs <- zipWithM assign varsList vals
+          map (\x -> pubMVar 0 (codeName x) (convType $ codeType x)) ins
+      varsList     = map (objVarSelf . codeName) ins
+      vals         = map (getDefaultValue . codeType) ins
+  asgs <- zipWithM assign' varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
-    [ constructor "InputParameters" [] [block asgs] ]
+    [ constructor "InputParameters" [] (body [block (initLogFileVar (logKind g) 
+    ++ asgs)]) ]
 
-genInputConstraints :: Reader State Method
+genInputConstraints :: (RenderSym repr) => Reader (State repr) 
+  (repr (Method repr))
 genInputConstraints = do
   g <- ask
   let varsList = inputs $ codeSpec g
@@ -169,25 +219,31 @@ genInputConstraints = do
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
   parms <- getParams varsList
-  sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
-  hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
-  publicMethod methodTypeVoid "input_constraints" parms
-      (return [ block $ sf ++ hw ])
+  ptypes <- getParamTypes varsList
+  pnames <- getParamNames varsList
+  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+    sfwrCBody g x)]}) sfwrCs
+  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+    physCBody g x)]}) physCs
+  publicMethod void "input_constraints" parms ptypes pnames
+      (return [block sf, block hw])
 
-genInputDerived :: Reader State Method
+genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
   parms <- getParams $ map codevar dvals
+  ptypes <- getParamTypes $ map codevar dvals
+  pnames <- getParamNames $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
-  publicMethod methodTypeVoid "derived_values" parms
-      (return $ concat inps)
+  publicMethod void "derived_values" parms ptypes pnames
+      (return inps)
 
 -- need Expr -> String to print constraint
-constrWarn :: Expr -> Body
+constrWarn :: (RenderSym repr) => Expr -> repr (Body repr)
 constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
 
-constrExc :: Expr -> Body
+constrExc :: (RenderSym repr) => Expr -> repr (Body repr)
 constrExc _ = oneLiner $ throw "InputError"
 
 ---- CONST ----
@@ -208,101 +264,121 @@ genConstClassD = pubClass "Constants" Nothing genVars []
 genCalcMod :: String -> [CodeDefinition] -> Reader State Module
 genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . codeEquat) defs)) []
 -}
-genCalcFunc :: CodeDefinition -> Reader State Method
+genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr
+  (Method repr))
 genCalcFunc cdef = do
   g <- ask
-  parms <- getParams (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)
+  parms <- getParams $ codecs g
+  ptypes <- getParamTypes $ codecs g
+  pnames <- getParamNames $ codecs g
+  blck <- genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef)
   publicMethod
-    (methodType $ convType (codeType cdef))
+    (mState $ convType (codeType cdef))
     (codeName cdef)
-    parms
-    (genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef))
+    parms ptypes pnames
+    (return [blck])
+  where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
+genCalcBlock :: (RenderSym repr) => CalcType -> String -> Expr -> Reader (State
+  repr) (repr (Block repr))
 genCalcBlock t v (Case e) = genCaseBlock t v e
 genCalcBlock t v e
-    | t == CalcAssign     = oneLiner <$> do { vv <- variable v; ee <- convExpr e; assign vv ee}
-    | otherwise           = oneLiner . I.return <$> convExpr e
+    | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v; ee <-
+      convExpr e; assign' vv ee}
+    | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
-genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
+genCaseBlock :: (RenderSym repr) => CalcType -> String -> [(Expr,Relation)] ->
+  Reader (State repr) (repr (Block repr))
 genCaseBlock t v cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (genCalcBlock t v e)) cs
-  return $ oneLiner $ ifCond ifs noElse
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
+    genCalcBlock t v e)) cs
+  return $ block [ifNoElse ifs]
 
 ----- OUTPUT -------
 
-genOutputMod :: [CodeChunk] -> Reader State [Module]
-genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ genOutputFormat outs) Nothing
+genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [repr
+  (Module repr)]
+genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ 
+  genOutputFormat outs) Nothing
 
-genOutputFormat :: [CodeChunk] -> Reader State Method
+genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
+  (Method repr))
 genOutputFormat outs =
-  let l_outfile = "outfile"
+  let l_outfile = "outputfile"
       v_outfile = var l_outfile
   in do
     parms <- getParams outs
+    ptypes <- getParamTypes outs
+    pnames <- getParamNames outs
     outp <- mapM (\x -> do
         v <- variable $ codeName x
         return [ printFileStr v_outfile (codeName x ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod methodTypeVoid "write_output" parms (return [ block $ [
+    publicMethod void "write_output" parms ptypes pnames (return [block $
+      [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ] ])
+      concat outp ++ [ closeFile v_outfile ]])
 
 -----
 
-genMethodCall :: Scope -> Permanence -> Comments -> Logging -> MethodType -> Label -> [Parameter]
-                  -> Reader State Body -> Reader State Method
-genMethodCall s pr doComments doLog t n p b = do
-  let loggedBody LogFunc = loggedMethod n p b
-      loggedBody LogAll  = loggedMethod n p b
+genMethodCall :: (RenderSym repr) => repr (Scope repr) -> repr
+  (Permanence repr) -> Comments -> Logging -> repr (MethodType repr) ->
+  Label -> [repr (Parameter repr)] -> [repr (StateType repr)] -> [Label]
+  -> Reader (State repr) [repr (Block repr)] -> Reader (State repr) (repr
+  (Method repr))
+genMethodCall s pr doComments doLog t n p st l b = do
+  let loggedBody LogFunc = loggedMethod n st l b
+      loggedBody LogAll  = loggedMethod n st l b
       loggedBody _       = b
-      commBody CommentFunc = commMethod n p
+      commBody CommentFunc = commMethod n l
       commBody _           = id
   bod <- commBody doComments (loggedBody doLog)
-  return $ Method n s pr t p bod
+  return $ function n s pr t p (body bod)
 
-commMethod :: Label -> [Parameter] -> Reader State Body -> Reader State Body
-commMethod n p b = do
+commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) 
+  [repr (Block repr)] -> Reader (State repr) [repr (Block repr)]
+commMethod n l b = do
   g <- ask
   rest <- b
-  return $
-    block [
+  return $ block [
       comment $ "function '" ++ n ++ "': " ++ funcTerm n (fMap $ codeSpec g),
       multi $ map
-        (\x -> comment $ "parameter '" ++ paramName x ++ "': " ++ varTerm (paramName x) (vMap $ codeSpec g)) p
+        (\x -> comment $ "parameter '" ++ x ++ "': " ++ varTerm x (vMap $ 
+          codeSpec g)) l
     ] : rest 
 
-loggedMethod :: Label -> [Parameter] -> Reader State Body -> Reader State Body
-loggedMethod n p b =
+loggedMethod :: (RenderSym repr) => Label -> [repr (StateType repr)] ->
+  [Label] -> Reader (State repr) [repr (Block repr)] -> Reader (State repr)
+  [repr (Block repr)]
+loggedMethod n st l b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
     g <- ask
     rest <- b
-    return $
-      block [
-        varDec l_outfile outfile,
-        openFileW v_outfile (litString $ logName g),
-        printFileStr v_outfile ("function " ++ n ++ "("),
-        printParams p v_outfile,
-        printFileStrLn v_outfile ") called",
-        closeFile v_outfile
-      ] : rest
+    return $ block [
+      varDec l_outfile outfile,
+      openFileA v_outfile (litString $ logName g),
+      printFileStr v_outfile ("function " ++ n ++ "("),
+      printParams st l v_outfile,
+      printFileStrLn v_outfile ") called",
+      closeFile v_outfile ]
+      : rest
   where
-    printParams ps v_outfile = multi $
+    printParams sts ls v_outfile = multi $
       intersperse (printFileStr v_outfile ", ") $
-      map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
+      map (\(x,y) -> printFile v_outfile x (var y)) (zip sts ls)
 
 ---- MAIN ---
 
-genModule :: Name
-               -> Maybe (Reader State [FunctionDecl])
-               -> Maybe (Reader State [Class])
-               -> Reader State Module
+genModule :: (RenderSym repr) => Name
+               -> Maybe (Reader (State repr) [repr (Method repr)])
+               -> Maybe (Reader (State repr) [repr (Class repr)])
+               -> Reader (State repr) (repr (Module repr))
 genModule n maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
@@ -312,10 +388,10 @@ genModule n maybeMs maybeCs = do
   return $ buildModule n ls [] ms cs
 
 
-genMain :: Reader State Module
+genMain :: (RenderSym repr) => Reader (State repr) (repr (Module repr))
 genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
-genMainFunc :: Reader State FunctionDecl
+genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
   let l_filename = "inputfile"
       v_filename = var l_filename
@@ -331,30 +407,32 @@ genMainFunc =
     varDef <- mapM (\x -> do
       args <- args1 x
       cnargs <- fApp (codeName x) args
-      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs) (execOrder $ codeSpec g)
+      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs)
+        (execOrder $ codeSpec g)
     wo <- fApp "write_output" args2
-    return $ mainMethod $ body $ [
+    return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
-      objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valStmt gi,
-      valStmt dv,
-      valStmt ic
-      ] ++ varDef ++ [ valStmt wo ]
+      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
+      valState gi,
+      valState dv,
+      valState ic
+      ] ++ varDef ++ [ valState wo ]
 
 -----
 
-loggedAssign :: Value -> Value -> Reader State Statement
+loggedAssign :: (RenderSym repr) => repr (Value repr) -> 
+  repr (Value repr) -> Reader (State repr) (repr (Statement repr))
 loggedAssign a b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
     g <- ask
     return $ multi [
-      I.assign a b,
-      varDec l_outfile outfile,
-      openFileW v_outfile (litString $ logName g),
+      assign a b,
+      openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ valName a ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
+      printFile v_outfile (convType $ varType (valName a) (vMap $ codeSpec g))
+        a,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 
@@ -363,85 +441,108 @@ loggedAssign a b =
 nopfx :: String -> String
 nopfx s = fromMaybe s (stripPrefix funcPrefix s)
 
-variable :: String -> Reader State Value
+variable :: (RenderSym repr) => String -> Reader (State repr) 
+  (repr (Value repr))
 variable s' = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
-      doit :: String -> Reader State Value
+      doit :: (RenderSym repr) => String -> Reader (State repr) 
+        (repr (Value repr))
       doit s | member s mm =
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-             | s `elem` map codeName (inputs cs) = return $ var "inParams" $-> var s
+             | s `elem` map codeName (inputs cs) = return $ var "inParams" $-> 
+               var s
              | otherwise                         = return $ var s
   doit s'
   
-fApp :: String -> [Value] -> Reader State Value
+fApp :: (RenderSym repr) => String -> [repr (Value repr)] -> Reader 
+  (State repr) (repr (Value repr))
 fApp s' vl' = do
   g <- ask
-  let doit :: String -> [Value] -> Value
+  let doit :: (RenderSym repr) => String -> [repr (Value repr)] -> repr
+        (Value repr)
       doit s vl | member s (eMap $ codeSpec g) =
         maybe (error "impossible")
-          (\x -> if x /= currentModule g then funcApp x s vl else funcApp' s vl)
+          (\x -> if x /= currentModule g then extFuncApp x s vl else 
+            funcApp s vl)
           (Map.lookup s (eMap $ codeSpec g))
-                | otherwise = funcApp' s vl
+                | otherwise = funcApp s vl
   return $ doit s' vl'
 
-getParams :: [CodeChunk] -> Reader State [Parameter]
+getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [repr (Parameter repr)]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
-      ps = map (\y -> param (codeName y) (convType $ codeType y))
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+      ps = map (\y -> (paramFunc $ codeType y) (codeName y) (convType $ 
+        codeType y))
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
+      paramFunc (C.List _) = pointerParam
+      paramFunc _ = stateParam
   return $ if length csSubIns < length cs
-           then param "inParams" (obj "InputParameters") : ps  -- todo:  make general
+           then pointerParam "inParams" (obj "InputParameters") : ps  -- todo:  make general
            else ps
 
-getArgs :: [CodeChunk] -> Reader State [Value]
+getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [repr (StateType repr)]
+getParamTypes cs = do
+  g <- ask
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      pts = map (convType . codeType)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
+  return $ if length csSubIns < length cs
+          then obj "InputParameters" : pts  -- todo:  make general
+          else pts
+
+getParamNames :: [CodeChunk] -> Reader (State repr) [Label]
+getParamNames cs = do
+  g <- ask
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      pvs = map codeName
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
+  return $ if length csSubIns < length cs
+          then "inParams" : pvs  -- todo:  make general
+          else pvs
+
+getArgs :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+  [repr (Value repr)]
 getArgs cs = do
   g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       args = map (var . codeName)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
+              csSubIns)
   return $ if length csSubIns < length cs
            then var "inParams" : args  -- todo:  make general
            else args
 
-paramType :: Parameter -> StateType
-paramType (StateParam _ s) = s
-paramType FuncParam{} = error "Function param not implemented"
+getDefaultValue :: (RenderSym repr) => C.CodeType -> repr (Value repr)
+getDefaultValue C.Boolean = defaultBool
+getDefaultValue C.Integer = defaultInt
+getDefaultValue C.Float = defaultFloat
+getDefaultValue C.Char = defaultChar
+getDefaultValue C.String = defaultString
+getDefaultValue _ = error "No default value for the given type"
 
-paramVal :: Parameter -> Value
-paramVal (StateParam l _) = var l
-paramVal FuncParam{} = error "Function param not implemented"
-
-paramName :: Parameter -> String
-paramName (StateParam l _) = l
-paramName FuncParam{} = error "Function param not implemented"
-
-valName :: Value -> String
-valName (Lit (LitBool b)) = show b
-valName (Lit (LitInt i)) = show i
-valName (Lit (LitFloat f)) = show f
-valName (Lit (LitChar c)) = [c]
-valName (Lit (LitStr s)) = s
-valName (Var _ n) = n
-valName (ObjVar o v) = valName o ++ "." ++ valName v
-valName (ObjAccess o (ListAccess v)) = valName o ++ "[" ++ valName v ++ "]"
-valName _ = error "Value has no name"
-
-convType :: C.CodeType -> I.StateType
+convType :: (RenderSym repr) => C.CodeType -> repr (StateType repr)
 convType C.Boolean = bool
 convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = listT $ convType t
+convType (C.List t) = getListTypeFunc t dynamic
 convType (C.Object n) = obj n
 convType C.File = error "convType: File ?"
 
-convExpr :: Expr -> Reader State Value
+convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
@@ -452,7 +553,8 @@ convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ codeSpec g))
+  variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ 
+    codeSpec g))
 convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
@@ -463,18 +565,25 @@ convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) 
+  (convExpr b) -- hack to deal with string equality
 convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
-    doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
+    doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
+      (convExpr (Case xs))
 convExpr Matrix{}    = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
+
+getUpperBound :: Expr -> Expr
+getUpperBound (BinaryOp Lt _ b) = b
+getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
 lookupC :: ChunkDB -> UID -> QuantityDict
 lookupC sm c = symbLookup c $ symbolTable sm
@@ -497,27 +606,28 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: UFunc -> (Value -> Value)
+unop :: (RenderSym repr) => UFunc -> (repr (Value repr) -> repr (Value repr))
 unop Sqrt = (#/^)
-unop Log  = I.log
-unop Ln   = I.ln
+unop Log  = log
+unop Ln   = ln
 unop Abs  = (#|)
-unop Exp  = I.exp
-unop Sin  = I.sin
-unop Cos  = I.cos
-unop Tan  = I.tan
-unop Csc  = I.csc
-unop Sec  = I.sec
-unop Cot  = I.cot
-unop Arcsin = error "unop: Arcsin not implemented"
-unop Arccos = error "unop: Arccos not implemented"
-unop Arctan = error "unop: Arctan not implemented"
-unop Dim  = (I.$.listSize)
+unop Exp  = exp
+unop Sin  = sin
+unop Cos  = cos
+unop Tan  = tan
+unop Csc  = csc
+unop Sec  = sec
+unop Cot  = cot
+unop Arcsin = arcsin
+unop Arccos = arccos
+unop Arctan = arctan
+unop Dim  = listSizeAccess
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: BinOp -> (Value -> Value -> Value)
+bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr) -> repr
+  (Value repr) -> repr (Value repr))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -531,19 +641,22 @@ bfunc Impl  = error "convExpr :=>"
 bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
-bfunc Index = \x y -> x I.$. listAccess y
+bfunc Index = \x y -> x $. listAccess y
 
 -- medium hacks --
-genModDef :: CS.Mod -> Reader State Module
+genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
+  (repr (Module repr))
 genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
-genFunc :: Func -> Reader State Method
+genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
+  ptypes <- getParamTypes i
+  pnames <- getParamNames i
   stmts <- mapM convStmt s
-  publicMethod (methodType $ convType o) n parms
-    (return [ block $
+  publicMethod (mState $ convType o) n parms ptypes pnames
+    (return [block $
         map (\x -> varDec (codeName x) (convType $ codeType x))
           (fstdecl (sysinfodb (codeSpec g)) s \\ i)
         ++ stmts
@@ -551,144 +664,176 @@ genFunc (FDef (FuncDef n i o s)) = do
 genFunc (FData (FuncData n ddef)) = genDataFunc n ddef
 genFunc (FCD cd) = genCalcFunc cd
 
-convStmt :: FuncStmt -> Reader State Statement
-convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
+convStmt :: (RenderSym repr) => FuncStmt -> Reader (State repr) 
+  (repr (Statement repr))
+convStmt (FAsg v e) = convExpr e >>= assign' (var $ codeName v)
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
-  e' <- convExpr e
-  return $ for (varDecDef (codeName v) int (litInt 0)) e' (var (codeName v) &++)
-               [ block stmts ]
+  e' <- convExpr $ getUpperBound e
+  return $ forRange (codeName v) (litInt 0) e' (litInt 1) (bodyStatements stmts)
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
-  return $ while e' [ block stmts ]
+  return $ while e' (bodyStatements stmts)
 convStmt (FCond e tSt []) = do
   stmts <- mapM convStmt tSt
   e' <- convExpr e
-  return $ ifCond [(e', [ block stmts ])] noElse
+  return $ ifNoElse [(e', bodyStatements stmts)]
 convStmt (FCond e tSt eSt) = do
   stmt1 <- mapM convStmt tSt
   stmt2 <- mapM convStmt eSt
   e' <- convExpr e
-  return $ ifCond [(e', [ block stmt1 ])] [ block stmt2 ]
-convStmt (FRet e) = fmap I.return (convExpr e)
+  return $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
+convStmt (FRet e) = do
+  e' <- convExpr e
+  return $ returnState e'
 convStmt (FThrow s) = return $ throw s
 convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
-  return $ tryCatch [ block stmt1 ] [ block stmt2 ]
+  return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
+convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
+  (getListTypeFunc t dynamic)
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt (FProcCall n l) = valStmt <$> convExpr (FCall (asExpr n) l)
-convStmt (FAppend a b) = valStmt <$>
-  liftM2 (\x y -> x I.$. listAppend y) (convExpr a) (convExpr b)
+convStmt (FProcCall n l) = do
+  e' <- convExpr (FCall (asExpr n) l)
+  return $ valState e'
+convStmt (FAppend a b) = do
+  a' <- convExpr a
+  b' <- convExpr b
+  return $ valState $ a' $. listAppend b'
+
+getListTypeFunc :: (RenderSym repr) => C.CodeType -> repr (Permanence repr) ->
+  repr (StateType repr)
+getListTypeFunc C.Integer p = intListType p
+getListTypeFunc C.Float p = floatListType p
+getListTypeFunc C.Boolean _ = boolListType
+getListTypeFunc (C.List t) p = listType p $ getListTypeFunc t p
+getListTypeFunc t p = listType p (convType t)
 
 -- this is really ugly!!
-genDataFunc :: Name -> DataDesc -> Reader State Method
+genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
+  (repr (Method repr))
 genDataFunc nameTitle ddef = do
     parms <- getParams $ getInputs ddef
+    ptypes <- getParamTypes $ getInputs ddef
+    pnames <- getParamNames $ getInputs ddef
     inD <- mapM inData ddef
-    publicMethod methodTypeVoid nameTitle (p_filename : parms) $
-      return $ body $ [
+    publicMethod void nameTitle (p_filename : parms) (string : ptypes)
+      (l_filename : pnames) $
+      return [block $ [
       varDec l_infile infile,
       varDec l_line string,
-      listDec' l_lines string 0,
-      listDec' l_linetokens string 0,
+      listDec l_lines 0 (listType dynamic string),
+      listDec l_linetokens 0 (listType dynamic string),
       openFileR v_infile v_filename ] ++
       concat inD ++ [
-      closeFile v_infile ]
-  where inData :: Data -> Reader State [Statement]
+      closeFile v_infile ]]
+  where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
-          vv <- variable $ codeName v
-          return [getFileInput v_infile (convType $ codeType v) vv]
+            vv <- variable $ codeName v
+            return [getFileInput (codeType v) v_infile vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData lp (litInt 0)
-          return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ lnI
+          return $ [getFileInputLine v_infile v_line, 
+            stringSplit d v_linetokens v_line] ++ lnI
         inData (Lines lp Nothing d) = do
           lnV <- lineData lp v_i
-          return [getFileInputAll v_infile v_lines,
-              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) (v_i &++)
-                (body (stringSplit v_linetokens (v_lines I.$. listAccess v_i) d : lnV))
+          return [ getFileInputAll v_infile v_lines,
+            forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
+              (bodyStatements $ stringSplit d v_linetokens (v_lines $.
+                listAccess v_i) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData lp v_i
-          return [for (varDecDef l_i int (litInt 0)) (v_i ?< litInt numLines) (v_i &++)
-              ( body
-                ( [getFileInputLine v_infile v_line,
-                   stringSplit v_linetokens v_line d
-                  ] ++ lnV
-                )
-              )
+          return [ forRange l_i (litInt 0) (litInt numLines) (litInt 1)
+            ( bodyStatements $
+              [getFileInputLine v_infile v_line,
+               stringSplit d v_linetokens v_line
+              ] ++ lnV)
             ]
         ---------------
-        lineData :: LinePattern -> Value -> Reader State [Statement]
+        lineData :: (RenderSym repr) => LinePattern -> repr (Value repr)
+          -> Reader (State repr) [repr (Statement repr)]
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ litInt (toInteger $ length p))I.$. cast int float) (v_j &++)
-              ( body pat )
-            ]
+          return [forRange l_j (litInt 0) (castObj (cast int float)
+            (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
+            (litInt 1) ( bodyStatements pat )]
         lineData (Repeat p (Just numPat)) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< litInt numPat) (v_j &++)
-              ( body pat )
-            ]
+          return [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
+            ( bodyStatements pat )]
         ---------------
-        patternData :: [Entry] -> Value -> Value -> Reader State [Statement]
+        patternData :: (RenderSym repr) => [Entry] -> repr (Value repr)
+          -> repr (Value repr) -> Reader (State repr) [repr (Statement repr)]
         patternData d lineNo patNo = do
           let l = toInteger $ length d
-          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
+          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ 
+            zip (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
           return $ concat ent
         ---------------
-        entryData :: Value -> Value -> Value -> Entry -> Reader State [Statement]
+        entryData :: (RenderSym repr) => repr (Value repr) -> repr 
+          (Value repr) -> repr (Value repr) -> Entry -> Reader (State repr)
+          [repr (Statement repr)]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
-          a <- assign vv $ (v_linetokens I.$. listAccess tokIndex) I.$. cast (convType $ codeType v) string
+          a <- assign' vv $ getCastFunc (codeType v)
+            (v_linetokens $. listAccess tokIndex)
           return [a]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
-          a <- assign (indexData indx lineNo patNo vv) $
-                (v_linetokens I.$. listAccess tokIndex) I.$. cast (listType (codeType v) (toInteger $ length indx)) string
-          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [ a ]
+          return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [
+            valState $ indexData indx lineNo patNo vv $. 
+            listSet (getIndex indx lineNo patNo)
+            (getCastFunc (getListType (codeType v) (toInteger $ length indx))
+            (v_linetokens $. listAccess tokIndex))]
         entryData _ _ _ JunkEntry = return []
         ---------------
-        indexData :: [Ind] -> Value -> Value -> Value -> Value
-        indexData [] _ _ v = v
-        indexData (Explicit i  : is) l p v = indexData is l p (ObjAccess v (listAccess $ litInt i))
-        indexData (WithLine    : is) l p v = indexData is l p (ObjAccess v (listAccess l))
-        indexData (WithPattern : is) l p v = indexData is l p (ObjAccess v (listAccess p))
+        indexData :: (RenderSym repr) => [Ind] -> repr (Value repr) ->
+          repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+        indexData [_] _ _ v = v
+        indexData (Explicit i : is) l p v = indexData is l p (objAccess v 
+          (listAccess $ litInt i))
+        indexData (WithLine : is) l p v = indexData is l p (objAccess v 
+          (listAccess l))
+        indexData (WithPattern : is) l p v = indexData is l p (objAccess v
+          (listAccess p))
+        indexData [] _ _ _ = error "indexData called with empty index list"
+        ------------------------------
+        getIndex :: (RenderSym repr) => [Ind] -> repr (Value repr) ->
+          repr (Value repr) -> repr (Value repr)
+        getIndex [Explicit i] _ _ = litInt i
+        getIndex [WithLine] l _ = l
+        getIndex [WithPattern] _ p = p
+        getIndex (_:xs) l p = getIndex xs l p
+        getIndex [] _ _ = error "getIndex called with empty index list"
         ---------------
-        checkIndex :: [Ind] -> Value -> Value -> Value -> C.CodeType -> [Statement]
-        checkIndex indx l p v s = checkIndex' indx len l p v (listBase s)
-          where len = toInteger $ length indx
-        checkIndex' [] _ _ _ _ _ = []
-        checkIndex' (Explicit i : is) n l p v s =
-            while (v I.$. listSize ?<= litInt i) (body [ valStmt $ v I.$. listExtend (listType' s n) ])
-          : checkIndex' is (n-1) l p (v I.$. listAccess (litInt i)) s
-        checkIndex' (WithLine : is) n l p v s =
-            while (v I.$. listSize ?<= l)        (body [ valStmt $ v I.$. listExtend (listType' s n) ])
-          : checkIndex' is (n-1) l p (v I.$. listAccess l) s
-        checkIndex' (WithPattern : is) n l p v s =
-            while (v I.$. listSize ?<= p)        (body [ valStmt $ v I.$. listExtend (listType' s n) ])
-          : checkIndex' is (n-1) l p (v I.$. listAccess p) s
-        ---------------
-        listType :: C.CodeType -> Integer -> I.StateType
-        listType _ 0 = error "No index given"
-        listType (C.List t) 1 = convType t
-        listType (C.List t) n = listType t (n-1)
-        listType _ _ = error "Not a list type"
-        ---------------
-        listBase :: C.CodeType -> C.CodeType
-        listBase (C.List t) = listBase t
-        listBase t = t
-        ---------------
-        listType' :: C.CodeType -> Integer -> I.StateType
-        listType' _ 0 = error "No index given"
-        listType' t 1 = convType t
-        listType' t n = listT $ listType' t (n-1)
-        ---------------
+        checkIndex :: (RenderSym repr) => [Ind] -> Integer-> 
+          repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+          C.CodeType -> [repr (Statement repr)]
+        checkIndex [] _ _ _ _ _ = []
+        checkIndex (Explicit i : is) n l p v s =
+          while (listSizeAccess v ?<= litInt i) (bodyStatements [ 
+            valState $
+            v $. getListExtend (getListType s n) ] )
+            : checkIndex is (n+1) l p (v $. listAccess (litInt i)) s
+        checkIndex (WithLine : is) n l p v s =
+          while (listSizeAccess  v ?<= l) (bodyStatements [ valState $
+          v $. getListExtend (getListType s n) ])
+          : checkIndex is (n+1) l p (v $. listAccess l) s
+        checkIndex (WithPattern : is) n l p v s =
+          while (listSizeAccess v ?<= p) (bodyStatements [ valState $ 
+          v $. getListExtend (getListType s n) ] )
+          : checkIndex is (n+1) l p (v $. listAccess p) s
+        ---------------------------
+        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
+        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
+          (RenderSym repr) => (repr (Value repr))
+        p_filename :: (RenderSym repr) => (repr (Parameter repr))
         l_line = "line"
         v_line = var l_line
         l_lines = "lines"
@@ -698,9 +843,42 @@ genDataFunc nameTitle ddef = do
         l_infile = "infile"
         v_infile = var l_infile
         l_filename = "filename"
-        p_filename = param l_filename string
+        p_filename = stateParam l_filename string
         v_filename = var l_filename
         l_i = "i"
         v_i = var l_i
         l_j = "j"
         v_j = var l_j
+
+getFileInput :: (RenderSym repr) => C.CodeType -> (repr (Value repr) -> repr
+  (Value repr) -> repr (Statement repr))
+getFileInput C.Boolean = getBoolFileInput
+getFileInput C.Integer = getIntFileInput
+getFileInput C.Float = getFloatFileInput
+getFileInput C.Char = getCharFileInput
+getFileInput C.String = getStringFileInput
+getFileInput _ = error "No getFileInput function for the given type"
+
+getListExtend :: (RenderSym repr) => C.CodeType -> repr (Function repr)
+getListExtend C.Boolean = listExtendBool
+getListExtend C.Integer = listExtendInt
+getListExtend C.Float = listExtendFloat
+getListExtend C.Char = listExtendChar
+getListExtend C.String = listExtendString
+getListExtend t@(C.List _) = listExtendList (getNestDegree t) (convType t)
+getListExtend _ = error "No listExtend function for the given type"
+
+getNestDegree :: C.CodeType -> Integer
+getNestDegree (C.List t) = 1 + getNestDegree t
+getNestDegree _ = 0
+
+getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
+   repr (Value repr)
+getCastFunc C.Float = castStrToFloat
+getCastFunc t = castObj (cast (convType t) string)
+
+getListType :: C.CodeType -> Integer -> C.CodeType
+getListType _ 0 = error "No index given"
+getListType (C.List t) 1 = t
+getListType (C.List t) n = getListType t (n-1)
+getListType _ _ = error "Not a list type"

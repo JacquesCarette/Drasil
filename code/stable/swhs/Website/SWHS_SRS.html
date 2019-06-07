@@ -727,12 +727,12 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 </p>
 <p>
 <div id="assumpCWTAT">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </div>
 </p>
 <p>
 <div id="assumpTPCAV">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </div>
 </p>
 <p>
@@ -1367,7 +1367,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </p>
 </td>
 </tr>
@@ -2013,10 +2013,10 @@ The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) =
 </table>
 </div>
 <p class="paragraph">
-Detailed derivation of the energy balance on the PCM during  sensible heating phase:
+Detailed derivation of the energy balance on the PCM during sensible heating phase:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
@@ -2843,12 +2843,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
 <th><a href=#DD:ht.flux.P>DD: ht_flux_P</a></th>
+<th><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
 <th><a href=#DD:ht.flux.C>DD: ht_flux_C</a></th>
 <th><a href=#unlikeChgWPFS>UC: Water-PCM-Fixed-States</a></th>
 <th><a href=#unlikeChgNGS>UC: No-Gaseous-State</a></th>
 <th><a href=#IM:heatEInPCM>IM: heatEInPCM</a></th>
-<th><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></th>
 <th><a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a></th>
 <th><a href=#likeChgTLH>LC: Tank-Lose-Heat</a></th>
 <th>
@@ -3046,7 +3046,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
-<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3118,8 +3118,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3156,8 +3156,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3227,9 +3227,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
 <td>X</td>
 <td>X</td>
 <td>X</td>
@@ -3264,12 +3264,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3299,11 +3299,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3406,12 +3406,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td>X</td>
@@ -3479,8 +3479,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3516,8 +3516,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3552,7 +3552,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
-<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3589,12 +3589,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3661,8 +3661,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3732,8 +3732,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td>X</td>
 <td></td>
@@ -3764,12 +3764,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td>X</td>
 <td></td>
 <td></td>
@@ -3834,12 +3834,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
 <td>X</td>
 <td></td>
-<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3908,8 +3908,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3974,12 +3974,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -4048,8 +4048,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4079,12 +4079,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -4114,12 +4114,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -4153,8 +4153,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4184,12 +4184,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -4219,12 +4219,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>

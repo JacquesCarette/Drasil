@@ -256,9 +256,8 @@ balPCMDescNotes = map foldlSent [
 --    Derivation of eBalanceOnPCM          --
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
-eBalanceOnPCMDeriv =
-  [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
-    S "sensible heating phase:" ] ++
+eBalanceOnPCMDeriv = foldlSentCol [S "Detailed derivation of the", phrase energy,
+  S "balance on the PCM during sensible heating phase"] :
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2])
   ++ (eBalanceOnPCMDerivDesc5 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol assumpVCMPN)
   ++ (eBalanceOnPCMDerivDesc6 temp_PCM)
@@ -283,11 +282,15 @@ eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass1
    `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
    S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `andThe`
    phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,
-   S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
-   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. phrase output_,
-   S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
-   (sParen (makeRef2S ass16)) `sC` (E $ sy vhg $= 0) `sC` S "the equation for",
-   makeRef2S rocTempSimp, S "can be written as"]
+   S "into the PCM from", phrase wt `sIs` (E $ sy hfp), sParen (makeRef2S dd2HtFluxP),
+   S "over", phrase pc, S "material surface area" +:+. (E $ sy ps),
+   S "The thermal flux" `sIs` S "constant over", (E $ sy pcm_SA) `sC` S "since",
+   phrase temp `ofThe` getAcc phsChgMtrl `isThe` S "same throughout its", phrase vol,
+   sParen (makeRef2S assumpTPCAV) `andThe` phrase water `sIs` S "fully mixed" +:+.
+   sParen (makeRef2S assumpCWTAT), S "There is no", phrase hf, phrase output_,
+   S "from the" +:+. getAcc phsChgMtrl, S "Assuming no volumetric", phrase ht,
+   S "generation per unit", phrase vo, sParen (makeRef2S ass16) `sC` (E $ sy vhg $= 0) `sC`
+   S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: DataDefinition -> UnitalChunk -> [Sentence]
 eBalanceOnPCMDerivDesc2 dd2 hfp =

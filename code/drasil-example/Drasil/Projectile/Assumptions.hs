@@ -38,10 +38,10 @@ neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     as
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion is in" +:+. getAcc twoD
+twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` S "in" +:+. getAcc twoD
 
 cartSystDesc :: Sentence
-cartSystDesc = S "A" +:+ phrase cartesian +:+. S "is used"
+cartSystDesc = S "A" +:+. (phrase cartesian `sIs` S "used")
 
 yAxisPerpendDesc :: Sentence
 yAxisPerpendDesc = S "The y-axis" `sIs` phrase perp `toThe` S "x-axis."
@@ -56,10 +56,11 @@ targetXAxisDesc :: Sentence
 targetXAxisDesc = S "The" +:+ phrase target +:+. S "lies on the x-axis"
 
 posXDirectionDesc :: Sentence
-posXDirectionDesc = S "The positive x-direction is from the" +:+. (phrase launcher `toThe` phrase target)
+posXDirectionDesc = S "The positive x-direction" `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)
 
 constAccelDesc :: Sentence
-constAccelDesc = S "The" +:+. (phrase acceleration `sIs` S "constant")
+constAccelDesc = S "The" +:+ (phrase acceleration `sIs` S "constant") +:+.
+                 sParen (S "from" +:+ (foldlList Comma List $ map makeRef2S [accelXZero, accelYGravity, neglectDrag, freeFlight]))
 
 accelXZeroDesc :: Sentence
 accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the x-direction" `sIs` S "zero")
@@ -79,7 +80,7 @@ pointMassDesc = (S "size" `sAnd` S "shape") `ofThe'` phrase projectile `sAre`
                 S "negligible" `sC` S "so that it can be modelled as a point" +:+. phrase mass
 
 freeFlightDesc :: Sentence
-freeFlightDesc = S "The flight is free; there" `sAre` S "no" +:+ plural collision +:+
+freeFlightDesc = S "The flight" `sIs` S "free; there" `sAre` S "no" +:+ plural collision +:+
                  S "during" +:+. (S "trajectory" `ofThe` phrase projectile)
 
 neglectCurvDesc :: Sentence

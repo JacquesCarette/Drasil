@@ -47,13 +47,13 @@ This section simplifies the original problem and helps in developing the theoret
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
 \item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target.
-\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant. \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
-\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected.
+\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
+\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[constAccel]{A: constAccel}.
+\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[constAccel]{A: constAccel}.
+\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected. \hyperref[constAccel]{A: constAccel}.
 \item[constMass:\phantomsection\label{constMass}]The mass of the projectile is constant.
 \item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
-\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile.
+\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. \hyperref[constAccel]{A: constAccel}.
 \item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected.
 \item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero.
 \end{itemize}

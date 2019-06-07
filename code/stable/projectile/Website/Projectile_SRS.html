@@ -90,21 +90,23 @@ posXDirection: The positive x-direction is from the launcher to the target.
 </p>
 <p>
 <div id="constAccel">
-constAccel: The acceleration is constant. <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
+constAccel: The acceleration is constant (from <a href=#accelXZero>A: accelXZero</a>, <a href=#accelYGravity>A: accelYGravity</a>, <a href=#neglectDrag>A: neglectDrag</a>, and <a href=#freeFlight>A: freeFlight</a>). <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
 </div>
 </p>
 <p>
 <div id="accelXZero">
-accelXZero: The acceleration in the x-direction is zero. <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+accelXZero: The acceleration in the x-direction is zero. <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#constAccel>A: constAccel</a>.
 </div>
 </p>
 <p>
 <div id="accelYGravity">
-accelYGravity: The acceleration in the y-direction is the acceleration due to gravity. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.
+accelYGravity: The acceleration in the y-direction is the acceleration due to gravity. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#constAccel>A: constAccel</a>.
 </div>
 </p>
 <p>
-<div id="neglectDrag">neglectDrag: Air drag is neglected.</div>
+<div id="neglectDrag">
+neglectDrag: Air drag is neglected. <a href=#constAccel>A: constAccel</a>.
+</div>
 </p>
 <p>
 <div id="constMass">
@@ -118,7 +120,7 @@ pointMass: The size and shape of the projectile are negligible, so that it can b
 </p>
 <p>
 <div id="freeFlight">
-freeFlight: The flight is free; there are no collisions during the trajectory of the projectile.
+freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. <a href=#constAccel>A: constAccel</a>.
 </div>
 </p>
 <p>

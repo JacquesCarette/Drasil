@@ -212,16 +212,14 @@ eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
   balPCMDesc balPCM_Rel -- eBalanceOnPCML
 
 balPCM_Rel :: Relation
-balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
+balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3]
   where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
 
         case2 = ((1 / (sy tau_L_P)) * ((apply1 temp_W time) -
           (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy temp_melt_P)))
 
-        case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
-
-        case4 = (0, real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
+        case3 = (0, (sy temp_PCM) $= (sy temp_melt_P) $&& real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.

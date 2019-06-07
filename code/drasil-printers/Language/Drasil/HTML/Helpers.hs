@@ -148,7 +148,7 @@ span_tag :: [String] -> Doc -> Doc
 span_tag = wrap "span"
 
 indent :: Doc -> Doc
-indent = nest 0
+indent = nest 2
 
 -- | Create and markup fractions
 fraction :: Doc -> Doc -> Doc

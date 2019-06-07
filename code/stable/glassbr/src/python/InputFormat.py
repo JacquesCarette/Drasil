@@ -1,8 +1,8 @@
 from __future__ import print_function
 import sys
 import math
-import InputParameters
 
+import InputParameters
 
 def func_get_input(filename, inParams):
     lines = []

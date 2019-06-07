@@ -295,7 +295,7 @@ restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (In
 
 posOutCons        = constrained' QP.position           [] (dbl 0.502)
 veloOutCons       = constrained' QP.velocity           [] (dbl 0)
-orientOutCons     = constrained' QM.orientation        [] (dbl 0)
+orientOutCons     = constrained' QM.orientation        [physc $ Bounded (Inc, 0) (Inc, 2 * sy QM.pi_)] (dbl 0)
 angVeloOutCons    = constrained' QP.angularVelocity    [] (dbl 9.8)
 --(0 <= sy QM.orientation <= 2 * $ sy QM.pi_)
 

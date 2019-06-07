@@ -378,8 +378,7 @@ goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
 
 goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
 goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw,
-  S "the" +:+ phrase tempcm,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw `andThe` phrase tempcm,
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -703,11 +702,11 @@ trace3LC6 = ["A15"]
 introP1 :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 introP1 es en sp pcmat pro te lh un = foldlSent [
-  S "Due to", foldlList Comma List (map S ["increasing cost", "diminishing availability",
+  S "Due to the", foldlList Comma List (map S ["increasing cost", "diminishing availability",
     "negative environmental impact of fossil fuels"]) `sC`
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
-  S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
-  plural es `sAnd` S "provide a novel way of storing" +:+. phrase en,
+  S "storage technology", sp ^. defn, sParen (short pcmat), S "use a renewable",
+  phrase es `sAnd` S "provide a novel way of storing" +:+. phrase en,
   at_start sp, S "improve over the traditional",
   plural pro, S "because of their smaller size. The",
   S "smaller size is possible because of the ability of",

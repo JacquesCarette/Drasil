@@ -4,19 +4,20 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class OutputFormat {
     
     public static void write_output(InputParameters inParams) throws Exception {
-        PrintWriter outfile;
-        outfile = new PrintWriter("output.txt");
-        outfile.print("T_W = ");
-        outfile.println(inParams.T_W);
-        outfile.print("E_W = ");
-        outfile.println(inParams.E_W);
-        outfile.close();
+        PrintWriter outputfile;
+        outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
+        outputfile.print("T_W = ");
+        outputfile.println(inParams.T_W);
+        outputfile.print("E_W = ");
+        outputfile.println(inParams.E_W);
+        outputfile.close();
     }
 }
 

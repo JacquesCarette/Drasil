@@ -9,8 +9,6 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-
-
 void write_output(InputParameters &inParams);
 
 #endif

@@ -18,39 +18,40 @@ def derived_values():
     None
 
 def input_constraints(inParams):
-    if (not(inParams.A_C <= 100000)) :
+    if (not((inParams.A_C <= 100000))) :
         print("Warning: constraint violated")
-    if (not((4170 < inParams.C_W) and (inParams.C_W < 4210))) :
+    if (not(((4170 < inParams.C_W) and (inParams.C_W < 4210)))) :
         print("Warning: constraint violated")
-    if (not((10 <= inParams.h_C) and (inParams.h_C <= 10000))) :
+    if (not(((10 <= inParams.h_C) and (inParams.h_C <= 10000)))) :
         print("Warning: constraint violated")
-    if (not(inParams.t_final < 86400)) :
+    if (not((inParams.t_final < 86400))) :
         print("Warning: constraint violated")
-    if (not((0.1 <= inParams.L) and (inParams.L <= 50))) :
+    if (not(((0.1 <= inParams.L) and (inParams.L <= 50)))) :
         print("Warning: constraint violated")
-    if (not((950 < inParams.ρ_W) and (inParams.ρ_W <= 1000))) :
+    if (not(((950 < inParams.ρ_W) and (inParams.ρ_W <= 1000)))) :
         print("Warning: constraint violated")
-    if (not(inParams.A_C > 0)) :
+    
+    if (not((inParams.A_C > 0))) :
         print("Warning: constraint violated")
-    if (not(inParams.C_W > 0)) :
+    if (not((inParams.C_W > 0))) :
         print("Warning: constraint violated")
-    if (not(inParams.h_C > 0)) :
+    if (not((inParams.h_C > 0))) :
         print("Warning: constraint violated")
-    if (not((0 < inParams.T_init) and (inParams.T_init < 100))) :
+    if (not(((0 < inParams.T_init) and (inParams.T_init < 100)))) :
         print("Warning: constraint violated")
-    if (not(inParams.t_final > 0)) :
+    if (not((inParams.t_final > 0))) :
         print("Warning: constraint violated")
-    if (not(inParams.L > 0)) :
+    if (not((inParams.L > 0))) :
         print("Warning: constraint violated")
-    if (not((0 < inParams.T_C) and (inParams.T_C < 100))) :
+    if (not(((0 < inParams.T_C) and (inParams.T_C < 100)))) :
         print("Warning: constraint violated")
-    if (not(inParams.ρ_W > 0)) :
+    if (not((inParams.ρ_W > 0))) :
         print("Warning: constraint violated")
-    if (not(inParams.D > 0)) :
+    if (not((inParams.D > 0))) :
         print("Warning: constraint violated")
-    if (not((inParams.T_init <= inParams.T_W) and (inParams.T_W <= inParams.T_C))) :
+    if (not(((inParams.T_init <= inParams.T_W) and (inParams.T_W <= inParams.T_C)))) :
         print("Warning: constraint violated")
-    if (not(inParams.E_W >= 0)) :
+    if (not((inParams.E_W >= 0))) :
         print("Warning: constraint violated")
 
 

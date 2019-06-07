@@ -26,11 +26,10 @@ import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (abs_tol, coil_HTC, coil_SA, cons_tol, diam, eta,
-  htCap_L_P, htCap_S_P, htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density,
-  pcm_mass, pcm_vol, rel_tol, sim_time, t_final_melt, t_init_melt, tank_length,
-  tank_vol, tau_L_P, tau_S_P, tau_W, temp_C, temp_PCM, temp_W, temp_init,
-  temp_melt_P, timeStep, time_final, w_E, w_density, w_mass, w_vol)
+import Drasil.SWHS.Unitals (inputConstraints, inputs, coil_HTC, coil_SA, diam, 
+  eta, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol, sim_time, 
+  t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P, tau_W, 
+  temp_C, temp_PCM, temp_W, w_E, w_density, w_mass, w_vol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -39,11 +38,6 @@ import Drasil.SWHS.Unitals (abs_tol, coil_HTC, coil_SA, cons_tol, diam, eta,
 -- FIXME: This probably shouldn't be here.
 dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -73,10 +67,8 @@ iIQConstruct req = cic "inputInitQuants" ( foldlSent [
   plural condition]) "Input-Initial-Quantities" funcReqDom
 
 inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = mkInputPropsTable inputVar inputInitQuants
+inputInitQuantsTable = mkInputPropsTable inputs inputInitQuants
 
-inputVar :: [QuantityDict]
-inputVar = map qw inputConstraints ++ map qw [abs_tol, rel_tol, cons_tol]
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
             (foldlList Comma List $ map makeRef2S iMods)

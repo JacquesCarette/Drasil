@@ -6,7 +6,7 @@ import Utils.Drasil
 import Data.Drasil.IdeaDicts (physics)
 
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, position, speed)
+import Data.Drasil.Concepts.Physics (position, speed)
 
 concepts :: [NamedChunk]
 concepts = [landingPos, launch, launchAngle, launchSpeed, launcher, projectile, target, targetPos]

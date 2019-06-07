@@ -36,30 +36,26 @@ eBalanceOnWtr = im eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
   [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [0 $< sy time $< sy time_final] [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
-  eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
+  eBalanceOnWtrDeriv "eBalanceOnWtr" balWtrNotes
 
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel
+  "water to find the temperature of the water") EmptyS balWtr_Rel
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (apply1 temp_W time)))
 
-balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), 
-  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
-  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
-  S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
-  sParen (unwrap $ getUnit temp_W), S "where", E 0,
-  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
-  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boilPt, S "of", phrase water `sC` S "respectively"
-  +:+ sParen (makeRef2S assumpWAL)]
+balWtrNotes :: [Sentence]
+balWtrNotes = map foldlSent [
+  [E (sy tau_W) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
+  [S "The above", phrase equation, S "applies as long as the", phrase water,
+   S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
+   sParen (unwrap $ getUnit temp_W), S "where", E 0,
+   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
+   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
+   plural boilPt `sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

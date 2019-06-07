@@ -60,7 +60,7 @@ posXDirectionDesc = S "The positive x-direction" `sIs` S "from the" +:+. (phrase
 
 constAccelDesc :: Sentence
 constAccelDesc = S "The" +:+ (phrase acceleration `sIs` S "constant") +:+.
-                 sParen (S "from" +:+ (foldlList Comma List $ map makeRef2S [accelXZero, accelYGravity, neglectDrag, freeFlight]))
+                 sParen (S "from" +:+ foldlList Comma List (map makeRef2S [accelXZero, accelYGravity, neglectDrag, freeFlight]))
 
 accelXZeroDesc :: Sentence
 accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the x-direction" `sIs` S "zero")

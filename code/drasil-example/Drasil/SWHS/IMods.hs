@@ -57,8 +57,8 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [[E (sy temp_PCM) `sIs` S "defined by", makeRef2S eBalanceOnPCM],
   [S "The input", phrase constraint, E $ sy temp_init $<= sy temp_C, S "comes from", makeRef2S assumpCTNOD],
-  [E (sy tau_W) `sIs` S "calculated from" +:+ S "FIXME: Missing DD #1484"],
-  [E (sy eta) `sIs` S "calculated from" +:+ S "FIXME: Missing DD #1484"],
+  [E (sy tau_W) `sIs` S "calculated from" +:+ S "FIXME: Missing DD Issue 1484"],
+  [E (sy eta) `sIs` S "calculated from" +:+ S "FIXME: Missing DD Issue 1484"],
   [S "The initial", plural condition, S "for the" +:+ (getAcc ode `sAre` 
   E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP)],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`

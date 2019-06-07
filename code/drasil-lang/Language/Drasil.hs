@@ -14,7 +14,7 @@ module Language.Drasil (
   , real_interval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
-  , apply, apply1, apply1Int, apply2
+  , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
@@ -186,7 +186,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
           real_interval,
-          apply, apply1, apply1Int, apply2,
+          apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Document (section, fig, figWithWidth

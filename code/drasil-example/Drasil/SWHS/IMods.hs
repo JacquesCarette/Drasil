@@ -61,7 +61,7 @@ balWtrDesc = map foldlSent [[E (sy temp_PCM) `sIs` S "defined by", makeRef2S eBa
   [E (sy tau_W) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
   [E (sy eta) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
-   E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP],
+   E (apply (sy temp_W) [Int 0] $= apply (sy temp_PCM) [Int 0] $= sy temp_init) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`
   phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
   sParen (unwrap $ getUnit temp_W), S "where", E 0, sParen (unwrap $ getUnit temp_W) `sAnd`
@@ -237,7 +237,7 @@ balPCMNotes = map foldlSent [
   [E (sy tau_S_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceSolidPCM],
   [E (sy tau_L_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceLiquidPCM],
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
-   E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP]]
+   E (apply (sy temp_W) [Int 0] $= apply (sy temp_PCM) [Int 0] $= sy temp_init) `follows` assumpSITWP]]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

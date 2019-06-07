@@ -139,9 +139,6 @@ apply = FCall
 apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
 apply1 f a = FCall (sy f) [sy a]
 
-apply1Int :: (HasUID f, HasSymbol f) => f -> Integer -> Expr
-apply1Int f a = FCall (sy f) [Int a]
-
 apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => 
     f -> a -> b -> Expr
 apply2 f a b = FCall (sy f) [sy a, sy b]

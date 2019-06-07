@@ -205,7 +205,7 @@ eBalanceOnPCM = im eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [sy temp_init $< sy temp_melt_P] (qw temp_PCM)
    [0 $<= sy time $<= sy time_final] [makeCite koothoor2013] eBalanceOnPCMDeriv 
-   "eBalanceOnPCM" balPCMDescNotes
+   "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
@@ -235,8 +235,8 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit tau_S_P),
   sParen (makeRef2S ddBalanceLiquidPCM)]
 
-balPCMDescNotes :: [Sentence]
-balPCMDescNotes = map foldlSent [
+balPCMNotes :: [Sentence]
+balPCMNotes = map foldlSent [
   [E (sy temp_W) `sIs` S "defined by", makeRef2S eBalanceOnWtr],
   [S "The", phrase input_, phrase constraint, E $ sy temp_init $<= sy temp_melt_P,
    S "comes from", makeRef2S assumpPIS],
@@ -365,31 +365,25 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass] 
   [] (qw w_E) [0 $<= sy time $<= sy time_final] [makeCite koothoor2013] [] "heatEInWtr"
-  [htWtrDesc]
+  htWtrNotes
 
 heatEInWtr_rc :: RelationConcept
 heatEInWtr_rc = makeRC "heatEInWtr_rc" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel -- heatEInWtrL
+  EmptyS htWtr_Rel -- heatEInWtrL
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
   ((apply1 temp_W time) - sy temp_init)
 
-htWtrDesc :: Sentence
-htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+. 
-  makeRef2S sensHtE, ch w_E `sIs` ((phrase change `sIn`
-  phrase thermalEnergy) `ofThe` phrase liquid), phrase water, 
-  S "relative" `toThe` phrase energy, S "at the initial", phrase temp, 
-  sParen (ch temp_init) +:+. sParen (unwrap $ getUnit pcm_initMltE), 
-  (ch htCap_W) `isThe` phrase heatCapSpec `sOf` phrase liquid, phrase water,
-  sParen (unwrap $ getUnit htCap_S_P) `sAnd` (ch w_mass) `sIs` (phrase mass `ofThe`
-  phrase water) +:+. sParen (unwrap $ getUnit w_mass), S "The", 
-  phrase change `sIn` phrase temp `isThe` S "difference between the", 
-  phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit t_init_melt) `sC`
-  (ch temp_W) `andThe` phrase temp_init `sC` ch temp_init +:+.
-  sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
-  S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
-  :+: unwrap (getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]
+htWtrNotes :: [Sentence]
+htWtrNotes = map foldlSent [
+  [S "The above", phrase equation, S "is derived using", makeRef2S sensHtE],
+  [S "The", phrase change `sIn` phrase temp `isThe` S "difference between the", 
+   phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit t_init_melt) `sC`
+  (ch temp_W) `andThe` phrase temp_init `sC` ch temp_init, sParen (unwrap $ getUnit temp_init)],
+  [S "This", phrase equation, S "applies as long as",
+  (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))) :+:
+  unwrap (getUnit temp_W), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]]
 
 ---------
 -- IM4 --

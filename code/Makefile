@@ -44,16 +44,18 @@ TEST_E_SUFFIX = _diff
 MOVE_DF_E_SUFFIX = _prog
 TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
+DCP_E_SUFFIX = _deploy_code_path
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
 MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
+DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
-EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE
+EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE DCP
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME)
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -74,7 +76,9 @@ LOG_FOLDER = $(LOG_FOLDER_NAME)/
 SCRIPT_FOLDER = scripts/
 GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
-
+DEPLOY_FOLDER_NAME = deploy
+DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
+DEPLOY_CODE_PATH_KV_SEP = :
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling
@@ -186,6 +190,28 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_S
 
 code: $(CODE_EXAMPLES)
 
+%$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
+# Print as formatted K/V for deploy to extract
+	@echo "$(EDIR)$(DEPLOY_CODE_PATH_KV_SEP)$(shell git rev-parse --show-prefix)stable/$*/src/"
+
+deploy_code_path: $(DCP_EXAMPLES)
+
+deploy_lite:
+	@mkdir -p $(DEPLOY_FOLDER)
+	@BUILD_FOLDER=$(BUILD_FOLDER) DEPLOY_FOLDER=$(DEPLOY_FOLDER) GRAPH_FOLDER=$(GRAPH_FOLDER) \
+	DEPLOY_CODE_PATH_KV_SEP=$(DEPLOY_CODE_PATH_KV_SEP) MAKE=$(MAKE) "$(SHELL)" $(SCRIPT_FOLDER)deploy_stage.sh
+
+# This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
+# dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
+# files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
+# everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
+# what `deploy.bash` calls. 
+deploy: graphs docs tex
+	$(MAKE) deploy_lite
+
+
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -r "./$*"
@@ -194,4 +220,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(ALL_EXPANDED_TARGETS)

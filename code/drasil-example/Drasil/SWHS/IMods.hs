@@ -4,6 +4,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
+import Control.Lens((^.))
 
 import Data.Drasil.SentenceStructures (follows)
 import Data.Drasil.Utils (unwrap, weave)
@@ -45,7 +46,7 @@ eBalanceOnWtr = im eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_
 
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") EmptyS balWtr_Rel 
+  "water to find the temperature of the water") (temp_W ^. defn) balWtr_Rel 
   -- eBalanceOnWtrL
 
 balWtr_Rel :: Relation
@@ -209,7 +210,7 @@ eBalanceOnPCM = im eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init
 eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
   "Energy Balance on PCM to find temperature of PCM")
-  balPCMDesc balPCM_Rel -- eBalanceOnPCML
+  (temp_PCM ^. defn) balPCM_Rel -- eBalanceOnPCML
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3]
@@ -220,19 +221,6 @@ balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3]
           (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy temp_melt_P)))
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P) $&& real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
-
-balPCMDesc :: Sentence
-balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
-  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
-  (E $ (sy tau_L_P) $= ((sy pcm_mass) * (sy htCap_L_P)) /
-  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant",
-  sParen (unwrap $ getUnit tau_S_P),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
 
 balPCMNotes :: [Sentence]
 balPCMNotes = map foldlSent [
@@ -368,7 +356,7 @@ heatEInWtr = im heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass]
 
 heatEInWtr_rc :: RelationConcept
 heatEInWtr_rc = makeRC "heatEInWtr_rc" (nounPhraseSP "Heat energy in the water")
-  EmptyS htWtr_Rel -- heatEInWtrL
+  (w_E ^. defn) htWtr_Rel -- heatEInWtrL
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
@@ -396,7 +384,7 @@ heatEInPCM = imNoDeriv heatEInPCM_rc [qw temp_melt_P, qw time_final, qw temp_ini
 
 heatEInPCM_rc :: RelationConcept
 heatEInPCM_rc = makeRC "heatEInPCM_rc" (nounPhraseSP "Heat energy in the PCM")
-  EmptyS htPCM_Rel
+  (pcm_E ^. defn) htPCM_Rel
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]

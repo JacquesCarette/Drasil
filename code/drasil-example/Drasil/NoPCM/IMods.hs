@@ -3,6 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im)
 import Utils.Drasil
+import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
@@ -40,7 +41,7 @@ eBalanceOnWtr = im eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
 
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") EmptyS balWtr_Rel
+  "water to find the temperature of the water") (temp_W ^. defn) balWtr_Rel
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation

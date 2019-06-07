@@ -248,7 +248,9 @@ balPCMDescNotes = map foldlSent [
    S "determined as part" `sOf` S "the", phrase heat, phrase energy `sIn`
    S "the", getAcc phsChgMtrl `sC` S "as given" `sIn` sParen (makeRef2S heatEInPCM)],
   [E (sy tau_S_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceSolidPCM],
-  [E (sy tau_L_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceLiquidPCM]]
+  [E (sy tau_L_P) `sIs` S "calculated" `sIn` makeRef2S ddBalanceLiquidPCM],
+  [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
+   E ((apply1Int temp_W 0) $= (apply1Int temp_PCM 0) $= sy temp_init) `follows` assumpSITWP]]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

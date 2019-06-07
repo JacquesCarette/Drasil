@@ -772,7 +772,7 @@ Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tan
 </p>
 <p>
 <div id="assumpSITWP">
-Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. <a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>.
+Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. <a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a> <a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>.
 </div>
 </p>
 <p>
@@ -1990,6 +1990,9 @@ The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even 
 </p>
 <p class="paragraph">
 <em>τ<sub>P</sub><sup>L</sup></em> is calculated in <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>.
+</p>
+<p class="paragraph">
+The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
 </p>
 </td>
 </tr>
@@ -3408,7 +3411,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td>X</td>

@@ -20,6 +20,7 @@ fi
 
 ci_export_funcs() {
   declare -f > "$ALL_FUNCTIONS_FILE"
+  echo $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") > "$SHELL_OPTS_FILE"
 }
 
 ci_fstep() {

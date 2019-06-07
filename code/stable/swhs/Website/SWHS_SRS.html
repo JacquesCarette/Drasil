@@ -835,8 +835,12 @@ This section focuses on the general equations and laws that SWHS is based on.
 <td>
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
-                                                    <span class="fup">&part;&#8239;T</span>
-                                                    <span class="fdn">&part;&#8239;t</span>
+                                                    <span class="fup">
+                                                      &part;&#8239;T
+                                                    </span>
+                                                    <span class="fdn">
+                                                      &part;&#8239;t
+                                                    </span>
                                                     </div></em>
 </div>
 </td>
@@ -981,8 +985,12 @@ The above equation gives the law of conservation of energy for transient heat tr
 <td>
 <div class="equation">
 <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
-                                        <span class="fup">d&#8239;Q(τ)</span>
-                                        <span class="fdn">d&#8239;τ</span>
+                                        <span class="fup">
+                                          d&#8239;Q(τ)
+                                        </span>
+                                        <span class="fdn">
+                                          d&#8239;τ
+                                        </span>
                                         </div>&#8239;dτ</em>
 </div>
 </td>
@@ -1397,7 +1405,9 @@ This section collects and defines all the data needed to build the instance mode
                                 <span class="fup">
                                 m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
                                 </span>
-                                <span class="fdn">h<sub>P</sub>&#8239;A<sub>P</sub></span>
+                                <span class="fdn">
+                                  h<sub>P</sub>&#8239;A<sub>P</sub>
+                                </span>
                                 </div></em>
 </div>
 </td>
@@ -1464,7 +1474,9 @@ This section collects and defines all the data needed to build the instance mode
                                 <span class="fup">
                                 m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
                                 </span>
-                                <span class="fdn">h<sub>P</sub>&#8239;A<sub>P</sub></span>
+                                <span class="fdn">
+                                  h<sub>P</sub>&#8239;A<sub>P</sub>
+                                </span>
                                 </div></em>
 </div>
 </td>
@@ -1752,7 +1764,9 @@ To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy bala
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                            <span class="fup">d&#8239;T<sub>W</sub></span>
+                                            <span class="fup">
+                                              d&#8239;T<sub>W</sub>
+                                            </span>
                                             <span class="fdn">d&#8239;t</span>
                                             </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
@@ -1761,7 +1775,9 @@ Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_f
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                            <span class="fup">d&#8239;T<sub>W</sub></span>
+                                            <span class="fup">
+                                              d&#8239;T<sub>W</sub>
+                                            </span>
                                             <span class="fdn">d&#8239;t</span>
                                             </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
@@ -1836,8 +1852,12 @@ Factoring the negative sign out of the second term of the RHS of Equation (4) an
 </div>
 <p class="paragraph">
 Setting <em>τ<sub>W</sub> = <div class="fraction">
-                            <span class="fup">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                            <span class="fdn">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                            <span class="fup">
+                              m<sub>W</sub>&#8239;C<sub>W</sub>
+                            </span>
+                            <span class="fdn">
+                              h<sub>C</sub>&#8239;A<sub>C</sub>
+                            </span>
                             </div></em> (<a href=#DD:htFusion>DD: htFusion</a>) and <em>η = <div class="fraction">
                                                                                             <span class="fup">
                                                                                             h<sub>P</sub>&#8239;A<sub>P</sub>
@@ -1855,7 +1875,9 @@ Setting <em>τ<sub>W</sub> = <div class="fraction">
              <span class="fup">1</span>
              <span class="fdn">τ<sub>W</sub></span>
              </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                   <span class="fup">η</span>
+                                                                   <span class="fup">
+                                                                     η
+                                                                   </span>
                                                                    <span class="fdn">
                                                                    τ<sub>W</sub>
                                                                    </span>
@@ -2026,7 +2048,9 @@ To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy bala
                                                         <span class="fup">
                                                         d&#8239;T<sub>P</sub>
                                                         </span>
-                                                        <span class="fdn">d&#8239;t</span>
+                                                        <span class="fdn">
+                                                          d&#8239;t
+                                                        </span>
                                                         </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
 <p class="paragraph">
@@ -2037,7 +2061,9 @@ Using <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>P</sub></em>, this e
                                                         <span class="fup">
                                                         d&#8239;T<sub>P</sub>
                                                         </span>
-                                                        <span class="fdn">d&#8239;t</span>
+                                                        <span class="fdn">
+                                                          d&#8239;t
+                                                        </span>
                                                         </div> = h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
 <p class="paragraph">
@@ -2323,7 +2349,9 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a h
 <td><em>A<sub>P</sub>&thinsp;&gt;&thinsp;0</em></td>
 <td>
 <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;<div class="fraction">
-                                                                      <span class="fup">2</span>
+                                                                      <span class="fup">
+                                                                        2
+                                                                      </span>
                                                                       <span class="fdn">
                                                                       h<sub>min</sub>
                                                                       </span>

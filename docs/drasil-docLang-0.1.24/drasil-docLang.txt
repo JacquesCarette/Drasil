@@ -174,10 +174,9 @@ ShowDerivation :: DerivationDisplay
 HideDerivation :: DerivationDisplay
 type DocDesc = [DocSection]
 
--- | Document sections are either Verbatim, Reference, Introduction, or
---   Specific System Description sections (for now!)
+-- | Document sections are either Reference, Introduction, or Specific
+--   System Description sections (for now!)
 data DocSection
-Verbatim :: Section -> DocSection
 RefSec :: RefSec -> DocSection
 IntroSec :: IntroSec -> DocSection
 StkhldrSec :: StkhldrSec -> DocSection
@@ -260,7 +259,7 @@ data RefTab
 newtype ReqrmntSec
 ReqsProg :: [ReqsSub] -> ReqrmntSec
 data ReqsSub
-[FReqsSub] :: [Contents] -> ReqsSub
+[FReqsSub] :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
 [NonFReqsSub] :: [ConceptInstance] -> ReqsSub
 
 -- | Solution Characteristics Specification subsections
@@ -352,10 +351,6 @@ mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
 --   Definition, into Simple-type Enumerations.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 
--- | Creates a list tuple filling in the title with a ShortName and filling
---   reference information.
-mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-
 -- | Fields that should be displayed in definitions
 data Field
 Label :: Field
@@ -391,6 +386,16 @@ genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
 -- | Default reference section introduction
 intro :: Contents
 reqF :: [Section] -> Section
+
+-- | takes a list of wrapped variables and creates an Input Data Table for
+--   uses in Functional Requirments
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+
+-- | takes a list of tuples of variables and sources and creates an table
+--   for uses in Functional Requirments
+mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
 assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 dataConstraintUncertainty :: Sentence
 dataDefnF :: Sentence -> [Contents] -> Section

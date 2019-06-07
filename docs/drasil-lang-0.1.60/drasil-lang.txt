@@ -1763,3 +1763,4 @@ getUnit :: MayHaveUnit u => u -> Maybe UnitDefn
 
 module Language.Drasil.Utils
 sortBySymbol :: (HasSymbol a) => [a] -> [a]
+sortBySymbolTuple :: (HasSymbol a) => [(a, b)] -> [(a, b)]

@@ -9,142 +9,6 @@
 @package drasil-data
 @version 0.1.11
 
-module Data.Drasil.Constraints
-gtZeroConstr :: Constraint
-
-module Data.Drasil.People
-spencerSmith :: Person
-henryFrankis :: Person
-nKoothoor :: Person
-dParnas :: Person
-daAruliah :: Person
-gWilson :: Person
-cTitus :: Person
-kdHuff :: Person
-nChueHong :: Person
-mDavis :: Person
-rGuy :: Person
-shdHaddock :: Person
-imMitchell :: Person
-mdPlumblet :: Person
-bWaugh :: Person
-epWhite :: Person
-pWilson :: Person
-pcClements :: Person
-luthfi :: Person
-alex :: Person
-nikitha :: Person
-thulasi :: Person
-brooks :: Person
-mLightstone :: Person
-lLai :: Person
-pjAgerfalk :: Person
-nKraiem :: Person
-jRalyte :: Person
-jBueche :: Person
-fIncropera :: Person
-dDewitt :: Person
-tBergman :: Person
-aLavine :: Person
-jRobertson :: Person
-sRobertson :: Person
-wlBeason :: Person
-tlKohutek :: Person
-jmBracci :: Person
-qhQian :: Person
-dyZhu :: Person
-cfLee :: Person
-grChen :: Person
-dgFredlund :: Person
-jKrahn :: Person
-dStolle :: Person
-yCLi :: Person
-ymChen :: Person
-tltZhan :: Person
-ssLing :: Person
-pjCleall :: Person
-pGuo :: Person
-mCampidelli :: Person
-dmWiess :: Person
-sPalmer :: Person
-scottSmith :: Person
-bKarchewski :: Person
-rHuston :: Person
-hJosephs :: Person
-nrMorgenstern :: Person
-vePrice :: Person
-samCrawford :: Person
-
-module Data.Drasil.Citations
-campidelli :: Citation
-koothoor2013 :: Citation
-parnas1972 :: Citation
-parnasClements1986 :: Citation
-parnasClements1984 :: Citation
-smithLai2005 :: Citation
-jnlCGJ :: String
-
-module Data.Drasil.Phrase
-
--- | Creates an NP by combining two <a>NamedIdea</a>s with the word "and"
---   between their terms. Plural is defaulted to <tt>(phrase t1) "of"
---   (plural t2)</tt>
-and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>and_</a> combinator, except phrase default of second term
---   is plural instead of phrase
-and_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Customizable <a>and</a> combinator
-andRT :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
-with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Creates a noun phrase by combining two <a>NamedIdea</a>s with the word
---   "of" between their terms. Plural is defaulted to <tt>(phrase t1) "of"
---   (plural t2)</tt>
-of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
-
--- | Creates a noun phrase by combining two <a>NamedIdea</a>s with the word
---   "of" between them. <a>phrase</a> is defaulted to <tt>(phrase t1) "of"
---   (plural t2)</tt>. Plural is the same.
-of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as of_, except plural default of second term is phrase
-of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as of_, except phrase default of first term is plural instead of
---   phrase
-of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as of__, except combining Sentence piece is "of a"
-ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Inserts the word "for" between the titleized versions of two terms
-for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-
--- | Similar to <a>for</a>, but uses titleized version of term 1 with the
---   abbreviation (if it exists, phrase otherwise) for term 2
-for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
-
--- | Similar to <a>for</a>, but allows one to specify the function to use
---   on each term before inserting for. For example one could use <tt>for''
---   phrase plural t1 t2</tt>
-for'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
-the' :: (NamedIdea t) => t -> NP
-the :: (NamedIdea t) => t -> NP
-theCustom :: (t -> Sentence) -> t -> NP
-
--- | Combinator for combining two <a>NamedChunk</a>s into one. <i>Does not
---   preserve abbreviations</i>
-compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
-compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
-compoundNC'' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
-compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
-compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
-
 module Data.Drasil.Concepts.Math
 mathcon :: [ConceptChunk]
 mathcon' :: [CI]
@@ -392,89 +256,26 @@ srsDomains :: [ConceptChunk]
 --   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 
-module Data.Drasil.Concepts.Physics
-rigidBody :: ConceptChunk
-velocity :: ConceptChunk
-friction :: ConceptChunk
-elasticity :: ConceptChunk
-energy :: ConceptChunk
-mechEnergy :: ConceptChunk
-collision :: ConceptChunk
-space :: ConceptChunk
-cartesian :: ConceptChunk
-rightHand :: ConceptChunk
-restitutionCoef :: ConceptChunk
-acceleration :: ConceptChunk
-pressure :: ConceptChunk
-momentOfInertia :: ConceptChunk
-force :: ConceptChunk
-impulseS :: ConceptChunk
-impulseV :: ConceptChunk
-displacement :: ConceptChunk
-gravitationalAccel :: ConceptChunk
-gravitationalConst :: ConceptChunk
-position :: ConceptChunk
-distance :: ConceptChunk
-time :: ConceptChunk
-torque :: ConceptChunk
-weight :: ConceptChunk
-fbd :: ConceptChunk
-angular :: ConceptChunk
-linear :: ConceptChunk
-tension :: ConceptChunk
-compression :: ConceptChunk
-stress :: ConceptChunk
-strain :: ConceptChunk
-angDisp :: ConceptChunk
-angVelo :: ConceptChunk
-angAccel :: ConceptChunk
-linDisp :: ConceptChunk
-linVelo :: ConceptChunk
-linAccel :: ConceptChunk
-joint :: ConceptChunk
-damping :: ConceptChunk
-cohesion :: ConceptChunk
-isotropy :: ConceptChunk
-twoD :: CI
-threeD :: CI
-physicCon :: [ConceptChunk]
-physicCon' :: [CI]
-kEnergy :: ConceptChunk
-
-module Data.Drasil.Concepts.Thermodynamics
-thermocon :: [ConceptChunk]
-boiling :: ConceptChunk
-boilPt :: ConceptChunk
-degree_' :: ConceptChunk
-lawConsEnergy :: ConceptChunk
-lawConvCooling :: ConceptChunk
-latentHeat :: ConceptChunk
-melting :: ConceptChunk
-meltPt :: ConceptChunk
-phaseChange :: ConceptChunk
-sensHeat :: ConceptChunk
-temp :: ConceptChunk
-thermalAnalysis :: ConceptChunk
-thermalConduction :: ConceptChunk
-thermalEnergy :: ConceptChunk
-thermalConductor :: ConceptChunk
-heat :: ConceptChunk
-heatCapSpec :: ConceptChunk
-htFlux :: ConceptChunk
-heatTrans :: ConceptChunk
-htTransTheo :: ConceptChunk
-enerSrc :: ConceptChunk
-
-module Data.Drasil.Concepts.SolidMechanics
-solidcon :: [ConceptChunk]
-elastMod :: ConceptChunk
-mobShear :: ConceptChunk
-normForce :: ConceptChunk
-nrmStrss :: ConceptChunk
-poissnsR :: ConceptChunk
-shearForce :: ConceptChunk
-shearRes :: ConceptChunk
-stffness :: ConceptChunk
+module Data.Drasil.Concepts.Computation
+algorithm :: ConceptChunk
+modCalcDesc :: Sentence -> ConceptChunk
+compcon :: [NamedChunk]
+application :: NamedChunk
+computer :: NamedChunk
+structure :: NamedChunk
+os :: CI
+dataStruct :: NamedChunk
+dataStruct' :: NamedChunk
+dataType :: NamedChunk
+dataType' :: NamedChunk
+inDatum :: NamedChunk
+outDatum :: NamedChunk
+inParam :: NamedChunk
+inVar :: NamedChunk
+inValue :: NamedChunk
+inQty :: NamedChunk
+computerLiteracy :: NamedChunk
+computerApp :: NamedChunk
 
 module Data.Drasil.Concepts.PhysicalProperties
 physicalcon :: [ConceptChunk]
@@ -515,26 +316,200 @@ highSchoolPhysics :: NamedChunk
 frstYr :: NamedChunk
 physChem :: NamedChunk
 
-module Data.Drasil.Concepts.Computation
-algorithm :: ConceptChunk
-modCalcDesc :: Sentence -> ConceptChunk
-compcon :: [NamedChunk]
-application :: NamedChunk
-computer :: NamedChunk
-structure :: NamedChunk
-os :: CI
-dataStruct :: NamedChunk
-dataStruct' :: NamedChunk
-dataType :: NamedChunk
-dataType' :: NamedChunk
-inDatum :: NamedChunk
-outDatum :: NamedChunk
-inParam :: NamedChunk
-inVar :: NamedChunk
-inValue :: NamedChunk
-inQty :: NamedChunk
-computerLiteracy :: NamedChunk
-computerApp :: NamedChunk
+module Data.Drasil.Concepts.Physics
+rigidBody :: ConceptChunk
+velocity :: ConceptChunk
+friction :: ConceptChunk
+elasticity :: ConceptChunk
+energy :: ConceptChunk
+mechEnergy :: ConceptChunk
+collision :: ConceptChunk
+space :: ConceptChunk
+cartesian :: ConceptChunk
+rightHand :: ConceptChunk
+restitutionCoef :: ConceptChunk
+acceleration :: ConceptChunk
+pressure :: ConceptChunk
+height :: ConceptChunk
+momentOfInertia :: ConceptChunk
+force :: ConceptChunk
+impulseS :: ConceptChunk
+impulseV :: ConceptChunk
+displacement :: ConceptChunk
+gravitationalAccel :: ConceptChunk
+gravitationalConst :: ConceptChunk
+position :: ConceptChunk
+distance :: ConceptChunk
+time :: ConceptChunk
+torque :: ConceptChunk
+weight :: ConceptChunk
+fbd :: ConceptChunk
+angular :: ConceptChunk
+linear :: ConceptChunk
+tension :: ConceptChunk
+compression :: ConceptChunk
+stress :: ConceptChunk
+strain :: ConceptChunk
+angDisp :: ConceptChunk
+angVelo :: ConceptChunk
+angAccel :: ConceptChunk
+linDisp :: ConceptChunk
+linVelo :: ConceptChunk
+linAccel :: ConceptChunk
+joint :: ConceptChunk
+damping :: ConceptChunk
+cohesion :: ConceptChunk
+isotropy :: ConceptChunk
+twoD :: CI
+threeD :: CI
+physicCon :: [ConceptChunk]
+physicCon' :: [CI]
+kEnergy :: ConceptChunk
+
+module Data.Drasil.Concepts.Software
+softwarecon :: [ConceptChunk]
+c :: ConceptChunk
+errMsg :: ConceptChunk
+physLib :: ConceptChunk
+program :: ConceptChunk
+accuracy :: ConceptChunk
+correctness :: ConceptChunk
+maintainability :: ConceptChunk
+performance :: ConceptChunk
+performanceSpd :: ConceptChunk
+portability :: ConceptChunk
+reliability :: ConceptChunk
+reusability :: ConceptChunk
+understandability :: ConceptChunk
+verifiability :: ConceptChunk
+hwHiding :: ConceptChunk
+modBehavHiding :: ConceptChunk
+modControl :: ConceptChunk
+modSfwrDecision :: ConceptChunk
+modInputFormat :: ConceptChunk
+modInputParam :: ConceptChunk
+modInputConstraint :: ConceptChunk
+modInputVerif :: ConceptChunk
+modDerivedVal :: ConceptChunk
+modInterpolation :: ConceptChunk
+modInterpDatum :: ConceptChunk
+modSeqServ :: ConceptChunk
+modLinkedServ :: ConceptChunk
+modAssocServ :: ConceptChunk
+modVectorServ :: ConceptChunk
+modPlotDesc :: ConceptChunk
+modOutputfDescFun :: Sentence -> ConceptChunk
+modOdeDesc :: ConceptChunk
+
+module Data.Drasil.Concepts.SolidMechanics
+solidcon :: [ConceptChunk]
+elastMod :: ConceptChunk
+mobShear :: ConceptChunk
+normForce :: ConceptChunk
+nrmStrss :: ConceptChunk
+poissnsR :: ConceptChunk
+shearForce :: ConceptChunk
+shearRes :: ConceptChunk
+stffness :: ConceptChunk
+
+module Data.Drasil.Concepts.Thermodynamics
+thermocon :: [ConceptChunk]
+boiling :: ConceptChunk
+boilPt :: ConceptChunk
+degree_' :: ConceptChunk
+lawConsEnergy :: ConceptChunk
+lawConvCooling :: ConceptChunk
+latentHeat :: ConceptChunk
+melting :: ConceptChunk
+meltPt :: ConceptChunk
+phaseChange :: ConceptChunk
+sensHeat :: ConceptChunk
+temp :: ConceptChunk
+thermalAnalysis :: ConceptChunk
+thermalConduction :: ConceptChunk
+thermalEnergy :: ConceptChunk
+thermalConductor :: ConceptChunk
+heat :: ConceptChunk
+heatCapSpec :: ConceptChunk
+htFlux :: ConceptChunk
+heatTrans :: ConceptChunk
+htTransTheo :: ConceptChunk
+enerSrc :: ConceptChunk
+
+module Data.Drasil.Constraints
+gtZeroConstr :: Constraint
+
+module Data.Drasil.People
+spencerSmith :: Person
+henryFrankis :: Person
+nKoothoor :: Person
+dParnas :: Person
+daAruliah :: Person
+gWilson :: Person
+cTitus :: Person
+kdHuff :: Person
+nChueHong :: Person
+mDavis :: Person
+rGuy :: Person
+shdHaddock :: Person
+imMitchell :: Person
+mdPlumblet :: Person
+bWaugh :: Person
+epWhite :: Person
+pWilson :: Person
+pcClements :: Person
+luthfi :: Person
+alex :: Person
+nikitha :: Person
+thulasi :: Person
+brooks :: Person
+mLightstone :: Person
+lLai :: Person
+pjAgerfalk :: Person
+nKraiem :: Person
+jRalyte :: Person
+jBueche :: Person
+fIncropera :: Person
+dDewitt :: Person
+tBergman :: Person
+aLavine :: Person
+jRobertson :: Person
+sRobertson :: Person
+wlBeason :: Person
+tlKohutek :: Person
+jmBracci :: Person
+qhQian :: Person
+dyZhu :: Person
+cfLee :: Person
+grChen :: Person
+dgFredlund :: Person
+jKrahn :: Person
+dStolle :: Person
+yCLi :: Person
+ymChen :: Person
+tltZhan :: Person
+ssLing :: Person
+pjCleall :: Person
+pGuo :: Person
+mCampidelli :: Person
+dmWiess :: Person
+sPalmer :: Person
+scottSmith :: Person
+bKarchewski :: Person
+rHuston :: Person
+hJosephs :: Person
+nrMorgenstern :: Person
+vePrice :: Person
+samCrawford :: Person
+
+module Data.Drasil.Citations
+campidelli :: Citation
+koothoor2013 :: Citation
+parnas1972 :: Citation
+parnasClements1986 :: Citation
+parnasClements1984 :: Citation
+smithLai2005 :: Citation
+jnlCGJ :: String
 
 module Data.Drasil.SI_Units
 fundamentals :: [UnitDefn]
@@ -596,6 +571,43 @@ surface :: UnitalChunk
 surArea :: UnitalChunk
 orientation :: UnitalChunk
 
+module Data.Drasil.SentenceStructures
+tableShows :: LabelledContent -> Sentence -> Sentence
+underConsidertn :: ConceptChunk -> Sentence
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+
+-- | Create a list in the pattern of "The <b> are refined to the </b>".
+--   Note: Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+maybeChanged :: Sentence -> Sentence -> Sentence
+maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb :: Sentence -> Sentence -> Sentence
+
+-- | helpful combinators for making Sentences for Terminologies with
+--   Definitions term (acc) - definition
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+tAndDOnly :: Concept s => s -> ItemType
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in..."
+getTandS :: (Quantity a) => a -> Sentence
+
+-- | get term, definition, and symbol
+getTDS :: (Quantity a, Concept a) => a -> Sentence
+eqN :: Int -> Sentence
+displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+
+module Data.Drasil.Software.Products
+prodtcon :: [NamedChunk]
+matlab :: CI
+sciCompS :: NamedChunk
+videoGame :: NamedChunk
+openSource :: NamedChunk
+compPro :: NamedChunk
+
 module Data.Drasil.Units.PhysicalProperties
 densityU :: UnitDefn
 
@@ -632,6 +644,7 @@ energy :: UnitalChunk
 force :: UnitalChunk
 gravitationalAccel :: UnitalChunk
 gravitationalConst :: UnitalChunk
+height :: UnitalChunk
 impulseS :: UnitalChunk
 impulseV :: UnitalChunk
 linearAccel :: UnitalChunk
@@ -708,20 +721,6 @@ fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 --   amount u - unit we want to attach to amount
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 
--- | fold helper functions applies f to all but the last element, applies g
---   to last element and the accumulator
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-
--- | fold helper functions applied f to all but last element, applies g to
---   last element and accumulator without starting value, does not work for
---   empty list
-foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
-
--- | Apply a binary function to the terms of two named ideas, instead of to
---   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
---   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr
 
@@ -741,10 +740,6 @@ makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 --   - the title of the list l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 
--- | takes a list of wrapped variables and creates an Input Data Table for
---   uses in Functional Requirments
-mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
-
 -- | Helper for making a table from a columns
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 
@@ -756,7 +751,6 @@ noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 --   a ListTuple which can be used with Contents but not directly
 --   referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
-prodUCTbl :: [[Sentence]] -> LabelledContent
 
 -- | extracts the typical uncertainty to be displayed from something that
 --   has an uncertainty
@@ -773,74 +767,6 @@ zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
-
-module Data.Drasil.SentenceStructures
-
--- | partial function application of foldle for sentences specifically
-foldlSent :: [Sentence] -> Sentence
-
--- | foldlSent but does not end with period
-foldlSent_ :: [Sentence] -> Sentence
-
--- | foldlSent but ends with colon
-foldlSentCol :: [Sentence] -> Sentence
-
--- | creates a list of elements separated by commas, including the last
---   element
-foldlsC :: [Sentence] -> Sentence
-
--- | creates a list of elements separated by a "separator", ending with
---   "and" or "or"
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-
--- | creates an list of elements with "enumerators" in "wrappers" using
---   foldlList
-foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-tableShows :: LabelledContent -> Sentence -> Sentence
-underConsidertn :: ConceptChunk -> Sentence
-showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
-
--- | Create a list in the pattern of "The <b> are refined to the </b>".
---   Note: Order matters!
-refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-
--- | fold sentences then turns into content
-foldlSP :: [Sentence] -> Contents
-foldlSP_ :: [Sentence] -> Contents
-foldlSPCol :: [Sentence] -> Contents
-maybeChanged :: Sentence -> Sentence -> Sentence
-maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOVerb :: Sentence -> Sentence -> Sentence
-
--- | helpful combinators for making Sentences for Terminologies with
---   Definitions term (acc) - definition
-tAndDWAcc :: Concept s => s -> ItemType
-tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDOnly :: Concept s => s -> ItemType
-follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-
--- | Used when you want to say a term followed by its symbol. ex. "...using
---   the Force F in..."
-getTandS :: (Quantity a) => a -> Sentence
-
--- | get term, definition, and symbol
-getTDS :: (Quantity a, Concept a) => a -> Sentence
-eqN :: Int -> Sentence
-displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-data EnumType
-Numb :: EnumType
-Upper :: EnumType
-Lower :: EnumType
-data WrapType
-Parens :: WrapType
-Period :: WrapType
-data SepType
-Comma :: SepType
-SemiCol :: SepType
-data FoldType
-List :: FoldType
-Options :: FoldType
 
 module Data.Drasil.Theories.Physics
 physicsTMs :: [TheoryModel]
@@ -863,50 +789,12 @@ weightDerivAccelEqn :: Expr
 weightDerivNewtonEqn :: Expr
 weightDerivReplaceMassEqn :: Expr
 weightDerivSpecWeightEqn :: Expr
+hsPressureGD :: GenDefn
+hsPressureRC :: RelationConcept
+hsPressureEqn :: Relation
+hsPressureSrc :: Reference
+hsPressureNotes :: Sentence
 torqueDD :: DataDefinition
 torque :: QDefinition
 torqueEqn :: Expr
 torqueDesc :: Sentence
-
-module Data.Drasil.Concepts.Software
-softwarecon :: [ConceptChunk]
-c :: ConceptChunk
-errMsg :: ConceptChunk
-physLib :: ConceptChunk
-program :: ConceptChunk
-accuracy :: ConceptChunk
-correctness :: ConceptChunk
-maintainability :: ConceptChunk
-performance :: ConceptChunk
-performanceSpd :: ConceptChunk
-portability :: ConceptChunk
-reliability :: ConceptChunk
-reusability :: ConceptChunk
-understandability :: ConceptChunk
-verifiability :: ConceptChunk
-hwHiding :: ConceptChunk
-modBehavHiding :: ConceptChunk
-modControl :: ConceptChunk
-modSfwrDecision :: ConceptChunk
-modInputFormat :: ConceptChunk
-modInputParam :: ConceptChunk
-modInputConstraint :: ConceptChunk
-modInputVerif :: ConceptChunk
-modDerivedVal :: ConceptChunk
-modInterpolation :: ConceptChunk
-modInterpDatum :: ConceptChunk
-modSeqServ :: ConceptChunk
-modLinkedServ :: ConceptChunk
-modAssocServ :: ConceptChunk
-modVectorServ :: ConceptChunk
-modPlotDesc :: ConceptChunk
-modOutputfDescFun :: Sentence -> ConceptChunk
-modOdeDesc :: ConceptChunk
-
-module Data.Drasil.Software.Products
-prodtcon :: [NamedChunk]
-matlab :: CI
-sciCompS :: NamedChunk
-videoGame :: NamedChunk
-openSource :: NamedChunk
-compPro :: NamedChunk

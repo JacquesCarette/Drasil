@@ -266,16 +266,17 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 -----------------------
 
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
-  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
+  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons, veloOutCons,
+  angVeloOutCons, orientOutCons, posOutCons  :: ConstrConcept
 
 inputConstraints :: [UncertQ]
 inputConstraints = map (`uq` defaultUncrt)
-  [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
-  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
+  [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
+  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons, posCons]
 
 outputConstraints :: [UncertQ]
 outputConstraints = map (`uq` defaultUncrt) 
-  [posCons, veloCons, orientCons, angVeloCons]
+  [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
 nonNegativeConstraint = physc $ UpFrom (Inc,0)
@@ -291,6 +292,12 @@ angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (dbl 200)
 restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (Inc,1)] (dbl 0.8)
+
+posOutCons        = constrained' QP.position           [] (dbl 0.502)
+veloOutCons       = constrained' QP.velocity           [] (dbl 0)
+orientOutCons     = constrained' QM.orientation        [] (dbl 0)
+angVeloOutCons    = constrained' QP.angularVelocity    [] (dbl 9.8)
+--(0 <= sy QM.orientation <= 2 * $ sy QM.pi_)
 
 ---------------------
 -- INSTANCE MODELS --

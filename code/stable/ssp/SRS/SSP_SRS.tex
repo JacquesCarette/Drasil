@@ -80,11 +80,13 @@ $c'$ & Effective Cohesion: internal pressure that sticks particles of soil toget
 \\
 $const_f$ & Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false & --
 \\
+${F_{rot}}$ & Force Causing Rotation: a force in the direction of rotation & N
+\\
 ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force & --
 \\
-${F_{x}}$ & X-Component of the Net Force:  & N
+${F_{x}}$ & X-Component of the Force:  & N
 \\
-${F_{y}}$ & Y-Component of the Net Force:  & N
+${F_{y}}$ & Y-Component of the Force:  & N
 \\
 ${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
@@ -100,6 +102,8 @@ $g$ & Gravitational Acceleration: An expression used in physics to indicate the 
 \\
 $\mathbf{G}$ & Interslice Normal Forces: per meter in the z-direction exerted between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
+$h$ & Height: The distance above a reference point for a point of interest. & m
+\\
 $\mathbf{H}$ & Interslice Normal Water Forces: per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 $\mathbf{h}$ & Y-Direction Heights of Slices: heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice & m
@@ -108,9 +112,9 @@ ${\mathbf{h}^{L}}$ & Heights of the Left Side of Slices: assuming slice surfaces
 \\
 ${\mathbf{h}^{R}}$ & Heights of the Right Side of Slices: assuming slice surfaces have negative slope & m
 \\
-${\mathbf{h}_{z}}$ & Heights of Centers of Slices: the heights in the y-direction from the base of each slice to the center of the slice & m
+${\mathbf{h}_{z}}$ & Heights of Interslice Normal Forces: the heights in the y-direction of the interslice normal forces on each slice & m
 \\
-${\mathbf{h}_{z,w}}$ & Heights Halfway to Water Table: the heights in the y-direction from the base of each slice halfway to the water table & m
+${\mathbf{h}_{z,w}}$ & Heights of the Water Table: the heights in the y-direction from the base of each slice to the watertable & m
 \\
 $i$ & Index: representing a single slice & --
 \\
@@ -118,7 +122,7 @@ $\mathbf{\hat{j}}$ & Unit Vector: A vector that has a magnitude of one & --
 \\
 ${K_{c}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
-$M$ & Net Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
+$M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
 $m$ & Mass: the quantity of matter in a body & kg
 \\
@@ -130,11 +134,17 @@ $\mathbf{N'}$ & Effective Normal Forces: per meter in the z-direction for each s
 \\
 $P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure & N
 \\
+$p$ & Pressure: A force exerted over an area & Pa
+\\
 $\mathbf{P}$ & Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure & $\frac{\text{N}}{\text{m}}$
 \\
 $\mathbf{Q}$ & External Forces: forces per meter in the z-direction acting into the surface from the midpoint of each slice & $\frac{\text{N}}{\text{m}}$
 \\
+$r$ & Length of the Moment Arm: distance between a force causing rotation and the axis of rotation & m
+\\
 $\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
+\\
+$\mathbf{r}$ & Displacement: The change in An object's location relative to a reference point & m
 \\
 $S$ & Mobilized Shear Force: shear force in the direction of potential motion & N
 \\
@@ -155,8 +165,6 @@ $v$ & Local Index: used as a bound variable index in calculations & --
 ${\mathbf{V}_{dry}}$ & Volumes of Dry Soil: amount of space occupied by dry soil for each slice & $\text{m}^{3}$
 \\
 ${\mathbf{V}_{sat}}$ & Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice & $\text{m}^{3}$
-\\
-${\mathbf{V}_{wat}}$ & Volumes of Water: amount of space occupied by water for each slice & $\text{m}^{3}$
 \\
 $W$ & Weight: The gravitational force acting on an object & N
 \\
@@ -222,6 +230,8 @@ ${σ_{N}}'$ & Effective Normal Stress:  & Pa
 \\
 $τ$ & Shear Strength:  & Pa
 \\
+$τ$ & Torque: A twisting force that tends to cause rotation & Nm
+\\
 $Υ$ & Minimization Function: generic minimization function or algorithm & --
 \\
 $\mathbf{Φ}$ & First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces & --
@@ -233,6 +243,8 @@ $\mathbf{Ψ}$ & Second Function for Incorporating Interslice Forces Into Shear F
 $\mathbf{ω}$ & Imposed Load Angles: between the external force acting into the surface of each slice and the vertical & ${}^{\circ}$
 \\
 ${\mathbf{ℓ}_{b}}$ & Total Base Lengths of Slices: in the direction parallel to the slope of the base of each slice & m
+\\
+${\mathbf{ℓ}_{s}}$ & Surface Lengths of Slices: in the direction parallel to the slope of the surface of each slice & m
 \\
 \bottomrule
 \caption{}
@@ -418,6 +430,8 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external forces, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_external]{LC: Calculate-External-Force}.
 \item[Water-Intersects-Base-Edge:\phantomsection\label{assumpWIBE}]The water table only intersects the base of a slice at an edge of the slice. \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
 \item[Water-Intersects-Surface-Edge:\phantomsection\label{assumpWISE}]The water table only intersects the slope surface at the edge of a slice. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght}.
+\item[Negligible-Effect-Surface-Slope-Seismic:\phantomsection\label{assumpNESSS}]The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. \hyperref[GD:momentEql]{GD: momentEql}.
+\item[Hydrostatic-Force-Slice-Midpoint:\phantomsection\label{assumpHFSM}]The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -462,12 +476,12 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{x}}$ is the x-component of the net force (N)}
-              \item{${F_{y}}$ is the y-component of the net force (N)}
-              \item{$M$ is the net moment (Nm)}
+              \item{${F_{x}}$ is the x-component of the force (N)}
+              \item{${F_{y}}$ is the y-component of the force (N)}
+              \item{$M$ is the moment (Nm)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-component of the force ${F_{x}}$ and y-component of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
@@ -849,17 +863,17 @@ Label & Moment equilibrium
 Units & N
 \\ \midrule \\
 Equation & \begin{displaymath}
-           0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left({\mathbf{h}_{z,w,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left({\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}-{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}-{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+           0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{h}_{z}}$ is the heights of centers of slices (m)}
+              \item{${\mathbf{h}_{z}}$ is the heights of interslice normal forces (m)}
               \item{$\mathbf{b}$ is the base width of slices (m)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{h}_{z,w}}$ is the heights halfway to water table (m)}
+              \item{${\mathbf{h}_{z,w}}$ is the heights of the water table (m)}
               \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
               \item{${K_{c}}$ is the seismic coefficient (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
@@ -877,7 +891,62 @@ Source & \cite{chen2005}
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque} will be used to calculate moments:
+\begin{displaymath}
+τ=\mathbf{r}\times\mathbf{F}
+\end{displaymath}
+Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
+\begin{displaymath}
+M={F_{rot}} r
+\end{displaymath}
+where ${F_{rot}}$ is the force causing rotation and $r$ is the length of the moment arm, or the distance between the force and the axis about which the rotation acts. To represent the moment equilibrium, the moments from each force acting on a slice must be considered and added together. The forces acting on a slice are all shown in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The midpoint of the base of a slice is considered as the axis of rotation, from which the length of the moment arm is measured. Considering first the interslice normal force acting on slice interface $i$, the moment is negative because the force tends to rotate the slice in a counterclockwise direction, and the length of the moment arm is the height of the force plus the difference in height between the base at slice interface $i$ and the base at the midpoint of slice $i$. Thus, the moment is expressed as:
+\begin{displaymath}
+-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+\end{displaymath}
+For the $i-1$th slice interface, the moment is similar but in the opposite direction:
+\begin{displaymath}
+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+\end{displaymath}
+Next, the interslice normal water force is considered. This force is zero at the height of the water table, then increases linearly towards the base of the slice due to the increasing water pressure. For such a triangular distribution, the resultant force acts at one-third of the height. Thus, for the interslice normal water force acting on slice interface $i$, the moment is:
+\begin{displaymath}
+-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+\end{displaymath}
+The moment for the interslice normal water force acting on slice interface $i-1$ is:
+\begin{displaymath}
+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+\end{displaymath}
+The interslice shear force at slice interface $i$ tends to rotate in the clockwise direction, and the length of the moment arm is the length from the slice edge to the slice midpoint, equivalent to half of the width of the slice, so the moment is.:
+\begin{displaymath}
+{\mathbf{X}}_{i} \frac{{\mathbf{b}}_{i}}{2}
+\end{displaymath}
+The interslice shear force at slice interface $i-1$ also tends to rotate in the clockwise direction, and has the same length of the moment arm, so the moment is:
+\begin{displaymath}
+{\mathbf{X}}_{i-1} \frac{{\mathbf{b}}_{i}}{2}
+\end{displaymath}
+Seismic forces act over the entire height of the slice. For each horizontal segment of the slice, the seismic force is ${K_{c}} {\mathbf{W}}_{i}$ where ${\mathbf{W}}_{i}$ can be expressed as $γ {\mathbf{b}}_{i} y$ using \hyperref[GD:weight]{GD: weight} where $y$ is the height of the segment under consideration. The corresponding length of the moment arm is $y$, the height from the base of the slice to the segment under consideration. In reality, the forces near the surface of the soil mass are slightly different due to the slope of the surface, but this difference is assumed to be negligible (\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}). The resultant moment from the forces on all of the segments with an equivalent resultant length of the moment arm is determined by taking the integral over the slice height. The forces tend to rotate in the counterclockwise direction, so the moment is negative:
+\begin{displaymath}
+-\int_{0}^{{\mathbf{h}}_{i}}{{K_{c}} γ {\mathbf{b}}_{i} y}\,dy
+\end{displaymath}
+Solving the definite integral yields:
+\begin{displaymath}
+-{K_{c}} γ {\mathbf{b}}_{i} \frac{{\mathbf{h}}_{i}^{2}}{2}
+\end{displaymath}
+Using \hyperref[GD:weight]{GD: weight} again to express $γ {\mathbf{b}}_{i} {\mathbf{h}}_{i}$ as ${\mathbf{W}}_{i}$, the moment is:
+\begin{displaymath}
+-{K_{c}} {\mathbf{W}}_{i} \frac{{\mathbf{h}}_{i}}{2}
+\end{displaymath}
+The surface hydrostatic force acts into the midpoint of the surface of the slice (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). Thus, the vertical component of the force acts directly towards the point of rotation, and has a moment of zero. The horizontal component of the force tends to rotate in a clockwise direction and the length of the moment arm is the entire height of the slice. Thus, the moment is:
+\begin{displaymath}
+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}
+\end{displaymath}
+The external force again acts into the midpoint of the slice surface, so the vertical component does not contribute to the moment, and the length of the moment arm is again the entire height of the slice. The moment is:
+\begin{displaymath}
+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+\end{displaymath}
+The base hydrostatic force and slice weight both act in the direction of the point of rotation (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}), therefore both have moments of zero. Thus, all of the moments have been determined. The moment equilibrium is then represented by the sum of all moments:
+\begin{displaymath}
+0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+\end{displaymath}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -902,7 +971,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Weight}{}{}{Definition of Weight}
 \\ \midrule \\
-RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
@@ -990,6 +1059,35 @@ For the case where the water table is between the slope surface and slip surface
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:hsPressure}
+\phantomsection 
+\label{GD:hsPressure}
+\\ \midrule \\
+Label & Hydrostatic pressure
+\\ \midrule \\
+Units & Pa
+\\ \midrule \\
+Equation & \begin{displaymath}
+           p=γ h
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$p$ is the pressure (Pa)}
+              \item{$γ$ is the specific weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{$h$ is the height (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & This equation is derived from Bernoulli's equation for a slow moving fluid through a porous material.
+\\ \midrule \\
+Source & \hyperref{https://en.wikipedia.org/wiki/Pressure}{}{}{Definition of Pressure}
+\\ \midrule \\
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:baseWtrF}
 \phantomsection 
 \label{GD:baseWtrF}
@@ -999,7 +1097,7 @@ Label & Base hydrostatic force
 Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{U}_{b,i}}={\mathbf{b}}_{i} {γ_{w}} \frac{1}{2} \begin{cases}
+           {\mathbf{U}_{b,i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
 {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slip,i-1}}\\
 0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slip,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slip,i-1}}
 \end{cases}
@@ -1008,28 +1106,32 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${\mathbf{U}_{b}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
-              \item{$\mathbf{b}$ is the base width of slices (m)}
+              \item{${\mathbf{ℓ}_{b}}$ is the total base lengths of slices (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
               \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:effNormF]{GD: effNormF} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-The base hydrostatic forces come from the weight of the water above the base of each slice. Substituting values for water into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
+The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
 \begin{displaymath}
-{\mathbf{U}_{b,i}}={\mathbf{V}_{wat,i}} {γ_{w}}
+p=γ h
 \end{displaymath}
-Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slip surface at one edge and above the height of the slip surface at the other edge is assumed not to occur (\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}). In the case where the height of the water table is below the height of the slip surface, the area of the water is zero. In the case where the height of the water table is above the height of the slip surface, the water forms a trapezoid on top of the slip surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slip surface for the edges of the slice, and the length between them is the width of the slice. Thus, the base hydrostatic forces are defined as:
+The specific weight in this case is the unit weight of water ${γ_{w}}$. The height in this case is the height from the slice base to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). The height at the midpoint is the average of the height at slice interface $i$ and the height at slice interface $i-1$:
 \begin{displaymath}
-{\mathbf{U}_{b,i}}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{w}}
+\frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right)
 \end{displaymath}
-This equation is a rearrangement of the non-zero case of \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the base hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to base hydrostatic forces by multiplying by the corresponding length of the slice base ${\mathbf{ℓ}_{b,i}}$, assuming the water table does not intersect a slice base except at a slice edge (\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}). Thus, in the case where the height of the water table is above the height of the slip surface, the base hydrostatic forces are defined as:
+\begin{displaymath}
+{\mathbf{U}_{b,i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right)
+\end{displaymath}
+This equation is the non-zero case of \hyperref[GD:baseWtrF]{GD: baseWtrF}. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1043,7 +1145,7 @@ Label & Surface hydrostatic force
 Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{U}_{t,i}}={\mathbf{b}}_{i} {γ_{w}} \frac{1}{2} \begin{cases}
+           {\mathbf{U}_{t,i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
 {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
 0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slope,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slope,i-1}}
 \end{cases}
@@ -1052,28 +1154,32 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
-              \item{$\mathbf{b}$ is the base width of slices (m)}
+              \item{${\mathbf{ℓ}_{s}}$ is the surface lengths of slices (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
               \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${\mathbf{ℓ}_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-The surface hydrostatic forces come from the weight of the water standing on top of the soil of the slope surface. Substituting values for water into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
+The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
 \begin{displaymath}
-{\mathbf{U}_{t,i}}={\mathbf{V}_{wat,i}} {γ_{w}}
+p=γ h
 \end{displaymath}
-Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the areas of water are considered instead of the volumes of water. For a given slice, the case where the height of the water table is below the height of the slope surface at one edge and above the height of the slope surface at the other edge is assumed not to occur (\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}). In the case where the height of the water table is below the height of the slope surface, the area of the water is zero. In the case where the height of the water table is above the height of the slope surface, the water forms a trapezoid on top of the slope surface. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the distances between the water table and the slope surface for the edges of the slice, and the length between them is the width of the slice. Thus, the surface hydrostatic forces are defined as:
+The specific weight in this case is the unit weight of water ${γ_{w}}$. The height in this case is the height from the slice surface to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). The height at the midpoint is the average of the height at slice interface $i$ and the height at slice interface $i-1$:
 \begin{displaymath}
-{\mathbf{U}_{t,i}}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right) {γ_{w}}
+\frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right)
 \end{displaymath}
-This equation is a rearrangement of the non-zero case of \hyperref[GD:srfWtrF]{GD: srfWtrF}.
+Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the surface hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to surface hydrostatic forces by multiplying by the corresponding length of the slice surface ${\mathbf{ℓ}_{s,i}}$, assuming the water table does not intersect a slice surface except at a slice edge (\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}). Thus, in the case where the height of the water table is above the height of the slope surface, the surface hydrostatic forces are defined as:
+\begin{displaymath}
+{\mathbf{U}_{t,i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right)
+\end{displaymath}
+This equation is the non-zero case of \hyperref[GD:srfWtrF]{GD: srfWtrF}. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -1174,7 +1280,7 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1203,7 +1309,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1235,7 +1341,39 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr}.
+RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:lengthLs}
+\phantomsection 
+\label{DD:lengthLs}
+\\ \midrule \\
+Label & Surface lengths of slices
+\\ \midrule \\
+Symbol & ${\mathbf{ℓ}_{s}}$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {\mathbf{ℓ}_{s}}={\mathbf{b}}_{i} \sec\left({\mathbf{β}}_{i}\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{ℓ}_{s}}$ is the surface lengths of slices (m)}
+              \item{$\mathbf{b}$ is the base width of slices (m)}
+              \item{$i$ is the index (Unitless)}
+              \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+\\ \midrule \\
+Source & \cite{fredlund1977}
+\\ \midrule \\
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1297,6 +1435,37 @@ Description & \begin{symbDescription}
 Source & \cite{huston2008}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[TM:effStress]{TM: effStress} \hyperref[GD:effNormF]{GD: effNormF}.
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:torque}
+\phantomsection 
+\label{DD:torque}
+\\ \midrule \\
+Label & Torque
+\\ \midrule \\
+Symbol & $τ$
+\\ \midrule \\
+Units & Nm
+\\ \midrule \\
+Equation & \begin{displaymath}
+           τ=\mathbf{r}\times\mathbf{F}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$τ$ is the torque (Nm)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{F}$ is the force (N)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1698,19 +1867,19 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nr
 \end{minipage}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
 \begin{displaymath}
-0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left({\mathbf{h}_{z,w,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left({\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-λ \frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)+\frac{{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}-{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}-{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+λ \frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
 \end{displaymath}
 Rearranging the equation in terms of $λ$ leads to Equation (15):
 \begin{displaymath}
-λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left({\mathbf{h}_{z,w,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left({\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}-{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}-{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}}{\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
+λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
 \end{displaymath}
 This equation can be simplified by applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the seismic and external forces, respectively, are zero:
 \begin{displaymath}
-λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left({\mathbf{h}_{z,w,i}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left({\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}}{\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
+λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
 \end{displaymath}
 Taking the summation of all slices, and applying \hyperref[assumpES]{A: Edge-Slices} to set ${\mathbf{G}}_{0}$, ${\mathbf{G}}_{n}$, ${\mathbf{H}}_{0}$, and ${\mathbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}:
 \begin{displaymath}
-λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
+λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
 \end{displaymath}
 Equation (16) for $λ$ is a function of the unknown interslice normal forces $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 \par~
@@ -1969,7 +2138,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the inputs, shown in \hyperref[Table:inDataTable]{Table:inDataTable}, and store the data.
+\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the inputs, shown in \hyperref[Table:ReqInputs]{Table:ReqInputs}, and store the data.
 \item[Verify-Input:\phantomsection\label{verifyInput}]Verify that the input data lie within the physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
 \item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs} to calculate the factor of safety for a slip surface and using \hyperref[IM:crtSlpId]{IM: crtSlpId} to find the slip surface that minimizes it.
 \item[Verify-Output:\phantomsection\label{verifyOutput}]Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}.
@@ -1982,47 +2151,47 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
-Symbol & Unit & Name
+Symbol & Description & Units
 \\
 \midrule
 \endhead
-$(x,y)$ & m & cartesian position coordinates
+$(x,y)$ & Cartesian position coordinates & m
 \\
-${\mathbf{x}_{slope}}$ & m & x-coordinates of the slope
+$c'$ & Effective cohesion & Pa
 \\
-${\mathbf{y}_{slope}}$ & m & y-coordinates of the slope
+$const_f$ & Decision on f & --
 \\
-${\mathbf{x}_{wt}}$ & m & x-coordinates of the water table
+${{x_{slip}}^{maxEtr}}$ & Maximum entry x-coordinate & m
 \\
-${\mathbf{y}_{wt}}$ & m & y-coordinates of the water table
+${{x_{slip}}^{maxExt}}$ & Maximum exit x-coordinate & m
 \\
-${{x_{slip}}^{maxExt}}$ & m & maximum exit x-coordinate
+${{x_{slip}}^{minEtr}}$ & Minimum exit x-coordinate & m
 \\
-${{x_{slip}}^{maxEtr}}$ & m & maximum entry x-coordinate
+${{x_{slip}}^{minExt}}$ & Minimum exit x-coordinate & m
 \\
-${{x_{slip}}^{minExt}}$ & m & minimum exit x-coordinate
+${\mathbf{x}_{slope}}$ & X-coordinates of the slope & m
 \\
-${{x_{slip}}^{minEtr}}$ & m & minimum exit x-coordinate
+${\mathbf{x}_{wt}}$ & X-coordinates of the water table & m
 \\
-${{y_{slip}}^{max}}$ & m & maximum y-coordinate
+${{y_{slip}}^{max}}$ & Maximum y-coordinate & m
 \\
-${{y_{slip}}^{min}}$ & m & minimum y-coordinate
+${{y_{slip}}^{min}}$ & Minimum y-coordinate & m
 \\
-$c'$ & Pa & effective cohesion
+${\mathbf{y}_{slope}}$ & Y-coordinates of the slope & m
 \\
-$φ'$ & ${}^{\circ}$ & effective angle of friction
+${\mathbf{y}_{wt}}$ & Y-coordinates of the water table & m
 \\
-${γ_{dry}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil dry unit weight
+${γ_{dry}}$ & Soil dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{Sat}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & soil saturated unit weight
+${γ_{Sat}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{w}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
+${γ_{w}}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-$const_f$ &  & decision on f
+$φ'$ & Effective angle of friction & ${}^{\circ}$
 \\
 \bottomrule
-\caption{Required Inputs}
-\label{Table:inDataTable}
+\caption{Required Inputs following \hyperref[readAndStore]{FR: Read-and-Store}}
+\label{Table:ReqInputs}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -2074,135 +2243,145 @@ If changes were to be made with regard to the following, a different algorithm w
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of items of different sections on each other.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[correct]{NFR: Correct} & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:srfWtrF]{GD: srfWtrF} & \hyperref[GD:sliceWght]{GD: sliceWght} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[GD:baseWtrF]{GD: baseWtrF} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_seismic]{LC: Calculate-Seismic-Force} & \hyperref[LC_external]{LC: Calculate-External-Force} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[writeToFile]{FR: Write-Results-To-File} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[GD:weight]{GD: weight} & \hyperref[TM:effStress]{TM: effStress}
+ & \hyperref[correct]{NFR: Correct} & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[UC_2donly]{UC: 2D-Analysis-Only} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:srfWtrF]{GD: srfWtrF} & \hyperref[GD:baseWtrF]{GD: baseWtrF} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only} & \hyperref[GD:sliceWght]{GD: sliceWght} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[LC_seismic]{LC: Calculate-Seismic-Force} & \hyperref[LC_external]{LC: Calculate-External-Force} & \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[writeToFile]{FR: Write-Results-To-File} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[GD:weight]{GD: weight} & \hyperref[TM:effStress]{TM: effStress}
 \\
 \midrule
 \endhead
-\hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:convertFunc1]{DD: convertFunc1} &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:convertFunc1]{DD: convertFunc1} &  &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Sec:PhysSyst]{Section: Physical System Description} &  & X & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Sec:PhysSyst]{Section: Physical System Description} &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:convertFunc2]{DD: convertFunc2} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:convertFunc2]{DD: convertFunc2} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angleA]{DD: angleA} &  & X & X & X & X & X &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:ReqInputs]{Table:ReqInputs} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angleA]{DD: angleA} &  & X & X & X & X & X & X &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:lengthB]{DD: lengthB} &  &  &  &  & X &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:baseWtrF]{GD: baseWtrF} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angleB]{DD: angleB} &  & X & X & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:bsShrFEq]{GD: bsShrFEq} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:lengthB]{DD: lengthB} &  &  & X &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:crtSlpId]{IM: crtSlpId} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+\hyperref[GD:baseWtrF]{GD: baseWtrF} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayFS]{FR: Display-Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[DD:angleB]{DD: angleB} &  & X & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayGraph]{FR: Display-Graph} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[GD:bsShrFEq]{GD: bsShrFEq} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayInput]{FR: Display-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[IM:crtSlpId]{IM: crtSlpId} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[displayFS]{FR: Display-Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[displayGraph]{FR: Display-Graph} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[TM:effStress]{TM: effStress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayInput]{FR: Display-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[TM:equilibrium]{TM: equilibrium} &  & X & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ratioVariation]{DD: ratioVariation} &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[TM:factOfSafety]{TM: factOfSafety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:effStress]{TM: effStress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:fctSfty]{IM: fctSfty} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X & X & X &  &  &  &  & 
+\hyperref[TM:equilibrium]{TM: equilibrium} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ratioVariation]{DD: ratioVariation} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:factOfSafety]{TM: factOfSafety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:slcHeight]{DD: slcHeight} &  &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:fctSfty]{IM: fctSfty} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X & X & X &  &  &  & 
 \\
-\hyperref[Table:inDataTable]{Table:inDataTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:inputsToOutputTable]{Table:inputsToOutputTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:intsliceFs]{IM: intsliceFs} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X & X & X &  &  &  &  & 
+\hyperref[DD:slcHeight]{DD: slcHeight} &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:lengthLb]{DD: lengthLb} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:hsPressure]{GD: hsPressure} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:inputsToOutputTable]{Table:inputsToOutputTable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[GD:mobShearWO]{GD: mobShearWO} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:intsliceFs]{IM: intsliceFs} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X & X & X &  &  &  & 
 \\
-\hyperref[GD:mobShr]{GD: mobShr} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:lengthLb]{DD: lengthLb} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:momentEql]{GD: momentEql} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:lengthLs]{DD: lengthLs} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
+\hyperref[GD:mobShearWO]{GD: mobShearWO} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:normForcEq]{GD: normForcEq} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:mobShr]{GD: mobShr} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:normShrR]{GD: normShrR} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:momentEql]{GD: momentEql} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
 \\
-\hyperref[IM:nrmShrFor]{IM: nrmShrFor} &  &  &  &  & X &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  & X & X & X &  &  &  &  & 
+\hyperref[GD:normForcEq]{GD: normForcEq} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:resShearWO]{GD: resShearWO} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:normShrR]{GD: normShrR} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:resShr]{GD: resShr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:sliceWght]{GD: sliceWght} &  & X & X & X &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:nrmShrFor]{IM: nrmShrFor} &  &  &  &  &  & X &  &  &  &  & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  & X & X & X &  &  &  & 
 \\
-\hyperref[GD:srfWtrF]{GD: srfWtrF} &  & X & X & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:resShearWO]{GD: resShearWO} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:weight]{GD: weight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:resShr]{GD: resShr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\\
+\hyperref[GD:sliceWght]{GD: sliceWght} &  & X & X & X & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:srfWtrF]{GD: srfWtrF} &  & X & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:torque]{DD: torque} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:weight]{GD: weight} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

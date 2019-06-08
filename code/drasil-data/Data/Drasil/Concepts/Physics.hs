@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Physics 
   ( rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space
-  , cartesian, rightHand, restitutionCoef, acceleration, pressure
+  , cartesian, rightHand, restitutionCoef, acceleration, pressure, height
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, weight, fbd, angular, linear, tension, compression, stress
@@ -93,6 +93,8 @@ compression  = dccWDS "compression" (cn' "compression")
 
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
+  S "above a reference point for a point of interest.")
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

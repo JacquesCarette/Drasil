@@ -4,7 +4,7 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
 
-import Drasil.DocLang (inDataConstTbl, mkEnumSimpleD)
+import Drasil.DocLang (inDataConstTbl, mkInputPropsTable)
 import Drasil.DocLang.SRS (propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
@@ -12,6 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
   physicalConstraint, property, quantity, requirement, simulation, solution,
   srs, traceyMatrix, unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (equation, parameter, surface)
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, lawConsEnergy, melting)
 
 import Data.Drasil.Quantities.Math (pi_)
@@ -19,20 +20,16 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol)
 import Data.Drasil.Utils (eqUnR')
 
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Tables (inputInitQuantsTblabled, inputInitQuantsTbl)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
-  htCap_W, htFusion, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol,
-  sim_time, t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P,
-  tau_W, temp_C, temp_PCM, temp_W, temp_init, temp_melt_P, timeStep, time_final, w_E,
-  w_density, w_mass, w_vol)
+import Drasil.SWHS.Unitals (inputConstraints, inputs, coil_HTC, coil_SA, diam, 
+  eta, pcm_E, pcm_HTC, pcm_SA, pcm_density, pcm_mass, pcm_vol, sim_time, 
+  t_final_melt, t_init_melt, tank_length, tank_vol, tau_L_P, tau_S_P, tau_W, 
+  temp_C, temp_PCM, temp_W, w_E, w_density, w_mass, w_vol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -42,23 +39,12 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_SA, diam, eta, htCap_L_P, htCap_S_P,
 dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
 
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, timeStep, time_final]
-
 ------------------------------
 -- Section 5 : REQUIREMENTS --
 ------------------------------
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsList :: [Contents]
-funcReqsList = reqs ++ [inputInitQuantsTbl]
-
-reqs :: [Contents]
-reqs = mkEnumSimpleD funcReqs
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
@@ -70,16 +56,19 @@ inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
   calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin,
   calcPCMMeltEnd :: ConceptInstance
 
-inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
-inputInitQuants = iIQConstruct inputInitQuantsTblabled
+inputInitQuants = iIQConstruct inputInitQuantsTable
 
 iIQConstruct :: (Referable l, HasShortName l) => l -> ConceptInstance
-iIQConstruct x = cic "inputInitQuants" ( foldlSent [
+iIQConstruct req = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
-  makeRef2S x `sC` S "which define the", phrase tank,
-  plural parameter `sC` S "material", plural property, S "and initial",
+  makeRef2S req `sC` S "which define the", phrase tank,
+  plural parameter `sC` plural materialProprty, S "and initial",
   plural condition]) "Input-Initial-Quantities" funcReqDom
+
+inputInitQuantsTable :: LabelledContent
+inputInitQuantsTable = mkInputPropsTable inputs inputInitQuants
+
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
             (foldlList Comma List $ map makeRef2S iMods)
@@ -92,6 +81,8 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
   S "Use the", plural input_, S "in", makeRef2S fr, S "to find the", 
   m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
+
+inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
 inputInitQuantsEqn = (sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=

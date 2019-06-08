@@ -1,4 +1,3 @@
-#include "InputParameters.hpp"
 #ifndef Calculations_h
 #define Calculations_h
 
@@ -10,9 +9,7 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-
-
-double func_q_C(InputParameters &inParams, double t);
+#include "InputParameters.hpp"
 
 double func_q_C(InputParameters &inParams, double t);
 

@@ -733,6 +733,9 @@ cuc :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [Constraint] -> Exp
 cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
 constrained' :: (Concept c, Quantity c, MayHaveUnit c) => c -> [Constraint] -> Expr -> ConstrConcept
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space -> [Constraint] -> Expr -> ConstrConcept
+
+-- | For when the symbol changes depending on the stage
+cuc'' :: String -> NP -> String -> (Stage -> Symbol) -> UnitDefn -> Space -> [Constraint] -> Expr -> ConstrConcept
 constrainedNRV' :: (MayHaveUnit c, Concept c, Quantity c) => c -> [Constraint] -> ConstrConcept
 cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
@@ -747,6 +750,12 @@ fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDef
 
 -- | Same as fromEqn, but has no units. FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
+
+-- | For when the symbol changes depending on the stage FIXME: Space hack
+fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) -> u -> Expr -> QDefinition
+
+-- | For when the symbol changes depending on the stage FIXME: Space hack
+fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Expr -> QDefinition
 equat :: Lens' QDefinition Expr
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its
@@ -839,6 +848,9 @@ uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
 -- | Same as <a>uc'</a>, but does not assume the <a>Space</a>
 ucs :: (IsUnit u) => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
 ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
+
+-- | For when the symbol changes depending on the stage
+ucs'' :: String -> NP -> String -> (Stage -> Symbol) -> Space -> UnitDefn -> UnitalChunk
 ucsWS :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
 
 -- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit
@@ -848,6 +860,9 @@ unit :: Unitary c => c -> UnitDefn
 -- | UnitaryChunks are <a>Unitary</a>s with <tt>Symbols</tt>
 data UnitaryChunk
 unitary :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+
+-- | For when the symbol changes depending on the stage
+unitary' :: (IsUnit u) => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
 
 -- | Helper for getting the unit's symbol from a chunk, as opposed to the
 --   symbols of the chunk itself.
@@ -1405,6 +1420,9 @@ hat :: Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 prime :: Symbol -> Symbol
 compsy :: Symbol -> Symbol -> Ordering
+
+-- | Helper for creating a symbol that depends on the stage
+staged :: Symbol -> Symbol -> Stage -> Symbol
 
 -- | Create a table body (not including header row) by applying the given
 --   functions to the column elements of the table rows (in order). The

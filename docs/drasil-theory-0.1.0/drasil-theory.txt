@@ -13,6 +13,9 @@ module Theory.Drasil
 data DataDefinition
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 
+-- | For when the symbol changes depending on the stage
+mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
+
 -- | Smart constructor for data definitions
 dd :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
 

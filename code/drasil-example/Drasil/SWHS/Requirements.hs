@@ -26,7 +26,8 @@ import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, diam, eta,
+import Drasil.SWHS.Unitals (inputs, absTol, coilHTC, coilSA,
+  consTol, diam, eta,
   htCapLP, htCapSP, htCapW, htFusion, pcmE, pcmHTC, pcmSA, pcmDensity,
   pcmMass, pcmVol, relTol, simTime, tFinalMelt, tInitMelt, tankLength,
   tankVol, tauLP, tauSP, tauW, tempC, tempPCM, tempW, tempInit,
@@ -39,11 +40,6 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, diam, eta,
 -- FIXME: This probably shouldn't be here.
 dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
-  tempMeltP, htCapSP, htCapLP, htFusion, coilSA,
-  tempC, wDensity, htCapW, coilHTC, pcmHTC, tempInit, timeStep, timeFinal]
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -73,10 +69,8 @@ iIQConstruct req = cic "inputInitQuants" ( foldlSent [
   plural condition]) "Input-Initial-Quantities" funcReqDom
 
 inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = mkInputPropsTable inputVar inputInitQuants
+inputInitQuantsTable = mkInputPropsTable inputs inputInitQuants
 
-inputVar :: [QuantityDict]
-inputVar = map qw inputConstraints ++ map qw [absTol, relTol, consTol]
 --
 findMass = findMassConstruct inputInitQuants (plural mass)
             (foldlList Comma List $ map makeRef2S iMods)

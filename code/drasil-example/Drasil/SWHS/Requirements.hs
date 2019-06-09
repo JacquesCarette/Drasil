@@ -26,12 +26,10 @@ import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, absTol, coilHTC, coilSA,
-  consTol, diam, eta,
-  htCapLP, htCapSP, htCapW, htFusion, pcmE, pcmHTC, pcmSA, pcmDensity,
-  pcmMass, pcmVol, relTol, simTime, tFinalMelt, tInitMelt, tankLength,
-  tankVol, tauLP, tauSP, tauW, tempC, tempPCM, tempW, tempInit,
-  tempMeltP, timeStep, timeFinal, watE, wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (inputs, inputConstraints, coilHTC, coilSA,
+  diam, eta, pcmE, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol, simTime,
+  tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP, tauW, tempC,
+  tempPCM, tempW, watE, wDensity, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --

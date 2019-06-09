@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec) where
+module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
+  fromEqnSt', equat, ec) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
@@ -7,12 +8,13 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ))
-import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Sentence (Sentence(EmptyS))
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
 
 -- | A QDefinition is a 'Quantity' with a defining expression, and a definition
@@ -42,6 +44,19 @@ fromEqn nm desc def symb un =
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc def symb = EC (mkQuant nm desc symb Real Nothing Nothing) def
+
+-- | For when the symbol changes depending on the stage
+--FIXME: Space hack
+fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) -> u 
+  -> Expr -> QDefinition
+fromEqnSt nm desc def symb un = 
+    EC (mkQuant' nm desc symb Real (Just $ unitWrapper un) Nothing) def
+
+-- | For when the symbol changes depending on the stage
+--FIXME: Space hack
+fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Expr -> 
+  QDefinition
+fromEqnSt' nm desc def symb = EC (mkQuant' nm desc symb Real Nothing Nothing) def
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME

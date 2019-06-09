@@ -16,7 +16,7 @@ public class InputParameters {
     public static double t_final = 0.0;
     public static double L = 0.0;
     public static double T_C = 0.0;
-    public static double ρ_W = 0.0;
+    public static double rho_W = 0.0;
     public static double D = 0.0;
     public static double T_W = 0.0;
     public static double E_W = 0.0;
@@ -40,7 +40,7 @@ public class InputParameters {
         if (!(((L_min <= inParams.L) && (inParams.L <= L_max)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((ρ_W_min < inParams.ρ_W) && (inParams.ρ_W <= ρ_W_max)))) {
+        if (!(((rho_W_min < inParams.rho_W) && (inParams.rho_W <= rho_W_max)))) {
             System.out.println("Warning: constraint violated");
         }
         
@@ -65,7 +65,7 @@ public class InputParameters {
         if (!(((0 < inParams.T_C) && (inParams.T_C < 100)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!((inParams.ρ_W > 0))) {
+        if (!((inParams.rho_W > 0))) {
             System.out.println("Warning: constraint violated");
         }
         if (!((inParams.D > 0))) {

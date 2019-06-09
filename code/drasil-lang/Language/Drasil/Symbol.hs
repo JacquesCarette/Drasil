@@ -3,9 +3,10 @@
 -- semantics at all, but just a description of how things look.
 
 module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
- upperLeft, sub, sup, hat, vec, prime) where
+ upperLeft, sub, sup, hat, vec, prime, staged) where
 
 import Language.Drasil.Unicode(Special)
+import Language.Drasil.Stages (Stage(..))
 
 import Data.Char (toLower)
 
@@ -152,3 +153,8 @@ vec = Atop Vector
 -- | Helper for creating a Vector symbol.
 prime :: Symbol -> Symbol
 prime = Atop Prime
+
+-- | Helper for creating a symbol that depends on the stage
+staged :: Symbol -> Symbol -> Stage -> Symbol
+staged eqS _ Equational = eqS
+staged _ impS Implementation = impS 

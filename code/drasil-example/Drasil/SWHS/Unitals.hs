@@ -2,7 +2,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Theory.Drasil (mkQuantDef)
+import Theory.Drasil (mkQuantDef, mkQuantDef')
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (simulation)
@@ -279,10 +279,11 @@ pcmSA = uqc "pcmSA"
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5
-pcmDensity = uqc "pcmDensity" (nounPhraseSP "density of PCM")
+pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
-  (sub (eqSymb density) cP) densityU Rational
-  [ physc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)] (dbl 1007) defaultUncrt
+  (staged (sub (eqSymb density) cP) (sub (Atomic "rho") cP)) densityU Rational
+  [ physc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
+  (dbl 1007)) defaultUncrt
 
 -- Constraint 6
 tempMeltP = uqc "tempMeltP"
@@ -337,11 +338,11 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
-wDensity = uqc "wDensity" (density `of_` water)
+wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "Mass per unit volume of water"
-  (sub (eqSymb density) cW) densityU Rational
+  (staged (sub (eqSymb density) cW) (sub (Atomic "rho") cW)) densityU Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)] (dbl 1000)) defaultUncrt
 
 -- Constraint 13
 htCapW = uqc "htCapW" (heatCapSpec `of_` water)
@@ -478,11 +479,13 @@ fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM")
-  (sup (eqSymb pcmDensity) (Atomic "min")) densityU Rational) 500
+  (staged (sup (eqSymb pcmDensity) (Atomic "min")) (sup (codeSymb pcmDensity) 
+  (Atomic "min"))) densityU Rational) 500
 
 pcmDensityMax = mkQuantDef (unitary "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM")
-  (sup (eqSymb pcmDensity) (Atomic "max")) densityU Rational) 20000
+  (staged (sup (eqSymb pcmDensity) (Atomic "max")) (sup (codeSymb pcmDensity) 
+  (Atomic "max"))) densityU Rational) 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (unitary "htCapSPMin"
@@ -519,11 +522,13 @@ coilSAMax = unitary "coilSAMax"
 -- Used in Constraint 12
 wDensityMin = mkQuantDef (unitary "wDensityMin"
   (nounPhraseSP "minimum density of water")
-  (sup (eqSymb wDensity) (Atomic "min")) densityU Rational) 950
+  (staged (sup (eqSymb wDensity) (Atomic "min")) (sup (codeSymb wDensity) 
+  (Atomic "min"))) densityU Rational) 950
 
 wDensityMax = mkQuantDef (unitary "wDensityMax"
   (nounPhraseSP "maximum density of water")
-  (sup (eqSymb wDensity) (Atomic "max")) densityU Rational) 1000
+  (staged (sup (eqSymb wDensity) (Atomic "max")) (sup (codeSymb wDensity) 
+  (Atomic "max"))) densityU Rational) 1000
   
 -- Used in Constraint 13
 htCapWMin = mkQuantDef (unitary "htCapWMin"

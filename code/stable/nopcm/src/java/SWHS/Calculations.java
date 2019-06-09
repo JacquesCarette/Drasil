@@ -13,9 +13,5 @@ public class Calculations {
     public static double func_q_C(InputParameters inParams, double t) throws Exception {
         return (inParams.h_C * (inParams.T_C - func_T_W(t)));
     }
-    
-    public static double func_q_C(InputParameters inParams, double t) throws Exception {
-        return (inParams.h_C * (inParams.T_C - func_T_W(t)));
-    }
 }
 

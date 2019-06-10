@@ -7,7 +7,6 @@ import Utils.Drasil
 import Control.Lens((^.))
 
 import Data.Drasil.SentenceStructures (follows)
-import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, term_, output_)
 import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)

@@ -14,7 +14,6 @@ import Utils.Drasil
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,

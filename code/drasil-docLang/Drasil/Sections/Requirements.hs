@@ -2,7 +2,6 @@ module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
   mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
-import Language.Drasil.Utils (sortBySymbol, sortBySymbolTuple)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (description, functionalRequirement,

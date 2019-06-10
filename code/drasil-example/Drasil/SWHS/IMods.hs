@@ -5,7 +5,6 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
-import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.Concepts.Documentation (assumption, goal, solution, output_)
 import Data.Drasil.Concepts.Math (area, change, equation, rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)

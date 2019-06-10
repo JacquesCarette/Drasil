@@ -250,7 +250,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef2S verifyEnergyOutput]
+  plural eq, S "should be less than", addPercent (0.001 :: Double), makeRef2S verifyEnergyOutput]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

@@ -55,7 +55,6 @@ import Data.Drasil.Theories.Physics (physicsTMs)
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
@@ -81,8 +80,8 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 
 tableOfSymbIntro :: [TSIntro]
 
-problemDesc, termiDefi, physSysDesc, goalStmt :: Section
-termiDefiList, physSysIntro, physSysConv, 
+problemDesc, termsDefs, physSysDesc, goalStmt :: Section
+termsDefsList, physSysIntro, physSysConv, 
   physSysDescBullets, physSysFbd :: Contents
 goalsList :: [Contents]
 
@@ -376,7 +375,7 @@ userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  S "The", phrase endUser, S "of", short pname,
+  S "The", phrase endUser `sOf` short pname,
   S "should have an understanding of undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
@@ -392,20 +391,20 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termiDefi, physSysDesc, goalStmt]
-  where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrasePoss slope, phrase slpSrf, S "and identify the",
-          phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
+problemDesc = probDescF EmptyS ssp ending [termsDefs, physSysDesc, goalStmt]
+  where ending = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a",
+          phrasePoss slope, phrase slpSrf, S "and identify",
+          phrase crtSlpSrf `ofThe` phrase slope `sC` S "as well as the",
           phrase intrslce, phrase normForce `sAnd` phrase shearForce,
           S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
           S "used as an educational tool for introducing", phrase slope,
           S "stability", plural issue `sC` S "and to facilitate the",
-          phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
+          phrase analysis `sAnd` phrase design `sOf` S "a safe", phrase slope]
 
 -- SECTION 4.1.1 --
-termiDefi = termDefnF Nothing [termiDefiList]
+termsDefs = termDefnF Nothing [termsDefsList]
 
-termiDefiList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
+termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))
   [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,

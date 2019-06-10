@@ -55,7 +55,6 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
   thermalConduction, htFlux, heatCapSpec, thermalEnergy, htTransTheo,
   thermalAnalysis, enerSrc)
@@ -106,7 +105,7 @@ si = SI {
   _outputs = map qw outputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (constrained),
-  _constants = [],
+  _constants = specParamValList,
   _sysinfodb = symMap,
   _usedinfodb = usedDB,
    refdb = refDB

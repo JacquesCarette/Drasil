@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 3, 2019
+Last updated: June 5, 2019
 --------------------------------------------------
 
 **Concepts**
@@ -32,7 +32,4 @@ SentenceStructures.hs
   
 SI_Units.hs
   - Contains the fundamental SI Units, and several derived units
-  
-Utils.hs
-  - Contains utility functions for use with Drasil
   

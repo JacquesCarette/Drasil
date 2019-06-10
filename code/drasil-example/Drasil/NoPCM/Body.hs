@@ -14,7 +14,6 @@ import Utils.Drasil
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, noRefs)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
@@ -72,13 +71,10 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals (coilHTCMax, coilHTCMin, 
-  coilSAMax, deltaT, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
-  htCapWMax, htCapWMin, htTransCoeff, inSA, outSA, 
-  tankLengthMax, tankLengthMin, tankVol, tau, tauW, 
-  tempEnv, tempW, thFluxVect, timeFinalMax, volHtGen, 
-  wDensityMax, wDensityMin, watE, wMass, wVol, specParamValList, unitalChuncks,
-  absTol, relTol, consTol)
+import Drasil.SWHS.Unitals ( coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
+  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
+  tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol,
+  consTol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -89,7 +85,7 @@ import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
-import Drasil.NoPCM.Unitals (inputs, constrained)
+import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
 -- This defines the standard units used throughout the document
 thisSi :: [UnitDefn]
@@ -171,7 +167,7 @@ mkSRS = [RefSec $ RefProg intro
   TraceabilitySec $
     TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2)) [],
-  AuxConstntSec $ AuxConsProg progName auxCons,
+  AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
 label :: TraceMap
@@ -222,7 +218,7 @@ si = SI {
   _outputs = (map qw [tempW, watE]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
   _constraints = (map cnstrw constrained ++ map cnstrw [tempW, watE]),        --constrained
-  _constants = [],
+  _constants = specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
@@ -607,11 +603,6 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
-
-auxCons :: [QDefinition]
-auxCons = [tankLengthMin, tankLengthMax,
-  wDensityMin, wDensityMax, htCapWMin, htCapWMax, coilHTCMin,
-  coilHTCMax, timeFinalMax]
 
 ------------
 --REFERENCES

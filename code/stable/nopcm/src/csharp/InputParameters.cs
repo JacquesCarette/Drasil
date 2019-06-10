@@ -23,22 +23,22 @@ public class InputParameters {
     }
     
     public static void input_constraints(InputParameters inParams) {
-        if (!((inParams.A_C <= A_C_max))) {
+        if (!((inParams.A_C <= 100000))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((C_W_min < inParams.C_W) && (inParams.C_W < C_W_max)))) {
+        if (!(((4170 < inParams.C_W) && (inParams.C_W < 4210)))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((h_C_min <= inParams.h_C) && (inParams.h_C <= h_C_max)))) {
+        if (!(((10 <= inParams.h_C) && (inParams.h_C <= 10000)))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!((inParams.t_final < t_final_max))) {
+        if (!((inParams.t_final < 86400))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((L_min <= inParams.L) && (inParams.L <= L_max)))) {
+        if (!(((0.1 <= inParams.L) && (inParams.L <= 50)))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((rho_W_min < inParams.rho_W) && (inParams.rho_W <= rho_W_max)))) {
+        if (!(((950 < inParams.rho_W) && (inParams.rho_W <= 1000)))) {
             Console.WriteLine("Warning: constraint violated");
         }
         

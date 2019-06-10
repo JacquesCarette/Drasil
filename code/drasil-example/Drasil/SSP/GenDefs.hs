@@ -10,8 +10,6 @@ import Utils.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
-import Data.Drasil.Utils (weave)
-
 import Data.Drasil.SI_Units (metre, newton)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,

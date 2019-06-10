@@ -14,7 +14,6 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Language.Drasil.Utils (sortBySymbol)
 import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
   termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)

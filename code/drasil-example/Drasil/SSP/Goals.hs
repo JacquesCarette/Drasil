@@ -6,7 +6,7 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
-import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slice, slope)
+import Drasil.SSP.Defs (crtSlpSrf, fsConcept, slice, slope)
 import Drasil.SSP.Unitals (intNormForce, intShrForce)
 
 -----------
@@ -30,7 +30,7 @@ determineShearFGS = cic "determineShearF" (determineF intShrForce)
 
 identifyCritAndFS :: Sentence
 identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `andThe` 
-  S "corresponding" +:+. phrase fs_concept
+  S "corresponding" +:+. phrase fsConcept
   
 determineF :: (NamedIdea a) => a -> Sentence
 determineF what = S "Determine the" +:+ phrase what +:+

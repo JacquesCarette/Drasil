@@ -23,12 +23,12 @@ import Drasil.SWHS.Concepts (water)
 import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : (map dqdWr units) ++ (map dqdWr unitless) ++ map dqdWr constrained
+symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 
 symbolsAll :: [QuantityDict]
-symbolsAll = (map qw symbols) ++ (map qw specParamValList) ++
-  (map qw [htFusionMin, htFusionMax, coilSAMax]) ++
-  (map qw [absTol, relTol, consTol])
+symbolsAll = map qw symbols ++ map qw specParamValList ++
+  map qw [htFusionMin, htFusionMax, coilSAMax] ++
+  map qw [absTol, relTol, consTol]
 
 -- Symbols with Units --
 
@@ -168,7 +168,7 @@ wVol = uc' "wVol" (vol `of_` water)
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
-  (Concat [cDelta, (eqSymb temp)]) centigrade
+  (Concat [cDelta, eqSymb temp]) centigrade
 
 tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time"
@@ -261,7 +261,7 @@ pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tankVol),
-   sfwrc $ UpFrom (Inc, (sy fracMin)*(sy tankVol))] 
+   sfwrc $ UpFrom (Inc, sy fracMin * sy tankVol)] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -282,7 +282,7 @@ pcmSA = uqc "pcmSA"
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (staged (sub (eqSymb density) cP) (sub (Atomic "rho") cP)) densityU Rational
-  [ physc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
+  [gtZeroConstr, sfwrc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
   (dbl 1007)) defaultUncrt
 
 -- Constraint 6
@@ -341,8 +341,8 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "Mass per unit volume of water"
   (staged (sub (eqSymb density) cW) (sub (Atomic "rho") cW)) densityU Rational
-  [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)] (dbl 1000)) defaultUncrt
+  [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
+  (dbl 1000)) defaultUncrt
 
 -- Constraint 13
 htCapW = uqc "htCapW" (heatCapSpec `of_` water)

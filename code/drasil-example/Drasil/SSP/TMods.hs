@@ -39,7 +39,7 @@ factOfSafetyRC :: RelationConcept
 factOfSafetyRC = makeRC "factOfSafetyRC" factorOfSafety EmptyS factOfSafetyRel
 
 factOfSafetyRel :: Relation
-factOfSafetyRel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
+factOfSafetyRel = sy fs $= sy resistiveShear / sy mobilizedShear
 
 --
 ------------- New Chunk -----------
@@ -78,7 +78,7 @@ mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strengt
   mcShrStrgthDesc mcShrStrgthRel
 
 mcShrStrgthRel :: Relation
-mcShrStrgthRel = (sy shrStress) $= ((sy effNormStress) * (tan (sy fricAngle)) + (sy effCohesion))
+mcShrStrgthRel = sy shrStress $= (sy effNormStress * tan (sy fricAngle) + sy effCohesion)
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
@@ -108,7 +108,7 @@ effStressRC = makeRC "effStressRC"
   (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
 effStressRel :: Relation
-effStressRel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)
+effStressRel = sy effectiveStress $= sy totStress - sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]

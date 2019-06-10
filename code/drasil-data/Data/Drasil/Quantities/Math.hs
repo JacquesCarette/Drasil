@@ -17,7 +17,7 @@ unitVect    = dqd' CM.unitV    (const $ vec $ hat lI)  Real Nothing
 unitVectj   = dqd' CM.unitV    (const $ vec $ hat lJ)  Real Nothing
 perpVect    = dqd' CM.perpV    (const $ vec lN)        Real Nothing
 pi_         = dqd' CM.pi_      (const lPi)             Real Nothing
-euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
+euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", vec lR, Atomic "||"])
                                                         Real Nothing  
 
 area, diameter, surface, surArea, orientation :: UnitalChunk

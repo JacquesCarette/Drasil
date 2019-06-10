@@ -6,7 +6,15 @@ module Language.Drasil.Code (
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton,
-  unJC, unPC, unCSC, unSrc, unHdr
+  PackageSym(..), RenderSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
+  ModuleSym(..),
+  ModData(..),
+  JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
+  unSrc, unHdr
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -22,7 +30,20 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), Con
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (unJC)
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer (unPC)
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer (unCSC)
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (unSrc, unHdr)
+import Language.Drasil.Code.Imperative.New (PackageSym(..), RenderSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
+  ModuleSym(..))
+
+import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+  (JavaCode (..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer 
+  (PythonCode(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer 
+  (CSharpCode(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer 
+  (CppSrcCode(..), CppHdrCode(..), unSrc, unHdr)

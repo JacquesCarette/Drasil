@@ -1,6 +1,6 @@
-module Example.Helper (helper) where
+module Test.Helper (helper) where
 
-import New (
+import Language.Drasil.Code.Imperative.New (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..),  ValueSym(..), NumericExpression(..), ScopeSym(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
@@ -10,6 +10,10 @@ helper :: (RenderSym repr) => repr (RenderFile repr)
 helper = fileDoc (buildModule "Helper" [] [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => repr (Method repr)
-doubleAndAdd = function "doubleAndAdd" public static (mState float) [(stateParam "num1" float), (stateParam "num2" float)]
-  (bodyStatements [(varDec "doubledSum" float), ("doubledSum" &.= (((litFloat 2.0) #* (var "num1")) #+ ((litFloat 2.0) #* (var "num2")))),
-    (returnVar "doubledSum")])
+doubleAndAdd = function "doubleAndAdd" public static (mState float) 
+  [stateParam "num1" float, stateParam "num2" float]
+  (bodyStatements [
+    varDec "doubledSum" float, 
+    "doubledSum" &.= ((litFloat 2.0 #* var "num1") #+ 
+      (litFloat 2.0 #* var "num2")),
+    returnVar "doubledSum"])

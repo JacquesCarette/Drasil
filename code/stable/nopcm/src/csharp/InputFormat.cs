@@ -20,7 +20,7 @@ public class InputFormat {
         infile.ReadLine();
         inParams.T_C = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.ρ_W = Double.Parse(infile.ReadLine());
+        inParams.rho_W = Double.Parse(infile.ReadLine());
         infile.ReadLine();
         inParams.C_W = Double.Parse(infile.ReadLine());
         infile.ReadLine();
@@ -35,8 +35,6 @@ public class InputFormat {
         inParams.A_tol = Double.Parse(infile.ReadLine());
         infile.ReadLine();
         inParams.R_tol = Double.Parse(infile.ReadLine());
-        infile.ReadLine();
-        inParams.C_tol = Double.Parse(infile.ReadLine());
         infile.Close();
     }
 }

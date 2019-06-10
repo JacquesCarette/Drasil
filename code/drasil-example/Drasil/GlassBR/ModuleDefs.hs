@@ -10,7 +10,7 @@ import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr,
   fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
   repeated, singleLine, singleton)
 
-import Drasil.GlassBR.Unitals (charWeight, glass_type, nomThick, pbTol, 
+import Drasil.GlassBR.Unitals (charWeight, glassTypeCon, nomThick, pbTol, 
   plateLen, plateWidth, sdx, sdy, sdz, tNT)
 
 allMods :: [Mod]
@@ -46,7 +46,7 @@ inputData = funcData "get_input"
   [ junkLine,
     singleton plateLen, singleton plateWidth, singleton nomThick,
     junkLine,
-    singleton glass_type,
+    singleton glassTypeCon,
     junkLine,
     singleton charWeight,
     junkLine,

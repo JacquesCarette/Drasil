@@ -25,7 +25,7 @@ public class InputFormat {
         infile.nextLine();
         inParams.T_C = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        inParams.ρ_W = Double.parseDouble(infile.nextLine());
+        inParams.rho_W = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.C_W = Double.parseDouble(infile.nextLine());
         infile.nextLine();
@@ -40,8 +40,6 @@ public class InputFormat {
         inParams.A_tol = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.R_tol = Double.parseDouble(infile.nextLine());
-        infile.nextLine();
-        inParams.C_tol = Double.parseDouble(infile.nextLine());
         infile.close();
     }
 }

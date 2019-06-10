@@ -63,7 +63,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhsPCM, phase_change_material, tank_pcm, con)
+  coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
 import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
@@ -74,16 +74,16 @@ import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
   nfRequirements, propsDeriv)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
-import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, htCap_S_P, htCap_W,
-  ht_flux_C, ht_flux_P, ht_flux_in, ht_flux_out, in_SA, out_SA, pcm_E,
-  pcm_HTC, pcm_SA, pcm_mass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tau_S_P, tau_W, temp_C,
-  temp_PCM, temp_W, thFluxVect, thickness, vol_ht_gen, w_E, w_mass, abs_tol, rel_tol, cons_tol)
+import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
+  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
+  pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
+  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
+  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol, consTol)
 
 -------------------------------------------------------------------------------
 
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, kilogram, second] ++ 
+thisSi :: [UnitDefn]
+thisSi = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
@@ -102,7 +102,7 @@ si = SI {
   _concepts = symbTT,
   _definitions = qDefs,
   _datadefs = dataDefs,
-  _inputs = map qw inputs,
+  _inputs = inputs,
   _outputs = map qw outputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (constrained),
@@ -118,13 +118,13 @@ resourcePath = "../../../datafiles/SWHS/"
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3] ++ map nw [abs_tol, rel_tol, cons_tol]
+  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol, consTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (this_si ++ [m_2, m_3]) label refBy
+  (thisSi ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
   section labCon
 
@@ -158,14 +158,14 @@ people = [thulasi, brooks, spencerSmith]
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
-    tsymb'' tsymb_intro (TermExcept [uNormalVect]),
+    tsymb'' tSymbIntro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
     progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
     progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope (scopeReqs1 CT.thermalAnalysis tank_pcm) $
+     IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
      IChar [] ((charReader1 CT.htTransTheo) ++ (charReader2 de)) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
@@ -205,8 +205,8 @@ mkSRS = [RefSec $ RefProg intro [
 code :: CodeSpec
 code = codeSpec si [inputMod]
 
-tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose, SymbConvention
+tSymbIntro :: [TSIntro]
+tSymbIntro = [TSPurpose, SymbConvention
   [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
 
 --- The document starts here
@@ -340,11 +340,11 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.htFlux, phase_change_material, CT.heatCapSpec,
+  [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec,
   CT.thermalConduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
-tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
+tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, (c ^. defn)]
 
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -356,7 +356,7 @@ tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, LlC fig_tank]
+physSystDescription = physSystDesc (short progName) figTank [physSystDescList, LlC figTank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
@@ -366,15 +366,15 @@ physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
-systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
-  physSyst3 phsChgMtrl tank ht_flux_P]
+systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
+  physSyst3 phsChgMtrl tank htFluxP]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
 goalStates :: Section
-goalStates = goalStmtF (goalStateIntro temp_C temp_W temp_PCM) goalStateList
+goalStates = goalStmtF (goalStateIntro tempC tempW tempPCM) goalStateList
 
 goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
 goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
@@ -424,11 +424,11 @@ s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_2 consThermE vol,
   s4_2_3_deriv_3,
-  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_deriv_4 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_deriv_5,
-  s4_2_3_deriv_6 vol vol_ht_gen,
+  s4_2_3_deriv_6 vol volHtGen,
   s4_2_3_deriv_7,
-  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heatCapSpec
+  s4_2_3_deriv_8 htFluxIn htFluxOut inSA outSA density heatCapSpec
     temp vol assumption assump3 assump4 assump5 assump6,
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
@@ -459,10 +459,10 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 
 dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
---FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
+--FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
 
 outputConstraints :: [ConstrConcept]
-outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
+outputConstraints = [tempW, tempPCM, watE, pcmE]
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?
@@ -707,7 +707,7 @@ introP1 es en sp pcmat pro te lh un = foldlSent [
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use a renewable",
   phrase es `sAnd` S "provide a novel way of storing" +:+. phrase en,
-  at_start sp, S "improve over the traditional",
+  atStart sp, S "improve over the traditional",
   plural pro, S "because of their smaller size. The",
   S "smaller size is possible because of the ability of",
   short pcmat, S "to store", phrase te, S "as", phrase lh `sC`
@@ -932,10 +932,10 @@ probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
 -----------------------------------------
 
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
-physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]
+physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 --
 physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-physSyst2 co ta hfc = [at_start co, S "at bottom of" +:+. phrase ta,
+physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
   sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 --
 physSyst3 :: CI -> ConceptChunk -> UnitalChunk -> [Sentence]
@@ -945,10 +945,10 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- Structure of list would be same between examples but content is completely
 -- different
 
-fig_tank :: LabelledContent
-fig_tank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
-  ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
+figTank :: LabelledContent
+figTank = llcc (makeFigRef "Tank") $ fig (
+  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC, S "of",
+  ch htFluxC `sAnd` phrase htFluxP, S "of", ch htFluxP])
   $ resourcePath ++ "Tank.png"
 
 -----------------------------
@@ -985,9 +985,9 @@ genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR'
-  ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  ((negate (intAll (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
+  (intAll (eqSymb vol) (sy volHtGen)) $=
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> Contents
@@ -998,9 +998,9 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   S "outward", phrase unv, S "for a", phrase su]
 
 genDefDeriv5 = eqUnR'
-  ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  ((negate (intAll (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (intAll (eqSymb vol) (sy volHtGen)) $= 
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1008,9 +1008,9 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
 genDefDeriv7 = eqUnR'
-  ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
+  ((sy htFluxIn) * (sy inSA) - (sy htFluxOut) *
+  (sy outSA) + (sy volHtGen) * (sy vol) $= 
+  (intAll (eqSymb vol) ((sy density) * (sy heatCapSpec) * pderiv (sy temp) time)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
@@ -1018,8 +1018,8 @@ genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
 
 genDefDeriv11 = eqUnR'
   ((sy mass) * (sy heatCapSpec) * deriv (sy temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
+  time $= (sy htFluxIn) * (sy inSA) - (sy htFluxOut)
+  * (sy outSA) + (sy volHtGen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
@@ -1075,48 +1075,48 @@ iMod1Sent5 = [S "Which simplifies to"]
 
 iMod1Sent6 :: [Sentence]
 iMod1Sent6 = [S "Setting",
-  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)) `sAnd`
-  (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)) `sC`
+  (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)) `sAnd`
+  (E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)) `sC`
   titleize equation, S "(5) can be written as"]
 
 iMod1Sent7 :: [Sentence]
-iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
+iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tauW) `sC` 
   S "we are left with the governing", short ode, S "for", makeRef2S eBalanceOnWtr]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
 
-iMod1Eqn1 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
+iMod1Eqn1 = ((sy wMass) * (sy htCapW) * deriv (sy tempW) time $=
+  (sy htFluxC) * (sy coilSA) - (sy htFluxP) * (sy pcmSA))
 
-iMod1Eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
-  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
-  (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
+iMod1Eqn2 = ((sy wMass) * (sy htCapW) * deriv (sy tempW) time $=
+  (sy coilHTC) * (sy coilSA) * ((sy tempC) - (sy tempW)) -
+  (sy pcmHTC) * (sy pcmSA) * ((sy tempW) - (sy tempPCM)))
 
-iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
-  (sy temp_W)) - ((sy pcm_mass) * (sy pcm_SA)) / ((sy w_mass) *
-  (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
+iMod1Eqn3 = (deriv (sy tempW) time $= ((sy coilHTC) *
+  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) -
+  (sy tempW)) - ((sy pcmMass) * (sy pcmSA)) / ((sy wMass) *
+  (sy htCapW)) * ((sy tempW) - (sy tempPCM)))
 
-iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
-  (((sy coil_HTC) * (sy coil_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
-  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy w_mass) * (sy htCap_W))) *
-  ((sy temp_PCM) - (sy temp_W)))
+iMod1Eqn4 = (deriv (sy tempW) time $= ((sy coilHTC) *
+  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy tempW)) +
+  (((sy coilHTC) * (sy coilSA)) / ((sy coilHTC) * (sy coilSA))) *
+  (((sy pcmHTC) * (sy pcmSA)) / ((sy wMass) * (sy htCapW))) *
+  ((sy tempPCM) - (sy tempW)))
 
-iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
-  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
-  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
-  (((sy coil_HTC) * (sy coil_SA)) / ((sy w_mass) * (sy htCap_W))) *
-  ((sy temp_PCM) - (sy temp_W)))
+iMod1Eqn5 = (deriv (sy tempW) time $= ((sy coilHTC) *
+  (sy coilSA)) / ((sy wMass) * (sy htCapW)) * ((sy tempC) - (sy tempW)) +
+  (((sy pcmHTC) * (sy pcmSA)) / ((sy coilHTC) * (sy coilSA))) *
+  (((sy coilHTC) * (sy coilSA)) / ((sy wMass) * (sy htCapW))) *
+  ((sy tempPCM) - (sy tempW)))
 
-iMod1Eqn6 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
-  ((sy temp_C) - (sy temp_W)) + ((sy eta) / (sy tau_W)) *
-  ((sy temp_PCM) - (sy temp_W)))
+iMod1Eqn6 = (deriv (sy tempW) time $= (1 / (sy tauW)) *
+  ((sy tempC) - (sy tempW)) + ((sy eta) / (sy tauW)) *
+  ((sy tempPCM) - (sy tempW)))
 
-iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
-  (((sy temp_C) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
-  (sy temp_W))))
+iMod1Eqn7 = (deriv (sy tempW) time $= (1 / (sy tauW)) *
+  (((sy tempC) - (sy tempW)) + (sy eta) * ((sy tempPCM) -
+  (sy tempW))))
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
@@ -1128,27 +1128,27 @@ iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for",
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
-iMod2Sent2 = [S "Dividing by", ch pcm_mass :+: ch htCap_S_P,
+iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCapSP,
   S "we obtain"]
 
 iMod2Sent3 :: [Sentence]
-iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcm_mass :+: 
-  ch htCap_S_P :+: S "/" :+: ch pcm_HTC :+: ch pcm_SA `sC`
+iMod2Sent3 = [S "Setting", ch tauSP :+: S "=" :+: ch pcmMass :+: 
+  ch htCapSP :+: S "/" :+: ch pcmHTC :+: ch pcmSA `sC`
   S "this can be written as"]
 
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
 
-iMod2Eqn1 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
-  time $= (sy ht_flux_P) * (sy pcm_SA))
+iMod2Eqn1 = ((sy pcmMass) * (sy htCapSP) * deriv (sy tempPCM)
+  time $= (sy htFluxP) * (sy pcmSA))
 
-iMod2Eqn2 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
-  time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
+iMod2Eqn2 = ((sy pcmMass) * (sy htCapSP) * deriv (sy tempPCM)
+  time $= (sy pcmHTC) * (sy pcmSA) * ((sy tempW) - (sy tempPCM)))
 
-iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
-  (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
+iMod2Eqn3 = (deriv (sy tempPCM) time $= ((sy pcmHTC) *
+  (sy pcmSA)) / ((sy pcmMass) * (sy htCapSP)) * ((sy tempW) - (sy tempPCM)))
 
-iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
-  ((sy temp_W) - (sy temp_PCM)))
+iMod2Eqn4 = (deriv (sy tempPCM) time $= (1 / (sy tauSP)) *
+  ((sy tempW) - (sy tempPCM)))
 
 -- Add GD, A, and EqnBlock references when available
 -- FIXME: Replace derivs with regular derivative when available

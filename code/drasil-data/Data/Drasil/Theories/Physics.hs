@@ -81,7 +81,7 @@ weightDerivNewtonSentence = [S "Since there is only one non-zero",
   S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
-weightDerivReplaceMassSentence = [at_start QPP.mass, S "can be expressed as",
+weightDerivReplaceMassSentence = [atStart QPP.mass, S "can be expressed as",
   phrase QPP.density, S "multiplied by", phrase QPP.vol `sC` S "resulting in"]
 
 weightDerivSpecWeightSentence :: [Sentence]

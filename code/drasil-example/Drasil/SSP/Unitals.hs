@@ -3,7 +3,7 @@ module Drasil.SSP.Unitals where --export all of it
 import Language.Drasil
 import Language.Drasil.ShortHands
 
-import Drasil.SSP.Defs (fs_concept)
+import Drasil.SSP.Defs (fsConcept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
@@ -166,11 +166,11 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
   " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
+fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
-fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
+fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
+fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
   ("The minimum factor of safety associated with the critical slip surface")) 
   (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
@@ -408,7 +408,7 @@ momntArm = uc' "r" (cn' "length of the moment arm")
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
-  mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
+  mobShrC, shrResC, index, pi_, varblV, fsMin, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

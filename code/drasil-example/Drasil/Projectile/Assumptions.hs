@@ -89,4 +89,4 @@ neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
                   (S "curvature" `ofThe` S "Earth can be neglected")
 
 timeStartZeroDesc :: Sentence
-timeStartZeroDesc = at_start time +:+. S "starts at zero"
+timeStartZeroDesc = atStart time +:+. S "starts at zero"

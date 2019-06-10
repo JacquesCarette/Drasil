@@ -81,7 +81,7 @@ force        = dcc "force" (cn' "force")
 distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
 stress       = dccWDS "stress" (cn''' "stress")
-  (at_start' force +:+ S "that are exerted between planes internal to" +:+
+  (atStart' force +:+ S "that are exerted between planes internal to" +:+
   S "a larger body subject to external loading.")            --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
   (S "A measure of deformation of a body or plane under" +:+. phrase stress) --definition used in SSP, can be made clearer
@@ -101,8 +101,8 @@ height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (cn "distance in the x-direction") (at_start distance +:+ S "in the x-direction")
-yDist = dccWDS "yDist" (cn "distance in the y-direction") (at_start distance +:+ S "in the y-direction")
+xDist = dccWDS "xDist" (cn "distance in the x-direction") (atStart distance +:+ S "in the x-direction")
+yDist = dccWDS "yDist" (cn "distance in the y-direction") (atStart distance +:+ S "in the y-direction")
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
 xPos = dccWDS "xPos" (cn "x-component of position") (S "The x-component" `sOf` phrase position)

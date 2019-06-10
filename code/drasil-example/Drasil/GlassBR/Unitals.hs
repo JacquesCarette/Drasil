@@ -36,8 +36,8 @@ constrained = (map cnstrw inputsWUncrtn) ++
   (map cnstrw inputsWUnitsUncrtn) ++ [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
-aspect_ratio, pbTol, tNT :: UncertainChunk
-glass_type, nomThick :: ConstrainedChunk
+aspectRatio, pbTol, tNT :: UncertainChunk
+glassTypeCon, nomThick :: ConstrainedChunk
 
 {--}
 
@@ -51,11 +51,11 @@ inputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: [UncertainChunk]
-inputsWUncrtn = [aspect_ratio, pbTol, tNT]
+inputsWUncrtn = [aspectRatio, pbTol, tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = [glass_type, nomThick]
+inputsNoUncrtn = [glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = (map uncrtnw inputsWUnitsUncrtn) ++ 
@@ -72,7 +72,7 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspect_ratio = uvc "aspect_ratio" (aR ^. term)
+aspectRatio = uvc "aspectRatio" (aR ^. term)
   (Atomic "AR") Real
   [ physc $ UpFrom (Inc, 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
@@ -108,8 +108,8 @@ nomThick = cuc "nomThick"
 -- but the problem is still the Capitalization issue with new 
 -- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
-glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glass_type (map (getAccStr . snd) glassType))
+glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+ 
+    displayConstrntsAsSet glassTypeCon (map (getAccStr . snd) glassType))
   lG ({-DiscreteS (map (getAccStr . snd) glassType)-} String)
   [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 
@@ -124,7 +124,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [is_safeProb, is_safeLoad] 
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad] 
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
@@ -180,22 +180,22 @@ sdMin     = mkQuantDef (unitary "sdMin"
 {--}
 
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, demand, tm_demand, lRe, tm_lRe, nonFactorL, loadDur,
+symbols = [minThick, sflawParamK, sflawParamM, demand, tmDemand, lRe, tmLRe, nonFactorL, loadDur,
   eqTNTWeight]
 
-minThick, sflawParamK, sflawParamM, demand, tm_demand, sdx, sdy, sdz, lRe, tm_lRe, nonFactorL, loadDur,
+minThick, sflawParamK, sflawParamM, demand, tmDemand, sdx, sdy, sdz, lRe, tmLRe, nonFactorL, loadDur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
 
-tm_demand      = unitary "tm_demand"      (nounPhraseSP "applied load (demand) or pressure")
+tmDemand      = unitary "tmDemand"      (nounPhraseSP "applied load (demand) or pressure")
   (Atomic "Load") pascal Rational --correct Space used?
   
 lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
   (Atomic "LR") pascal Rational --correct Space used?
 
-tm_lRe      = unitary "tm_lRe"      (nounPhraseSP "capacity or load resistance")
+tmLRe      = unitary "tmLRe"      (nounPhraseSP "capacity or load resistance")
   (Atomic "capacity") pascal Rational --correct Space used?
 
 nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
@@ -230,10 +230,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
 
-riskFun, isSafePb, is_safeProb, isSafeLR, is_safeLoad, stressDistFac, sdfTol,
+riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
 
@@ -246,7 +246,7 @@ isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned 
   " probability is less than tolerable probability")
   (Atomic "is-safePb") Boolean
 
-is_safeProb      = vc "is_safeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
+isSafeProb      = vc "isSafeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
   " probability of failure is less than tolerable probability of failure")
   (Atomic "is-safeProb") Boolean
 
@@ -254,7 +254,7 @@ isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned 
   ++ " (capacity) is greater than load (demand)")
   (Atomic "is-safeLR") Boolean
 
-is_safeLoad      = vc "is_safeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
+isSafeLoad      = vc "isSafeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than applied load (demand)")
   (Atomic "is-safeLoad") Boolean
 
@@ -277,13 +277,13 @@ tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
 
 
 terms :: [ConceptChunk]
-terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion]
 
-aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
@@ -292,7 +292,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 annealedGl    = cc' annealed
   (foldlSent [S "A flat, monolithic, glass lite which has uniform thickness where",
   S "the residual surface stresses are almost zero, as defined in", makeCiteS astm2016])
-aspectRatio   = cc aR
+aspectRatioCon   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
@@ -420,7 +420,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
   eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatioCon]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 

@@ -4,7 +4,6 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gdNoRefs)
 import Utils.Drasil
-import Data.Drasil.Utils (fromReplace, weave)
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (vector)

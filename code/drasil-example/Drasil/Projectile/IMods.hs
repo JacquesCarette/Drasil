@@ -5,7 +5,6 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs)
 import Utils.Drasil
-import Data.Drasil.Utils (eqnWSource, fromReplace, weave)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation)

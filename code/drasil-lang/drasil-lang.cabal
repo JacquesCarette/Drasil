@@ -9,7 +9,6 @@ library
   exposed-modules:
       Language.Drasil
     , Language.Drasil.Development
-    , Language.Drasil.Utils
     , Data.Drasil.IdeaDicts
     , Language.Drasil.ShortHands
   other-modules:

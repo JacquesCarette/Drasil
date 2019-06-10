@@ -1,0 +1,37 @@
+Name:		GOOLFinallyTagless
+Version:	0.0.1
+Cabal-Version:  >= 1.18
+Author:		Brooks MacLachlan
+build-type:     Simple
+Synopsis:	A reimplementation of GOOL using finally-tagless style
+
+library
+  hs-source-dirs: ./
+  exposed-modules:
+      New
+    , Helpers
+    , NewLanguageRenderer
+    , LanguageRenderer.NewJavaRenderer
+    , LanguageRenderer.NewPythonRenderer
+  other-modules:
+  Build-Depends:
+    base >= 4.7,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    directory >= 1.2.6.2,
+    MissingH >= 1.4.0.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+executable helloworld
+  hs-source-dirs: Example
+  main-is: Main.hs
+  other-modules:
+  Build-Depends:
+    base >= 4.7,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    directory >= 1.2.6.2,
+    GOOLFinallyTagless >= 0.0.1
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2

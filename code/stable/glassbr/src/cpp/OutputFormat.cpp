@@ -1,6 +1,5 @@
 #include "OutputFormat.hpp"
 
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -17,14 +16,14 @@ using std::ifstream;
 using std::ofstream;
 
 void write_output(bool is_safePb, bool is_safeLR, double P_b) {
-    ofstream outfile;
-    outfile.open("output.txt", std::fstream::out | std::fstream::app);
-    outfile << "is_safePb = ";
-    outfile << is_safePb << std::endl;
-    outfile << "is_safeLR = ";
-    outfile << is_safeLR << std::endl;
-    outfile << "P_b = ";
-    outfile << P_b << std::endl;
-    outfile.close();
+    ofstream outputfile;
+    outputfile.open("output.txt", std::fstream::out);
+    outputfile << "is_safePb = ";
+    outputfile << is_safePb << std::endl;
+    outputfile << "is_safeLR = ";
+    outputfile << is_safeLR << std::endl;
+    outputfile << "P_b = ";
+    outputfile << P_b << std::endl;
+    outputfile.close();
 }
 

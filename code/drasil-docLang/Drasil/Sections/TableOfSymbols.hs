@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Math (unit_)
 -- | table of symbols creation function
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
 table st ls f = llcc (makeTabRef "ToS") $
-  Table [at_start symbol_, at_start description, at_start' unit_]
+  Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [P . (`symbol` st), f, toSentence]
   $ filter (`hasStageSymbol`st) ls)
   (titleize tOfSymb) False

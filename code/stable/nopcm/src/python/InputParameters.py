@@ -18,17 +18,17 @@ def derived_values():
     None
 
 def input_constraints(inParams):
-    if (not((inParams.A_C <= A_C_max))) :
+    if (not((inParams.A_C <= 100000))) :
         print("Warning: constraint violated")
-    if (not(((C_W_min < inParams.C_W) and (inParams.C_W < C_W_max)))) :
+    if (not(((4170 < inParams.C_W) and (inParams.C_W < 4210)))) :
         print("Warning: constraint violated")
-    if (not(((h_C_min <= inParams.h_C) and (inParams.h_C <= h_C_max)))) :
+    if (not(((10 <= inParams.h_C) and (inParams.h_C <= 10000)))) :
         print("Warning: constraint violated")
-    if (not((inParams.t_final < t_final_max))) :
+    if (not((inParams.t_final < 86400))) :
         print("Warning: constraint violated")
-    if (not(((L_min <= inParams.L) and (inParams.L <= L_max)))) :
+    if (not(((0.1 <= inParams.L) and (inParams.L <= 50)))) :
         print("Warning: constraint violated")
-    if (not(((rho_W_min < inParams.rho_W) and (inParams.rho_W <= rho_W_max)))) :
+    if (not(((950 < inParams.rho_W) and (inParams.rho_W <= 1000)))) :
         print("Warning: constraint violated")
     
     if (not((inParams.A_C > 0))) :

@@ -453,17 +453,16 @@ consTol = uvc "consTol"
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
   pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
-  htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
+  htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax, 
+  htFusionMin, htFusionMax, coilSAMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
   pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
-  htCapSPMax, htCapLPMin, htCapLPMax,
+  htCapSPMax, htCapLPMin, htCapLPMax, htFusionMin, htFusionMax, coilSAMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
   pcmHTCMax, timeFinalMax, fracMinAux :: QDefinition
-
-htFusionMin, htFusionMax, coilSAMax :: UnitaryChunk
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
@@ -506,18 +505,18 @@ htCapLPMax = mkQuantDef (unitary "htCapLPMax"
   (sub (eqSymb htCapLP) (Atomic "max")) UT.heatCapSpec Rational) 5000
 
 -- Used in Constraint 9
-htFusionMin = unitary "htFusionMin"
+htFusionMin = mkQuantDef (unitary "htFusionMin"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational
+  (sub (eqSymb htFusion) (Atomic "min")) UT.heatCapSpec Rational) 0 
 
-htFusionMax = unitary "htFusionMax"
+htFusionMax = mkQuantDef (unitary "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational
+  (sub (eqSymb htFusion) (Atomic "max")) UT.heatCapSpec Rational) 1000000 
 
 -- Used in Constraint 10
-coilSAMax = unitary "coilSAMax"
+coilSAMax = mkQuantDef (unitary "coilSAMax"
   (nounPhraseSP "maximum surface area of coil")
-  (sup (eqSymb coilSA) (Atomic "max")) m_2 Rational
+  (sup (eqSymb coilSA) (Atomic "max")) m_2 Rational) 100000
 
 -- Used in Constraint 12
 wDensityMin = mkQuantDef' (unitary' "wDensityMin"

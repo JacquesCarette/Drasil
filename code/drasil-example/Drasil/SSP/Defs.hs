@@ -88,7 +88,7 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
 fsConcept = dccWDS "FS" factorOfSafety
   (S "The global stability metric of a" +:+ phrase slpSrf +:+ S "of a" +:+
   phrase slope `sC` S "defined as the ratio of" +:+ phrase shearRes +:+ 
-  S "to" +:+ phrase mobShear)
+  S "to" +:+. phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
 

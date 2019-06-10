@@ -11,8 +11,6 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.Utils (unwrap, weave)
-
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, heatEInWtr)

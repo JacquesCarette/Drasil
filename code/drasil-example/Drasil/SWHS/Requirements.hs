@@ -140,9 +140,8 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
 verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
-  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
-  S "as outlined in"
-  --FIXME , makeRefS s4_2_7 `sC` -}
+  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
+  S "as outlined in", makeRef2S (propCorSol propsDeriv []) `sC`
   S "with relative error no greater than 0.001%"] )
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --

@@ -4,6 +4,13 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Utils.Drasil
+
+import Data.Drasil.Concepts.Documentation (value)
+
+import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
   assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
@@ -11,10 +18,6 @@ import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
   tempW, tempPCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
   htCapLP, pcmHTC, pcmSA, tauSP, tauLP)
-
-import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
@@ -109,7 +112,8 @@ meltFracEqn = (sy latentEP) / ((sy htFusion) * (sy pcmMass))
 
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
- [makeRef2S dd3HtFusion]
+ [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
+  E (0 $<= sy meltFrac $<= 1), makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions
 

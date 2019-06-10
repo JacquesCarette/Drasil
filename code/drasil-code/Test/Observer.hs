@@ -1,6 +1,6 @@
-module Example.Observer (observer) where
+module Test.Observer (observer) where
 
-import New (
+import Language.Drasil.Code.Imperative.New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
   MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))

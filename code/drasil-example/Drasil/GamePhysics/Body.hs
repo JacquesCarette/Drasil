@@ -43,8 +43,6 @@ import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, itemRefToSent,
-  makeListRef, makeTMatrix)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
@@ -398,7 +396,7 @@ terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn))
+  (map (\x -> (atStart x) +: EmptyS +:+ (x ^. defn))
     [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
 
 -----------------------------

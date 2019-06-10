@@ -16,7 +16,7 @@ public class InputParameters {
     public static double t_final = 0.0;
     public static double L = 0.0;
     public static double T_C = 0.0;
-    public static double ρ_W = 0.0;
+    public static double rho_W = 0.0;
     public static double D = 0.0;
     public static double T_W = 0.0;
     public static double E_W = 0.0;
@@ -25,22 +25,22 @@ public class InputParameters {
     }
     
     public static void input_constraints(InputParameters inParams) throws Exception {
-        if (!((inParams.A_C <= A_C_max))) {
+        if (!((inParams.A_C <= 100000))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((C_W_min < inParams.C_W) && (inParams.C_W < C_W_max)))) {
+        if (!(((4170 < inParams.C_W) && (inParams.C_W < 4210)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((h_C_min <= inParams.h_C) && (inParams.h_C <= h_C_max)))) {
+        if (!(((10 <= inParams.h_C) && (inParams.h_C <= 10000)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!((inParams.t_final < t_final_max))) {
+        if (!((inParams.t_final < 86400))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((L_min <= inParams.L) && (inParams.L <= L_max)))) {
+        if (!(((0.1 <= inParams.L) && (inParams.L <= 50)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((ρ_W_min < inParams.ρ_W) && (inParams.ρ_W <= ρ_W_max)))) {
+        if (!(((950 < inParams.rho_W) && (inParams.rho_W <= 1000)))) {
             System.out.println("Warning: constraint violated");
         }
         
@@ -65,7 +65,7 @@ public class InputParameters {
         if (!(((0 < inParams.T_C) && (inParams.T_C < 100)))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!((inParams.ρ_W > 0))) {
+        if (!((inParams.rho_W > 0))) {
             System.out.println("Warning: constraint violated");
         }
         if (!((inParams.D > 0))) {

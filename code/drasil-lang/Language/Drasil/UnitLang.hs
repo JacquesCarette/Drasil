@@ -1,6 +1,6 @@
 module Language.Drasil.UnitLang (
     USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
-  , from_udefn, comp_usymb, get_usymb, get_defn
+  , fromUDefn, compUSymb, getUSymb, getDefn
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
@@ -18,15 +18,15 @@ data UDefn = USynonym USymb      -- ^ to define straight synonyms
            | UShift Double USymb -- ^ shift, i.e. +
 
 -- | Can generate a default symbol
-from_udefn :: UDefn -> USymb
-from_udefn (USynonym x) = x
-from_udefn (UScale _ s) = s
-from_udefn (UShift _ s) = s
+fromUDefn :: UDefn -> USymb
+fromUDefn (USynonym x) = x
+fromUDefn (UScale _ s) = s
+fromUDefn (UShift _ s) = s
 
 -- | Hand-rolled version of compare. Should assume |USymb| is normalized, so
 -- that some redundant EQ cases can be removed.
-comp_usymb :: USymb -> USymb -> Ordering
-comp_usymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
+compUSymb :: USymb -> USymb -> Ordering
+compUSymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
   where
     comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2
 
@@ -38,12 +38,12 @@ data UnitSymbol =
    | DerivedSI USymb USymb UDefn
    | Defined USymb UDefn
 
-get_usymb :: UnitSymbol -> USymb
-get_usymb (BaseSI u) = u
-get_usymb (DerivedSI u _ _) = u
-get_usymb (Defined u _) = u
+getUSymb :: UnitSymbol -> USymb
+getUSymb (BaseSI u) = u
+getUSymb (DerivedSI u _ _) = u
+getUSymb (Defined u _) = u
 
-get_defn :: UnitSymbol -> Maybe UDefn
-get_defn (BaseSI _) = Nothing
-get_defn (DerivedSI _ _ d) = Just d
-get_defn (Defined _ d) = Just d
+getDefn :: UnitSymbol -> Maybe UDefn
+getDefn (BaseSI _) = Nothing
+getDefn (DerivedSI _ _ d) = Just d
+getDefn (Defined _ d) = Just d

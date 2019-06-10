@@ -12,7 +12,8 @@ module Theory.Drasil (
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where
 
-import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef, dd, ddNoRefs, qdFromDD)
+import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef,
+  dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.InstanceModel
 import Theory.Drasil.Theory

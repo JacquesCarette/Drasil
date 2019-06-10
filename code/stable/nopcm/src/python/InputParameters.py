@@ -9,7 +9,7 @@ T_init = 0.0
 t_final = 0.0
 L = 0.0
 T_C = 0.0
-ρ_W = 0.0
+rho_W = 0.0
 D = 0.0
 T_W = 0.0
 E_W = 0.0
@@ -18,17 +18,17 @@ def derived_values():
     None
 
 def input_constraints(inParams):
-    if (not((inParams.A_C <= A_C_max))) :
+    if (not((inParams.A_C <= 100000))) :
         print("Warning: constraint violated")
-    if (not(((C_W_min < inParams.C_W) and (inParams.C_W < C_W_max)))) :
+    if (not(((4170 < inParams.C_W) and (inParams.C_W < 4210)))) :
         print("Warning: constraint violated")
-    if (not(((h_C_min <= inParams.h_C) and (inParams.h_C <= h_C_max)))) :
+    if (not(((10 <= inParams.h_C) and (inParams.h_C <= 10000)))) :
         print("Warning: constraint violated")
-    if (not((inParams.t_final < t_final_max))) :
+    if (not((inParams.t_final < 86400))) :
         print("Warning: constraint violated")
-    if (not(((L_min <= inParams.L) and (inParams.L <= L_max)))) :
+    if (not(((0.1 <= inParams.L) and (inParams.L <= 50)))) :
         print("Warning: constraint violated")
-    if (not(((ρ_W_min < inParams.ρ_W) and (inParams.ρ_W <= ρ_W_max)))) :
+    if (not(((950 < inParams.rho_W) and (inParams.rho_W <= 1000)))) :
         print("Warning: constraint violated")
     
     if (not((inParams.A_C > 0))) :
@@ -45,7 +45,7 @@ def input_constraints(inParams):
         print("Warning: constraint violated")
     if (not(((0 < inParams.T_C) and (inParams.T_C < 100)))) :
         print("Warning: constraint violated")
-    if (not((inParams.ρ_W > 0))) :
+    if (not((inParams.rho_W > 0))) :
         print("Warning: constraint violated")
     if (not((inParams.D > 0))) :
         print("Warning: constraint violated")

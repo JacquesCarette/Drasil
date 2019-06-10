@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 9, 2019
+Last updated: June 5, 2019
 --------------------------------------------------
 
 **Chunk**
@@ -104,6 +104,3 @@ Unicode.hs
 
 UnitLang.hs
   - Defines the language for working with Units
-
-Utils.hs
-  - Contains utilities (currently only a function for sorting by symbol)

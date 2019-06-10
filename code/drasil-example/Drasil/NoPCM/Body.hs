@@ -75,7 +75,7 @@ import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htTransCoeff, in_SA, out_SA, tank_length, tank_vol, tau, tau_W, 
-  temp_C, temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, 
+  temp_C, temp_env, temp_W, thFluxVect, time_final, vol_ht_gen, 
   w_density, w_E, w_mass, w_vol, unitalChuncks, abs_tol, rel_tol, cons_tol)
 
 import Drasil.NoPCM.Assumptions

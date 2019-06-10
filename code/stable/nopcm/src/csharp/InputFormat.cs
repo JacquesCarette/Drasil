@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class InputFormat {
     
-    public static void func_get_input(string filename, InputParameters inParams, double τ, double A_tol, double R_tol, double C_tol) {
+    public static void func_get_input(string filename, InputParameters inParams, double τ, double A_tol, double R_tol) {
         StreamReader infile;
         string line;
         List<string> lines = new List<string>(0);
@@ -36,7 +36,6 @@ public class InputFormat {
         infile.ReadLine();
         R_tol = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        C_tol = Double.Parse(infile.ReadLine());
         infile.Close();
     }
 }

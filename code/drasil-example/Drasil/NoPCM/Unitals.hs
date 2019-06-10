@@ -7,7 +7,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp)
 
 import Drasil.SWHS.Unitals (tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
-  coilHTCMin, coilHTCMax, timeFinalMax)
+  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux)
 
 tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
@@ -18,4 +18,4 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
-  coilHTCMin, coilHTCMax, timeFinalMax]
+  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux]

@@ -17,7 +17,7 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
-void func_get_input(string filename, InputParameters &inParams, double τ, double A_tol, double R_tol, double C_tol) {
+void func_get_input(string filename, InputParameters &inParams, double τ, double A_tol, double R_tol) {
     ifstream infile;
     string line;
     vector<string> lines(0);
@@ -59,8 +59,6 @@ void func_get_input(string filename, InputParameters &inParams, double τ, doubl
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> R_tol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> C_tol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.close();
 }

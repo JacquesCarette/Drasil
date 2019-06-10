@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class InputFormat {
     
-    public static void func_get_input(String filename, InputParameters inParams, double τ, double A_tol, double R_tol, double C_tol) throws Exception {
+    public static void func_get_input(String filename, InputParameters inParams, double τ, double A_tol, double R_tol) throws Exception {
         Scanner infile;
         String line;
         ArrayList<String> lines = new ArrayList<String>(0);
@@ -41,7 +41,6 @@ public class InputFormat {
         infile.nextLine();
         R_tol = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        C_tol = Double.parseDouble(infile.nextLine());
         infile.close();
     }
 }

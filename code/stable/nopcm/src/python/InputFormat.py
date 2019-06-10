@@ -4,7 +4,7 @@ import math
 
 import InputParameters
 
-def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
+def func_get_input(filename, inParams, τ, A_tol, R_tol):
     lines = []
     linetokens = []
     infile = open(filename, "r")
@@ -33,7 +33,6 @@ def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
     infile.readline()
     R_tol = float(infile.readline())
     infile.readline()
-    C_tol = float(infile.readline())
     infile.close()
 
 

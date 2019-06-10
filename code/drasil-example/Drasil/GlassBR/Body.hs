@@ -240,7 +240,7 @@ termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (at_start load `sDash` (load ^. defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
@@ -276,7 +276,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
-  at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
+  atStart prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
   S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
@@ -325,7 +325,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the Doc.dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(atStartNP' $ the Doc.dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 

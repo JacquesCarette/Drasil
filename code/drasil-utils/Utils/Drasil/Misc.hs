@@ -1,6 +1,6 @@
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, enumBullet,
   enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent,
-  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs,
+  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
   sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave, zipSentList) where
 
 import Language.Drasil
@@ -10,14 +10,14 @@ import Data.Function (on)
 import Data.List (elem, sortBy, transpose)
 
 -- Sorts a list of HasSymbols by Symbol
-sortBySymbol :: (HasSymbol a) => [a] -> [a]
+sortBySymbol :: HasSymbol a => [a] -> [a]
 sortBySymbol = sortBy compareBySymbol
 
-sortBySymbolTuple :: (HasSymbol a) => [(a, b)] -> [(a, b)]
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 
-compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
-compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
+compareBySymbol :: HasSymbol a => a -> a -> Ordering
+compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e

@@ -53,17 +53,17 @@ inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc, c
 
 inputGlassPropsDesc = foldlSent [atStart input_, S "the", plural quantity, S "from",
   makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
-  [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
-  phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
-  phrase blast)]]
+  [phrase glass +:+ plural dimension, glassTy ^. defn, S "tolerable" +:+
+  phrase probability `sOf` phrase failure, plural characteristic `ofThe` 
+  phrase blast]]
 
 inputGlassPropsTable :: LabelledContent
 inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
   where
     requiredInputs :: [QuantityDict]
-    requiredInputs = (map qw [plateLen, plateWidth, charWeight])
-      ++ (map qw [pbTol, tNT]) ++ (map qw [sdx, sdy, sdz])
-      ++ (map qw [glassTypeCon, nomThick])
+    requiredInputs = map qw [plateLen, plateWidth, charWeight]
+      ++ map qw [pbTol, tNT] ++ map qw [sdx, sdy, sdz]
+      ++ map qw [glassTypeCon, nomThick]
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
@@ -91,7 +91,7 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ (makeRef2S pbIsSafe) `sAnd` (makeRef2S lrIsSafe)) `sC`
+  sParen (S "from" +:+ makeRef2S pbIsSafe `sAnd` makeRef2S lrIsSafe) `sC`
   phrase output_, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -100,7 +100,7 @@ outputQuantsDesc :: Sentence
 outputQuantsDesc = foldlSent [titleize output_, S "the", plural quantity, S "from", makeRef2S outputQuantsTable]
 
 outputQuantsTable :: LabelledContent
-outputQuantsTable = mkValsSourceTable ((mkQRTuple iMods) ++ (mkQRTuple r6DDs)) "ReqOutputs"
+outputQuantsTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputQuants)
   where
     r6DDs :: [DataDefinition]

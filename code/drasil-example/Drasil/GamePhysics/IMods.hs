@@ -38,18 +38,18 @@ transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = (sy accI) $= (deriv (apply1 velI QP.time) QP.time)
-  $= (sy QP.gravitationalAccel) + ((apply1 forceI QP.time) / (sy massI))
+transMotRel = sy accI $= deriv (apply1 velI QP.time) QP.time
+  $= sy QP.gravitationalAccel + (apply1 forceI QP.time / sy massI)
 
 
 --fixme: need referencing
 transMotDesc, transMotLeg :: Sentence
 transMotDesc = foldlSent [S "The above equation expresses the total",
-  (phrase QP.acceleration), S "of the", (phrase CP.rigidBody),
+  phrase QP.acceleration, S "of the", phrase CP.rigidBody,
   makeRef2S assumpOT, makeRef2S assumpOD, S "i as the sum of",
-  (phrase QP.gravitationalAccel),
-  S "(GD3) and", (phrase QP.acceleration), S "due to applied",
-  (phrase QP.force), S "Fi(t) (T1). The resultant outputs are",
+  phrase QP.gravitationalAccel,
+  S "(GD3) and", phrase QP.acceleration, S "due to applied",
+  phrase QP.force, S "Fi(t) (T1). The resultant outputs are",
   S "then obtained from this equation using", makeRef2S linDispDD,
   makeRef2S linVelDD +:+. makeRef2S linAccDD, S" It is currently",
   S "assumed that there is no damping", makeRef2S assumpDI,
@@ -66,15 +66,15 @@ im2_new = imNoDerivNoRefs rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI,
   [rotMotDesc]
 
 rotMot :: RelationConcept
-rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel
+rotMot = makeRC "rotMot" rotMotNP (rotMotDesc +:+ rotMotLeg) rotMotRel
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 rotMotRel :: Relation
-rotMotRel = (sy QP.angularAccel) $= deriv
+rotMotRel = sy QP.angularAccel $= deriv
   (apply1 QP.angularVelocity QP.time) QP.time $= 
-     ((apply1 torqueI QP.time) / (sy QP.momentOfInertia))
+     (apply1 torqueI QP.time / sy QP.momentOfInertia)
 
 --fixme: need referencing
 rotMotDesc, rotMotLeg :: Sentence
@@ -97,14 +97,14 @@ im3_new = imNoDerivNoRefs col2D [qw QP.time, qw QP.impulseS, qw massA, qw normal
   [col2DDesc]
 
 col2D :: RelationConcept
-col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel
+col2D = makeRC "col2D" col2DNP (col2DDesc +:+ col2DLeg) col2DRel
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = (apply1 velA timeC) $= (apply1 velA QP.time) +
-  ((sy QP.impulseS) / (sy massA)) * (sy normalVect)
+col2DRel = apply1 velA timeC $= apply1 velA QP.time +
+  (sy QP.impulseS / sy massA) * sy normalVect
 
 --im3Rel2 = (apply1 velB timeC) $= (apply1 velB QP.time) -
 --  ((sy QP.impulseS) / (sy massB)) * (sy normalVect)
@@ -134,7 +134,7 @@ col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
 --}
 
 defList :: (Quantity a, MayHaveUnit a) => a -> Sentence
-defList thing = foldlSent [(ch thing), S "is the", (phrase thing),
+defList thing = foldlSent [ch thing, S "is the", phrase thing,
   sParen (fmtU EmptyS thing)]
 
 col2DLeg = foldlSent_ $ map defList col2DLegTerms

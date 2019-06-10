@@ -21,7 +21,7 @@ astm2009 = cMisc [author [mononym "ASTM"],
   title "Standard Practice for Determining Load Resistance of Glass in Buildings",
   publisher "ASTM International",
   bookTitle "Standard E1300-09a",
-  year (2009), howPublishedU "www.astm.org"]
+  year 2009, howPublishedU "www.astm.org"]
   "astm2009"
 
 astm2016 = cMisc

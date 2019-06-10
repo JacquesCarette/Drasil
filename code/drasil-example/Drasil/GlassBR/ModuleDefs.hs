@@ -151,7 +151,7 @@ findCT :: Func
 findCT = funcDef "find" [arr, v] Natural
   [
     ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond ((vLook arr i 0 $<= (sy v)) $&& ((sy v) $<= vLook arr i 1))
+      [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"
   ]

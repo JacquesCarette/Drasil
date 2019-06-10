@@ -520,21 +520,21 @@ isin :: Expr -> Space -> Expr
 
 -- | Smart constructor for case statement (underscore as case is reserved)
 case_ :: [(Expr, Relation)] -> Expr
-sum_all :: Symbol -> Expr -> Expr
+sumAll :: Symbol -> Expr -> Expr
 
 -- | Smart constructor for the summation, product, and integrals
 defsum :: Symbol -> Expr -> Expr -> Expr -> Expr
-prod_all :: Symbol -> Expr -> Expr
+prodAll :: Symbol -> Expr -> Expr
 
 -- | Smart constructor for the summation, product, and integrals
 defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 
 -- | Smart constructor for the summation, product, and integrals
 defint :: Symbol -> Expr -> Expr -> Expr -> Expr
-int_all :: Symbol -> Expr -> Expr
+intAll :: Symbol -> Expr -> Expr
 
 -- | Smart constructor for 'real interval' membership
-real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
+realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
 deriv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 sy :: (HasUID c, HasSymbol c) => c -> Expr
@@ -1164,12 +1164,12 @@ Replace :: Sentence -> CapitalizationRule
 -- | Singular sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase.
-at_startNP :: NounPhrase n => n -> Capitalization
+atStartNP :: NounPhrase n => n -> Capitalization
 
 -- | Plural sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase.
-at_startNP' :: NounPhrase n => n -> Capitalization
+atStartNP' :: NounPhrase n => n -> Capitalization
 
 -- | Pluralization rules.
 data PluralRule
@@ -1525,22 +1525,22 @@ phrase :: (HasUID n, NamedIdea n) => n -> Sentence
 plural :: (HasUID n, NamedIdea n) => n -> Sentence
 
 -- | Singular possesive function
-phrase's :: NamedIdea n => n -> Sentence
+phrasePoss :: NamedIdea n => n -> Sentence
 
 -- | Plural possesive function
-plural's :: NamedIdea n => n -> Sentence
+pluralPoss :: NamedIdea n => n -> Sentence
 
 -- | Singular sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase from a
 --   NamedIdea.
-at_start :: NamedIdea n => n -> Sentence
+atStart :: NamedIdea n => n -> Sentence
 
 -- | Plural sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase from a
 --   NamedIdea.
-at_start' :: NamedIdea n => n -> Sentence
+atStart' :: NamedIdea n => n -> Sentence
 
 -- | Singular title case.
 --   
@@ -1704,7 +1704,7 @@ UD :: ConceptChunk -> UnitSymbol -> [UID] -> UnitDefn
 [_cu] :: UnitDefn -> [UID]
 
 -- | Can generate a default symbol
-from_udefn :: UDefn -> USymb
+fromUDefn :: UDefn -> USymb
 
 -- | Helper for fundamental unit concept chunk creation. Uses the same
 --   string for the identifier, term, and definition.
@@ -1732,7 +1732,7 @@ makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 
 -- | Smart constructor for new derived units from existing units.
-new_unit :: String -> UnitEquation -> UnitDefn
+newUnit :: String -> UnitEquation -> UnitDefn
 
 -- | Combinator for scaling one unit by some number
 scale :: IsUnit s => Double -> s -> UDefn
@@ -1764,7 +1764,7 @@ fund' :: String -> String -> Symbol -> UnitDefn
 
 -- | We don't want an Ord on units, but this still allows us to compare
 --   them
-comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
+compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
 
 -- | Create a SI_Unit with two symbol representations
 derCUC :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
@@ -1778,7 +1778,3 @@ unitWrapper :: (IsUnit u) => u -> UnitDefn
 getCu :: UnitEquation -> [UID]
 class MayHaveUnit u
 getUnit :: MayHaveUnit u => u -> Maybe UnitDefn
-
-module Language.Drasil.Utils
-sortBySymbol :: (HasSymbol a) => [a] -> [a]
-sortBySymbolTuple :: (HasSymbol a) => [(a, b)] -> [(a, b)]

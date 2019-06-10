@@ -53,6 +53,75 @@ foldlSentCol :: [Sentence] -> Sentence
 --   element
 foldlsC :: [Sentence] -> Sentence
 
+-- | outputs sentence with % attached to it
+addPercent :: Show a => a -> Sentence
+
+-- | bulletFlat applies Bullet and Flat to a list.
+bulletFlat :: [Sentence] -> ListType
+
+-- | bulletNested applies Bullets and headers to a Nested ListType. t -
+--   Headers of the Nested lists. l - Lists of ListType.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+
+-- | enumBullet apply Enumeration, Bullet and Flat to a list
+enumBullet :: Reference -> [Sentence] -> LabelledContent
+enumBulletU :: [Sentence] -> Contents
+
+-- | enumSimple enumerates a list and applies simple and enumeration to it
+--   s - start index for the enumeration t - title of the list l - list to
+--   be enumerated
+enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+eqUnR :: Expr -> Reference -> LabelledContent
+eqUnR' :: Expr -> Contents
+
+-- | takes a amount and adds a unit to it n - sentenc representing an
+--   amount u - unit we want to attach to amount
+fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
+
+-- | makes sentences from an item and its reference a - String title of
+--   reference b - Sentence containing the full reference
+itemRefToSent :: String -> Sentence -> Sentence
+
+-- | makeListRef takes a list and a reference and generates references to
+--   match the length of the list l - list whos length is to be matched
+makeListRef :: [a] -> Section -> [Sentence]
+
+-- | makes a traceability matrix from list of column rows and list of rows
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+
+-- | zip helper function enumerates abbreviation and zips it with list of
+--   itemtype s - the number from which the enumeration should start from t
+--   - the title of the list l - the list to be enumerated
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+
+-- | Helper for making a table from a columns
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+
+-- | noRefs converts lists of simple ItemTypes into a lists which may be
+--   used in Contents but not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+
+-- | noRefsLT converts lists of tuples containing a title and ItemType into
+--   a ListTuple which can be used with Contents but not directly
+--   referable.
+noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
+sortBySymbol :: HasSymbol a => [a] -> [a]
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+
+-- | extracts the typical uncertainty to be displayed from something that
+--   has an uncertainty
+typUncr :: HasUncertainty c => c -> Sentence
+
+-- | get a unit symbol if there is one
+unwrap :: Maybe UnitDefn -> Sentence
+
+-- | interweaves two lists together [[a,b,c],[d,e,f]] -&gt; [a,d,b,e,c,f]
+weave :: [[a]] -> [a]
+
+-- | appends a sentence to the front of a list of list of sentences
+zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
+
 -- | Creates an NP by combining two <a>NamedIdea</a>s with the word "and"
 --   between their terms. Plural is defaulted to <tt>(phrase t1) "of"
 --   (plural t2)</tt>

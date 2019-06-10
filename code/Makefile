@@ -63,8 +63,8 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 
 #####
 
-# make variables/configuration
-DIFF = diff --ignore-all-space -r -X ../.gitignore -x '*.txt'
+# make variables/configur--ignore-all-spaceation
+DIFF = diff -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
 CACHED_MSV_FILE = .drasil-min-stack-ver

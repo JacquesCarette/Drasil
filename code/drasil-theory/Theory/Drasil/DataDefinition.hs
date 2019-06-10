@@ -58,5 +58,5 @@ qdFromDD d = d ^. qd
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) equation
+  where datadef (Just a) = fromEqnSt  (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) a equation
+        datadef Nothing  = fromEqnSt' (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) equation

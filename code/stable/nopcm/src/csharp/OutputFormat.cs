@@ -3,18 +3,16 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SWHS {
-    public class OutputFormat {
-        
-        public static void write_output(InputParameters inParams) {
-            StreamWriter outfile;
-            outfile = new StreamWriter("output.txt");
-            outfile.Write("T_W = ");
-            outfile.WriteLine(inParams.T_W);
-            outfile.Write("E_W = ");
-            outfile.WriteLine(inParams.E_W);
-            outfile.Close();
-        }
+public class OutputFormat {
+    
+    public static void write_output(InputParameters inParams) {
+        StreamWriter outputfile;
+        outputfile = new StreamWriter("output.txt", false);
+        outputfile.Write("T_W = ");
+        outputfile.WriteLine(inParams.T_W);
+        outputfile.Write("E_W = ");
+        outputfile.WriteLine(inParams.E_W);
+        outputfile.Close();
     }
 }
 

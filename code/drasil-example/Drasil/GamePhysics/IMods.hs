@@ -18,7 +18,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Data.Drasil.Utils (fmtU)
 
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]

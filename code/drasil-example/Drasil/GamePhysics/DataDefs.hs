@@ -49,7 +49,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sum_all (Atomic "i") (sy massI * sy posI) / sy mTot
+ctrOfMassEqn = (sumAll (Atomic "i") (sy massI * sy posI)) / sy mTot
 
 -- DD2 : Linear displacement --
 

@@ -1,7 +1,5 @@
 #include "Calculations.hpp"
 
-#include "InputParameters.hpp"
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -17,11 +15,9 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-double func_q_C(InputParameters &inParams, double t) {
-    return inParams.h_C * (inParams.T_C - func_T_W(t));
-}
+#include "InputParameters.hpp"
 
 double func_q_C(InputParameters &inParams, double t) {
-    return inParams.h_C * (inParams.T_C - func_T_W(t));
+    return (inParams.h_C * (inParams.T_C - func_T_W(t)));
 }
 

@@ -1,5 +1,3 @@
-#include "InputParameters.hpp"
-#include "Interpolation.hpp"
 #ifndef Calculations_h
 #define Calculations_h
 
@@ -11,7 +9,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-
+#include "InputParameters.hpp"
+#include "Interpolation.hpp"
 
 bool func_is_safePb(InputParameters &inParams, double P_b);
 

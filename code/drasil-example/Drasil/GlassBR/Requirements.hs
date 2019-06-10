@@ -26,7 +26,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL,
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
+import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glassTypeCon, 
   isSafeLR, isSafePb, loadSF, nomThick, notSafe, pbTol, plateLen, plateWidth, 
   safeMessage, sdx, sdy, sdz, tNT)
 
@@ -51,7 +51,7 @@ outputQuants               = cic "outputQuants"               outputQuantsDesc  
 
 inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc, checkGlassSafetyDesc :: Sentence
 
-inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
+inputGlassPropsDesc = foldlSent [atStart input_, S "the", plural quantity, S "from",
   makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
   [phrase glass +:+ plural dimension, glassTy ^. defn, S "tolerable" +:+
   phrase probability `sOf` phrase failure, plural characteristic `ofThe` 
@@ -63,7 +63,7 @@ inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
     requiredInputs :: [QuantityDict]
     requiredInputs = map qw [plateLen, plateWidth, charWeight]
       ++ map qw [pbTol, tNT] ++ map qw [sdx, sdy, sdz]
-      ++ map qw [glass_type, nomThick]
+      ++ map qw [glassTypeCon, nomThick]
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",

@@ -890,7 +890,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A: Thermal-Energy-Only</a>).
+                          The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+                        </p>
+                        <p class="paragraph">
+                          For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A: Thermal-Energy-Only</a>).
                         </p>
                       </td>
                     </tr>
@@ -977,7 +980,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>= <em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#TM:latentHtE>TM: latentHtE</a>, Latent heat energy.
+                          Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T = T<sub>boil</sub></em> or <em>T = T<sub>melt</sub></em>. If this is the case, refer to <a href=#TM:latentHtE>TM: latentHtE</a>.
                         </p>
                       </td>
                     </tr>
@@ -1040,14 +1043,26 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
-                                                                                                                                        <span class="fup">
-                                                                                                                                          &#8239;dQ(τ)
-                                                                                                                                        </span>
-                                                                                                                                        <span class="fdn">
-                                                                                                                                          &#8239;dτ
-                                                                                                                                        </span>
-                                                                                                                                      </div>&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD: htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+                          <em>Q</em> is the change in thermal energy (latent heat energy).
+                        </p>
+                        <p class="paragraph">
+                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
+                                                                    <span class="fup">
+                                                                      &#8239;dQ(τ)
+                                                                    </span>
+                                                                    <span class="fdn">
+                                                                      &#8239;dτ
+                                                                    </span>
+                                                                  </div>&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                        </p>
+                        <p class="paragraph">
+                          <em>t</em> is the time elapsed, as long as the phase change is not complete.
+                        </p>
+                        <p class="paragraph">
+                          The status of the phase change depends on the melt fraction (from <a href=#DD:meltFrac>DD: meltFrac</a>).
+                        </p>
+                        <p class="paragraph">
+                          Latent heating stops when all material has changed to the new phase.
                         </p>
                       </td>
                     </tr>
@@ -1775,7 +1790,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:meltFrac>DD: meltFrac</a>, <a href=#TM:latentHtE>TM: latentHtE</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>
+                          <a href=#DD:meltFrac>DD: meltFrac</a> and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1847,7 +1862,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#TM:latentHtE>TM: latentHtE</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -4496,8 +4511,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

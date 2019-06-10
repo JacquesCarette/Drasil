@@ -1,6 +1,6 @@
 module Test.Helper (helper) where
 
-import Language.Drasil.Code (
+import Language.Drasil.Code.Imperative.New (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..),  ValueSym(..), NumericExpression(..), ScopeSym(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))

@@ -48,8 +48,8 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   (lH `sub` lC) heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
-  * (sy coolFilmCond)))
+  2 * sy cladCond * sy coolFilmCond / (2 * sy cladCond + sy cladThick 
+  * sy coolFilmCond)
 
 ---
 
@@ -62,8 +62,8 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   EmptyS
   (lH `sub` lG) heatTransferCoef htTransCladFuelEq
 
-htTransCladFuelEq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
-  + ((sy cladThick) * (sy gapFilmCond)))
+htTransCladFuelEq = (2 * sy cladCond * sy gapFilmCond) / (2 * sy cladCond
+  + (sy cladThick * sy gapFilmCond))
 
 ---
 

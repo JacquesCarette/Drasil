@@ -39,8 +39,8 @@ inputInitQuants = iIQConstruct inputInitQuantsTable
 
 --
 findMassExpr :: Expr
-findMassExpr = ((sy wMass) $= (sy wVol) * (sy wDensity) $=
-  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) * (sy wDensity)))
+findMassExpr = sy wMass $= sy wVol * sy wDensity $=
+  (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength * sy wDensity)
 
 findMass :: ConceptInstance
 findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)

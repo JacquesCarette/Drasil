@@ -49,7 +49,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (sumAll (Atomic "i") ((sy massI) * (sy posI))) / (sy mTot)
+ctrOfMassEqn = sumAll (Atomic "i") (sy massI * sy posI) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -208,11 +208,11 @@ impulse = mkQuantDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
-  (sy normalVect)) / ((((1 / (sy massA))) + (1 / (sy massB))) *
-  ((sy normalLen) $^ 2) +
-  (((sy perpLenA) $^ 2) / (sy momtInertA)) +
-  (((sy perpLenB) $^ 2)/ (sy momtInertB)))
+impulseEqn = (negate (1 + sy QP.restitutionCoef) * sy initRelVel $.
+  sy normalVect) / (((1 / sy massA) + (1 / sy massB)) *
+  (sy normalLen $^ 2) +
+  ((sy perpLenA $^ 2) / sy momtInertA) +
+  ((sy perpLenB $^ 2) / sy momtInertB))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence
@@ -230,21 +230,21 @@ chasles = mkQuantDef velB chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = (sy velO) + (cross (sy  QP.angularVelocity) (sy rOB))
+chaslesEqn = sy velO + cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
-  (ch velB), (sParen $ Sy $ unit_symb velB), S "of any point B in a",
-  (phrase CP.rigidBody), makeRef2S assumpOT, S "is the sum of the linear",
-  (phrase QP.velocity), (ch velO),
-  (sParen $ Sy $ unit_symb velO), S "of the", (phrase CP.rigidBody),
+chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
+  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
+  phrase CP.rigidBody, makeRef2S assumpOT, S "is the sum of the linear",
+  phrase QP.velocity, ch velO,
+  sParen $ Sy $ unit_symb velO, S "of the", phrase CP.rigidBody,
   S "at the origin (axis of rotation) and the",
   S "resultant vector from the cross product of the",
-  (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
-  (ch QP.angularVelocity), 
-  (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
-  (phrase rOB) `sC` (ch rOB), 
-  (sParen $ Sy $ unit_symb rOB)]
+  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity, 
+  ch QP.angularVelocity, 
+  sParen $ Sy $ unit_symb  QP.angularVelocity, S "and the", 
+  phrase rOB `sC` ch rOB, 
+  sParen $ Sy $ unit_symb rOB]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition
@@ -255,14 +255,14 @@ reVelInColl :: QDefinition
 reVelInColl = mkQuantDef initRelVel reVelInCollEqn
 
 reVelInCollEqn :: Expr
-reVelInCollEqn = (sy velAP) - (sy velBP)
+reVelInCollEqn = sy velAP - sy velBP
 
 reVelInCollDesc :: Sentence
-reVelInCollDesc = foldlSent [S "In a collision, the", (phrase QP.velocity), 
-  S "of a", (phrase CP.rigidBody),makeRef2S assumpOT, 
-  S "A colliding with another", (phrase CP.rigidBody),
-  S "B relative to that body", (ch initRelVel),
-  S "is the difference between the", (plural QP.velocity),
+reVelInCollDesc = foldlSent [S "In a collision, the", phrase QP.velocity, 
+  S "of a", phrase CP.rigidBody,makeRef2S assumpOT, 
+  S "A colliding with another", phrase CP.rigidBody,
+  S "B relative to that body", ch initRelVel,
+  S "is the difference between the", plural QP.velocity,
   S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
 
@@ -277,17 +277,17 @@ coeffRestitution :: QDefinition
 coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
 
 coeffRestitutionEqn :: Expr
-coeffRestitutionEqn = -(sy finRelVel) $.
-  (sy normalVect)/ (sy initRelVel) $.
-  (sy normalVect)
+coeffRestitutionEqn = - sy finRelVel $.
+  sy normalVect / sy initRelVel $.
+  sy normalVect
 
 coeffRestitutionDesc :: Sentence
-coeffRestitutionDesc = foldlSent [S "The", (phrase QP.restitutionCoef), (ch QP.restitutionCoef), 
+coeffRestitutionDesc = foldlSent [S "The", phrase QP.restitutionCoef, ch QP.restitutionCoef, 
   S "is a unitless, dimensionless quantity that determines the", 
-  S "elasticity of a collision between two" +:+.(plural CP.rigidBody), 
-  (E $ sy QP.restitutionCoef $= 1), S "results in an elastic collision, while",
-  (E $ sy QP.restitutionCoef $< 1), S "results in an inelastic collision,",
-  S "and", (E $ sy QP.restitutionCoef $= 0), S "results in a totally inelastic collision"]
+  S "elasticity of a collision between two" +:+. plural CP.rigidBody, 
+  E $ sy QP.restitutionCoef $= 1, S "results in an elastic collision, while",
+  E $ sy QP.restitutionCoef $< 1, S "results in an inelastic collision,",
+  S "and", E $ sy QP.restitutionCoef $= 0, S "results in a totally inelastic collision"]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddNoRefs kEnergy [{-- Derivation --}] "kEnergy"
@@ -297,9 +297,9 @@ kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = ((sy QPP.mass)*(sy  QP.velocity) $^ 2)/2
+kEnergyEqn = (sy QPP.mass * sy QP.velocity $^ 2) / 2
 
 kEnergyDesc :: Sentence
-kEnergyDesc = foldlSent [S "The", (phrase QP.kEnergy),
- S "of an object is the", (phrase QP.energy),
+kEnergyDesc = foldlSent [S "The", phrase QP.kEnergy,
+ S "of an object is the", phrase QP.energy,
  S "it possess due to its motion"]

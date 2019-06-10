@@ -19,7 +19,7 @@ import Control.Lens ((^.))
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = makeRef2S ref +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
@@ -27,7 +27,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
 
 underConsidertn :: ConceptChunk -> Sentence
-underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ 
+underConsidertn chunk = S "The" +:+ phrase chunk +:+ 
   S "under consideration is" +:+. (chunk ^. defn)
 
 -- | Create a list in the pattern of "The __ are refined to the __".
@@ -57,16 +57,16 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ (atStart temp) +:+ (sParen (short temp) `sDash` (temp ^. defn))
+tAndDWAcc temp = Flat $ atStart temp +:+ (sParen (short temp) `sDash` (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ (atStart tD) +:+ (sParen (ch sym) `sDash` (tD ^. defn))
+tAndDWSym tD sym = Flat $ atStart tD +:+ (sParen (ch sym) `sDash` (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ (atStart chunk) `sDash` (chunk ^. defn)
+tAndDOnly chunk  = Flat $ atStart chunk `sDash` (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
+preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence
@@ -82,7 +82,7 @@ eqN n = atStart equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
+displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
 
 --Produces a common beginning of a likely change of the form "reference - sentence"
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

@@ -43,16 +43,16 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtrRel :: Relation
-balWtrRel = (deriv (sy tempW) time) $= 1 / (sy tauW) *
-  (((sy tempC) - (apply1 tempW time)))
+balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
+  (sy tempC - apply1 tempW time)
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [E (sy tauW) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy tempW $< 100),
+   S "is in", phrase liquid, S "form" `sC` E (0 $< sy tempW $< 100),
    sParen (unwrap $ getUnit tempW), S "where", E 0,
-   sParen (unwrap $ getUnit tempW) `sAnd` (E 100),
+   sParen (unwrap $ getUnit tempW) `sAnd` E 100,
    sParen (unwrap $ getUnit tempW), S "are the", phrase melting `sAnd`
    plural boilPt `sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
@@ -62,7 +62,7 @@ balWtrNotes = map foldlSent [
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
   S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
-  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
+  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns]
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
@@ -76,32 +76,32 @@ eBalanceOnWtrDerivDesc2 dd =
   [S "Using", makeRef2S dd, S ", this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
-eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", (E eq) `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", E eq `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
 eBalanceOnWtrDerivDesc4 eq = 
   [S "Setting"] ++ eq ++ [S ", Equation (4) can be written in its final form as"]
 
 eq1:: Expr
-eq1 = (sy wMass) * (sy htCapW)
+eq1 = sy wMass * sy htCapW
 
 eq2:: [Sentence]
 eq2 = [ch tauW, S "=", ch wMass, ch htCapW, S "/", ch coilHTC, ch coilSA]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-eBalanceOnWtrDerivEqn1 = (sy wMass) * (sy htCapW) * (deriv (sy tempW) time) $= 
-  (sy htFluxC) * (sy coilSA)
+eBalanceOnWtrDerivEqn1 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
+  sy htFluxC * sy coilSA
 
-eBalanceOnWtrDerivEqn2 = (sy wMass) * (sy htCapW) * (deriv (sy tempW) time) $= 
-  (sy coilHTC) * (sy coilSA) *  ((sy tempC) - (sy tempW))
+eBalanceOnWtrDerivEqn2 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
+  sy coilHTC * sy coilSA *  (sy tempC - sy tempW)
 
-eBalanceOnWtrDerivEqn3 = (deriv (sy tempW) time) $= 
-  ((sy coilHTC) * (sy coilSA) / 
-  ((sy wMass) * (sy htCapW))) *  ((sy tempC) - (sy tempW))
+eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $= 
+  (sy coilHTC * sy coilSA / 
+  (sy wMass * sy htCapW)) *  (sy tempC - sy tempW)
 
 eBalanceOnWtrDerivEqn4 =  
-  (deriv (sy tempW) time) $= 1 / (sy tauW) * ((sy tempC) - (sy tempW))
+  deriv (sy tempW) time $= 1 / sy tauW * (sy tempC - sy tempW)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

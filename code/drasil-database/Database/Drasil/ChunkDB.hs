@@ -54,7 +54,7 @@ type SectionMap = UMap Section
 type LabelledContentMap = UMap LabelledContent
 
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
-cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . (flip zip) [1..]
+cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap

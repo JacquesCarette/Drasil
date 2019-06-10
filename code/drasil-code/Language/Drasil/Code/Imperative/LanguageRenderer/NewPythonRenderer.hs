@@ -94,7 +94,7 @@ instance KeywordSym PythonCode where
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
   staticRepr = return staticDocD
-  dynamic = return dynamicDocD
+  dynamicRepr = return dynamicDocD
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
@@ -473,15 +473,15 @@ instance MethodSym PythonCode where
   type Method PythonCode = (Doc, Bool)
   method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList 
     paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamicRepr t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamicRepr
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
   mainMethod _ b = liftPairFst (b, True)
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method initName n public dynamic (construct n)
+  privMethod n c = method n c private dynamicRepr
+  pubMethod n c = method n c public dynamicRepr
+  constructor n = method initName n public dynamicRepr (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
 
@@ -491,8 +491,8 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ _ = return empty
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
+  privMVar del l = stateVar del l private dynamicRepr
+  pubMVar del l = stateVar del l public dynamicRepr
   pubGVar del l = stateVar del l public staticRepr
   listStateVar = stateVar
 

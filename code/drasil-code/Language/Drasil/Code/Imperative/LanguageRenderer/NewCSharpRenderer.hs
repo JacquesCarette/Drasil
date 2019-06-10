@@ -103,7 +103,7 @@ instance KeywordSym CSharpCode where
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
   staticRepr = return staticDocD
-  dynamic = return dynamicDocD
+  dynamicRepr = return dynamicDocD
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
@@ -129,7 +129,7 @@ instance StateTypeSym CSharpCode where
   listType p st = liftA2 listTypeDocD st (list p)
   intListType p = listType p int
   floatListType p = listType p float
-  boolListType = listType dynamic bool
+  boolListType = listType dynamicRepr bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
@@ -429,7 +429,7 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getStringFileInput
   discardFileLine f = valState $ fmap csFileInput f
-  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) 
+  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamicRepr string) 
     [s $. func "Split" [litChar d]]
 
   break = return (mkSt breakDocD)
@@ -513,16 +513,16 @@ instance MethodSym CSharpCode where
   type Method CSharpCode = (Doc, Bool)
   method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
     (liftList paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamicRepr t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamicRepr 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
   mainMethod c b = setMain <$> method "Main" c public staticRepr void 
     [return $ text "string[] args"] b
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method n n public dynamic (construct n)
+  privMethod n c = method n c private dynamicRepr
+  pubMethod n c = method n c public dynamicRepr
+  constructor n = method n n public dynamicRepr (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
   function n = method n ""
@@ -530,8 +530,8 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
+  privMVar del l = stateVar del l private dynamicRepr
+  pubMVar del l = stateVar del l public dynamicRepr
   pubGVar del l = stateVar del l public staticRepr
   listStateVar = stateVar
 

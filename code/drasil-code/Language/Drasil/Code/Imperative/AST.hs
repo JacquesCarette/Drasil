@@ -168,7 +168,7 @@ data BaseType = Boolean | Integer | Float | Character | String | FileType Mode
     deriving (Eq, Show)
 data StateType = List Permanence StateType | Base BaseType | Type Label | Iterator StateType | EnumType Label
     deriving (Eq, Show)
-data Permanence = StaticCon | Dynamic
+data Permanence = StaticCon | DynamicCon
     deriving (Eq, Show)
 data MethodType = MState StateType
                 | Void
@@ -218,7 +218,7 @@ infile = Base $ FileType Read
 outfile = Base $ FileType Write
 
 listT :: StateType -> StateType
-listT = List Dynamic
+listT = List DynamicCon
 
 obj :: Label -> StateType
 obj = Type
@@ -277,22 +277,22 @@ privClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 privClass n p= Class n p Private
 
 privMVar :: Int -> StateType -> Label -> StateVar
-privMVar del t n = StateVar n Private Dynamic t del
+privMVar del t n = StateVar n Private DynamicCon t del
 
 pubMVar :: Int -> StateType -> Label -> StateVar
-pubMVar del t n = StateVar n Public Dynamic t del
+pubMVar del t n = StateVar n Public DynamicCon t del
 
 pubGVar :: Int -> StateType -> Label -> StateVar
 pubGVar del t n = StateVar n Public StaticCon t del
 
 privMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-privMethod t n = Method n Private Dynamic t
+privMethod t n = Method n Private DynamicCon t
 
 pubMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-pubMethod t n = Method n Public Dynamic t
+pubMethod t n = Method n Public DynamicCon t
 
 constructor :: Label -> [Parameter] -> Body -> Method
-constructor n = Method n Public Dynamic (Construct n)
+constructor n = Method n Public DynamicCon (Construct n)
 
 mainMethod :: Body -> Method
 mainMethod = MainMethod
@@ -502,7 +502,7 @@ listDec :: Permanence -> Label -> StateType -> Int -> Statement
 listDec lt n t s = DeclState $ ListDec lt n t s
 
 listDec' :: Label -> StateType -> Int -> Statement
-listDec' n t s = DeclState $ ListDec Dynamic n t s
+listDec' n t s = DeclState $ ListDec DynamicCon n t s
 
 listDecValues :: Label -> StateType -> [Value] -> Statement
 listDecValues n t vs = DeclState $ ListDecValues StaticCon n t vs
@@ -758,9 +758,9 @@ convertToClass Enum{} = error "convertToClass: Cannot convert Enum-type Class to
 convertToClass c = c
 
 convertToMethod :: Method -> Method
-convertToMethod (GetMethod n t) = Method (getterName n) Public Dynamic t [] getBody
+convertToMethod (GetMethod n t) = Method (getterName n) Public DynamicCon t [] getBody
     where getBody = oneLiner $ return (Self $-> var n)
-convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Dynamic Void [p] setBody
+convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public DynamicCon Void [p] setBody
     where setBody = oneLiner $ Self $-> var n &=. pn
 convertToMethod (MainMethod b) = Method "main" Public StaticCon Void [] b
 convertToMethod t = t

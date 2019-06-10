@@ -62,7 +62,7 @@ objcConfig options c =
         iterForEachLabel = empty,
         iterInLabel      = text "in",
         list             = \case StaticCon  -> text staticListType
-                                 Dynamic -> text "NSMutableArray",
+                                 DynamicCon -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
         package          = const empty,
@@ -349,9 +349,9 @@ valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _ _))) = vcat [
 valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
     where init = case lt of StaticCon  -> defaultInit
-                            Dynamic -> "initWithCapacity"
+                            DynamicCon -> "initWithCapacity"
           size = case lt of StaticCon  -> []
-                            Dynamic -> [s]
+                            DynamicCon -> [s]
 valueDoc' c (StateObj _ t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
 valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs) -- cast needs fixing
 valueDoc' c (Arg i) = nsFromCString c $ argsListAccess c i
@@ -373,7 +373,7 @@ destructor _ vs =
         releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState (var lbl $. Func release [])]) releaseVars
         releaseBlock = if null releaseVars then [] else [Block releaseStatements]
         deallocBody = releaseBlock ++ oneLiner (ValState (super $. Func dealloc []))
-    in Method dealloc Public Dynamic Void [] deallocBody
+    in Method dealloc Public DynamicCon Void [] deallocBody
 
 alloc :: Config -> StateType -> Doc
 alloc c t = brackets (stateType c t Def <> innerFuncAppDoc c "alloc" [])

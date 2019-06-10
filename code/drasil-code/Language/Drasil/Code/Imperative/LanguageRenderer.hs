@@ -423,7 +423,7 @@ patternDocD c (Strategy (RunStrategy n (Strats strats r) v)) =
     where resultState = case v of Nothing    -> empty
                                   Just vari  -> case r of Nothing  -> error $ "Strategy '" ++ n ++ "': Attempt to assign null return to a Value."
                                                           Just res -> assignDoc c $ Assign vari res
-patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecValues Dynamic observerListName t os
+patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecValues DynamicCon observerListName t os
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
@@ -458,7 +458,7 @@ scopeDocD Public = text "public"
 
 permanence :: Permanence -> Doc
 permanence StaticCon = text "static"
-permanence Dynamic = empty
+permanence DynamicCon = empty
 
 stateDocD :: Config -> StateVar -> Doc
 stateDocD c (StateVar n s p t _) = includeScope c s <+> permanence p <+> stateType c t Dec <+> text n <> endStatement c
@@ -514,7 +514,7 @@ methodDocD c _ _ (Method n s p t ps b) = vcat [
     scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
-  where perm Dynamic = empty
+  where perm DynamicCon = empty
         perm StaticCon  = text "static "
 methodDocD c _ _ (MainMethod b) = vcat [
     scopeDoc c Public <+> text "static" <+> methodTypeDoc c Void <+> text "Main" <> parens (text "string[] args") <+> lbrace,
@@ -604,7 +604,7 @@ complexDocD _ _ = error "No default implementation for ComplexState"
 
 addDefaultCtor :: Config -> Label -> Label -> [Method] -> [Method]
 addDefaultCtor _ modName ctorName fs =
-    case find ctor fs of Nothing   -> Method ctorName Public Dynamic (Construct modName) [] [] : fs
+    case find ctor fs of Nothing   -> Method ctorName Public DynamicCon (Construct modName) [] [] : fs
                          _ -> fs
     where ctor (Method _ _ _ (Construct _) _ _) = True
           ctor _ = False

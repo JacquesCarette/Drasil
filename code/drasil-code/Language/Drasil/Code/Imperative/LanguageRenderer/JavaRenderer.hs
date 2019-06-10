@@ -124,7 +124,7 @@ jtop c _ p _ = vcat [
     include c "java.util.Scanner" <> endStatement c,
     include c "java.io.PrintWriter" <> endStatement c,
     include c "java.io.File" <> endStatement c,
-    include c ("java.util." ++ render (list c Dynamic)) <> endStatement c
+    include c ("java.util." ++ render (list c DynamicCon)) <> endStatement c
     ]
 
 jbody :: Config -> a -> Label -> Module -> Doc
@@ -194,7 +194,7 @@ methodDoc' c _ _ (Method n s p t ps b) = vcat [
     scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> text "throws Exception" <+> lbrace,
     oneTab $ bodyDoc c b,  -- all methods throw exception for now,  FIX ME.
     rbrace]
-  where perm Dynamic = empty
+  where perm DynamicCon = empty
         perm StaticCon  = text "static "
         --throwState False = empty
         --throwState True  = text " throws Exception"
@@ -257,7 +257,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
          getS Nothing v = (&++) v
          getS (Just n) v = v &+= n
 complexDoc' c (StringSplit vnew s d) = valueDoc c vnew <+> equals <+> new 
-  <+> stateType c (List Dynamic string) Dec <> parens (funcAppDoc c "Arrays.asList" [s $. Func "split" [litString [d]]]) 
+  <+> stateType c (List DynamicCon string) Dec <> parens (funcAppDoc c "Arrays.asList" [s $. Func "split" [litString [d]]]) 
   <> semi
 
 --helpers

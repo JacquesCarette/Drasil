@@ -56,7 +56,7 @@ goolConfig options c =
         iterForEachLabel = text "ForEach",
         iterInLabel      = empty,
         list             = \case StaticCon  -> text "List Static"
-                                 Dynamic -> text "List Dynamic",
+                                 DynamicCon -> text "List Dynamic",
         listObj          = empty,
         clsDec           = empty,
         package          = \p -> vcat [
@@ -226,7 +226,7 @@ iterationDoc' c i = iterationDocD c i
 
 listTypeDoc :: Permanence -> Doc
 listTypeDoc StaticCon = text "Static"
-listTypeDoc Dynamic = text "Dynamic"
+listTypeDoc DynamicCon = text "Dynamic"
 
 litDoc' :: Literal -> Doc
 litDoc' = parens . litDoc''
@@ -316,9 +316,9 @@ scopeDoc' Public = text "Public"
 
 stateDoc' :: Config -> StateVar -> Doc
 stateDoc' c (StateVar n s p t del) = text v <+> delp <+> stateType c t Dec <+> lbl n
-    where v = case (s,p) of (Public, Dynamic) -> "pubMVar"
+    where v = case (s,p) of (Public, DynamicCon) -> "pubMVar"
                             (Public, StaticCon)  -> "pubGVar"
-                            (Private, Dynamic) -> "privMVar"
+                            (Private, DynamicCon) -> "privMVar"
                             (Private, StaticCon) -> "privGVar"
           delp | del == alwaysDel = text "alwaysDel"
                | del == neverDel = text "neverDel"

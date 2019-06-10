@@ -3,7 +3,7 @@
 -- semantics at all, but just a description of how things look.
 
 module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
- upper_left, sub, sup, hat, vec, prime, staged) where
+ upperLeft, sub, sup, hat, vec, prime, staged) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))
@@ -129,8 +129,8 @@ compsy Empty Empty  = EQ
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.
-upper_left :: Symbol -> Symbol -> Symbol
-upper_left b ul = Corners [ul] [] [] [] b
+upperLeft :: Symbol -> Symbol -> Symbol
+upperLeft b ul = Corners [ul] [] [] [] b
 
 -- | Helper for creating a symbol with a subscript to the right.
 -- Arguments: Base symbol, then subscripted symbol.

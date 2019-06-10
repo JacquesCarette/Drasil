@@ -13,6 +13,4 @@ using std::ofstream;
 
 double func_q_C(InputParameters &inParams, double t);
 
-double func_q_C(InputParameters &inParams, double t);
-
 #endif

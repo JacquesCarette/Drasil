@@ -57,13 +57,13 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ (at_start temp) +:+ (sParen (short temp) `sDash` (temp ^. defn))
+tAndDWAcc temp = Flat $ (atStart temp) +:+ (sParen (short temp) `sDash` (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ (at_start tD) +:+ (sParen (ch sym) `sDash` (tD ^. defn))
+tAndDWSym tD sym = Flat $ (atStart tD) +:+ (sParen (ch sym) `sDash` (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ (at_start chunk) `sDash` (chunk ^. defn)
+tAndDOnly chunk  = Flat $ (atStart chunk) `sDash` (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ (makeRef2S ref)
@@ -78,7 +78,7 @@ getTDS a = phrase a +:+ (a ^. defn) +:+ ch a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
-eqN n = at_start equation +:+ sParen (S $ show n)
+eqN n = atStart equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence

@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
 import Data.Drasil.SentenceStructures (showingCxnBw)
 
 import Drasil.GlassBR.Concepts (aR, stdOffDist)
-import Drasil.GlassBR.Unitals (aspect_ratio, charWeight, demand, demandq,
+import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand, demandq,
   dimlessLoad, lateralLoad, sD, stressDistFac)
 
 resourcePath :: String
@@ -23,7 +23,7 @@ sysCtxFig = llcc (makeFigRef "sysCtxDiag") $
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
 
 physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth 
-  (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+  (atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw traceyMatrix $
   titleize' item +:+ S "of Different" +:+ titleize' section_)
@@ -38,12 +38,12 @@ traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCx
   (resourcePath ++ "ATrace.png")
 
 demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start charWeight +:+ sParen (ch charWeight))
+  sParen (ch demand) `sVersus` atStart sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
+  `sVersus` titleize aspectRatio +:+ sParen (getAcc aR)
+  `sVersus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")

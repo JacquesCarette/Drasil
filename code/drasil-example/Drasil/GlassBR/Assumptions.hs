@@ -67,7 +67,7 @@ standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 
 glassLiteDesc :: Sentence
-glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
+glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single", 
   S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short glassBR]
 

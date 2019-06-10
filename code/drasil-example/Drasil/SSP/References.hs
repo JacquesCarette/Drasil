@@ -32,7 +32,7 @@ li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   "li2010"
 
 karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
-  ("Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis") 
+  "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis"
   "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012 
   [address "Winnipeg, MB, Canada", organization "Canadian Geotechnical Society"] 
   "karchewski2012"

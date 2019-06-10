@@ -54,7 +54,7 @@ calorie = derUC "calorie"
   "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 
-  "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
+  "centigrade" "temperature" (Concat [Special Circle, Atomic "C"])
   (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb" 

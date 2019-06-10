@@ -20,12 +20,9 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-<<<<<<< HEAD
-  force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration)
+  force, kEnergy, energy, impulseV, chgInVelocity, acceleration)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-
-import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol)
 import Data.Drasil.Utils (weave)
 import Data.Drasil.Theories.Physics (torque, torqueDD)
 ----- Data Definitions -----

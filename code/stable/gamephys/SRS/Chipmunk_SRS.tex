@@ -140,10 +140,6 @@ ${\mathbf{v}^{AP}}$ & Velocity Of the Point of Collision P in Body A & $\frac{\t
 \\
 ${\mathbf{v}^{BP}}$ & Velocity Of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{1}}$ & Velocity Of the Firstbody & $\frac{\text{m}}{\text{s}}$
-\\
-${\mathbf{v}_{2}}$ & Velocity Of the Secondbody & $\frac{\text{m}}{\text{s}}$
-\\
 ${\mathbf{v}_{A}}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
@@ -152,7 +148,13 @@ ${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\te
 \\
 ${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
-$Δ\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{1}}$ & Velocity Of the First Body & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{2}}$ & Velocity Of the Second Body & $\frac{\text{m}}{\text{s}}$
+\\
+$Δ\mathbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -298,7 +300,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
 \begin{itemize}
-\item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocity over a period of time.
+\item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
@@ -578,13 +580,13 @@ Symbol & $\mathbf{a}(t)$
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{a}(t)=\frac{d\,Δ\mathbf{v}\left(t\right)}{d\,t}
+           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
-              \item{$Δ\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
@@ -818,13 +820,13 @@ Symbol & $KE$
 Units & J
 \\ \midrule \\
 Equation & \begin{displaymath}
-           KE=\frac{m Δ\mathbf{v}^{2}}{2}
+           KE=\frac{m \mathbf{v}^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$KE$ is the kinetic energy (J)}
               \item{$m$ is the mass (kg)}
-              \item{$Δ\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The kinetic energy of an object is the energy it possess due to its motion.
@@ -893,7 +895,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{v}^{BP}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocity of A and B at point P.
+Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocities of A and B at point P.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -921,7 +923,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$\mathbf{J}$ is the impulse (vector) (Ns)}
               \item{$m$ is the mass (kg)}
-              \item{$Δ\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$Δ\mathbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time Derivation of impulse (vector).
@@ -934,7 +936,7 @@ RefBy &
 \end{minipage}
  Derivation of impulse (vector) - Newton's second law of motion states:
 \begin{displaymath}
-\mathbf{F}=m \mathbf{a}=m \frac{d\,Δ\mathbf{v}}{d\,t}
+\mathbf{F}=m \mathbf{a}=m \frac{d\,\mathbf{v}}{d\,t}
 \end{displaymath}
 Rearranging :
 \begin{displaymath}
@@ -1127,7 +1129,7 @@ $m$ & $m\geq{}0$ & $56.2$ kg & 10$\%$
 \\
 $\mathbf{p}$ & -- & $412.0\cdot{}10^{-3}$ m & 10$\%$
 \\
-$Δ\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
 $τ$ & -- & $200.0$ Nm & 10$\%$
 \\
@@ -1147,7 +1149,7 @@ Var
 \endhead
 $\mathbf{p}$
 \\
-$Δ\mathbf{v}$
+$\mathbf{v}$
 \\
 $ϕ$
 \\
@@ -1168,13 +1170,13 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Simulation-Space:\phantomsection\label{simSpace}]Create a space for all of the rigid bodies in the physical simulation to interact in.
-\item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]Input the initial masses, velocity, orientations, angular velocities of, and forces applied on rigid bodies.
+\item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
 \item[Input-Surface-Properties:\phantomsection\label{inputSurfaceProps}]Input the surface properties of the bodies such as friction or elasticity.
 \item[Verify-Physical\_Constraints:\phantomsection\label{verifyPhysCons}]Verify that the inputs satisfy the required physical constraints from \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}.
-\item[Calculate-Translation-Over-Time:\phantomsection\label{calcTransOverTime}]Determine the positions and velocity over a period of time of the 2D rigid bodies acted upon by a force.
+\item[Calculate-Translation-Over-Time:\phantomsection\label{calcTransOverTime}]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
 \item[Calculate-Rotation-Over-Time:\phantomsection\label{calcRotOverTime}]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
 \item[Determine-Collisions:\phantomsection\label{deterColls}]Determine if any of the rigid bodies in the space have collided.
-\item[Determine-Collision-Response-Over-Time:\phantomsection\label{deterCollRespOverTime}]Determine the positions and velocity over a period of time of the 2D rigid bodies that have undergone a collision.
+\item[Determine-Collision-Response-Over-Time:\phantomsection\label{deterCollRespOverTime}]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}

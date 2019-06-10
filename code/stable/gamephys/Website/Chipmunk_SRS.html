@@ -263,16 +263,6 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m/s</td>
 </tr>
 <tr>
-<td><em><b>v</b><sub>1</sub></em></td>
-<td>Velocity Of the Firstbody</td>
-<td>m/s</td>
-</tr>
-<tr>
-<td><em><b>v</b><sub>2</sub></em></td>
-<td>Velocity Of the Secondbody</td>
-<td>m/s</td>
-</tr>
-<tr>
 <td><em><b>v</b><sub>A</sub></em></td>
 <td>Velocity At Point A</td>
 <td>m/s</td>
@@ -293,8 +283,23 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m/s</td>
 </tr>
 <tr>
-<td><em>Δ<b>v</b></em></td>
+<td><em><b>v</b></em></td>
 <td>Velocity</td>
+<td>m/s</td>
+</tr>
+<tr>
+<td><em><b>v</b><sub>1</sub></em></td>
+<td>Velocity Of the First Body</td>
+<td>m/s</td>
+</tr>
+<tr>
+<td><em><b>v</b><sub>2</sub></em></td>
+<td>Velocity Of the Second Body</td>
+<td>m/s</td>
+</tr>
+<tr>
+<td><em>Δ<b>v</b></em></td>
+<td>Change in velocity</td>
 <td>m/s</td>
 </tr>
 <tr>
@@ -606,7 +611,7 @@ Right-handed coordinate system: A coordinate system where the positive z-axis co
 <div class="list">
 <p>
 <div id="linearGS">
-Determine-Linear-Properties: Determine their new positions and velocity over a period of time.
+Determine-Linear-Properties: Determine their new positions and velocities over a period of time.
 </div>
 </p>
 <p>
@@ -1133,7 +1138,7 @@ This section collects and defines all the data needed to build the instance mode
 <td>
 <div class="equation">
 <em><b>a</b>(t) = <div class="fraction">
-                  <span class="fup">d&#8239;Δ<b>v</b>(t)</span>
+                  <span class="fup">d&#8239;<b>v</b>(t)</span>
                   <span class="fdn">d&#8239;t</span>
                   </div></em>
 </div>
@@ -1147,7 +1152,7 @@ This section collects and defines all the data needed to build the instance mode
 <em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>)
 </li>
 <li><em>t</em> is the time (s)</li>
-<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
+<li><em><b>v</b></em> is the velocity (m/s)</li>
 </ul>
 </td>
 </tr>
@@ -1573,7 +1578,7 @@ The torque on a body measures the the tendency of a force to rotate the body aro
 <td>
 <div class="equation">
 <em>KE = <div class="fraction">
-         <span class="fup">m&#8239;Δ<b>v</b><sup>2</sup></span>
+         <span class="fup">m&#8239;<b>v</b><sup>2</sup></span>
          <span class="fdn">2</span>
          </div></em>
 </div>
@@ -1585,7 +1590,7 @@ The torque on a body measures the the tendency of a force to rotate the body aro
 <ul class="hide-list-style-no-indent">
 <li><em>KE</em> is the kinetic energy (J)</li>
 <li><em>m</em> is the mass (kg)</li>
-<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
+<li><em><b>v</b></em> is the velocity (m/s)</li>
 </ul>
 </td>
 </tr>
@@ -1724,7 +1729,7 @@ Initial Relative Velocity Between Rigid Bodies of A and B
 <th>Notes</th>
 <td>
 <p class="paragraph">
-In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocity of A and B at point P.
+In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
 </p>
 </td>
 </tr>
@@ -1764,7 +1769,7 @@ In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A
 <ul class="hide-list-style-no-indent">
 <li><em><b>J</b></em> is the impulse (vector) (N&sdot;s)</li>
 <li><em>m</em> is the mass (kg)</li>
-<li><em>Δ<b>v</b></em> is the velocity (m/s)</li>
+<li><em>Δ<b>v</b></em> is the change in velocity (m/s)</li>
 </ul>
 </td>
 </tr>
@@ -1792,7 +1797,7 @@ An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts
 </p>
 <div class="equation">
 <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
-                                          <span class="fup">d&#8239;Δ<b>v</b></span>
+                                          <span class="fup">d&#8239;<b>v</b></span>
                                           <span class="fdn">d&#8239;t</span>
                                           </div></em>
 </div>
@@ -2148,7 +2153,7 @@ This instance model is based on our assumptions regarding rigid body <a href=#as
 <td>10<em>%</em></td>
 </tr>
 <tr>
-<td><em>Δ<b>v</b></em></td>
+<td><em><b>v</b></em></td>
 <td>--</td>
 <td><em>2.51</em> m/s</td>
 <td>10<em>%</em></td>
@@ -2183,7 +2188,7 @@ This instance model is based on our assumptions regarding rigid body <a href=#as
 <table class="table">
 <tr><th>Var</th></tr>
 <tr><td><em><b>p</b></em></td></tr>
-<tr><td><em>Δ<b>v</b></em></td></tr>
+<tr><td><em><b>v</b></em></td></tr>
 <tr><td><em>ϕ</em></td></tr>
 <tr><td><em>ω</em></td></tr>
 </table>
@@ -2221,7 +2226,7 @@ Simulation-Space: Create a space for all of the rigid bodies in the physical sim
 </p>
 <p>
 <div id="inputInitialConds">
-Input-Initial-Conditions: Input the initial masses, velocity, orientations, angular velocities of, and forces applied on rigid bodies.
+Input-Initial-Conditions: Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
 </div>
 </p>
 <p>
@@ -2236,7 +2241,7 @@ Verify-Physical_Constraints: Verify that the inputs satisfy the required physica
 </p>
 <p>
 <div id="calcTransOverTime">
-Calculate-Translation-Over-Time: Determine the positions and velocity over a period of time of the 2D rigid bodies acted upon by a force.
+Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
 </div>
 </p>
 <p>
@@ -2251,7 +2256,7 @@ Determine-Collisions: Determine if any of the rigid bodies in the space have col
 </p>
 <p>
 <div id="deterCollRespOverTime">
-Determine-Collision-Response-Over-Time: Determine the positions and velocity over a period of time of the 2D rigid bodies that have undergone a collision.
+Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 </div>
 </p>
 </div>

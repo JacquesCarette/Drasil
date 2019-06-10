@@ -18,7 +18,7 @@ import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
 physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
@@ -30,12 +30,12 @@ physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
 rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height, 
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity:: ConceptChunk
 
 twoD, threeD :: CI
 
@@ -161,8 +161,8 @@ isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
 
-chgInVelocity = dccWDS "velocity" (cn "velocity") (S "Change in" +:+ phrase velocity +:+ S "of a"
-   +:+ S "body.")
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
+ S "of a" +:+ phrase rigidBody)
 
 twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
 

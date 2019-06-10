@@ -46,10 +46,10 @@ symbols = (map qw unitalChunks) ++
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
-  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy] ++ [qw QP.restitutionCoef]
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity] ++ [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
-  QP.angularVelocity, QP.chgInVelocity]
+  QP.angularVelocity]
 
 
 unitalChunks :: [UnitalChunk]
@@ -61,7 +61,8 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2]
+  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
+  QP.chgInVelocity]
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -103,7 +104,7 @@ velParam n w = ucs'
 
 velBodyParam n w = ucs'
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
-  (cn $ "of the  " ++ n ++ "body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+  (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
 angParam n w = ucs'
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'

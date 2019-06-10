@@ -3,7 +3,7 @@ module Data.Drasil.Quantities.Physics where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
-    acceleration, displacement, distance, energy, force, gravitationalAccel, 
+    acceleration, height, displacement, distance, energy, force, gravitationalAccel, 
     gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
     momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity,
     weight, kEnergy, chgInVelocity)
@@ -31,7 +31,7 @@ angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
 angularVelocity      = uc CP.angVelo lOmega angVelU
 acceleration         = uc CP.acceleration (vec lA) accelU
-chgInVelocity        = uc CP.chgInVelocity(Concat[cDelta, (vec lV)]) velU
+chgInVelocity        = uc CP.chgInVelocity (Concat [cDelta, (vec lV)]) velU
 displacement         = uc CP.displacement (vec lR) metre
 distance             = uc CP.distance lR metre
 energy               = uc CP.energy cE joule

@@ -10,12 +10,12 @@ import Language.Drasil hiding (Expr)
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr)
 
-html, head_tag, body, title, paragraph, code, tr, th, td, figure,
+html, headTag, body, title, paragraph, code, tr, th, td, figure,
   figcaption, li, pa, ba :: Doc -> Doc
 -- | HTML tag wrapper
 html       = wrap "html" []
 -- | Head tag wrapper
-head_tag   = wrap "head" []
+headTag   = wrap "head" []
 -- | Body tag wrapper
 body       = wrap "body" []
 -- | Title tag wrapper
@@ -62,7 +62,7 @@ h n       | n < 1 = error "Illegal header (too small)"
 data Variation = Class | Id
 
 wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrap_gen Class a empty
+wrap a = wrapGen Class a empty
 
 wrap' :: String -> [String] -> Doc -> Doc
 wrap' a = wrapGen' hcat Class a empty
@@ -82,8 +82,8 @@ wrapGen' sepf Id s ti _ = \x ->
       te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s] 
 
-wrap_gen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrap_gen = wrapGen' cat
+wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrapGen = wrapGen' cat
 
 
 -- | Helper for wrapping attributes in a tag.
@@ -99,7 +99,7 @@ caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrap_gen Id "div") [""]
+refwrap = flip (wrapGen Id "div") [""]
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
@@ -134,18 +134,18 @@ sub = wrap' "sub" []
 -- | Bold tag
 bold = wrap' "b" []
 
-article_title, author :: Doc -> Doc
+articleTitle, author :: Doc -> Doc
 -- | Title header
-article_title t = div_tag ["title"]  (h 1 t)
+articleTitle t = divTag ["title"]  (h 1 t)
 -- | Author header
-author a        = div_tag ["author"] (h 2 a)
+author a        = divTag ["author"] (h 2 a)
 
 -- | Div tag wrapper
-div_tag :: [String] -> Doc -> Doc
-div_tag = wrap "div"
+divTag :: [String] -> Doc -> Doc
+divTag = wrap "div"
 
-span_tag :: [String] -> Doc -> Doc
-span_tag = wrap "span"
+spanTag :: [String] -> Doc -> Doc
+spanTag = wrap "span"
 
 indent :: Doc -> Doc
 indent = nest 2
@@ -153,16 +153,16 @@ indent = nest 2
 -- | Create and markup fractions
 fraction :: Doc -> Doc -> Doc
 fraction a b =
-  div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+  divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
 
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps p_expr = span_tag ["casebr"] (text "{") $$ div_tag ["cases"] 
-                  (makeCases ps p_expr)
+cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
+                  (makeCases ps pExpr)
 
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
 makeCases [] _ = empty
-makeCases (p:ps) p_expr = span_tag [] (p_expr (fst p) <> text " , " <>
-                          span_tag ["case"] (p_expr (snd p))) $$
-                          makeCases ps p_expr
+makeCases (p:ps) pExpr = spanTag [] (pExpr (fst p) <> text " , " <>
+                          spanTag ["case"] (pExpr (snd p))) $$
+                          makeCases ps pExpr

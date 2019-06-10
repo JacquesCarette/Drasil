@@ -60,3 +60,9 @@ mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) equation
+
+-- | For when the symbol changes depending on the stage
+mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
+mkQuantDef' cncpt equation = datadef $ getUnit cncpt
+  where datadef (Just a) = fromEqnSt  (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) a equation
+        datadef Nothing  = fromEqnSt' (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) equation

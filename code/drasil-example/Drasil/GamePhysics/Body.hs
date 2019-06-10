@@ -398,7 +398,7 @@ terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn))
+  (map (\x -> (atStart x) +: EmptyS +:+ (x ^. defn))
     [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
 
 -----------------------------

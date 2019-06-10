@@ -1,7 +1,5 @@
 #include "InputFormat.hpp"
 
-#include "InputParameters.hpp"
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -16,6 +14,8 @@ using std::string;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+
+#include "InputParameters.hpp"
 
 void func_get_input(string filename, InputParameters &inParams, double τ, double A_tol, double R_tol, double C_tol) {
     ifstream infile;
@@ -36,7 +36,7 @@ void func_get_input(string filename, InputParameters &inParams, double τ, doubl
     infile >> inParams.T_C;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> inParams.ρ_W;
+    infile >> inParams.rho_W;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.C_W;

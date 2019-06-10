@@ -71,29 +71,29 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
-import Drasil.SWHS.TMods (consThermE, sensHtE_template, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
-  coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
-  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, 
-  tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
-  temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, unitalChuncks,
-  abs_tol, rel_tol, cons_tol)
+import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
+import Drasil.SWHS.Unitals (coilHTC, coilHTCMax, coilHTCMin, coilSA, 
+  coilSAMax, deltaT, diam, eta, htFluxC, htFluxIn, htFluxOut, htCapL, 
+  htCapW, htCapWMax, htCapWMin, htTransCoeff, inSA, outSA, 
+  tankLength, tankLengthMax, tankLengthMin, tankVol, tau, tauW, tempC, 
+  tempEnv, tempW, thFluxVect, timeFinal, timeFinalMax, volHtGen, wDensity, 
+  wDensityMax, wDensityMin, watE, wMass, wVol, specParamValList, unitalChuncks,
+  absTol, relTol, consTol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
+import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (dataConstListIn, funcReqs, inputInitQuantsTable)
-import Drasil.NoPCM.Unitals (temp_init)
+import Drasil.NoPCM.Unitals (tempInit)
 
 -- This defines the standard units used throughout the document
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
+thisSi :: [UnitDefn]
+thisSi = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symbMap symbTT 
@@ -101,30 +101,30 @@ checkSi = collectUnits symbMap symbTT
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : (map dqdWr units) ++ (map dqdWr constraints)
- ++ map dqdWr [temp_W, w_E]
+ ++ map dqdWr [tempW, watE]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
   
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
-                               --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
+                               --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ (map qw specParamValList) ++ 
-  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ (map qw [eta]) ++
-  (map qw [abs_tol, rel_tol, cons_tol])
+  (map qw [coilSAMax]) ++ (map qw [tauW]) ++ (map qw [eta]) ++
+  (map qw [absTol, relTol, consTol])
 
 units :: [UnitaryConceptDict]
-units = map ucw [density, tau, in_SA, out_SA,
-  htCap_L, QT.htFlux, ht_flux_in, ht_flux_out, vol_ht_gen,
-  htTransCoeff, mass, tank_vol, QT.temp, QT.heatCapSpec,
-  deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol, tau_W, QT.sensHeat]
+units = map ucw [density, tau, inSA, outSA,
+  htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
+  htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
+  deltaT, tempEnv, thFluxVect, time, htFluxC,
+  vol, wMass, wVol, tauW, QT.sensHeat]
 
 constraints :: [UncertQ]
-constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
-  time_final, tank_length, temp_C, w_density, diam]
-  -- w_E, temp_W
+constraints =  [coilSA, htCapW, coilHTC, tempInit,
+  timeFinal, tankLength, tempC, wDensity, diam]
+  -- watE, tempW
 
 probDescription, termAndDefn, physSystDescription, goalStates :: Section
 
@@ -140,7 +140,7 @@ probDescription, termAndDefn, physSystDescription, goalStates :: Section
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw ht_trans, Doc' $ nw progName], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
   TAandA],
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
@@ -158,7 +158,7 @@ mkSRS = [RefSec $ RefProg intro
     SSDProg [SSDSubVerb probDescription
     , SSDSolChSpec $ SCSProg
       [ Assumptions
-      , TMs [] (Label : stdFields) theoretical_models
+      , TMs [] (Label : stdFields) theoreticalModels
       , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -217,17 +217,17 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SystemInformation
 si = SI {
-  _sys = srs_swhs,
+  _sys = srsSWHS,
   _kind = Doc.srs,
   _authors = [thulasi],
   _quants = symbTT,
   _concepts = symbols,
-  _definitions = [dd1HtFluxCQD],          --dataDefs
+  _definitions = [],
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
-  _outputs = (map qw [temp_W, w_E]),     --outputs
+  _inputs = (map qw constraints ++ map qw [tempW, watE]), --inputs ++ outputs?
+  _outputs = (map qw [tempW, watE]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (map cnstrw constraints ++ map cnstrw [temp_W, w_E]),        --constrained
+  _constraints = (map cnstrw constraints ++ map cnstrw [tempW, watE]),        --constrained
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
@@ -249,10 +249,10 @@ symbMap = cdb (symbolsAll) (map nw symbols ++ map nw acronyms ++ map nw thermoco
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srs_swhs, nw algorithm, nw ht_trans] ++ map nw checkSi
-  ++ map nw [abs_tol, rel_tol, cons_tol] ++ [nw materialProprty])
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
+  ++ map nw [absTol, relTol, consTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
-  this_si label refBy dataDefn iMods genDef theory
+  thisSi label refBy dataDefn iMods genDef theory
   concIns section labCon
 
 usedDB :: ChunkDB
@@ -276,7 +276,7 @@ introStart es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   plural es `sAnd` phrase en +:+. S "storage technology", 
-  at_start' pro, S "provide a novel way of storing", phrase en]
+  atStart' pro, S "provide a novel way of storing", phrase en]
 
 introEnd :: CI -> ConceptChunk -> Sentence
 introEnd pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
@@ -374,22 +374,22 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 termAndDefnBullets :: Contents
 termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
-  at_start x :+: S ":" +:+ (x ^. defn))
+  atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]
   
-physSystDescription = physSystDesc (getAcc progName) fig_tank
-  [physSystDescList, LlC fig_tank]
+physSystDescription = physSystDesc (getAcc progName) figTank
+  [physSystDescList, LlC figTank]
 
-fig_tank :: LabelledContent
-fig_tank = llcc (makeFigRef "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase htFlux +:+
-  S "from" +:+ phrase coil `sOf` ch ht_flux_C)
+figTank :: LabelledContent
+figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
+  S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
-  [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
+  [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
-goalStates = goalStmtF (goalStatesIntro temp coil temp_W) goalStatesList
+goalStates = goalStmtF (goalStatesIntro temp coil tempW) goalStatesList
 
 goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
 goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
@@ -404,11 +404,11 @@ goalStatesList = mkEnumSimpleD goals
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
 
-theoretical_models :: [TheoryModel]
-theoretical_models = [consThermE, sensHtE]
+theoreticalModels :: [TheoryModel]
+theoreticalModels = [consThermE, sensHtE]
 
 sensHtE :: TheoryModel
-sensHtE = sensHtE_template Liquid sensHtEdesc
+sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
@@ -430,7 +430,7 @@ dataConstTable2 = outDataConstTbl dataConstListOut
   -- (titleize output_ +:+ titleize' variable) True
 
 dataConstListOut :: [ConstrConcept]
-dataConstListOut = [temp_W, w_E]
+dataConstListOut = [tempW, watE]
 
 --------------------------
 --Section 5 : REQUIREMENTS
@@ -486,7 +486,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef2S assumptions
 
 traceTheories = ["T1", "T2"]
-traceTheoriesRef = map makeRef2S theoretical_models
+traceTheoriesRef = map makeRef2S theoreticalModels
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef2S genDefs
@@ -615,9 +615,9 @@ traceTable3 = llcc (makeTabRef "TraceyAI") $ Table
 ------------------------------------------
 
 auxCons :: [QDefinition]
-auxCons = [tank_length_min, tank_length_max,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max]
+auxCons = [tankLengthMin, tankLengthMax,
+  wDensityMin, wDensityMax, htCapWMin, htCapWMax, coilHTCMin,
+  coilHTCMax, timeFinalMax]
 
 ------------
 --REFERENCES

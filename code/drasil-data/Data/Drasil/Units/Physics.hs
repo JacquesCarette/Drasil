@@ -2,20 +2,20 @@ module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
-import Language.Drasil (cn, dcc,new_unit, UnitDefn, (/:), (/$), (*:), makeDerU)
+import Language.Drasil (cn, dcc,newUnit, UnitDefn, (/:), (/$), (*:), makeDerU)
 
 accelU, angVelU, angAccelU, forcePerMeterU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: UnitDefn
 
-accelU          = new_unit "acceleration"         $ metre /: s_2
-angVelU         = new_unit "angular velocity"     $ radian /: second
-angAccelU       = new_unit "angular acceleration" $ radian /: s_2
-forcePerMeterU  = new_unit "force per meter"      $ newton /: metre
-impulseU        = new_unit "impulse"              $ newton *: second
-momtInertU      = new_unit "moment of inertia"    $ kilogram *: m_2
-momentOfForceU  = new_unit "moment of force"      $ newton *: metre
-springConstU    = new_unit "spring constant"      $ newton /: metre
-torqueU         = new_unit "torque"               $ newton *: metre
-velU            = new_unit "velocity"             $ metre /: second
+accelU          = newUnit "acceleration"         $ metre /: s_2
+angVelU         = newUnit "angular velocity"     $ radian /: second
+angAccelU       = newUnit "angular acceleration" $ radian /: s_2
+forcePerMeterU  = newUnit "force per meter"      $ newton /: metre
+impulseU        = newUnit "impulse"              $ newton *: second
+momtInertU      = newUnit "moment of inertia"    $ kilogram *: m_2
+momentOfForceU  = newUnit "moment of force"      $ newton *: metre
+springConstU    = newUnit "spring constant"      $ newton /: metre
+torqueU         = newUnit "torque"               $ newton *: metre
+velU            = newUnit "velocity"             $ metre /: second
 
 gravConstU :: UnitDefn
 

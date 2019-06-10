@@ -1,0 +1,24 @@
+<h2>Drasil - Generate All the Things!</h2>
+<ul>
+$-for(examples)$
+  <li>$name$ Artifacts<br>
+    <ul>
+    $-for(srs)$
+      <li><a href="$url$">$name$ SRS [$type$]</a></li>$sep-$
+    $endfor$
+    $-if(src)$
+      <li><a href="$src-$">Generated Code</a></li>
+    $-endif$
+    </ul>
+  </li>$sep-$
+$endfor$
+</ul>
+$if(docsUrl)-$
+<h4><a href="$docsUrl$">Haskell Documentation</a></h4>
+$-endif$
+Package Dependencies
+<ul>
+  $-for(graphs)$
+    <li><a href="$url$">$name$</a></li>$sep-$
+  $endfor$
+</ul>

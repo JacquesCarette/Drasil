@@ -727,12 +727,12 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 </p>
 <p>
 <div id="assumpCWTAT">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
 <div id="assumpTPCAV">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
@@ -747,7 +747,7 @@ Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, 
 </p>
 <p>
 <div id="assumpLCCCW">
-Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxC>DD: htFluxC</a>.
+Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
@@ -757,12 +757,12 @@ Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is con
 </p>
 <p>
 <div id="assumpTHCCoL">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:htFluxC>DD: htFluxC</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
 <div id="assumpLCCWP">
-Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:htFluxP>DD: htFluxP</a>.
+Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM.
 </div>
 </p>
 <p>
@@ -1280,9 +1280,6 @@ This section collects and defines all the data needed to build the instance mode
 <p class="paragraph">
 <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
 </p>
-<p class="paragraph">
-<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>
-</p>
 </td>
 </tr>
 <tr>
@@ -1347,13 +1344,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>Notes</th>
 <td>
 <p class="paragraph">
-<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>
-</p>
-<p class="paragraph">
-<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>
-</p>
-<p class="paragraph">
-<a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>
+<a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
 </p>
 </td>
 </tr>
@@ -2846,8 +2837,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
-<th><a href=#DD:htFluxP>DD: htFluxP</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
+<th><a href=#DD:htFluxP>DD: htFluxP</a></th>
 <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
 <th><a href=#unlikeChgWPFS>UC: Water-PCM-Fixed-States</a></th>
 <th><a href=#unlikeChgNGS>UC: No-Gaseous-State</a></th>
@@ -3092,7 +3083,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td></td>
 <td>X</td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3166,8 +3157,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3205,46 +3196,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>
-<a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>
-</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td>X</td>
-<td></td>
-<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3538,7 +3491,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -3612,7 +3565,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 <td></td>
 <td>X</td>
-<td>X</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>

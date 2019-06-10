@@ -283,7 +283,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
 \item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]Newton's law of convective cooling applies between the heating coil and the water. \hyperref[DD:htFluxC]{DD: htFluxC}.
 \item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]The temperature of the heating coil is constant over time. \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} \hyperref[DD:htFluxC]{DD: htFluxC}.
-\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} \hyperref[DD:htFluxC]{DD: htFluxC}.
+\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}.
 \item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNTD}]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. \hyperref[likeChgDT]{LC: Discharging-Tank}.
 \item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} \hyperref[TM:sensHtE]{TM: sensHtE} \hyperref[IM:heatEInWtr]{IM: heatEInWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
 \item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]The tank is perfectly insulated so that there is no heat loss from the tank. \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
@@ -471,7 +471,6 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
         \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}
-        \hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -730,7 +729,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[assumpTEO]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} &  &  &  &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  & 
 \\

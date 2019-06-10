@@ -93,7 +93,7 @@ instance KeywordSym PythonCode where
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static = return staticDocD
+  staticRepr = return staticDocD
   dynamic = return dynamicDocD
 
 instance BodySym PythonCode where
@@ -291,7 +291,7 @@ instance FunctionSym PythonCode where
   type Function PythonCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = targT
-  castListToInt = cast int (listType static int)
+  castListToInt = cast int (listType staticRepr int)
   get n = fmap funcDocD (var n)
   set n v = fmap funcDocD (mkVal . fst <$> assign (var n) v)
 
@@ -341,7 +341,7 @@ instance StatementSym PythonCode where
 
   varDec _ _ = return (mkStNoEnd empty)
   varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
-  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static t)
+  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType staticRepr t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
     callFuncParamList vs)
   objDecDef = varDecDef
@@ -493,7 +493,7 @@ instance StateVarSym PythonCode where
   stateVar _ _ _ _ _ = return empty
   privMVar del l = stateVar del l private dynamic
   pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  pubGVar del l = stateVar del l public staticRepr
   listStateVar = stateVar
 
 instance ClassSym PythonCode where

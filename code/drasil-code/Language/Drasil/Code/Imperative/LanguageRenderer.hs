@@ -457,7 +457,7 @@ scopeDocD Private = text "private"
 scopeDocD Public = text "public"
 
 permanence :: Permanence -> Doc
-permanence Static = text "static"
+permanence StaticCon = text "static"
 permanence Dynamic = empty
 
 stateDocD :: Config -> StateVar -> Doc
@@ -515,7 +515,7 @@ methodDocD c _ _ (Method n s p t ps b) = vcat [
     oneTab $ bodyDoc c b,
     rbrace]
   where perm Dynamic = empty
-        perm Static  = text "static "
+        perm StaticCon  = text "static "
 methodDocD c _ _ (MainMethod b) = vcat [
     scopeDoc c Public <+> text "static" <+> methodTypeDoc c Void <+> text "Main" <> parens (text "string[] args") <+> lbrace,
     oneTab $ bodyDoc c b,

@@ -61,7 +61,7 @@ objcConfig options c =
         inputFunc        = text "scanf",
         iterForEachLabel = empty,
         iterInLabel      = text "in",
-        list             = \case Static  -> text staticListType
+        list             = \case StaticCon  -> text staticListType
                                  Dynamic -> text "NSMutableArray",
         listObj          = empty,
         clsDec           = text "@" <> classDec,
@@ -348,9 +348,9 @@ valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _ _))) = vcat [
     objAccessDoc c e (Func release [])]
 valueDoc' _ Self = text "self"
 valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
-    where init = case lt of Static  -> defaultInit
+    where init = case lt of StaticCon  -> defaultInit
                             Dynamic -> "initWithCapacity"
-          size = case lt of Static  -> []
+          size = case lt of StaticCon  -> []
                             Dynamic -> [s]
 valueDoc' c (StateObj _ t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
 valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs) -- cast needs fixing

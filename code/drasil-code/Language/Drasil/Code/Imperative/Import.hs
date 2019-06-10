@@ -107,7 +107,7 @@ publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> [repr
   [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
 publicMethod mt l pl st v u = do
   g <- ask
-  genMethodCall public static (commented g) (logKind g) mt l pl st v u
+  genMethodCall public staticRepr (commented g) (logKind g) mt l pl st v u
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()

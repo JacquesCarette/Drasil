@@ -168,7 +168,7 @@ data BaseType = Boolean | Integer | Float | Character | String | FileType Mode
     deriving (Eq, Show)
 data StateType = List Permanence StateType | Base BaseType | Type Label | Iterator StateType | EnumType Label
     deriving (Eq, Show)
-data Permanence = Static | Dynamic
+data Permanence = StaticCon | Dynamic
     deriving (Eq, Show)
 data MethodType = MState StateType
                 | Void
@@ -283,7 +283,7 @@ pubMVar :: Int -> StateType -> Label -> StateVar
 pubMVar del t n = StateVar n Public Dynamic t del
 
 pubGVar :: Int -> StateType -> Label -> StateVar
-pubGVar del t n = StateVar n Public Static t del
+pubGVar del t n = StateVar n Public StaticCon t del
 
 privMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
 privMethod t n = Method n Private Dynamic t
@@ -505,7 +505,7 @@ listDec' :: Label -> StateType -> Int -> Statement
 listDec' n t s = DeclState $ ListDec Dynamic n t s
 
 listDecValues :: Label -> StateType -> [Value] -> Statement
-listDecValues n t vs = DeclState $ ListDecValues Static n t vs
+listDecValues n t vs = DeclState $ ListDecValues StaticCon n t vs
 
 listOf :: Label -> StateType -> Value
 l `listOf` s = ListVar l s
@@ -762,7 +762,7 @@ convertToMethod (GetMethod n t) = Method (getterName n) Public Dynamic t [] getB
     where getBody = oneLiner $ return (Self $-> var n)
 convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Dynamic Void [p] setBody
     where setBody = oneLiner $ Self $-> var n &=. pn
-convertToMethod (MainMethod b) = Method "main" Public Static Void [] b
+convertToMethod (MainMethod b) = Method "main" Public StaticCon Void [] b
 convertToMethod t = t
 
 -- | Takes a "find" Value (old), a "replace" Value (new),
@@ -897,15 +897,15 @@ addToMethod :: [Method] -> [Method] -> [Method]
 addToMethod f = (++ map fToM f)
 
 fToM :: Method -> Method
-fToM (Method l _ _ t ps b) = Method l Public Static t ps b
+fToM (Method l _ _ t ps b) = Method l Public StaticCon t ps b
 fToM m = m
 
 addToSV :: [Declaration] -> [StateVar] -> [StateVar]
 addToSV d sv = sv ++ map dToSV d
 
 dToSV :: Declaration -> StateVar
-dToSV (VarDec l s) = StateVar l Public Static s 0
-dToSV (VarDecDef l s _) = StateVar l Public Static s 0
-dToSV (ListDec p l s _) = StateVar l Public Static (List p s) 0
-dToSV (ObjDecDef l s _) = StateVar l Public Static s 0
+dToSV (VarDec l s) = StateVar l Public StaticCon s 0
+dToSV (VarDecDef l s _) = StateVar l Public StaticCon s 0
+dToSV (ListDec p l s _) = StateVar l Public StaticCon (List p s) 0
+dToSV (ObjDecDef l s _) = StateVar l Public StaticCon s 0
 dToSV _ = error "Not implemented"

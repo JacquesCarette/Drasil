@@ -55,7 +55,7 @@ goolConfig options c =
         inputFunc        = text "Input",
         iterForEachLabel = text "ForEach",
         iterInLabel      = empty,
-        list             = \case Static  -> text "List Static"
+        list             = \case StaticCon  -> text "List Static"
                                  Dynamic -> text "List Dynamic",
         listObj          = empty,
         clsDec           = empty,
@@ -172,7 +172,7 @@ conditionalDoc' c (Switch v cs b) = text "switch" <+> parens (valueDoc c v) <+> 
 declarationDoc' :: Config -> Declaration -> Doc
 declarationDoc' c (VarDec n t) = text "varDec" <+> lbl n <+> stateType c t Dec
 declarationDoc' c (ListDec lt n t s) = text "listDec" <+> listTypeDoc lt <+> lbl n <+> stateType c t Dec <+> int s
-declarationDoc' c (ListDecValues Static n t vs) = text "listDecValues" <+> lbl n <+> stateType c t Dec <+> hsList (valueDoc c) vs
+declarationDoc' c (ListDecValues StaticCon n t vs) = text "listDecValues" <+> lbl n <+> stateType c t Dec <+> hsList (valueDoc c) vs
 declarationDoc' c (ListDecValues lt n t vs) = text "DeclState $ ListDecValues" <+> listTypeDoc lt <+> lbl n <+> stateType c t Dec <+> hsList (valueDoc c) vs
 declarationDoc' c (VarDecDef n t v) = text "varDecDef" <+> lbl n <+> stateType c t Dec <+> valueDoc c v
 declarationDoc' c (ObjDecDef n t v) = text "objDecDef" <+> lbl n <+> stateType c t Dec <+> valueDoc c v
@@ -225,7 +225,7 @@ iterationDoc' c (While v b) = vcat [
 iterationDoc' c i = iterationDocD c i
 
 listTypeDoc :: Permanence -> Doc
-listTypeDoc Static = text "Static"
+listTypeDoc StaticCon = text "Static"
 listTypeDoc Dynamic = text "Dynamic"
 
 litDoc' :: Literal -> Doc
@@ -317,9 +317,9 @@ scopeDoc' Public = text "Public"
 stateDoc' :: Config -> StateVar -> Doc
 stateDoc' c (StateVar n s p t del) = text v <+> delp <+> stateType c t Dec <+> lbl n
     where v = case (s,p) of (Public, Dynamic) -> "pubMVar"
-                            (Public, Static)  -> "pubGVar"
+                            (Public, StaticCon)  -> "pubGVar"
                             (Private, Dynamic) -> "privMVar"
-                            (Private, Static) -> "privGVar"
+                            (Private, StaticCon) -> "privGVar"
           delp | del == alwaysDel = text "alwaysDel"
                | del == neverDel = text "neverDel"
                | otherwise = int del

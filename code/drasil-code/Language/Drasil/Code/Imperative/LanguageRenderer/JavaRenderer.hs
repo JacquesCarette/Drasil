@@ -195,7 +195,7 @@ methodDoc' c _ _ (Method n s p t ps b) = vcat [
     oneTab $ bodyDoc c b,  -- all methods throw exception for now,  FIX ME.
     rbrace]
   where perm Dynamic = empty
-        perm Static  = text "static "
+        perm StaticCon  = text "static "
         --throwState False = empty
         --throwState True  = text " throws Exception"
 methodDoc' c _ _ (MainMethod b) = vcat [

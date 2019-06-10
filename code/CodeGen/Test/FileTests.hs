@@ -1,6 +1,6 @@
-module Example.FileTests (fileTests) where
+module Test.FileTests (fileTests) where
 
-import New (PackageSym(..), RenderSym(..), PermanenceSym(..),
+import Language.Drasil.Code (PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), MethodSym(..), ModuleSym(..))

@@ -1,12 +1,12 @@
-module Example.PatternTest (patternTest) where
+module Test.PatternTest (patternTest) where
 
-import New (
+import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), ValueExpression(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Example.Observer (observer)
+import Test.Observer (observer)
 
 patternTest :: (PackageSym repr) => repr (Package repr)
 patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [] [patternTestMainMethod] []), observer]

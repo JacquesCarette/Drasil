@@ -1,6 +1,6 @@
-module Example.HelloWorld (helloWorld) where
+module Test.HelloWorld (helloWorld) where
 
-import New (
+import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
@@ -8,7 +8,7 @@ import New (
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Example.Helper (helper)
+import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
 helloWorld = packMods "HelloWorld" [fileDoc (buildModule "HelloWorld" 

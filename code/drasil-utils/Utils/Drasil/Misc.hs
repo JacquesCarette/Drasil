@@ -7,8 +7,8 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
   tableShows, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
-import Utils.Drasil.Fold (foldlSent)
-import Utils.Drasil.Sentence (sOf)
+import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
+import Utils.Drasil.Sentence (sAre, sOf, toThe)
 
 import Control.Lens ((^.))
 
@@ -158,18 +158,14 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+
-  S "are refined to the" +:+ plural (fst y)
-refineChain (x:y:xs) = refineChain [x,y] `sC` rc (y : xs)
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) `sAre` S "refined" `toThe` plural (fst y)
+refineChain (x:y:xs) = foldlList Comma List (refineChain [x,y] : rc (y : xs))
+  where
+    rc [a, b]   = [rcSent a b +:+. sParen (makeRef2S $ snd b)]
+    rc (a:b:as) =  rcSent a b : rc (b : as)
+    rc _        = error "refineChain helper encountered an unexpected empty list"
+    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (makeRef2S $ snd a) `toThe` plural (fst b)
 refineChain _ = error "refineChain encountered an unexpected empty list"
-
--- | Helper used by refineChain
-rc :: NamedIdea c => [(c, Section)] -> Sentence
-rc [x,y] = S "and the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) 
-  +:+ S "to the" +:+ plural (fst y) +:+. sParen (makeRef2S $ snd y)
-rc (x:y:xs) = S "the" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) +:+ 
-  S "to the" +:+ plural (fst y) `sC` rc (y : xs)
-rc _ = error "refineChain helper encountered an unexpected empty list"
 
 -- | helper functions for making likely change statements
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence

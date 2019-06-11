@@ -23,7 +23,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   force, kEnergy, energy, impulseV, chgInVelocity, acceleration)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import Data.Drasil.Utils (weave)
 import Data.Drasil.Theories.Physics (torque, torqueDD)
 ----- Data Definitions -----
 

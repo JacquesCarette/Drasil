@@ -9,7 +9,6 @@ import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SentenceStructures (displayConstrntsAsSet)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 

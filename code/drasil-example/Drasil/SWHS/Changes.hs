@@ -16,8 +16,6 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat,
   thermalConductor)
 import Data.Drasil.Quantities.Physics (energy)
 
-import Data.Drasil.SentenceStructures (chgsStart)
-
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------

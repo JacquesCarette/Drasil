@@ -52,7 +52,6 @@ import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,

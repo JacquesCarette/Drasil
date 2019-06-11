@@ -12,7 +12,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
  reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.SentenceStructures (showingCxnBw, tableShows)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
 import qualified Drasil.DocLang.SRS as SRS

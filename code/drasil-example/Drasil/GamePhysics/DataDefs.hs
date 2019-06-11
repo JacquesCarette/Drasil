@@ -268,7 +268,7 @@ impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1,
  impulseVDerivSentence2, impulseVDerivSentence3]  
 
 impulseVDerivSentence1 :: [Sentence]
-impulseVDerivSentence1 = [S " Derivation of", (phrase QP.impulseV), S "-", 
+impulseVDerivSentence1 = [S "Derivation of", (phrase QP.impulseV), S "-", 
   S "Newton's second law of motion states"]
 
 impulseVDerivSentence2 :: [Sentence]

@@ -97,9 +97,9 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf`
   sParen (makeRef2S dd1HtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No",
   phrase heatTrans, S "occurs to", S "outside" `ofThe` phrase tank `sC`
   S "since it has been assumed to be perfectly insulated" +:+. sParen (makeRef2S assumpPIT),
-  S "Since the", phrase assumption `sIs` S "made that no internal heat" `sIs`
-  S "generated" +:+. (sParen (makeRef2S htA) `sC` (E $ sy volHtGen $= 0)),
-  S "Therefore" `sC` S "the", phrase equation, S "for", makeRef2S rocTempSimp, S "can be written as"]
+  S "Since the", phrase assumption, S "is made that no internal heat is generated" +:+.
+  (sParen (makeRef2S htA) `sC` (E $ sy volHtGen $= 0)), S "Therefore" `sC` S "the",
+  phrase equation, S "for", makeRef2S rocTempSimp, S "can be written as"]
 
 htTransEnd :: Sentence
 htTransEnd = foldlSent_ [S " " `sAnd` S "from the", phrase water, S "into the",

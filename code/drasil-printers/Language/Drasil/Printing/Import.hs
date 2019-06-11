@@ -58,6 +58,7 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
+digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
 digitsProcess (hd:tl) pos coun ex 
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
   | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
@@ -78,17 +79,9 @@ digitsProcess [] pos coun ex
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a 
-  | a == 0 = (3, -3)
-  | a == 1 = (1, 0)
-  | a == 2 = (2, 0)
-  | a == -1 = (3, -3) 
-  | a == -2 = (1, -3)
-  | a > 0 && mod (a-1)  3 == 0 = (1, a-1)
-  | a > 0 && mod (a-1)  3 == 1 = (2, a-2)
-  | a > 0 && mod (a-1)  3 == 2 = (3, a-3)
-  | a < 0 && mod (-a) 3 == 0 = (3, a-3)
-  | a < 0 && mod (-a) 3 == 1 = (2, a-2)
-  | a < 0 && mod (-a) 3 == 2 = (1, a-1)
+  | mod (a-1)  3 == 0 = (1, a-1)
+  | mod (a-1)  3 == 1 = (2, a-2)
+  | mod (a-1)  3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- | expr translation function from Drasil to layout AST

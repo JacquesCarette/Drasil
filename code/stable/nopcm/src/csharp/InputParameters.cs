@@ -11,8 +11,11 @@ public class InputParameters {
     public static double t_final = 0.0;
     public static double L = 0.0;
     public static double T_C = 0.0;
+    public static double t_step = 0.0;
     public static double rho_W = 0.0;
     public static double D = 0.0;
+    public static double A_tol = 0.0;
+    public static double R_tol = 0.0;
     public static double T_W = 0.0;
     public static double E_W = 0.0;
     
@@ -58,6 +61,9 @@ public class InputParameters {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!(((0 < inParams.T_C) && (inParams.T_C < 100)))) {
+            Console.WriteLine("Warning: constraint violated");
+        }
+        if (!(((0 < inParams.t_step) && (inParams.t_step < inParams.t_final)))) {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!((inParams.rho_W > 0))) {

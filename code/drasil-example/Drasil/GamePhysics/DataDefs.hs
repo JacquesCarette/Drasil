@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD, momentOfInertiaDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, 
+  coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD
+  ) where
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
@@ -11,7 +13,8 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
-  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot)
+  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot,
+  velo_1, velo_2, timeT, time_1, time_2)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -19,19 +22,17 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
-  linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, torque, kEnergy, energy, momentOfInertia)
+  linearDisplacement, linearVelocity, position, torque, restitutionCoef, time, velocity,
+  force, kEnergy, energy, impulseV, chgInVelocity, acceleration, momentOfInertia)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-
 import Data.Drasil.Theories.Physics (torque, torqueDD)
-
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
- angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD,
- momentOfInertiaDD]
+ angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
+ coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD]
 
 qDefs :: [QDefinition]
 qDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
@@ -50,7 +51,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (sumAll (Atomic "i") (sy massI * sy posI)) / sy mTot
+ctrOfMassEqn = sumAll (Atomic "i") (sy massI * sy posI) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -246,6 +247,56 @@ chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
   sParen $ Sy $ unit_symb  QP.angularVelocity, S "and the", 
   phrase rOB `sC` ch rOB, 
   sParen $ Sy $ unit_symb rOB]
+
+---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
+impulseVDD :: DataDefinition
+impulseVDD = ddNoRefs impulseV impulseVDeriv "impulseV"
+ [impulseVDesc, makeRef2S assumpOT]
+
+impulseV :: QDefinition
+impulseV = mkQuantDef QP.impulseV impulseVEqn
+
+impulseVEqn :: Expr
+impulseVEqn =   (sy QPP.mass) * (sy QP.chgInVelocity)
+
+impulseVDesc :: Sentence
+impulseVDesc = foldlSent [S "An", (phrase QP.impulseV), (ch impulseV), S "occurs when a", 
+  (phrase QP.force), (ch QP.force), S "acts over a body over an interval of",(phrase QP.time),
+  S "Derivation of", (phrase QP.impulseV)]
+
+impulseVDeriv :: Derivation
+impulseVDeriv = (weave [impulseVDerivSentences, map E impulseVDerivEqns]) 
+
+impulseVDerivSentences :: [Sentence]
+impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1, 
+ impulseVDerivSentence2, impulseVDerivSentence3]  
+
+impulseVDerivSentence1 :: [Sentence]
+impulseVDerivSentence1 = [S " Derivation of", (phrase QP.impulseV), S "-", 
+  S "Newton's second law of motion states"]
+
+impulseVDerivSentence2 :: [Sentence]
+impulseVDerivSentence2 = [S "Rearranging "] 
+
+impulseVDerivSentence3 :: [Sentence]
+impulseVDerivSentence3 = [S "Integrating the right hand side "] 
+
+impulseVDerivEqn1 :: Expr
+impulseVDerivEqn1 = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration) 
+                    $= (sy QPP.mass) * (deriv(sy QP.velocity) QP.time) 
+
+impulseVDerivEqn2 :: Expr
+impulseVDerivEqn2 = (defint (eqSymb timeT)(sy time_1)(sy time_2)(sy QP.force))
+                     $= sy QPP.mass * defint (eqSymb QP.velocity)(sy velo_1)(sy velo_2)1
+
+
+impulseVDerivEqn3 :: Expr
+impulseVDerivEqn3 = (defint (eqSymb timeT)(sy time_1)(sy time_2)(sy QP.force))
+                    $= (sy QPP.mass)*(sy velo_2) - (sy QPP.mass)*(sy velo_1) 
+                    $= (sy QPP.mass) * (sy QP.chgInVelocity)
+                                      
+impulseVDerivEqns :: [Expr]
+impulseVDerivEqns = [impulseVDerivEqn1, impulseVDerivEqn2, impulseVDerivEqn3]
 
 -----------------DD11 Relative Velocity in Collision------------------------------------------------------- 
 reVelInCollDD :: DataDefinition

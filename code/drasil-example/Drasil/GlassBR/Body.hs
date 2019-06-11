@@ -199,8 +199,8 @@ systInfo = SI {
                  concatMap (^. defined_quant) tMods ++
                  concatMap (^. defined_fun) tMods,
   _datadefs    = dataDefns,
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
+  _inputs      = inputs,
+  _outputs     = outputs,
   _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,

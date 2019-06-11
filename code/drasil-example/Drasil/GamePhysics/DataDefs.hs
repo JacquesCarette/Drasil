@@ -17,7 +17,7 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 
-import qualified Data.Drasil.Quantities.Physics as QP angularAccel, 
+import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy, momentOfInertia)
@@ -314,7 +314,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = (sum_all (Atomic "i")((sy massI)*(sy  rRot $^ 2)))
+momentOfInertiaEqn = (sumAll (Atomic "i")((sy massI)*(sy  rRot $^ 2)))
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", (phrase QP.momentOfInertia), (ch QP.momentOfInertia),

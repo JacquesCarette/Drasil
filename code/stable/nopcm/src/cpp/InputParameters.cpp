@@ -37,6 +37,9 @@ void input_constraints(InputParameters &inParams) {
     if (!(((950 < inParams.rho_W) && (inParams.rho_W <= 1000)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
+    if (!(((1.0e-2 <= inParams.D) && (inParams.D <= 100)))) {
+        std::cout << "Warning: constraint violated" << std::endl;
+    }
     
     if (!((inParams.A_C > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;

@@ -33,6 +33,8 @@ def input_constraints(inParams):
         print("Warning: constraint violated")
     if (not(((950 < inParams.rho_W) and (inParams.rho_W <= 1000)))) :
         print("Warning: constraint violated")
+    if (not(((1.0e-2 <= inParams.D) and (inParams.D <= 100)))) :
+        print("Warning: constraint violated")
     
     if (not((inParams.A_C > 0))) :
         print("Warning: constraint violated")

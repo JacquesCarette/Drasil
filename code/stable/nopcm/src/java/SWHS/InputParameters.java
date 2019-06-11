@@ -46,6 +46,9 @@ public class InputParameters {
         if (!(((950 < inParams.rho_W) && (inParams.rho_W <= 1000)))) {
             System.out.println("Warning: constraint violated");
         }
+        if (!(((1.0e-2 <= inParams.D) && (inParams.D <= 100)))) {
+            System.out.println("Warning: constraint violated");
+        }
         
         if (!((inParams.A_C > 0))) {
             System.out.println("Warning: constraint violated");

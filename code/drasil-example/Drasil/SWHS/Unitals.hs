@@ -202,9 +202,10 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, aspectRatio]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin,
+            aspectRatio, aspectRatioMin, aspectRatioMax]
 
-eta, meltFrac, fracMin, aspectRatio :: DefinedQuantityDict
+eta, meltFrac, fracMin, aspectRatio, aspectRatioMin, aspectRatioMax :: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
@@ -225,6 +226,14 @@ aspectRatio = dqd' (dcc "aspectRatio"
   (nounPhraseSP "aspect ratio")
   "ratio of tank diameter to tank length")
    (const $ Atomic "AR") Real Nothing
+
+aspectRatioMin = dqd' (dcc "aspectRatioMin" 
+  (nounPhraseSP "minimum aspect ratio") "minimum aspect ratio")
+   (const $ sub (Atomic "AR") (Atomic "min")) Real Nothing
+
+aspectRatioMax = dqd' (dcc "aspectRatioMax" 
+  (nounPhraseSP "maximum aspect ratio") "maximum aspect ratio")
+   (const $ sub (Atomic "AR") (Atomic "max")) Real Nothing
 
 -----------------
 -- Constraints --
@@ -258,7 +267,7 @@ tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
-  [gtZeroConstr]
+  [gtZeroConstr, sfwrc $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
@@ -456,18 +465,16 @@ consTol = uvc "consTol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tankLengthMin, tankLengthMax,
-  pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
-  htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax, 
-  htFusionMin, htFusionMax, coilSAMax,
-  htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
-  pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux]
+specParamValList = [tankLengthMin, tankLengthMax, pcmDensityMin, pcmDensityMax,
+  wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
+  htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax, coilHTCMin,
+  coilHTCMax, pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux, arMin, arMax]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax, htFusionMin, htFusionMax, coilSAMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
-  pcmHTCMax, timeFinalMax, fracMinAux :: QDefinition
+  pcmHTCMax, timeFinalMax, fracMinAux, arMin, arMax :: QDefinition
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
@@ -478,7 +485,10 @@ tankLengthMax = mkQuantDef (unitary "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tankLength) (Atomic "max")) metre Rational) 50
 
-fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
+fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
+
+arMin = mkQuantDef aspectRatioMin $ dbl 0.01
+arMax = mkQuantDef aspectRatioMax 100
 
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"

@@ -34,16 +34,16 @@ pbIsSafe = imNoDeriv pbIsSafeRC [qw probBr, qw pbTol]
 
 pbIsSafeRC :: RelationConcept
 pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbIsSafeDesc ((sy isSafePb) $= (sy probBr) $< (sy pbTol))
+  pbIsSafeDesc (sy isSafePb $= sy probBr $< sy pbTol)
 
 
 pbIsSafeDesc :: Sentence
-pbIsSafeDesc = iModDesc (isSafePb) s ending
+pbIsSafeDesc = iModDesc isSafePb s ending
     where 
-      s = (ch isSafePb) `sAnd` (ch isSafePb) +:+ sParen (S "from" +:+
-        (makeRef2S lrIsSafe))
-      ending = ((ch probBr) `isThe` (phrase probBr)) `sC` S "as calculated in" +:+.
-        (makeRef2S probOfBreak) +:+ (ch pbTol) `isThe` (phrase pbTol) +:+ S "entered by the user"
+      s = ch isSafePb `sAnd` ch isSafePb +:+ sParen (S "from" +:+
+        makeRef2S lrIsSafe)
+      ending = (ch probBr `isThe` phrase probBr) `sC` S "as calculated in" +:+.
+        makeRef2S probOfBreak +:+ ch pbTol `isThe` phrase pbTol +:+ S "entered by the user"
 
 lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv lrIsSafeRC [qw isSafeLR, qw lRe, qw demand]
@@ -53,16 +53,16 @@ lrIsSafe = imNoDeriv lrIsSafeRC [qw isSafeLR, qw lRe, qw demand]
 
 lrIsSafeRC :: RelationConcept
 lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-    lrIsSafeDesc ( (sy isSafeLR) $= (sy lRe) $> (sy demand))
+    lrIsSafeDesc (sy isSafeLR $= sy lRe $> sy demand)
 
 lrIsSafeDesc :: Sentence
-lrIsSafeDesc = iModDesc (isSafeLR) s ending
+lrIsSafeDesc = iModDesc isSafeLR s ending
       where 
-        s = ((ch isSafePb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch isSafeLR))
-        ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
+        s = ch isSafePb +:+ sParen (S "from" +:+ makeRef2S pbIsSafe) `sAnd` ch isSafeLR
+        ending = short lResistance `isThe` phrase lResistance +:+ 
           sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-          (makeRef2S calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
-          (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
+          makeRef2S calofCapacity +:+ ch demand +:+ sParen (S "also referred as the" +:+ 
+          titleize demandq) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
           makeRef2S calofDemand
   
 iModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence

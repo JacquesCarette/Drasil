@@ -34,11 +34,11 @@ degree = fund' "degree" "angle" (Special Circle)
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
 s_2 :: UnitDefn
-s_2 = new_unit "seconds squared" $ second ^: 2
+s_2 = newUnit "seconds squared" $ second ^: 2
 
 m_2, m_3 :: UnitDefn
-m_2 = new_unit "square metres"   $ metre ^: 2
-m_3 = new_unit "cubic metres"    $ metre ^: 3
+m_2 = newUnit "square metres"   $ metre ^: 2
+m_3 = newUnit "cubic metres"    $ metre ^: 3
 
 -- And now for the ones with 'common' names
 
@@ -54,7 +54,7 @@ calorie = derUC "calorie"
   "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 
-  "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
+  "centigrade" "temperature" (Concat [Special Circle, Atomic "C"])
   (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb" 

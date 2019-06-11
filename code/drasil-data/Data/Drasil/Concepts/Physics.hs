@@ -5,7 +5,7 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, weight, fbd, angular, linear, tension, compression, stress
   , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
-  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
+  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -18,33 +18,31 @@ import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
 physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, height, cohesion, isotropy, kEnergy]
+  joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity]
 
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
 rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height, 
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, height, cohesion, isotropy, kEnergy :: ConceptChunk
-
-  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity:: ConceptChunk
 
 twoD, threeD :: CI
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
 velocity     = dccWDS "velocity" (cnIES "velocity")
-  (S "The rate of change of a body's" +:+ (phrase position))
+  (S "The rate of change of a body's" +:+ phrase position)
 friction     = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
 elasticity   = dcc "elasticity" (cnIES "elasticity") 
@@ -69,12 +67,12 @@ rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
 kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
-  (S "The measure of the" +:+ (phrase energy) +:+ 
+  (S "The measure of the" +:+ phrase energy +:+ 
    S "a body possess due to its motion.")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
-  (S "The rate of change of a body's" +:+ (phrase velocity))
+  (S "The rate of change of a body's" +:+ phrase velocity)
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "The change in" +:+ (position ^. defn))
 force        = dcc "force" (cn' "force")
@@ -82,19 +80,18 @@ force        = dcc "force" (cn' "force")
 distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
 stress       = dccWDS "stress" (cn''' "stress")
-  (at_start' force +:+ S "that are exerted between planes internal to" +:+
+  (atStart' force +:+ S "that are exerted between planes internal to" +:+
   S "a larger body subject to external loading.")            --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
   (S "A measure of deformation of a body or plane under" +:+. phrase stress) --definition used in SSP, can be made clearer
 tension      = dccWDS "tension" (cn' "tension")
-  (S "A" +:+ (phrase stress) +:+
+  (S "A" +:+ phrase stress +:+
   S "that causes displacement of the body away from its center.")
 compression  = dccWDS "compression" (cn' "compression")
-  (S "A" +:+ (phrase stress) +:+
+  (S "A" +:+ phrase stress +:+
   S "that causes displacement of the body towards its center.")
-
 pressure     = dccWDS "pressure" (cn' "pressure")
-  (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+  (S "A" +:+ phrase force +:+ S "exerted over an area")
 height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
   S "above a reference point for a point of interest.")
 
@@ -162,6 +159,9 @@ cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
+
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
+ S "of a" +:+ phrase rigidBody)
 
 twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
 

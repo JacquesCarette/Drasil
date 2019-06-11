@@ -55,15 +55,14 @@ import Data.Drasil.Theories.Physics (physicsTMs)
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
-  unlikelyChanges_SRS)
-import Drasil.SSP.DataCons (data_constraint_Table2, data_constraint_Table3) 
+import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
+  unlikelyChgsCon)
+import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (inputMod)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fs_concept, 
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
   waterTable)
@@ -79,17 +78,17 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 
 --type declarations for sections--
 
-table_of_symbol_intro :: [TSIntro]
+tableOfSymbIntro :: [TSIntro]
 
-problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
-termi_defi_list, phys_sys_intro, phys_sys_convention, 
-  phys_sys_desc_bullets, phys_sys_fbd :: Contents
-goals_list :: [Contents]
+problemDesc, termsDefs, physSysDesc, goalStmt :: Section
+termsDefsList, physSysIntro, physSysConv, 
+  physSysDescBullets, physSysFbd :: Contents
+goalsList :: [Contents]
 
 
 --Document Setup--
-this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+thisSi :: [UnitDefn]
+thisSi = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symMap symbTT
@@ -101,7 +100,7 @@ si = SI {
   _authors = [henryFrankis, brooks],
   _quants = symbols,
   _concepts = symbTT,
-  _definitions = ([] :: [QDefinition]),
+  _definitions = [] :: [QDefinition],
   _datadefs = dataDefns,
   _inputs = map qw inputs,
   _outputs = map qw outputs,
@@ -121,7 +120,7 @@ srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
-  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS
@@ -134,7 +133,7 @@ mkSRS = [RefSec $ RefProg intro
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
-      SSDProg [SSDSubVerb problem_desc
+      SSDProg [SSDSubVerb problemDesc
         , SSDSolChSpec $ SCSProg
           [Assumptions
           , TMs [] (Label : stdFields) tMods
@@ -143,7 +142,7 @@ mkSRS = [RefSec $ RefProg intro
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
-            [data_constraint_Table2, data_constraint_Table3]
+            [dataConstraintTable2, dataConstraintTable3]
           , CorrSolnPpties propsDeriv
           ]
         ],
@@ -151,8 +150,8 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChanges_SRS,
-  UCsSec $ UCsProg unlikelyChanges_SRS,
+  LCsSec $ LCsProg likelyChgsCon,
+  UCsSec $ UCsProg unlikelyChgsCon,
   TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
     [LlC traceyMatrix] [],
   AuxConstntSec $ AuxConsProg ssp [],
@@ -186,8 +185,8 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [fig_physsyst, fig_indexconv, fig_forceacting, 
-  data_constraint_Table2, data_constraint_Table3] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing, 
+  dataConstraintTable2, dataConstraintTable3] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -210,8 +209,8 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) this_si label
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi label
   refBy dataDefs iMods genDefs theory concIns
   section labCon
 
@@ -239,7 +238,7 @@ symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 -- SECTION 1.2 --
 --automatically generated in mkSRS using the intro below
 
-table_of_symbol_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
+tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [plural value, S "with a subscript", ch index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
   `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
@@ -256,9 +255,9 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   S "movement", S "The", plural effect, S "of", phrase soil,
   S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in signifcant life and economic" +:+.
-  plural loss, at_start slope, S "stability is of", phrase interest,
+  plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
-  S "and when designing an excavated" +:+.  phrase slope, at_start ssa,
+  S "and when designing an excavated" +:+.  phrase slope, atStart ssa,
   S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `sAnd`
@@ -281,7 +280,7 @@ purposeDoc pname =
   foldlSent [S "The primary purpose of this", phrase document, S "is to",
   S "record the", plural requirement `sOf` short pname `andThe` plural model,
   S "that will be used to meet those" +:+. plural requirement, 
-  at_start' goal `sC` plural assumption `sC` plural thModel `sC` 
+  atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
@@ -354,7 +353,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
-  S "Find the" +:+ phrase fs_concept +:+ S "for the" +:+ phrase slope,
+  S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
   S "Find the" +:+ phrase intrslce +:+ phrase normForce `sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
   
 sysCtxResp :: [Sentence]
@@ -376,7 +375,7 @@ userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  S "The", phrase endUser, S "of", short pname,
+  S "The", phrase endUser `sOf` short pname,
   S "should have an understanding of undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
@@ -392,48 +391,48 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problem_desc = probDescF EmptyS ssp ending [termi_defi, phys_sys_desc, goal_stmt]
-  where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrase's slope, phrase slpSrf, S "and identify the",
-          phrase crtSlpSrf, S "of the", phrase slope `sC` S "as well as the",
+problemDesc = probDescF EmptyS ssp ending [termsDefs, physSysDesc, goalStmt]
+  where ending = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a",
+          phrasePoss slope, phrase slpSrf, S "and identify",
+          phrase crtSlpSrf `ofThe` phrase slope `sC` S "as well as the",
           phrase intrslce, phrase normForce `sAnd` phrase shearForce,
           S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
           S "used as an educational tool for introducing", phrase slope,
           S "stability", plural issue `sC` S "and to facilitate the",
-          phrase analysis `sAnd` phrase design, S "of a safe", phrase slope]
+          phrase analysis `sAnd` phrase design `sOf` S "a safe", phrase slope]
 
 -- SECTION 4.1.1 --
-termi_defi = termDefnF Nothing [termi_defi_list]
+termsDefs = termDefnF Nothing [termsDefsList]
 
-termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
+termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))
-  [fs_concept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
   plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
-  -- except for fs_concept, crtSlpSrf & plnStrn which are in defs.hs
+  -- except for fsConcept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
-phys_sys_desc = SRS.physSyst
-  [phys_sys_intro, phys_sys_desc_bullets, LlC fig_physsyst, phys_sys_convention,
-   LlC fig_indexconv, phys_sys_fbd, LlC fig_forceacting] []
+physSysDesc = SRS.physSyst
+  [physSysIntro, physSysDescBullets, LlC figPhysSyst, physSysConv,
+   LlC figIndexConv, physSysFbd, LlC figForceActing] []
 
-phys_sys_intro = physSystIntro ssp fig_physsyst
+physSysIntro = physSystIntro ssp figPhysSyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
 physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
   short what `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 
-phys_sys_convention = physSystConvention morPrice morgenstern1965 slope how 
-  index slice intrslce fig_indexconv
+physSysConv = physSystConvention morPrice morgenstern1965 slope how 
+  index slice intrslce figIndexConv
   where how = S "as a series of vertical" +:+ plural slice
 
 physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
   NamedIdea d, HasSymbol d, NamedIdea e, NamedIdea f, HasShortName g, 
   Referable g) => a -> b -> c -> Sentence -> d -> e -> f -> g -> Contents
 physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
-  at_start anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
+  atStart anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
   S "involves representing the", phrase what +:+. how, S "As shown in",
   makeRef2S indexref `sC` S "the", phrase ix, ch ix, S "is used to denote a",
   phrase value, S "for a single", phrase ixd `sC` S "and an", phrase intrfce, 
@@ -441,7 +440,7 @@ physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
   phrase value, S "between", phrase ixd, ch ix `sAnd` S "adjacent", phrase ixd,
   E $ sy ix + 1]
 
-phys_sys_desc_bullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
+physSysDescBullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
 
 physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence
@@ -455,36 +454,36 @@ physSystDescriptionListPhysys1 = foldlSent [S "A", phrase slope,
 physSystDescriptionListPhysys2 = foldlSent [S "A", phrase waterTable `sC` 
   S "which may or may not exist"]
 
-phys_sys_fbd = foldlSP [S "A", phrase fbd, S "of the", 
+physSysFbd = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on a", phrase slice, 
-  S "is displayed in" +:+. makeRef2S fig_forceacting, S "The specific",
+  S "is displayed in" +:+. makeRef2S figForceActing, S "The specific",
   plural force `sAnd` plural symbol_, S "will be discussed in detail in",
   makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
 
-fig_physsyst :: LabelledContent
-fig_physsyst = llcc (makeFigRef "PhysicalSystem") $
+figPhysSyst :: LabelledContent
+figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   fig (foldlSent_ [S "An example", phrase slope, S "for", phrase analysis,
   S "by", short ssp `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
-fig_indexconv :: LabelledContent
-fig_indexconv = llcc (makeFigRef "IndexConvention") $ 
+figIndexConv :: LabelledContent
+figIndexConv = llcc (makeFigRef "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
-fig_forceacting :: LabelledContent
-fig_forceacting = llcc (makeFigRef "ForceDiagram") $
-  fig (at_start fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
+figForceActing :: LabelledContent
+figForceActing = llcc (makeFigRef "ForceDiagram") $
+  fig (atStart fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goal_stmt = goalStmtF (map (uncurry ofThe) [
+goalStmt = goalStmtF (map (uncurry ofThe) [
   (phrase shape, phrase soil +:+ S "mass"),
   (S "location", phrase waterTable),
   (plural mtrlPrpty, phrase soil)
-  ]) goals_list
+  ]) goalsList
 
-goals_list = mkEnumSimpleD goals
+goalsList = mkEnumSimpleD goals
 
 -- SECTION 4.2 --
 

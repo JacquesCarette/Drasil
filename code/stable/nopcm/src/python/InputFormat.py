@@ -4,7 +4,7 @@ import math
 
 import InputParameters
 
-def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
+def func_get_input(filename, inParams):
     lines = []
     linetokens = []
     infile = open(filename, "r")
@@ -17,7 +17,7 @@ def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
     infile.readline()
     inParams.T_C = float(infile.readline())
     infile.readline()
-    inParams.ρ_W = float(infile.readline())
+    inParams.rho_W = float(infile.readline())
     infile.readline()
     inParams.C_W = float(infile.readline())
     infile.readline()
@@ -25,15 +25,13 @@ def func_get_input(filename, inParams, τ, A_tol, R_tol, C_tol):
     infile.readline()
     inParams.T_init = float(infile.readline())
     infile.readline()
-    τ = float(infile.readline())
+    inParams.t_step = float(infile.readline())
     infile.readline()
     inParams.t_final = float(infile.readline())
     infile.readline()
-    A_tol = float(infile.readline())
+    inParams.A_tol = float(infile.readline())
     infile.readline()
-    R_tol = float(infile.readline())
-    infile.readline()
-    C_tol = float(infile.readline())
+    inParams.R_tol = float(infile.readline())
     infile.close()
 
 

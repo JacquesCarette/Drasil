@@ -559,7 +559,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
-        $AR$ is the aspect ratio defined in \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}.
+        $AR$ is the aspect ratio defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -704,7 +704,7 @@ Description & \begin{symbDescription}
               \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}, respectively.
+Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -787,9 +787,9 @@ RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}.
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:aspect.ratio}
+\toprule \textbf{Refname} & \textbf{DD:aspectRatio}
 \phantomsection 
-\label{DD:aspect.ratio}
+\label{DD:aspectRatio}
 \\ \midrule \\
 Label & Aspect ratio
 \\ \midrule \\
@@ -1039,7 +1039,7 @@ $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{max}}$ & $1.5$ & 10$\%$
 \\
 $b$ & $0<b\leq{}a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ & $1.2$ m & 10$\%$
 \\
-${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $8.0\cdot{}10^{-3}$ & 0.1$\%$
+${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1$\%$
 \\
 $SD$ & $SD>0$ & ${SD_{min}}\leq{}SD\leq{}{SD_{max}}$ & $45.0$ m & 10$\%$
 \\
@@ -1116,7 +1116,7 @@ Symbol & Description & Source & Units
 \\
 \midrule
 \endhead
-$AR$ & Aspect ratio & \hyperref[DD:aspect.ratio]{DD: aspect\_ratio} & --
+$AR$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD: aspectRatio} & --
 \\
 $E$ & Modulus of elasticity of glass & \hyperref[assumpSV]{A: standardValues} & Pa
 \\
@@ -1146,7 +1146,7 @@ Symbol & Description & Source & Units
 \\
 \midrule
 \endhead
-$AR$ & Aspect ratio & \hyperref[DD:aspect.ratio]{DD: aspect\_ratio} & --
+$AR$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD: aspectRatio} & --
 \\
 $B$ & Risk of failure & \hyperref[DD:riskFun]{DD: riskFun} & --
 \\
@@ -1217,7 +1217,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[Table:ReqOutputs]{Table:ReqOutputs} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:aspect.ratio]{DD: aspect\_ratio} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpBC]{A: boundaryConditions} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1434,7 +1434,7 @@ ${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
 \\
 ${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $100.0\cdot{}10^{-3}$ & m
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
 \\
 $E$ & modulus of elasticity of glass & $71.7\cdot{}10^{9}$ & Pa
 \\

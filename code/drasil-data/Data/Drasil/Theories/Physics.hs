@@ -1,11 +1,10 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Utils.Drasil
-
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd, 
   mkQuantDef, tmNoRefs)
-import Data.Drasil.Utils (weave)
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
   value)
 import Data.Drasil.Concepts.Math (equation, vector)
@@ -22,7 +21,7 @@ physicsTMs = [newtonSL]
 newtonSL :: TheoryModel
 newtonSL = tmNoRefs (cw newtonSLRC)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] []
+  [] [sy QP.force $= sy QPP.mass * sy QP.acceleration] []
   "NewtonSecLawMot" [newtonSLDesc]
 
 newtonSLRC :: RelationConcept
@@ -30,15 +29,15 @@ newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc newtonSLRel
 
 newtonSLRel :: Relation
-newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
+newtonSLRel = sy QP.force $= sy QPP.mass * sy QP.acceleration
 
 newtonSLDesc :: Sentence
-newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
-  (sParen $ Sy $ unit_symb QP.force), S "on a", phrase body,
-  S "is proportional to the", (phrase QP.acceleration),
-  (ch QP.acceleration), (sParen $ Sy $ unit_symb QP.acceleration),
-  S "of the", phrase body `sC` S "where", (ch QPP.mass), 
-  (sParen $ Sy $ unit_symb QPP.mass), S "denotes", (phrase QPP.mass) `ofThe` 
+newtonSLDesc = foldlSent [S "The net", phrase QP.force, ch QP.force,
+  sParen $ Sy $ unit_symb QP.force, S "on a", phrase body,
+  S "is proportional" `toThe` phrase QP.acceleration,
+  ch QP.acceleration, sParen $ Sy $ unit_symb QP.acceleration,
+  S "of the", phrase body `sC` S "where", ch QPP.mass, 
+  sParen $ Sy $ unit_symb QPP.mass, S "denotes", phrase QPP.mass `ofThe` 
   phrase body, S "as the", phrase constant `sOf` S "proportionality"]
 
 --
@@ -68,7 +67,7 @@ weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn,
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
-weightDerivAccelSentence = [S "Under the influence of gravity" `sC` 
+weightDerivAccelSentence = [S "Under the influence" `sOf` S "gravity" `sC` 
   S "and assuming a", short twoD, phrase cartesian, 
   S "with down as positive" `sC` S "an object has an", phrase QP.acceleration, 
   phrase vector, S "of"]
@@ -81,12 +80,12 @@ weightDerivNewtonSentence = [S "Since there is only one non-zero",
   S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
-weightDerivReplaceMassSentence = [at_start QPP.mass, S "can be expressed as",
+weightDerivReplaceMassSentence = [atStart QPP.mass, S "can be expressed as",
   phrase QPP.density, S "multiplied by", phrase QPP.vol `sC` S "resulting in"]
 
 weightDerivSpecWeightSentence :: [Sentence]
 weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight, 
-  S "as the product of", phrase QPP.density `sAnd` phrase QP.gravitationalAccel,
+  S "as the product" `sOf` phrase QPP.density `sAnd` phrase QP.gravitationalAccel,
   S "yields"]
 
 weightDerivAccelEqn :: Expr
@@ -138,5 +137,5 @@ torqueEqn = cross (sy QP.displacement) (sy QP.force)
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
-  S "on a body measures the", S "the tendency of a", phrase QP.force, 
+  S "on a body measures the", S "the tendency" `sOf` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]

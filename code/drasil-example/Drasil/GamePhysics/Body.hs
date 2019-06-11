@@ -43,8 +43,6 @@ import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, itemRefToSent,
-  makeListRef, makeTMatrix)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
@@ -157,7 +155,7 @@ sysInfo = SI {
   _kind = Doc.srs,
   _authors = authors,
   _quants = symbTT, 
-  _concepts = ([] :: [DefinedQuantityDict]),
+  _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefns,
   _inputs = inputSymbols,
@@ -222,12 +220,12 @@ resourcePath = "../../../datafiles/GamePhysics/"
 
 para1_introduction_intro :: Sentence
 para1_introduction_intro = foldlSent
-  [S "Due to the rising cost of developing", (plural videoGame) `sC` 
+  [S "Due to the rising cost of developing", plural videoGame `sC` 
   S "developers are looking for ways to save time and money for their" +:+.
-  (plural project), S "Using an", (phrase openSource), 
-  (phrase physLib),
+  plural project, S "Using an", phrase openSource, 
+  phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
-  S "to better quality", (plural product_)]
+  S "to better quality", plural product_]
 
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -241,19 +239,19 @@ para1_purpose_of_document_intro = para1_purpose_of_document_param chipmunk
   document programDescription (plural game) (map plural detailsAndGoal)
 
 programDescription :: Sentence
-programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
-  (phrase CP.rigidBody), (phrase physLib)]
+programDescription = foldlSent_ [phrase openSource, getAcc twoD, 
+  phrase CP.rigidBody, phrase physLib]
 
 para1_purpose_of_document_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
   [Sentence] -> Sentence
 para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldlSent 
-  [S "This", (phrase typeOf), S "descibes the modeling of an",
+  [S "This", phrase typeOf, S "descibes the modeling of an",
   progDescrip, S "used for" +:+. appOf, S "The", 
-  foldlList Comma List listOf, S "used in", (short progName), 
-  S "are provided. This", (phrase typeOf), 
-  S "is intended to be used as a", (phrase reference), 
-  S "to provide all necessary", (phrase information), 
-  S "to understand and verify the", (phrase model)]
+  foldlList Comma List listOf, S "used in", short progName, 
+  S "are provided. This", phrase typeOf, 
+  S "is intended to be used as a", phrase reference, 
+  S "to provide all necessary", phrase information, 
+  S "to understand and verify the", phrase model]
 
 ---------------------------------
 -- 2.2 : Scope of Requirements --
@@ -261,11 +259,11 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 scope_of_requirements_intro_p1, scope_of_requirements_intro_p2 :: Sentence
 
 scope_of_requirements_intro_p1 = foldlSent_
-  [S "the", (phrase physicalSim) `sOf` (getAcc twoD), 
-  (plural CP.rigidBody), S "acted on by", plural QP.force]
+  [S "the", phrase physicalSim `sOf` getAcc twoD, 
+  plural CP.rigidBody, S "acted on by", plural QP.force]
   
 scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
-  (plural CP.rigidBody), S "interact with one another"]
+  plural CP.rigidBody, S "interact with one another"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -278,9 +276,9 @@ scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these",
 organizationOfDocumentsIntro :: Sentence
 
 organizationOfDocumentsIntro = foldlSent 
-  [S "The", (phrase organization), S "of this", (phrase document), 
-  S "follows the", phrase template, S "for an", (getAcc Doc.srs), S "for", 
-  (phrase sciCompS), S "proposed by", makeCiteS parnas1972 `sAnd` 
+  [S "The", phrase organization, S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
   makeCiteS parnasClements1984]
 
 --------------------------------------------
@@ -312,7 +310,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
     phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
-    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.force +:+.
+    plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
     S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
     S "use complies with the" +:+ phrase user +:+. phrase guide,
@@ -398,7 +396,7 @@ terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
 termAndDefnBullets :: Contents
 termAndDefnBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn))
+  (map (\x -> atStart x +: EmptyS +:+ (x ^. defn))
     [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
 
 -----------------------------
@@ -431,10 +429,10 @@ generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
 generalDefinitionsIntro = foldlSP 
-  [S "This", (phrase section_), S "collects the", (plural CM.law) `sAnd` 
-  (plural CM.equation), S "that will be used in deriving the", 
-  (plural dataDefn) `sC` S "which in turn will be used to build the", 
-  (plural inModel)]
+  [S "This", phrase section_, S "collects the", plural CM.law `sAnd` 
+  plural CM.equation, S "that will be used in deriving the", 
+  plural dataDefn `sC` S "which in turn will be used to build the", 
+  plural inModel]
 
 -- GDefs not yet implemented --
 {-
@@ -447,8 +445,8 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [S "The", (phrase CPP.dimension)
-   `sOf` S "each", (phrase quantity), S "is also given"]
+dataDefinitionsIntro = foldlSent [S "The", phrase CPP.dimension
+   `sOf` S "each", phrase quantity, S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -503,16 +501,16 @@ offShelfSolsIntro = mkParagraph $ foldlSentCol
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 
-offShelfSols2DList = LlC $ enumBullet solutionLabel [(S "Box2D: http://box2d.org/"),
-  (S "Nape Physics Engine: http://napephys.com/")]
+offShelfSols2DList = LlC $ enumBullet solutionLabel [S "Box2D: http://box2d.org/",
+  S "Nape Physics Engine: http://napephys.com/"]
 
 offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
   getAcc threeD, phrase game, plural physLib, S "include:"]
 
 offShelfSols3DList = LlC $ enumBullet solutionLabel [
-  (S "Bullet: http://bulletphysics.org/"),
-  (S "Open Dynamics Engine: http://www.ode.org/"),
-  (S "Newton Game Dynamics: http://newtondynamics.com/")]
+  S "Bullet: http://bulletphysics.org/",
+  S "Open Dynamics Engine: http://www.ode.org/",
+  S "Newton Game Dynamics: http://newtondynamics.com/"]
 
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
@@ -531,14 +529,14 @@ traceabilityMatricesAndGraphTraces = map (foldlList Comma List)
   [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2,
    traceability_matrices_and_graph_trace3]
 
-traceability_matrices_and_graph_trace1 = [(plural goalStmt), 
-  (plural requirement), (plural inModel), (plural datumConstraint) +:+. S "with each other"]
+traceability_matrices_and_graph_trace1 = [plural goalStmt, 
+  plural requirement, plural inModel, plural datumConstraint +:+. S "with each other"]
 
-traceability_matrices_and_graph_trace2 = [(plural thModel), (plural genDefn), (plural dataDefn), 
-  (plural inModel), S "on the" +:+. plural assumption]
+traceability_matrices_and_graph_trace2 = [plural thModel, plural genDefn, plural dataDefn, 
+  plural inModel, S "on the" +:+. plural assumption]
 
-traceability_matrices_and_graph_trace3 = [(plural thModel), (plural genDefn), (plural dataDefn), 
-  (plural inModel) +:+ S "on each other"]
+traceability_matrices_and_graph_trace3 = [plural thModel, plural genDefn, plural dataDefn, 
+  plural inModel +:+ S "on each other"]
 
 -- these look like they could be generated by the sections above
 traceMatInstaModel, traceMatAssump, traceMatFuncReq, traceMatData,
@@ -599,7 +597,7 @@ traceMatTabReqGoalOtherReq8 = ["IM3", "R7"]
 
 traceMatTabReqGoalOtherRowHead, traceMatTabReqGoalOtherColHead :: [Sentence]
 traceMatTabReqGoalOtherRowHead = zipWith itemRefToSent traceMatTabReqGoalOtherRow
-  (traceMatInstaModelRef ++ (take 3 traceMatFuncReqRef) ++ traceMatDataRef)
+  (traceMatInstaModelRef ++ take 3 traceMatFuncReqRef ++ traceMatDataRef)
 traceMatTabReqGoalOtherColHead = zipWith itemRefToSent (traceMatGoalStmt ++
   traceMatFuncReq) (traceMatGoalStmtRef ++ traceMatFuncReqRef)
 
@@ -616,11 +614,11 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
 
 traceMatTabReqGoalOther :: LabelledContent
 traceMatTabReqGoalOther = llcc (makeTabRef "TraceyReqGoalsOther") $ Table 
-  (EmptyS:(traceMatTabReqGoalOtherRowHead))
+  (EmptyS : traceMatTabReqGoalOtherRowHead)
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef2S requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef2S probDescription) `sAnd` S "Other" +:+
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ sParen (makeRef2S requirements)
+  `sC` titleize' goalStmt +:+ sParen (makeRef2S probDescription) `sAnd` S "Other" +:+
   titleize' item)) True
 
 traceMatTabAssumpCol' :: [[String]]
@@ -691,7 +689,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc (makeTabRef "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S probDescription)
+  (showingCxnBw traceyMatrix (titleize' assumption +:+ sParen (makeRef2S probDescription)
   `sAnd` S "Other" +:+ titleize' item)) True
 
 traceMatTabDefnModelCol :: [[String]]
@@ -753,7 +751,7 @@ traceMatTabDefnModel :: LabelledContent
 traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table 
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
-  traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
+  traceMatTabDefnModelRow) (showingCxnBw traceyMatrix (titleize' item `sAnd`
   S "Other" +:+ titleize' section_)) True
 
 -----------------------------------

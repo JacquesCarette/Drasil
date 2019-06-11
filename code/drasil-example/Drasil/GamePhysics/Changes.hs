@@ -37,19 +37,19 @@ likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
 
 --these statements look like they could be parametrized
-likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
+likelyChangesStmt1 = (S "internal" +:+ getAcc CM.ode :+:
   S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
-  (phrase library)) `maybeChanged` (S "in the future")
+  phrase library) `maybeChanged` S "in the future"
 
-likelyChangesStmt2 = chgsStart assumpCT $ (phrase library) `maybeExpanded`
+likelyChangesStmt2 = chgsStart assumpCT $ phrase library `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+
   plural CP.collision)
 
-likelyChangesStmt3 = chgsStart assumpDI $ (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping))
+likelyChangesStmt3 = chgsStart assumpDI $ phrase library `maybeExpanded` (
+  S "to include motion with" +:+ phrase CP.damping)
 
-likelyChangesStmt4 = chgsStart assumpCAJI $ (phrase library) `maybeExpanded` (
-  S "to include" +:+ (plural CP.joint) `sAnd` (plural CM.constraint))
+likelyChangesStmt4 = chgsStart assumpCAJI $ phrase library `maybeExpanded` (
+  S "to include" +:+ plural CP.joint `sAnd` plural CM.constraint)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 

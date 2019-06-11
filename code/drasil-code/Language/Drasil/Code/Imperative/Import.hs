@@ -102,12 +102,12 @@ assign' x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> [repr
-  (Parameter repr)] -> [repr (StateType repr)] -> [Label] -> Reader (State repr)
-  [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
-publicMethod mt l pl st v u = do
+publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> 
+  [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
+  Reader (State repr) (repr (Method repr))
+publicMethod mt l pl u = do
   g <- ask
-  genMethodCall public static (commented g) (logKind g) mt l pl st v u
+  genMethodCall public static (commented g) (logKind g) mt l pl u
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()
@@ -219,25 +219,21 @@ genInputConstraints = do
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
   parms <- getParams varsList
-  ptypes <- getParamTypes varsList
-  pnames <- getParamNames varsList
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
     sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
     physCBody g x)]}) physCs
-  publicMethod void "input_constraints" parms ptypes pnames
-      (return [block sf, block hw])
+  publicMethod void "input_constraints" parms (return [block sf, block hw])
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-  parms <- getParams $ map codevar dvals
-  ptypes <- getParamTypes $ map codevar dvals
-  pnames <- getParamNames $ map codevar dvals
+      reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
+        dvals
+  parms <- getParams reqdVals
   inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
-  publicMethod void "derived_values" parms ptypes pnames
-      (return inps)
+  publicMethod void "derived_values" parms (return inps)
 
 -- need Expr -> String to print constraint
 constrWarn :: (RenderSym repr) => Expr -> repr (Body repr)
@@ -269,13 +265,11 @@ genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr
 genCalcFunc cdef = do
   g <- ask
   parms <- getParams $ codecs g
-  ptypes <- getParamTypes $ codecs g
-  pnames <- getParamNames $ codecs g
   blck <- genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef)
   publicMethod
     (mState $ convType (codeType cdef))
     (codeName cdef)
-    parms ptypes pnames
+    parms
     (return [blck])
   where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
@@ -310,14 +304,12 @@ genOutputFormat outs =
       v_outfile = var l_outfile
   in do
     parms <- getParams outs
-    ptypes <- getParamTypes outs
-    pnames <- getParamNames outs
     outp <- mapM (\x -> do
         v <- variable $ codeName x
         return [ printFileStr v_outfile (codeName x ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
                ] ) outs
-    publicMethod void "write_output" parms ptypes pnames (return [block $
+    publicMethod void "write_output" parms (return [block $
       [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
@@ -327,17 +319,18 @@ genOutputFormat outs =
 
 genMethodCall :: (RenderSym repr) => repr (Scope repr) -> repr
   (Permanence repr) -> Comments -> Logging -> repr (MethodType repr) ->
-  Label -> [repr (Parameter repr)] -> [repr (StateType repr)] -> [Label]
-  -> Reader (State repr) [repr (Block repr)] -> Reader (State repr) (repr
-  (Method repr))
-genMethodCall s pr doComments doLog t n p st l b = do
-  let loggedBody LogFunc = loggedMethod n st l b
-      loggedBody LogAll  = loggedMethod n st l b
+  Label -> [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
+  Reader (State repr) (repr (Method repr))
+genMethodCall s pr doComments doLog t n p b = do
+  let loggedBody LogFunc = loggedMethod n pTypes pNames b
+      loggedBody LogAll  = loggedMethod n pTypes pNames b
       loggedBody _       = b
-      commBody CommentFunc = commMethod n l
+      commBody CommentFunc = commMethod n pNames
       commBody _           = id
+      pTypes = map paramType p
+      pNames = map paramName p
   bod <- commBody doComments (loggedBody doLog)
-  return $ function n s pr t p (body bod)
+  return $ function n s pr t (map param p) (body bod)
 
 commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) 
   [repr (Block repr)] -> Reader (State repr) [repr (Block repr)]
@@ -470,46 +463,44 @@ fApp s' vl' = do
                 | otherwise = funcApp s vl
   return $ doit s' vl'
 
+data ParamData repr = PD {
+  param :: (ParameterSym repr) => repr (Parameter repr),
+  paramType :: (StateTypeSym repr) => repr (StateType repr),
+  paramName :: Label
+}
+
 getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
-  [repr (Parameter repr)]
+  [ParamData repr]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
-      csSubIns = cs \\ ins
-      ps = map (\y -> (paramFunc $ codeType y) (codeName y) (convType $ 
-        codeType y))
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
-              csSubIns)
-      paramFunc (C.List _) = pointerParam
-      paramFunc _ = stateParam
-  return $ if length csSubIns < length cs
-           then pointerParam "inParams" (obj "InputParameters") : ps  -- todo:  make general
-           else ps
+      consts = map codevar $ constants $ codeSpec g
+      inpParams = filter (`elem` ins) cs
+      inPs = getInputParams (inStruct g) inpParams
+      conParams = filter (`elem` consts) cs
+      conPs = getConstParams conParams
+      csSubIns = cs \\ (ins ++ consts)
+      ps = map mkParam csSubIns
+  return $ inPs ++ conPs ++ ps
 
-getParamTypes :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
-  [repr (StateType repr)]
-getParamTypes cs = do
-  g <- ask
-  let ins = inputs $ codeSpec g
-      csSubIns = cs \\ ins
-      pts = map (convType . codeType)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
-              csSubIns)
-  return $ if length csSubIns < length cs
-          then obj "InputParameters" : pts  -- todo:  make general
-          else pts
+mkParam :: (RenderSym repr) => CodeChunk -> ParamData repr
+mkParam p = PD ((paramFunc $ codeType p) pName pType) pType pName
+  where paramFunc (C.List _) = pointerParam
+        paramFunc _ = stateParam
+        pName = codeName p
+        pType = convType $ codeType p
 
-getParamNames :: [CodeChunk] -> Reader (State repr) [Label]
-getParamNames cs = do
-  g <- ask
-  let ins = inputs $ codeSpec g
-      csSubIns = cs \\ ins
-      pvs = map codeName
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
-              csSubIns)
-  return $ if length csSubIns < length cs
-          then "inParams" : pvs  -- todo:  make general
-          else pvs
+getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
+  [ParamData repr]
+getInputParams _ [] = []
+getInputParams Loose cs = map mkParam cs
+getInputParams AsClass _ = [PD (pointerParam pName pType) pType pName]
+  where pName = "inParams"
+        pType = obj "InputParameters"
+
+-- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
+getConstParams :: [CodeChunk] -> [ParamData repr]
+getConstParams _ = []
 
 getArgs :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
   [repr (Value repr)]
@@ -652,10 +643,8 @@ genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
-  ptypes <- getParamTypes i
-  pnames <- getParamNames i
   stmts <- mapM convStmt s
-  publicMethod (mState $ convType o) n parms ptypes pnames
+  publicMethod (mState $ convType o) n parms
     (return [block $
         map (\x -> varDec (codeName x) (convType $ codeType x))
           (fstdecl (sysinfodb (codeSpec g)) s \\ i)
@@ -717,11 +706,8 @@ genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
 genDataFunc nameTitle ddef = do
     parms <- getParams $ getInputs ddef
-    ptypes <- getParamTypes $ getInputs ddef
-    pnames <- getParamNames $ getInputs ddef
     inD <- mapM inData ddef
-    publicMethod void nameTitle (p_filename : parms) (string : ptypes)
-      (l_filename : pnames) $
+    publicMethod void nameTitle ((PD p_filename string l_filename) : parms) $
       return [block $ [
       varDec l_infile infile,
       varDec l_line string,

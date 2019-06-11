@@ -49,7 +49,7 @@ data CodeSpec where
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  const :: [Const],
+  constants :: [Const],
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
@@ -84,10 +84,10 @@ codeSpec SI {_sys = sys
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
-              , _constants = constants
+              , _constants = consts
               , _sysinfodb = db} chs ms = 
   let inputs' = map codevar ins
-      const' = map qtov constants
+      const' = map qtov consts
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
@@ -107,7 +107,7 @@ codeSpec SI {_sys = sys
         vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
-        const = const',
+        constants = const',
         mods = mods',
         dMap = modDepMap db mem mods',
         sysinfodb = db

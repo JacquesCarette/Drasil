@@ -4,11 +4,11 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
   makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
   mkTableFromColumns, noRefs, noRefsLT, refineChain, showingCxnBw,
   sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
-  tableShows, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (sAre, sOf, toThe)
+import Utils.Drasil.Sentence (sAre, toThe)
 
 import Control.Lens ((^.))
 
@@ -141,10 +141,6 @@ noRefs a = zip a $ repeat Nothing
 -- a ListTuple which can be used with Contents but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
-
---Doesn't use dependency phrase so utils doesn't depend on data
-tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref end = makeRef2S ref +:+ S "shows the dependencies" `sOf` end
 
 --Doesn't use connection phrase so utils doesn't depend on data
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence

@@ -1,17 +1,12 @@
-module Drasil.Sections.TraceabilityMandGs
-  ( traceMGF,
-    traceGIntro,
-    generateTraceTable
-   ) where
+module Drasil.Sections.TraceabilityMandGs (generateTraceTable, traceGIntro, traceMGF) where
 
 import Language.Drasil
-import Database.Drasil(ChunkDB, SystemInformation, refbyLookup, refbyTable,
-  _sysinfodb)
+import Database.Drasil (ChunkDB, SystemInformation, refbyLookup, refbyTable, _sysinfodb)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
- reference, section_, traceyGraph, traceyMatrix)
-import Data.Drasil.Concepts.Math ( graph)
+import Data.Drasil.Concepts.Documentation (component, dependency, item, purpose,
+  reference, section_, traceyGraph, traceyMatrix)
+import Data.Drasil.Concepts.Math (graph)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
 import qualified Drasil.DocLang.SRS as SRS
@@ -42,11 +37,11 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `ofThe'` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
-        S "The arrows in the", plural graph, S "represent" +:+.
-        plural dependency, S "The", phrase component, S "at the tail of an arrow",
-        S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
-        phrase component, S "is changed, the", plural component, S "that it points to should also",
-        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)]
+        S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
+        S "The", phrase component, S "at the tail of an arrow is depended on by the",
+        phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
+        S "is changed, the", plural component, S "that it points to should also be changed"] +:+
+        foldlSent (zipWith tableShows refs trailings)]
  
 traceMRow :: ChunkDB -> [UID]
 traceMRow = nub . Map.keys . (^. refbyTable)
@@ -71,4 +66,7 @@ generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
   (EmptyS : traceMColHeader c)
   (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMCol $ _sysinfodb c)
   (showingCxnBw traceyMatrix $
-  titleize' item +:+ S "of Different" +:+ titleize' section_) True
+  titleize' item `sOf` S "Different" +:+ titleize' section_) True
+
+tableShows :: LabelledContent -> Sentence -> Sentence
+tableShows ref end = makeRef2S ref +:+ S "shows the" +:+ plural dependency `sOf` end

@@ -143,6 +143,11 @@
                   <td>N&sdot;s</td>
                 </tr>
                 <tr>
+                  <td><em><b>J</b></em></td>
+                  <td>Impulse (vector)</td>
+                  <td>N&sdot;s</td>
+                </tr>
+                <tr>
                   <td><em>KE</em></td>
                   <td>Kinetic energy</td>
                   <td>J</td>
@@ -280,6 +285,21 @@
                 <tr>
                   <td><em><b>v</b></em></td>
                   <td>Velocity</td>
+                  <td>m/s</td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b><sub>1</sub></em></td>
+                  <td>Velocity Of the First Body</td>
+                  <td>m/s</td>
+                </tr>
+                <tr>
+                  <td><em><b>v</b><sub>2</sub></em></td>
+                  <td>Velocity Of the Second Body</td>
+                  <td>m/s</td>
+                </tr>
+                <tr>
+                  <td><em>Δ<b>v</b></em></td>
+                  <td>Change in velocity</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -619,7 +639,7 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
                     </div>
                   </p>
                   <p>
@@ -1725,6 +1745,74 @@
                     </tr>
                   </table>
                 </div>
+                <div id="DD:impulseV">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Impulse (vector)</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>J</b></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">N&sdot;s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation"><em><b>J</b> = m&#8239;Δ<b>v</b></em></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em><b>J</b></em> is the impulse (vector) (N&sdot;s)</li>
+                          <li><em>m</em> is the mass (kg)</li>
+                          <li><em>Δ<b>v</b></em> is the change in velocity (m/s)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts over a body over an interval of time Derivation of impulse (vector).
+                        </p>
+                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph">
+                   Derivation of impulse (vector) - Newton's second law of motion states:
+                </p>
+                <div class="equation">
+                  <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
+                                                              <span class="fup">
+                                                                d&#8239;<b>v</b>
+                                                              </span>
+                                                              <span class="fdn">d&#8239;t</span>
+                                                            </div></em>
+                </div>
+                <p class="paragraph">Rearranging :</p>
+                <div class="equation">
+                  <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
+                </div>
+                <p class="paragraph">Integrating the right hand side :</p>
+                <div class="equation">
+                  <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+                </div>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2037,7 +2125,7 @@
                       <td>
                         <em>0&thinsp;&le;&thinsp;C<sub>R</sub>&thinsp;&le;&thinsp;1</em>
                       </td>
-                      <td><em>800.0&sdot;10<sup>-3</sup></em></td>
+                      <td><em>0.8</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2073,7 +2161,7 @@
                     <tr>
                       <td><em><b>p</b></em></td>
                       <td>--</td>
-                      <td><em>412.0&sdot;10<sup>-3</sup></em> m</td>
+                      <td><em>0.412</em> m</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2340,6 +2428,7 @@
               <th><a href=#DD:ctrOfMass>DD: ctrOfMass</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
               <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
+              <th><a href=#DD:impulseV>DD: impulseV</a></th>
               <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
             </tr>
             <tr>
@@ -2347,6 +2436,7 @@
                 <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
               </td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2389,11 +2479,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angDisp>DD: angDisp</a></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2435,6 +2527,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#assumpAD>A: axesDefined</a></td>
@@ -2442,6 +2535,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2481,6 +2575,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#assumpCT>A: collisionType</a></td>
@@ -2491,6 +2586,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2527,6 +2623,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#assumpOD>A: objectDimension</a></td>
@@ -2548,6 +2645,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -2573,6 +2671,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td>X</td>
             </tr>
             <tr>
               <td><a href=#DD:impulse>DD: impulse</a></td>
@@ -2580,6 +2679,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2619,6 +2719,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linDisp>DD: linDisp</a></td>
@@ -2627,6 +2728,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2665,6 +2767,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
@@ -2673,6 +2776,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3138,7 +3242,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>LC3 (<a href=#IM:transMot>IM: transMot</a>)</td>
+              <td>LC3 (<a href=#DD:impulseV>DD: impulseV</a>)</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3148,7 +3252,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>LC4 (<a href=#IM:rotMot>IM: rotMot</a>)</td>
+              <td>LC4 (<a href=#IM:transMot>IM: transMot</a>)</td>
               <td></td>
               <td></td>
               <td></td>

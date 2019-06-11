@@ -6,7 +6,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo,
     acceleration, height, displacement, distance, energy, force, gravitationalAccel, 
     gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
     momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity,
-    weight, kEnergy, chgInVelocity)
+    weight, kEnergy, chgInVelocity, potEnergy)
+
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
@@ -25,7 +26,7 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, height, 
   impulseS, impulseV, linearAccel, linearDisplacement, linearVelocity,
   momentOfInertia, position, pressure, time, torque, velocity, weight,
-  kEnergy, chgInVelocity :: UnitalChunk
+  kEnergy, chgInVelocity, potEnergy :: UnitalChunk
 
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
@@ -52,3 +53,4 @@ time                 = uc CP.time lT second
 torque               = uc CP.torque lTau torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
+potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule

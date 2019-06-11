@@ -3,7 +3,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
-import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (value)
@@ -17,18 +17,18 @@ import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
   tempW, tempPCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
-  htCapLP, pcmHTC, pcmSA, tauSP, tauLP)
+  htCapLP, pcmHTC, pcmSA, tauSP, tauLP, aspectRatio, diam, tankLength)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
 qDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
-  ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
+  ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
 dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
-  ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
+  ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac, aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -114,6 +114,17 @@ dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
  [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
   E (0 $<= sy meltFrac $<= 1), makeRef2S dd3HtFusion]
+
+----
+
+aspRatQD :: QDefinition
+aspRatQD = mkQuantDef aspectRatio aspRatEq
+
+aspRatEq :: Expr
+aspRatEq = sy diam / sy tankLength
+
+aspRat :: DataDefinition
+aspRat = ddNoRefs aspRatQD [{-derivation-}] "aspectRatio" []
 
 --Need to add units to data definition descriptions
 

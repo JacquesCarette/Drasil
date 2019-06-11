@@ -99,6 +99,11 @@ The table that follows summarizes the symbols used in this document along with t
 <td>m<sup>2</sup></td>
 </tr>
 <tr>
+<td><em>AR</em></td>
+<td>Aspect ratio</td>
+<td>--</td>
+</tr>
+<tr>
 <td><em>C</em></td>
 <td>Specific heat capacity</td>
 <td>J/(kg&sdot;&deg;C)</td>
@@ -1626,6 +1631,51 @@ The value of <em>ϕ</em> is constrained to <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&l
 <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </p>
 </td>
+</tr>
+</table>
+</div>
+<div id="DD:aspectRatio">
+<table class="ddefn">
+<tr>
+<th>Label</th>
+<td><p class="paragraph">Aspect ratio</p></td>
+</tr>
+<tr>
+<th>Symbol</th>
+<td><p class="paragraph"><em>AR</em></p></td>
+</tr>
+<tr>
+<th>Units</th>
+<td><p class="paragraph">Unitless</p></td>
+</tr>
+<tr>
+<th>Equation</th>
+<td>
+<div class="equation">
+<em>AR = <div class="fraction">
+         <span class="fup">D</span>
+         <span class="fdn">L</span>
+         </div></em>
+</div>
+</td>
+</tr>
+<tr>
+<th>Description</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li><em>AR</em> is the aspect ratio (Unitless)</li>
+<li><em>D</em> is the diameter of tank (m)</li>
+<li><em>L</em> is the length of tank (m)</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>Source</th>
+<td><p class="paragraph">--</p></td>
+</tr>
+<tr>
+<th>RefBy</th>
+<td><p class="paragraph"></p></td>
 </tr>
 </table>
 </div>
@@ -4268,10 +4318,10 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 </th>
 <th>DD5 (<a href=#DD:htFusion>DD: htFusion</a>)</th>
 <th>DD6 (<a href=#DD:meltFrac>DD: meltFrac</a>)</th>
-<th>IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</th>
-<th>IM2 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</th>
-<th>IM3 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</th>
-<th>IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)</th>
+<th>IM1 (<a href=#DD:aspectRatio>DD: aspectRatio</a>)</th>
+<th>IM2 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</th>
+<th>IM3 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</th>
+<th>IM4 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</th>
 </tr>
 <tr>
 <td>T1 (<a href=#TM:consThermE>TM: consThermE</a>)</td>
@@ -4474,7 +4524,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</td>
+<td>IM1 (<a href=#DD:aspectRatio>DD: aspectRatio</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4492,7 +4542,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>IM2 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</td>
+<td>IM2 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4510,7 +4560,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td>X</td>
 </tr>
 <tr>
-<td>IM3 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</td>
+<td>IM3 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</td>
 <td></td>
 <td>X</td>
 <td></td>
@@ -4528,7 +4578,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)</td>
+<td>IM4 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</td>
 <td></td>
 <td>X</td>
 <td>X</td>
@@ -5198,7 +5248,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</td>
+<td>IM1 (<a href=#DD:aspectRatio>DD: aspectRatio</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5220,7 +5270,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td>X</td>
 </tr>
 <tr>
-<td>IM2 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</td>
+<td>IM2 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5242,7 +5292,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>IM3 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</td>
+<td>IM3 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5264,7 +5314,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td>X</td>
 </tr>
 <tr>
-<td>IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)</td>
+<td>IM4 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5286,7 +5336,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>LC1 (<a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a>)</td>
+<td>LC1 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5296,6 +5346,52 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>LC2 (<a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a>)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>
+LC3 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5309,8 +5405,11 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
+LC4 (<a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a>)
 </td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -5323,6 +5422,25 @@ LC2 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>LC5 (<a href=#likeChgDT>LC: Discharging-Tank</a>)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5333,76 +5451,8 @@ LC2 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
 </tr>
 <tr>
 <td>
-LC3 (<a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a>)
+LC6 (<a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a>)
 </td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>LC4 (<a href=#likeChgDT>LC: Discharging-Tank</a>)</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>
-LC5 (<a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a>)
-</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>LC6 (<a href=#likeChgTLH>LC: Tank-Lose-Heat</a>)</td>
 <td></td>
 <td></td>
 <td></td>

@@ -72,6 +72,8 @@ ${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
 ${A_{P}}$ & Phase change material surface area & $\text{m}^{2}$
 \\
+$AR$ & Aspect ratio & --
+\\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -746,6 +748,35 @@ Source & \cite{koothoor2013}
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:aspectRatio}
+\phantomsection 
+\label{DD:aspectRatio}
+\\ \midrule \\
+Label & Aspect ratio
+\\ \midrule \\
+Symbol & $AR$
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & \begin{displaymath}
+           AR=\frac{D}{L}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$AR$ is the aspect ratio (Unitless)}
+              \item{$D$ is the diameter of tank (m)}
+              \item{$L$ is the length of tank (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
@@ -1247,7 +1278,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:htFluxC]{DD: htFluxC}) & DD2 (\hyperref[DD:htFluxP]{DD: htFluxP}) & DD3 (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}) & DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) & DD5 (\hyperref[DD:htFusion]{DD: htFusion}) & DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
+ & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & T3 (\hyperref[TM:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:htFluxC]{DD: htFluxC}) & DD2 (\hyperref[DD:htFluxP]{DD: htFluxP}) & DD3 (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}) & DD4 (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}) & DD5 (\hyperref[DD:htFusion]{DD: htFusion}) & DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) & IM1 (\hyperref[DD:aspectRatio]{DD: aspectRatio}) & IM2 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM3 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM4 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr})
 \\
 \midrule
 \endhead
@@ -1273,13 +1304,13 @@ DD5 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  &  &  & X &  & 
+IM1 (\hyperref[DD:aspectRatio]{DD: aspectRatio}) &  &  &  &  & X & X & X &  &  &  &  &  & X &  & 
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  & X &  & X & X & X &  & X & X &  &  & X
+IM2 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X &  & X & X & X &  & X & X &  &  & X
 \\
-IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X & X &  &  &  & X &  & X & X &  &  & X &  & 
+IM4 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  & X & X &  &  &  & X &  & X & X &  &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1353,25 +1384,25 @@ DD5 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 DD6 (\hyperref[DD:meltFrac]{DD: meltFrac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
+IM1 (\hyperref[DD:aspectRatio]{DD: aspectRatio}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
+IM2 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
 \\
-IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
+IM3 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
 \\
-IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
+IM4 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
 \\
-LC1 (\hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+LC1 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-LC2 (\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+LC2 (\hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-LC3 (\hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+LC3 (\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-LC4 (\hyperref[likeChgDT]{LC: Discharging-Tank}) &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+LC4 (\hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-LC5 (\hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water}) &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+LC5 (\hyperref[likeChgDT]{LC: Discharging-Tank}) &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-LC6 (\hyperref[likeChgTLH]{LC: Tank-Lose-Heat}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+LC6 (\hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

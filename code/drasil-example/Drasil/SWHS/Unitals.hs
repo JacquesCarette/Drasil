@@ -202,9 +202,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, aspectRatio]
 
-eta, meltFrac, fracMin:: DefinedQuantityDict
+eta, meltFrac, fracMin, aspectRatio :: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
@@ -220,6 +220,11 @@ fracMin = dqd' (dcc "fracMin"
   (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
   "minimum fraction of the tank volume taken up by the PCM")
    (const $ Atomic "MINFRACT") Real Nothing
+
+aspectRatio = dqd' (dcc "aspectRatio" 
+  (nounPhraseSP "aspect ratio")
+  "ratio of tank diameter to tank length")
+   (const $ Atomic "AR") Real Nothing
 
 -----------------
 -- Constraints --

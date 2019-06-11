@@ -1,6 +1,6 @@
 module Utils.Drasil (
   -- Fold
-  EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints, -- FIXME: foldConstraints shouldn't be exported when drasil-utils is finished
+  EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC,
   -- Misc

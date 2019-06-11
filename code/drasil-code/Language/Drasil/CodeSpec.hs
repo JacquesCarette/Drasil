@@ -76,7 +76,7 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _quants = q
               , _definitions = defs'
@@ -85,13 +85,13 @@ codeSpec SI {_sys = sys
               , _outputs = outs
               , _constraints = cs
               , _constants = constants
-              , _sysinfodb = db} ms = 
+              , _sysinfodb = db} chs ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
-      mem   = modExportMap mods' inputs' const'
+      mem   = modExportMap chs mods' inputs' const' derived
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
@@ -234,12 +234,12 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
-modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
+modExportMap chs ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
-                        ++ [ ("derived_values", "DerivedValues"),
-                             ("input_constraints", "InputConstraints"),
+                        ++ getExportDerived chs ds
+                        ++ [ ("input_constraints", "InputConstraints"),
                              ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
@@ -342,6 +342,14 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                         ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
+type Export = (String, String)
+
+getExportDerived :: Choices -> [Derived] -> [Export]
+getExportDerived _ [] = []
+getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
+  where dMod Loose = "InputParameters"
+        dMod AsClass = "DerivedValues"
+
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 

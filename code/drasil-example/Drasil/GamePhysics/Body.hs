@@ -198,8 +198,7 @@ usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
 
-code :: CodeSpec
-code = codeSpec sysInfo []
+
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"

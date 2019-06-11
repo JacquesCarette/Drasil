@@ -1,7 +1,6 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization, section, sec)
-import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -64,7 +63,6 @@ import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
-import Drasil.SWHS.DataDesc (inputMod)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
@@ -200,9 +198,6 @@ mkSRS = [RefSec $ RefProg intro [
   [LlC traceFig1, LlC traceFig2]) [],
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
-
-code :: CodeSpec
-code = codeSpec si [inputMod]
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention

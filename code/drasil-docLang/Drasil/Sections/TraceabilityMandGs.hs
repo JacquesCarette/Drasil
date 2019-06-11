@@ -1,20 +1,26 @@
-module Drasil.Sections.TraceabilityMandGs (generateTraceTable, traceGIntro, traceMGF) where
+module Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro, generateTraceTable,
+  generateTraceTableView, tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
+  tvInsModels, tvGoals, tvReqs, tvChanges) where
 
 import Language.Drasil
-import Database.Drasil (ChunkDB, SystemInformation, refbyTable, traceTable,
-  traceLookup, _sysinfodb)
+import Database.Drasil(ChunkDB, SystemInformation, refbyTable, conceptinsTable,
+  _sysinfodb, defTable, defLookup, traceTable, gendefTable, traceLookup,
+  asOrderedList, dataDefnTable, insmodelTable, theoryModelTable, UMap)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (component, dependency, item, purpose,
-  reference, section_, traceyGraph, traceyMatrix)
+import Data.Drasil.Concepts.Documentation (assumpDom, chgProbDom,
+  goalStmtDom, reqDom, purpose, component, dependency,
+  item, reference, section_, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math (graph)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
 import qualified Drasil.DocLang.SRS as SRS
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), Getting)
 import Data.List (nub)
 import qualified Data.Map as Map
+
+type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
@@ -44,30 +50,89 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent (zipWith tableShows refs trailings)]
  
-traceMReferees :: ChunkDB -> [UID]
-traceMReferees = nub . Map.keys . (^. refbyTable)
+traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
+traceMReferees f = f . nub . Map.keys . (^. refbyTable)
 
-traceMReferrers :: ChunkDB -> [UID]
-traceMReferrers = nub . concat . Map.elems . (^. refbyTable)
+traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
+traceMReferrers f = f . nub . concat . Map.elems . (^. refbyTable)
 
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
 traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
  
-traceMRowHeader :: SystemInformation -> [Sentence]
-traceMRowHeader = traceMHeader traceMReferrers
+traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+traceMColHeader f = traceMHeader (traceMReferees f)
 
-traceMColHeader :: SystemInformation -> [Sentence]
-traceMColHeader = traceMHeader traceMReferees
+traceMRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+traceMRowHeader f = traceMHeader (traceMReferrers f)
 
-traceMColumns :: ChunkDB -> [[UID]]
-traceMColumns c = map (`traceLookup` (c ^. traceTable)) $ traceMReferrers c
- 
-generateTraceTable :: SystemInformation -> LabelledContent
-generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
-  (EmptyS : traceMColHeader c)
-  (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMReferees $ _sysinfodb c)
-  (showingCxnBw traceyMatrix $
-  titleize' item `sOf` S "Different" +:+ titleize' section_) True
+traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> ChunkDB -> [[UID]]
+traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup (c ^. traceTable)) $ traceMReferrers fr c
 
 tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref end = makeRef2S ref +:+ S "shows the" +:+ plural dependency `sOf` end
+ 
+generateTraceTable :: SystemInformation -> LabelledContent
+generateTraceTable = generateTraceTableView "Tracey"
+  (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
+
+generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
+generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ u
+generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ u
+generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
+  (EmptyS : ensureItems u (traceMColHeader colf c))
+  (makeTMatrix (ensureItems u $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
+  (showingCxnBw traceyMatrix desc) True where
+    cdb = _sysinfodb c
+    colf = layoutUIDs cols cdb
+    rowf = layoutUIDs rows cdb
+
+ensureItems :: UID -> [a] -> [a]
+ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability matrix " ++ u
+ensureItems _ l = l
+
+layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
+layoutUIDs a c e = concatMap (\x -> x e c) a
+
+traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
+
+traceView :: HasUID a => Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceView = traceViewFilt (const True)
+
+traceViewCC :: Concept c => c -> TraceViewCat
+traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) conceptinsTable u c
+  where
+    isDomUnder :: UID -> UID -> Bool
+    isDomUnder filtDom curr
+      | filtDom == curr = True
+      | not $ null $ getDom curr = isDomUnder filtDom (sDom $ getDom curr)
+      | otherwise = False
+    getDom :: UID -> [UID]
+    getDom curr = cdom $ defLookup curr $ defTable c
+
+tvEverything :: TraceViewCat
+tvEverything = flip (const id)
+
+tvAssumps :: TraceViewCat
+tvAssumps = traceViewCC assumpDom
+
+tvDataDefns :: TraceViewCat
+tvDataDefns = traceView dataDefnTable
+
+tvGenDefns :: TraceViewCat
+tvGenDefns = traceView gendefTable
+
+tvTheoryModels :: TraceViewCat
+tvTheoryModels = traceView theoryModelTable
+
+tvInsModels :: TraceViewCat
+tvInsModels = traceView insmodelTable
+
+tvGoals :: TraceViewCat
+tvGoals = traceViewCC goalStmtDom
+
+tvReqs :: TraceViewCat
+tvReqs = traceViewCC reqDom
+
+tvChanges :: TraceViewCat
+tvChanges = traceViewCC chgProbDom

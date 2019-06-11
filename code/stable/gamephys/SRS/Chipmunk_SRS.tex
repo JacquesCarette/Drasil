@@ -1262,42 +1262,56 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+\begin{longtable}{l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:potEnergy]{DD: potEnergy} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
+ & \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[assumpAD]{A: axesDefined} & \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} & \hyperref[assumpCT]{A: collisionType} & \hyperref[assumpDI]{A: dampingInvolvement} & \hyperref[assumpOD]{A: objectDimension} & \hyperref[assumpOT]{A: objectTy} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass}
 \\
 \midrule
 \endhead
-\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:rotMot]{IM: rotMot} &  & X & X & X & X & X &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[DD:angDisp]{DD: angDisp} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:impulse]{DD: impulse} &  &  &  &  & X &  & X &  & X & X &  &  &  &  & 
 \\
-\hyperref[DD:angVel]{DD: angVel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:col2D]{IM: col2D} &  &  &  &  & X & X & X & X & X & X & X &  &  &  & X
 \\
-\hyperref[assumpAD]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:transMot]{IM: transMot} &  &  &  &  &  & X &  & X & X & X &  & X & X & X & X
 \\
-\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} &  & X &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[lcIJC]{LC: Include-Joints-Constraints} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpCT]{A: collisionType} &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[lcEC]{LC: Expanded-Collisions} &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpDI]{A: dampingInvolvement} &  & X &  & X & X &  &  & X & X & X & X & X & X & X & X & X & X &  &  &  &  & 
+\hyperref[DD:chalses]{DD: chalses} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[assumpOD]{A: objectDimension} &  & X & X & X & X &  &  & X & X & X & X & X &  & X & X & X & X & X & X &  &  & 
+\hyperref[DD:potEnergy]{DD: potEnergy} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[assumpOT]{A: objectTy} &  & X & X & X & X &  &  & X & X & X & X & X &  & X & X & X & X & X &  & X & X & X
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[lcID]{LC: Include-Dampening} &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:kEnergy]{DD: kEnergy} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angVel]{DD: angVel} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
+\\
+\hyperref[DD:angDisp]{DD: angDisp} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
+\\
+\hyperref[DD:angAccel]{DD: angAccel} &  &  &  &  &  &  &  & X & X & X &  &  &  &  & 
+\\
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  &  &  &  &  &  & X & X &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[DD:reVeInColl]{DD: reVeInColl} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\\
+\hyperref[DD:impulseV]{DD: impulseV} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\\
+\hyperref[TM:ChaslesThm]{TM: ChaslesThm} &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

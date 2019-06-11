@@ -1,7 +1,8 @@
 module Drasil.Sections.TraceabilityMandGs (generateTraceTable, traceGIntro, traceMGF) where
 
 import Language.Drasil
-import Database.Drasil (ChunkDB, SystemInformation, refbyLookup, refbyTable, _sysinfodb)
+import Database.Drasil (ChunkDB, SystemInformation, refbyTable, traceTable,
+  traceLookup, _sysinfodb)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (component, dependency, item, purpose,
@@ -26,7 +27,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         `ofThe'` plural traceyMatrix, S "is to provide easy", plural reference, 
         S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component, 
-        S "is changed, the", plural item, S "in the row of that", 
+        S "is changed, the", plural item, S "in the column of that", 
         phrase component, S "that are marked with an", Quote (S "X"), 
         S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
 
@@ -43,28 +44,28 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent (zipWith tableShows refs trailings)]
  
-traceMRow :: ChunkDB -> [UID]
-traceMRow = nub . Map.keys . (^. refbyTable)
+traceMReferees :: ChunkDB -> [UID]
+traceMReferees = nub . Map.keys . (^. refbyTable)
 
-traceMCol :: ChunkDB -> [UID]
-traceMCol = nub . concat . Map.elems . (^. refbyTable)
+traceMReferrers :: ChunkDB -> [UID]
+traceMReferrers = nub . concat . Map.elems . (^. refbyTable)
 
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
 traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
  
 traceMRowHeader :: SystemInformation -> [Sentence]
-traceMRowHeader = traceMHeader traceMRow
+traceMRowHeader = traceMHeader traceMReferrers
 
 traceMColHeader :: SystemInformation -> [Sentence]
-traceMColHeader = traceMHeader traceMCol
+traceMColHeader = traceMHeader traceMReferees
 
 traceMColumns :: ChunkDB -> [[UID]]
-traceMColumns c = map (`refbyLookup` (c ^. refbyTable)) $ traceMRow c
+traceMColumns c = map (`traceLookup` (c ^. traceTable)) $ traceMReferrers c
  
 generateTraceTable :: SystemInformation -> LabelledContent
 generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
   (EmptyS : traceMColHeader c)
-  (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMCol $ _sysinfodb c)
+  (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMReferees $ _sysinfodb c)
   (showingCxnBw traceyMatrix $
   titleize' item `sOf` S "Different" +:+ titleize' section_) True
 

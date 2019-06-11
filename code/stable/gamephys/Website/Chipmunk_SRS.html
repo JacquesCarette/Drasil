@@ -2467,40 +2467,33 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey>Table:Tracey</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
         </p>
         <div id="Table:Tracey">
           <table class="table">
             <tr>
               <th></th>
               <th>
-                <a href=#verifyPhysCons>FR: Verify-Physical_Constraints</a>
+                <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
               </th>
-              <th><a href=#IM:rotMot>IM: rotMot</a></th>
-              <th><a href=#DD:impulse>DD: impulse</a></th>
-              <th><a href=#IM:col2D>IM: col2D</a></th>
-              <th><a href=#IM:transMot>IM: transMot</a></th>
-              <th><a href=#lcIJC>LC: Include-Joints-Constraints</a></th>
-              <th><a href=#lcEC>LC: Expanded-Collisions</a></th>
-              <th><a href=#DD:chalses>DD: chalses</a></th>
-              <th><a href=#DD:potEnergy>DD: potEnergy</a></th>
-              <th><a href=#DD:linVel>DD: linVel</a></th>
-              <th><a href=#DD:linDisp>DD: linDisp</a></th>
-              <th><a href=#DD:linAcc>DD: linAcc</a></th>
-              <th><a href=#lcID>LC: Include-Dampening</a></th>
-              <th><a href=#DD:kEnergy>DD: kEnergy</a></th>
-              <th><a href=#DD:angVel>DD: angVel</a></th>
-              <th><a href=#DD:angDisp>DD: angDisp</a></th>
               <th><a href=#DD:angAccel>DD: angAccel</a></th>
+              <th><a href=#DD:angDisp>DD: angDisp</a></th>
+              <th><a href=#DD:angVel>DD: angVel</a></th>
+              <th><a href=#assumpAD>A: axesDefined</a></th>
+              <th><a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a></th>
+              <th><a href=#assumpCT>A: collisionType</a></th>
+              <th><a href=#assumpDI>A: dampingInvolvement</a></th>
+              <th><a href=#assumpOD>A: objectDimension</a></th>
+              <th><a href=#assumpOT>A: objectTy</a></th>
+              <th><a href=#DD:impulse>DD: impulse</a></th>
+              <th><a href=#DD:linAcc>DD: linAcc</a></th>
+              <th><a href=#DD:linDisp>DD: linDisp</a></th>
+              <th><a href=#DD:linVel>DD: linVel</a></th>
               <th><a href=#DD:ctrOfMass>DD: ctrOfMass</a></th>
-              <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
-              <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
-              <th><a href=#DD:impulseV>DD: impulseV</a></th>
-              <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
             </tr>
             <tr>
               <td>
-                <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
+                <a href=#verifyPhysCons>FR: Verify-Physical_Constraints</a>
               </td>
               <td>X</td>
               <td></td>
@@ -2517,8 +2510,19 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:rotMot>IM: rotMot</a></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2526,24 +2530,17 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:angAccel>DD: angAccel</a></td>
+              <td><a href=#DD:impulse>DD: impulse</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2551,70 +2548,49 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:angDisp>DD: angDisp</a></td>
+              <td><a href=#IM:col2D>IM: col2D</a></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
             </tr>
             <tr>
-              <td><a href=#DD:angVel>DD: angVel</a></td>
+              <td><a href=#IM:transMot>IM: transMot</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
             </tr>
             <tr>
-              <td><a href=#assumpAD>A: axesDefined</a></td>
+              <td><a href=#lcIJC>LC: Include-Joints-Constraints</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2626,21 +2602,14 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a></td>
+              <td><a href=#lcEC>LC: Expanded-Collisions</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2651,14 +2620,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#assumpCT>A: collisionType</a></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td>X</td>
+              <td><a href=#DD:chalses>DD: chalses</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2666,31 +2628,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#assumpDI>A: dampingInvolvement</a></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -2701,124 +2638,17 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#assumpOD>A: objectDimension</a></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
+              <td><a href=#DD:potEnergy>DD: potEnergy</a></td>
               <td></td>
               <td></td>
               <td></td>
-            </tr>
-            <tr>
-              <td><a href=#assumpOT>A: objectTy</a></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-            </tr>
-            <tr>
-              <td><a href=#DD:impulse>DD: impulse</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:linAcc>DD: linAcc</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:linDisp>DD: linDisp</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2831,6 +2661,63 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:linDisp>DD: linDisp</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:linAcc>DD: linAcc</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#lcID>LC: Include-Dampening</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2839,11 +2726,73 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:kEnergy>DD: kEnergy</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:angVel>DD: angVel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:angDisp>DD: angDisp</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:angAccel>DD: angAccel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2855,6 +2804,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -2862,6 +2816,9 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2869,6 +2826,63 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:reVeInColl>DD: reVeInColl</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:impulseV>DD: impulseV</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#TM:ChaslesThm>TM: ChaslesThm</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

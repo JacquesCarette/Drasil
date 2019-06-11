@@ -166,7 +166,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
-                      S "gives", (plural value `ofThe` S "specification"),
+                      S "gives", plural value `ofThe` S "specification",
                       plural parameter, S "used in", makeRef2S inputDataConstraints])
                       [inputDataConstraints, outputDataConstraints]
         , CorrSolnPpties propsDeriv
@@ -180,7 +180,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
-    ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) [],
+    (map LlC traceyMatrices ++ traceMatsAndGraphsIntro2 ++ map LlC traceyGraphs) [],
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
@@ -195,9 +195,9 @@ systInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD symbMap) iMods) ++ 
-                 (concatMap (^. defined_quant) tMods) ++
-                 (concatMap (^. defined_fun) tMods),
+  _definitions = map (relToQD symbMap) iMods ++ 
+                 concatMap (^. defined_quant) tMods ++
+                 concatMap (^. defined_fun) tMods,
   _datadefs    = dataDefns,
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
@@ -305,7 +305,7 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
   `sAnd` plural thModel, S "used in the", short progName, phrase Doc.code,
   S "are provided" `sC` S "with an", phrase emphasis,
-  S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
+  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase typeOf, S "is intended to be used as a",
   phrase reference, S "to provide all", phrase information,
   S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
@@ -325,8 +325,8 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(atStartNP' $ the Doc.dataDefn),
-  S "are used to support", (plural definition `ofThe` S "different"),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [atStartNP' $ the Doc.dataDefn,
+  S "are used to support", plural definition `ofThe` S "different",
   plural model]
 
 {--STAKEHOLDERS--}
@@ -425,7 +425,7 @@ physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence
 physSystDescriptionListPhysys2 :: NamedIdea n => n -> Sentence
 
-physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2 (ptOfExplsn)]
+physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2 ptOfExplsn]
 
 physSystDescriptionListPhysys1 = S "The" +:+. phrase glaSlab
 
@@ -557,10 +557,10 @@ traceMatsAndGraphsRowT2 = traceMatsAndGraphsRowT1 ++ traceMatsAndGraphsDataCons 
 
 traceMatsAndGraphsRowHdrT2, traceMatsAndGraphsColHdrT2 :: [Sentence]
 traceMatsAndGraphsRowHdrT2 = traceMatsAndGraphsRowHdrT1 ++
-  (zipWith itemRefToSent (traceMatsAndGraphsDataCons ++ traceMatsAndGraphsFuncReq)
-   (traceMatsAndGraphsDataConsRef ++ traceMatsAndGraphsFuncReqRef))
+  zipWith itemRefToSent (traceMatsAndGraphsDataCons ++ traceMatsAndGraphsFuncReq)
+   (traceMatsAndGraphsDataConsRef ++ traceMatsAndGraphsFuncReqRef)
 
-traceMatsAndGraphsColHdrT2 = zipWith (\x y -> (S x) +:+ (sParen (S "in" +:+ y)))
+traceMatsAndGraphsColHdrT2 = zipWith (\x y -> S x +:+ sParen (S "in" +:+ y))
   traceMatsAndGraphsFuncReq traceMatsAndGraphsFuncReqRef
 
 traceMatsAndGraphsColsT2_R1, traceMatsAndGraphsColsT2_R2, traceMatsAndGraphsColsT2_R3,
@@ -591,8 +591,8 @@ traceMatsAndGraphsRowT3 = traceMatsAndGraphsA
 traceMatsAndGraphsRowHdr3, traceMatsAndGraphsColHdr3 :: [Sentence]
 traceMatsAndGraphsRowHdr3 = zipWith itemRefToSent traceMatsAndGraphsA traceMatsAndGraphsARef
 
-traceMatsAndGraphsColHdr3 = traceMatsAndGraphsRowHdrT1 ++ (zipWith itemRefToSent
-  (traceMatsAndGraphsLC ++ traceMatsAndGraphsFuncReq) (traceMatsAndGraphsLCRef ++ traceMatsAndGraphsFuncReqRef))
+traceMatsAndGraphsColHdr3 = traceMatsAndGraphsRowHdrT1 ++ zipWith itemRefToSent
+  (traceMatsAndGraphsLC ++ traceMatsAndGraphsFuncReq) (traceMatsAndGraphsLCRef ++ traceMatsAndGraphsFuncReqRef)
 
 traceMatsAndGraphsColsT3 :: [[String]]
 traceMatsAndGraphsColsT3 = [traceMatsAndGraphsColsT3_T1, traceMatsAndGraphsColsT3_T2, traceMatsAndGraphsColsT3_IM1, traceMatsAndGraphsColsT3_IM2, traceMatsAndGraphsColsT3_IM3, traceMatsAndGraphsColsT3_DD1,
@@ -640,11 +640,11 @@ traceMatsAndGraphsTable3 = llcc (makeTabRef "TraceyAssumpsOthers") $ Table
 --
 traceMatsAndGraphsIntro2 :: [Contents]
 traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
-  [(foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
-  S "on each other"), (plural requirement +:+ S "on" +:+. foldlList Comma List
-  (map plural solChSpecSubsections)),
-  (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
-  [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
+  [foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
+  S "on each other", plural requirement +:+ S "on" +:+. foldlList Comma List
+  (map plural solChSpecSubsections),
+  foldlList Comma List (map plural (take 3 solChSpecSubsections)++
+  [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption])]
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
@@ -654,7 +654,7 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
 
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((makeRef2S demandVsSDFig) `sAnd` (makeRef2S dimlessloadVsARFig)),
+  sParen (makeRef2S demandVsSDFig `sAnd` makeRef2S dimlessloadVsARFig),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 blstRskInvWGlassSlab :: Sentence

@@ -11,13 +11,13 @@ import Drasil.GlassBR.Unitals (inputDataConstraints, inputs, outputs,
 import Data.List ((\\))
 
 symbolsForTable :: [QuantityDict]
-symbolsForTable = inputs ++ outputs ++ tmSymbols ++ (map qw specParamVals) ++ 
-  (map qw symbolsWithDefns) ++ (map qw symbols) ++
-  (map qw unitless) ++ (map qw inputDataConstraints) ++
-  (map asVC' [interpY, interpZ]) 
+symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
+  map qw symbolsWithDefns ++ map qw symbols ++
+  map qw unitless ++ map qw inputDataConstraints ++
+  map asVC' [interpY, interpZ]
 
 thisSymbols :: [QuantityDict]
-thisSymbols = (map qw iMods) 
+thisSymbols = map qw iMods
   -- include all module functions as symbols
   ++ (map asVC (concatMap (\(Mod _ l) -> l) allMods) \\ symbolsForTable)
   ++ map qw implVars ++ symbolsForTable

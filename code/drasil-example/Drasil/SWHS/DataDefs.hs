@@ -37,7 +37,7 @@ dd1HtFluxCQD :: QDefinition
 dd1HtFluxCQD = mkQuantDef htFluxC htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (sy coilHTC) * ((sy tempC) - apply1 tempW time)
+htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
 
 dd1HtFluxC :: DataDefinition
 dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
@@ -50,7 +50,7 @@ dd2HtFluxPQD :: QDefinition
 dd2HtFluxPQD = mkQuantDef htFluxP htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (sy pcmHTC) * (apply1 tempW time - apply1 tempPCM time)
+htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 dd2HtFluxP :: DataDefinition
 dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"
@@ -62,8 +62,8 @@ ddBalanceSolidPCMQD :: QDefinition
 ddBalanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
-balanceSolidPCMEqn = ((sy pcmMass) * (sy htCapSP)) /
-  ((sy pcmHTC) * (sy pcmSA))
+balanceSolidPCMEqn = (sy pcmMass * sy htCapSP) /
+  (sy pcmHTC * sy pcmSA)
 
 ddBalanceSolidPCM :: DataDefinition
 ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012] []
@@ -75,8 +75,8 @@ ddBalanceLiquidPCMQD :: QDefinition
 ddBalanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
-balanceLiquidPCMEqn = ((sy pcmMass) * (sy htCapLP)) /
-  ((sy pcmHTC) * (sy pcmSA))
+balanceLiquidPCMEqn = (sy pcmMass * sy htCapLP) /
+  (sy pcmHTC * sy pcmSA)
 
 ddBalanceLiquidPCM :: DataDefinition
 ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012] []
@@ -88,7 +88,7 @@ dd3HtFusionQD :: QDefinition
 dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (sy latentHeat) / (sy mass)
+htFusionEqn = sy latentHeat / sy mass
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
@@ -107,7 +107,7 @@ dd4MeltFracQD = fromEqn' (meltFrac ^. uid) -- FIXME Should (^. id) be used
   -- produced according to CaseStudies' original
 
 meltFracEqn :: Expr
-meltFracEqn = (sy latentEP) / ((sy htFusion) * (sy pcmMass))
+meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
 
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"

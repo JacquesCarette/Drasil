@@ -98,8 +98,8 @@ inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs) readAndStor
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]
-inputsToOutput = constF : (map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
-  xMinEtrSlip, yMaxSlip, yMinSlip])
+inputsToOutput = constF : map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip, 
+  xMinEtrSlip, yMaxSlip, yMinSlip]
 
 inputsToOutputTable :: LabelledContent
 inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $

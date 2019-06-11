@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 24, 2019
+Last updated: June 10, 2019
 --------------------------------------------------
 
 Body.hs
-  - The main document body representation for the Projectile example
+  - The main document body representation for the Template example
   
 Main.hs 
   - A list of what should be generated

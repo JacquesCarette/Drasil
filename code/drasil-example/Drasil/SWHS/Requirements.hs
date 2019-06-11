@@ -83,13 +83,13 @@ findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
 
 inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
-inputInitQuantsEqn = (sy wMass) $= (sy wVol) * (sy wDensity) $=
-  ((sy tankVol) - (sy pcmVol)) * (sy wDensity) $=
-  ((sy pi_) * ((((sy diam) / 2) $^ 2)) * (sy tankLength) - (sy pcmVol)) * (sy wDensity) -- FIXME: Ref Hack
+inputInitQuantsEqn = sy wMass $= sy wVol * sy wDensity $=
+  (sy tankVol - sy pcmVol) * sy wDensity $=
+  (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength - sy pcmVol) * sy wDensity -- FIXME: Ref Hack
 
 findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcmDensity) -- FIXME: Ref Hack
 --
-checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
+checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
   plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
   "Check-Input-with-Physical_Constraints" funcReqDom
@@ -97,10 +97,10 @@ checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
 outputInputDerivQuants = oIDQConstruct oIDQQuants
 
 oIDQConstruct :: [Sentence] -> ConceptInstance
-oIDQConstruct x = cic "outputInputDerivQuants" ( foldlSent_ [
+oIDQConstruct x = cic "outputInputDerivQuants" (foldlSent_ [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list"] +:+.
-  (foldlList Comma List x)) "Output-Input-Derived-Quantities" funcReqDom
+  foldlList Comma List x) "Output-Input-Derived-Quantities" funcReqDom
 
 oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
@@ -113,31 +113,31 @@ oIDQQuants = map foldlSent_ [
   ]
   
 --
-calcTempWtrOverTime = cic "calcTempWtrOverTime" ( foldlSent [
+calcTempWtrOverTime = cic "calcTempWtrOverTime" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase tempW,
-  sParen(ch tempW :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)] )
+  sParen (ch tempW :+: sParen (ch time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)])
   "Calculate-Temperature-Water-Over-Time" funcReqDom
 --
-calcTempPCMOverTime = cic "calcTempPCMOverTime" ( foldlSent [
+calcTempPCMOverTime = cic "calcTempPCMOverTime" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase tempPCM,
   sParen (ch tempPCM :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-Temperature-PCM-Over-Time" funcReqDom
 --
-calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" ( foldlSent [
+calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase watE,
   sParen (ch watE :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInWtr)] )
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInWtr)])
   "Calculate-Change-Heat_Energy-Water-Over-Time" funcReqDom
 --
-calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" ( foldlSent [
+calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase pcmE,
   sParen (ch pcmE :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInPCM)] )
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInPCM)])
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
-verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
+verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
@@ -145,16 +145,16 @@ verifyEnergyOutput = cic "verifyEnergyOutput" ( foldlSent [
   S "with relative error no greater than 0.001%"] )
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
-calcPCMMeltBegin = cic "calcPCMMeltBegin" ( foldlSent [
+calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
-  ch tInitMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
+  ch tInitMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-PCM-Melt-Begin-Time" funcReqDom
 --
-calcPCMMeltEnd = cic "calcPCMMeltEnd" ( foldlSent [
+calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  ch tFinalMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)] )
+  ch tFinalMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-PCM-Melt-End-Time" funcReqDom
 
 -- List structure same between all examples
@@ -218,18 +218,18 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef2S d1hfc) `sAnd` (makeRef2S d2hfp) `sC`
+  makeRef2S d1hfc `sAnd` makeRef2S d2hfp `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase simTime `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR'
-  ((sy watE) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coilHTC) * (sy coilSA) * ((sy tempC) - apply1 tempW time)))
-  - (defint (eqSymb time) 0 (sy time)
-  ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) -
-  (apply1 tempPCM time)))))
+  (sy watE $= defint (eqSymb time) 0 (sy time)
+  (sy coilHTC * sy coilSA * (sy tempC - apply1 tempW time))
+  - defint (eqSymb time) 0 (sy time)
+  (sy pcmHTC * sy pcmSA * (apply1 tempW time -
+  apply1 tempPCM time)))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
@@ -239,9 +239,9 @@ propCorSolDeriv3 epcm en pcmat wa =
 
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
-  ((sy pcmE) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcmHTC) * (sy pcmSA) * ((apply1 tempW time) - 
-  (apply1 tempPCM time)))))
+  (sy pcmE $= defint (eqSymb time) 0 (sy time)
+  (sy pcmHTC * sy pcmSA * (apply1 tempW time - 
+  apply1 tempPCM time)))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

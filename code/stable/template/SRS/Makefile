@@ -1,9 +1,9 @@
-srs: Projectile_SRS.pdf
+srs: Template_SRS.pdf
 
-Projectile_SRS.pdf: Projectile_SRS.tex
-	lualatex $(TEXFLAGS) Projectile_SRS
-	-bibtex $(BIBTEXFLAGS) Projectile_SRS
-	lualatex $(TEXFLAGS) Projectile_SRS
-	lualatex $(TEXFLAGS) Projectile_SRS
+Template_SRS.pdf: Template_SRS.tex
+	lualatex $(TEXFLAGS) Template_SRS
+	-bibtex $(BIBTEXFLAGS) Template_SRS
+	lualatex $(TEXFLAGS) Template_SRS
+	lualatex $(TEXFLAGS) Template_SRS
 
 .PHONY: srs

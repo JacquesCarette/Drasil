@@ -7,6 +7,6 @@ import Drasil.DocLang (inDataConstTbl, outDataConstTbl)
 import Drasil.SSP.Unitals (inputsWUncrtn, outputs)
 
 {-input and output tables-}
-data_constraint_Table2, data_constraint_Table3 :: LabelledContent
-data_constraint_Table2 = inDataConstTbl inputsWUncrtn --FIXME: issue #295
-data_constraint_Table3 = outDataConstTbl outputs
+dataConstraintTable2, dataConstraintTable3 :: LabelledContent
+dataConstraintTable2 = inDataConstTbl inputsWUncrtn --FIXME: issue #295
+dataConstraintTable3 = outDataConstTbl outputs

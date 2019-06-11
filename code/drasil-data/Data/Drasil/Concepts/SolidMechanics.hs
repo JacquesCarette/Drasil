@@ -17,7 +17,7 @@ elastMod   = dccWDS "elastMod" (cn "elastic modulus")
   S "exerted on a body to the resulting" +:+. phrase strain)
 
 mobShear   = dccWDS "mobShear" (cn "mobilized shear force") 
-  (at_start shearForce +:+ S "in the direction of potential motion" `sC`
+  (atStart shearForce +:+ S "in the direction of potential motion" `sC`
   S "thus encouraging motion along the plane.")
 
 normForce  = dccWDS "normForce" (cn' "normal force")
@@ -33,7 +33,7 @@ poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio")
   S "to parallel" +:+. phrase strain)
   
 shearRes   = dccWDS "shearRes" (cn "resistive shear force") 
-  (at_start shearForce +:+ S "in the direction opposite to the direction" +:+
+  (atStart shearForce +:+ S "in the direction opposite to the direction" +:+
   S "of potential motion, thus hindering motion along the plane.")
   
 shearForce = dccWDS "shearForce" (cn' "shear force")

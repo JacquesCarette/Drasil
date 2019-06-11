@@ -1,16 +1,23 @@
-{-# Language TypeFamilies #-}
-module Data.Drasil.Utils (addPercent, bulletFlat, bulletNested, enumBullet,
-  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtPhys, fmtSfwr, fmtU,
-  getRVal, itemRefToSent, makeListRef, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, noRefsLT,
-  typUncr, unwrap, weave, zipFTable', zipSentList) where
+module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, enumBullet,
+  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent,
+  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
+  sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave, zipSentList) where
 
 import Language.Drasil
-import Utils.Drasil
 
-import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
-import Data.List (elem, transpose)
+import Data.Function (on)
+import Data.List (elem, sortBy, transpose)
+
+-- Sorts a list of HasSymbols by Symbol
+sortBySymbol :: HasSymbol a => [a] -> [a]
+sortBySymbol = sortBy compareBySymbol
+
+sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
+
+compareBySymbol :: HasSymbol a => a -> a -> Ordering
+compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
@@ -18,37 +25,18 @@ eqUnR e lbl = llcc lbl $ EqnBlock e
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
 
--- | concantenates number to abbreviation
--- should not be exported
-enumWithAbbrev :: Integer -> Sentence -> [Sentence]
-enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
-
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
+mkEnumAbbrevList s t l = zip [t :+: (S $ show x) | x <- [s..]] $ map Flat l
 
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ unwrap (getUnit u)
-
--- | formats physical constraints
-fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
-
--- | formats software constraints
-fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
-
--- | gets a reasonable or typical value from a Constrained chunk
-getRVal :: (HasUID c, HasReasVal c) => c -> Expr
-getRVal c = uns (c ^. reasVal)
-  where uns (Just e) = e
-        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | extracts the typical uncertainty to be displayed from something that has an uncertainty
 typUncr :: HasUncertainty c => c -> Sentence
@@ -59,28 +47,25 @@ typUncr x = found (uncVal x) (uncPrec x)
 
 -- | outputs sentence with % attached to it
 addPercent :: Show a => a -> Sentence
-addPercent num = (S (show num) :+: Percent)
+addPercent num = S (show num) :+: Percent
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
 zipSentList acc _ []           = acc
-zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
+zipSentList acc [] r           = acc ++ map (EmptyS:) r
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
-
--- | traceability matrices row from a list of rows and a list of columns
-
-zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
-zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
+  where
+    zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 
 -- | Helper for making a table from a columns
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
   let l' = filter (any (not . isEmpty) . snd) l in 
-  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
+  (map fst l', transpose $ map (map replaceEmptyS . snd) l')
   where
     isEmpty       EmptyS = True
     isEmpty       _      = False
@@ -131,7 +116,7 @@ weave :: [[a]] -> [a]
 weave = concat . transpose
 
 -- | get a unit symbol if there is one
-unwrap :: (Maybe UnitDefn) -> Sentence
+unwrap :: Maybe UnitDefn -> Sentence
 unwrap (Just a) = Sy $ usymb a
 unwrap Nothing  = EmptyS
 

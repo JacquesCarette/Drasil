@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , at_startNP, at_startNP', titleizeNP, titleizeNP'
+  , atStartNP, atStartNP', titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -169,11 +169,11 @@ compoundPhraseP1 = compoundPhrase''' pluralNP
 
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.
-at_startNP, at_startNP' :: NounPhrase n => n -> Capitalization
+atStartNP, atStartNP' :: NounPhrase n => n -> Capitalization
 -- | Singular sentence case.
-at_startNP  n = sentenceCase n phraseNP
+atStartNP  n = sentenceCase n phraseNP
 -- | Plural sentence case.
-at_startNP' n = sentenceCase n pluralNP
+atStartNP' n = sentenceCase n pluralNP
 
 -- | Helper function for getting the title case of a noun phrase.
 titleizeNP, titleizeNP' :: NounPhrase n => n -> Capitalization

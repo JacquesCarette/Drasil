@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
-module Language.Drasil.Development.Sentence (short, introduceAbb, at_start,
-  at_start', titleize, titleize', phrase, plural, phrase's, plural's) where
+module Language.Drasil.Development.Sentence (short, introduceAbb, atStart,
+  atStart', titleize, titleize', phrase, plural, phrasePoss, pluralPoss) where
 
 import Control.Lens ((^.))
 
@@ -24,11 +24,11 @@ introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a 
 -- NamedIdea.
-at_start, at_start' :: NamedIdea n => n -> Sentence
+atStart, atStart' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
-at_start  n = NP.at_startNP (n ^. term)
+atStart  n = NP.atStartNP (n ^. term)
 -- | Plural sentence case.
-at_start' n = NP.at_startNP' (n ^. term)
+atStart' n = NP.atStartNP' (n ^. term)
 
 -- | Helper function for getting the title case of a noun phrase from a 
 -- NamedIdea.
@@ -47,8 +47,8 @@ plural :: (HasUID n, NamedIdea n) => n -> Sentence
 plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 
-phrase's, plural's :: NamedIdea n => n -> Sentence
+phrasePoss, pluralPoss :: NamedIdea n => n -> Sentence
 -- | Singular possesive function
-phrase's a = phrase a :+: S "'s"
+phrasePoss a = phrase a :+: S "'s"
 -- | Plural possesive function
-plural's a = plural a :+: S "'"
+pluralPoss a = plural a :+: S "'"

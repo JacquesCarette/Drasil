@@ -14,8 +14,8 @@ import qualified Language.Drasil as L (People, Person,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (article_title, author, ba, body, bold,
-  caption, cases, div_tag, em, fraction, h, head_tag, html, image, li, ol, pa,
+import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
+  caption, cases, divTag, em, fraction, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
@@ -53,26 +53,26 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 build :: String -> Document -> Doc
 build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
-  html (head_tag (linkCSS fn $$ title (title_spec t) $$
+  html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
-  body (article_title (p_spec t) $$ author (p_spec a)
+  body (articleTitle (pSpec t) $$ author (pSpec a)
   $$ print c
   ))
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
-printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
-                                 div_tag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents)   = paragraph $ p_spec contents
-printLO (EqnBlock contents)    = p_spec contents
-printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
-printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
+printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
+printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
+                                 divTag ts (vcat (map printLO layoutObs))
+printLO (Paragraph contents)   = paragraph $ pSpec contents
+printLO (EqnBlock contents)    = pSpec contents
+printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
+printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
+printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
+printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 
@@ -87,27 +87,27 @@ print = foldr (($$) . printLO) empty
 -----------------------------------------------------------------
 -- | Renders the title of the document. Different than body rendering
 -- because newline can't be rendered in an HTML title.
-title_spec :: Spec -> Doc
-title_spec (a :+: b) = title_spec a <> title_spec b
-title_spec HARDNL    = empty
-title_spec s         = p_spec s
+titleSpec :: Spec -> Doc
+titleSpec (a :+: b) = titleSpec a <> titleSpec b
+titleSpec HARDNL    = empty
+titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
-p_spec :: Spec -> Doc
-p_spec (E e)             = em $ p_expr e
-p_spec (a :+: b)         = p_spec a <> p_spec b
-p_spec (S s)             = text s
-p_spec (Sy s)            = text $ uSymb s
-p_spec (Sp s)            = text $ unPH $ L.special s
-p_spec HARDNL            = text "<br />"
-p_spec (Ref Internal r a)      = reflink     r $ p_spec a
-p_spec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
-p_spec (Ref Cite2    r a)      = reflinkInfo r (text r) (p_spec a) -- no difference for citations?
-p_spec (Ref External r a)      = reflinkURI  r $ p_spec a
-p_spec EmptyS             = text "" -- Expected in the output
-p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
--- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
--- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+pSpec :: Spec -> Doc
+pSpec (E e)             = em $ pExpr e
+pSpec (a :+: b)         = pSpec a <> pSpec b
+pSpec (S s)             = text s
+pSpec (Sy s)            = text $ uSymb s
+pSpec (Sp s)            = text $ unPH $ L.special s
+pSpec HARDNL            = text "<br />"
+pSpec (Ref Internal r a)      = reflink     r $ pSpec a
+pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
+pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
+pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
+pSpec EmptyS             = text "" -- Expected in the output
+pSpec (Quote q)          = text "&quot;" <> pSpec q <> text "&quot;"
+-- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
+-- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
@@ -147,71 +147,71 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 
 -- | Renders expressions in the HTML (called by multiple functions)
-p_expr :: Expr -> Doc
-p_expr (Dbl d)        = text $ showEFloat Nothing d ""
-p_expr (Int i)        = text $ show i
-p_expr (Str s)        = text s
-p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
-p_expr (Case ps)      = cases ps p_expr
-p_expr (Mtx a)        = text "<table class=\"matrix\">\n" <> p_matrix a <> text "</table>"
-p_expr (Row l)        = hcat $ map p_expr l
-p_expr (Ident s)      = text s
-p_expr (Spec s)       = text $ unPH $ L.special s
---p_expr (Gr g)         = unPH $ greek g
-p_expr (Sub e)        = sub $ p_expr e
-p_expr (Sup e)        = sup $ p_expr e
-p_expr (Over Hat s)   = p_expr s <> text "&#770;"
-p_expr (MO o)         = text $ p_ops o
-p_expr (Fenced l r e) = text (fence Open l) <> p_expr e <> text (fence Close r)
-p_expr (Font Bold e)  = bold $ p_expr e
-p_expr (Font Emph e)  = text "<em>" <> p_expr e <> text "</em>" -- FIXME
-p_expr (Spc Thin)     = text "&#8239;"
-p_expr (Sqrt e)       = text "&radic;(" <> p_expr e <> text ")"
+pExpr :: Expr -> Doc
+pExpr (Dbl d)        = text $ showEFloat Nothing d ""
+pExpr (Int i)        = text $ show i
+pExpr (Str s)        = text s
+pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
+pExpr (Case ps)      = cases ps pExpr
+pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
+pExpr (Row l)        = hcat $ map pExpr l
+pExpr (Ident s)      = text s
+pExpr (Spec s)       = text $ unPH $ L.special s
+--pExpr (Gr g)         = unPH $ greek g
+pExpr (Sub e)        = sub $ pExpr e
+pExpr (Sup e)        = sup $ pExpr e
+pExpr (Over Hat s)   = pExpr s <> text "&#770;"
+pExpr (MO o)         = text $ pOps o
+pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
+pExpr (Font Bold e)  = bold $ pExpr e
+pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
+pExpr (Spc Thin)     = text "&#8239;"
+pExpr (Sqrt e)       = text "&radic;(" <> pExpr e <> text ")"
 
-p_ops :: Ops -> String
-p_ops IsIn     = "&thinsp;&isin;&thinsp;"
-p_ops Integer  = "&#8484;"
-p_ops Rational = "&#8474;"
-p_ops Real     = "&#8477;"
-p_ops Natural  = "&#8469;"
-p_ops Boolean  = "&#120121;"
-p_ops Comma    = ","
-p_ops Prime    = "&prime;"
-p_ops Log      = "log"
-p_ops Ln       = "ln"
-p_ops Sin      = "sin"
-p_ops Cos      = "cos"
-p_ops Tan      = "tan"
-p_ops Sec      = "sec"
-p_ops Csc      = "csc"
-p_ops Cot      = "cot"
-p_ops Arcsin   = "arcsin"
-p_ops Arccos   = "arccos"
-p_ops Arctan   = "arctan"
-p_ops Not      = "&not;"
-p_ops Dim      = "dim"
-p_ops Exp      = "e"
-p_ops Neg      = "&minus;"
-p_ops Cross    = "&#10799;"
-p_ops Dot      = "&sdot;"
-p_ops Eq       = " = " -- with spaces?
-p_ops NEq      = "&ne;"
-p_ops Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-p_ops Gt       = "&thinsp;&gt;&thinsp;"
-p_ops LEq      = "&thinsp;&le;&thinsp;"
-p_ops GEq      = "&thinsp;&ge;&thinsp;"
-p_ops Impl     = " &rArr; "
-p_ops Iff      = " &hArr; "
-p_ops Subt     = "&minus;"
-p_ops And      = " &and; "
-p_ops Or       = " &or; "
-p_ops Add      = "&plus;"
-p_ops Mul      = "&#8239;"
-p_ops Summ     = "&sum;"
-p_ops Inte     = "&int;"
-p_ops Prod     = "&prod;"
-p_ops Point    = "."
-p_ops Perc     = "%"
+pOps :: Ops -> String
+pOps IsIn     = "&thinsp;&isin;&thinsp;"
+pOps Integer  = "&#8484;"
+pOps Rational = "&#8474;"
+pOps Real     = "&#8477;"
+pOps Natural  = "&#8469;"
+pOps Boolean  = "&#120121;"
+pOps Comma    = ","
+pOps Prime    = "&prime;"
+pOps Log      = "log"
+pOps Ln       = "ln"
+pOps Sin      = "sin"
+pOps Cos      = "cos"
+pOps Tan      = "tan"
+pOps Sec      = "sec"
+pOps Csc      = "csc"
+pOps Cot      = "cot"
+pOps Arcsin   = "arcsin"
+pOps Arccos   = "arccos"
+pOps Arctan   = "arctan"
+pOps Not      = "&not;"
+pOps Dim      = "dim"
+pOps Exp      = "e"
+pOps Neg      = "&minus;"
+pOps Cross    = "&#10799;"
+pOps Dot      = "&sdot;"
+pOps Eq       = " = " -- with spaces?
+pOps NEq      = "&ne;"
+pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt       = "&thinsp;&gt;&thinsp;"
+pOps LEq      = "&thinsp;&le;&thinsp;"
+pOps GEq      = "&thinsp;&ge;&thinsp;"
+pOps Impl     = " &rArr; "
+pOps Iff      = " &hArr; "
+pOps Subt     = "&minus;"
+pOps And      = " &and; "
+pOps Or       = " &or; "
+pOps Add      = "&plus;"
+pOps Mul      = "&#8239;"
+pOps Summ     = "&sum;"
+pOps Inte     = "&int;"
+pOps Prod     = "&prod;"
+pOps Point    = "."
+pOps Perc     = "%"
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("
@@ -221,15 +221,15 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
-p_matrix :: [[Expr]] -> Doc
-p_matrix [] = text ""
-p_matrix [x] = text "<tr>" <> p_in x <> text "</tr>\n"
-p_matrix (x:xs) = p_matrix [x] <> p_matrix xs
+pMatrix :: [[Expr]] -> Doc
+pMatrix [] = text ""
+pMatrix [x] = text "<tr>" <> pIn x <> text "</tr>\n"
+pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
 
-p_in :: [Expr] -> Doc
-p_in [] = text ""
-p_in [x] = text "<td>" <> p_expr x <> text "</td>"
-p_in (x:xs) = p_in [x] <> p_in xs
+pIn :: [Expr] -> Doc
+pIn [] = text ""
+pIn [x] = text "<td>" <> pExpr x <> text "</td>"
+pIn (x:xs) = pIn [x] <> pIn xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
@@ -247,10 +247,10 @@ makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
-makeHeaderCols = vcat . map (th . p_spec)
+makeHeaderCols = vcat . map (th . pSpec)
 
 -- | Helper for creating table columns
-makeColumns = vcat . map (td . p_spec)
+makeColumns = vcat . map (td . pSpec)
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
@@ -277,28 +277,28 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 
 -- | Renders lists
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ p_spec b <> text ": "
-  <> p_item e) items
-makeList (Desc items)   = div_tag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ p_spec b
-  <> text ": " <> p_item e) items
+makeList (Simple items) = divTag ["list"] $
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
+  <> pItem e) items
+makeList (Desc items)   = divTag ["list"] $
+  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b
+  <> text ": " <> pItem e) items
 makeList (Ordered items) = ol ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ p_item i) items)
+  (li . \(i,l) -> mlref l $ pItem i) items)
 makeList (Unordered items) = ul ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ p_item i) items)
+  (li . \(i,l) -> mlref l $ pItem i) items)
 makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> li $ mlref l $ p_spec b <> text " is the"
-  <+> p_item e) items
+  vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
+  <+> pItem e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ refwrap . p_spec
+mlref = maybe id $ refwrap . pSpec
 
 -- | Helper for rendering list items
-p_item :: ItemType -> Doc
-p_item (Flat s)     = p_spec s
-p_item (Nested s l) = vcat [p_spec s, makeList l]
+pItem :: ItemType -> Doc
+pItem (Flat s)     = pSpec s
+pItem (Nested s l) = vcat [pSpec s, makeList l]
 
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
@@ -391,59 +391,59 @@ useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: CiteField -> Doc
-bookMLA (Address   s) = p_spec s <> text ":"
+bookMLA (Address   s) = pSpec s <> text ":"
 bookMLA (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
-bookMLA (Series    s) = dot $ em $ p_spec s
-bookMLA (Title     s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Series    s) = dot $ em $ pSpec s
+bookMLA (Title     s) = dot $ em $ pSpec s --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume    s) = comm $ text $ "vol. " ++ show s
-bookMLA (Publisher s) = comm $ p_spec s
-bookMLA (Author    p) = dot $ p_spec (rendPeople' p)
+bookMLA (Publisher s) = comm $ pSpec s
+bookMLA (Author    p) = dot $ pSpec (rendPeople' p)
 bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (BookTitle s) = dot $ em $ p_spec s
-bookMLA (Journal   s) = comm $ em $ p_spec s
+bookMLA (BookTitle s) = dot $ em $ pSpec s
+bookMLA (Journal   s) = comm $ em $ pSpec s
 bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
 bookMLA (Pages [a,b]) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Pages     _) = error "Page range specified is empty or has more than two items"
-bookMLA (Note      s) = p_spec s
+bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
-bookMLA (School    s) = comm $ p_spec s
+bookMLA (School    s) = comm $ pSpec s
 --bookMLA (Thesis     t)  = comm $ show t
---bookMLA (URL        s)  = dot $ p_spec s
-bookMLA (HowPublished (Verb s)) = comm $ p_spec s
-bookMLA (HowPublished (URL s))  = dot $ p_spec s
-bookMLA  (Editor     p)    = comm $ text "Edited by " <> p_spec (foldlList (map (S . L.nameStr) p))
+--bookMLA (URL        s)  = dot $ pSpec s
+bookMLA (HowPublished (Verb s)) = comm $ pSpec s
+bookMLA (HowPublished (URL s))  = dot $ pSpec s
+bookMLA  (Editor     p)    = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
 bookMLA (Chapter _)       = text ""
-bookMLA (Institution i)   = comm $ p_spec i
-bookMLA (Organization i)  = comm $ p_spec i
+bookMLA (Institution i)   = comm $ pSpec i
+bookMLA (Organization i)  = comm $ pSpec i
 bookMLA (Month m)         = comm $ text $ show m
-bookMLA (Type t)          = comm $ p_spec t
+bookMLA (Type t)          = comm $ pSpec t
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
-bookAPA (Author   p) = p_spec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
+bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages     [n])  = dot $ text $ show n
 bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
+bookAPA (Editor   p)  = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
-bookChicago (Author   p) = p_spec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
+bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago p@(Pages  _) = bookAPA p
-bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
+bookChicago (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
 artclMLA :: CiteField -> Doc
-artclMLA (Title s) = doubleQuotes $ dot $ p_spec s
+artclMLA (Title s) = doubleQuotes $ dot $ pSpec s
 artclMLA i         = bookMLA i
 
 artclAPA :: CiteField -> Doc
-artclAPA (Title  s)  = dot $ p_spec s
+artclAPA (Title  s)  = dot $ pSpec s
 artclAPA (Volume n)  = em $ text $ show n
 artclAPA (Number  n) = comm $ text $ paren $ show n
 artclAPA i           = bookAPA i

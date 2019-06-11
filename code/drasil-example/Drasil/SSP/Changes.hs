@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes (likelyChanges_SRS, likelyChgs, unlikelyChanges_SRS,
+module Drasil.SSP.Changes (likelyChgsCon, likelyChgs, unlikelyChgsCon,
   unlikelyChgs) where
 
 -- A list of likely and unlikely changes for the SSP example
@@ -17,8 +17,8 @@ import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL,
 import Drasil.SSP.Defs (slope, soil, soilPrpty)
 import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad, zcoord)
 
-likelyChanges_SRS :: [Contents]
-likelyChanges_SRS = mkEnumSimpleD likelyChgs
+likelyChgsCon :: [Contents]
+likelyChgsCon = mkEnumSimpleD likelyChgs
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likelyChgCISL, likelyChgCSF, likelyChgCEF]
@@ -49,8 +49,8 @@ lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
   plural calculation, S "can be added for an imposed surface load on the", 
   phrase slope]
 
-unlikelyChanges_SRS :: [Contents]
-unlikelyChanges_SRS = ucIntro : mkEnumSimpleD unlikelyChgs
+unlikelyChgsCon :: [Contents]
+unlikelyChgsCon = ucIntro : mkEnumSimpleD unlikelyChgs
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikelyChgNISLO, unlikelyChg2AO]
@@ -63,7 +63,7 @@ unlikelyChg2AO =   cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 ucNASLODesc, uc2AODesc :: Sentence
 
 ucNASLODesc = foldlSent [S "Changes related to",
-  (makeRef2S assumpINSFL), S "are not possible due to the dependency",
+  makeRef2S assumpINSFL, S "are not possible due to the dependency",
   S "of the", plural calculation, S "on the linear relationship between",
   phrase intNormForce `sAnd` phrase intShrForce]
 

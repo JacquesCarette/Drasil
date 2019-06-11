@@ -123,6 +123,11 @@
                   <td>m/s<sup>2</sup></td>
                 </tr>
                 <tr>
+                  <td><em>h</em></td>
+                  <td>Height</td>
+                  <td>m</td>
+                </tr>
+                <tr>
                   <td><em><b>I</b></em></td>
                   <td>Moment of inertia</td>
                   <td>kg&sdot;m<sup>2</sup></td>
@@ -196,6 +201,11 @@
                   <td><em><b>n</b></em></td>
                   <td>Collision Normal Vector</td>
                   <td>m</td>
+                </tr>
+                <tr>
+                  <td><em>PE</em></td>
+                  <td>Potential energy</td>
+                  <td>J</td>
                 </tr>
                 <tr>
                   <td><em><b>p</b></em></td>
@@ -639,12 +649,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:potEnergy>DD: potEnergy</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+                      objectDimension: All objects are 2D. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:potEnergy>DD: potEnergy</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
                     </div>
                   </p>
                   <p>
@@ -664,7 +674,7 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. <a href=#DD:chalses>DD: chalses</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:potEnergy>DD: potEnergy</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
                     </div>
                   </p>
                   <p>
@@ -1813,6 +1823,62 @@
                 <div class="equation">
                   <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
                 </div>
+                <div id="DD:potEnergy">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Potential energy</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>PE</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">J</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation"><em>PE = m&#8239;g&#8239;h</em></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>PE</em> is the potential energy (J)</li>
+                          <li><em>m</em> is the mass (kg)</li>
+                          <li>
+                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                          </li>
+                          <li><em>h</em> is the height (m)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The potential energy of an object is the energy held by an object because of its position to other objects.
+                        </p>
+                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
+                        <p class="paragraph">
+                          <a href=#assumpDI>A: dampingInvolvement</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2417,6 +2483,7 @@
               <th><a href=#lcIJC>LC: Include-Joints-Constraints</a></th>
               <th><a href=#lcEC>LC: Expanded-Collisions</a></th>
               <th><a href=#DD:chalses>DD: chalses</a></th>
+              <th><a href=#DD:potEnergy>DD: potEnergy</a></th>
               <th><a href=#DD:linVel>DD: linVel</a></th>
               <th><a href=#DD:linDisp>DD: linDisp</a></th>
               <th><a href=#DD:linAcc>DD: linAcc</a></th>
@@ -2436,6 +2503,7 @@
                 <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
               </td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2480,11 +2548,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angDisp>DD: angDisp</a></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2528,6 +2598,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#assumpAD>A: axesDefined</a></td>
@@ -2535,6 +2606,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2576,6 +2648,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#assumpCT>A: collisionType</a></td>
@@ -2586,6 +2659,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2619,6 +2693,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2634,6 +2709,7 @@
               <td>X</td>
               <td></td>
               <td></td>
+              <td>X</td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -2662,6 +2738,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td>X</td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -2679,6 +2756,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2720,6 +2798,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linDisp>DD: linDisp</a></td>
@@ -2728,6 +2807,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2768,6 +2848,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
@@ -2776,6 +2857,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3252,7 +3334,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>LC4 (<a href=#IM:transMot>IM: transMot</a>)</td>
+              <td>LC4 (<a href=#DD:potEnergy>DD: potEnergy</a>)</td>
               <td></td>
               <td></td>
               <td></td>

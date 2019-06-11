@@ -21,7 +21,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, kEnergy, energy, impulseV, chgInVelocity, acceleration)
+  force, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy, height, gravitationalAccel)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Theories.Physics (torque, torqueDD)
@@ -29,11 +29,12 @@ import Data.Drasil.Theories.Physics (torque, torqueDD)
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
- angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD, impulseVDD]
+ angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
+ coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD]
 
 qDefs :: [QDefinition]
 qDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution]
+  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution, potEnergy]
 
 blockQDefs :: [Block QDefinition]
 blockQDefs = map (\x -> Parallel x []) qDefs
@@ -351,3 +352,21 @@ kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [S "The", phrase QP.kEnergy,
  S "of an object is the", phrase QP.energy,
  S "it possess due to its motion"]
+
+---------------------------DD17 Potential Energy-------------------------------------------
+
+potEnergyDD :: DataDefinition
+potEnergyDD = ddNoRefs potEnergy [{-- Derivation --}] "potEnergy"
+ [potEnergyDesc,makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI] 
+
+potEnergy :: QDefinition
+potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
+
+potEnergyEqn :: Expr
+potEnergyEqn = (sy QPP.mass * sy QP.gravitationalAccel * sy QP.height)
+
+potEnergyDesc :: Sentence
+potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy,
+ S "of an object is the", phrase QP.energy,
+ S "held by an object because of its", phrase QP.position, S "to other objects"]
+

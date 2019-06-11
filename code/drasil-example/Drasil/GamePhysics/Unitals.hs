@@ -19,8 +19,8 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
 import Control.Lens((^.))
 
 defSymbols :: [DefinedQuantityDict]
-defSymbols = (map dqdWr unitSymbs) ++ (map dqdWr inputConstraints) ++
-  (map dqdWr outputConstraints)
+defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
+  map dqdWr outputConstraints
 
 unitSymbs :: [UnitaryConceptDict]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
@@ -39,9 +39,9 @@ symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
 symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
-symbols = (map qw unitalChunks) ++ 
-  (map qw unitless) ++ 
-  (map qw inputConstraints)
+symbols = map qw unitalChunks ++ 
+  map qw unitless ++ 
+  map qw inputConstraints
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
@@ -107,7 +107,7 @@ perpParam n w = ucs'
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Concat [Atomic "||", w, Atomic "*", --should be x for cross
-  (eqSymb QM.perpVect), Atomic "||"]) Real metre
+  eqSymb QM.perpVect, Atomic "||"]) Real metre
 
 rigidParam n w = ucs'
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
@@ -134,7 +134,7 @@ normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (eqSymb QM.normalVect) Real metre
 
 dispUnit = ucs' (dccWDS "dispUnit" (cn "displacement unit vector") 
-                   (S "displacement" +:+ (phrase QM.unitVect))) (vec (hat lR)) Real metre
+                   (S "displacement" +:+ phrase QM.unitVect)) (vec (hat lR)) Real metre
 
 dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real metre
@@ -200,7 +200,7 @@ massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term)
 normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
-                  (Concat [Atomic "||",(eqSymb QM.normalVect), Atomic "||"]) Real metre
+                  (Concat [Atomic "||", eqSymb QM.normalVect, Atomic "||"]) Real metre
 
 rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
                 (cn "between the j-th particle and the axis of rotation")) (phrase QP.distance)) 

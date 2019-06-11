@@ -499,7 +499,7 @@ Convective heat transfer coefficient between coil and water
 <div class="section">
 <h1>Introduction</h1>
 <p class="paragraph">
-Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
+Due to the increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 </p>
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
@@ -674,7 +674,7 @@ Solar water heating tank, with heat flux into the water from the coil of <em>q<s
 <div class="subsubsection">
 <h3>Goal Statements</h3>
 <p class="paragraph">
-Given the temperature of the heating coil, the initial conditions for the temperature of the water, the temperature of the phase change material, and the material properties, the goal statements are:
+Given the temperature of the heating coil, the initial conditions for the temperature of the water and the temperature of the phase change material, and the material properties, the goal statements are:
 </p>
 <div class="list">
 <p>
@@ -727,12 +727,12 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 </p>
 <p>
 <div id="assumpCWTAT">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
 <div id="assumpTPCAV">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
@@ -747,22 +747,22 @@ Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, 
 </p>
 <p>
 <div id="assumpLCCCW">
-Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
 <div id="assumpTHCCoT">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> <a href=#DD:htFluxC>DD: htFluxC</a>.
 </div>
 </p>
 <p>
 <div id="assumpTHCCoL">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:ht.flux.C>DD: ht_flux_C</a>.
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:htFluxC>DD: htFluxC</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </div>
 </p>
 <p>
 <div id="assumpLCCWP">
-Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:ht.flux.P>DD: ht_flux_P</a>.
+Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:htFluxP>DD: htFluxP</a>.
 </div>
 </p>
 <p>
@@ -792,7 +792,7 @@ Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no hea
 </p>
 <p>
 <div id="assumpNIHGBWP">
-No-Internal-Heat-Generation-By-Water-PCM: No internal heat is generated by either the water or the PCM ; therefore, the volumetric heat generation per unit volume is zero. <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
+No-Internal-Heat-Generation-By-Water-PCM: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </div>
 </p>
 <p>
@@ -1227,7 +1227,7 @@ Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:ht.flux.C">
+<div id="DD:htFluxC">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -1295,13 +1295,13 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:ht.flux.P">
+<div id="DD:htFluxP">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -1367,7 +1367,7 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
+<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </p>
 </td>
 </tr>
@@ -1556,13 +1556,13 @@ This section collects and defines all the data needed to build the instance mode
 <th>RefBy</th>
 <td>
 <p class="paragraph">
-<a href=#DD:melt.frac>DD: melt_frac</a> <a href=#TM:latentHtE>TM: latentHtE</a> <a href=#IM:heatEInPCM>IM: heatEInPCM</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+<a href=#DD:meltFrac>DD: meltFrac</a> <a href=#TM:latentHtE>TM: latentHtE</a> <a href=#IM:heatEInPCM>IM: heatEInPCM</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="DD:melt.frac">
+<div id="DD:meltFrac">
 <table class="ddefn">
 <tr>
 <th>Label</th>
@@ -1607,6 +1607,9 @@ This section collects and defines all the data needed to build the instance mode
 <tr>
 <th>Notes</th>
 <td>
+<p class="paragraph">
+The value of <em>ϕ</em> is constrained to <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;1</em>.
+</p>
 <p class="paragraph"><a href=#DD:htFusion>DD: htFusion</a></p>
 </td>
 </tr>
@@ -1748,7 +1751,7 @@ Energy balance on water to find the temperature of the water
 </div>
 <p class="paragraph">Derivation of the energy balance on water:</p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat transfer into the water from the heating coil and <em>q<sub>P</sub></em> represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>)  and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1757,7 +1760,7 @@ To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy bala
                                             </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
+Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
 </p>
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1777,7 +1780,7 @@ Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
              <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
              </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;<div class="fraction">
                                                                     <span class="fup">
-                                                                    m<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                    h<sub>P</sub>&#8239;A<sub>P</sub>
                                                                     </span>
                                                                     <span class="fdn">
                                                                     m<sub>W</sub>&#8239;C<sub>W</sub>
@@ -1845,7 +1848,7 @@ Setting <em>τ<sub>W</sub> = <div class="fraction">
                                                                                             <span class="fdn">
                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
                                                                                             </span>
-                                                                                            </div></em> (<a href=#DD:melt.frac>DD: melt_frac</a>), Equation (5) can be written as:
+                                                                                            </div></em> (<a href=#DD:meltFrac>DD: meltFrac</a>), Equation (5) can be written as:
 </p>
 <div class="equation">
 <em><div class="fraction">
@@ -1981,21 +1984,21 @@ Energy Balance on PCM to find temperature of PCM
 <th>Notes</th>
 <td>
 <p class="paragraph">
-<em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> form (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#assumpPIS>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:melt.frac>DD: melt_frac</a> ) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>). <em>τ<sub>P</sub><sup>S</sup> = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div></em> is a constant (s) (<a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>). <em>τ<sub>P</sub><sup>L</sup> = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </div></em> is a constant (s) (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
+<em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> from (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#assumpPIS>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>). <em>τ<sub>P</sub><sup>S</sup> = <div class="fraction">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span class="fup">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span class="fdn">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div></em> is a constant (s) (<a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>). <em>τ<sub>P</sub><sup>L</sup> = <div class="fraction">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <span class="fup">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <span class="fdn">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </div></em> is a constant (s) (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
 </p>
 </td>
 </tr>
@@ -2019,7 +2022,7 @@ Energy Balance on PCM to find temperature of PCM
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em> , the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
@@ -2030,7 +2033,7 @@ To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy bala
                                                         </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>P</sub></em>, this equation can be written as:
+Using <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this equation can be written as:
 </p>
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
@@ -2265,7 +2268,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<s
 <th>Notes</th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a href=#TM:latentHtE>TM: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>) (<a href=#assumpPIS>A: PCM-Initially-Solid</a>).
+The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a href=#TM:latentHtE>TM: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heating, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM. The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). The specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>) (<a href=#assumpPIS>A: PCM-Initially-Solid</a>).
 </p>
 </td>
 </tr>
@@ -2439,7 +2442,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a h
 <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
 </td>
 <td>--</td>
-<td><em>100.0&sdot;10<sup>-3</sup></em> s</td>
+<td><em>10.0&sdot;10<sup>-3</sup></em> s</td>
 <td>10<em>%</em></td>
 </tr>
 <tr>
@@ -2459,15 +2462,15 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a h
 <td>
 <em>V<sub>P</sub>&thinsp;&ge;&thinsp;MINFRACT&#8239;V<sub>tank</sub></em>
 </td>
-<td><em>500.0&sdot;10<sup>-3</sup></em> m<sup>3</sup></td>
+<td><em>50.0&sdot;10<sup>-3</sup></em> m<sup>3</sup></td>
 <td>10<em>%</em></td>
 </tr>
 <tr>
 <td><em>ρ<sub>P</sub></em></td>
+<td><em>ρ<sub>P</sub>&thinsp;&gt;&thinsp;0</em></td>
 <td>
 <em>ρ<sub>P</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>P</sub>&thinsp;&lt;&thinsp;ρ<sub>P</sub><sup>max</sup></em>
 </td>
-<td>--</td>
 <td><em>1.007&sdot;10<sup>3</sup></em> kg/m<sup>3</sup></td>
 <td>10<em>%</em></td>
 </tr>
@@ -2518,7 +2521,7 @@ The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a h
 <div class="subsubsection">
 <h3>Properties of a Correct Solution</h3>
 <p class="paragraph">
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
 <div class="equation">
 <em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
@@ -2553,7 +2556,7 @@ This section provides the functional requirements, the tasks and behaviours that
 <div class="list">
 <p>
 <div id="inputInitQuants">
-Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the tank parameters, material properties and initial conditions.
 </div>
 </p>
 <p>
@@ -2614,117 +2617,119 @@ Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stop
 </div>
 </p>
 </div>
-<div id="Table:Input-Variable-Requirements">
+<div id="Table:ReqInputs">
 <table class="table">
 <tr>
 <th>Symbol</th>
-<th>Unit</th>
 <th>Description</th>
-</tr>
-<tr>
-<td><em>L</em></td>
-<td>m</td>
-<td>length of tank</td>
-</tr>
-<tr>
-<td><em>D</em></td>
-<td>m</td>
-<td>diameter of tank</td>
-</tr>
-<tr>
-<td><em>V<sub>P</sub></em></td>
-<td>m<sup>3</sup></td>
-<td>volume of PCM</td>
-</tr>
-<tr>
-<td><em>A<sub>P</sub></em></td>
-<td>m<sup>2</sup></td>
-<td>phase change material surface area</td>
-</tr>
-<tr>
-<td><em>ρ<sub>P</sub></em></td>
-<td>kg/m<sup>3</sup></td>
-<td>density of PCM</td>
-</tr>
-<tr>
-<td><em>T<sub>melt</sub><sup>P</sup></em></td>
-<td>&deg;C</td>
-<td>melting point temperature for PCM</td>
-</tr>
-<tr>
-<td><em>C<sub>P</sub><sup>S</sup></em></td>
-<td>J/(kg&sdot;&deg;C)</td>
-<td>specific heat capacity of PCM as a solid</td>
-</tr>
-<tr>
-<td><em>C<sub>P</sub><sup>L</sup></em></td>
-<td>J/(kg&sdot;&deg;C)</td>
-<td>specific heat capacity of PCM as a liquid</td>
-</tr>
-<tr>
-<td><em>H<sub>f</sub></em></td>
-<td>J/kg</td>
-<td>specific latent heat of fusion</td>
+<th>Units</th>
 </tr>
 <tr>
 <td><em>A<sub>C</sub></em></td>
+<td>Heating coil surface area</td>
 <td>m<sup>2</sup></td>
-<td>heating coil surface area</td>
 </tr>
 <tr>
-<td><em>T<sub>C</sub></em></td>
-<td>&deg;C</td>
-<td>temperature of the heating coil</td>
-</tr>
-<tr>
-<td><em>ρ<sub>W</sub></em></td>
-<td>kg/m<sup>3</sup></td>
-<td>density of water</td>
-</tr>
-<tr>
-<td><em>C<sub>W</sub></em></td>
-<td>J/(kg&sdot;&deg;C)</td>
-<td>specific heat capacity of water</td>
-</tr>
-<tr>
-<td><em>h<sub>C</sub></em></td>
-<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-<td>
-convective heat transfer coefficient between coil and water
-</td>
-</tr>
-<tr>
-<td><em>h<sub>P</sub></em></td>
-<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-<td>convective heat transfer coefficient between PCM and water</td>
-</tr>
-<tr>
-<td><em>T<sub>init</sub></em></td>
-<td>&deg;C</td>
-<td>initial temperature</td>
-</tr>
-<tr>
-<td><em>t<sub>final</sub></em></td>
-<td>s</td>
-<td>final time</td>
+<td><em>A<sub>P</sub></em></td>
+<td>Phase change material surface area</td>
+<td>m<sup>2</sup></td>
 </tr>
 <tr>
 <td><em>A<sub>tol</sub></em></td>
+<td>Absolute tolerance</td>
 <td>--</td>
-<td>absolute tolerance</td>
+</tr>
+<tr>
+<td><em>C<sub>W</sub></em></td>
+<td>Specific heat capacity of water</td>
+<td>J/(kg&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>C<sub>P</sub><sup>L</sup></em></td>
+<td>Specific heat capacity of PCM as a liquid</td>
+<td>J/(kg&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>C<sub>P</sub><sup>S</sup></em></td>
+<td>Specific heat capacity of PCM as a solid</td>
+<td>J/(kg&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>D</em></td>
+<td>Diameter of tank</td>
+<td>m</td>
+</tr>
+<tr>
+<td><em>h<sub>C</sub></em></td>
+<td>
+Convective heat transfer coefficient between coil and water
+</td>
+<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>H<sub>f</sub></em></td>
+<td>Specific latent heat of fusion</td>
+<td>J/kg</td>
+</tr>
+<tr>
+<td><em>h<sub>P</sub></em></td>
+<td>Convective heat transfer coefficient between PCM and water</td>
+<td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>L</em></td>
+<td>Length of tank</td>
+<td>m</td>
 </tr>
 <tr>
 <td><em>R<sub>tol</sub></em></td>
+<td>Relative tolerance</td>
 <td>--</td>
-<td>relative tolerance</td>
 </tr>
 <tr>
-<td><em>C<sub>tol</sub></em></td>
-<td>--</td>
-<td>relative tolerance for conservation of energy</td>
+<td><em>T<sub>C</sub></em></td>
+<td>Temperature of the heating coil</td>
+<td>&deg;C</td>
+</tr>
+<tr>
+<td><em>t<sub>final</sub></em></td>
+<td>Final time</td>
+<td>s</td>
+</tr>
+<tr>
+<td><em>T<sub>init</sub></em></td>
+<td>Initial temperature</td>
+<td>&deg;C</td>
+</tr>
+<tr>
+<td><em>t<sub>step</sub></em></td>
+<td>Time step for simulation</td>
+<td>s</td>
+</tr>
+<tr>
+<td><em>T<sub>melt</sub><sup>P</sup></em></td>
+<td>Melting point temperature for PCM</td>
+<td>&deg;C</td>
+</tr>
+<tr>
+<td><em>V<sub>P</sub></em></td>
+<td>Volume of PCM</td>
+<td>m<sup>3</sup></td>
+</tr>
+<tr>
+<td><em>ρ<sub>P</sub></em></td>
+<td>Density of PCM</td>
+<td>kg/m<sup>3</sup></td>
+</tr>
+<tr>
+<td><em>ρ<sub>W</sub></em></td>
+<td>Density of water</td>
+<td>kg/m<sup>3</sup></td>
 </tr>
 </table>
-<p class="caption">Input Variable Requirements</p>
+<p class="caption">
+Required Inputs following <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>
+</p>
 </div>
 </div>
 </div>
@@ -2838,9 +2843,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
 <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
 <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
-<th><a href=#DD:ht.flux.P>DD: ht_flux_P</a></th>
+<th><a href=#DD:htFluxP>DD: htFluxP</a></th>
 <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
-<th><a href=#DD:ht.flux.C>DD: ht_flux_C</a></th>
+<th><a href=#DD:htFluxC>DD: htFluxC</a></th>
 <th><a href=#unlikeChgWPFS>UC: Water-PCM-Fixed-States</a></th>
 <th><a href=#unlikeChgNGS>UC: No-Gaseous-State</a></th>
 <th><a href=#IM:heatEInPCM>IM: heatEInPCM</a></th>
@@ -2883,7 +2888,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <th>
 <a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>
 </th>
-<th><a href=#DD:melt.frac>DD: melt_frac</a></th>
+<th><a href=#DD:meltFrac>DD: meltFrac</a></th>
 <th><a href=#TM:latentHtE>TM: latentHtE</a></th>
 <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
 </tr>
@@ -2925,9 +2930,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
-<td>
-<a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>
-</td>
+<td><a href=#Table:ReqInputs>Table:ReqInputs</a></td>
 <td></td>
 <td>X</td>
 <td></td>
@@ -3040,7 +3043,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td>X</td>
 <td>X</td>
@@ -3472,7 +3475,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td></td>
 <td></td>
@@ -3546,7 +3549,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>X</td>
 <td></td>
 <td>X</td>
 <td>X</td>
@@ -3894,6 +3897,76 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 </tr>
 <tr>
+<td><a href=#DD:htFluxC>DD: htFluxC</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href=#DD:htFluxP>DD: htFluxP</a></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td><a href=#DD:htFusion>DD: htFusion</a></td>
 <td></td>
 <td></td>
@@ -3926,76 +3999,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td></td>
 <td>X</td>
 <td>X</td>
-<td></td>
-</tr>
-<tr>
-<td><a href=#DD:ht.flux.C>DD: ht_flux_C</a></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href=#DD:ht.flux.P>DD: ht_flux_P</a></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>X</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 <td></td>
 </tr>
 <tr>
@@ -4069,7 +4072,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 <td>X</td>
 </tr>
 <tr>
-<td><a href=#DD:melt.frac>DD: melt_frac</a></td>
+<td><a href=#DD:meltFrac>DD: meltFrac</a></td>
 <td></td>
 <td></td>
 <td></td>
@@ -4257,14 +4260,14 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 <th>T3 (<a href=#TM:latentHtE>TM: latentHtE</a>)</th>
 <th>GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)</th>
 <th>GD2 (<a href=#GD:rocTempSimp>GD: rocTempSimp</a>)</th>
-<th>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</th>
-<th>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</th>
+<th>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</th>
+<th>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</th>
 <th>DD3 (<a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>)</th>
 <th>
 DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 </th>
 <th>DD5 (<a href=#DD:htFusion>DD: htFusion</a>)</th>
-<th>DD6 (<a href=#DD:melt.frac>DD: melt_frac</a>)</th>
+<th>DD6 (<a href=#DD:meltFrac>DD: meltFrac</a>)</th>
 <th>IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)</th>
 <th>IM2 (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>)</th>
 <th>IM3 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)</th>
@@ -4361,7 +4364,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</td>
+<td>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4379,7 +4382,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</td>
+<td>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -4453,7 +4456,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD6 (<a href=#DD:melt.frac>DD: melt_frac</a>)</td>
+<td>DD6 (<a href=#DD:meltFrac>DD: meltFrac</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5061,7 +5064,7 @@ A17 (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)</td>
+<td>DD1 (<a href=#DD:htFluxC>DD: htFluxC</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5083,7 +5086,7 @@ A17 (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD2 (<a href=#DD:ht.flux.P>DD: ht_flux_P</a>)</td>
+<td>DD2 (<a href=#DD:htFluxP>DD: htFluxP</a>)</td>
 <td></td>
 <td></td>
 <td>X</td>
@@ -5173,7 +5176,7 @@ DD4 (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>)
 <td></td>
 </tr>
 <tr>
-<td>DD6 (<a href=#DD:melt.frac>DD: melt_frac</a>)</td>
+<td>DD6 (<a href=#DD:meltFrac>DD: meltFrac</a>)</td>
 <td></td>
 <td></td>
 <td></td>
@@ -5461,6 +5464,12 @@ This section contains the standard values that are used for calculations in SWHS
 <th>Unit</th>
 </tr>
 <tr>
+<td><em>A<sub>C</sub><sup>max</sup></em></td>
+<td>maximum surface area of coil</td>
+<td><em>100000</em></td>
+<td>m<sup>2</sup></td>
+</tr>
+<tr>
 <td><em>C<sub>W</sub><sup>max</sup></em></td>
 <td>maximum specific heat capacity of water</td>
 <td><em>4210</em></td>
@@ -5511,6 +5520,18 @@ minimum convective heat transfer coefficient between coil and water
 </td>
 <td><em>10</em></td>
 <td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>H<sub>f</sub><sub>max</sub></em></td>
+<td>maximum specific latent heat of fusion</td>
+<td><em>1000000</em></td>
+<td>J/(kg&sdot;&deg;C)</td>
+</tr>
+<tr>
+<td><em>H<sub>f</sub><sub>min</sub></em></td>
+<td>minimum specific latent heat of fusion</td>
+<td><em>0</em></td>
+<td>J/(kg&sdot;&deg;C)</td>
 </tr>
 <tr>
 <td><em>h<sub>P</sub><sup>max</sup></em></td>

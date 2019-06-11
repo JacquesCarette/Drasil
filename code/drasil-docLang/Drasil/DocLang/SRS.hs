@@ -14,6 +14,8 @@ module Drasil.DocLang.SRS
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
+import Utils.Drasil
+
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
   generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
@@ -23,7 +25,6 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfSymb, userCharacteristic)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Phrase (for'', the')
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -61,7 +62,7 @@ sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysCont
 userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
-scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
+scpOfTheProj cs ss = section' (atStart (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss  = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
 indPRCase   cs ss  = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
 

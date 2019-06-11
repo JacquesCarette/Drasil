@@ -1,6 +1,5 @@
 #include "OutputFormat.hpp"
 
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -17,12 +16,12 @@ using std::ifstream;
 using std::ofstream;
 
 void write_output(InputParameters &inParams) {
-    ofstream outfile;
-    outfile.open("output.txt", std::fstream::out | std::fstream::app);
-    outfile << "T_W = ";
-    outfile << inParams.T_W << std::endl;
-    outfile << "E_W = ";
-    outfile << inParams.E_W << std::endl;
-    outfile.close();
+    ofstream outputfile;
+    outputfile.open("output.txt", std::fstream::out);
+    outputfile << "T_W = ";
+    outputfile << inParams.T_W << std::endl;
+    outputfile << "E_W = ";
+    outputfile << inParams.E_W << std::endl;
+    outputfile.close();
 }
 

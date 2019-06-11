@@ -7,10 +7,10 @@ module Drasil.Sections.Stakeholders
 
 import Language.Drasil
 import Utils.Drasil
+
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Documentation (section_, stakeholder, interest, product_, client,
   customer, endUser)
-import Data.Drasil.Phrase (the)
 
 stakehldrGeneral :: (Idea a) => a -> Sentence -> Section
 stakehldrGeneral kWord clientDetails = SRS.stakeholder [stakeholderIntro] subs
@@ -26,14 +26,14 @@ tClientF :: (Idea a) => a -> Sentence ->  Section
 tClientF kWord details = SRS.theClient [clientIntro kWord details] []
 
 clientIntro :: (Idea a) => a -> Sentence -> Contents
-clientIntro kWord  details = foldlSP [at_startNP $ the client,
+clientIntro kWord  details = foldlSP [atStartNP $ the client,
   S "for", short kWord, S "is" +:+. details,
-  at_startNP $ the client, S "has the final say on acceptance of the", 
+  atStartNP $ the client, S "has the final say on acceptance of the", 
   phrase product_]
 
 tCustomerF :: (Idea a) => a -> Section
 tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
 
 customerIntro :: (Idea a) => a -> Contents
-customerIntro kWord = foldlSP [at_startNP' $ the customer,
+customerIntro kWord = foldlSP [atStartNP' $ the customer,
   S "are the", phrase endUser, S "of", short kWord]

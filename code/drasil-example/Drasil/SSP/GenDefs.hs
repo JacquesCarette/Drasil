@@ -10,18 +10,18 @@ import Utils.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
-import Data.Drasil.Utils (weave)
-
 import Data.Drasil.SI_Units (metre, newton)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
   constant, definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation)
 import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.Concepts.Physics (distance, pressure, twoD, weight)
+import Data.Drasil.Concepts.Physics (twoD, weight)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Quantities.Physics (displacement, force, torque)
-import Data.Drasil.Theories.Physics (weightGD, torqueDD)
+import Data.Drasil.Quantities.PhysicalProperties (specWeight)
+import Data.Drasil.Quantities.Physics (displacement, force, height, 
+  pressure, torque)
+import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
 
 import Data.Drasil.SentenceStructures (getTandS)
 
@@ -30,19 +30,20 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpHFSM)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
-  slcHeight, stressDD, ratioVariation)
+  lengthLs, slcHeight, stressDD, ratioVariation)
 import Drasil.SSP.Defs (intrslce, slice, slope, slopeSrf, slpSrf, soil, 
   soilPrpty, waterTable)
-import Drasil.SSP.Figures (fig_forceacting)
+import Drasil.SSP.Figures (figForceActing)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, earthqkLoadFctr, effCohesion, fricAngle, fs, genericA, genericSpWght, impLoadAngle, intNormForce, intShrForce, 
-  index, inxi, inxiM1, midpntHght, mobShrI, momntArm, momntOfBdy, normToShear, 
-  nrmFSubWat, rotForce, satWeight, scalFunc, shearFNoIntsl, shrResI, shrResI, 
-  shrStress, totNrmForce, shearRNoIntsl, shrResI, slcWght, sliceHght, sliceHghtW, slipHght,
-  slopeHght, surfHydroForce, surfAngle, surfLoad, watrForce, waterHght, waterWeight, 
-  dryVol, satVol, waterVol, yi, zcoord)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
+  dryWeight, earthqkLoadFctr, effCohesion, fricAngle, fs, genericA, 
+  genericSpWght, impLoadAngle, intNormForce, intShrForce, index, inxi, inxiM1, 
+  midpntHght, mobShrI, momntArm, momntOfBdy, normToShear, 
+  nrmFSubWat, rotForce, satWeight, scalFunc, shearFNoIntsl, shrResI, 
+  shrStress, totNrmForce, shearRNoIntsl, slcWght, sliceHght, sliceHghtW, 
+  slipHght, slopeHght, surfHydroForce, surfAngle, surfLngth, surfLoad, 
+  watrForce, waterHght, waterWeight, dryVol, satVol, yi, zcoord)
 
 ---------------------------
 --  General Definitions  --
@@ -50,29 +51,29 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD, 
- sliceWghtGD, baseWtrFGD, srfWtrFGD]
+ sliceWghtGD, hsPressureGD, baseWtrFGD, srfWtrFGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, 
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 
   srfWtrFGD :: GenDefn
-normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEq_deriv]    
-  [makeCite chen2005]                      "normForcEq"  [nmFEq_desc]
-bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEq_deriv]
-  [makeCite chen2005]                      "bsShrFEq"    [bShFEq_desc]
-resShrGD     = gd resShr     (getUnit shrResI)       [resShr_deriv]   
-  [makeCite chen2005]                      "resShr"      [resShr_desc]
-mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShr_deriv]   
-  [makeCite chen2005]                      "mobShr"      [mobShr_desc]
-effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormF_deriv] 
-  [makeCite chen2005]                      "effNormF"    [effNormF_desc]
+normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]    
+  [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
+bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
+  [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
+resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]   
+  [makeCite chen2005]                      "resShr"      [resShrDesc]
+mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]   
+  [makeCite chen2005]                      "mobShr"      [mobShrDesc]
+effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormFDeriv] 
+  [makeCite chen2005]                      "effNormF"    [effNormFDesc]
 resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
-  (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
-  (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWO_desc]
+  (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
-  [makeCite chen2005]                      "normShrR"    [nmShrR_desc]
+  [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEql  (Just newton)           momEqlDeriv
-  [makeCite chen2005]                      "momentEql"   [momEql_desc]
+  [makeCite chen2005]                      "momentEql"   [momEqlDesc]
 sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
 baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) bsWtrFDeriv
@@ -83,46 +84,46 @@ srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel
+  nmFEqDesc nmFEqRel
 
-nmFEq_rel :: Relation
-nmFEq_rel = inxi totNrmForce $= eqlExprN cos sin
+nmFEqRel :: Relation
+nmFEqRel = inxi totNrmForce $= eqlExprN cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
-nmFEq_desc :: Sentence
-nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
+nmFEqDesc :: Sentence
+nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the normal direction", ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce,  S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
 
-nmFEq_deriv :: Sentence
-nmFEq_deriv = foldlSent [at_start normForcEq, S "is derived from the free",
-  S "body diagram of", makeRef2S fig_forceacting, S "in", 
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+nmFEqDeriv :: Sentence
+nmFEqDeriv = foldlSent [atStart normForcEq, S "is derived from the free",
+  S "body diagram of", makeRef2S figForceActing, S "in", 
+  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel
+  bShFEqDesc bShFEqRel
 
-bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
+bShFEqRel :: Relation
+bShFEqRel = inxi mobShrI $= eqlExpr sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
-bShFEq_desc :: Sentence
-bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
+bShFEqDesc :: Sentence
+bShFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in",
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
 
-bShFEq_deriv :: Sentence
-bShFEq_deriv = foldlSent [at_start bsShrFEq, S "is derived from the free",
-  S "body diagram of", makeRef2S fig_forceacting, S "in", 
-  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section]))]
+bShFEqDeriv :: Sentence
+bShFEqDeriv = foldlSent [atStart bsShrFEq, S "is derived from the free",
+  S "body diagram of", makeRef2S figForceActing, S "in", 
+  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 shrResEqn :: Expr
@@ -131,17 +132,17 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShr_rel -- genDef3Label
+  resShrDesc resShrRel -- genDef3Label
 
-resShr_rel :: Relation
-resShr_rel = inxi shrResI $= shrResEqn
+resShrRel :: Relation
+resShrRel = inxi shrResI $= shrResEqn
 
-resShr_desc :: Sentence
-resShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+resShrDesc :: Sentence
+resShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-resShr_deriv :: Sentence
-resShr_deriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
+resShrDeriv :: Sentence
+resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
   S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
   S "and multiplying both sides of the", phrase equation, S "by", 
   phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord  +:+. 
@@ -158,17 +159,17 @@ resShr_deriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobilized shear force") mobShr_desc mobShr_rel -- genDef4Label
+  (nounPhraseSP "mobilized shear force") mobShrDesc mobShrRel -- genDef4Label
 
-mobShr_rel :: Relation
-mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
+mobShrRel :: Relation
+mobShrRel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
-mobShr_desc :: Sentence
-mobShr_desc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
+mobShrDesc :: Sentence
+mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-mobShr_deriv :: Sentence
-mobShr_deriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
+mobShrDeriv :: Sentence
+mobShrDeriv = foldlSent_ [atStart mobShrI, S "is derived by dividing",
   phrase definition `ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
   S "by", phrase definition `ofThe` phrase fs, S "from" +:+.
   makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,
@@ -178,16 +179,16 @@ mobShr_deriv = foldlSent_ [at_start mobShrI, S "is derived by dividing",
 --
 effNormF :: RelationConcept
 effNormF = makeRC "effNormF"
-  (nounPhraseSP "effective normal force") effNormF_desc effNormF_rel
+  (nounPhraseSP "effective normal force") effNormFDesc effNormFRel
 
-effNormF_rel :: Relation
-effNormF_rel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
+effNormFRel :: Relation
+effNormFRel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 
-effNormF_desc :: Sentence
-effNormF_desc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
+effNormFDesc :: Sentence
+effNormFDesc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 
-effNormF_deriv :: Sentence
-effNormF_deriv = foldlSent [
+effNormFDeriv :: Sentence
+effNormFDeriv = foldlSent [
   S "Derived by substituting", makeRef2S stressDD, S "into", 
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
   S "by the", phrase genericA `ofThe` phrase slice, S "in the shear-" :+: 
@@ -199,13 +200,13 @@ effNormF_deriv = foldlSent [
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
   (nounPhraseSP "interslice normal and shear force proportionality") 
-  nmShrR_desc nmShrR_rel -- genDef5Label
+  nmShrRDesc nmShrRRel -- genDef5Label
 
-nmShrR_rel :: Relation
-nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
+nmShrRRel :: Relation
+nmShrRRel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
-nmShrR_desc :: Sentence
-nmShrR_desc = foldlSent [S "Mathematical representation of the primary", 
+nmShrRDesc :: Sentence
+nmShrRDesc = foldlSent [S "Mathematical representation of the primary", 
   phrase assumption, S "for the Morgenstern-Price", phrase method_ +:+.
   sParen (makeRef2S assumpINSFL), ch scalFunc, S "is defined in", 
   makeRef2S ratioVariation]
@@ -213,18 +214,18 @@ nmShrR_desc = foldlSent [S "Mathematical representation of the primary",
 --
 resShearWO :: RelationConcept
 resShearWO = makeRC "resShearWO"
-  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWO_desc resShearWO_rel
+  (nounPhraseSP "resistive shear force, without interslice normal and shear forces") resShearWODesc resShearWORel
 
-resShearWO_rel :: Relation
-resShearWO_rel = inxi shearRNoIntsl $= 
-  (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle))) *
-  (cos (inxi baseAngle)) + (negate (inxi watrForce) + (inxiM1 watrForce) + 
-  (inxi surfHydroForce) * sin (inxi surfAngle)) * (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi effCohesion) *
-  (inxi baseLngth)
+resShearWORel :: Relation
+resShearWORel = inxi shearRNoIntsl $= 
+  ((inxi slcWght + inxi surfHydroForce * cos (inxi surfAngle)) *
+  cos (inxi baseAngle) + (negate (inxi watrForce) + inxiM1 watrForce + 
+  inxi surfHydroForce * sin (inxi surfAngle)) * sin (inxi baseAngle) -
+  inxi baseHydroForce) * tan (inxi fricAngle) + inxi effCohesion *
+  inxi baseLngth
 
-resShearWO_desc :: Sentence
-resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
+resShearWODesc :: Sentence
+resShearWODesc = foldlSent_ [ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
@@ -237,15 +238,15 @@ resShearWO_desc = foldlSent_ [ch slcWght, S "is defined in",
 --
 mobShearWO :: RelationConcept
 mobShearWO = makeRC "mobShearWO"
-  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWO_desc mobShearWO_rel
+  (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWODesc mobShearWORel
 
-mobShearWO_rel :: Relation
-mobShearWO_rel = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
-  (cos (inxi surfAngle))) * (sin (inxi baseAngle)) - (negate (inxi watrForce) + 
-  (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle)) * (cos (inxi baseAngle))
+mobShearWORel :: Relation
+mobShearWORel = inxi shearFNoIntsl $= (inxi slcWght + inxi surfHydroForce *
+  cos (inxi surfAngle)) * sin (inxi baseAngle) - (negate (inxi watrForce) + 
+  inxiM1 watrForce + inxi surfHydroForce * sin (inxi surfAngle)) * cos (inxi baseAngle)
 
-mobShearWO_desc :: Sentence
-mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in", 
+mobShearWODesc :: Sentence
+mobShearWODesc = foldlSent_ [ch slcWght, S "is defined in", 
   makeRef2S sliceWghtGD `sC` ch surfHydroForce, S "is defined in", 
   makeRef2S srfWtrFGD `sC` ch surfAngle, S "is defined in", 
   makeRef2S angleB `sC` ch baseAngle, S "is defined in",
@@ -256,14 +257,14 @@ mobShearWO_desc = foldlSent_ [ch slcWght, S "is defined in",
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEql_rel -- genDef6Label
+  momEqlDesc momEqlRel -- genDef6Label
 
-momEql_rel :: Relation
-momEql_rel = 0 $= momExpr (\ x y -> x +
+momEqlRel :: Relation
+momEqlRel = 0 $= momExpr (\ x y -> x +
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
-momEql_desc :: Sentence
-momEql_desc = foldlSent [S "This", phrase equation, S "satisfies", 
+momEqlDesc :: Sentence
+momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies", 
   makeRef2S equilibrium, S "for the net" +:+. phrase momntOfBdy, ch baseWthX,
   S "is defined in", makeRef2S lengthB `sC` ch baseAngle, S "is defined in",
   makeRef2S angleA `sC` ch slcWght, S "is defined in", 
@@ -309,7 +310,7 @@ momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
   momEqlDerivHydroEqn, momEqlDerivExtEqn, 
   momEqlDerivFinalEqn :: Expr
 
-momEqlDerivTorqueSentence = [at_start momntOfBdy, S "is equal to", 
+momEqlDerivTorqueSentence = [atStart momntOfBdy, S "is equal to", 
   phrase torque `sC` S "so the", phrase equation, S "from", makeRef2S torqueDD,
   S "will be used to calculate", plural momntOfBdy]
 
@@ -327,7 +328,7 @@ momEqlDerivNormaliSentence = [S "where", ch rotForce, S "is the",
   S "from each", phrase force, S "acting on a", phrase slice +:+. 
   S "must be considered and added together", S "The", plural force,
   S "acting on a", phrase slice, S "are all shown in" +:+.
-  makeRef2S fig_forceacting,
+  makeRef2S figForceActing,
   S "The midpoint of the base of a", phrase slice, S "is considered as the",
   S "axis of rotation, from which the", phrase momntArm +:+. S "is measured",
   S "Considering first the", phrase intrslce, phrase normForce,
@@ -595,7 +596,7 @@ baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force")
   bsWtrFNotes bsWtrFEqn
 
 bsWtrFEqn :: Expr
-bsWtrFEqn = inxi baseHydroForce $= inxi baseWthX * sy waterWeight * 0.5 * 
+bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth * sy waterWeight * 0.5 * 
   case_ [case1, case2]
   where case1 = ((inxi waterHght - inxi slipHght) + 
           (inxiM1 waterHght - inxiM1 slipHght), 
@@ -607,56 +608,69 @@ bsWtrFEqn = inxi baseHydroForce $= inxi baseWthX * sy waterWeight * 0.5 *
 bsWtrFNotes :: Sentence
 bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the base of a", phrase slice, 
-  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX,
-  S "is defined in", makeRef2S lengthB]
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseLngth,
+  S "is defined in", makeRef2S lengthLb]
 
 bsWtrFDeriv :: Derivation
 bsWtrFDeriv = weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++ 
   bsWtrFDerivEndSentence
 
 bsWtrFDerivEqns :: [Sentence]
-bsWtrFDerivEqns = map E [bsWtrFDerivWeightEqn, bsWtrFDerivSliceEqn]
+bsWtrFDerivEqns = map E [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
+  bsWtrFDerivSliceEqn]
 
 bsWtrFDerivSentences :: [Sentence]
-bsWtrFDerivSentences = map foldlSentCol [bsWtrFDerivIntroSentence, bsWtrFDeriv2DSentence]
+bsWtrFDerivSentences = map foldlSentCol [bsWtrFDerivIntroSentence, 
+  bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence]
 
-bsWtrFDerivIntroSentence, bsWtrFDeriv2DSentence, bsWtrFDerivEndSentence :: [Sentence]
+bsWtrFDerivIntroSentence, bsWtrFDerivHeightSentence, bsWtrFDeriv2DSentence, 
+  bsWtrFDerivEndSentence :: [Sentence]
 
-bsWtrFDerivWeightEqn, bsWtrFDerivSliceEqn :: Expr
+bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn, bsWtrFDerivSliceEqn :: Expr
 
-bsWtrFDerivIntroSentence = [S "The", phrase baseHydroForce, S "come from", 
-  phrase weight `ofThe` S "water above the base of each" +:+. phrase slice, 
-  S "Substituting", plural value, S "for water into the",
-  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
-  S "yields"] 
+bsWtrFDerivIntroSentence = [S "The", phrase baseHydroForce, S "come from the", 
+  S "hydrostatic", phrase pressure, S "exerted by the water above the base of", 
+  S "each" +:+. phrase slice, 
+  S "The", phrase equation, S "for hydrostatic", phrase pressure, S "from", 
+  makeRef2S hsPressureGD, S "is"] 
+
+bsWtrFDerivHeightSentence = [S "The", phrase specWeight, S "in this case is",
+  S "the" +:+. getTandS waterWeight,
+  S "The", phrase height, S "in this case is the height from the", phrase slice,
+  S "base to the" +:+. phrase waterTable,
+  S "This", phrase height, S "is measured from", S "midpoint" `ofThe` 
+  phrase slice, S "because the resultant hydrostatic", phrase force,
+  S "is assumed to act at the", phrase slice, S "midpoint" +:+.
+  sParen (makeRef2S assumpHFSM),
+  S "The", phrase height, S "at the midpoint is the average of the", 
+  phrase height, S "at", phrase slice, S "interface", ch index `andThe`
+  phrase height, S "at", phrase slice, S "interface", E (sy index - 1)]
 
 bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only two dimensions are considered, so the", plural area `sOf` 
-  S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
-  phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
-  S "is below", S "height" `ofThe` phrase slpSrf, S "at one edge and above", 
-  S "height" `ofThe` phrase slpSrf, S "at the other edge is", 
-  S "assumed not to occur" +:+. sParen (makeRef2S assumpWIBE), 
-  S "In the case where", S "height" `ofThe` phrase waterTable,
-  S "is below" +:+. ((S "height" `ofThe` phrase slpSrf) `sC`
-  (phrase area `ofThe` S "water is zero")), S "In the case where", 
-  S "height" `ofThe` phrase waterTable, S "is above", S "height" `ofThe` 
-  phrase slpSrf `sC` S "the water forms a trapezoid on top of the" +:+. 
-  phrase slpSrf, S "The", phrase area, S "of a trapezoid is the average of",
-  plural len `ofThe` S "parallel sides multiplied by the", phrase len +:+.
-  S "between the parallel sides", S "The parallel sides in this case are the",
-  plural distance, S "between the", phrase waterTable `andThe` phrase slpSrf,
-  S "for the edges of the", phrase slice `sC` S "and the", phrase len, 
-  S "between them" `isThe` S "width of the" +:+. phrase slice, S "Thus" `sC`
-  S "the", phrase baseHydroForce, S "are defined as"]
+  S "only two dimensions are considered, so the", phrase baseHydroForce,
+  S "are expressed as", plural force +:+. S "per meter", S "The", 
+  plural pressure, S "acting on the", plural slice, S "can thus be converted",
+  S "to", phrase baseHydroForce, S "by multiplying by the corresponding",
+  phrase len, S "of the", phrase slice, S "base", E (inxi baseLngth) `sC`
+  S "assuming the", phrase waterTable, S "does not intersect a", phrase slice,
+  S "base except at a", phrase slice, S "edge" +:+. 
+  sParen (makeRef2S assumpWIBE), 
+  S "Thus, in the case where", S "height" `ofThe` phrase waterTable, 
+  S "is above", S "height" `ofThe` phrase slpSrf `sC` S "the",
+  phrase baseHydroForce, S "are defined as"]
 
-bsWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
-    S "a rearrangement of the non-zero case of" +:+. makeRef2S baseWtrFGD]
+bsWtrFDerivEndSentence = [foldlSent [S "This", phrase equation `sIs`
+  S "the non-zero case of" +:+. makeRef2S baseWtrFGD,
+  S "The zero case is when", S "height" `ofThe` phrase waterTable,
+  S "is below", S "height" `ofThe` phrase slpSrf `sC` S "so there is no",
+  S "hydrostatic", phrase force]]
 
-bsWtrFDerivWeightEqn = inxi baseHydroForce $= inxi waterVol * sy waterWeight
+bsWtrFDerivWeightEqn = sy pressure $= sy specWeight * sy height
 
-bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseWthX * 0.5 *
-  ((inxi waterHght - inxi slipHght) + (inxiM1 waterHght - inxiM1 slipHght)) * sy waterWeight
+bsWtrFDerivHeightEqn = 0.5 * ((inxi waterHght - inxi slipHght) + (inxiM1 waterHght - inxiM1 slipHght))
+
+bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseLngth * sy waterWeight *
+  bsWtrFDerivHeightEqn
 
 --
 
@@ -665,7 +679,7 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
   srfWtrFNotes srfWtrFEqn
 
 srfWtrFEqn :: Relation
-srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 * 
+srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 * 
   case_ [case1, case2]
   where case1 = ((inxi waterHght - inxi slopeHght) + 
           (inxiM1 waterHght - inxiM1 slopeHght), 
@@ -677,53 +691,66 @@ srfWtrFEqn = inxi surfHydroForce $= inxi baseWthX * sy waterWeight * 0.5 *
 srfWtrFNotes :: Sentence
 srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the surface of a", phrase slice, 
-  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch baseWthX, 
-  S "is defined in", makeRef2S lengthB]
+  S "is a straight line" +:+. sParen (makeRef2S assumpSBSBISL), ch surfLngth, 
+  S "is defined in", makeRef2S lengthLs]
 
 srfWtrFDeriv :: Derivation
 srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 
   srfWtrFDerivEndSentence
 
 srfWtrFDerivEqns :: [Sentence]
-srfWtrFDerivEqns = map E [srfWtrFDerivWeightEqn, srfWtrFDerivSliceEqn]
+srfWtrFDerivEqns = map E [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
+  srfWtrFDerivSliceEqn]
 
 srfWtrFDerivSentences :: [Sentence]
-srfWtrFDerivSentences = map foldlSentCol [srfWtrFDerivIntroSentence, srfWtrFDeriv2DSentence]
+srfWtrFDerivSentences = map foldlSentCol [srfWtrFDerivIntroSentence, 
+  srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence]
 
-srfWtrFDerivIntroSentence, srfWtrFDeriv2DSentence, srfWtrFDerivEndSentence :: [Sentence]
+srfWtrFDerivIntroSentence, srfWtrFDerivHeightSentence, srfWtrFDeriv2DSentence, 
+  srfWtrFDerivEndSentence :: [Sentence]
 
-srfWtrFDerivWeightEqn, srfWtrFDerivSliceEqn :: Expr
+srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn, srfWtrFDerivSliceEqn :: Expr
 
-srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from", 
-  phrase weight `ofThe` S "water standing on top of" +:+. (phrase soil `ofThe` 
-  phrase slopeSrf), S "Substituting", plural value, S "for water into the",
-  phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
-  S "yields"] 
+srfWtrFDerivIntroSentence = [S "The", phrase surfHydroForce, S "come from the", 
+  S "hydrostatic", phrase pressure, S "exerted by the water above the surface", 
+  S "of each" +:+. phrase slice, 
+  S "The", phrase equation, S "for hydrostatic", phrase pressure, S "from", 
+  makeRef2S hsPressureGD, S "is"] 
+
+srfWtrFDerivHeightSentence = [S "The", phrase specWeight, S "in this case is",
+  S "the" +:+. getTandS waterWeight,
+  S "The", phrase height, S "in this case is the height from the", phrase slice,
+  S "surface to the" +:+. phrase waterTable,
+  S "This", phrase height, S "is measured from", S "midpoint" `ofThe` 
+  phrase slice, S "because the resultant hydrostatic", phrase force,
+  S "is assumed to act at the", phrase slice, S "midpoint" +:+.
+  sParen (makeRef2S assumpHFSM),
+  S "The", phrase height, S "at the midpoint is the average of the", 
+  phrase height, S "at", phrase slice, S "interface", ch index `andThe`
+  phrase height, S "at", phrase slice, S "interface", E (sy index - 1)]
 
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only two dimensions are considered, so the", plural area `sOf` 
-  S "water are considered instead of the" +:+. phrase waterVol, S "For a given",
-  phrase slice `sC` S "the case where", S "height" `ofThe` phrase waterTable, 
-  S "is below", S "height" `ofThe` phrase slopeSrf, S "at one edge and above", 
-  S "height" `ofThe` phrase slopeSrf, S "at the other edge is", 
-  S "assumed not to occur" +:+. sParen (makeRef2S assumpWISE), 
-  S "In the case where", S "height" `ofThe` phrase waterTable,
-  S "is below" +:+. ((S "height" `ofThe` phrase slopeSrf) `sC`
-  (phrase area `ofThe` S "water is zero")), S "In the case where", 
-  S "height" `ofThe` phrase waterTable, S "is above", S "height" `ofThe` 
-  phrase slopeSrf `sC` S "the water forms a trapezoid on top of the" +:+. 
-  phrase slopeSrf, S "The", phrase area, S "of a trapezoid is the average of",
-  plural len `ofThe` S "parallel sides multiplied by the", phrase len +:+.
-  S "between the parallel sides", S "The parallel sides in this case are the",
-  plural distance, S "between the", phrase waterTable `andThe` phrase slopeSrf,
-  S "for the edges of the", phrase slice `sC` S "and the", phrase len, 
-  S "between them" `isThe` S "width of the" +:+. phrase slice, S "Thus" `sC`
-  S "the", phrase surfHydroForce, S "are defined as"]
+  S "only two dimensions are considered, so the", phrase surfHydroForce,
+  S "are expressed as", plural force +:+. S "per meter", S "The", 
+  plural pressure, S "acting on the", plural slice, S "can thus be converted",
+  S "to", phrase surfHydroForce, S "by multiplying by the corresponding",
+  phrase len, S "of the", phrase slice, S "surface", E (inxi surfLngth) `sC`
+  S "assuming the", phrase waterTable, S "does not intersect a", phrase slice,
+  S "surface except at a", phrase slice, S "edge" +:+. 
+  sParen (makeRef2S assumpWISE), 
+  S "Thus, in the case where", S "height" `ofThe` phrase waterTable, 
+  S "is above", S "height" `ofThe` phrase slopeSrf `sC` S "the",
+  phrase surfHydroForce, S "are defined as"]
 
-srfWtrFDerivEndSentence = [S "This" +:+ phrase equation `sIs`
-    S "a rearrangement of the non-zero case of" +:+. makeRef2S srfWtrFGD]
+srfWtrFDerivEndSentence = [foldlSent [S "This" +:+ phrase equation `sIs`
+  S "the non-zero case of" +:+. makeRef2S srfWtrFGD,
+  S "The zero case is when", S "height" `ofThe` phrase waterTable,
+  S "is below", S "height" `ofThe` phrase slopeSrf `sC` S "so there is no",
+  S "hydrostatic", phrase force]]
 
-srfWtrFDerivWeightEqn = inxi surfHydroForce $= inxi waterVol * sy waterWeight
+srfWtrFDerivWeightEqn = sy pressure $= sy specWeight * sy height
 
-srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi baseWthX * 0.5 *
-  (((inxi waterHght) - (inxi slopeHght)) + ((inxiM1 waterHght) - (inxiM1 slopeHght))) * sy waterWeight
+srfWtrFDerivHeightEqn = 0.5 * ((inxi waterHght - inxi slopeHght) + (inxiM1 waterHght - inxiM1 slopeHght))
+
+srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 
+  srfWtrFDerivHeightEqn

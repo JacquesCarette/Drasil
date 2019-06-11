@@ -1,12 +1,16 @@
-module Drasil.Sections.Requirements (fReqF, reqF, reqIntro, nfReqF,) where
+module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
+  mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (software, nonfunctionalRequirement,
-  functionalRequirement, section_)
+import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
+  input_, nonfunctionalRequirement, section_, software, symbol_)
+import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.SentenceStructures (follows)
 
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocumentLanguage.Units (toSentence)
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
@@ -33,22 +37,34 @@ nfrReqIntroBody = foldlSent_
         phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
-reqIntroS :: Sentence
-reqIntroS = reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
-
 reqIntro :: Contents
-reqIntro = mkParagraph reqIntroS
+reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
 
 --generalized functional requirements introduction
-fReqIntroS :: Sentence
-fReqIntroS = reqIntroStart +:+. frReqIntroBody
-
-nfReqIntro :: Contents
-nfReqIntro = mkParagraph nfReqIntroS
+fReqIntro :: Contents
+fReqIntro = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 
 --generalized nonfunctional requirements introduction
-nfReqIntroS :: Sentence
-nfReqIntroS = reqIntroStart +:+. nfrReqIntroBody
+nfReqIntro :: Contents
+nfReqIntro = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
-fReqIntro :: Contents
-fReqIntro = mkParagraph fReqIntroS
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
+                          [i] -> r -> LabelledContent
+mkInputPropsTable reqInputs req = llcc (makeTabRef "ReqInputs") $ 
+  Table [atStart symbol_, atStart description, atStart' unit_]
+  (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
+  (S "Required" +:+ titleize' input_ `follows` req) True
+
+-- | takes a list of tuples of variables and sources and creates an table for uses in Functional Requirments
+mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+                          [(i, Sentence)] -> String -> Sentence -> LabelledContent
+mkValsSourceTable vals label cap = llcc (makeTabRef label) $ 
+  Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
+  (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
+
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple = map (\c -> (qw c, makeRef2S c))
+
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs

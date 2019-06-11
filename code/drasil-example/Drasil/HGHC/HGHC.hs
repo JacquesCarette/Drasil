@@ -14,6 +14,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   collectUnits, rdb, refdb, _authors, _concepts, _constants, _constraints,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
+import Utils.Drasil
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -21,7 +22,6 @@ import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs,
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
-import Data.Drasil.Phrase (for)
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []
@@ -32,13 +32,13 @@ thisSI = SI {
   _kind = srs,
   _authors = [spencerSmith],
   _quants = symbols,
-  _concepts = ([] :: [UnitaryConceptDict]),
-  _definitions = ([] :: [QDefinition]),
+  _concepts = [] :: [UnitaryConceptDict],
+  _definitions = [] :: [QDefinition],
   _datadefs = dataDefs,
   _inputs = htInputs,
   _outputs = htOutputs,
-  _defSequence = ([] :: [Block QDefinition]),
-  _constraints = ([] :: [ConstrainedChunk]),
+  _defSequence = [] :: [Block QDefinition],
+  _constraints = [] :: [ConstrainedChunk],
   _constants = [],
   _sysinfodb = allSymbols,
   _usedinfodb = usedDB,

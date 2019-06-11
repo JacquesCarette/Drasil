@@ -3,7 +3,7 @@ module Drasil.SSP.Unitals where --export all of it
 import Language.Drasil
 import Language.Drasil.ShortHands
 
-import Drasil.SSP.Defs (fs_concept)
+import Drasil.SSP.Defs (fsConcept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
@@ -14,12 +14,12 @@ import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
-  gravitationalAccel, torque, weight)
+  gravitationalAccel, height, pressure, torque, weight)
 
 
 symbols :: [DefinedQuantityDict]
-symbols = (map dqdWr inputs) ++ (map dqdWr outputs) ++ 
-  (map dqdWr units) ++ (map dqdWr unitless)
+symbols = map dqdWr inputs ++ map dqdWr outputs ++ 
+  map dqdWr units ++ map dqdWr unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -39,6 +39,8 @@ accel = acceleration
 genericMass = mass
 gravAccel = gravitationalAccel
 dens = density
+genericH = height
+genericP = pressure
 genericR = displacement
 genericT = torque
 
@@ -88,19 +90,19 @@ fs, coords :: ConstrConcept
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
 slopeDist = uqc "x_slope,i" (cn "x-coordinates of the slope")
-  ("x-coordinates of points on the soil slope")
+  "x-coordinates of points on the soil slope"
   (sub (vec lX) (Atomic "slope")) metre Real [] (dbl 0) defaultUncrt
 
 slopeHght = uqc "y_slope,i" (cn "y-coordinates of the slope")
-  ("y-coordinates of points on the soil slope")
+  "y-coordinates of points on the soil slope"
   (sub (vec lY) (Atomic "slope")) metre Real [] (dbl 0) defaultUncrt
 
 waterDist = uqc "x_wt,i" (cn "x-coordinates of the water table")
-  ("x-positions of the water table")
+  "x-positions of the water table"
   (sub (vec lX) (Atomic "wt")) metre Real [] (dbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (cn "y-coordinates of the water table")
-  ("heights of the water table")
+  "heights of the water table"
   (sub (vec lY) (Atomic "wt")) metre Real [] (dbl 0) defaultUncrt
 
 xMaxExtSlip = uqc "x_slip^maxExt" (cn "maximum exit x-coordinate")
@@ -164,12 +166,12 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
   " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
+fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
-fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety associated with the critical slip surface")) 
+fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
+fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
+  "The minimum factor of safety associated with the critical slip surface")
   (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
@@ -186,38 +188,40 @@ coords = cuc' "(x,y)"
 
 units :: [UnitaryConceptDict]
 units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, 
-  zcoord, critCoords, slipDist, mobilizedShear, resistiveShear, mobShrI, 
-  shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, 
+  genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT, 
+  nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, slipDist, 
+  mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
+  shearRNoIntsl, slcWght, watrForce, intShrForce, baseHydroForce, 
+  surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, waterVol, rotForce, momntArm]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm]
 
 accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, genericR, genericT, nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord,
-  critCoords, mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, 
-  shearRNoIntsl, slcWght, watrForce, resistiveShear, shrResI, intShrForce, 
-  baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, 
-  surfAngle, impLoadAngle, baseWthX, baseLngth, midpntHght, momntOfBdy, fx, fy, 
+  gravAccel, dens, genericH, genericP, genericR, genericT, nrmShearNum, 
+  nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear,
+  mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, 
+  watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
+  surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
-  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol,
-  satVol, waterVol, rotForce, momntArm :: UnitalChunk
+  intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol, 
+  satVol, rotForce, momntArm :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
 
 intNormForce = uc' "G_i" (cn "interslice normal forces")
-  ("per meter in the z-direction exerted between each pair of adjacent slices")
+  "per meter in the z-direction exerted between each pair of adjacent slices"
   (vec cG) forcePerMeterU
 
 slipHght = uc' "y_slip,i" (cn "y-coordinates of the slip surface")
-  ("heights of the slip surface")
+  "heights of the slip surface"
   (sub (vec lY) (Atomic "slip")) metre
 
 slipDist = uc' "x_slip,i" (cn "x-coordinates of the slip surface")
-  ("x-coordinates of points on the slip surface")
+  "x-coordinates of points on the slip surface"
   (sub (vec lX) (Atomic "slip")) metre
 
 yi = uc' "y_i" (cn "y-coordinate") "in the Cartesian coordinate system" lY metre
@@ -267,7 +271,7 @@ shearRNoIntsl = uc' "R_i"
   (vec cR) forcePerMeterU
 
 slcWght = uc' "W_i" (cn "weights")
-  ("downward force per meter in the z-direction on each slice caused by gravity")
+  "downward force per meter in the z-direction on each slice caused by gravity"
   (vec cW) forcePerMeterU
 
 watrForce = uc' "H_i" (cn "interslice normal water forces") 
@@ -276,11 +280,11 @@ watrForce = uc' "H_i" (cn "interslice normal water forces")
   (vec cH) forcePerMeterU
 
 intShrForce = uc' "X_i" (cn "interslice shear forces") 
-  ("per meter in the z-direction exerted between adjacent slices")
+  "per meter in the z-direction exerted between adjacent slices"
   (vec cX) forcePerMeterU
 
 baseHydroForce = uc' "U_b,i" (cn "base hydrostatic forces")
-  ("per meter in the z-direction from water pressure within each slice")
+  "per meter in the z-direction from water pressure within each slice"
   (sub (vec cU) lB) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn "surface hydrostatic forces")
@@ -303,11 +307,11 @@ surfLoad = uc' "Q_i" (cn "external forces")
   (vec cQ) forcePerMeterU
 
 baseAngle = uc' "alpha_i" (cn "base angles")
-  ("between the base of each slice and the horizontal")
+  "between the base of each slice and the horizontal"
   (vec lAlpha) degree
 
 surfAngle = uc' "beta_i" (cn "surface angles")
-  ("between the surface of each slice and the horizontal")
+  "between the surface of each slice and the horizontal"
   (vec lBeta) degree
 
 impLoadAngle = uc' "omega_i" (cn "imposed load angles")
@@ -316,12 +320,16 @@ impLoadAngle = uc' "omega_i" (cn "imposed load angles")
   (vec lOmega) degree
 
 baseWthX = uc' "b_i" (cn "base width of slices")
-  ("in the x-direction")
+  "in the x-direction"
   (vec lB) metre
 
 baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
   "in the direction parallel to the slope of the base of each slice"
   (sub (vec lEll) lB) metre
+
+surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
+  "in the direction parallel to the slope of the surface of each slice"
+  (sub (vec lEll) lS) metre
 
 midpntHght = uc' "h_i" (cn "y-direction heights of slices")
   ("heights in the y-direction from the base of each slice to the slope " ++
@@ -332,7 +340,7 @@ momntOfBdy = uc' "M" (cn' "moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
-porePressure = uc' "u" (cn "pore pressure") ("from water within the soil")
+porePressure = uc' "u" (cn "pore pressure") "from water within the soil"
   lU pascal
   
 shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
@@ -387,8 +395,6 @@ dryVol = uc' "V_dry" (cn "volumes of dry soil") "amount of space occupied by dry
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil") "amount of space occupied by saturated soil for each slice" (sub (vec cV) (Atomic "sat")) m_3
 
-waterVol = uc' "V_wat" (cn "volumes of water") "amount of space occupied by water for each slice" (sub (vec cV) (Atomic "wat")) m_3
-
 rotForce = uc' "F_rot" (cn "force causing rotation") 
   "a force in the direction of rotation" (sub cF (Atomic "rot")) newton
   
@@ -402,7 +408,7 @@ momntArm = uc' "r" (cn' "length of the moment arm")
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
-  mobShrC, shrResC, index, pi_, varblV, fs_min, unitVectj]
+  mobShrC, shrResC, index, pi_, varblV, fsMin, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
@@ -414,11 +420,11 @@ earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
 
 normToShear = dqd' (dcc "lambda"
   (nounPhraseSP "proportionality constant")
-  ("for the interslice normal to shear force ratio")) (const lLambda) Real Nothing
+  "for the interslice normal to shear force ratio") (const lLambda) Real Nothing
 
 scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "interslice normal to shear " ++
   "force ratio variation function")
-  ("function of distance in the x-direction"))
+  "function of distance in the x-direction")
   (const (vec lF)) Real Nothing 
 
 numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
@@ -426,7 +432,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   (const lN) Natural Nothing
 
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
-  ("generic minimization function or algorithm"))
+  "generic minimization function or algorithm")
   (const cUpsilon) Real Nothing
 
 mobShrC = dqd' (dcc "Psi" (nounPhraseSP $ "second function for incorporating" ++
@@ -444,11 +450,11 @@ shrResC = dqd' (dcc "Phi" (nounPhraseSP $ "first function for incorporating " ++
 --------------------
 
 varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
-  ("used as a bound variable index in calculations"))
+  "used as a bound variable index in calculations")
   (const lV) Natural Nothing
 
 index = dqd' (dcc "index" (nounPhraseSP "index")
-  ("representing a single slice")) (const lI) Natural Nothing 
+  "representing a single slice") (const lI) Natural Nothing 
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

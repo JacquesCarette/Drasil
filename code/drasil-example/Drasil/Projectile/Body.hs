@@ -6,6 +6,7 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   TraceMap, cdb, generateRefbyMap, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
+import Utils.Drasil
 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
@@ -15,7 +16,6 @@ import Data.Drasil.Concepts.Documentation as Doc (srs)
 
 import Data.Drasil.IdeaDicts (physics)
 import Data.Drasil.People (samCrawford)
-import Data.Drasil.Phrase (for'')
 
 import qualified Data.Map as Map
 
@@ -45,7 +45,7 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ([nw projectile]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
+symbMap = cdb ([] :: [QuantityDict]) [nw projectile] ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
   ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 

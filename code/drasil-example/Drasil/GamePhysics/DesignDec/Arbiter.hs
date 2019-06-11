@@ -6,8 +6,8 @@ vR1, vR2, vNMass, vTMass, vBounce, vJnAcc, vJtAcc, vJBias,
   vBias, vA, vB, vId, vNormal, vCount, vArr, vElast, vSurfaceVal, vAs, vAb, vBodyA, vBodyB, vThreadA, vThreadB, vContacts, vHandler, vHandlerA,
   vHandlerB, vSwapper, vStamp, vState, vPoints, vArb :: VarChunk
 
-vR1         = makeVC "R1"         (nounPhrase "R1")         (sub (lR) (Atomic "1"))
-vR2         = makeVC "R2"         (nounPhrase "R2")         (sub (lR) (Atomic "2"))
+vR1         = makeVC "R1"         (nounPhrase "R1")         (sub lR (Atomic "1"))
+vR2         = makeVC "R2"         (nounPhrase "R2")         (sub lR (Atomic "2"))
 vNMass      = makeVC "nMass"      (nounPhrase "nMass")      (Atomic "nMass")
 vTMass      = makeVC "tMass"      (nounPhrase "tMass")      (Atomic "tMass")
 vBounce     = makeVC "bounce"     (nounPhrase "bounce")     (Atomic "bounce")

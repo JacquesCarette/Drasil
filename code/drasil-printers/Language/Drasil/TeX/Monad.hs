@@ -69,8 +69,8 @@ toMath = switch (const Math)
 toText = switch (const Text)
 
 -- MonadReader calls this 'ask'
-get_ctx :: PrintLaTeX MathContext
-get_ctx = PL id
+getCtx :: PrintLaTeX MathContext
+getCtx = PL id
 
 instance Semigroup (PrintLaTeX TP.Doc) where
   (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx

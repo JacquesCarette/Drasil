@@ -1,7 +1,5 @@
 #include "InputFormat.hpp"
 
-#include "InputParameters.hpp"
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -17,7 +15,9 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-void func_get_input(string filename, InputParameters &inParams, double τ, double A_tol, double R_tol, double C_tol) {
+#include "InputParameters.hpp"
+
+void func_get_input(string filename, InputParameters &inParams) {
     ifstream infile;
     string line;
     vector<string> lines(0);
@@ -36,7 +36,7 @@ void func_get_input(string filename, InputParameters &inParams, double τ, doubl
     infile >> inParams.T_C;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> inParams.ρ_W;
+    infile >> inParams.rho_W;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.C_W;
@@ -48,19 +48,16 @@ void func_get_input(string filename, InputParameters &inParams, double τ, doubl
     infile >> inParams.T_init;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> τ;
+    infile >> inParams.t_step;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.t_final;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> A_tol;
+    infile >> inParams.A_tol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> R_tol;
-    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> C_tol;
+    infile >> inParams.R_tol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.close();
 }

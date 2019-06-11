@@ -21,12 +21,13 @@ executable tiny
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.24,
-    drasil-theory >= 0.1.0
+    drasil-theory >= 0.1.0,
+    drasil-utils >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints
 
@@ -59,7 +60,7 @@ executable glassbr
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
@@ -84,7 +85,6 @@ executable nopcm
     , Drasil.NoPCM.Goals
     , Drasil.NoPCM.Requirements
     , Drasil.SWHS.Assumptions
-    , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
@@ -95,7 +95,6 @@ executable nopcm
     , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
-    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
@@ -109,7 +108,7 @@ executable nopcm
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
@@ -133,10 +132,8 @@ executable swhs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Goals
     , Drasil.SWHS.IMods
-    , Drasil.SWHS.Labels
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
-    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.Unitals
   Build-Depends:
@@ -148,7 +145,7 @@ executable swhs
     directory >= 1.2.6.2,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
@@ -174,7 +171,6 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
-    , Drasil.SSP.Labels
     , Drasil.SSP.References
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
@@ -189,7 +185,7 @@ executable ssp
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
@@ -224,7 +220,7 @@ executable chipmunkdocs
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
@@ -249,12 +245,13 @@ executable projectile
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.24,
-    drasil-theory >= 0.1.0
+    drasil-theory >= 0.1.0,
+    drasil-utils >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -273,12 +270,13 @@ executable template
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
     drasil-data >= 0.1.11,
-    drasil-code >= 0.1.4,
+    drasil-code >= 0.1.7,
     drasil-database >= 0.1.0,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
     drasil-docLang >= 0.1.24,
-    drasil-theory >= 0.1.0
+    drasil-theory >= 0.1.0,
+    drasil-utils >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 

@@ -54,9 +54,7 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
-import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,
-  tAndDWSym, underConsidertn)
-  
+
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)

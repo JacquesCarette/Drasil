@@ -6,7 +6,7 @@ import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 import Drasil.SWHS.Unitals (tankLength, diam, pcmVol, pcmSA, pcmDensity,
     tempMeltP, htCapSP, htCapLP, htFusion, coilSA, tempC,
     wDensity, htCapW, coilHTC, pcmHTC, tempInit, tau, timeFinal,
-    absTol, relTol, consTol)
+    absTol, relTol)
 
 inputMod :: Mod
 inputMod = Mod "InputFormat" [inputData]
@@ -53,8 +53,7 @@ inputData = funcData "get_input"
     singleton  absTol,
     junkLine, -- 39
     singleton relTol,
-    junkLine, -- 41
-    singleton consTol
+    junkLine  -- 41
   ]
 
 -- Numbering refers to corresopnding line on input file

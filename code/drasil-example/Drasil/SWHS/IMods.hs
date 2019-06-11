@@ -97,7 +97,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf`
   phrase vol, S "being considered" `isThe` (phrase vol `sOf` phrase water), S "in the",
   phrase tank, (E $ sy wVol) `sC` S "which has", phrase mass +:+. ((E $ sy wMass) `sAnd`
   phrase heatCapSpec `sC` (E $ sy htCapW)), atStart heatTrans, S "occurs in the",
-  phrase water, S "from the", phrase coil, S "as", (E $ sy htFluxC),
+  phrase water, S "from the", phrase coil, S "as", E $ sy htFluxC,
   sParen (makeRef2S dd1HtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
@@ -189,13 +189,13 @@ eBalanceOnWtrDerivEqn5 =
   (sy wMass * sy htCapW)) * (sy tempPCM - sy tempW)
 
 
-eBalanceOnWtrDerivEqn6 = (deriv (sy tempW) time) $= 
-  1 / (sy tauW) * ((sy tempC) - (sy tempW)) +
-  (sy eta) / (sy tauW) * ((sy tempPCM) - (sy tempW))
+eBalanceOnWtrDerivEqn6 = deriv (sy tempW) time $= 
+  1 / sy tauW * (sy tempC - sy tempW) +
+  sy eta / sy tauW * (sy tempPCM - sy tempW)
 
 eBalanceOnWtrDerivEqn7 =  
-  (deriv (sy tempW) time) $= 1 / (sy tauW) * (((sy tempC) - (sy tempW)) +
-  sy eta * ((sy tempPCM) - (sy tempW)))
+  deriv (sy tempW) time $= 1 / sy tauW * ((sy tempC - sy tempW) +
+  sy eta * (sy tempPCM - sy tempW))
 
 eBalanceOnWtr_deriv_eqns__im1 :: [Expr]
 eBalanceOnWtr_deriv_eqns__im1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
@@ -399,7 +399,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   phrase thermalEnergy) `ofThe` phrase liquid), phrase water, 
   S "relative" `toThe` phrase energy, S "at the initial", phrase temp, 
   sParen (ch tempInit) +:+. sParen (unwrap $ getUnit pcmInitMltE), 
-  (ch htCapW) `isThe` phrase heatCapSpec `sOf` phrase liquid, phrase water,
+  ch htCapW `isThe` phrase heatCapSpec `sOf` phrase liquid, phrase water,
   sParen (unwrap $ getUnit htCapSP) `sAnd` ch wMass `sIs` (phrase mass `ofThe`
   phrase water) +:+. sParen (unwrap $ getUnit wMass), S "The", 
   phrase change `sIn` phrase temp `isThe` S "difference between the", 

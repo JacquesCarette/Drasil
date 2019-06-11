@@ -59,6 +59,9 @@ void input_constraints(InputParameters &inParams) {
     if (!(((0 < inParams.T_C) && (inParams.T_C < 100)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
+    if (!(((0 < inParams.t_step) && (inParams.t_step < inParams.t_final)))) {
+        std::cout << "Warning: constraint violated" << std::endl;
+    }
     if (!((inParams.rho_W > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }

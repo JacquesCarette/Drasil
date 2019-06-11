@@ -41,7 +41,7 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ([nw example]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
+symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
   ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
   ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 

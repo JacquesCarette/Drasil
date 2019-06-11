@@ -96,7 +96,7 @@ velVecDeriv = [S "Detailed derivation" `sOf` phrase velocity +:+ phrase vector :
                velVecDerivSent, E velVecRel]
 
 velVecDerivSent :: Sentence
-velVecDerivSent = vecDeriv [velocity, acceleration] rectVelGD
+velVecDerivSent = vecDeriv [(velocity, velocityXYEqnS), (acceleration, accelerationXYEqnS)] rectVelGD
 
 ----------
 posVecGD :: GenDefn
@@ -116,7 +116,7 @@ posVecDeriv = [S "Detailed derivation" `sOf` phrase position +:+ phrase vector :
                posVecDerivSent, E posVecRel]
 
 posVecDerivSent :: Sentence
-posVecDerivSent = vecDeriv [position, velocity, acceleration] rectPosGD
+posVecDerivSent = vecDeriv [(position, positionXYEqnS), (velocity, velocityXYEqnS), (acceleration, accelerationXYEqnS)] rectPosGD
 
 -- Helper for making rectilinear derivations
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
@@ -142,26 +142,21 @@ rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "hav
 performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
 
 -- Helper for making vector derivations
-vecDeriv :: [UnitalChunk] -> GenDefn -> Sentence
+vecDeriv :: [(UnitalChunk, Sentence)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSent_ [
   S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 
-  (map (\c -> foldlSent_ [S "the", phrase c, phrase vector, S "as", E (getVec c)]) vecs),
+  (map (\(c, e) -> foldlSent_ [S "the", phrase c, phrase vector, S "as", e]) vecs),
   S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
-  phrase constAccelV `sIs` S "represented as" +:+. E (getVec constAccelV),
+  phrase constAccelV `sIs` S "represented as" +:+. constAccelXYEqnS,
   S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`
-  S "the", phrase (head vecs), phrase vector +: S "to yield"]
+  S "the", phrase ((fst . head) vecs), phrase vector +: S "to yield"]
 
--- Helper for making vector with x- and y-components
-getVec :: UnitalChunk -> Expr
-getVec c = sy c $= vec2D ((sy . fst) comps) ((sy . snd) comps)
-  where
-    comps
-      | c == position     = (xPos,        yPos)
-      | c == velocity     = (xVel,        yVel)
-      | c == iVel         = (ixVel,       iyVel)
-      | c == acceleration = (xAccel,      yAccel)
-      | c == constAccelV  = (xConstAccel, yConstAccel)
-      | otherwise         = error "Not implemented in getVec"
+-- Helper sentences that represent the vectors of quantities as components
+positionXYEqnS, velocityXYEqnS, accelerationXYEqnS, constAccelXYEqnS :: Sentence
+positionXYEqnS     = E $ sy position     $= vec2D (sy xPos)        (sy yPos)
+velocityXYEqnS     = E $ sy velocity     $= vec2D (sy xVel)        (sy yVel)
+accelerationXYEqnS = E $ sy acceleration $= vec2D (sy xAccel)      (sy yAccel)
+constAccelXYEqnS   = E $ sy constAccelV  $= vec2D (sy xConstAccel) (sy yConstAccel)

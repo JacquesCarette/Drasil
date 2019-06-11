@@ -9,26 +9,30 @@ import Data.Drasil.Concepts.Documentation (property, value)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion,
-  collision, compression, constAccel, constAccelV, damping, displacement, distance,
-  elasticity, energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel,
-  gravitationalConst, height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel,
-  iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
-  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, scalarPos, 
-  space, speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
-  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos]
+physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
+  chgInVelocity, cohesion, collision, compression, constAccel, constAccelV,
+  damping, displacement, distance, elasticity, energy, fSpeed, fVel, fbd,
+  force, friction, gravitationalAccel, gravitationalConst, height, iPos,
+  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
+  joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
+  momentOfInertia, position, pressure, restitutionCoef, rightHand, rigidBody,
+  scalarAccel, scalarPos, space, speed, strain, stress, tension, time, torque,
+  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel,
+  yConstAccel, yDist, yPos, yVel]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
-acceleration, angAccel, angDisp, angVelo, angular, cartesian, cohesion, collision,
-  compression, constAccel, constAccelV, damping, displacement, distance, elasticity,
-  energy, fbd, force, friction, fSpeed, fVel, gravitationalAccel, gravitationalConst, 
-  height, impulseS, impulseV, iPos, isotropy, iSpeed, iVel, ixVel, iyVel, joint,
-  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position,
-  pressure, restitutionCoef, rightHand, rigidBody, scalarAccel, scalarPos, space,
-  speed, strain, stress, tension, time, torque, velocity, weight, xDist, xVel,
-  yDist, yVel, xAccel, yAccel, xConstAccel, yConstAccel, xPos, yPos, ixPos, iyPos :: ConceptChunk
+acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
+  cohesion, collision, compression, constAccel, constAccelV, damping,
+  displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
+  friction, gravitationalAccel, gravitationalConst, height, iPos, iSpeed,
+  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
+  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
+  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel,
+  scalarPos, space, speed, strain, stress, tension, time, torque, velocity,
+  weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  yPos, yVel :: ConceptChunk
 
 twoD, threeD :: CI
 twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
@@ -194,3 +198,6 @@ cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
+
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
+ S "of a" +:+ phrase rigidBody)

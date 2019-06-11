@@ -149,10 +149,10 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (negate (intAll (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (intAll (eqSymb vol) (sy volHtGen)) $=
-  (intAll (eqSymb vol) ((sy density)
-  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+s4_2_3_eq1 = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
+  intAll (eqSymb vol) (sy volHtGen) $=
+  intAll (eqSymb vol) (sy density
+  * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
 s4_2_3_eq2 = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
   intAll (eqSymb vol) (sy volHtGen) $= 

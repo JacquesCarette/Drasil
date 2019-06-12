@@ -35,7 +35,7 @@ import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (fromMaybe, maybe, maybeToList)
+import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -218,12 +218,9 @@ genInputConstraints = do
   g <- ask
   let cm       = cMap $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
-      reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v 
-        (sysinfodb $ codeSpec g) (eMap $ codeSpec g)) (getConstraints cm 
-        varsList)
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
-  parms <- getParams reqdVals
+  parms <- getConstraintParams
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
     sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
@@ -406,7 +403,7 @@ genMainFunc =
     args2 <- getArgs $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- getDerivedCall
-    ic <- fApp "input_constraints" [v_params]
+    ic <- getConstraintCall
     varDef <- mapM (\x -> do
       args <- args1 x
       cnargs <- fApp (codeName x) args
@@ -417,9 +414,8 @@ genMainFunc =
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi] ++ 
-      maybeToList dv ++
-      [valState ic
-      ] ++ varDef ++ [ valState wo ]
+      catMaybes [dv, ic] ++
+      varDef ++ [ valState wo ]
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -433,12 +429,35 @@ getDerivedCall = do
         return $ Just $ valState val
   getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
+getConstraintCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getConstraintCall = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ps <- getConstraintParams
+        let pvals = map (var . paramName) ps
+        val <- fApp' m "input_constraints" pvals
+        return $ Just $ valState val
+  getCall $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
       reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
         dvals
+  getParams reqdVals
+
+getConstraintParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getConstraintParams = do 
+  g <- ask
+  let cm = cMap $ codeSpec g
+      mem = eMap $ codeSpec g
+      db = sysinfodb $ codeSpec g
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v db 
+        mem) (getConstraints cm varsList)
   getParams reqdVals
 
 -----

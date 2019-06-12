@@ -15,10 +15,10 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   force, friction, gravitationalAccel, gravitationalConst, height, iPos,
   iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
-  momentOfInertia, position, pressure, restitutionCoef, rightHand, rigidBody,
-  scalarAccel, scalarPos, space, speed, strain, stress, tension, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel,
-  yConstAccel, yDist, yPos, yVel]
+  momentOfInertia, position, potEnergy, pressure, restitutionCoef, rightHand,
+  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
+  yAccel, yConstAccel, yDist, yPos, yVel]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
@@ -29,10 +29,10 @@ acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
   friction, gravitationalAccel, gravitationalConst, height, iPos, iSpeed,
   iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
-  position, pressure, restitutionCoef, rightHand, rigidBody, scalarAccel,
-  scalarPos, space, speed, strain, stress, tension, time, torque, velocity,
-  weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel :: ConceptChunk
+  position, potEnergy, pressure, restitutionCoef, rightHand, rigidBody,
+  scalarAccel, scalarPos, space, speed, strain, stress, tension, time, torque,
+  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel,
+  yConstAccel, yDist, yPos, yVel :: ConceptChunk
 
 twoD, threeD :: CI
 twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
@@ -131,6 +131,10 @@ yAccel = dccWDS "yScalAcc" (cn "y-component of acceleration") (S "The y-componen
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
 xConstAccel = dccWDS "xConstAccel" (cn "x-component of constant acceleration") (S "The x-component" `sOf` phrase constAccel)
 yConstAccel = dccWDS "yConstAccel" (cn "y-component of constant acceleration") (S "The y-component" `sOf` phrase constAccel)
+
+potEnergy  = dccWDS "potEnergy" (cn "potential energy")
+  (S "The measure of the" +:+ phrase energy +:+ 
+   S "held by an object because of its" +:+  phrase position)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

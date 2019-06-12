@@ -10,7 +10,6 @@ library
     Data.Drasil.People
     Data.Drasil.Citations
     Data.Drasil.Constraints
-    Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation

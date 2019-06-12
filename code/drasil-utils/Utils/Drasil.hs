@@ -1,13 +1,16 @@
 module Utils.Drasil (
   -- Fold
-  EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints, -- FIXME: foldConstraints shouldn't be exported when drasil-utils is finished
+  EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC,
   -- Misc
-  addPercent, bulletFlat, bulletNested, enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, itemRefToSent,
-  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs,
-  noRefsLT, sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave, zipSentList,
+  addPercent, bulletFlat, bulletNested, chgsStart, displayConstrntsAsSet,
+  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqN, eqUnR, eqUnR',
+  eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent,
+  makeListRef, makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb,
+  mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
+  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',

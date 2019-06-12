@@ -28,7 +28,7 @@ symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 symbolsAll :: [QuantityDict]
 symbolsAll = map qw symbols ++ map qw specParamValList ++
   map qw [htFusionMin, htFusionMax, coilSAMax] ++
-  map qw [absTol, relTol, consTol]
+  map qw [absTol, relTol]
 
 -- Symbols with Units --
 
@@ -202,9 +202,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, consTol]
 
-eta, meltFrac, fracMin:: DefinedQuantityDict
+eta, meltFrac, fracMin, consTol :: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
@@ -221,11 +221,16 @@ fracMin = dqd' (dcc "fracMin"
   "minimum fraction of the tank volume taken up by the PCM")
    (const $ Atomic "MINFRACT") Real Nothing
 
+consTol = dqd' (dcc "consTol" 
+  (nounPhraseSP "relative tolerance for conservation of energy") 
+  "relative tolerance for conservation of energy")
+  (const $ sub cC $ Atomic "tol") Real Nothing
+
 -----------------
 -- Constraints --
 -----------------
 
-constrained ::[ConstrConcept]
+constrained :: [ConstrConcept]
 constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
 
 -- Input Constraints
@@ -428,7 +433,7 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 -- Uncertainties with no Units --
 ---------------------------------
 
-absTol, relTol, consTol :: UncertainChunk
+absTol, relTol :: UncertainChunk
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA (Atomic "tol")) Real
@@ -440,12 +445,6 @@ relTol = uvc "relTol" (nounPhraseSP "relative tolerance")
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
-consTol = uvc "consTol"
-  (nounPhraseSP "relative tolerance for conservation of energy") 
-  (sub cC (Atomic "tol")) Real
-  [ physc $ Bounded (Exc,0) (Exc,1)] 
-  (dbl (10.0**(-3))) (uncty 0.01 Nothing)
-
 -------------------------
 -- Max / Min Variables --
 -------------------------
@@ -456,13 +455,15 @@ specParamValList = [tankLengthMin, tankLengthMax,
   htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax, 
   htFusionMin, htFusionMax, coilSAMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
-  pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux]
+  pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux, consTolAux]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
   pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
   htCapSPMax, htCapLPMin, htCapLPMax, htFusionMin, htFusionMax, coilSAMax,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
-  pcmHTCMax, timeFinalMax, fracMinAux :: QDefinition
+  pcmHTCMax, timeFinalMax, fracMinAux, consTolAux :: QDefinition
+
+consTolAux = mkQuantDef consTol $ dbl 0.00001
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
